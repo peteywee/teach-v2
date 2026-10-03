@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C11",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.0.3",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-03",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.1.0",
+    "approved_version": "1.0.0",
     "approved_on": "2026-10-03",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner explicitly approved C11 1.1.0 identity lifecycle through state-machine approval token; GitHub issue #4"
+    "inheritance": "1.0.1, 1.0.2, and 1.0.3 are non-normative governance/truth-state cleanup patches; 1.0.0 owner approval remains controlling"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,8 +28,8 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C11@1.0.3"],
-  "superseded_by": null,
+  "supersedes": [],
+  "superseded_by": "TEACH-CON-C11@1.1.0",
   "depends_on": [
     "contracts/"
   ]
@@ -38,20 +38,22 @@
 
 # C11 — Identity & Credentials Contract
 
+> Superseded by C11 version 1.1.0 on 2026-10-03. Preserved under SYS-21.
+
 | Field              | Value                                                                                                                                                           |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Contract ID        | C11                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.1.0                                                                                                                                                           |
-| Status             | `active`                                                                                                                                                        |
+| Version            | 1.0.3                                                                                                                                                           |
+| Status             | `superseded`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-03 — C11 1.1.0 state-machine approval; see `APPROVAL-RECORD.md` and GitHub issue #4 |
+| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
 | Requirement prefix | `IDN`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/identity-access.json` (identity half); session half moves to C12.                                   |
-| Supersedes         | C11 1.0.3 |
-| Superseded by      | None                                                                                                                                                            |
+| Supersedes         | None                                                                                                                                                            |
+| Superseded by      | C11 1.1.0 |
 | Created            | 2026-10-03                                                                                                                                                      |
 | Last updated       | 2026-10-03                                                                                                                                                      |
 
@@ -69,7 +71,7 @@ This contract owns:
 - Invitations
 - Frontline setup tokens
 - Password-reset tokens
-- Identity lifecycle state (`ACTIVE`, `INACTIVE`, `DELETED`) and the offboarding lifecycle operation/event
+- Identity lifecycle state (active, inactive, offboarded)
 
 This contract does not own:
 
@@ -87,7 +89,7 @@ Related contracts: C00, C01, C12, C13, C14, C23.
 | Identity         | The single application record representing one human user.                                                                                                                                                                                                                       |
 | Credential       | Anything that proves identity: a password, a PIN, an OAuth link, or a single-use token.                                                                                                                                                                                          |
 | Single-use token | An invitation, frontline setup, or password-reset token.                                                                                                                                                                                                                         |
-| Offboarded       | The result of the `OffboardIdentity` lifecycle operation: `IdentityOffboarded` is emitted, IdentityStatus is `INACTIVE`, authentication is disabled, sessions/tokens are revoked, and effective membership/grants are removed. It is distinct from `DELETED`. |
+| Offboarded       | The outcome of the OffboardIdentity command: the identity cannot authenticate and holds no effective membership. Distinct from `inactive`, `deleted`, and `anonymized`. Whether it is an IdentityStatus value or an event resulting in another status is open in C01 (OQ-SEM-2). |
 
 ## 4. Requirements
 
@@ -110,10 +112,9 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **IDN-15** — A credential change MUST revoke the sessions designated by the session-revocation policy (see OQ-IDN-3; value Not yet verified) through C12's canonical revocation path.
 - **IDN-16** — Every identity lifecycle change (create, invite, accept, credential change, deactivate, offboard, reactivate) MUST emit an audit event per C23 in the same transaction as the change.
 - **IDN-17** — Offboarding MUST execute only through one shared identity lifecycle service.
-- **IDN-18** — Offboarding MUST, in one transaction: set IdentityStatus to `INACTIVE`, emit `IdentityOffboarded`, revoke all its sessions, revoke its frontline credentials and pending single-use tokens, and remove its effective membership and grants.
+- **IDN-18** — Offboarding MUST, in one transaction: put the identity into its offboarded outcome (C01 OQ-SEM-2), revoke all its sessions, revoke its frontline credentials and pending single-use tokens, and remove its effective membership and grants.
 - **IDN-19** — Repeating an offboarding request with the same idempotency key MUST return the same final state, preserve the original offboarding timestamp, and append no duplicate lifecycle or audit event.
 - **IDN-20** — An invitation to an email that belongs to an offboarded identity MUST follow exactly one owner-chosen rule (see OQ-IDN-5; value Not yet verified); until chosen, such invitations MUST be rejected.
-- **IDN-21** — IdentityStatus lifecycle MUST permit only `ACTIVE -> INACTIVE` and `INACTIVE -> ACTIVE` for current application behavior. `OffboardIdentity` MUST result in `INACTIVE`; repeating offboarding while already `INACTIVE` MAY preserve `INACTIVE` while applying idempotent offboarding guarantees. `DELETED` MUST be terminal, and no application transition into `DELETED` is authorized until C15 deletion semantics are owner-approved.
 
 ## 5. Acceptance Cases
 
@@ -135,7 +136,6 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | IDN-AC-14 | IDN-18         | Offboard an identity with sessions, pending tokens, and membership; inject failure midway                          | Either all effects are present or none are                                                                                    |
 | IDN-AC-15 | IDN-19         | Send the same offboarding request three times with one idempotency key                                             | Same final state; original timestamp preserved; exactly one lifecycle and one audit event                                     |
 | IDN-AC-16 | IDN-20         | Invite an email belonging to an offboarded identity before the OQ is decided                                       | Invitation rejected; no token issued                                                                                          |
-| IDN-AC-17 | IDN-18, IDN-21 | Exercise deactivate, reactivate, offboard, invalid reactivation-from-DELETED, and attempted deletion before C15 approval | Only ACTIVE→INACTIVE and INACTIVE→ACTIVE succeed; offboarding ends INACTIVE; DELETED has no authorized ingress and is terminal |
 
 ## 6. Open Questions
 
@@ -158,7 +158,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
 | Blocking open questions      | 5 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
-| Owner approval               | declared                 | C11 1.1.0 approved by Patrick Craven on 2026-10-03 through explicit state-machine approval; GitHub issue #4. |
+| Owner approval               | declared                 | Approved by the owner on 2026-10-03; recorded in `APPROVAL-RECORD.md`. Initial owner-approval baseline is commit `2c9b1c849a520ba817efc91150be9a37797f4238`; this 1.0.3 revision is tracked by Git history.                                                                     |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
@@ -174,4 +174,3 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.1   | 2026-10-03 | Non-normative document-governance metadata/provenance normalization; 1.0.0 owner approval remained controlling. | ChatGPT (governance) |
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
-| 1.1.0   | 2026-10-03 | Approved bootstrap IdentityStatus transition graph; offboarding now explicitly results in INACTIVE; DELETED ingress remains fail-closed pending C15 privacy semantics. GitHub issue #4. | Patrick Craven (owner approval) |

@@ -2,17 +2,24 @@
 {
   "doc_id": "TEACH-STATE-DISCOVERY",
   "class": "specification",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "claims_truth_state": "declared",
-  "status": "proposed",
+  "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-03",
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "d71fbf99b5ab2f554f89a6794a0ff9dc98e4f9da",
-    "purpose": "post-relationship-registration state-discovery baseline"
+    "commit": "c64c00f04197907d846c507ae956ed377826da2f",
+    "purpose": "pre-state-machine approval baseline"
+  },
+  "approval": {
+    "state": "approved",
+    "approved_on": "2026-10-03",
+    "owner": "Patrick Craven, Top Shelf Service LLC",
+    "record": "contracts/APPROVAL-RECORD.md",
+    "issue": "#4"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -24,7 +31,7 @@
 
 # Teach v2 State / State-Machine Discovery
 
-Status: `proposed`.
+Status: `recorded`.
 
 `proposed.json` records state semantics that can be proven from active contracts and explicitly preserves blocked or contradictory state-machine work.
 
@@ -40,3 +47,16 @@ Current dependency-ready result:
 - Certification, single-use credential, and ContentPack lifecycles: blocked pending semantic decisions.
 
 Next gate: owner decisions for the blocking lifecycle questions, followed by K00 state-machine registration.
+
+## Approved disposition
+
+GitHub issue #4 registers candidate state machines for Identity, ApplicationSession, Membership, and LearningSession.
+
+Remaining blocked lifecycle work:
+
+- Certification lifecycle.
+- Single-use credential/token lifecycle.
+- ContentPack lifecycle.
+- Identity transition into `DELETED` remains disabled pending C15 privacy/deletion semantics.
+
+No K00 candidate was promoted to `approved`.

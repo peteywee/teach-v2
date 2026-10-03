@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-DOMAIN-DISCOVERY",
   "class": "specification",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -11,15 +11,15 @@
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "57d60016611681235c464bec295e123987e823e3",
-    "purpose": "pre-domain-ownership approval baseline"
+    "commit": "c64c00f04197907d846c507ae956ed377826da2f",
+    "purpose": "pre-state-machine approval baseline"
   },
   "approval": {
     "state": "approved",
     "approved_on": "2026-10-03",
     "owner": "Patrick Craven, Top Shelf Service LLC",
     "record": "contracts/APPROVAL-RECORD.md",
-    "issue": "#2"
+    "issue": "#4"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -46,3 +46,5 @@ Current proposed domain boundaries:
 `Identity`, `Organization`, `Authorization`, `Content`, `Learning`, `Certification`, `AuditLifecycle`, `TransactionControl`, `VerificationEvidence`, `Observability`.
 
 `Entitlement` is owned by Organization. C63 owns billing/provider reconciliation and must cross the Organization command boundary for local entitlement changes.
+
+Domain Ownership Map `1.1.0` adds owner-approved state-set, lifecycle-command/event, and state-machine ownership assignments from GitHub issue #4.

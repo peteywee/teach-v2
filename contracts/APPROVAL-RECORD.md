@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-03
-- Contract package version: `0.6.0`
+- Contract package version: `0.7.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -245,3 +245,14 @@ PATCH revisions preserve the controlling owner approval when they do not change 
 | TEACH-K00 | 0.2.0 | 0.3.0 | Register all 18 dependency-ready relationship definitions as `candidate`; keep 11 blocked relationships outside K00; no candidate-to-approved promotion | 2026-10-03 | Patrick Craven | #3 |
 | TEACH-REL-DISCOVERY | 0.1.0 | 0.2.0 | Record discovery disposition and registration evidence | 2026-10-03 | Patrick Craven | #3 |
 | TEACH-DOMAIN-OWNERSHIP | 1.0.0 | 1.0.0 | Extended with owning-domain assignments for the 18 registered relationships, exactly as specified in `domains/relationships/proposed.json`; no existing approved assignment changed | 2026-10-03 | Patrick Craven | #3 |
+
+## Part 8 — State-machine approval
+
+| Artifact / Contract | From | To | Decision | Date | Owner | GitHub issue |
+| --- | --- | --- | --- | --- | --- | --- |
+| C01 Canonical Semantics | 1.2.0 | 1.3.0 | Resolve OQ-SEM-4; establish canonical state-machine registry requirements | 2026-10-03 | Patrick Craven | #4 |
+| C11 Identity & Credentials | 1.0.3 | 1.1.0 | ACTIVE↔INACTIVE bootstrap graph; offboarding results INACTIVE; DELETED terminal with ingress disabled pending C15 | 2026-10-03 | Patrick Craven | #4 |
+| C13 Tenancy & Membership | 1.1.0 | 1.2.0 | Membership lifecycle ACTIVE→INACTIVE→REVOKED; REVOKED terminal; DELETED is not MembershipStatus | 2026-10-03 | Patrick Craven | #4 |
+| C32 Learning Sessions & Progress | 1.0.3 | 1.1.0 | Resolve OQ-LRN-1 with ACTIVE→COMPLETED; progress events ACTIVE-only; COMPLETED terminal | 2026-10-03 | Patrick Craven | #4 |
+| TEACH-K00 | 0.3.0 | 0.4.0 | Register four state machines plus required state/command/event candidates; no semantic promotion | 2026-10-03 | Patrick Craven | #4 |
+| TEACH-DOMAIN-OWNERSHIP | 1.0.0 | 1.1.0 | Add ownership for new state, command, event, and state-machine concepts | 2026-10-03 | Patrick Craven | #4 |

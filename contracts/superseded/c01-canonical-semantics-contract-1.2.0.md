@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C01",
   "class": "contract",
-  "version": "1.3.0",
+  "version": "1.2.0",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-03",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.3.0",
+    "approved_version": "1.2.0",
     "approved_on": "2026-10-03",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner explicitly approved C01 1.3.0 through state-machine approval token; GitHub issue #4"
+    "basis": "Owner explicitly approved C01 1.2.0 through domain-ownership approval token; GitHub issue #2"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,8 +28,8 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C01@1.2.0"],
-  "superseded_by": null,
+  "supersedes": ["TEACH-CON-C01@1.1.0"],
+  "superseded_by": "TEACH-CON-C01@1.3.0",
   "depends_on": [
     "contracts/"
   ]
@@ -38,20 +38,22 @@
 
 # C01 — Canonical Semantics Contract
 
+> Superseded by C01 version 1.3.0 on 2026-10-03. Preserved under SYS-21.
+
 | Field              | Value                                                                                                                                                           |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Contract ID        | C01                                                                                                                                                             |
 | Group              | C01 Canonical Semantics (Semantic Kernel, K00)                                                                                                                  |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.3.0                                                                                                                                                           |
-| Status             | `active`                                                                                                                                                        |
+| Version            | 1.2.0                                                                                                                                                           |
+| Status             | `superseded`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-03 — C01 1.3.0 state-machine approval; see `APPROVAL-RECORD.md` and GitHub issue #4 |
+| Approved by        | Patrick Craven (owner), 2026-10-03 — C01 1.2.0 explicit domain-ownership approval; see `APPROVAL-RECORD.md` and GitHub issue #2 |
 | Requirement prefix | `SEM`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New. Also referred to as K00, the semantic kernel.                                                                                                              |
-| Supersedes         | C01 1.2.0 |
-| Superseded by      | None                                                                                                                                                            |
+| Supersedes         | C01 1.1.0                                                                                                                                                            |
+| Superseded by      | C01 1.3.0 |
 | Created            | 2026-10-03                                                                                                                                                      |
 | Last updated       | 2026-10-03                                                                                                                                                      |
 
@@ -141,7 +143,6 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **SEM-29** — `IdentityOffboarded` MUST be represented as a lifecycle event associated with the offboarding operation and MUST NOT be a member of `IdentityStatus`. Offboarding MUST result only in canonical identity/access state transitions defined by the owning domain contracts.
 - **SEM-30** — Promotion of a semantic registry entry from `candidate` to `approved` MUST require an explicit owner approval naming the semantic revision or approval package; an AI assistant, development agent, runtime agent, or automation actor MUST NOT approve promotion on the owner's behalf.
 - **SEM-31** — Exactly one `active` Domain Ownership Map MUST define the owning semantic domain for every authoritative concept. Changing an approved ownership assignment MUST be treated as a semantic change and MUST identify every affected domain contract.
-- **SEM-32** — Canonical lifecycle state machines MUST be registered in `kernel/state-machines.json`. Each registered machine MUST name its entity, canonical state set, initial state, allowed transitions, terminal states, owning domain, and authority contracts; any transition not registered MUST fail closed.
 
 ## 5. Acceptance Cases
 
@@ -167,7 +168,6 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | SEM-AC-18 | SEM-11, SEM-29                | Inspect IdentityStatus and lifecycle events                                                                                 | OFFBOARDED is absent from IdentityStatus; IdentityOffboarded exists as a canonical event             |
 | SEM-AC-19 | SEM-30                        | Attempt candidate-to-approved promotion without owner approval                                                             | Promotion is rejected; agent/automation approval is insufficient                                    |
 | SEM-AC-20 | SEM-19, SEM-31                | Validate active Domain Ownership Map against K00                                                                            | Each ownership assignment has exactly one approved owner                                            |
-| SEM-AC-21 | SEM-21, SEM-32                | Validate each lifecycle entity against `kernel/state-machines.json`                                                         | Registered transitions are complete for approved behavior; unregistered transitions are rejected    |
 
 ## 6. Open Questions
 
@@ -176,7 +176,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | OQ-SEM-1 | Resolved | Canonical semantic registry lives under `kernel/`. Canonical source format is JSON. JSON Schema plus the dependency-free kernel validator enforce structure; Markdown views may be generated. Decision approved 2026-10-03; GitHub issue #1. | No | SEM-27 |
 | OQ-SEM-2 | Resolved | `OFFBOARDED` is not an `IdentityStatus`. `IdentityStatus` remains `ACTIVE`, `INACTIVE`, `DELETED`; `IdentityOffboarded` is the canonical lifecycle event for the offboarding operation. Decision approved 2026-10-03; GitHub issue #1. | No | SEM-11, SEM-29 |
 | OQ-SEM-3 | Resolved | C01 owns capability identifier registration and canonical naming. C14 owns authorization meaning, assignment, scope, evaluation, and denial semantics. Decision approved 2026-10-03; GitHub issue #1. | No | SEM-28 |
-| OQ-SEM-4 | Resolved | Membership lifecycle is `ACTIVE -> INACTIVE -> REVOKED`; `REVOKED` is terminal and `DELETED` is not a MembershipStatus. Decision approved 2026-10-03; GitHub issue #4. | No | SEM-21, SEM-32 |
+| OQ-SEM-4 | Open     | Is the Membership lifecycle ACTIVE → INACTIVE → REVOKED the approved state machine? | No | — |
 | OQ-SEM-5 | Resolved | Only Patrick Craven, as owner, may approve promotion of `candidate` entries to `approved`; an explicit approval token naming the revision/package is a valid approval record. Decision approved 2026-10-03; GitHub issue #2. | No | SEM-30 |
 
 ## 7. Verification Status
@@ -188,7 +188,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
 | Blocking open questions      | 0 open                   | OQ-SEM-1/2/3/5 are resolved. OQ-SEM-4 remains open and non-blocking. |
-| Owner approval               | declared                 | C01 1.3.0 approved by Patrick Craven on 2026-10-03 through explicit state-machine approval; GitHub issue #4. |
+| Owner approval               | declared                 | C01 1.2.0 approved by Patrick Craven on 2026-10-03 through explicit domain-ownership approval; GitHub issue #2. |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
@@ -204,4 +204,3 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.1.0   | 2026-10-03 | Normative K00 bootstrap revision: resolved OQ-SEM-1/2/3; fixed kernel location/JSON format, offboarding semantics, and C01/C14 capability ownership; added SEM-27–SEM-29 and SEM-AC-16–18. GitHub issue #1. | Patrick Craven (owner approval via K00 bootstrap) |
 | 1.2.0   | 2026-10-03 | Approved first active Domain Ownership Map; resolved OQ-SEM-5; added SEM-30/31 and SEM-AC-19/20. K00 entries remain candidate. GitHub issue #2. | Patrick Craven (owner approval) |
-| 1.3.0   | 2026-10-03 | Resolved OQ-SEM-4 and established canonical `kernel/state-machines.json` registration requirements. GitHub issue #4. | Patrick Craven (owner approval) |

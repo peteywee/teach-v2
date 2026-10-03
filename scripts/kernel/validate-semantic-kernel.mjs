@@ -11,13 +11,13 @@ const load = (name) => {
 };
 
 const manifest = load('manifest.json');
-const names = ['entities.json','values.json','identifiers.json','relationships.json','states.json','capabilities.json','commands.json','events.json','evidence.json','schema/semantic-kernel.schema.json'];
+const names = ['entities.json','values.json','identifiers.json','relationships.json','states.json','state-machines.json','capabilities.json','commands.json','events.json','evidence.json','schema/semantic-kernel.schema.json'];
 const docs = Object.fromEntries(names.map(n => [n, load(n)]));
 if (manifest) {
   if (manifest.kernel_id !== 'TEACH-K00') errors.push('manifest.json: kernel_id must be TEACH-K00');
-  if (manifest.version !== '0.3.0') errors.push('manifest.json: version must be 0.3.0');
+  if (manifest.version !== '0.4.0') errors.push('manifest.json: version must be 0.4.0');
   if (manifest.canonical_format !== 'json') errors.push('manifest.json: canonical_format must be json');
-  for (const n of ['entities','values','identifiers','relationships','states','capabilities','commands','events','evidence','schema']) {
+  for (const n of ['entities','values','identifiers','relationships','states','state_machines','capabilities','commands','events','evidence','schema']) {
     if (!manifest.files?.[n]) errors.push(`manifest.json: missing file mapping ${n}`);
   }
 }
@@ -34,7 +34,7 @@ function collect(file) {
     else if (!allIds.has(e.id)) allIds.set(e.id,file);
   }
 }
-for (const f of ['entities.json','values.json','identifiers.json','relationships.json','states.json','commands.json','events.json']) collect(f);
+for (const f of ['entities.json','values.json','identifiers.json','relationships.json','states.json','state-machines.json','commands.json','events.json']) collect(f);
 const ids = new Set((docs['identifiers.json']?.entries || []).map(x => x.id));
 const entityIds = new Set((docs['entities.json']?.entries || []).map(x => x.id));
 for (const e of docs['entities.json']?.entries || []) {
@@ -116,15 +116,50 @@ for (const [key, owner] of expectedOwners) {
   else if (entry.owning_domain !== owner) errors.push(`${file}: ${id} owner must be ${owner}`);
 }
 if (cap?.semantic_domain !== 'Authorization') errors.push('capabilities.json: semantic_domain must be Authorization');
+const stateSetMap = new Map((docs['states.json']?.entries || []).map(x => [x.id, x]));
+const commandSet = new Set((docs['commands.json']?.entries || []).map(x => x.id));
+const eventSet = new Set((docs['events.json']?.entries || []).map(x => x.id));
+const machineIds = new Set();
+for (const m of docs['state-machines.json']?.entries || []) {
+  if (machineIds.has(m.id)) errors.push(`state-machines.json: duplicate ${m.id}`);
+  machineIds.add(m.id);
+  if (m.status !== 'candidate') errors.push(`state-machines.json: ${m.id} must remain candidate in K00 0.4.0`);
+  if (!entityIds.has(m.entity)) errors.push(`state-machines.json: ${m.id} unknown entity ${m.entity}`);
+  const ss = stateSetMap.get(m.state_set);
+  if (!ss) errors.push(`state-machines.json: ${m.id} unknown state_set ${m.state_set}`);
+  if (!m.owning_domain) errors.push(`state-machines.json: ${m.id} missing owning_domain`);
+  if (!Array.isArray(m.authority_contracts) || !m.authority_contracts.length) errors.push(`state-machines.json: ${m.id} missing authority_contracts`);
+  const values = new Set(ss?.values || []);
+  if (m.initial_state && !values.has(m.initial_state)) errors.push(`state-machines.json: ${m.id} invalid initial_state ${m.initial_state}`);
+  for (const tr of m.transitions || []) {
+    if (!values.has(tr.from) || !values.has(tr.to)) errors.push(`state-machines.json: ${m.id} invalid transition ${tr.from}->${tr.to}`);
+    if (tr.command && !commandSet.has(tr.command)) errors.push(`state-machines.json: ${m.id} unknown command ${tr.command}`);
+    if (tr.event && !eventSet.has(tr.event)) errors.push(`state-machines.json: ${m.id} unknown event ${tr.event}`);
+  }
+  for (const terminal of m.terminal_states || []) if (!values.has(terminal)) errors.push(`state-machines.json: ${m.id} invalid terminal ${terminal}`);
+}
+const requiredMachines = new Set(['ApplicationSessionStateMachine','IdentityStateMachine','LearningSessionStateMachine','MembershipStateMachine']);
+for (const id of requiredMachines) if (!machineIds.has(id)) errors.push(`state-machines.json: missing ${id}`);
+for (const id of machineIds) if (!requiredMachines.has(id)) errors.push(`state-machines.json: unexpected ${id}`);
+
+const learningStatus = stateSetMap.get('LearningSessionStatus');
+if (!learningStatus || JSON.stringify(learningStatus.values) !== JSON.stringify(['ACTIVE','COMPLETED'])) errors.push('states.json: LearningSessionStatus must be ACTIVE,COMPLETED');
+const membershipStatus = stateSetMap.get('MembershipStatus');
+if (!membershipStatus || JSON.stringify(membershipStatus.values) !== JSON.stringify(['ACTIVE','INACTIVE','REVOKED'])) errors.push('states.json: MembershipStatus must be ACTIVE,INACTIVE,REVOKED');
+
+for (const id of ['DeactivateIdentity','ReactivateIdentity','RevokeMembership']) if (!commandSet.has(id)) errors.push(`commands.json: missing ${id}`);
+for (const id of ['IdentityDeactivated','IdentityReactivated','MembershipRevoked']) if (!eventSet.has(id)) errors.push(`events.json: missing ${id}`);
+
 
 if (errors.length) {
   console.error(`Semantic kernel FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
-console.log('Semantic kernel PASS: TEACH-K00 0.3.0');
+console.log('Semantic kernel PASS: TEACH-K00 0.4.0');
 console.log(`Entities: ${(docs['entities.json']?.entries || []).length}`);
 console.log(`Identifiers: ${(docs['identifiers.json']?.entries || []).length}`);
 console.log(`Relationships: ${(docs['relationships.json']?.entries || []).length}`);
+console.log(`State machines: ${(docs['state-machines.json']?.entries || []).length}`);
 console.log(`Commands: ${(docs['commands.json']?.entries || []).length}`);
 console.log(`Events: ${(docs['events.json']?.entries || []).length}`);

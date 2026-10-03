@@ -1,0 +1,151 @@
+{
+  "schema_version": "0.1.0",
+  "entries": [
+    {
+      "id": "ApplicationSessionStateMachine",
+      "kind": "state_machine",
+      "status": "candidate",
+      "entity": "ApplicationSession",
+      "state_set": "ApplicationSessionStatus",
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C12"
+      ],
+      "initial_state": "ACTIVE",
+      "transitions": [
+        {
+          "from": "ACTIVE",
+          "to": "EXPIRED",
+          "trigger_kind": "system_condition",
+          "trigger": "expiry"
+        },
+        {
+          "from": "ACTIVE",
+          "to": "REVOKED",
+          "command": "RevokeApplicationSession",
+          "event": "ApplicationSessionRevoked"
+        }
+      ],
+      "terminal_states": [
+        "EXPIRED",
+        "REVOKED"
+      ]
+    },
+    {
+      "id": "IdentityStateMachine",
+      "kind": "state_machine",
+      "status": "candidate",
+      "entity": "Identity",
+      "state_set": "IdentityStatus",
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C11"
+      ],
+      "initial_state": "ACTIVE",
+      "transitions": [
+        {
+          "from": "ACTIVE",
+          "to": "INACTIVE",
+          "command": "DeactivateIdentity",
+          "event": "IdentityDeactivated"
+        },
+        {
+          "from": "INACTIVE",
+          "to": "ACTIVE",
+          "command": "ReactivateIdentity",
+          "event": "IdentityReactivated"
+        },
+        {
+          "from": "ACTIVE",
+          "to": "INACTIVE",
+          "command": "OffboardIdentity",
+          "event": "IdentityOffboarded"
+        }
+      ],
+      "idempotent_operations": [
+        {
+          "state": "INACTIVE",
+          "command": "OffboardIdentity",
+          "result_state": "INACTIVE",
+          "notes": "State remains INACTIVE; C11 idempotency and total-offboarding effects still apply."
+        }
+      ],
+      "terminal_states": [
+        "DELETED"
+      ],
+      "blocked_transitions": [
+        {
+          "to": "DELETED",
+          "reason": "No application ingress is authorized until C15 privacy/deletion semantics are owner-approved."
+        }
+      ]
+    },
+    {
+      "id": "LearningSessionStateMachine",
+      "kind": "state_machine",
+      "status": "candidate",
+      "entity": "LearningSession",
+      "state_set": "LearningSessionStatus",
+      "owning_domain": "Learning",
+      "authority_contracts": [
+        "C01",
+        "C32"
+      ],
+      "initial_state": "ACTIVE",
+      "creation_command": "StartLearningSession",
+      "creation_event": "LearningSessionStarted",
+      "allowed_operations": [
+        {
+          "state": "ACTIVE",
+          "command": "RecordProgressEvent",
+          "event": "ProgressRecorded"
+        }
+      ],
+      "transitions": [
+        {
+          "from": "ACTIVE",
+          "to": "COMPLETED",
+          "command": "CompleteLearningSession",
+          "event": "LearningSessionCompleted"
+        }
+      ],
+      "terminal_states": [
+        "COMPLETED"
+      ]
+    },
+    {
+      "id": "MembershipStateMachine",
+      "kind": "state_machine",
+      "status": "candidate",
+      "entity": "Membership",
+      "state_set": "MembershipStatus",
+      "owning_domain": "Organization",
+      "authority_contracts": [
+        "C01",
+        "C13"
+      ],
+      "initial_state": "ACTIVE",
+      "creation_command": "CreateMembership",
+      "creation_event": "MembershipCreated",
+      "transitions": [
+        {
+          "from": "ACTIVE",
+          "to": "INACTIVE",
+          "command": "DeactivateMembership",
+          "event": "MembershipDeactivated"
+        },
+        {
+          "from": "INACTIVE",
+          "to": "REVOKED",
+          "command": "RevokeMembership",
+          "event": "MembershipRevoked"
+        }
+      ],
+      "terminal_states": [
+        "REVOKED"
+      ]
+    }
+  ]
+}

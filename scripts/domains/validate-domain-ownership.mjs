@@ -16,6 +16,7 @@ const files = {
   identifier: load('kernel/identifiers.json'),
   value_object: load('kernel/values.json'),
   state_set: load('kernel/states.json'),
+  state_machine: load('kernel/state-machines.json'),
   relationship: load('kernel/relationships.json'),
   command: load('kernel/commands.json'),
   event: load('kernel/events.json')
@@ -23,7 +24,7 @@ const files = {
 
 if (map) {
   if (map.map_id !== 'TEACH-DOMAIN-OWNERSHIP') errors.push('ownership map: map_id must be TEACH-DOMAIN-OWNERSHIP');
-  if (map.version !== '1.0.0') errors.push('ownership map: version must be 1.0.0');
+  if (map.version !== '1.1.0') errors.push('ownership map: version must be 1.1.0');
   if (map.status !== 'active') errors.push('ownership map: approved map must be active');
 }
 

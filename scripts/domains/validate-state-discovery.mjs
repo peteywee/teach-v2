@@ -11,6 +11,8 @@ const load = (p) => {
 };
 
 const proposal = load('domains/states/proposed.json');
+const registration = load('domains/states/registration.json');
+const machines = load('kernel/state-machines.json');
 const kernelStates = load('kernel/states.json');
 const entities = load('kernel/entities.json');
 const commands = load('kernel/commands.json');
@@ -24,8 +26,8 @@ if (proposal) {
   if (proposal.baseline?.commit !== 'd71fbf99b5ab2f554f89a6794a0ff9dc98e4f9da') errors.push('state discovery: baseline mismatch');
 }
 
-if (ownership?.status !== 'active' || ownership?.version !== '1.0.0') {
-  errors.push('state discovery: requires active Domain Ownership Map 1.0.0');
+if (ownership?.status !== 'active' || ownership?.version !== '1.1.0') {
+  errors.push('state discovery: requires active Domain Ownership Map 1.1.0');
 }
 
 const states = new Map((kernelStates?.entries || []).map(x => [x.id, x]));
@@ -70,7 +72,7 @@ if (!identitySet || JSON.stringify(identitySet.values) !== JSON.stringify(['ACTI
 
 const membership = (proposal?.blocked || []).find(x => x.id === 'MembershipStateMachine');
 if (!membership || membership.evidence_state !== 'CONTRADICTORY') {
-  errors.push('state discovery: MembershipStateMachine must remain CONTRADICTORY');
+  errors.push('state discovery: original MembershipStateMachine discovery evidence must remain CONTRADICTORY');
 }
 
 const learning = (proposal?.blocked || []).find(x => x.id === 'LearningSessionStateMachine');
@@ -88,15 +90,36 @@ for (const item of proposal?.blocked || []) {
   if (!Array.isArray(item.blocked_by) || !item.blocked_by.length) errors.push(`${item.id}: blocked_by required`);
 }
 
+if (registration) {
+  if (registration.version !== '1.0.0') errors.push('state registration: version must be 1.0.0');
+  if (registration.status !== 'recorded') errors.push('state registration: status must be recorded');
+  if (registration.kernel_version !== '0.4.0') errors.push('state registration: kernel_version must be 0.4.0');
+  if (registration.ownership_map_version !== '1.1.0') errors.push('state registration: ownership_map_version must be 1.1.0');
+  if (registration.candidate_to_approved_promotions !== 0) errors.push('state registration: semantic promotion must remain zero');
+}
+
+const machineSet = new Set((machines?.entries || []).map(x => x.id));
+for (const id of ['ApplicationSessionStateMachine','IdentityStateMachine','LearningSessionStateMachine','MembershipStateMachine']) {
+  if (!machineSet.has(id)) errors.push(`state registration: missing registered machine ${id}`);
+}
+for (const m of machines?.entries || []) {
+  if (m.status !== 'candidate') errors.push(`state registration: ${m.id} must remain candidate`);
+}
+
+const remaining = new Set(registration?.remaining_blocked || []);
+for (const text of ['CertificationLifecycle','SingleUseCredentialLifecycle','ContentPackLifecycle']) {
+  if (!remaining.has(text)) errors.push(`state registration: remaining blocker ${text} missing`);
+}
+
+
 if (errors.length) {
   console.error(`State discovery FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
 
-console.log('State discovery PASS');
-console.log(`Ready state artifacts: ${(proposal?.ready || []).length}`);
-console.log(`Blocked state machines: ${(proposal?.blocked || []).length}`);
-console.log('ApplicationSession transitions proven: 2');
-console.log('Membership lifecycle evidence: CONTRADICTORY');
-console.log('K00 state authority changed: no');
+console.log('State-machine registration PASS');
+console.log(`Registered candidate state machines: ${(machines?.entries || []).length}`);
+console.log('Resolved owner decisions: Membership, LearningSession, Identity bootstrap graph');
+console.log('Historical Membership discovery evidence preserved: CONTRADICTORY');
+console.log('Candidate-to-approved promotions: 0');

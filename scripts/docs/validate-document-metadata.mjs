@@ -86,7 +86,7 @@ const base = baseArgIndex >= 0 ? process.argv[baseArgIndex + 1] : process.env.DO
 if (base) {
   let changed = [];
   try {
-    changed = execFileSync('git', ['diff', '--name-only', `${base}...HEAD`, '--', 'contracts/**/*.md', 'contracts/*.md', 'governance/**/*.md', 'governance/*.md', 'kernel/**/*.md', 'kernel/*.md'], { encoding: 'utf8' })
+    changed = execFileSync('git', ['diff', '--name-only', `${base}...HEAD`, '--', 'contracts/**/*.md', 'contracts/*.md', 'governance/**/*.md', 'governance/*.md', 'kernel/**/*.md', 'kernel/*.md', 'domains/**/*.md', 'domains/*.md'], { encoding: 'utf8' })
       .split('\n').map(s=>s.trim()).filter(Boolean);
   } catch (e) {
     errors.push(`unable to determine changed governed documents against ${base}: ${e.message}`);

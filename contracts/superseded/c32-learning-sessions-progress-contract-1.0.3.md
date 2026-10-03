@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C32",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.0.3",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-03",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.1.0",
+    "approved_version": "1.0.0",
     "approved_on": "2026-10-03",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner explicitly approved C32 1.1.0 learning-session lifecycle through state-machine approval token; GitHub issue #4"
+    "inheritance": "1.0.1, 1.0.2, and 1.0.3 are non-normative governance/truth-state cleanup patches; 1.0.0 owner approval remains controlling"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,8 +28,8 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C32@1.0.3"],
-  "superseded_by": null,
+  "supersedes": [],
+  "superseded_by": "TEACH-CON-C32@1.1.0",
   "depends_on": [
     "contracts/"
   ]
@@ -38,20 +38,22 @@
 
 # C32 — Learning Sessions & Progress Contract
 
+> Superseded by C32 version 1.1.0 on 2026-10-03. Preserved under SYS-21.
+
 | Field              | Value                                                                                                                                                           |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Contract ID        | C32                                                                                                                                                             |
 | Group              | C30 Product Semantics                                                                                                                                           |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.1.0                                                                                                                                                           |
-| Status             | `active`                                                                                                                                                        |
+| Version            | 1.0.3                                                                                                                                                           |
+| Status             | `superseded`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-03 — C32 1.1.0 state-machine approval; see `APPROVAL-RECORD.md` and GitHub issue #4 |
+| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
 | Requirement prefix | `LRN`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/frontline-learning.json`.                                                                           |
-| Supersedes         | C32 1.0.3 |
-| Superseded by      | None                                                                                                                                                            |
+| Supersedes         | None                                                                                                                                                            |
+| Superseded by      | C32 1.1.0 |
 | Created            | 2026-10-03                                                                                                                                                      |
 | Last updated       | 2026-10-03                                                                                                                                                      |
 
@@ -89,7 +91,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 - **LRN-1** — Each learning session MUST belong to exactly one learner.
 - **LRN-2** — A learning session MUST only be started against content assigned to and authorized for that learner.
-- **LRN-3** — A started learning session MUST be `ACTIVE`. `RecordProgressEvent` MUST be accepted only while `ACTIVE`. The only lifecycle transition is `ACTIVE -> COMPLETED` through completion; `COMPLETED` is terminal, and every unlisted transition or post-completion learner event MUST be rejected.
+- **LRN-3** — Session start, event recording, and completion MUST follow the owner-approved state machine (see OQ-LRN-1; value Not yet verified); events MUST NOT be accepted for a session outside the states that permit them.
 - **LRN-4** — Progress MUST derive only from persisted canonical learner events or state.
 - **LRN-5** — Challenge completion that claims learning or progress MUST be recorded in the same canonical persistence model.
 - **LRN-6** — Progress MUST NOT exist only in client state (React, Zustand, or browser storage).
@@ -115,13 +117,12 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | LRN-AC-8  | LRN-11              | Render progress UI with no persisted events                       | Values are zero/empty or visibly labelled sample |
 | LRN-AC-9  | LRN-12              | Submit a learning event offline                                   | UI reports not saved; no false success           |
 | LRN-AC-10 | LRN-13              | Owner decision record                                             | Manual evidence: approved rules recorded         |
-| LRN-AC-11 | LRN-3               | Attempt event after completion, completion twice, reopening, and an unregistered state | All rejected; ACTIVE→COMPLETED is the only lifecycle transition |
 
 ## 6. Open Questions
 
 | ID       | Question                                                                                              | Blocks implementation | Affects |
 | -------- | ----------------------------------------------------------------------------------------------------- | --------------------- | ------- |
-| OQ-LRN-1 | Resolved 2026-10-03: bootstrap lifecycle is `ACTIVE -> COMPLETED`; progress events are allowed only in ACTIVE and COMPLETED is terminal. GitHub issue #4. | No | LRN-3 |
+| OQ-LRN-1 | What is the learning-session state machine (states and allowed transitions)?                          | Yes                   | LRN-3   |
 | OQ-LRN-2 | How are mastery, XP, streak, and rank derived from events?                                            | No                    | LRN-13  |
 | OQ-LRN-3 | When a pack gets a new version, does in-progress learner history carry over, restart, or stay pinned? | No                    | —       |
 
@@ -133,8 +134,8 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
-| Blocking open questions      | 0 open                   | OQ-LRN-1 is resolved; remaining open questions are non-blocking. |
-| Owner approval               | declared                 | C32 1.1.0 approved by Patrick Craven on 2026-10-03 through explicit state-machine approval; GitHub issue #4. |
+| Blocking open questions      | 1 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
+| Owner approval               | declared                 | Approved by the owner on 2026-10-03; recorded in `APPROVAL-RECORD.md`. Initial owner-approval baseline is commit `2c9b1c849a520ba817efc91150be9a37797f4238`; this 1.0.3 revision is tracked by Git history.                                                                     |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
@@ -150,4 +151,3 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.1   | 2026-10-03 | Non-normative document-governance metadata/provenance normalization; 1.0.0 owner approval remained controlling. | ChatGPT (governance) |
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
-| 1.1.0   | 2026-10-03 | Resolved OQ-LRN-1 with minimal ACTIVE→COMPLETED LearningSession state machine; no paused/abandoned/reopen state invented. GitHub issue #4. | Patrick Craven (owner approval) |

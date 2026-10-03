@@ -1,6 +1,6 @@
 {
   "map_id": "TEACH-DOMAIN-OWNERSHIP",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
@@ -8,8 +8,8 @@
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "57d60016611681235c464bec295e123987e823e3",
-    "purpose": "approved domain-ownership baseline"
+    "commit": "c64c00f04197907d846c507ae956ed377826da2f",
+    "purpose": "pre-state-machine approval baseline"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -548,7 +548,7 @@
         "C13"
       ],
       "notes": [
-        "Ownership is clear; lifecycle values remain candidate because OQ-SEM-4 is still open."
+        "Approved lifecycle: ACTIVE -> INACTIVE -> REVOKED; REVOKED terminal; DELETED is not MembershipStatus."
       ]
     },
     {
@@ -944,13 +944,117 @@
       "authority_contracts": [
         "C34"
       ]
+    },
+    {
+      "kind": "state_set",
+      "id": "LearningSessionStatus",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C01",
+        "C32"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "DeactivateIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "ReactivateIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "RevokeMembership",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ]
+    },
+    {
+      "kind": "event",
+      "id": "IdentityDeactivated",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11"
+      ]
+    },
+    {
+      "kind": "event",
+      "id": "IdentityReactivated",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11"
+      ]
+    },
+    {
+      "kind": "event",
+      "id": "MembershipRevoked",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ]
+    },
+    {
+      "kind": "state_machine",
+      "id": "ApplicationSessionStateMachine",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C12"
+      ]
+    },
+    {
+      "kind": "state_machine",
+      "id": "IdentityStateMachine",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C11"
+      ]
+    },
+    {
+      "kind": "state_machine",
+      "id": "LearningSessionStateMachine",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C01",
+        "C32"
+      ]
+    },
+    {
+      "kind": "state_machine",
+      "id": "MembershipStateMachine",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C01",
+        "C13"
+      ]
     }
   ],
   "approval": {
     "state": "approved",
     "approved_on": "2026-10-03",
     "owner": "Patrick Craven, Top Shelf Service LLC",
-    "issue": "#2",
-    "basis": "Explicit domain-ownership approval token"
+    "issue": "#4",
+    "basis": "Explicit state-machine approval token"
   }
 }

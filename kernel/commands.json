@@ -2,42 +2,12 @@
   "schema_version": "0.1.0",
   "entries": [
     {
-      "id": "AuthenticateIdentity",
-      "kind": "command",
-      "status": "candidate"
-    },
-    {
-      "id": "CreateApplicationSession",
-      "kind": "command",
-      "status": "candidate"
-    },
-    {
-      "id": "RevokeApplicationSession",
-      "kind": "command",
-      "status": "candidate"
-    },
-    {
-      "id": "CreateMembership",
-      "kind": "command",
-      "status": "candidate"
-    },
-    {
-      "id": "DeactivateMembership",
-      "kind": "command",
-      "status": "candidate"
-    },
-    {
       "id": "AssignContent",
       "kind": "command",
       "status": "candidate"
     },
     {
-      "id": "StartLearningSession",
-      "kind": "command",
-      "status": "candidate"
-    },
-    {
-      "id": "RecordProgressEvent",
+      "id": "AuthenticateIdentity",
       "kind": "command",
       "status": "candidate"
     },
@@ -47,7 +17,47 @@
       "status": "candidate"
     },
     {
+      "id": "CreateApplicationSession",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "CreateMembership",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "DeactivateIdentity",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "DeactivateMembership",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
       "id": "IssueCertification",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "OffboardIdentity",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "ReactivateIdentity",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "RecordProgressEvent",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "RevokeApplicationSession",
       "kind": "command",
       "status": "candidate"
     },
@@ -57,7 +67,12 @@
       "status": "candidate"
     },
     {
-      "id": "OffboardIdentity",
+      "id": "RevokeMembership",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "StartLearningSession",
       "kind": "command",
       "status": "candidate"
     }

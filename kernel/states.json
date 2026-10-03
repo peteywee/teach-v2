@@ -2,19 +2,6 @@
   "schema_version": "0.1.0",
   "entries": [
     {
-      "id": "IdentityStatus",
-      "kind": "state_set",
-      "status": "candidate",
-      "values": [
-        "ACTIVE",
-        "INACTIVE",
-        "DELETED"
-      ],
-      "notes": [
-        "OFFBOARDED is not a value; IdentityOffboarded is a lifecycle event."
-      ]
-    },
-    {
       "id": "ApplicationSessionStatus",
       "kind": "state_set",
       "status": "candidate",
@@ -22,6 +9,11 @@
         "ACTIVE",
         "EXPIRED",
         "REVOKED"
+      ],
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C12"
       ]
     },
     {
@@ -33,6 +25,47 @@
         "BLOCKED",
         "UNKNOWN",
         "CONTRADICTORY"
+      ],
+      "owning_domain": "VerificationEvidence",
+      "authority_contracts": [
+        "C01",
+        "C51"
+      ],
+      "classification": "non-lifecycle"
+    },
+    {
+      "id": "IdentityStatus",
+      "kind": "state_set",
+      "status": "candidate",
+      "values": [
+        "ACTIVE",
+        "INACTIVE",
+        "DELETED"
+      ],
+      "notes": [
+        "OFFBOARDED is not a value; IdentityOffboarded is a lifecycle event."
+      ],
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C11"
+      ]
+    },
+    {
+      "id": "LearningSessionStatus",
+      "kind": "state_set",
+      "status": "candidate",
+      "values": [
+        "ACTIVE",
+        "COMPLETED"
+      ],
+      "owning_domain": "Learning",
+      "authority_contracts": [
+        "C01",
+        "C32"
+      ],
+      "notes": [
+        "Bootstrap lifecycle intentionally contains no paused, abandoned, or reopened state."
       ]
     },
     {
@@ -44,7 +77,14 @@
         "INACTIVE",
         "REVOKED"
       ],
-      "open_question": "OQ-SEM-4"
+      "owning_domain": "Organization",
+      "authority_contracts": [
+        "C01",
+        "C13"
+      ],
+      "notes": [
+        "Approved bootstrap lifecycle: ACTIVE -> INACTIVE -> REVOKED; REVOKED is terminal."
+      ]
     }
   ]
 }

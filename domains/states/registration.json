@@ -1,0 +1,29 @@
+{
+  "registration_id": "TEACH-STATE-MACHINE-REGISTRATION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "approved_on": "2026-10-03",
+  "issue": "#4",
+  "baseline_commit": "c64c00f04197907d846c507ae956ed377826da2f",
+  "kernel_version": "0.4.0",
+  "ownership_map_version": "1.1.0",
+  "registered_candidate_state_machines": [
+    "ApplicationSessionStateMachine",
+    "IdentityStateMachine",
+    "LearningSessionStateMachine",
+    "MembershipStateMachine"
+  ],
+  "resolved_decisions": [
+    "OQ-SEM-4",
+    "OQ-LRN-1",
+    "Identity bootstrap transition graph and offboarding result"
+  ],
+  "remaining_blocked": [
+    "CertificationLifecycle",
+    "SingleUseCredentialLifecycle",
+    "ContentPackLifecycle",
+    "IdentityStatus transition into DELETED pending C15"
+  ],
+  "candidate_to_approved_promotions": 0
+}

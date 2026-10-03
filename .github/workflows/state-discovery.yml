@@ -5,6 +5,7 @@ on:
     paths:
       - 'domains/states/**'
       - 'kernel/states.json'
+      - 'kernel/state-machines.json'
       - 'kernel/entities.json'
       - 'kernel/commands.json'
       - 'kernel/events.json'
@@ -14,6 +15,7 @@ on:
     paths:
       - 'domains/states/**'
       - 'kernel/states.json'
+      - 'kernel/state-machines.json'
       - 'kernel/entities.json'
       - 'kernel/commands.json'
       - 'kernel/events.json'
