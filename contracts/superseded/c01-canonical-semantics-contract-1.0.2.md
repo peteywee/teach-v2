@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C01",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.0.2",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-03",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.1.0",
+    "approved_version": "1.0.0",
     "approved_on": "2026-10-03",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner explicitly approved C01 1.1.0 by executing the K00 bootstrap with approval token; change tracked by GitHub issue #1"
+    "inheritance": "1.0.1 and 1.0.2 are non-normative governance/baseline cleanup patches; 1.0.0 owner approval remains controlling"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,8 +28,8 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C01@1.0.2"],
-  "superseded_by": null,
+  "supersedes": [],
+  "superseded_by": "TEACH-CON-C01@1.1.0",
   "depends_on": [
     "contracts/"
   ]
@@ -38,15 +38,17 @@
 
 # C01 — Canonical Semantics Contract
 
+> Superseded by C01 version 1.1.0 on 2026-10-03. Preserved under SYS-21.
+
 | Field              | Value                                                                                                                                                           |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Contract ID        | C01                                                                                                                                                             |
 | Group              | C01 Canonical Semantics (Semantic Kernel, K00)                                                                                                                  |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.1.0                                                                                                                                                           |
-| Status             | `active`                                                                                                                                                        |
+| Version            | 1.0.2                                                                                                                                                           |
+| Status             | `superseded`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-03 — C01 1.1.0 approved through explicit K00 bootstrap approval; see `APPROVAL-RECORD.md` and GitHub issue #1 |
+| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
 | Requirement prefix | `SEM`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New. Also referred to as K00, the semantic kernel.                                                                                                              |
@@ -72,7 +74,7 @@ This contract owns:
 This contract does not own:
 
 - The behavior rules of each domain (C11–C63)
-- Canonical capability identifier registration and naming (C01); C14 owns capability authorization semantics, assignment, scope, evaluation, and denial behavior
+- Which capabilities exist and what they authorize (C14); how capability identifiers are split between C01 and C14 is open (see OQ-SEM-3; value Not yet verified)
 - Persistence technology and migrations (C21)
 - Actor trust rules (C02)
 
@@ -82,7 +84,7 @@ Related contracts: C00, C02, C11, C14, C21.
 
 | Term              | Meaning                                                                                                                                  |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| Semantic registry | The single authoritative source under `kernel/`; canonical machine-readable source files use JSON and are validated against the kernel schema and deterministic validator. |
+| Semantic registry | The single authoritative source of canonical concepts and their definitions (location and format: see OQ-SEM-1; value Not yet verified). |
 | Concept           | A named unit of meaning: an entity, value object, relationship, state, capability, command, or event.                                    |
 | Entity            | A concept with stable identity, mutable state, a defined owner, and a defined lifecycle.                                                 |
 | Value object      | An immutable value with meaning but no independent business lifecycle (for example `EmailAddress`, `IdempotencyKey`).                    |
@@ -120,7 +122,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **SEM-8** — A concept's definition and identity MUST NOT change within a contract version; an entity's state MAY change.
 - **SEM-9** — Each entity MUST have exactly one canonical identifier type.
 - **SEM-10** — Every canonical state or status MUST be drawn from a registered, enumerated set of values; free-form strings MUST NOT represent canonical state.
-- **SEM-11** — `inactive`, `deleted`, `offboarded`, `revoked`, and `expired` MUST remain distinct concepts and MUST NOT be used interchangeably in code, contracts, APIs, tests, or documentation. `offboarded` MUST describe a lifecycle operation/event and MUST NOT be an `IdentityStatus` value.
+- **SEM-11** — `inactive`, `deleted`, `offboarded`, `revoked`, and `expired` MUST remain distinct concepts and MUST NOT be used interchangeably in code, contracts, APIs, tests, or documentation (see OQ-SEM-2; value Not yet verified).
 - **SEM-12** — Developers and development agents MUST NOT introduce an entity, identifier, state, relationship, capability, command, or event that is absent from the registry without an approved semantic change.
 - **SEM-13** — A proposed semantic change MUST state which existing concepts were considered and why none applies.
 - **SEM-14** — A deprecated alias MAY map to a canonical term; each alias MUST map to exactly one canonical term and MUST be registered as compatibility code under C00.
@@ -136,9 +138,6 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **SEM-24** — Artifacts generated from the registry (types, constants, documentation, AI context, validation rules, decision-test fixtures, architecture checks) MUST derive only from registry content and MUST NOT introduce semantics absent from it.
 - **SEM-25** — Drift between generated artifacts and the registry MUST fail CI.
 - **SEM-26** — Persistence models MUST be derived from registered concepts, ownership, relationships, states, invariants, and commands; a table or column MUST NOT introduce a canonical concept by itself.
-- **SEM-27** — The canonical semantic registry MUST live under `kernel/`. Canonical machine-readable source files MUST use JSON. Structural validation MUST be deterministic and dependency-free at bootstrap; human-readable views MAY be generated from the canonical JSON.
-- **SEM-28** — C01 MUST own registration and canonical naming of capability identifiers. C14 MUST own what each capability authorizes, who or what may receive it, applicable scope, evaluation semantics, and denial behavior.
-- **SEM-29** — `IdentityOffboarded` MUST be represented as a lifecycle event associated with the offboarding operation and MUST NOT be a member of `IdentityStatus`. Offboarding MUST result only in canonical identity/access state transitions defined by the owning domain contracts.
 
 ## 5. Acceptance Cases
 
@@ -159,30 +158,27 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | SEM-AC-13 | SEM-22, SEM-23                | Enumerate state-changing operations and emitted events                                                                   | Each maps to a registered command or event                                                          |
 | SEM-AC-14 | SEM-24, SEM-25                | Edit generated output by hand; separately change the registry without regenerating                                       | Both fail CI                                                                                        |
 | SEM-AC-15 | SEM-26                        | Schema review: each table and column traces to a registered concept                                                      | Manual evidence plus check: untraced schema objects fail                                            |
-| SEM-AC-16 | SEM-27                        | Validate repository kernel layout and parse every canonical source file                                                    | `kernel/` contains the registered JSON files; schema and deterministic validator pass                |
-| SEM-AC-17 | SEM-28                        | Register a capability identifier, then inspect C14 authorization metadata                                                   | Identifier ownership is C01; authorization meaning and scope are C14                                |
-| SEM-AC-18 | SEM-11, SEM-29                | Inspect IdentityStatus and lifecycle events                                                                                 | OFFBOARDED is absent from IdentityStatus; IdentityOffboarded exists as a canonical event             |
 
 ## 6. Open Questions
 
-| ID       | Status   | Decision / Question | Blocks implementation | Affects |
-| -------- | -------- | ------------------- | --------------------- | ------- |
-| OQ-SEM-1 | Resolved | Canonical semantic registry lives under `kernel/`. Canonical source format is JSON. JSON Schema plus the dependency-free kernel validator enforce structure; Markdown views may be generated. Decision approved 2026-10-03; GitHub issue #1. | No | SEM-27 |
-| OQ-SEM-2 | Resolved | `OFFBOARDED` is not an `IdentityStatus`. `IdentityStatus` remains `ACTIVE`, `INACTIVE`, `DELETED`; `IdentityOffboarded` is the canonical lifecycle event for the offboarding operation. Decision approved 2026-10-03; GitHub issue #1. | No | SEM-11, SEM-29 |
-| OQ-SEM-3 | Resolved | C01 owns capability identifier registration and canonical naming. C14 owns authorization meaning, assignment, scope, evaluation, and denial semantics. Decision approved 2026-10-03; GitHub issue #1. | No | SEM-28 |
-| OQ-SEM-4 | Open     | Is the Membership lifecycle ACTIVE → INACTIVE → REVOKED the approved state machine? | No | — |
-| OQ-SEM-5 | Open     | Who approves domain-discovery output that promotes candidate entries to approved entries? | No | — |
+| ID       | Question                                                                                                                                                                                                                      | Blocks implementation | Affects |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ------- |
+| OQ-SEM-1 | Where does the semantic registry live (the decisions suggest a `kernel/` tree with manifest, entities, values, relationships, states, capabilities, commands, events, evidence) and in what machine-readable format?          | Yes                   | —       |
+| OQ-SEM-2 | The decisions give IdentityStatus as ACTIVE, INACTIVE, DELETED, and also require `offboarded` to stay distinct. Is offboarded an IdentityStatus value, or the `IdentityOffboarded` event whose result is INACTIVE or DELETED? | Yes                   | SEM-11  |
+| OQ-SEM-3 | Capability identifiers appear in both the kernel concept list and C14's vocabulary. Does C01 own capability identifiers while C14 owns what they authorize, or does C14 own capabilities entirely?                            | Yes                   | —       |
+| OQ-SEM-4 | Is the Membership lifecycle ACTIVE → INACTIVE → REVOKED (given as an example) the approved state machine?                                                                                                                     | No                    | —       |
+| OQ-SEM-5 | Who approves the output of domain discovery that turns candidate entries into approved entries?                                                                                                                               | No                    | —       |
 
 ## 7. Verification Status
 
 | Item                         | State                    | Detail                                                                                                                                                                                                                                                |
 | ---------------------------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Target codebase              | verified (limited scope) | `peteywee/teach-v2` default branch `main`, verified through governance baseline commit `292e8da9123987e9d94f09669c7bc6b6d43c4320` on 2026-10-03. The repository contains the contract/governance foundation; application implementation remains not yet built.                                |
+| Target codebase              | verified (limited scope) | `peteywee/teach-v2`, default branch `main` (owner-declared). Cloned 2026-10-03: repository exists and has no commits, so no SHA is anchored. Teach v2 is a new build on these contracts (owner statement, 2026-10-03).                                |
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
-| Blocking open questions      | 0 open                   | OQ-SEM-1 through OQ-SEM-3 are resolved in 1.1.0. OQ-SEM-4 and OQ-SEM-5 remain open but are non-blocking.                                                                                                   |
-| Owner approval               | declared                 | Approved by the owner on 2026-10-03; recorded in `APPROVAL-RECORD.md`. Initial owner-approval baseline is commit `2c9b1c849a520ba817efc91150be9a37797f4238`; this 1.1.0 normative revision is approved and tracked by Git history.                                                                     |
+| Blocking open questions      | 3 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
+| Owner approval               | declared                 | Approved by the owner on 2026-10-03; recorded in `APPROVAL-RECORD.md`. Initial owner-approval baseline is commit `2c9b1c849a520ba817efc91150be9a37797f4238`; this 1.0.2 revision is tracked by Git history.                                                                     |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
@@ -196,4 +192,3 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.0   | 2026-10-03 | Approved by the owner; status changed from `proposed` to `active`. Open questions remain open and block implementation of the requirements they affect (SYS-34) instead of blocking activation. | Claude (drafter) |
 | 1.0.1   | 2026-10-03 | Non-normative document-governance metadata/provenance normalization; 1.0.0 owner approval remained controlling. | ChatGPT (governance) |
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
-| 1.1.0   | 2026-10-03 | Normative K00 bootstrap revision: resolved OQ-SEM-1/2/3; fixed kernel location/JSON format, offboarding semantics, and C01/C14 capability ownership; added SEM-27–SEM-29 and SEM-AC-16–18. GitHub issue #1. | Patrick Craven (owner approval via K00 bootstrap) |

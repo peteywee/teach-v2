@@ -1,0 +1,38 @@
+{
+  "kernel_id": "TEACH-K00",
+  "version": "0.1.0",
+  "status": "active",
+  "canonical_format": "json",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-03",
+  "updated_on": "2026-10-03",
+  "governed_by": [
+    "TEACH-CON-C00",
+    "TEACH-CON-C01"
+  ],
+  "issue": "#1",
+  "entry_statuses": [
+    "candidate",
+    "approved",
+    "deprecated"
+  ],
+  "files": {
+    "entities": "entities.json",
+    "values": "values.json",
+    "identifiers": "identifiers.json",
+    "relationships": "relationships.json",
+    "states": "states.json",
+    "capabilities": "capabilities.json",
+    "commands": "commands.json",
+    "events": "events.json",
+    "evidence": "evidence.json",
+    "schema": "schema/semantic-kernel.schema.json"
+  },
+  "rules": {
+    "unknown_semantic_term": "reject_or_propose_semantic_change",
+    "implementation_may_invent_terms": false,
+    "representation_defines_meaning": false,
+    "one_authoritative_owner_per_mutable_fact": true,
+    "candidate_entries_usable_by_merged_implementation": false
+  }
+}

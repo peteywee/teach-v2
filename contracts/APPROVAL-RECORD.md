@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-03
-- Contract package version: `0.4.2`
+- Contract package version: `0.5.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -37,15 +37,15 @@ not Claude's (SYS-18). The owner's initial contract-spine commit to `peteywee/te
 
 ## Part 1 — Open question decisions
 
-31 questions that block implementation (SYS-34). The contracts were activated with these open.
+28 questions that block implementation (SYS-34). The contracts were activated with these open.
 Record each decision in plain words; it then gets written into the contract through the revision
 procedure (SYS-21).
 
 | Contract | OQ         | Question                                                                                                                                                                                                                      | Decision | Date | Owner |
 | -------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ---- | ----- |
-| C01      | OQ-SEM-1   | Where does the semantic registry live (the decisions suggest a `kernel/` tree with manifest, entities, values, relationships, states, capabilities, commands, events, evidence) and in what machine-readable format?          |          |      |       |
-| C01      | OQ-SEM-2   | The decisions give IdentityStatus as ACTIVE, INACTIVE, DELETED, and also require `offboarded` to stay distinct. Is offboarded an IdentityStatus value, or the `IdentityOffboarded` event whose result is INACTIVE or DELETED? |          |      |       |
-| C01      | OQ-SEM-3   | Capability identifiers appear in both the kernel concept list and C14's vocabulary. Does C01 own capability identifiers while C14 owns what they authorize, or does C14 own capabilities entirely?                            |          |      |       |
+| C01      | OQ-SEM-1   | Where does the semantic registry live (the decisions suggest a `kernel/` tree with manifest, entities, values, relationships, states, capabilities, commands, events, evidence) and in what machine-readable format?          | `kernel/`; canonical JSON; JSON Schema + dependency-free validator; generated Markdown permitted | 2026-10-03 | Patrick Craven |
+| C01      | OQ-SEM-2   | The decisions give IdentityStatus as ACTIVE, INACTIVE, DELETED, and also require `offboarded` to stay distinct. Is offboarded an IdentityStatus value, or the `IdentityOffboarded` event whose result is INACTIVE or DELETED? | OFFBOARDED is not IdentityStatus; IdentityOffboarded is lifecycle event; IdentityStatus remains ACTIVE/INACTIVE/DELETED | 2026-10-03 | Patrick Craven |
+| C01      | OQ-SEM-3   | Capability identifiers appear in both the kernel concept list and C14's vocabulary. Does C01 own capability identifiers while C14 owns what they authorize, or does C14 own capabilities entirely?                            | C01 owns capability identifiers/names; C14 owns authorization meaning, assignment, scope, evaluation, denial | 2026-10-03 | Patrick Craven |
 | C11      | OQ-IDN-1   | Which password hashing algorithm and parameters are approved?                                                                                                                                                                 |          |      |       |
 | C11      | OQ-IDN-2   | What are the lifetimes of invitation, frontline setup, and password-reset tokens?                                                                                                                                             |          |      |       |
 | C11      | OQ-IDN-3   | Which sessions does a credential change revoke: all sessions, all other sessions, or another policy?                                                                                                                          |          |      |       |
@@ -83,6 +83,7 @@ Decision is one of: `Approve`, `Approve with amendments` (list them), or `Reject
 | --------------------------------------------- | ------- | -------------------------------------- | -------- | -------------------------------------------------------------- | ---------- | -------------------------------------------------------- |
 | C00 System Authority                          | 1.0.0   | 0                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
 | C01 Canonical Semantics                       | 1.0.0   | 3                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C01 Canonical Semantics                        | 1.1.0   | 0                                      | Approve  | Resolves OQ-SEM-1/2/3 and authorizes K00 bootstrap; GitHub issue #1 | 2026-10-03 | Patrick Craven (explicit K00 bootstrap approval) |
 | C02 Automation & Agent Authority              | 1.0.0   | 0                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
 | C11 Identity & Credentials                    | 1.0.0   | 5                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
 | C12 Application Sessions                      | 1.0.0   | 6                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
@@ -165,26 +166,54 @@ PATCH revisions preserve the controlling owner approval when they do not change 
 | C61 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
 | C62 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
 | C63 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
-| 00 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 01 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 02 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 11 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 12 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 13 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 14 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 15 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 21 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 22 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 23 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 31 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 32 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 33 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 34 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 41 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 42 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 51 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 52 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 53 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 61 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 62 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
-| 63 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C00 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C01 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C02 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C11 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C12 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C13 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C14 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C15 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C21 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C22 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C23 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C31 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C32 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C33 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C34 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C41 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C42 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C51 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C52 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C53 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C61 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C62 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| C63 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 00 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 02 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 11 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 12 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 13 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 14 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 15 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 21 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 22 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 23 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 31 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 32 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 33 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 34 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 41 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 42 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 51 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 52 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 53 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 61 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 62 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 63 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+
+## Part 5 — Normative revisions
+
+| Contract | From | To | Date | Approval | GitHub issue | Reason |
+| --- | --- | --- | --- | --- | --- | --- |
+| C01 | 1.0.2 | 1.1.0 | 2026-10-03 | Patrick Craven (explicit K00 bootstrap approval) | #1 | Resolve OQ-SEM-1/2/3 and establish K00 registry location/format and authority split |

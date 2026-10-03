@@ -1,0 +1,40 @@
+{
+  "schema_version": "0.1.0",
+  "entries": [
+    {
+      "id": "EmailAddress",
+      "kind": "value_object",
+      "status": "candidate",
+      "definition": "Normalized validated email address.",
+      "owning_domain": "Identity"
+    },
+    {
+      "id": "ContentVersion",
+      "kind": "value_object",
+      "status": "candidate",
+      "definition": "Immutable content-version identity used to bind learning evidence to exact content semantics.",
+      "owning_domain": "Content"
+    },
+    {
+      "id": "Timestamp",
+      "kind": "value_object",
+      "status": "candidate",
+      "definition": "Canonical point-in-time value.",
+      "owning_domain": "AuditLifecycle"
+    },
+    {
+      "id": "RequestId",
+      "kind": "value_object",
+      "status": "candidate",
+      "definition": "Request correlation identity; never an authorization input.",
+      "owning_domain": "AuditLifecycle"
+    },
+    {
+      "id": "IdempotencyKey",
+      "kind": "value_object",
+      "status": "candidate",
+      "definition": "Stable retry identity for an idempotent operation.",
+      "owning_domain": "AuditLifecycle"
+    }
+  ]
+}

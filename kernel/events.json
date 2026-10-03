@@ -1,0 +1,60 @@
+{
+  "schema_version": "0.1.0",
+  "entries": [
+    {
+      "id": "ApplicationSessionCreated",
+      "kind": "event",
+      "status": "candidate"
+    },
+    {
+      "id": "ApplicationSessionRevoked",
+      "kind": "event",
+      "status": "candidate"
+    },
+    {
+      "id": "MembershipCreated",
+      "kind": "event",
+      "status": "candidate"
+    },
+    {
+      "id": "MembershipDeactivated",
+      "kind": "event",
+      "status": "candidate"
+    },
+    {
+      "id": "ContentAssigned",
+      "kind": "event",
+      "status": "candidate"
+    },
+    {
+      "id": "LearningSessionStarted",
+      "kind": "event",
+      "status": "candidate"
+    },
+    {
+      "id": "ProgressRecorded",
+      "kind": "event",
+      "status": "candidate"
+    },
+    {
+      "id": "LearningSessionCompleted",
+      "kind": "event",
+      "status": "candidate"
+    },
+    {
+      "id": "CertificationIssued",
+      "kind": "event",
+      "status": "candidate"
+    },
+    {
+      "id": "CertificationRevoked",
+      "kind": "event",
+      "status": "candidate"
+    },
+    {
+      "id": "IdentityOffboarded",
+      "kind": "event",
+      "status": "candidate"
+    }
+  ]
+}

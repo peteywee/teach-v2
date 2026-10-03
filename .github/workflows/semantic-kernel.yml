@@ -1,0 +1,28 @@
+name: Semantic Kernel
+
+on:
+  pull_request:
+    paths:
+      - 'kernel/**'
+      - 'scripts/kernel/**'
+      - 'contracts/c01-canonical-semantics-contract.md'
+      - 'contracts/APPROVAL-RECORD.md'
+  push:
+    branches: [main]
+    paths:
+      - 'kernel/**'
+      - 'scripts/kernel/**'
+      - 'contracts/c01-canonical-semantics-contract.md'
+      - 'contracts/APPROVAL-RECORD.md'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-semantic-kernel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate K00
+        run: node scripts/kernel/validate-semantic-kernel.mjs

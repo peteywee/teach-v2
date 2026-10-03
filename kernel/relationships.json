@@ -1,0 +1,70 @@
+{
+  "schema_version": "0.1.0",
+  "entries": [
+    {
+      "id": "LocationBelongsToOrganization",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "Location",
+      "to": "Organization",
+      "cardinality": "many-to-one",
+      "enables": [
+        "tenant_scope_resolution"
+      ],
+      "does_not_grant": [
+        "capability",
+        "entitlement"
+      ]
+    },
+    {
+      "id": "MembershipLinksIdentityOrganization",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "Membership",
+      "to": [
+        "Identity",
+        "Organization"
+      ],
+      "cardinality": "relationship-entity",
+      "may_scope": [
+        "Location"
+      ],
+      "enables": [
+        "capability_resolution_eligibility"
+      ],
+      "does_not_grant": [
+        "capability",
+        "entitlement",
+        "manager_authority"
+      ]
+    },
+    {
+      "id": "IdentityHasApplicationSession",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "Identity",
+      "to": "ApplicationSession",
+      "cardinality": "one-to-many",
+      "enables": [
+        "session_ownership"
+      ],
+      "does_not_grant": [
+        "authorization"
+      ]
+    },
+    {
+      "id": "IdentityHasLearningSession",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "Identity",
+      "to": "LearningSession",
+      "cardinality": "one-to-many",
+      "enables": [
+        "learner_session_ownership"
+      ],
+      "does_not_grant": [
+        "content_access"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,181 @@
+{
+  "schema_version": "0.1.0",
+  "entries": [
+    {
+      "id": "Identity",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Persistent application representation of a person.",
+      "identifier": "IdentityId",
+      "owning_domain": "Identity",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "Credential",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Authentication proof or secret associated with an Identity.",
+      "identifier": "CredentialId",
+      "owning_domain": "Identity",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "ApplicationSession",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Revocable authenticated application session.",
+      "identifier": "ApplicationSessionId",
+      "owning_domain": "Identity",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "Organization",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Primary customer, tenant, and security boundary.",
+      "identifier": "OrganizationId",
+      "owning_domain": "OrganizationAuthority",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "Location",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Workplace scope contained by an Organization.",
+      "identifier": "LocationId",
+      "owning_domain": "OrganizationAuthority",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "Membership",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Relationship connecting an Identity to an Organization and optionally a Location.",
+      "identifier": "MembershipId",
+      "owning_domain": "OrganizationAuthority",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "Entitlement",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Right to consume a product or resource; does not itself grant an application capability.",
+      "identifier": "EntitlementId",
+      "owning_domain": "OrganizationAuthority",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "ContentPack",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Versioned collection of teaching content.",
+      "identifier": "ContentPackId",
+      "owning_domain": "Content",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "ContentBlock",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Addressable unit within a ContentPack.",
+      "identifier": "ContentBlockId",
+      "owning_domain": "Content",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "Assignment",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Authoritative association making content available to a learner or governed scope.",
+      "identifier": "AssignmentId",
+      "owning_domain": "Learning",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "LearningSession",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Bounded learner attempt against assigned content.",
+      "identifier": "LearningSessionId",
+      "owning_domain": "Learning",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "ProgressEvent",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Persisted canonical learner action or progress fact.",
+      "identifier": "ProgressEventId",
+      "owning_domain": "Learning",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "LearnerState",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Authoritative derived/current learning state for a learner and governed content scope.",
+      "identifier": "LearnerStateId",
+      "owning_domain": "Learning",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "Certification",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Evidence-backed credential issued under approved criteria.",
+      "identifier": "CertificationId",
+      "owning_domain": "Certification",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "AuditEvent",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Immutable security or business audit fact.",
+      "identifier": "AuditEventId",
+      "owning_domain": "AuditLifecycle",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "LifecycleEvent",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Canonical record of a governed lifecycle transition.",
+      "identifier": "LifecycleEventId",
+      "owning_domain": "AuditLifecycle",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    }
+  ]
+}

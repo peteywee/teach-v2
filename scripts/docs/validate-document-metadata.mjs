@@ -4,7 +4,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 
 const ROOT = resolve(process.cwd());
-const governedRoots = ['contracts', 'governance'];
+const governedRoots = ['contracts', 'governance', 'kernel'];
 const semver = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 const dateRe = /^\d{4}-\d{2}-\d{2}$/;
 const statuses = new Set(['draft', 'proposed', 'active', 'superseded', 'retired', 'recorded']);
@@ -50,7 +50,8 @@ for (const r of governedRoots) {
   try { docs.push(...walk(abs)); } catch {}
 }
 
-const ids = new Map();
+const idVersions = new Map();
+const activeIds = new Map();
 for (const abs of docs) {
   const path = relative(ROOT, abs).replaceAll('\\','/');
   const text = readFileSync(abs, 'utf8');
@@ -64,8 +65,14 @@ for (const abs of docs) {
   if (m.class && !classes.has(m.class)) errors.push(`${path}: invalid class ${m.class}`);
   for (const key of ['created_on','updated_on']) if (m[key] && !dateRe.test(m[key])) errors.push(`${path}: invalid ${key} ${m[key]}`);
   if (m.created_on && m.updated_on && m.created_on > m.updated_on) errors.push(`${path}: created_on is after updated_on`);
-  if (ids.has(m.doc_id)) errors.push(`${path}: duplicate doc_id ${m.doc_id}; first seen in ${ids.get(m.doc_id)}`);
-  else ids.set(m.doc_id, path);
+  const idVersion = `${m.doc_id}@${m.version}`;
+  if (idVersions.has(idVersion)) errors.push(`${path}: duplicate document version ${idVersion}; first seen in ${idVersions.get(idVersion)}`);
+  else idVersions.set(idVersion, path);
+  if (m.status === 'active') {
+    if (activeIds.has(m.doc_id)) errors.push(`${path}: more than one active version of ${m.doc_id}; first active version in ${activeIds.get(m.doc_id)}`);
+    else activeIds.set(m.doc_id, path);
+  }
+  if (path.includes('/superseded/') && m.status !== 'superseded') errors.push(`${path}: document under superseded/ must have status superseded`);
   if (m.class === 'contract' && m.status === 'active') {
     if (!m.approval || m.approval.state !== 'approved' || !m.approval.record) errors.push(`${path}: active contract missing approved approval record`);
     const vm = text.match(/^\| Version\s+\|\s*([^|\s]+)\s*\|/m);
@@ -79,7 +86,7 @@ const base = baseArgIndex >= 0 ? process.argv[baseArgIndex + 1] : process.env.DO
 if (base) {
   let changed = [];
   try {
-    changed = execFileSync('git', ['diff', '--name-only', `${base}...HEAD`, '--', 'contracts/**/*.md', 'contracts/*.md', 'governance/**/*.md', 'governance/*.md'], { encoding: 'utf8' })
+    changed = execFileSync('git', ['diff', '--name-only', `${base}...HEAD`, '--', 'contracts/**/*.md', 'contracts/*.md', 'governance/**/*.md', 'governance/*.md', 'kernel/**/*.md', 'kernel/*.md'], { encoding: 'utf8' })
       .split('\n').map(s=>s.trim()).filter(Boolean);
   } catch (e) {
     errors.push(`unable to determine changed governed documents against ${base}: ${e.message}`);

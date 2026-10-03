@@ -1,0 +1,50 @@
+{
+  "schema_version": "0.1.0",
+  "entries": [
+    {
+      "id": "IdentityStatus",
+      "kind": "state_set",
+      "status": "candidate",
+      "values": [
+        "ACTIVE",
+        "INACTIVE",
+        "DELETED"
+      ],
+      "notes": [
+        "OFFBOARDED is not a value; IdentityOffboarded is a lifecycle event."
+      ]
+    },
+    {
+      "id": "ApplicationSessionStatus",
+      "kind": "state_set",
+      "status": "candidate",
+      "values": [
+        "ACTIVE",
+        "EXPIRED",
+        "REVOKED"
+      ]
+    },
+    {
+      "id": "EvidenceState",
+      "kind": "state_set",
+      "status": "candidate",
+      "values": [
+        "PROVEN",
+        "BLOCKED",
+        "UNKNOWN",
+        "CONTRADICTORY"
+      ]
+    },
+    {
+      "id": "MembershipStatus",
+      "kind": "state_set",
+      "status": "candidate",
+      "values": [
+        "ACTIVE",
+        "INACTIVE",
+        "REVOKED"
+      ],
+      "open_question": "OQ-SEM-4"
+    }
+  ]
+}

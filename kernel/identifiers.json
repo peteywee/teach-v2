@@ -1,0 +1,157 @@
+{
+  "schema_version": "0.1.0",
+  "entries": [
+    {
+      "id": "IdentityId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "Identity",
+      "owning_domain": "Identity"
+    },
+    {
+      "id": "CredentialId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "Credential",
+      "owning_domain": "Identity"
+    },
+    {
+      "id": "ApplicationSessionId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "ApplicationSession",
+      "owning_domain": "Identity"
+    },
+    {
+      "id": "OrganizationId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "Organization",
+      "owning_domain": "OrganizationAuthority"
+    },
+    {
+      "id": "LocationId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "Location",
+      "owning_domain": "OrganizationAuthority"
+    },
+    {
+      "id": "MembershipId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "Membership",
+      "owning_domain": "OrganizationAuthority"
+    },
+    {
+      "id": "EntitlementId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "Entitlement",
+      "owning_domain": "OrganizationAuthority"
+    },
+    {
+      "id": "ContentPackId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "ContentPack",
+      "owning_domain": "Content"
+    },
+    {
+      "id": "ContentBlockId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "ContentBlock",
+      "owning_domain": "Content"
+    },
+    {
+      "id": "AssignmentId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "Assignment",
+      "owning_domain": "Learning"
+    },
+    {
+      "id": "LearningSessionId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "LearningSession",
+      "owning_domain": "Learning"
+    },
+    {
+      "id": "ProgressEventId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "ProgressEvent",
+      "owning_domain": "Learning"
+    },
+    {
+      "id": "LearnerStateId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "LearnerState",
+      "owning_domain": "Learning"
+    },
+    {
+      "id": "CertificationId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "Certification",
+      "owning_domain": "Certification"
+    },
+    {
+      "id": "AuditEventId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "AuditEvent",
+      "owning_domain": "AuditLifecycle"
+    },
+    {
+      "id": "LifecycleEventId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "LifecycleEvent",
+      "owning_domain": "AuditLifecycle"
+    },
+    {
+      "id": "CapabilityId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "string",
+      "represents": "Capability",
+      "owning_domain": "OrganizationAuthority"
+    },
+    {
+      "id": "RequestId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "string",
+      "represents": "Request",
+      "owning_domain": "AuditLifecycle"
+    },
+    {
+      "id": "IdempotencyKey",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "string",
+      "represents": "IdempotentOperation",
+      "owning_domain": "AuditLifecycle"
+    }
+  ]
+}

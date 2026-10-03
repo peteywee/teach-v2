@@ -1,0 +1,65 @@
+{
+  "schema_version": "0.1.0",
+  "entries": [
+    {
+      "id": "AuthenticateIdentity",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "CreateApplicationSession",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "RevokeApplicationSession",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "CreateMembership",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "DeactivateMembership",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "AssignContent",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "StartLearningSession",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "RecordProgressEvent",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "CompleteLearningSession",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "IssueCertification",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "RevokeCertification",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "OffboardIdentity",
+      "kind": "command",
+      "status": "candidate"
+    }
+  ]
+}

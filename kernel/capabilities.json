@@ -1,0 +1,9 @@
+{
+  "schema_version": "0.1.0",
+  "ownership": {
+    "identifier_registration": "C01",
+    "authorization_semantics": "C14"
+  },
+  "entries": [],
+  "note": "Capability identifiers are registered here; C14 owns authorization meaning, assignment, scope, evaluation, and denial."
+}

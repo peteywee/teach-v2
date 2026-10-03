@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-GOV-DOCS",
   "class": "governance-policy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -51,6 +51,8 @@ Dates use ISO `YYYY-MM-DD`.
 - `effective_on`: date the version became governing.
 - `superseded_on`: date a superseded version stopped governing, when applicable.
 
+A superseded copy of an existing document preserves the same `doc_id` and its historical `version`; uniqueness is enforced on the `(doc_id, version)` pair, and at most one `active` version of a `doc_id` may exist.
+
 ## 4. Versioning
 
 Governed normative documents use semantic versioning `MAJOR.MINOR.PATCH`.
@@ -98,7 +100,7 @@ An active contract MUST identify its approval record. PATCH-only non-normative r
 CI MUST fail for at least:
 
 - missing or malformed `tos-doc` metadata
-- duplicate `doc_id`
+- duplicate `(doc_id, version)` records or more than one active version of a `doc_id`
 - invalid semantic version
 - invalid lifecycle status
 - invalid ISO date
@@ -113,3 +115,10 @@ Semantic review remains responsible for determining whether a MINOR or MAJOR cha
 ## 9. Single source of truth
 
 The `tos-doc` block is the machine-readable metadata authority. Visible tables and generated indexes MUST agree with it. Future tooling SHOULD generate duplicate human-facing metadata and contract indexes from the machine source rather than requiring manual synchronization.
+
+## 10. Change Log
+
+| Version | Date | Change |
+| --- | --- | --- |
+| 1.0.0 | 2026-10-03 | Initial active document-governance baseline. |
+| 1.0.1 | 2026-10-03 | Clarified versioned superseded-copy identity and included semantic-kernel documents in enforced governance. |
