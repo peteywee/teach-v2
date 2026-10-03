@@ -1,0 +1,144 @@
+<!--tos-doc
+{
+  "doc_id": "TEACH-CON-C14",
+  "class": "contract",
+  "claims_truth_state": "declared",
+  "status": "active",
+  "written_against": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "head_sha": "Not yet verified",
+    "note": "repository had no commits when cloned 2026-10-03"
+  },
+  "legacy_reference": {
+    "repo": "peteywee/teach",
+    "ref": "work/TR-0010-production-cutover",
+    "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+    "use": "reference only; does not govern and is not governed by this contract"
+  },
+  "depends_on": [
+    "contracts/"
+  ]
+}
+-->
+
+# C14 — Authorization & Capabilities Contract
+
+| Field              | Value                                                                                                                                                           |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Contract ID        | C14                                                                                                                                                             |
+| Group              | C10 Trust & Security                                                                                                                                            |
+| Governed by        | C00 System Authority                                                                                                                                            |
+| Version            | 1.0.0                                                                                                                                                           |
+| Status             | `active`                                                                                                                                                        |
+| Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
+| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
+| Requirement prefix | `AUTHZ`                                                                                                                                                         |
+| Activation         | Required for the core rebuild                                                                                                                                   |
+| Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/tenancy.json` (capability resolution half); carries forward Gate A denial semantics.                |
+| Supersedes         | None                                                                                                                                                            |
+| Superseded by      | None                                                                                                                                                            |
+| Created            | 2026-10-03                                                                                                                                                      |
+| Last updated       | 2026-10-03                                                                                                                                                      |
+
+## 1. Purpose and Failure Prevented
+
+A developer adds a new manager endpoint and forgets to wire the authorization check. It ships, because nothing requires every route to be registered. Any signed-in learner can call it. Separately, a screen hides the "Export" button from cooks, and everyone treats that as the security control. This contract makes authorization default-deny at a single registry, so an unregistered route cannot run, and makes the API, never the UI, the place where permission lives.
+
+## 2. Scope
+
+This contract owns:
+
+- The protected-operation registry
+- The capability vocabulary
+- Role-to-capability bundles
+- Authorization decisions and denial semantics
+
+This contract does not own:
+
+- Membership facts (C13)
+- Session validity (C12)
+- Entitlement/billing facts (C63)
+
+Related contracts: C00, C12, C13, C23, C63.
+
+## 3. Definitions
+
+| Term                | Meaning                                                                      |
+| ------------------- | ---------------------------------------------------------------------------- |
+| Protected operation | Any API method and path that reads or mutates non-public data.               |
+| Capability          | A typed, dot-delimited action constant (for example `team.member.offboard`). |
+| Role                | A named bundle of capabilities. Roles are not checked directly.              |
+| Entitlement         | A commercial/plan fact that can restrict, but never create, a capability.    |
+| Target              | The record an operation acts on.                                             |
+
+## 4. Requirements
+
+The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Requirement IDs are stable and MUST NOT be renumbered or reused.
+
+- **AUTHZ-1** — Every protected API operation MUST be listed in the protected-operation registry.
+- **AUTHZ-2** — Every registered operation MUST map to exactly one owning capability.
+- **AUTHZ-3** — Exactly one protected-operation registry MUST exist.
+- **AUTHZ-4** — The registry MUST be default-deny: an operation absent from it MUST be denied.
+- **AUTHZ-5** — Denial of an unknown or unauthorized operation MUST occur before handler code executes.
+- **AUTHZ-6** — A mounted protected route without a registry entry MUST fail CI or application startup.
+- **AUTHZ-7** — Roles MUST be defined only as bundles of capabilities; authorization code MUST NOT check role names directly.
+- **AUTHZ-8** — Entitlements MAY remove a capability's effect but MUST NOT create a capability.
+- **AUTHZ-9** — UI visibility MUST NOT constitute authorization; every protected operation MUST be enforced at the API.
+- **AUTHZ-10** — Each authorization decision MUST reload database-current actor, membership, and scope state.
+- **AUTHZ-11** — Authorization MUST evaluate, in order: identity, membership, tenant/location scope, capability, target, entitlement; failure at any step MUST stop evaluation.
+- **AUTHZ-12** — A missing, invalid, expired, or revoked session MUST produce `401`.
+- **AUTHZ-13** — An authenticated actor lacking the required capability or active membership MUST receive `403`.
+- **AUTHZ-14** — A wrong-tenant, wrong-location, out-of-reporting-scope, inactive, deleted, or nonexistent target MUST produce a non-disclosing `404` that is indistinguishable from a nonexistent target and contains no target fields.
+- **AUTHZ-15** — A denied request MUST produce no state change and no external side effect, other than audit records permitted by C23.
+- **AUTHZ-16** — A target ID supplied by the client MUST NOT establish authorization; the target MUST be resolved and checked against actor scope.
+- **AUTHZ-17** — Every sensitive mutation MUST be evaluated with both actor scope and target scope.
+- **AUTHZ-18** — Every capability addition or change MUST ship with negative tests proving denial for actors that lack it, in the same change.
+- **AUTHZ-19** — The capability vocabulary and role bundles MUST be the owner-approved set (see OQ-AUTHZ-1; value Not yet verified).
+- **AUTHZ-20** — A role MUST NOT hold a cross-tenant capability unless the owner approves it (see OQ-AUTHZ-2; value Not yet verified).
+
+## 5. Acceptance Cases
+
+| Case        | Proves                                           | Setup                                                                                                                    | Expected                                                                                                     |
+| ----------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| AUTHZ-AC-1  | AUTHZ-1, AUTHZ-6, AUTHZ-3                        | Mount a protected route with no registry entry                                                                           | CI or startup fails                                                                                          |
+| AUTHZ-AC-2  | AUTHZ-4, AUTHZ-5                                 | Call an unregistered path that exists in code; instrument handler                                                        | Denied; handler never invoked                                                                                |
+| AUTHZ-AC-3  | AUTHZ-2                                          | Registry validation                                                                                                      | Every entry names exactly one capability                                                                     |
+| AUTHZ-AC-4  | AUTHZ-7                                          | Static check for role-name comparisons in authorization paths                                                            | None found                                                                                                   |
+| AUTHZ-AC-5  | AUTHZ-8                                          | Entitlement grants a feature to an actor without the capability                                                          | Request still denied 403                                                                                     |
+| AUTHZ-AC-6  | AUTHZ-9                                          | Call every protected operation directly with actors whose UI hides it                                                    | Denied per matrix                                                                                            |
+| AUTHZ-AC-7  | AUTHZ-10                                         | Revoke a capability mid-session; repeat request                                                                          | Denied on next request                                                                                       |
+| AUTHZ-AC-8  | AUTHZ-11, AUTHZ-12, AUTHZ-13, AUTHZ-14, AUTHZ-15 | Authorization matrix: every operation × {no session, no capability, wrong tenant, wrong location, deleted target, valid} | 401/403/404/2xx exactly per matrix; zero writes on denial; 404 bodies identical to nonexistent-target bodies |
+| AUTHZ-AC-9  | AUTHZ-16, AUTHZ-17                               | Valid actor supplies a guessed target ID outside scope for each mutation                                                 | Non-disclosing 404; no write                                                                                 |
+| AUTHZ-AC-10 | AUTHZ-18                                         | PR adds a capability without a denial test                                                                               | CI check fails                                                                                               |
+| AUTHZ-AC-11 | AUTHZ-19                                         | Owner decision record                                                                                                    | Manual evidence: approved vocabulary recorded                                                                |
+| AUTHZ-AC-12 | AUTHZ-20                                         | Enumerate role bundles for cross-tenant capabilities                                                                     | None unless owner approval recorded                                                                          |
+
+## 6. Open Questions
+
+| ID         | Question                                                                                                                  | Blocks implementation | Affects  |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------- | --------------------- | -------- |
+| OQ-AUTHZ-1 | Is the Gate A capability vocabulary and bundle table (accepted 2026-07-22) adopted verbatim for v2, amended, or replaced? | Yes                   | AUTHZ-19 |
+| OQ-AUTHZ-2 | Which cross-tenant platform capabilities, if any, exist in v2, and what audit do they require?                            | No                    | AUTHZ-20 |
+
+## 7. Verification Status
+
+| Item                         | State                    | Detail                                                                                                                                                                                                                                                |
+| ---------------------------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Target codebase              | verified (limited scope) | `peteywee/teach-v2`, default branch `main` (owner-declared). Cloned 2026-10-03: repository exists and has no commits, so no SHA is anchored. Teach v2 is a new build on these contracts (owner statement, 2026-10-03).                                |
+| Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
+| Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
+| Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
+| Blocking open questions      | 1 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
+| Owner approval               | declared                 | Approved by the owner on 2026-10-03 (chat instruction); recorded in `APPROVAL-RECORD.md`. Not yet committed to `peteywee/teach-v2`: no commit was visible on `main` when checked.                                                                     |
+| Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
+| Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
+
+## 8. Change Log
+
+| Version | Date       | Change                                                                                                                                                                                          | By               |
+| ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                | Claude (drafter) |
+| 0.2.0   | 2026-10-03 | Retargeted to the Teach v2 codebase: legacy `peteywee/teach` is reference only; anchors and paths no longer point into the legacy repository.                                                   | Claude (drafter) |
+| 0.3.0   | 2026-10-03 | Anchored to `peteywee/teach-v2` branch `main` (owner-declared); the repository had no commits when cloned on 2026-10-03, so the anchor SHA stays Not yet verified.                              | Claude (drafter) |
+| 1.0.0   | 2026-10-03 | Approved by the owner; status changed from `proposed` to `active`. Open questions remain open and block implementation of the requirements they affect (SYS-34) instead of blocking activation. | Claude (drafter) |

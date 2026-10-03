@@ -1,0 +1,113 @@
+# Teach v2 System Contracts — Owner Approval Record
+
+- Owner: Patrick Craven, Top Shelf Service LLC
+- Created: 2026-10-03
+- Last updated: 2026-10-03
+
+This file is the only place approval of a C-series contract is recorded (SYS-17).
+
+The 2026-10-03 approvals in Part 2 and the status changes in Part 3 were given by the owner as an
+instruction in chat ("I don't want it to say proposed because I need these to be actually
+infrastructure") and transcribed by Claude at the owner's direction. They are the owner's decision,
+not Claude's (SYS-18). The owner's commit of this file to `peteywee/teach-v2` is the durable record;
+fill in that commit SHA in Part 3.
+
+## Part 1 — Open question decisions
+
+31 questions that block implementation (SYS-34). The contracts were activated with these open.
+Record each decision in plain words; it then gets written into the contract through the revision
+procedure (SYS-21).
+
+| Contract | OQ         | Question                                                                                                                                                                                                                      | Decision | Date | Owner |
+| -------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ---- | ----- |
+| C01      | OQ-SEM-1   | Where does the semantic registry live (the decisions suggest a `kernel/` tree with manifest, entities, values, relationships, states, capabilities, commands, events, evidence) and in what machine-readable format?          |          |      |       |
+| C01      | OQ-SEM-2   | The decisions give IdentityStatus as ACTIVE, INACTIVE, DELETED, and also require `offboarded` to stay distinct. Is offboarded an IdentityStatus value, or the `IdentityOffboarded` event whose result is INACTIVE or DELETED? |          |      |       |
+| C01      | OQ-SEM-3   | Capability identifiers appear in both the kernel concept list and C14's vocabulary. Does C01 own capability identifiers while C14 owns what they authorize, or does C14 own capabilities entirely?                            |          |      |       |
+| C11      | OQ-IDN-1   | Which password hashing algorithm and parameters are approved?                                                                                                                                                                 |          |      |       |
+| C11      | OQ-IDN-2   | What are the lifetimes of invitation, frontline setup, and password-reset tokens?                                                                                                                                             |          |      |       |
+| C11      | OQ-IDN-3   | Which sessions does a credential change revoke: all sessions, all other sessions, or another policy?                                                                                                                          |          |      |       |
+| C11      | OQ-IDN-4   | What is the OAuth linking rule: verified-email match, explicit user-initiated linking only, or another rule?                                                                                                                  |          |      |       |
+| C11      | OQ-IDN-5   | For an offboarded identity's email, is a new invitation a controlled reactivation or a controlled rejection? (Required decision carried from Gate A.)                                                                         |          |      |       |
+| C12      | OQ-SES-1   | Which `SameSite` value is approved: `Strict` or `Lax`?                                                                                                                                                                        |          |      |       |
+| C12      | OQ-SES-2   | Which cookie domain and path are approved given the web and API hostnames?                                                                                                                                                    |          |      |       |
+| C12      | OQ-SES-3   | Which hash or verifier construction is approved for session credentials at rest?                                                                                                                                              |          |      |       |
+| C12      | OQ-SES-4   | What are the absolute and idle session lifetimes?                                                                                                                                                                             |          |      |       |
+| C12      | OQ-SES-5   | Is `SameSite` alone the approved CSRF control, or is an additional mechanism (token, origin check) required?                                                                                                                  |          |      |       |
+| C12      | OQ-SES-6   | On which events must the session credential rotate (sign-in, privilege change, other)?                                                                                                                                        |          |      |       |
+| C13      | OQ-TEN-1   | Does v2 start with the Gate A single-location compatibility membership or a normalized multi-organization, multi-location membership model?                                                                                   |          |      |       |
+| C13      | OQ-TEN-2   | How does a request select its scope when an identity holds more than one membership (explicit path segment, header validated against membership, other)?                                                                      |          |      |       |
+| C14      | OQ-AUTHZ-1 | Is the Gate A capability vocabulary and bundle table (accepted 2026-07-22) adopted verbatim for v2, amended, or replaced?                                                                                                     |          |      |       |
+| C15      | OQ-PRIV-1  | What exactly do deleted, anonymized, retained, and offboarded mean in Teach?                                                                                                                                                  |          |      |       |
+| C15      | OQ-PRIV-2  | What retention periods apply to each record class?                                                                                                                                                                            |          |      |       |
+| C15      | OQ-PRIV-3  | Which record classes are exempt from deletion, and on what legal or audit basis?                                                                                                                                              |          |      |       |
+| C21      | OQ-MIG-1   | What backup mechanism and cadence are approved for production?                                                                                                                                                                |          |      |       |
+| C21      | OQ-MIG-2   | Where is restore proof performed (disposable environment, staging), and how recent must it be?                                                                                                                                |          |      |       |
+| C22      | OQ-TXN-1   | Are idempotency keys client-supplied (header), server-derived, or both, and how long are they retained?                                                                                                                       |          |      |       |
+| C23      | OQ-AUD-1   | How long are audit records retained, and is retention per tenant configurable?                                                                                                                                                |          |      |       |
+| C32      | OQ-LRN-1   | What is the learning-session state machine (states and allowed transitions)?                                                                                                                                                  |          |      |       |
+| C33      | OQ-MGR-1   | Is manager visibility limited to direct reports, the whole location, or configurable?                                                                                                                                         |          |      |       |
+| C34      | OQ-CERT-1  | Is credential verification public (anyone with the link) or private (authenticated, scoped)? (Deferred by Gate A.)                                                                                                            |          |      |       |
+| C34      | OQ-CERT-2  | Who approves certification criteria versions, and where is approval recorded?                                                                                                                                                 |          |      |       |
+| C41      | OQ-API-1   | Which routes are boundary exceptions outside `/api/v1`?                                                                                                                                                                       |          |      |       |
+| C42      | OQ-WEB-1   | Which accessibility standard and level is approved (for example WCAG 2.2 AA)?                                                                                                                                                 |          |      |       |
+| C52      | OQ-REL-2   | How is configuration identity computed and recorded without exposing secret values?                                                                                                                                           |          |      |       |
+
+## Part 2 — Contract approvals
+
+Decision is one of: `Approve`, `Approve with amendments` (list them), or `Reject` (give reason).
+
+| Contract                                      | Version | Open questions blocking implementation | Decision | Amendments / reason                                            | Date       | Owner                                                    |
+| --------------------------------------------- | ------- | -------------------------------------- | -------- | -------------------------------------------------------------- | ---------- | -------------------------------------------------------- |
+| C00 System Authority                          | 1.0.0   | 0                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C01 Canonical Semantics                       | 1.0.0   | 3                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C02 Automation & Agent Authority              | 1.0.0   | 0                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C11 Identity & Credentials                    | 1.0.0   | 5                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C12 Application Sessions                      | 1.0.0   | 6                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C13 Tenancy & Membership                      | 1.0.0   | 2                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C14 Authorization & Capabilities              | 1.0.0   | 1                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C15 Data Isolation & Privacy                  | 1.0.0   | 3                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C21 Database & Migration                      | 1.0.0   | 2                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C22 Transaction, Idempotency & Reconciliation | 1.0.0   | 1                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C23 Audit & Lifecycle Events                  | 1.0.0   | 1                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C31 Content & Teaching Engine                 | 1.0.0   | 0                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C32 Learning Sessions & Progress              | 1.0.0   | 1                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C33 Manager Operations                        | 1.0.0   | 1                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C34 Certification & Credentials               | 1.0.0   | 2                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C41 Application / Command / API Boundary      | 1.0.0   | 1                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C42 Web Client Boundary                       | 1.0.0   | 1                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C51 Verification & Evidence                   | 1.0.0   | 0                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C52 Deployment, Release & Recovery            | 1.0.0   | 1                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C53 Observability                             | 1.0.0   | 0                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C61 Analytics                                 | 1.0.0   | 0                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C62 PWA / Offline                             | 1.0.0   | 0                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+| C63 Self-Service Billing                      | 1.0.0   | 0                                      | Approve  | Activated with open questions blocking implementation (SYS-34) | 2026-10-03 | Patrick Craven (chat instruction; transcribed by Claude) |
+
+## Part 3 — Status changes
+
+Record each change of a contract's `Status` field after approval.
+
+| Contract | From       | To       | Version | Date       | Commit SHA                                    | Owner          |
+| -------- | ---------- | -------- | ------- | ---------- | --------------------------------------------- | -------------- |
+| C00      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C01      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C02      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C11      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C12      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C13      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C14      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C15      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C21      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C22      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C23      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C31      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C32      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C33      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C34      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C41      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C42      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C51      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C52      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C53      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C61      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C62      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C63      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
