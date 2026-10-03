@@ -1,16 +1,39 @@
+<!--tos-doc
+{
+  "doc_id": "TEACH-CON-APPROVALS",
+  "class": "approval-record",
+  "version": "0.4.1",
+  "claims_truth_state": "declared",
+  "status": "active",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-03",
+  "updated_on": "2026-10-03",
+  "effective_on": "2026-10-03",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "commit": "2c9b1c849a520ba817efc91150be9a37797f4238",
+    "purpose": "contract-spine approval baseline"
+  },
+  "depends_on": [
+    "contracts/"
+  ]
+}
+-->
+
 # Teach v2 System Contracts — Owner Approval Record
 
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-03
+- Contract package version: `0.4.1`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
 The 2026-10-03 approvals in Part 2 and the status changes in Part 3 were given by the owner as an
 instruction in chat ("I don't want it to say proposed because I need these to be actually
 infrastructure") and transcribed by Claude at the owner's direction. They are the owner's decision,
-not Claude's (SYS-18). The owner's commit of this file to `peteywee/teach-v2` is the durable record;
-fill in that commit SHA in Part 3.
+not Claude's (SYS-18). The owner's initial contract-spine commit to `peteywee/teach-v2` is `2c9b1c849a520ba817efc91150be9a37797f4238`. Part 3 records that approval baseline. Later non-normative PATCH revisions inherit the approved normative version unless the revision changes behavior.
 
 ## Part 1 — Open question decisions
 
@@ -88,26 +111,57 @@ Record each change of a contract's `Status` field after approval.
 
 | Contract | From       | To       | Version | Date       | Commit SHA                                    | Owner          |
 | -------- | ---------- | -------- | ------- | ---------- | --------------------------------------------- | -------------- |
-| C00      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C01      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C02      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C11      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C12      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C13      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C14      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C15      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C21      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C22      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C23      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C31      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C32      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C33      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C34      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C41      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C42      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C51      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C52      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C53      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C61      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C62      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
-| C63      | `proposed` | `active` | 1.0.0   | 2026-10-03 | Not yet verified — owner to fill after commit | Patrick Craven |
+| C00      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C01      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C02      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C11      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C12      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C13      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C14      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C15      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C21      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C22      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C23      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C31      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C32      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C33      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C34      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C41      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C42      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C51      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C52      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C53      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C61      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C62      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+| C63      | `proposed` | `active` | 1.0.0   | 2026-10-03 | 2c9b1c849a520ba817efc91150be9a37797f4238 | Patrick Craven |
+
+
+## Part 4 — Non-normative revisions
+
+PATCH revisions preserve the controlling owner approval when they do not change normative behavior. The Git commit containing the revision is the durable revision record; it is intentionally not embedded as a self-referential SHA.
+
+| Contract | From | To | Date | Reason |
+| --- | --- | --- | --- | --- |
+| C00 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C01 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C02 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C11 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C12 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C13 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C14 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C15 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C21 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C22 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C23 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C31 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C32 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C33 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C34 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C41 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C42 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C51 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C52 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C53 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C61 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C62 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| C63 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |

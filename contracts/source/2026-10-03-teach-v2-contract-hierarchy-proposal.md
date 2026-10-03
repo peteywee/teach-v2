@@ -1,3 +1,23 @@
+<!--tos-doc
+{
+  "doc_id": "TEACH-SRC-2026-10-03-TEACH-V2-CONTRACT-HIERARCHY-PROPOSAL",
+  "class": "source-record",
+  "version": "1.0.0",
+  "claims_truth_state": "historical-source",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-03",
+  "updated_on": "2026-10-03",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "commit": "2c9b1c849a520ba817efc91150be9a37797f4238",
+    "purpose": "source record included in initial contract spine"
+  },
+  "immutability": "Content is retained as historical source; corrections require a new source record rather than silent rewriting."
+}
+-->
+
 <!-- Non-normative source record. Owner-supplied proposal pasted into Claude on 2026-10-03, preserved verbatim except for whitespace and table formatting normalized by Prettier. The contracts in the parent directory are normative; this file is not. -->
 
 Yes. After the repo audit, I would **strip the contract system down hard**.

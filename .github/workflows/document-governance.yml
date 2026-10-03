@@ -1,0 +1,38 @@
+name: Document Governance
+
+on:
+  pull_request:
+    paths:
+      - 'contracts/**'
+      - 'governance/**'
+      - 'scripts/docs/**'
+      - '.github/workflows/document-governance.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'contracts/**'
+      - 'governance/**'
+      - 'scripts/docs/**'
+      - '.github/workflows/document-governance.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-document-governance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate document metadata
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch origin "${{ github.base_ref }}" --depth=1
+            node scripts/docs/validate-document-metadata.mjs --base "origin/${{ github.base_ref }}"
+          else
+            node scripts/docs/validate-document-metadata.mjs
+          fi

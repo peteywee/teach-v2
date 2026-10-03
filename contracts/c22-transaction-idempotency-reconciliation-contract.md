@@ -2,13 +2,25 @@
 {
   "doc_id": "TEACH-CON-C22",
   "class": "contract",
+  "version": "1.0.1",
   "claims_truth_state": "declared",
   "status": "active",
-  "written_against": {
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-03",
+  "updated_on": "2026-10-03",
+  "effective_on": "2026-10-03",
+  "approval": {
+    "state": "approved",
+    "approved_version": "1.0.0",
+    "approved_on": "2026-10-03",
+    "record": "contracts/APPROVAL-RECORD.md",
+    "inheritance": "1.0.1 is a non-normative metadata/governance patch; 1.0.0 owner approval remains controlling"
+  },
+  "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "head_sha": "Not yet verified",
-    "note": "repository had no commits when cloned 2026-10-03"
+    "commit": "2c9b1c849a520ba817efc91150be9a37797f4238",
+    "purpose": "contract-spine approval baseline"
   },
   "legacy_reference": {
     "repo": "peteywee/teach",
@@ -16,6 +28,8 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
+  "supersedes": [],
+  "superseded_by": null,
   "depends_on": [
     "contracts/"
   ]
@@ -29,7 +43,7 @@
 | Contract ID        | C22                                                                                                                                                             |
 | Group              | C20 Data Correctness                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.0.0                                                                                                                                                           |
+| Version            | 1.0.1                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
 | Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
