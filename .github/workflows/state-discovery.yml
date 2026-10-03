@@ -1,0 +1,32 @@
+name: State Discovery
+
+on:
+  pull_request:
+    paths:
+      - 'domains/states/**'
+      - 'kernel/states.json'
+      - 'kernel/entities.json'
+      - 'kernel/commands.json'
+      - 'kernel/events.json'
+      - 'scripts/domains/validate-state-discovery.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'domains/states/**'
+      - 'kernel/states.json'
+      - 'kernel/entities.json'
+      - 'kernel/commands.json'
+      - 'kernel/events.json'
+      - 'scripts/domains/validate-state-discovery.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-state-discovery:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate state discovery
+        run: node scripts/domains/validate-state-discovery.mjs

@@ -1,0 +1,173 @@
+{
+  "state_discovery_id": "TEACH-STATE-DISCOVERY",
+  "version": "0.1.0",
+  "status": "proposed",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-03",
+  "updated_on": "2026-10-03",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "commit": "d71fbf99b5ab2f554f89a6794a0ff9dc98e4f9da"
+  },
+  "governed_by": [
+    "TEACH-CON-C00",
+    "TEACH-CON-C01",
+    "TEACH-DOMAIN-OWNERSHIP@1.0.0"
+  ],
+  "ready": [
+    {
+      "id": "ApplicationSessionStateMachine",
+      "classification": "lifecycle-state-machine",
+      "state_set": "ApplicationSessionStatus",
+      "entity": "ApplicationSession",
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C12"
+      ],
+      "initial_state": "ACTIVE",
+      "terminal_states": [
+        "EXPIRED",
+        "REVOKED"
+      ],
+      "transitions": [
+        {
+          "from": "ACTIVE",
+          "to": "EXPIRED",
+          "trigger": "expiry",
+          "authority": "C12 SES-11 and SES-20"
+        },
+        {
+          "from": "ACTIVE",
+          "to": "REVOKED",
+          "trigger": "RevokeApplicationSession",
+          "event": "ApplicationSessionRevoked",
+          "authority": "C12 SES-12, SES-14, SES-20"
+        }
+      ],
+      "forbidden_transitions": [
+        "EXPIRED->ACTIVE",
+        "REVOKED->ACTIVE",
+        "EXPIRED->REVOKED",
+        "REVOKED->EXPIRED"
+      ],
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "EvidenceStateClassification",
+      "classification": "non-lifecycle-state-set",
+      "state_set": "EvidenceState",
+      "values": [
+        "PROVEN",
+        "BLOCKED",
+        "UNKNOWN",
+        "CONTRADICTORY"
+      ],
+      "owning_domain": "VerificationEvidence",
+      "authority_contracts": [
+        "C51"
+      ],
+      "transition_graph_required": false,
+      "notes": [
+        "EvidenceState is a truth/evidence classification, not an entity lifecycle."
+      ],
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "IdentityStatusSet",
+      "classification": "state-set-only",
+      "state_set": "IdentityStatus",
+      "values": [
+        "ACTIVE",
+        "INACTIVE",
+        "DELETED"
+      ],
+      "entity": "Identity",
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C11"
+      ],
+      "transition_graph_required": true,
+      "transition_graph_state": "BLOCKED",
+      "blocked_by": [
+        "No owner-approved complete Identity transition graph exists.",
+        "C01 resolves OFFBOARDED as an event, but does not choose the resulting IdentityStatus transition for every offboarding case."
+      ],
+      "evidence_state": "PROVEN"
+    }
+  ],
+  "blocked": [
+    {
+      "id": "MembershipStateMachine",
+      "state_set": "MembershipStatus",
+      "entity": "Membership",
+      "owning_domain": "Organization",
+      "authority_contracts": [
+        "C01",
+        "C13"
+      ],
+      "blocked_by": [
+        "OQ-SEM-4 is open: whether ACTIVE -> INACTIVE -> REVOKED is the approved membership lifecycle.",
+        "C13 TEN-10 refers to deleted or inactive memberships, while current K00 MembershipStatus contains ACTIVE, INACTIVE, REVOKED and no DELETED value."
+      ],
+      "evidence_state": "CONTRADICTORY"
+    },
+    {
+      "id": "LearningSessionStateMachine",
+      "entity": "LearningSession",
+      "owning_domain": "Learning",
+      "authority_contracts": [
+        "C32"
+      ],
+      "blocked_by": [
+        "OQ-LRN-1 explicitly asks for the learning-session states and allowed transitions.",
+        "No LearningSessionStatus state set is registered in K00."
+      ],
+      "evidence_state": "BLOCKED"
+    },
+    {
+      "id": "CertificationLifecycle",
+      "entity": "Certification",
+      "owning_domain": "Certification",
+      "authority_contracts": [
+        "C34"
+      ],
+      "blocked_by": [
+        "C34 defines issuance and revocation history but does not establish whether revocation is represented as a Certification status, a separate revocation entity, or event-only lifecycle fact.",
+        "CertificationRevocation remains a missing semantic candidate with unresolved entity-or-event classification."
+      ],
+      "evidence_state": "BLOCKED"
+    },
+    {
+      "id": "SingleUseCredentialLifecycle",
+      "entity": "Credential",
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C11"
+      ],
+      "blocked_by": [
+        "C11 requires expiry, one-time consumption, and revocation for single-use tokens, but K00 does not yet model token subtypes or a canonical token state set."
+      ],
+      "evidence_state": "BLOCKED"
+    },
+    {
+      "id": "ContentPackLifecycle",
+      "entity": "ContentPack",
+      "owning_domain": "Content",
+      "authority_contracts": [
+        "C31"
+      ],
+      "blocked_by": [
+        "C31 defines Published semantically but no complete ContentPack state set or transition graph is approved."
+      ],
+      "evidence_state": "BLOCKED"
+    }
+  ],
+  "rules": {
+    "unknown_never_passes": true,
+    "contradictory_never_passes": true,
+    "proposal_does_not_modify_kernel": true,
+    "only_contract_proven_transitions_are_ready": true
+  }
+}
