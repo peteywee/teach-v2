@@ -1,0 +1,30 @@
+name: Relationship Discovery
+
+on:
+  pull_request:
+    paths:
+      - 'domains/relationships/**'
+      - 'kernel/relationships.json'
+      - 'kernel/entities.json'
+      - 'domains/ownership-map.json'
+      - 'scripts/domains/validate-relationships.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'domains/relationships/**'
+      - 'kernel/relationships.json'
+      - 'kernel/entities.json'
+      - 'domains/ownership-map.json'
+      - 'scripts/domains/validate-relationships.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-relationship-discovery:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate relationship discovery
+        run: node scripts/domains/validate-relationships.mjs
