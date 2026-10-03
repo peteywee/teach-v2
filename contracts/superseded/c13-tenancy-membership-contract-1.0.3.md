@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C13",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.0.3",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-03",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.1.0",
+    "approved_version": "1.0.0",
     "approved_on": "2026-10-03",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner explicitly approved C13 1.1.0 through domain-ownership approval token; GitHub issue #2"
+    "inheritance": "1.0.1, 1.0.2, and 1.0.3 are non-normative governance/truth-state cleanup patches; 1.0.0 owner approval remains controlling"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,8 +28,8 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C13@1.0.3"],
-  "superseded_by": null,
+  "supersedes": [],
+  "superseded_by": "TEACH-CON-C13@1.1.0",
   "depends_on": [
     "contracts/"
   ]
@@ -38,20 +38,22 @@
 
 # C13 — Tenancy & Membership Contract
 
+> Superseded by C13 version 1.1.0 on 2026-10-03. Preserved under SYS-21.
+
 | Field              | Value                                                                                                                                                           |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Contract ID        | C13                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.1.0                                                                                                                                                           |
-| Status             | `active`                                                                                                                                                        |
+| Version            | 1.0.3                                                                                                                                                           |
+| Status             | `superseded`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-03 — C13 1.1.0 domain-ownership approval; see `APPROVAL-RECORD.md` and GitHub issue #2 |
+| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
 | Requirement prefix | `TEN`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/tenancy.json` (tenancy half); capability resolution moves to C14.                                   |
-| Supersedes         | C13 1.0.3                                                                                                                                                            |
-| Superseded by      | None                                                                                                                                                            |
+| Supersedes         | None                                                                                                                                                            |
+| Superseded by      | C13 1.1.0                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
 | Last updated       | 2026-10-03                                                                                                                                                      |
 
@@ -66,18 +68,16 @@ This contract owns:
 - Organizations
 - Locations
 - Memberships
-- Entitlements and authoritative local entitlement state
 - Reporting relationships
 - Scope resolution for a request
 
 This contract does not own:
 
 - Capabilities and authorization decisions (C14)
-- Billing/provider integration and entitlement reconciliation process (C63)
 - Identity (C11)
 - Record-level privacy lifecycle (C15)
 
-Related contracts: C00, C11, C14, C15, C63.
+Related contracts: C00, C11, C14, C15.
 
 ## 3. Definitions
 
@@ -86,7 +86,6 @@ Related contracts: C00, C11, C14, C15, C63.
 | Organization           | The customer and security boundary.                                                       |
 | Location               | A workplace scope beneath exactly one organization.                                       |
 | Membership             | The record that an identity belongs to an organization and, where applicable, a location. |
-| Entitlement            | Organization-owned local resource/plan access state. It may restrict capability effect but cannot create a capability. |
 | Reporting relationship | A record that a learner reports to a manager. It narrows visibility only.                 |
 | Tenant-owned record    | Any record whose access depends on organization membership.                               |
 
@@ -109,8 +108,6 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **TEN-13** — Every tenant-owned record MUST have exactly one non-null owning organization.
 - **TEN-14** — An actor in one tenant MUST NOT be able to read, modify, delete, or infer the existence of another tenant's protected data through any API path.
 - **TEN-15** — The membership model (single-location compatibility or normalized multi-location) MUST be the one the owner approves (see OQ-TEN-1; value Not yet verified).
-- **TEN-16** — The Organization domain MUST own the canonical `Entitlement` entity and authoritative local entitlement state; billing/provider state MUST NOT be the application authority for entitlement.
-- **TEN-17** — A change to local entitlement state originating from billing/provider reconciliation MUST cross the Organization domain's registered command boundary; C63 MUST NOT directly mutate Organization-owned entitlement state.
 
 ## 5. Acceptance Cases
 
@@ -126,8 +123,6 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | TEN-AC-8  | TEN-10               | Soft-deleted membership attempts access                                                 | Denied                                                                                |
 | TEN-AC-9  | TEN-11, TEN-12       | Add a reporting relationship to an actor lacking manager capability                     | Actor gains no capability; manager with relationship sees only reports in scope       |
 | TEN-AC-10 | TEN-15               | Owner decision record                                                                   | Manual evidence: approved model recorded before C13 activation                        |
-| TEN-AC-11 | TEN-16               | Compare local entitlement state with provider/billing state                             | Application authority remains the Organization-owned local entitlement record          |
-| TEN-AC-12 | TEN-17               | Attempt billing adapter direct write to entitlement persistence                         | Domain-boundary validation rejects direct foreign-domain mutation                      |
 
 ## 6. Open Questions
 
@@ -146,7 +141,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
 | Blocking open questions      | 2 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
-| Owner approval               | declared                 | C13 1.1.0 approved by Patrick Craven on 2026-10-03 through explicit domain-ownership approval; GitHub issue #2. |
+| Owner approval               | declared                 | Approved by the owner on 2026-10-03; recorded in `APPROVAL-RECORD.md`. Initial owner-approval baseline is commit `2c9b1c849a520ba817efc91150be9a37797f4238`; this 1.0.3 revision is tracked by Git history.                                                                     |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
@@ -161,4 +156,3 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.1   | 2026-10-03 | Non-normative document-governance metadata/provenance normalization; 1.0.0 owner approval remained controlling. | ChatGPT (governance) |
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
-| 1.1.0   | 2026-10-03 | Organization owns Entitlement/local entitlement state; provider reconciliation must cross the Organization command boundary. GitHub issue #2. | Patrick Craven (owner approval) |

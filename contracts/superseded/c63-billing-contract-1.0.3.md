@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C63",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.0.3",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-03",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.1.0",
+    "approved_version": "1.0.0",
     "approved_on": "2026-10-03",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner explicitly approved C63 1.1.0 through domain-ownership approval token; GitHub issue #2"
+    "inheritance": "1.0.1, 1.0.2, and 1.0.3 are non-normative governance/truth-state cleanup patches; 1.0.0 owner approval remains controlling"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,8 +28,8 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C63@1.0.3"],
-  "superseded_by": null,
+  "supersedes": [],
+  "superseded_by": "TEACH-CON-C63@1.1.0",
   "depends_on": [
     "contracts/"
   ]
@@ -38,20 +38,22 @@
 
 # C63 — Self-Service Billing Contract
 
+> Superseded by C63 version 1.1.0 on 2026-10-03. Preserved under SYS-21.
+
 | Field              | Value                                                                                                                                                           |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Contract ID        | C63                                                                                                                                                             |
 | Group              | C60 Optional Feature Contracts                                                                                                                                  |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.1.0                                                                                                                                                           |
-| Status             | `active`                                                                                                                                                        |
+| Version            | 1.0.3                                                                                                                                                           |
+| Status             | `superseded`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-03 — C63 1.1.0 domain-ownership approval; see `APPROVAL-RECORD.md` and GitHub issue #2 |
+| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
 | Requirement prefix | `BIL`                                                                                                                                                           |
 | Activation         | Conditional — binding only when the owner enables this feature                                                                                                  |
 | Legacy lineage     | New.                                                                                                                                                            |
-| Supersedes         | C63 1.0.3                                                                                                                                                            |
-| Superseded by      | None                                                                                                                                                            |
+| Supersedes         | None                                                                                                                                                            |
+| Superseded by      | C63 1.1.0                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
 | Last updated       | 2026-10-03                                                                                                                                                      |
 
@@ -66,22 +68,21 @@ This contract owns:
 - Self-service checkout
 - Payment-provider customer identity
 - Provider event processing
-- Billing/provider-to-entitlement reconciliation process
+- Entitlement reconciliation
 
 This contract does not own:
 
-- Capabilities and authorization semantics (C14)
-- The canonical Entitlement entity and authoritative local entitlement state (C13)
+- Capabilities (C14)
 - Commercial terms (customer agreements, outside this contract set)
 - Idempotency mechanics (C22)
 
-Related contracts: C00, C01, C13, C14, C22.
+Related contracts: C00, C01, C14, C22.
 
 ## 3. Definitions
 
 | Term        | Meaning                                                                                       |
 | ----------- | --------------------------------------------------------------------------------------------- |
-| Entitlement | Organization-owned authoritative local access state; billing/provider reconciliation may request updates but does not own the entity (C13, C14). |
+| Entitlement | A plan-derived fact that can restrict capability effect but cannot create a capability (C14). |
 
 ## 4. Requirements
 
@@ -102,7 +103,6 @@ This contract belongs to C60 (Good to Have). Its requirements bind only after th
 - **BIL-11** — Billing state MUST NOT grant an application capability.
 - **BIL-12** — Production money movement MUST require explicit owner authorization (see OQ-BIL-2; value Not yet verified).
 - **BIL-13** — The ownership relationship between an Organization and its billing account MUST be defined in C01 even while self-service billing is disabled (see OQ-BIL-3; value Not yet verified).
-- **BIL-14** — Billing/provider reconciliation MUST request local entitlement changes through the Organization domain's registered command boundary and MUST NOT directly mutate the Organization-owned `Entitlement` entity or persistence.
 
 ## 5. Acceptance Cases
 
@@ -119,7 +119,6 @@ This contract belongs to C60 (Good to Have). Its requirements bind only after th
 | BIL-AC-9  | BIL-11       | Active subscription for actor lacking capability             | Protected operations still denied              |
 | BIL-AC-10 | BIL-12       | Live-mode keys configured without owner authorization record | Release gate blocks                            |
 | BIL-AC-11 | BIL-13       | Registry check for the Organization–billing relationship     | Relationship registered in C01                 |
-| BIL-AC-12 | BIL-10, BIL-14 | Provider event requires a local entitlement correction       | Reconciliation crosses Organization command boundary; direct entitlement persistence write is rejected |
 
 ## 6. Open Questions
 
@@ -138,7 +137,7 @@ This contract belongs to C60 (Good to Have). Its requirements bind only after th
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
 | Blocking open questions      | 0 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
-| Owner approval               | declared                 | C63 1.1.0 approved by Patrick Craven on 2026-10-03 through explicit domain-ownership approval; GitHub issue #2. |
+| Owner approval               | declared                 | Approved by the owner on 2026-10-03; recorded in `APPROVAL-RECORD.md`. Initial owner-approval baseline is commit `2c9b1c849a520ba817efc91150be9a37797f4238`; this 1.0.3 revision is tracked by Git history.                                                                     |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
@@ -154,4 +153,3 @@ This contract belongs to C60 (Good to Have). Its requirements bind only after th
 | 1.0.1   | 2026-10-03 | Non-normative document-governance metadata/provenance normalization; 1.0.0 owner approval remained controlling. | ChatGPT (governance) |
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
-| 1.1.0   | 2026-10-03 | Billing owns provider reconciliation process, not local Entitlement state; reconciliation must cross Organization boundary. GitHub issue #2. | Patrick Craven (owner approval) |

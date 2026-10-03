@@ -27,14 +27,14 @@
       "kind": "value_object",
       "status": "candidate",
       "definition": "Request correlation identity; never an authorization input.",
-      "owning_domain": "AuditLifecycle"
+      "owning_domain": "Observability"
     },
     {
       "id": "IdempotencyKey",
       "kind": "value_object",
       "status": "candidate",
       "definition": "Stable retry identity for an idempotent operation.",
-      "owning_domain": "AuditLifecycle"
+      "owning_domain": "TransactionControl"
     }
   ]
 }

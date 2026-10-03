@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-03
-- Contract package version: `0.5.0`
+- Contract package version: `0.6.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -217,3 +217,23 @@ PATCH revisions preserve the controlling owner approval when they do not change 
 | Contract | From | To | Date | Approval | GitHub issue | Reason |
 | --- | --- | --- | --- | --- | --- | --- |
 | C01 | 1.0.2 | 1.1.0 | 2026-10-03 | Patrick Craven (explicit K00 bootstrap approval) | #1 | Resolve OQ-SEM-1/2/3 and establish K00 registry location/format and authority split |
+
+## Part 6 — Domain Ownership approval
+
+| Artifact / Contract | Version | Decision | Date | Owner | GitHub issue |
+| --- | --- | --- | --- | --- | --- |
+| C01 Canonical Semantics | 1.2.0 | Only owner may approve candidate promotion; active Domain Ownership Map is authoritative | 2026-10-03 | Patrick Craven | #2 |
+| C13 Tenancy & Membership | 1.1.0 | Organization owns Entitlement and local entitlement state | 2026-10-03 | Patrick Craven | #2 |
+| C14 Authorization & Capabilities | 1.1.0 | Authorization consumes entitlement read-only | 2026-10-03 | Patrick Craven | #2 |
+| C63 Self-Service Billing | 1.1.0 | Billing owns provider reconciliation process, not local Entitlement state | 2026-10-03 | Patrick Craven | #2 |
+| TEACH-K00 | 0.2.0 | Approve ownership alignment; semantic entries remain candidate | 2026-10-03 | Patrick Craven | #2 |
+| TEACH-DOMAIN-OWNERSHIP | 1.0.0 | Approve first active Domain Ownership Map | 2026-10-03 | Patrick Craven | #2 |
+
+### Part 6A — Normative revision ledger
+
+| Contract | From | To | Date | Approval | GitHub issue | Reason |
+| --- | --- | --- | --- | --- | --- | --- |
+| C01 | 1.1.0 | 1.2.0 | 2026-10-03 | Patrick Craven | #2 | Resolve OQ-SEM-5 and require owner approval for promotion |
+| C13 | 1.0.3 | 1.1.0 | 2026-10-03 | Patrick Craven | #2 | Organization owns local Entitlement state |
+| C14 | 1.0.3 | 1.1.0 | 2026-10-03 | Patrick Craven | #2 | Authorization consumes but does not own entitlement |
+| C63 | 1.0.3 | 1.1.0 | 2026-10-03 | Patrick Craven | #2 | Provider reconciliation crosses Organization command boundary |

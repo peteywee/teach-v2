@@ -9,7 +9,7 @@ const load = (p) => {
   catch (e) { errors.push(`${p}: ${e.message}`); return null; }
 };
 
-const map = load('domains/ownership-map.proposed.json');
+const map = load('domains/ownership-map.json');
 const gaps = load('domains/discovery-gaps.json');
 const files = {
   entity: load('kernel/entities.json'),
@@ -23,8 +23,8 @@ const files = {
 
 if (map) {
   if (map.map_id !== 'TEACH-DOMAIN-OWNERSHIP') errors.push('ownership map: map_id must be TEACH-DOMAIN-OWNERSHIP');
-  if (map.version !== '0.1.0') errors.push('ownership map: version must be 0.1.0');
-  if (map.status !== 'proposed') errors.push('ownership map: this discovery package must remain proposed');
+  if (map.version !== '1.0.0') errors.push('ownership map: version must be 1.0.0');
+  if (map.status !== 'active') errors.push('ownership map: approved map must be active');
 }
 
 const domainIds = new Set((map?.domains || []).map(d => d.id));
@@ -33,12 +33,9 @@ for (const e of map?.entries || []) {
   const key = `${e.kind}:${e.id}`;
   if (mapKeys.has(key)) errors.push(`ownership map: duplicate ${key}`);
   mapKeys.set(key, e);
-  if (!['proposed','unresolved'].includes(e.decision_state)) errors.push(`ownership map: ${key} invalid decision_state`);
-  if (e.decision_state === 'proposed') {
-    if (!e.proposed_owner) errors.push(`ownership map: ${key} proposed without owner`);
-    else if (!domainIds.has(e.proposed_owner)) errors.push(`ownership map: ${key} owner ${e.proposed_owner} is not a registered proposed domain`);
-  }
-  if (e.decision_state === 'unresolved' && e.proposed_owner !== null) errors.push(`ownership map: ${key} unresolved entry must keep proposed_owner null`);
+  if (e.decision_state !== 'approved') errors.push(`ownership map: ${key} must be approved`);
+  if (!e.proposed_owner) errors.push(`ownership map: ${key} approved without owner`);
+  else if (!domainIds.has(e.proposed_owner)) errors.push(`ownership map: ${key} owner ${e.proposed_owner} is not a registered domain`);
 }
 
 const kernelKeys = new Set();
@@ -56,9 +53,12 @@ for (const g of gaps?.core_missing_kernel_candidates || []) {
   if (present) errors.push(`discovery gaps: ${g.id} is listed missing but is already in K00`);
 }
 
-const unresolved = [...mapKeys.values()].filter(x => x.decision_state === 'unresolved');
-if (!unresolved.some(x => x.id === 'Entitlement')) errors.push('ownership map: Entitlement must remain explicitly unresolved in this discovery pass');
-if (!unresolved.some(x => x.id === 'EntitlementId')) errors.push('ownership map: EntitlementId must remain explicitly unresolved in this discovery pass');
+const unresolved = [...mapKeys.values()].filter(x => x.decision_state !== 'approved');
+for (const id of ['Entitlement','EntitlementId']) {
+  const matches = [...mapKeys.values()].filter(x => x.id === id);
+  if (!matches.length) errors.push(`ownership map: missing ${id}`);
+  for (const x of matches) if (x.proposed_owner !== 'Organization') errors.push(`ownership map: ${id} owner must be Organization`);
+}
 
 if (errors.length) {
   console.error(`Domain ownership discovery FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
@@ -69,5 +69,5 @@ if (errors.length) {
 console.log('Domain ownership discovery PASS');
 console.log(`Proposed domains: ${domainIds.size}`);
 console.log(`Mapped K00 concepts: ${mapKeys.size}`);
-console.log(`Unresolved ownership entries: ${unresolved.length}`);
+console.log(`Unapproved ownership entries: ${unresolved.length}`);
 console.log(`Missing core semantic candidates: ${(gaps?.core_missing_kernel_candidates || []).length}`);

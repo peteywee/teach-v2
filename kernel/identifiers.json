@@ -31,7 +31,7 @@
       "status": "candidate",
       "value_type": "opaque-id",
       "represents": "Organization",
-      "owning_domain": "OrganizationAuthority"
+      "owning_domain": "Organization"
     },
     {
       "id": "LocationId",
@@ -39,7 +39,7 @@
       "status": "candidate",
       "value_type": "opaque-id",
       "represents": "Location",
-      "owning_domain": "OrganizationAuthority"
+      "owning_domain": "Organization"
     },
     {
       "id": "MembershipId",
@@ -47,7 +47,7 @@
       "status": "candidate",
       "value_type": "opaque-id",
       "represents": "Membership",
-      "owning_domain": "OrganizationAuthority"
+      "owning_domain": "Organization"
     },
     {
       "id": "EntitlementId",
@@ -55,7 +55,7 @@
       "status": "candidate",
       "value_type": "opaque-id",
       "represents": "Entitlement",
-      "owning_domain": "OrganizationAuthority"
+      "owning_domain": "Organization"
     },
     {
       "id": "ContentPackId",
@@ -135,7 +135,7 @@
       "status": "candidate",
       "value_type": "string",
       "represents": "Capability",
-      "owning_domain": "OrganizationAuthority"
+      "owning_domain": "Authorization"
     },
     {
       "id": "RequestId",
@@ -143,7 +143,7 @@
       "status": "candidate",
       "value_type": "string",
       "represents": "Request",
-      "owning_domain": "AuditLifecycle"
+      "owning_domain": "Observability"
     },
     {
       "id": "IdempotencyKey",
@@ -151,7 +151,7 @@
       "status": "candidate",
       "value_type": "string",
       "represents": "IdempotentOperation",
-      "owning_domain": "AuditLifecycle"
+      "owning_domain": "TransactionControl"
     }
   ]
 }

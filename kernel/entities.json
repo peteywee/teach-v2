@@ -40,7 +40,7 @@
       "status": "candidate",
       "definition": "Primary customer, tenant, and security boundary.",
       "identifier": "OrganizationId",
-      "owning_domain": "OrganizationAuthority",
+      "owning_domain": "Organization",
       "relationships": [],
       "authority_implications": [],
       "lifecycle": null
@@ -51,7 +51,7 @@
       "status": "candidate",
       "definition": "Workplace scope contained by an Organization.",
       "identifier": "LocationId",
-      "owning_domain": "OrganizationAuthority",
+      "owning_domain": "Organization",
       "relationships": [],
       "authority_implications": [],
       "lifecycle": null
@@ -62,7 +62,7 @@
       "status": "candidate",
       "definition": "Relationship connecting an Identity to an Organization and optionally a Location.",
       "identifier": "MembershipId",
-      "owning_domain": "OrganizationAuthority",
+      "owning_domain": "Organization",
       "relationships": [],
       "authority_implications": [],
       "lifecycle": null
@@ -73,7 +73,7 @@
       "status": "candidate",
       "definition": "Right to consume a product or resource; does not itself grant an application capability.",
       "identifier": "EntitlementId",
-      "owning_domain": "OrganizationAuthority",
+      "owning_domain": "Organization",
       "relationships": [],
       "authority_implications": [],
       "lifecycle": null

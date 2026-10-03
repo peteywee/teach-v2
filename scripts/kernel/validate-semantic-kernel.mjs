@@ -15,7 +15,7 @@ const names = ['entities.json','values.json','identifiers.json','relationships.j
 const docs = Object.fromEntries(names.map(n => [n, load(n)]));
 if (manifest) {
   if (manifest.kernel_id !== 'TEACH-K00') errors.push('manifest.json: kernel_id must be TEACH-K00');
-  if (manifest.version !== '0.1.0') errors.push('manifest.json: version must be 0.1.0');
+  if (manifest.version !== '0.2.0') errors.push('manifest.json: version must be 0.2.0');
   if (manifest.canonical_format !== 'json') errors.push('manifest.json: canonical_format must be json');
   for (const n of ['entities','values','identifiers','relationships','states','capabilities','commands','events','evidence','schema']) {
     if (!manifest.files?.[n]) errors.push(`manifest.json: missing file mapping ${n}`);
@@ -67,12 +67,35 @@ if (JSON.stringify(Object.keys(ev?.values || {})) !== JSON.stringify(evidenceExp
 const cap = docs['capabilities.json'];
 if (cap?.ownership?.identifier_registration !== 'C01') errors.push('capabilities.json: identifier_registration must be C01');
 if (cap?.ownership?.authorization_semantics !== 'C14') errors.push('capabilities.json: authorization_semantics must be C14');
+const expectedOwners = new Map([
+  ['entities.json:Organization','Organization'],
+  ['entities.json:Location','Organization'],
+  ['entities.json:Membership','Organization'],
+  ['entities.json:Entitlement','Organization'],
+  ['identifiers.json:OrganizationId','Organization'],
+  ['identifiers.json:LocationId','Organization'],
+  ['identifiers.json:MembershipId','Organization'],
+  ['identifiers.json:EntitlementId','Organization'],
+  ['identifiers.json:CapabilityId','Authorization'],
+  ['identifiers.json:RequestId','Observability'],
+  ['identifiers.json:IdempotencyKey','TransactionControl'],
+  ['values.json:RequestId','Observability'],
+  ['values.json:IdempotencyKey','TransactionControl']
+]);
+for (const [key, owner] of expectedOwners) {
+  const [file, id] = key.split(':');
+  const entry = (docs[file]?.entries || []).find(x => x.id === id);
+  if (!entry) errors.push(`${file}: expected ${id}`);
+  else if (entry.owning_domain !== owner) errors.push(`${file}: ${id} owner must be ${owner}`);
+}
+if (cap?.semantic_domain !== 'Authorization') errors.push('capabilities.json: semantic_domain must be Authorization');
+
 if (errors.length) {
   console.error(`Semantic kernel FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
-console.log('Semantic kernel PASS: TEACH-K00 0.1.0');
+console.log('Semantic kernel PASS: TEACH-K00 0.2.0');
 console.log(`Entities: ${(docs['entities.json']?.entries || []).length}`);
 console.log(`Identifiers: ${(docs['identifiers.json']?.entries || []).length}`);
 console.log(`Relationships: ${(docs['relationships.json']?.entries || []).length}`);

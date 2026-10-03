@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C14",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.0.3",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-03",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.1.0",
+    "approved_version": "1.0.0",
     "approved_on": "2026-10-03",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner explicitly approved C14 1.1.0 through domain-ownership approval token; GitHub issue #2"
+    "inheritance": "1.0.1, 1.0.2, and 1.0.3 are non-normative governance/truth-state cleanup patches; 1.0.0 owner approval remains controlling"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,8 +28,8 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C14@1.0.3"],
-  "superseded_by": null,
+  "supersedes": [],
+  "superseded_by": "TEACH-CON-C14@1.1.0",
   "depends_on": [
     "contracts/"
   ]
@@ -38,20 +38,22 @@
 
 # C14 — Authorization & Capabilities Contract
 
+> Superseded by C14 version 1.1.0 on 2026-10-03. Preserved under SYS-21.
+
 | Field              | Value                                                                                                                                                           |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Contract ID        | C14                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.1.0                                                                                                                                                           |
-| Status             | `active`                                                                                                                                                        |
+| Version            | 1.0.3                                                                                                                                                           |
+| Status             | `superseded`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-03 — C14 1.1.0 domain-ownership approval; see `APPROVAL-RECORD.md` and GitHub issue #2 |
+| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
 | Requirement prefix | `AUTHZ`                                                                                                                                                         |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/tenancy.json` (capability resolution half); carries forward Gate A denial semantics.                |
-| Supersedes         | C14 1.0.3                                                                                                                                                            |
-| Superseded by      | None                                                                                                                                                            |
+| Supersedes         | None                                                                                                                                                            |
+| Superseded by      | C14 1.1.0                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
 | Last updated       | 2026-10-03                                                                                                                                                      |
 
@@ -64,16 +66,15 @@ A developer adds a new manager endpoint and forgets to wire the authorization ch
 This contract owns:
 
 - The protected-operation registry
-- Authorization semantics for the C01-registered capability vocabulary
+- The capability vocabulary
 - Role-to-capability bundles
 - Authorization decisions and denial semantics
 
 This contract does not own:
 
-- Capability identifier registration and canonical naming (C01)
-- Membership and authoritative local entitlement facts (C13)
+- Membership facts (C13)
 - Session validity (C12)
-- Billing/provider facts and entitlement reconciliation process (C63)
+- Entitlement/billing facts (C63)
 
 Related contracts: C00, C12, C13, C23, C63.
 
@@ -84,7 +85,7 @@ Related contracts: C00, C12, C13, C23, C63.
 | Protected operation | Any API method and path that reads or mutates non-public data.               |
 | Capability          | A typed, dot-delimited action constant (for example `team.member.offboard`). |
 | Role                | A named bundle of capabilities. Roles are not checked directly.              |
-| Entitlement         | An Organization-owned local access fact that authorization may consume to restrict capability effect but may never use to create a capability. |
+| Entitlement         | A commercial/plan fact that can restrict, but never create, a capability.    |
 | Target              | The record an operation acts on.                                             |
 
 ## 4. Requirements
@@ -111,7 +112,6 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **AUTHZ-18** — Every capability addition or change MUST ship with negative tests proving denial for actors that lack it, in the same change.
 - **AUTHZ-19** — The capability vocabulary and role bundles MUST be the owner-approved set (see OQ-AUTHZ-1; value Not yet verified).
 - **AUTHZ-20** — A role MUST NOT hold a cross-tenant capability unless the owner approves it (see OQ-AUTHZ-2; value Not yet verified).
-- **AUTHZ-21** — Authorization MUST treat entitlement as a read-only input loaded from authoritative Organization-owned state; authorization code MUST NOT create or mutate entitlement state.
 
 ## 5. Acceptance Cases
 
@@ -129,7 +129,6 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | AUTHZ-AC-10 | AUTHZ-18                                         | PR adds a capability without a denial test                                                                               | CI check fails                                                                                               |
 | AUTHZ-AC-11 | AUTHZ-19                                         | Owner decision record                                                                                                    | Manual evidence: approved vocabulary recorded                                                                |
 | AUTHZ-AC-12 | AUTHZ-20                                         | Enumerate role bundles for cross-tenant capabilities                                                                     | None unless owner approval recorded                                                                          |
-| AUTHZ-AC-13 | AUTHZ-8, AUTHZ-11, AUTHZ-21                       | Evaluate authorization with entitlement input, then attempt entitlement mutation from authorization code                | Entitlement may restrict effect; mutation is rejected outside Organization boundary                          |
 
 ## 6. Open Questions
 
@@ -147,7 +146,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
 | Blocking open questions      | 1 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
-| Owner approval               | declared                 | C14 1.1.0 approved by Patrick Craven on 2026-10-03 through explicit domain-ownership approval; GitHub issue #2. |
+| Owner approval               | declared                 | Approved by the owner on 2026-10-03; recorded in `APPROVAL-RECORD.md`. Initial owner-approval baseline is commit `2c9b1c849a520ba817efc91150be9a37797f4238`; this 1.0.3 revision is tracked by Git history.                                                                     |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
@@ -162,4 +161,3 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.1   | 2026-10-03 | Non-normative document-governance metadata/provenance normalization; 1.0.0 owner approval remained controlling. | ChatGPT (governance) |
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
-| 1.1.0   | 2026-10-03 | C01 registers capability identifiers; C14 owns authorization semantics and consumes Organization-owned entitlement state read-only. GitHub issue #2. | Patrick Craven (owner approval) |

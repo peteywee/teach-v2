@@ -5,5 +5,6 @@
     "authorization_semantics": "C14"
   },
   "entries": [],
-  "note": "Capability identifiers are registered here; C14 owns authorization meaning, assignment, scope, evaluation, and denial."
+  "note": "Capability identifiers are registered here; C14 owns authorization meaning, assignment, scope, evaluation, and denial.",
+  "semantic_domain": "Authorization"
 }

@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-K00",
   "class": "semantic-kernel",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -13,13 +13,14 @@
     "state": "approved",
     "approved_on": "2026-10-03",
     "record": "contracts/APPROVAL-RECORD.md",
-    "issue": "#1"
+    "issue": "#2",
+    "basis": "Explicit domain-ownership approval token"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "292e8da9123987e9d94f09669c7bc6b6d43c4320",
-    "purpose": "pre-K00 governance baseline"
+    "commit": "57d60016611681235c464bec295e123987e823e3",
+    "purpose": "pre-domain-ownership approval baseline"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -31,6 +32,10 @@
 # K00 — Teach v2 Semantic Kernel
 
 Canonical machine-readable source format: JSON.
+
+K00 version: `0.2.0`.
+
+Active domain ownership authority: `domains/ownership-map.json`.
 
 All initial domain entries are `candidate` until domain discovery promotes them through an approved semantic change.
 
