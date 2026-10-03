@@ -1,0 +1,503 @@
+{
+  "invariant_discovery_id": "TEACH-INVARIANT-DISCOVERY",
+  "version": "0.1.0",
+  "status": "proposed",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-03",
+  "updated_on": "2026-10-03",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "commit": "0d0da31243b78f83aac66e21733fc0b9a2371f83"
+  },
+  "governed_by": [
+    "TEACH-CON-C00",
+    "TEACH-CON-C01",
+    "TEACH-DOMAIN-OWNERSHIP@1.1.0",
+    "TEACH-K00@0.4.0"
+  ],
+  "rules": {
+    "discovery_is_not_kernel_authority": true,
+    "only_active_contract_requirements_may_support_ready_invariants": true,
+    "blocked_or_unknown_never_becomes_ready": true,
+    "invariants_must_state_failure_behavior": true
+  },
+  "ready_invariants": [
+    {
+      "id": "INV-001",
+      "name": "SingleAuthoritativeOwnerPerMutableFact",
+      "scope": "system",
+      "owning_domain": "cross-cutting",
+      "authority_contracts": [
+        "C00",
+        "C01"
+      ],
+      "requirements": [
+        "SYS-6",
+        "SYS-7",
+        "SEM-19",
+        "SEM-20"
+      ],
+      "assertion": "Every mutable authoritative fact has exactly one owning contract/domain and exactly one permitted writer; foreign domains request change through the owner boundary.",
+      "failure_behavior": "Reject direct foreign-owner mutation.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-002",
+      "name": "UnknownAuthorityFailsClosed",
+      "scope": "security",
+      "owning_domain": "Authorization",
+      "authority_contracts": [
+        "C00",
+        "C14"
+      ],
+      "requirements": [
+        "SYS-9",
+        "SYS-10",
+        "AUTHZ-4",
+        "AUTHZ-5"
+      ],
+      "assertion": "Unknown, unavailable, ambiguous, or unregistered authority never becomes permission.",
+      "failure_behavior": "Deny before protected handler or side effect.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-003",
+      "name": "CandidateSemanticsAreNotImplementationAuthority",
+      "scope": "semantic-kernel",
+      "owning_domain": "cross-cutting",
+      "authority_contracts": [
+        "C01"
+      ],
+      "requirements": [
+        "SEM-2",
+        "SEM-3",
+        "SEM-12",
+        "SEM-30"
+      ],
+      "assertion": "A candidate semantic entry cannot authorize merged implementation and cannot become approved without explicit owner approval.",
+      "failure_behavior": "Block merge/activation.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-004",
+      "name": "CanonicalStateClosedWorld",
+      "scope": "lifecycle",
+      "owning_domain": "cross-cutting",
+      "authority_contracts": [
+        "C01"
+      ],
+      "requirements": [
+        "SEM-10",
+        "SEM-21",
+        "SEM-32"
+      ],
+      "assertion": "Canonical state values and lifecycle transitions are closed sets; an unregistered state or transition is invalid.",
+      "failure_behavior": "Reject transition and persistence.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-005",
+      "name": "AmbiguousExternalEffectReconcilesBeforeRetry",
+      "scope": "transaction-control",
+      "owning_domain": "TransactionControl",
+      "authority_contracts": [
+        "C00",
+        "C22"
+      ],
+      "requirements": [
+        "SYS-15",
+        "TXN-6",
+        "TXN-7",
+        "TXN-8",
+        "TXN-9"
+      ],
+      "assertion": "An ambiguous external side effect is never retried before canonical provider readback; unreadable provider state leaves the operation ambiguous.",
+      "failure_behavior": "Do not retry; remain ambiguous/needs-reconciliation.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-006",
+      "name": "IdempotencyKeyPayloadBinding",
+      "scope": "transaction-control",
+      "owning_domain": "TransactionControl",
+      "authority_contracts": [
+        "C22"
+      ],
+      "requirements": [
+        "TXN-3",
+        "TXN-4"
+      ],
+      "assertion": "The same idempotency key with the same payload yields the same final state/response; the same key with a different payload is rejected.",
+      "failure_behavior": "Reject mismatched reuse with zero side effect.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-007",
+      "name": "RetryDoesNotDuplicateAuthoritativeEffects",
+      "scope": "transaction-control",
+      "owning_domain": "TransactionControl",
+      "authority_contracts": [
+        "C22",
+        "C32",
+        "C34"
+      ],
+      "requirements": [
+        "TXN-5",
+        "LRN-7",
+        "CERT-10"
+      ],
+      "assertion": "Retry or concurrent replay cannot create duplicate authoritative effects.",
+      "failure_behavior": "Return/reconcile the original effect.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-008",
+      "name": "AtomicMultiWriteOutcome",
+      "scope": "transaction-control",
+      "owning_domain": "TransactionControl",
+      "authority_contracts": [
+        "C22",
+        "C34"
+      ],
+      "requirements": [
+        "TXN-1",
+        "CERT-9"
+      ],
+      "assertion": "Operations required to succeed together commit atomically; no partial result is observable.",
+      "failure_behavior": "Rollback the unit.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-009",
+      "name": "TenantBoundaryIsAuthoritative",
+      "scope": "organization",
+      "owning_domain": "Organization",
+      "authority_contracts": [
+        "C13",
+        "C15"
+      ],
+      "requirements": [
+        "TEN-1",
+        "TEN-8",
+        "TEN-9",
+        "TEN-14",
+        "PRIV-2",
+        "PRIV-3"
+      ],
+      "assertion": "Protected reads and writes cannot cross authoritative organization/location scope.",
+      "failure_behavior": "Non-disclosing denial; zero foreign-tenant mutation.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-010",
+      "name": "MembershipScopeUsesDatabaseCurrentState",
+      "scope": "organization",
+      "owning_domain": "Organization",
+      "authority_contracts": [
+        "C13",
+        "C14"
+      ],
+      "requirements": [
+        "TEN-3",
+        "TEN-4",
+        "TEN-10",
+        "AUTHZ-10"
+      ],
+      "assertion": "Membership/scope authority is resolved from current authoritative records on each protected request; inactive/revoked membership confers no scope.",
+      "failure_behavior": "Deny.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-011",
+      "name": "ClientInputCannotCreateAuthority",
+      "scope": "authorization",
+      "owning_domain": "Authorization",
+      "authority_contracts": [
+        "C13",
+        "C14"
+      ],
+      "requirements": [
+        "TEN-5",
+        "AUTHZ-16",
+        "AUTHZ-17"
+      ],
+      "assertion": "Client-supplied IDs, headers, path/query/body values, frontend state, and JWT claims cannot establish tenant, target, or authorization authority.",
+      "failure_behavior": "Resolve server-side authority or deny.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-012",
+      "name": "ProtectedOperationsDefaultDeny",
+      "scope": "authorization",
+      "owning_domain": "Authorization",
+      "authority_contracts": [
+        "C14"
+      ],
+      "requirements": [
+        "AUTHZ-1",
+        "AUTHZ-2",
+        "AUTHZ-3",
+        "AUTHZ-4",
+        "AUTHZ-6"
+      ],
+      "assertion": "Every protected operation is registered exactly once to one capability; absence from the registry is denial.",
+      "failure_behavior": "Fail CI/startup or deny request.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-013",
+      "name": "EntitlementCannotCreateCapability",
+      "scope": "authorization",
+      "owning_domain": "Authorization",
+      "authority_contracts": [
+        "C14"
+      ],
+      "requirements": [
+        "AUTHZ-8",
+        "AUTHZ-21"
+      ],
+      "assertion": "Entitlement may restrict capability effect but cannot create a capability and is read-only to authorization.",
+      "failure_behavior": "Deny unauthorized effect; reject authorization-owned entitlement mutation.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-014",
+      "name": "DeniedProtectedMutationHasNoSideEffect",
+      "scope": "authorization",
+      "owning_domain": "Authorization",
+      "authority_contracts": [
+        "C14"
+      ],
+      "requirements": [
+        "AUTHZ-5",
+        "AUTHZ-15"
+      ],
+      "assertion": "A denied protected mutation produces no state change or external side effect except explicitly permitted audit.",
+      "failure_behavior": "Zero mutation/external effect.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-015",
+      "name": "PublishedContentVersionIsImmutable",
+      "scope": "content",
+      "owning_domain": "Content",
+      "authority_contracts": [
+        "C31"
+      ],
+      "requirements": [
+        "CNT-3",
+        "CNT-4",
+        "CNT-6"
+      ],
+      "assertion": "Only valid content can be published/assigned; a published content identity+version never changes in place.",
+      "failure_behavior": "Reject invalid or in-place mutation; require new version.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-016",
+      "name": "ContentExistenceDoesNotGrantAccess",
+      "scope": "content",
+      "owning_domain": "Content",
+      "authority_contracts": [
+        "C31",
+        "C14"
+      ],
+      "requirements": [
+        "CNT-9",
+        "CNT-10"
+      ],
+      "assertion": "Content existence or possession of a content ID does not grant access; assignment and authorization are independent required facts.",
+      "failure_behavior": "Non-disclosing denial.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-017",
+      "name": "LearningSessionMutationRequiresActiveState",
+      "scope": "learning",
+      "owning_domain": "Learning",
+      "authority_contracts": [
+        "C32"
+      ],
+      "requirements": [
+        "LRN-3"
+      ],
+      "assertion": "Learning progress events are accepted only in ACTIVE sessions; COMPLETED is terminal.",
+      "failure_behavior": "Reject post-completion or unregistered transition/event.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-018",
+      "name": "LearningProgressIsServerAuthoritative",
+      "scope": "learning",
+      "owning_domain": "Learning",
+      "authority_contracts": [
+        "C32"
+      ],
+      "requirements": [
+        "LRN-4",
+        "LRN-5",
+        "LRN-6",
+        "LRN-10",
+        "LRN-11"
+      ],
+      "assertion": "Real learning progress derives from persisted canonical learner events/state with content identity/version; client-only values cannot be authoritative progress.",
+      "failure_behavior": "Do not record/display client-only progress as real.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-019",
+      "name": "CertificationIssuanceIsCompleteAtomicAndIdempotent",
+      "scope": "certification",
+      "owning_domain": "Certification",
+      "authority_contracts": [
+        "C34",
+        "C22"
+      ],
+      "requirements": [
+        "CERT-1",
+        "CERT-2",
+        "CERT-3",
+        "CERT-5",
+        "CERT-6",
+        "CERT-8",
+        "CERT-9",
+        "CERT-10"
+      ],
+      "assertion": "Certification issuance requires all currently defined mandatory authority/binding facts, commits with audit atomically, and cannot duplicate under replay.",
+      "failure_behavior": "Reject issuance or rollback; never persist a partial/duplicate certification.",
+      "evidence_state": "PROVEN",
+      "notes": [
+        "Criteria-version and evidence-shape details remain separately blocked; this invariant does not claim those undecided values."
+      ]
+    },
+    {
+      "id": "INV-020",
+      "name": "EvidenceNonPassStatesNeverPass",
+      "scope": "verification",
+      "owning_domain": "VerificationEvidence",
+      "authority_contracts": [
+        "C00",
+        "C51"
+      ],
+      "requirements": [
+        "SYS-25",
+        "EVD-1",
+        "EVD-2",
+        "EVD-14",
+        "EVD-15"
+      ],
+      "assertion": "UNKNOWN, BLOCKED, CONTRADICTORY, skipped, missing, stale, or unreadable required evidence cannot become PASS.",
+      "failure_behavior": "Gate fails closed.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-021",
+      "name": "EvidenceIsBoundToExactCandidate",
+      "scope": "verification",
+      "owning_domain": "VerificationEvidence",
+      "authority_contracts": [
+        "C00",
+        "C51"
+      ],
+      "requirements": [
+        "SYS-13",
+        "SYS-14",
+        "EVD-10",
+        "EVD-11",
+        "EVD-12",
+        "EVD-13"
+      ],
+      "assertion": "Evidence proves only the exact source SHA/environment it records; CI alone never proves production conformance.",
+      "failure_behavior": "Reject mismatched or CI-only production claim.",
+      "evidence_state": "PROVEN"
+    },
+    {
+      "id": "INV-022",
+      "name": "OffboardingIsTotalAndIdempotent",
+      "scope": "identity",
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12",
+        "C13",
+        "C22",
+        "C23"
+      ],
+      "requirements": [
+        "IDN-17",
+        "IDN-18",
+        "IDN-19",
+        "SES-14"
+      ],
+      "assertion": "Offboarding uses one lifecycle path, ends IdentityStatus INACTIVE, revokes effective sessions/credentials/tokens/membership/grants, emits one lifecycle/audit outcome, and replay does not duplicate effects.",
+      "failure_behavior": "Atomic rollback or same final offboarded outcome.",
+      "evidence_state": "PROVEN"
+    }
+  ],
+  "blocked_invariants": [
+    {
+      "id": "INV-B01",
+      "name": "DeletionAndAnonymizationInvariant",
+      "authority_contracts": [
+        "C15"
+      ],
+      "blocked_by": [
+        "OQ-PRIV-1",
+        "OQ-PRIV-2",
+        "OQ-PRIV-3"
+      ],
+      "reason": "Deleted/anonymized/retained meanings, retention periods, and exemptions are not owner-approved.",
+      "evidence_state": "BLOCKED"
+    },
+    {
+      "id": "INV-B02",
+      "name": "ConcreteRoleCapabilityClosure",
+      "authority_contracts": [
+        "C14"
+      ],
+      "blocked_by": [
+        "OQ-AUTHZ-1"
+      ],
+      "reason": "The invariant shape is known, but the concrete capability vocabulary and role bundles are not approved.",
+      "evidence_state": "BLOCKED"
+    },
+    {
+      "id": "INV-B03",
+      "name": "LearningDerivedMetricDeterminism",
+      "authority_contracts": [
+        "C32"
+      ],
+      "blocked_by": [
+        "OQ-LRN-2"
+      ],
+      "reason": "Mastery/XP/streak/rank derivation rules are not approved.",
+      "evidence_state": "BLOCKED"
+    },
+    {
+      "id": "INV-B04",
+      "name": "CertificationCriteriaAndEvidenceCompleteness",
+      "authority_contracts": [
+        "C34"
+      ],
+      "blocked_by": [
+        "OQ-CERT-2",
+        "OQ-CERT-3"
+      ],
+      "reason": "Criteria/checklist version and observed-performance evidence semantics are not approved.",
+      "evidence_state": "BLOCKED"
+    },
+    {
+      "id": "INV-B05",
+      "name": "ContentSchemaVersionPolicy",
+      "authority_contracts": [
+        "C31"
+      ],
+      "blocked_by": [
+        "OQ-CNT-1"
+      ],
+      "reason": "Content schema must be versioned, but the approved schema-version policy/value is not yet decided.",
+      "evidence_state": "BLOCKED"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+name: Invariant Discovery
+
+on:
+  pull_request:
+    paths:
+      - 'domains/invariants/**'
+      - 'kernel/**'
+      - 'contracts/**'
+      - 'scripts/domains/validate-invariant-discovery.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'domains/invariants/**'
+      - 'kernel/**'
+      - 'contracts/**'
+      - 'scripts/domains/validate-invariant-discovery.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-invariant-discovery:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate invariant discovery
+        run: node scripts/domains/validate-invariant-discovery.mjs
