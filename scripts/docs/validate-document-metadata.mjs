@@ -4,7 +4,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 
 const ROOT = resolve(process.cwd());
-const governedRoots = ['contracts', 'governance', 'kernel'];
+const governedRoots = ['contracts', 'governance', 'kernel', 'domains'];
 const semver = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 const dateRe = /^\d{4}-\d{2}-\d{2}$/;
 const statuses = new Set(['draft', 'proposed', 'active', 'superseded', 'retired', 'recorded']);

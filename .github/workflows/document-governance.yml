@@ -6,6 +6,7 @@ on:
       - 'contracts/**'
       - 'governance/**'
       - 'kernel/**'
+      - 'domains/**'
       - 'scripts/docs/**'
       - '.github/workflows/document-governance.yml'
   push:
@@ -14,6 +15,7 @@ on:
       - 'contracts/**'
       - 'governance/**'
       - 'kernel/**'
+      - 'domains/**'
       - 'scripts/docs/**'
       - '.github/workflows/document-governance.yml'
 

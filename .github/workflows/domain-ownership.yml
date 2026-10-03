@@ -1,0 +1,28 @@
+name: Domain Ownership Discovery
+
+on:
+  pull_request:
+    paths:
+      - 'domains/**'
+      - 'kernel/**'
+      - 'scripts/domains/**'
+      - '.github/workflows/domain-ownership.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'domains/**'
+      - 'kernel/**'
+      - 'scripts/domains/**'
+      - '.github/workflows/domain-ownership.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-domain-ownership:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate proposed ownership map
+        run: node scripts/domains/validate-domain-ownership.mjs

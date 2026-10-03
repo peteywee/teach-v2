@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://t34ch.com/schemas/domain-ownership-map.schema.json",
+  "title": "Teach v2 proposed domain ownership map",
+  "type": "object",
+  "required": [
+    "map_id",
+    "version",
+    "status",
+    "owner",
+    "baseline",
+    "domains",
+    "entries"
+  ],
+  "properties": {
+    "map_id": {
+      "const": "TEACH-DOMAIN-OWNERSHIP"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "proposed",
+        "active",
+        "superseded"
+      ]
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1
+    },
+    "baseline": {
+      "type": "object",
+      "required": [
+        "repo",
+        "ref",
+        "commit"
+      ],
+      "properties": {
+        "repo": {
+          "const": "peteywee/teach-v2"
+        },
+        "ref": {
+          "const": "main"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        }
+      },
+      "additionalProperties": true
+    },
+    "domains": {
+      "type": "array",
+      "minItems": 1
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1
+    }
+  },
+  "additionalProperties": true
+}

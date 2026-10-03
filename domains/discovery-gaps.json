@@ -1,0 +1,185 @@
+{
+  "report_id": "TEACH-DOMAIN-DISCOVERY-GAPS-2026-10-03",
+  "version": "0.1.0",
+  "status": "recorded",
+  "baseline_commit": "e567298c8c3916be0c98bdbe6bb715282be7e03e",
+  "core_missing_kernel_candidates": [
+    {
+      "id": "Invitation",
+      "kind": "entity",
+      "authority_contracts": [
+        "C11"
+      ],
+      "proposed_owner": "Identity"
+    },
+    {
+      "id": "OAuthIdentityLink",
+      "kind": "entity",
+      "authority_contracts": [
+        "C11"
+      ],
+      "proposed_owner": "Identity"
+    },
+    {
+      "id": "SetupToken",
+      "kind": "entity",
+      "authority_contracts": [
+        "C11"
+      ],
+      "proposed_owner": "Identity"
+    },
+    {
+      "id": "PasswordResetToken",
+      "kind": "entity",
+      "authority_contracts": [
+        "C11"
+      ],
+      "proposed_owner": "Identity"
+    },
+    {
+      "id": "ReportingRelationship",
+      "kind": "relationship",
+      "authority_contracts": [
+        "C13"
+      ],
+      "proposed_owner": "Organization"
+    },
+    {
+      "id": "ProtectedOperation",
+      "kind": "concept",
+      "authority_contracts": [
+        "C14"
+      ],
+      "proposed_owner": "Authorization"
+    },
+    {
+      "id": "Role",
+      "kind": "concept",
+      "authority_contracts": [
+        "C14"
+      ],
+      "proposed_owner": "Authorization"
+    },
+    {
+      "id": "DataExportRequest",
+      "kind": "entity",
+      "authority_contracts": [
+        "C15"
+      ],
+      "proposed_owner": null
+    },
+    {
+      "id": "DataDeletionRequest",
+      "kind": "entity",
+      "authority_contracts": [
+        "C15"
+      ],
+      "proposed_owner": null
+    },
+    {
+      "id": "ReconciliationRecord",
+      "kind": "entity",
+      "authority_contracts": [
+        "C22"
+      ],
+      "proposed_owner": "TransactionControl"
+    },
+    {
+      "id": "CertificationCriteriaVersion",
+      "kind": "value_object",
+      "authority_contracts": [
+        "C34"
+      ],
+      "proposed_owner": "Certification"
+    },
+    {
+      "id": "CertificationRevocation",
+      "kind": "entity_or_event",
+      "authority_contracts": [
+        "C34"
+      ],
+      "proposed_owner": "Certification"
+    },
+    {
+      "id": "EvidenceRecord",
+      "kind": "entity",
+      "authority_contracts": [
+        "C51"
+      ],
+      "proposed_owner": "VerificationEvidence"
+    }
+  ],
+  "conditional_or_deferred_candidates": [
+    {
+      "id": "AnalyticsEvent",
+      "authority_contracts": [
+        "C61"
+      ],
+      "condition": "C61 enabled"
+    },
+    {
+      "id": "OfflineWriteQueueEntry",
+      "authority_contracts": [
+        "C62"
+      ],
+      "condition": "offline writes authorized"
+    },
+    {
+      "id": "PaymentProviderCustomer",
+      "authority_contracts": [
+        "C63"
+      ],
+      "condition": "C63 enabled"
+    },
+    {
+      "id": "ProviderEvent",
+      "authority_contracts": [
+        "C63"
+      ],
+      "condition": "C63 enabled"
+    },
+    {
+      "id": "ReleaseCandidate",
+      "authority_contracts": [
+        "C52"
+      ],
+      "condition": "production-proof semantic expansion"
+    }
+  ],
+  "ownership_conflicts": [
+    {
+      "concept": "Entitlement / EntitlementId",
+      "current_kernel_owner": "OrganizationAuthority",
+      "contract_evidence": [
+        "C14 delegates entitlement/billing facts to C63",
+        "C63 owns entitlement reconciliation"
+      ],
+      "decision": "unresolved"
+    },
+    {
+      "concept": "CapabilityId",
+      "current_kernel_owner": "OrganizationAuthority",
+      "proposed_owner": "Authorization",
+      "contract_evidence": [
+        "C01 owns identifier registration",
+        "C14 owns authorization semantics"
+      ]
+    },
+    {
+      "concept": "RequestId",
+      "current_kernel_owner": "AuditLifecycle",
+      "proposed_owner": "Observability",
+      "contract_evidence": [
+        "C53 owns request/correlation IDs"
+      ]
+    },
+    {
+      "concept": "IdempotencyKey",
+      "current_kernel_owner": "AuditLifecycle",
+      "proposed_owner": "TransactionControl",
+      "contract_evidence": [
+        "C22 owns idempotency keys and semantics"
+      ]
+    }
+  ]
+}
