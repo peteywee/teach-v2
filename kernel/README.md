@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-K00",
   "class": "semantic-kernel",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -13,14 +13,14 @@
     "state": "approved",
     "approved_on": "2026-10-03",
     "record": "contracts/APPROVAL-RECORD.md",
-    "issue": "#2",
-    "basis": "Explicit domain-ownership approval token"
+    "issue": "#3",
+    "basis": "Explicit relationship-registration approval token"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "57d60016611681235c464bec295e123987e823e3",
-    "purpose": "pre-domain-ownership approval baseline"
+    "commit": "c90b9bb87ea3a619de83b01070d6ec12edb5ea53",
+    "purpose": "pre-relationship-registration baseline"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -33,9 +33,11 @@
 
 Canonical machine-readable source format: JSON.
 
-K00 version: `0.2.0`.
+K00 version: `0.3.0`.
 
 Active domain ownership authority: `domains/ownership-map.json`.
+
+Relationship registration: 18 dependency-ready relationships are registered as `candidate`; 11 blocked relationship proposals remain outside K00.
 
 All initial domain entries are `candidate` until domain discovery promotes them through an approved semantic change.
 

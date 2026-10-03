@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -237,3 +237,11 @@ PATCH revisions preserve the controlling owner approval when they do not change 
 | C13 | 1.0.3 | 1.1.0 | 2026-10-03 | Patrick Craven | #2 | Organization owns local Entitlement state |
 | C14 | 1.0.3 | 1.1.0 | 2026-10-03 | Patrick Craven | #2 | Authorization consumes but does not own entitlement |
 | C63 | 1.0.3 | 1.1.0 | 2026-10-03 | Patrick Craven | #2 | Provider reconciliation crosses Organization command boundary |
+
+## Part 7 — Relationship registration approval
+
+| Artifact | From | To | Decision | Date | Owner | GitHub issue |
+| --- | --- | --- | --- | --- | --- | --- |
+| TEACH-K00 | 0.2.0 | 0.3.0 | Register all 18 dependency-ready relationship definitions as `candidate`; keep 11 blocked relationships outside K00; no candidate-to-approved promotion | 2026-10-03 | Patrick Craven | #3 |
+| TEACH-REL-DISCOVERY | 0.1.0 | 0.2.0 | Record discovery disposition and registration evidence | 2026-10-03 | Patrick Craven | #3 |
+| TEACH-DOMAIN-OWNERSHIP | 1.0.0 | 1.0.0 | Extended with owning-domain assignments for the 18 registered relationships, exactly as specified in `domains/relationships/proposed.json`; no existing approved assignment changed | 2026-10-03 | Patrick Craven | #3 |

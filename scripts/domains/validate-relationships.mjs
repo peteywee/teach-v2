@@ -10,6 +10,7 @@ const load = (p) => {
 };
 
 const proposal = load('domains/relationships/proposed.json');
+const registration = load('domains/relationships/registration.json');
 const entities = load('kernel/entities.json');
 const existingRelationships = load('kernel/relationships.json');
 const ownership = load('domains/ownership-map.json');
@@ -41,8 +42,6 @@ for (const r of proposal?.ready_relationships || []) {
   if (!ownerDomains.has(r.owning_domain)) errors.push(`${r.id}: unknown owner domain ${r.owning_domain}`);
   if (!Array.isArray(r.authority_contracts) || !r.authority_contracts.length) errors.push(`${r.id}: missing contract traceability`);
   if (!Array.isArray(r.does_not_grant) || !r.does_not_grant.length) errors.push(`${r.id}: missing does_not_grant`);
-  if (r.action === 'retain-existing' && !existing.has(r.id)) errors.push(`${r.id}: marked retain-existing but absent from K00`);
-  if (r.action === 'add' && existing.has(r.id)) errors.push(`${r.id}: marked add but already exists in K00`);
 }
 
 for (const r of proposal?.blocked_relationships || []) {
@@ -53,14 +52,42 @@ for (const r of proposal?.blocked_relationships || []) {
   if (!Array.isArray(r.authority_contracts) || !r.authority_contracts.length) errors.push(`${r.id}: contract traceability required`);
 }
 
+if (registration) {
+  if (registration.version !== '1.0.0') errors.push('relationship registration: version must be 1.0.0');
+  if (registration.status !== 'recorded') errors.push('relationship registration: status must be recorded');
+  if (registration.kernel_version !== '0.3.0') errors.push('relationship registration: kernel_version must be 0.3.0');
+  if (registration.promotion?.candidate_to_approved !== false) errors.push('relationship registration: candidate promotion must remain false');
+}
+
+const readyIds = new Set((proposal?.ready_relationships || []).map(x => x.id));
+const blockedIds = new Set((proposal?.blocked_relationships || []).map(x => x.id));
+
+for (const id of readyIds) {
+  if (!existing.has(id)) errors.push(`relationship registration: ready relationship ${id} missing from K00`);
+}
+for (const id of existing) {
+  if (!readyIds.has(id)) errors.push(`relationship registration: K00 relationship ${id} was not in the approved ready set`);
+}
+for (const id of blockedIds) {
+  if (existing.has(id)) errors.push(`relationship registration: blocked relationship ${id} must not be in K00`);
+}
+
+const registeredIds = new Set(registration?.registered_relationships || []);
+for (const id of readyIds) if (!registeredIds.has(id)) errors.push(`relationship registration: ${id} missing from registration record`);
+for (const id of registeredIds) if (!readyIds.has(id)) errors.push(`relationship registration: unexpected registered id ${id}`);
+
+for (const r of existingRelationships?.entries || []) {
+  if (r.status !== 'candidate') errors.push(`relationship registration: ${r.id} must remain candidate`);
+}
+
+
 if (errors.length) {
   console.error(`Relationship discovery FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
 
-console.log('Relationship discovery PASS');
-console.log(`Ready proposals: ${(proposal?.ready_relationships || []).length}`);
-console.log(`Blocked proposals: ${(proposal?.blocked_relationships || []).length}`);
-console.log(`Existing K00 relationships retained: ${(proposal?.ready_relationships || []).filter(x => x.action === 'retain-existing').length}`);
-console.log(`New relationship candidates proposed: ${(proposal?.ready_relationships || []).filter(x => x.action === 'add').length}`);
+console.log('Relationship registration PASS');
+console.log(`Registered candidate relationships: ${existing.size}`);
+console.log(`Blocked relationships excluded: ${(proposal?.blocked_relationships || []).length}`);
+console.log('Candidate-to-approved promotions: 0');

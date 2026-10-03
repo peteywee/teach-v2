@@ -15,7 +15,7 @@ const names = ['entities.json','values.json','identifiers.json','relationships.j
 const docs = Object.fromEntries(names.map(n => [n, load(n)]));
 if (manifest) {
   if (manifest.kernel_id !== 'TEACH-K00') errors.push('manifest.json: kernel_id must be TEACH-K00');
-  if (manifest.version !== '0.2.0') errors.push('manifest.json: version must be 0.2.0');
+  if (manifest.version !== '0.3.0') errors.push('manifest.json: version must be 0.3.0');
   if (manifest.canonical_format !== 'json') errors.push('manifest.json: canonical_format must be json');
   for (const n of ['entities','values','identifiers','relationships','states','capabilities','commands','events','evidence','schema']) {
     if (!manifest.files?.[n]) errors.push(`manifest.json: missing file mapping ${n}`);
@@ -45,8 +45,35 @@ for (const e of docs['entities.json']?.entries || []) {
 for (const r of docs['relationships.json']?.entries || []) {
   const refs = [r.from, ...(Array.isArray(r.to) ? r.to : [r.to])].filter(Boolean);
   for (const ref of refs) if (!entityIds.has(ref)) errors.push(`relationships.json: ${r.id} references unknown entity ${ref}`);
-  if (!Array.isArray(r.does_not_grant)) errors.push(`relationships.json: ${r.id} missing does_not_grant`);
+  if (!r.owning_domain) errors.push(`relationships.json: ${r.id} missing owning_domain`);
+  if (!Array.isArray(r.authority_contracts) || !r.authority_contracts.length) errors.push(`relationships.json: ${r.id} missing authority_contracts`);
+  if (!Array.isArray(r.does_not_grant) || !r.does_not_grant.length) errors.push(`relationships.json: ${r.id} missing does_not_grant`);
+  if (r.status !== 'candidate') errors.push(`relationships.json: ${r.id} must remain candidate in K00 0.3.0`);
 }
+const expectedRelationshipIds = new Set([
+  'AssignmentReferencesContentPack',
+  'AssignmentTargetsIdentity',
+  'CertificationBelongsToIdentity',
+  'CertificationObservedByIdentity',
+  'CertificationReferencesContentPack',
+  'ContentPackContainsContentBlock',
+  'CredentialBelongsToIdentity',
+  'EntitlementBelongsToOrganization',
+  'IdentityHasApplicationSession',
+  'IdentityHasLearningSession',
+  'LearnerStateBelongsToIdentity',
+  'LearnerStateTracksContentPack',
+  'LearningSessionUsesAssignment',
+  'LifecycleEventReferencesIdentity',
+  'LocationBelongsToOrganization',
+  'MembershipLinksIdentityOrganization',
+  'MembershipMayScopeLocation',
+  'ProgressEventBelongsToLearningSession'
+]);
+const actualRelationshipIds = new Set((docs['relationships.json']?.entries || []).map(x => x.id));
+for (const id of expectedRelationshipIds) if (!actualRelationshipIds.has(id)) errors.push(`relationships.json: missing registered relationship ${id}`);
+for (const id of actualRelationshipIds) if (!expectedRelationshipIds.has(id)) errors.push(`relationships.json: unexpected relationship ${id}`);
+
 for (const s of docs['states.json']?.entries || []) {
   if (!Array.isArray(s.values) || !s.values.length) errors.push(`states.json: ${s.id} missing values`);
   if (new Set(s.values || []).size !== (s.values || []).length) errors.push(`states.json: ${s.id} duplicate values`);
@@ -95,7 +122,7 @@ if (errors.length) {
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
-console.log('Semantic kernel PASS: TEACH-K00 0.2.0');
+console.log('Semantic kernel PASS: TEACH-K00 0.3.0');
 console.log(`Entities: ${(docs['entities.json']?.entries || []).length}`);
 console.log(`Identifiers: ${(docs['identifiers.json']?.entries || []).length}`);
 console.log(`Relationships: ${(docs['relationships.json']?.entries || []).length}`);

@@ -1,0 +1,108 @@
+{
+  "registration_id": "TEACH-REL-REGISTRATION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "approved_on": "2026-10-03",
+  "issue": "#3",
+  "baseline_commit": "c90b9bb87ea3a619de83b01070d6ec12edb5ea53",
+  "kernel_version": "0.3.0",
+  "decision": "register-ready-relationships-as-candidate",
+  "registered_relationships": [
+    "CredentialBelongsToIdentity",
+    "IdentityHasApplicationSession",
+    "LocationBelongsToOrganization",
+    "MembershipLinksIdentityOrganization",
+    "MembershipMayScopeLocation",
+    "EntitlementBelongsToOrganization",
+    "ContentPackContainsContentBlock",
+    "AssignmentTargetsIdentity",
+    "AssignmentReferencesContentPack",
+    "IdentityHasLearningSession",
+    "LearningSessionUsesAssignment",
+    "ProgressEventBelongsToLearningSession",
+    "LearnerStateBelongsToIdentity",
+    "LearnerStateTracksContentPack",
+    "CertificationBelongsToIdentity",
+    "CertificationReferencesContentPack",
+    "CertificationObservedByIdentity",
+    "LifecycleEventReferencesIdentity"
+  ],
+  "blocked_relationships": [
+    {
+      "id": "InvitationForIdentity",
+      "blocked_by": [
+        "missing-k00:Invitation"
+      ]
+    },
+    {
+      "id": "OAuthIdentityLinkBelongsToIdentity",
+      "blocked_by": [
+        "missing-k00:OAuthIdentityLink"
+      ]
+    },
+    {
+      "id": "ReportingRelationshipLinksManagerLearner",
+      "blocked_by": [
+        "missing-k00:ReportingRelationship"
+      ]
+    },
+    {
+      "id": "ProtectedOperationRequiresCapability",
+      "blocked_by": [
+        "missing-k00:ProtectedOperation",
+        "capability-vocabulary-not-yet-populated"
+      ]
+    },
+    {
+      "id": "RoleBundlesCapabilities",
+      "blocked_by": [
+        "missing-k00:Role",
+        "capability-vocabulary-not-yet-populated"
+      ]
+    },
+    {
+      "id": "DataExportRequestHasSubjectAndScope",
+      "blocked_by": [
+        "missing-k00:DataExportRequest",
+        "domain-owner-not-yet-registered"
+      ]
+    },
+    {
+      "id": "DataDeletionRequestHasSubjectAndScope",
+      "blocked_by": [
+        "missing-k00:DataDeletionRequest",
+        "domain-owner-not-yet-registered"
+      ]
+    },
+    {
+      "id": "ReconciliationRecordUsesIdempotencyKey",
+      "blocked_by": [
+        "missing-k00:ReconciliationRecord"
+      ]
+    },
+    {
+      "id": "CertificationUsesCriteriaVersion",
+      "blocked_by": [
+        "missing-k00:CertificationCriteriaVersion"
+      ]
+    },
+    {
+      "id": "CertificationHasRevocation",
+      "blocked_by": [
+        "missing-k00:CertificationRevocation",
+        "classification-unresolved:entity-or-event"
+      ]
+    },
+    {
+      "id": "EvidenceRecordSupportsVerificationClaim",
+      "blocked_by": [
+        "missing-k00:EvidenceRecord"
+      ]
+    }
+  ],
+  "promotion": {
+    "candidate_to_approved": false,
+    "approved_count": 0
+  }
+}

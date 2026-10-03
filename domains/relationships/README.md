@@ -2,17 +2,24 @@
 {
   "doc_id": "TEACH-REL-DISCOVERY",
   "class": "specification",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "claims_truth_state": "declared",
-  "status": "proposed",
+  "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-03",
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "1cb51b4b0a171866628886d5445277b4f6b21e15",
-    "purpose": "post-domain-ownership relationship-discovery baseline"
+    "commit": "c90b9bb87ea3a619de83b01070d6ec12edb5ea53",
+    "purpose": "pre-relationship-registration baseline"
+  },
+  "approval": {
+    "state": "approved",
+    "approved_on": "2026-10-03",
+    "owner": "Patrick Craven, Top Shelf Service LLC",
+    "record": "contracts/APPROVAL-RECORD.md",
+    "issue": "#3"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -24,12 +31,12 @@
 
 # Teach v2 Relationship Discovery
 
-Status: `proposed`.
+Status: `recorded`.
 
-`proposed.json` is a non-authoritative relationship-discovery artifact. It does not change `kernel/relationships.json`, does not promote any K00 entry, and does not authorize implementation.
+`proposed.json` remains the discovery proposal. `registration.json` records the owner-approved disposition: all 18 ready relationships are registered in `kernel/relationships.json` as `candidate`; no entry is promoted to `approved`.
 
 Ready relationships reference currently registered K00 concepts and carry contract traceability.
 
 Blocked relationships remain explicit until their missing semantic candidates or classification decisions are resolved.
 
-Next gate: owner-approved semantic change that selects the relationship set to merge into K00.
+Next gate: states/state-machine discovery. The 11 blocked relationship proposals remain blocked until their named semantic dependencies are resolved.

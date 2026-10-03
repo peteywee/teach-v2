@@ -589,6 +589,141 @@
       ]
     },
     {
+      "kind": "relationship",
+      "id": "CredentialBelongsToIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "MembershipMayScopeLocation",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "EntitlementBelongsToOrganization",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13",
+        "C14",
+        "C63"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "ContentPackContainsContentBlock",
+      "decision_state": "approved",
+      "proposed_owner": "Content",
+      "authority_contracts": [
+        "C31"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "AssignmentTargetsIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "AssignmentReferencesContentPack",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C31",
+        "C32",
+        "C33"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "LearningSessionUsesAssignment",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "ProgressEventBelongsToLearningSession",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "LearnerStateBelongsToIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "LearnerStateTracksContentPack",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C31",
+        "C32"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "CertificationBelongsToIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Certification",
+      "authority_contracts": [
+        "C34"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "CertificationReferencesContentPack",
+      "decision_state": "approved",
+      "proposed_owner": "Certification",
+      "authority_contracts": [
+        "C31",
+        "C34"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "CertificationObservedByIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Certification",
+      "authority_contracts": [
+        "C14",
+        "C34"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "LifecycleEventReferencesIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "AuditLifecycle",
+      "authority_contracts": [
+        "C11",
+        "C23"
+      ]
+    },
+    {
       "kind": "command",
       "id": "AuthenticateIdentity",
       "decision_state": "approved",

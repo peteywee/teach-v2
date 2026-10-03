@@ -2,12 +2,283 @@
   "schema_version": "0.1.0",
   "entries": [
     {
+      "id": "AssignmentReferencesContentPack",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "Assignment",
+      "to": "ContentPack",
+      "cardinality": "many-to-one",
+      "owning_domain": "Learning",
+      "authority_contracts": [
+        "C31",
+        "C32",
+        "C33"
+      ],
+      "enables": [
+        "assigned_content_resolution"
+      ],
+      "does_not_grant": [
+        "content_publication",
+        "authorization"
+      ]
+    },
+    {
+      "id": "AssignmentTargetsIdentity",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "Assignment",
+      "to": "Identity",
+      "cardinality": "many-to-one",
+      "owning_domain": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ],
+      "enables": [
+        "learner_assignment"
+      ],
+      "does_not_grant": [
+        "membership",
+        "capability"
+      ]
+    },
+    {
+      "id": "CertificationBelongsToIdentity",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "Certification",
+      "to": "Identity",
+      "cardinality": "many-to-one",
+      "owning_domain": "Certification",
+      "authority_contracts": [
+        "C34"
+      ],
+      "enables": [
+        "learner_credential_ownership"
+      ],
+      "does_not_grant": [
+        "membership",
+        "capability"
+      ]
+    },
+    {
+      "id": "CertificationObservedByIdentity",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "Certification",
+      "to": "Identity",
+      "cardinality": "many-to-one-observer",
+      "owning_domain": "Certification",
+      "authority_contracts": [
+        "C14",
+        "C34"
+      ],
+      "enables": [
+        "observer_attribution"
+      ],
+      "does_not_grant": [
+        "observer_capability"
+      ]
+    },
+    {
+      "id": "CertificationReferencesContentPack",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "Certification",
+      "to": "ContentPack",
+      "cardinality": "many-to-one",
+      "owning_domain": "Certification",
+      "authority_contracts": [
+        "C31",
+        "C34"
+      ],
+      "enables": [
+        "certified_content_binding"
+      ],
+      "does_not_grant": [
+        "content_access"
+      ]
+    },
+    {
+      "id": "ContentPackContainsContentBlock",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "ContentPack",
+      "to": "ContentBlock",
+      "cardinality": "one-to-many",
+      "owning_domain": "Content",
+      "authority_contracts": [
+        "C31"
+      ],
+      "enables": [
+        "content_composition"
+      ],
+      "does_not_grant": [
+        "content_access"
+      ]
+    },
+    {
+      "id": "CredentialBelongsToIdentity",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "Credential",
+      "to": "Identity",
+      "cardinality": "many-to-one",
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C11"
+      ],
+      "enables": [
+        "credential_ownership"
+      ],
+      "does_not_grant": [
+        "authentication_success",
+        "authorization"
+      ]
+    },
+    {
+      "id": "EntitlementBelongsToOrganization",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "Entitlement",
+      "to": "Organization",
+      "cardinality": "many-to-one",
+      "owning_domain": "Organization",
+      "authority_contracts": [
+        "C13",
+        "C14",
+        "C63"
+      ],
+      "enables": [
+        "entitlement_scope"
+      ],
+      "does_not_grant": [
+        "capability"
+      ]
+    },
+    {
+      "id": "IdentityHasApplicationSession",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "Identity",
+      "to": "ApplicationSession",
+      "cardinality": "one-to-many",
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ],
+      "enables": [
+        "session_ownership"
+      ],
+      "does_not_grant": [
+        "authorization"
+      ]
+    },
+    {
+      "id": "IdentityHasLearningSession",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "Identity",
+      "to": "LearningSession",
+      "cardinality": "one-to-many",
+      "owning_domain": "Learning",
+      "authority_contracts": [
+        "C32"
+      ],
+      "enables": [
+        "learner_session_ownership"
+      ],
+      "does_not_grant": [
+        "content_access"
+      ]
+    },
+    {
+      "id": "LearnerStateBelongsToIdentity",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "LearnerState",
+      "to": "Identity",
+      "cardinality": "many-to-one",
+      "owning_domain": "Learning",
+      "authority_contracts": [
+        "C32"
+      ],
+      "enables": [
+        "learner_state_resolution"
+      ],
+      "does_not_grant": [
+        "membership",
+        "authorization"
+      ]
+    },
+    {
+      "id": "LearnerStateTracksContentPack",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "LearnerState",
+      "to": "ContentPack",
+      "cardinality": "many-to-one",
+      "owning_domain": "Learning",
+      "authority_contracts": [
+        "C31",
+        "C32"
+      ],
+      "enables": [
+        "content_scoped_learning_state"
+      ],
+      "does_not_grant": [
+        "content_access"
+      ]
+    },
+    {
+      "id": "LearningSessionUsesAssignment",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "LearningSession",
+      "to": "Assignment",
+      "cardinality": "many-to-one",
+      "owning_domain": "Learning",
+      "authority_contracts": [
+        "C32"
+      ],
+      "enables": [
+        "exact_assignment_binding"
+      ],
+      "does_not_grant": [
+        "assignment_creation"
+      ]
+    },
+    {
+      "id": "LifecycleEventReferencesIdentity",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "LifecycleEvent",
+      "to": "Identity",
+      "cardinality": "many-to-one-when-identity-lifecycle",
+      "owning_domain": "AuditLifecycle",
+      "authority_contracts": [
+        "C11",
+        "C23"
+      ],
+      "enables": [
+        "identity_lifecycle_history"
+      ],
+      "does_not_grant": [
+        "identity_authority"
+      ]
+    },
+    {
       "id": "LocationBelongsToOrganization",
       "kind": "relationship",
       "status": "candidate",
       "from": "Location",
       "to": "Organization",
       "cardinality": "many-to-one",
+      "owning_domain": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
       "enables": [
         "tenant_scope_resolution"
       ],
@@ -26,11 +297,12 @@
         "Organization"
       ],
       "cardinality": "relationship-entity",
-      "may_scope": [
-        "Location"
+      "owning_domain": "Organization",
+      "authority_contracts": [
+        "C13"
       ],
       "enables": [
-        "capability_resolution_eligibility"
+        "membership_scope_resolution"
       ],
       "does_not_grant": [
         "capability",
@@ -39,31 +311,40 @@
       ]
     },
     {
-      "id": "IdentityHasApplicationSession",
+      "id": "MembershipMayScopeLocation",
       "kind": "relationship",
       "status": "candidate",
-      "from": "Identity",
-      "to": "ApplicationSession",
-      "cardinality": "one-to-many",
+      "from": "Membership",
+      "to": "Location",
+      "cardinality": "many-to-zero-or-one",
+      "owning_domain": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
       "enables": [
-        "session_ownership"
+        "location_scope_resolution"
       ],
       "does_not_grant": [
-        "authorization"
+        "capability",
+        "manager_authority"
       ]
     },
     {
-      "id": "IdentityHasLearningSession",
+      "id": "ProgressEventBelongsToLearningSession",
       "kind": "relationship",
       "status": "candidate",
-      "from": "Identity",
+      "from": "ProgressEvent",
       "to": "LearningSession",
-      "cardinality": "one-to-many",
+      "cardinality": "many-to-one",
+      "owning_domain": "Learning",
+      "authority_contracts": [
+        "C32"
+      ],
       "enables": [
-        "learner_session_ownership"
+        "session_progress_history"
       ],
       "does_not_grant": [
-        "content_access"
+        "session_completion"
       ]
     }
   ]
