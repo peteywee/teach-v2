@@ -1,6 +1,6 @@
 {
   "map_id": "TEACH-DOMAIN-OWNERSHIP",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
@@ -8,8 +8,8 @@
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "c64c00f04197907d846c507ae956ed377826da2f",
-    "purpose": "pre-state-machine approval baseline"
+    "commit": "b29d0e7712d705ed30e574b39918e75a411db194",
+    "purpose": "pre-invariant-registration baseline"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -23,21 +23,12 @@
   },
   "domains": [
     {
-      "id": "Identity",
+      "id": "AuditLifecycle",
       "status": "approved",
       "authority_contracts": [
-        "C11",
-        "C12"
+        "C23"
       ],
-      "purpose": "Identity, credentials, authentication proof, application-session lifecycle."
-    },
-    {
-      "id": "Organization",
-      "status": "approved",
-      "authority_contracts": [
-        "C13"
-      ],
-      "purpose": "Tenant, location, membership, reporting-scope facts."
+      "purpose": "Immutable audit facts and lifecycle-event history."
     },
     {
       "id": "Authorization",
@@ -49,12 +40,38 @@
       "purpose": "Capability identifiers and authorization semantics. C01 registers names; C14 owns authorization meaning."
     },
     {
+      "id": "Certification",
+      "status": "approved",
+      "authority_contracts": [
+        "C34"
+      ],
+      "purpose": "Certification issuance, revocation and criteria-bound credential state."
+    },
+    {
       "id": "Content",
       "status": "approved",
       "authority_contracts": [
         "C31"
       ],
       "purpose": "Versioned content and teaching-engine semantics."
+    },
+    {
+      "id": "Governance",
+      "status": "approved",
+      "authority_contracts": [
+        "C00",
+        "C01"
+      ],
+      "purpose": "Cross-cutting system-authority and semantic-governance rules that must not be assigned arbitrarily to product domains."
+    },
+    {
+      "id": "Identity",
+      "status": "approved",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ],
+      "purpose": "Identity, credentials, authentication proof, application-session lifecycle."
     },
     {
       "id": "Learning",
@@ -66,20 +83,20 @@
       "purpose": "Assignments, learning sessions, progress and learner-state facts. Manager operations request changes but do not own learner state."
     },
     {
-      "id": "Certification",
+      "id": "Observability",
       "status": "approved",
       "authority_contracts": [
-        "C34"
+        "C53"
       ],
-      "purpose": "Certification issuance, revocation and criteria-bound credential state."
+      "purpose": "Request/correlation identity and operational telemetry semantics."
     },
     {
-      "id": "AuditLifecycle",
+      "id": "Organization",
       "status": "approved",
       "authority_contracts": [
-        "C23"
+        "C13"
       ],
-      "purpose": "Immutable audit facts and lifecycle-event history."
+      "purpose": "Tenant, location, membership, reporting-scope facts."
     },
     {
       "id": "TransactionControl",
@@ -96,20 +113,22 @@
         "C51"
       ],
       "purpose": "Evidence records and evidence-state semantics."
-    },
-    {
-      "id": "Observability",
-      "status": "approved",
-      "authority_contracts": [
-        "C53"
-      ],
-      "purpose": "Request/correlation identity and operational telemetry semantics."
     }
   ],
   "entries": [
     {
-      "kind": "entity",
-      "id": "Identity",
+      "kind": "command",
+      "id": "AssignContent",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "AuthenticateIdentity",
       "decision_state": "approved",
       "proposed_owner": "Identity",
       "authority_contracts": [
@@ -118,13 +137,126 @@
       ]
     },
     {
-      "kind": "entity",
-      "id": "Credential",
+      "kind": "command",
+      "id": "CompleteLearningSession",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "CreateApplicationSession",
       "decision_state": "approved",
       "proposed_owner": "Identity",
       "authority_contracts": [
         "C11",
         "C12"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "CreateMembership",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "DeactivateIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "DeactivateMembership",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "IssueCertification",
+      "decision_state": "approved",
+      "proposed_owner": "Certification",
+      "authority_contracts": [
+        "C34"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "OffboardIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "ReactivateIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "RecordProgressEvent",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "RevokeApplicationSession",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "RevokeCertification",
+      "decision_state": "approved",
+      "proposed_owner": "Certification",
+      "authority_contracts": [
+        "C34"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "RevokeMembership",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "StartLearningSession",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
       ]
     },
     {
@@ -139,11 +271,111 @@
     },
     {
       "kind": "entity",
-      "id": "Organization",
+      "id": "Assignment",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ]
+    },
+    {
+      "kind": "entity",
+      "id": "AuditEvent",
+      "decision_state": "approved",
+      "proposed_owner": "AuditLifecycle",
+      "authority_contracts": [
+        "C23"
+      ]
+    },
+    {
+      "kind": "entity",
+      "id": "Certification",
+      "decision_state": "approved",
+      "proposed_owner": "Certification",
+      "authority_contracts": [
+        "C34"
+      ]
+    },
+    {
+      "kind": "entity",
+      "id": "ContentBlock",
+      "decision_state": "approved",
+      "proposed_owner": "Content",
+      "authority_contracts": [
+        "C31"
+      ]
+    },
+    {
+      "kind": "entity",
+      "id": "ContentPack",
+      "decision_state": "approved",
+      "proposed_owner": "Content",
+      "authority_contracts": [
+        "C31"
+      ]
+    },
+    {
+      "kind": "entity",
+      "id": "Credential",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ]
+    },
+    {
+      "kind": "entity",
+      "id": "Entitlement",
       "decision_state": "approved",
       "proposed_owner": "Organization",
       "authority_contracts": [
-        "C13"
+        "C13",
+        "C14",
+        "C63"
+      ],
+      "notes": [
+        "Organization owns local entitlement state; C63 owns provider reconciliation process."
+      ]
+    },
+    {
+      "kind": "entity",
+      "id": "Identity",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ]
+    },
+    {
+      "kind": "entity",
+      "id": "LearnerState",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ]
+    },
+    {
+      "kind": "entity",
+      "id": "LearningSession",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ]
+    },
+    {
+      "kind": "entity",
+      "id": "LifecycleEvent",
+      "decision_state": "approved",
+      "proposed_owner": "AuditLifecycle",
+      "authority_contracts": [
+        "C23"
       ]
     },
     {
@@ -166,54 +398,11 @@
     },
     {
       "kind": "entity",
-      "id": "Entitlement",
+      "id": "Organization",
       "decision_state": "approved",
       "proposed_owner": "Organization",
       "authority_contracts": [
-        "C13",
-        "C14",
-        "C63"
-      ],
-      "notes": [
-        "Organization owns local entitlement state; C63 owns provider reconciliation process."
-      ]
-    },
-    {
-      "kind": "entity",
-      "id": "ContentPack",
-      "decision_state": "approved",
-      "proposed_owner": "Content",
-      "authority_contracts": [
-        "C31"
-      ]
-    },
-    {
-      "kind": "entity",
-      "id": "ContentBlock",
-      "decision_state": "approved",
-      "proposed_owner": "Content",
-      "authority_contracts": [
-        "C31"
-      ]
-    },
-    {
-      "kind": "entity",
-      "id": "Assignment",
-      "decision_state": "approved",
-      "proposed_owner": "Learning",
-      "authority_contracts": [
-        "C32",
-        "C33"
-      ]
-    },
-    {
-      "kind": "entity",
-      "id": "LearningSession",
-      "decision_state": "approved",
-      "proposed_owner": "Learning",
-      "authority_contracts": [
-        "C32",
-        "C33"
+        "C13"
       ]
     },
     {
@@ -227,8 +416,46 @@
       ]
     },
     {
-      "kind": "entity",
-      "id": "LearnerState",
+      "kind": "event",
+      "id": "ApplicationSessionCreated",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ]
+    },
+    {
+      "kind": "event",
+      "id": "ApplicationSessionRevoked",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ]
+    },
+    {
+      "kind": "event",
+      "id": "CertificationIssued",
+      "decision_state": "approved",
+      "proposed_owner": "Certification",
+      "authority_contracts": [
+        "C34"
+      ]
+    },
+    {
+      "kind": "event",
+      "id": "CertificationRevoked",
+      "decision_state": "approved",
+      "proposed_owner": "Certification",
+      "authority_contracts": [
+        "C34"
+      ]
+    },
+    {
+      "kind": "event",
+      "id": "ContentAssigned",
       "decision_state": "approved",
       "proposed_owner": "Learning",
       "authority_contracts": [
@@ -237,35 +464,17 @@
       ]
     },
     {
-      "kind": "entity",
-      "id": "Certification",
+      "kind": "event",
+      "id": "IdentityDeactivated",
       "decision_state": "approved",
-      "proposed_owner": "Certification",
+      "proposed_owner": "Identity",
       "authority_contracts": [
-        "C34"
+        "C11"
       ]
     },
     {
-      "kind": "entity",
-      "id": "AuditEvent",
-      "decision_state": "approved",
-      "proposed_owner": "AuditLifecycle",
-      "authority_contracts": [
-        "C23"
-      ]
-    },
-    {
-      "kind": "entity",
-      "id": "LifecycleEvent",
-      "decision_state": "approved",
-      "proposed_owner": "AuditLifecycle",
-      "authority_contracts": [
-        "C23"
-      ]
-    },
-    {
-      "kind": "identifier",
-      "id": "IdentityId",
+      "kind": "event",
+      "id": "IdentityOffboarded",
       "decision_state": "approved",
       "proposed_owner": "Identity",
       "authority_contracts": [
@@ -274,13 +483,69 @@
       ]
     },
     {
-      "kind": "identifier",
-      "id": "CredentialId",
+      "kind": "event",
+      "id": "IdentityReactivated",
       "decision_state": "approved",
       "proposed_owner": "Identity",
       "authority_contracts": [
-        "C11",
-        "C12"
+        "C11"
+      ]
+    },
+    {
+      "kind": "event",
+      "id": "LearningSessionCompleted",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ]
+    },
+    {
+      "kind": "event",
+      "id": "LearningSessionStarted",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ]
+    },
+    {
+      "kind": "event",
+      "id": "MembershipCreated",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ]
+    },
+    {
+      "kind": "event",
+      "id": "MembershipDeactivated",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ]
+    },
+    {
+      "kind": "event",
+      "id": "MembershipRevoked",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ]
+    },
+    {
+      "kind": "event",
+      "id": "ProgressRecorded",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
       ]
     },
     {
@@ -295,11 +560,136 @@
     },
     {
       "kind": "identifier",
-      "id": "OrganizationId",
+      "id": "AssignmentId",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ]
+    },
+    {
+      "kind": "identifier",
+      "id": "AuditEventId",
+      "decision_state": "approved",
+      "proposed_owner": "AuditLifecycle",
+      "authority_contracts": [
+        "C23"
+      ]
+    },
+    {
+      "kind": "identifier",
+      "id": "CapabilityId",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "notes": [
+        "Current K00 owner OrganizationAuthority should change when the ownership map is approved."
+      ]
+    },
+    {
+      "kind": "identifier",
+      "id": "CertificationId",
+      "decision_state": "approved",
+      "proposed_owner": "Certification",
+      "authority_contracts": [
+        "C34"
+      ]
+    },
+    {
+      "kind": "identifier",
+      "id": "ContentBlockId",
+      "decision_state": "approved",
+      "proposed_owner": "Content",
+      "authority_contracts": [
+        "C31"
+      ]
+    },
+    {
+      "kind": "identifier",
+      "id": "ContentPackId",
+      "decision_state": "approved",
+      "proposed_owner": "Content",
+      "authority_contracts": [
+        "C31"
+      ]
+    },
+    {
+      "kind": "identifier",
+      "id": "CredentialId",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ]
+    },
+    {
+      "kind": "identifier",
+      "id": "EntitlementId",
       "decision_state": "approved",
       "proposed_owner": "Organization",
       "authority_contracts": [
-        "C13"
+        "C13",
+        "C14",
+        "C63"
+      ],
+      "notes": [
+        "Organization owns local entitlement state; C63 owns provider reconciliation process."
+      ]
+    },
+    {
+      "kind": "identifier",
+      "id": "IdempotencyKey",
+      "decision_state": "approved",
+      "proposed_owner": "TransactionControl",
+      "authority_contracts": [
+        "C22"
+      ],
+      "notes": [
+        "Current K00 owner AuditLifecycle conflicts with C22 scope."
+      ]
+    },
+    {
+      "kind": "identifier",
+      "id": "IdentityId",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ]
+    },
+    {
+      "kind": "identifier",
+      "id": "LearnerStateId",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ]
+    },
+    {
+      "kind": "identifier",
+      "id": "LearningSessionId",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ]
+    },
+    {
+      "kind": "identifier",
+      "id": "LifecycleEventId",
+      "decision_state": "approved",
+      "proposed_owner": "AuditLifecycle",
+      "authority_contracts": [
+        "C23"
       ]
     },
     {
@@ -322,54 +712,11 @@
     },
     {
       "kind": "identifier",
-      "id": "EntitlementId",
+      "id": "OrganizationId",
       "decision_state": "approved",
       "proposed_owner": "Organization",
       "authority_contracts": [
-        "C13",
-        "C14",
-        "C63"
-      ],
-      "notes": [
-        "Organization owns local entitlement state; C63 owns provider reconciliation process."
-      ]
-    },
-    {
-      "kind": "identifier",
-      "id": "ContentPackId",
-      "decision_state": "approved",
-      "proposed_owner": "Content",
-      "authority_contracts": [
-        "C31"
-      ]
-    },
-    {
-      "kind": "identifier",
-      "id": "ContentBlockId",
-      "decision_state": "approved",
-      "proposed_owner": "Content",
-      "authority_contracts": [
-        "C31"
-      ]
-    },
-    {
-      "kind": "identifier",
-      "id": "AssignmentId",
-      "decision_state": "approved",
-      "proposed_owner": "Learning",
-      "authority_contracts": [
-        "C32",
-        "C33"
-      ]
-    },
-    {
-      "kind": "identifier",
-      "id": "LearningSessionId",
-      "decision_state": "approved",
-      "proposed_owner": "Learning",
-      "authority_contracts": [
-        "C32",
-        "C33"
+        "C13"
       ]
     },
     {
@@ -384,56 +731,6 @@
     },
     {
       "kind": "identifier",
-      "id": "LearnerStateId",
-      "decision_state": "approved",
-      "proposed_owner": "Learning",
-      "authority_contracts": [
-        "C32",
-        "C33"
-      ]
-    },
-    {
-      "kind": "identifier",
-      "id": "CertificationId",
-      "decision_state": "approved",
-      "proposed_owner": "Certification",
-      "authority_contracts": [
-        "C34"
-      ]
-    },
-    {
-      "kind": "identifier",
-      "id": "AuditEventId",
-      "decision_state": "approved",
-      "proposed_owner": "AuditLifecycle",
-      "authority_contracts": [
-        "C23"
-      ]
-    },
-    {
-      "kind": "identifier",
-      "id": "LifecycleEventId",
-      "decision_state": "approved",
-      "proposed_owner": "AuditLifecycle",
-      "authority_contracts": [
-        "C23"
-      ]
-    },
-    {
-      "kind": "identifier",
-      "id": "CapabilityId",
-      "decision_state": "approved",
-      "proposed_owner": "Authorization",
-      "authority_contracts": [
-        "C01",
-        "C14"
-      ],
-      "notes": [
-        "Current K00 owner OrganizationAuthority should change when the ownership map is approved."
-      ]
-    },
-    {
-      "kind": "identifier",
       "id": "RequestId",
       "decision_state": "approved",
       "proposed_owner": "Observability",
@@ -445,29 +742,143 @@
       ]
     },
     {
-      "kind": "identifier",
-      "id": "IdempotencyKey",
+      "kind": "invariant",
+      "id": "INV-001",
+      "decision_state": "approved",
+      "proposed_owner": "Governance",
+      "authority_contracts": [
+        "C00",
+        "C01"
+      ]
+    },
+    {
+      "kind": "invariant",
+      "id": "INV-002",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C00",
+        "C14"
+      ]
+    },
+    {
+      "kind": "invariant",
+      "id": "INV-003",
+      "decision_state": "approved",
+      "proposed_owner": "Governance",
+      "authority_contracts": [
+        "C01"
+      ]
+    },
+    {
+      "kind": "invariant",
+      "id": "INV-004",
+      "decision_state": "approved",
+      "proposed_owner": "Governance",
+      "authority_contracts": [
+        "C01"
+      ]
+    },
+    {
+      "kind": "invariant",
+      "id": "INV-005",
+      "decision_state": "approved",
+      "proposed_owner": "TransactionControl",
+      "authority_contracts": [
+        "C00",
+        "C22"
+      ]
+    },
+    {
+      "kind": "invariant",
+      "id": "INV-006",
       "decision_state": "approved",
       "proposed_owner": "TransactionControl",
       "authority_contracts": [
         "C22"
-      ],
-      "notes": [
-        "Current K00 owner AuditLifecycle conflicts with C22 scope."
       ]
     },
     {
-      "kind": "value_object",
-      "id": "EmailAddress",
+      "kind": "invariant",
+      "id": "INV-007",
       "decision_state": "approved",
-      "proposed_owner": "Identity",
+      "proposed_owner": "TransactionControl",
       "authority_contracts": [
-        "C11"
+        "C22",
+        "C32",
+        "C34"
       ]
     },
     {
-      "kind": "value_object",
-      "id": "ContentVersion",
+      "kind": "invariant",
+      "id": "INV-008",
+      "decision_state": "approved",
+      "proposed_owner": "TransactionControl",
+      "authority_contracts": [
+        "C22",
+        "C34"
+      ]
+    },
+    {
+      "kind": "invariant",
+      "id": "INV-009",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13",
+        "C15"
+      ]
+    },
+    {
+      "kind": "invariant",
+      "id": "INV-010",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13",
+        "C14"
+      ]
+    },
+    {
+      "kind": "invariant",
+      "id": "INV-011",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C13",
+        "C14"
+      ]
+    },
+    {
+      "kind": "invariant",
+      "id": "INV-012",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C14"
+      ]
+    },
+    {
+      "kind": "invariant",
+      "id": "INV-013",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C14"
+      ]
+    },
+    {
+      "kind": "invariant",
+      "id": "INV-014",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C14"
+      ]
+    },
+    {
+      "kind": "invariant",
+      "id": "INV-015",
       "decision_state": "approved",
       "proposed_owner": "Content",
       "authority_contracts": [
@@ -475,113 +886,18 @@
       ]
     },
     {
-      "kind": "value_object",
-      "id": "Timestamp",
+      "kind": "invariant",
+      "id": "INV-016",
       "decision_state": "approved",
-      "proposed_owner": "AuditLifecycle",
+      "proposed_owner": "Content",
       "authority_contracts": [
-        "C23"
-      ],
-      "notes": [
-        "Shared immutable time value; proposed semantic owner is AuditLifecycle while consumers may reference it."
+        "C31",
+        "C14"
       ]
     },
     {
-      "kind": "value_object",
-      "id": "RequestId",
-      "decision_state": "approved",
-      "proposed_owner": "Observability",
-      "authority_contracts": [
-        "C53"
-      ],
-      "notes": [
-        "Current K00 owner AuditLifecycle conflicts with C53 scope."
-      ]
-    },
-    {
-      "kind": "value_object",
-      "id": "IdempotencyKey",
-      "decision_state": "approved",
-      "proposed_owner": "TransactionControl",
-      "authority_contracts": [
-        "C22"
-      ],
-      "notes": [
-        "Current K00 owner AuditLifecycle conflicts with C22 scope."
-      ]
-    },
-    {
-      "kind": "state_set",
-      "id": "IdentityStatus",
-      "decision_state": "approved",
-      "proposed_owner": "Identity",
-      "authority_contracts": [
-        "C11",
-        "C12"
-      ]
-    },
-    {
-      "kind": "state_set",
-      "id": "ApplicationSessionStatus",
-      "decision_state": "approved",
-      "proposed_owner": "Identity",
-      "authority_contracts": [
-        "C11",
-        "C12"
-      ]
-    },
-    {
-      "kind": "state_set",
-      "id": "EvidenceState",
-      "decision_state": "approved",
-      "proposed_owner": "VerificationEvidence",
-      "authority_contracts": [
-        "C51"
-      ]
-    },
-    {
-      "kind": "state_set",
-      "id": "MembershipStatus",
-      "decision_state": "approved",
-      "proposed_owner": "Organization",
-      "authority_contracts": [
-        "C13"
-      ],
-      "notes": [
-        "Approved lifecycle: ACTIVE -> INACTIVE -> REVOKED; REVOKED terminal; DELETED is not MembershipStatus."
-      ]
-    },
-    {
-      "kind": "relationship",
-      "id": "LocationBelongsToOrganization",
-      "decision_state": "approved",
-      "proposed_owner": "Organization",
-      "authority_contracts": [
-        "C13"
-      ]
-    },
-    {
-      "kind": "relationship",
-      "id": "MembershipLinksIdentityOrganization",
-      "decision_state": "approved",
-      "proposed_owner": "Organization",
-      "authority_contracts": [
-        "C13"
-      ]
-    },
-    {
-      "kind": "relationship",
-      "id": "IdentityHasApplicationSession",
-      "decision_state": "approved",
-      "proposed_owner": "Identity",
-      "authority_contracts": [
-        "C11",
-        "C12"
-      ]
-    },
-    {
-      "kind": "relationship",
-      "id": "IdentityHasLearningSession",
+      "kind": "invariant",
+      "id": "INV-017",
       "decision_state": "approved",
       "proposed_owner": "Learning",
       "authority_contracts": [
@@ -589,51 +905,55 @@
       ]
     },
     {
-      "kind": "relationship",
-      "id": "CredentialBelongsToIdentity",
-      "decision_state": "approved",
-      "proposed_owner": "Identity",
-      "authority_contracts": [
-        "C11"
-      ]
-    },
-    {
-      "kind": "relationship",
-      "id": "MembershipMayScopeLocation",
-      "decision_state": "approved",
-      "proposed_owner": "Organization",
-      "authority_contracts": [
-        "C13"
-      ]
-    },
-    {
-      "kind": "relationship",
-      "id": "EntitlementBelongsToOrganization",
-      "decision_state": "approved",
-      "proposed_owner": "Organization",
-      "authority_contracts": [
-        "C13",
-        "C14",
-        "C63"
-      ]
-    },
-    {
-      "kind": "relationship",
-      "id": "ContentPackContainsContentBlock",
-      "decision_state": "approved",
-      "proposed_owner": "Content",
-      "authority_contracts": [
-        "C31"
-      ]
-    },
-    {
-      "kind": "relationship",
-      "id": "AssignmentTargetsIdentity",
+      "kind": "invariant",
+      "id": "INV-018",
       "decision_state": "approved",
       "proposed_owner": "Learning",
       "authority_contracts": [
-        "C32",
-        "C33"
+        "C32"
+      ]
+    },
+    {
+      "kind": "invariant",
+      "id": "INV-019",
+      "decision_state": "approved",
+      "proposed_owner": "Certification",
+      "authority_contracts": [
+        "C34",
+        "C22"
+      ]
+    },
+    {
+      "kind": "invariant",
+      "id": "INV-020",
+      "decision_state": "approved",
+      "proposed_owner": "VerificationEvidence",
+      "authority_contracts": [
+        "C00",
+        "C51"
+      ]
+    },
+    {
+      "kind": "invariant",
+      "id": "INV-021",
+      "decision_state": "approved",
+      "proposed_owner": "VerificationEvidence",
+      "authority_contracts": [
+        "C00",
+        "C51"
+      ]
+    },
+    {
+      "kind": "invariant",
+      "id": "INV-022",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12",
+        "C13",
+        "C22",
+        "C23"
       ]
     },
     {
@@ -649,16 +969,85 @@
     },
     {
       "kind": "relationship",
-      "id": "LearningSessionUsesAssignment",
+      "id": "AssignmentTargetsIdentity",
       "decision_state": "approved",
       "proposed_owner": "Learning",
       "authority_contracts": [
-        "C32"
+        "C32",
+        "C33"
       ]
     },
     {
       "kind": "relationship",
-      "id": "ProgressEventBelongsToLearningSession",
+      "id": "CertificationBelongsToIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Certification",
+      "authority_contracts": [
+        "C34"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "CertificationObservedByIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Certification",
+      "authority_contracts": [
+        "C14",
+        "C34"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "CertificationReferencesContentPack",
+      "decision_state": "approved",
+      "proposed_owner": "Certification",
+      "authority_contracts": [
+        "C31",
+        "C34"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "ContentPackContainsContentBlock",
+      "decision_state": "approved",
+      "proposed_owner": "Content",
+      "authority_contracts": [
+        "C31"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "CredentialBelongsToIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "EntitlementBelongsToOrganization",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13",
+        "C14",
+        "C63"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "IdentityHasApplicationSession",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "IdentityHasLearningSession",
       "decision_state": "approved",
       "proposed_owner": "Learning",
       "authority_contracts": [
@@ -686,31 +1075,11 @@
     },
     {
       "kind": "relationship",
-      "id": "CertificationBelongsToIdentity",
+      "id": "LearningSessionUsesAssignment",
       "decision_state": "approved",
-      "proposed_owner": "Certification",
+      "proposed_owner": "Learning",
       "authority_contracts": [
-        "C34"
-      ]
-    },
-    {
-      "kind": "relationship",
-      "id": "CertificationReferencesContentPack",
-      "decision_state": "approved",
-      "proposed_owner": "Certification",
-      "authority_contracts": [
-        "C31",
-        "C34"
-      ]
-    },
-    {
-      "kind": "relationship",
-      "id": "CertificationObservedByIdentity",
-      "decision_state": "approved",
-      "proposed_owner": "Certification",
-      "authority_contracts": [
-        "C14",
-        "C34"
+        "C32"
       ]
     },
     {
@@ -724,48 +1093,8 @@
       ]
     },
     {
-      "kind": "command",
-      "id": "AuthenticateIdentity",
-      "decision_state": "approved",
-      "proposed_owner": "Identity",
-      "authority_contracts": [
-        "C11",
-        "C12"
-      ]
-    },
-    {
-      "kind": "command",
-      "id": "CreateApplicationSession",
-      "decision_state": "approved",
-      "proposed_owner": "Identity",
-      "authority_contracts": [
-        "C11",
-        "C12"
-      ]
-    },
-    {
-      "kind": "command",
-      "id": "RevokeApplicationSession",
-      "decision_state": "approved",
-      "proposed_owner": "Identity",
-      "authority_contracts": [
-        "C11",
-        "C12"
-      ]
-    },
-    {
-      "kind": "command",
-      "id": "OffboardIdentity",
-      "decision_state": "approved",
-      "proposed_owner": "Identity",
-      "authority_contracts": [
-        "C11",
-        "C12"
-      ]
-    },
-    {
-      "kind": "command",
-      "id": "CreateMembership",
+      "kind": "relationship",
+      "id": "LocationBelongsToOrganization",
       "decision_state": "approved",
       "proposed_owner": "Organization",
       "authority_contracts": [
@@ -773,8 +1102,8 @@
       ]
     },
     {
-      "kind": "command",
-      "id": "DeactivateMembership",
+      "kind": "relationship",
+      "id": "MembershipLinksIdentityOrganization",
       "decision_state": "approved",
       "proposed_owner": "Organization",
       "authority_contracts": [
@@ -782,96 +1111,8 @@
       ]
     },
     {
-      "kind": "command",
-      "id": "AssignContent",
-      "decision_state": "approved",
-      "proposed_owner": "Learning",
-      "authority_contracts": [
-        "C32",
-        "C33"
-      ]
-    },
-    {
-      "kind": "command",
-      "id": "StartLearningSession",
-      "decision_state": "approved",
-      "proposed_owner": "Learning",
-      "authority_contracts": [
-        "C32",
-        "C33"
-      ]
-    },
-    {
-      "kind": "command",
-      "id": "RecordProgressEvent",
-      "decision_state": "approved",
-      "proposed_owner": "Learning",
-      "authority_contracts": [
-        "C32",
-        "C33"
-      ]
-    },
-    {
-      "kind": "command",
-      "id": "CompleteLearningSession",
-      "decision_state": "approved",
-      "proposed_owner": "Learning",
-      "authority_contracts": [
-        "C32",
-        "C33"
-      ]
-    },
-    {
-      "kind": "command",
-      "id": "IssueCertification",
-      "decision_state": "approved",
-      "proposed_owner": "Certification",
-      "authority_contracts": [
-        "C34"
-      ]
-    },
-    {
-      "kind": "command",
-      "id": "RevokeCertification",
-      "decision_state": "approved",
-      "proposed_owner": "Certification",
-      "authority_contracts": [
-        "C34"
-      ]
-    },
-    {
-      "kind": "event",
-      "id": "ApplicationSessionCreated",
-      "decision_state": "approved",
-      "proposed_owner": "Identity",
-      "authority_contracts": [
-        "C11",
-        "C12"
-      ]
-    },
-    {
-      "kind": "event",
-      "id": "ApplicationSessionRevoked",
-      "decision_state": "approved",
-      "proposed_owner": "Identity",
-      "authority_contracts": [
-        "C11",
-        "C12"
-      ]
-    },
-    {
-      "kind": "event",
-      "id": "IdentityOffboarded",
-      "decision_state": "approved",
-      "proposed_owner": "Identity",
-      "authority_contracts": [
-        "C11",
-        "C12"
-      ]
-    },
-    {
-      "kind": "event",
-      "id": "MembershipCreated",
+      "kind": "relationship",
+      "id": "MembershipMayScopeLocation",
       "decision_state": "approved",
       "proposed_owner": "Organization",
       "authority_contracts": [
@@ -879,134 +1120,12 @@
       ]
     },
     {
-      "kind": "event",
-      "id": "MembershipDeactivated",
-      "decision_state": "approved",
-      "proposed_owner": "Organization",
-      "authority_contracts": [
-        "C13"
-      ]
-    },
-    {
-      "kind": "event",
-      "id": "ContentAssigned",
+      "kind": "relationship",
+      "id": "ProgressEventBelongsToLearningSession",
       "decision_state": "approved",
       "proposed_owner": "Learning",
       "authority_contracts": [
-        "C32",
-        "C33"
-      ]
-    },
-    {
-      "kind": "event",
-      "id": "LearningSessionStarted",
-      "decision_state": "approved",
-      "proposed_owner": "Learning",
-      "authority_contracts": [
-        "C32",
-        "C33"
-      ]
-    },
-    {
-      "kind": "event",
-      "id": "ProgressRecorded",
-      "decision_state": "approved",
-      "proposed_owner": "Learning",
-      "authority_contracts": [
-        "C32",
-        "C33"
-      ]
-    },
-    {
-      "kind": "event",
-      "id": "LearningSessionCompleted",
-      "decision_state": "approved",
-      "proposed_owner": "Learning",
-      "authority_contracts": [
-        "C32",
-        "C33"
-      ]
-    },
-    {
-      "kind": "event",
-      "id": "CertificationIssued",
-      "decision_state": "approved",
-      "proposed_owner": "Certification",
-      "authority_contracts": [
-        "C34"
-      ]
-    },
-    {
-      "kind": "event",
-      "id": "CertificationRevoked",
-      "decision_state": "approved",
-      "proposed_owner": "Certification",
-      "authority_contracts": [
-        "C34"
-      ]
-    },
-    {
-      "kind": "state_set",
-      "id": "LearningSessionStatus",
-      "decision_state": "approved",
-      "proposed_owner": "Learning",
-      "authority_contracts": [
-        "C01",
         "C32"
-      ]
-    },
-    {
-      "kind": "command",
-      "id": "DeactivateIdentity",
-      "decision_state": "approved",
-      "proposed_owner": "Identity",
-      "authority_contracts": [
-        "C11"
-      ]
-    },
-    {
-      "kind": "command",
-      "id": "ReactivateIdentity",
-      "decision_state": "approved",
-      "proposed_owner": "Identity",
-      "authority_contracts": [
-        "C11"
-      ]
-    },
-    {
-      "kind": "command",
-      "id": "RevokeMembership",
-      "decision_state": "approved",
-      "proposed_owner": "Organization",
-      "authority_contracts": [
-        "C13"
-      ]
-    },
-    {
-      "kind": "event",
-      "id": "IdentityDeactivated",
-      "decision_state": "approved",
-      "proposed_owner": "Identity",
-      "authority_contracts": [
-        "C11"
-      ]
-    },
-    {
-      "kind": "event",
-      "id": "IdentityReactivated",
-      "decision_state": "approved",
-      "proposed_owner": "Identity",
-      "authority_contracts": [
-        "C11"
-      ]
-    },
-    {
-      "kind": "event",
-      "id": "MembershipRevoked",
-      "decision_state": "approved",
-      "proposed_owner": "Organization",
-      "authority_contracts": [
-        "C13"
       ]
     },
     {
@@ -1048,13 +1167,118 @@
         "C01",
         "C13"
       ]
+    },
+    {
+      "kind": "state_set",
+      "id": "ApplicationSessionStatus",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ]
+    },
+    {
+      "kind": "state_set",
+      "id": "EvidenceState",
+      "decision_state": "approved",
+      "proposed_owner": "VerificationEvidence",
+      "authority_contracts": [
+        "C51"
+      ]
+    },
+    {
+      "kind": "state_set",
+      "id": "IdentityStatus",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ]
+    },
+    {
+      "kind": "state_set",
+      "id": "LearningSessionStatus",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C01",
+        "C32"
+      ]
+    },
+    {
+      "kind": "state_set",
+      "id": "MembershipStatus",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "notes": [
+        "Approved lifecycle: ACTIVE -> INACTIVE -> REVOKED; REVOKED terminal; DELETED is not MembershipStatus."
+      ]
+    },
+    {
+      "kind": "value_object",
+      "id": "ContentVersion",
+      "decision_state": "approved",
+      "proposed_owner": "Content",
+      "authority_contracts": [
+        "C31"
+      ]
+    },
+    {
+      "kind": "value_object",
+      "id": "EmailAddress",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11"
+      ]
+    },
+    {
+      "kind": "value_object",
+      "id": "IdempotencyKey",
+      "decision_state": "approved",
+      "proposed_owner": "TransactionControl",
+      "authority_contracts": [
+        "C22"
+      ],
+      "notes": [
+        "Current K00 owner AuditLifecycle conflicts with C22 scope."
+      ]
+    },
+    {
+      "kind": "value_object",
+      "id": "RequestId",
+      "decision_state": "approved",
+      "proposed_owner": "Observability",
+      "authority_contracts": [
+        "C53"
+      ],
+      "notes": [
+        "Current K00 owner AuditLifecycle conflicts with C53 scope."
+      ]
+    },
+    {
+      "kind": "value_object",
+      "id": "Timestamp",
+      "decision_state": "approved",
+      "proposed_owner": "AuditLifecycle",
+      "authority_contracts": [
+        "C23"
+      ],
+      "notes": [
+        "Shared immutable time value; proposed semantic owner is AuditLifecycle while consumers may reference it."
+      ]
     }
   ],
   "approval": {
     "state": "approved",
     "approved_on": "2026-10-03",
     "owner": "Patrick Craven, Top Shelf Service LLC",
-    "issue": "#4",
-    "basis": "Explicit state-machine approval token"
+    "issue": "#5",
+    "basis": "Explicit invariant-registration approval token"
   }
 }

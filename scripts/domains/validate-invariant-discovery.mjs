@@ -10,6 +10,8 @@ const load = (p) => {
 };
 
 const proposal = load('domains/invariants/proposed.json');
+const registration = load('domains/invariants/registration.json');
+const kernelInvariants = load('kernel/invariants.json');
 const manifest = load('kernel/manifest.json');
 const ownership = load('domains/ownership-map.json');
 const machines = load('kernel/state-machines.json');
@@ -21,8 +23,8 @@ if (proposal) {
   if (proposal.baseline?.commit !== '0d0da31243b78f83aac66e21733fc0b9a2371f83') errors.push('invariant discovery: baseline mismatch');
 }
 
-if (manifest?.version !== '0.4.0') errors.push(`invariant discovery: expected K00 0.4.0, found ${manifest?.version}`);
-if (ownership?.version !== '1.1.0' || ownership?.status !== 'active') errors.push('invariant discovery: requires active Domain Ownership Map 1.1.0');
+if (manifest?.version !== '0.5.0') errors.push(`invariant registration: expected K00 0.5.0, found ${manifest?.version}`);
+if (ownership?.version !== '1.2.0' || ownership?.status !== 'active') errors.push('invariant registration: requires active Domain Ownership Map 1.2.0');
 if ((machines?.entries || []).length !== 4) errors.push('invariant discovery: expected 4 registered state machines');
 
 const ready = proposal?.ready_invariants || [];
@@ -52,13 +54,43 @@ for (const inv of blocked) {
 if (ready.length !== 22) errors.push(`invariant discovery: expected 22 ready invariants, found ${ready.length}`);
 if (blocked.length !== 5) errors.push(`invariant discovery: expected 5 blocked invariants, found ${blocked.length}`);
 
+if (registration) {
+  if (registration.version !== '1.0.0') errors.push('invariant registration: version must be 1.0.0');
+  if (registration.status !== 'recorded') errors.push('invariant registration: status must be recorded');
+  if (registration.kernel_version !== '0.5.0') errors.push('invariant registration: kernel_version must be 0.5.0');
+  if (registration.ownership_map_version !== '1.2.0') errors.push('invariant registration: ownership_map_version must be 1.2.0');
+  if (registration.candidate_to_approved_promotions !== 0) errors.push('invariant registration: promotions must remain zero');
+}
+
+const readyIds = new Set(ready.map(x => x.id));
+const blockedIds = new Set(blocked.map(x => x.id));
+const kernelEntries = kernelInvariants?.entries || [];
+const kernelIds = new Set(kernelEntries.map(x => x.id));
+
+for (const id of readyIds) if (!kernelIds.has(id)) errors.push(`invariant registration: ready invariant ${id} missing from K00`);
+for (const id of kernelIds) if (!readyIds.has(id)) errors.push(`invariant registration: unexpected K00 invariant ${id}`);
+for (const id of blockedIds) if (kernelIds.has(id)) errors.push(`invariant registration: blocked invariant ${id} must remain outside K00`);
+
+for (const inv of kernelEntries) {
+  if (inv.status !== 'candidate') errors.push(`invariant registration: ${inv.id} must remain candidate`);
+  const discovered = ready.find(x => x.id === inv.id);
+  const expectedOwner = discovered?.owning_domain === 'cross-cutting' ? 'Governance' : discovered?.owning_domain;
+  if (inv.owning_domain !== expectedOwner) errors.push(`invariant registration: ${inv.id} owner ${inv.owning_domain} != ${expectedOwner}`);
+}
+
+const domainIds = new Set((ownership?.domains || []).map(x => x.id));
+if (!domainIds.has('Governance')) errors.push('invariant registration: Governance semantic domain missing');
+for (const inv of kernelEntries) if (!domainIds.has(inv.owning_domain)) errors.push(`invariant registration: ${inv.id} owner domain ${inv.owning_domain} not registered`);
+
+
 if (errors.length) {
   console.error(`Invariant discovery FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
 
-console.log('Invariant discovery PASS');
-console.log(`Contract-proven invariant candidates: ${ready.length}`);
-console.log(`Blocked invariant candidates: ${blocked.length}`);
-console.log('K00 invariant authority changed: no');
+console.log('Invariant registration PASS');
+console.log(`Registered candidate invariants: ${(kernelInvariants?.entries || []).length}`);
+console.log(`Blocked invariants excluded: ${blocked.length}`);
+console.log('Governance semantic domain: registered');
+console.log('Candidate-to-approved promotions: 0');

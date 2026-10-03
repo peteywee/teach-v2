@@ -2,17 +2,24 @@
 {
   "doc_id": "TEACH-INVARIANT-DISCOVERY",
   "class": "specification",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "claims_truth_state": "declared",
-  "status": "proposed",
+  "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-03",
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "0d0da31243b78f83aac66e21733fc0b9a2371f83",
-    "purpose": "post-state-machine invariant-discovery baseline"
+    "commit": "b29d0e7712d705ed30e574b39918e75a411db194",
+    "purpose": "pre-invariant-registration baseline"
+  },
+  "approval": {
+    "state": "approved",
+    "approved_on": "2026-10-03",
+    "owner": "Patrick Craven, Top Shelf Service LLC",
+    "record": "contracts/APPROVAL-RECORD.md",
+    "issue": "#5"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -25,11 +32,11 @@
 
 # Teach v2 Invariant Discovery
 
-Status: `proposed`.
+Status: `recorded`.
 
 `proposed.json` records cross-domain and domain invariants derived from active contract requirements.
 
-This package does not create `kernel/invariants.json`, does not change K00, and does not promote any semantic entry.
+`kernel/invariants.json` now contains the 22 owner-registered invariant candidates. The 5 blocked invariant proposals remain outside K00, and no semantic entry is promoted to `approved`.
 
 Discovery result:
 
@@ -38,4 +45,4 @@ Discovery result:
 
 UNKNOWN/BLOCKED/CONTRADICTORY never count as ready.
 
-Next gate: owner-approved invariant registration into K00.
+Next gate: Decision Trees / Tables discovery and registration.

@@ -1,0 +1,438 @@
+{
+  "schema_version": "0.1.0",
+  "entries": [
+    {
+      "id": "INV-001",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "SingleAuthoritativeOwnerPerMutableFact",
+      "scope": "system",
+      "owning_domain": "Governance",
+      "authority_contracts": [
+        "C00",
+        "C01"
+      ],
+      "requirements": [
+        "SYS-6",
+        "SYS-7",
+        "SEM-19",
+        "SEM-20"
+      ],
+      "assertion": "Every mutable authoritative fact has exactly one owning contract/domain and exactly one permitted writer; foreign domains request change through the owner boundary.",
+      "failure_behavior": "Reject direct foreign-owner mutation."
+    },
+    {
+      "id": "INV-002",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "UnknownAuthorityFailsClosed",
+      "scope": "security",
+      "owning_domain": "Authorization",
+      "authority_contracts": [
+        "C00",
+        "C14"
+      ],
+      "requirements": [
+        "SYS-9",
+        "SYS-10",
+        "AUTHZ-4",
+        "AUTHZ-5"
+      ],
+      "assertion": "Unknown, unavailable, ambiguous, or unregistered authority never becomes permission.",
+      "failure_behavior": "Deny before protected handler or side effect."
+    },
+    {
+      "id": "INV-003",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "CandidateSemanticsAreNotImplementationAuthority",
+      "scope": "semantic-kernel",
+      "owning_domain": "Governance",
+      "authority_contracts": [
+        "C01"
+      ],
+      "requirements": [
+        "SEM-2",
+        "SEM-3",
+        "SEM-12",
+        "SEM-30"
+      ],
+      "assertion": "A candidate semantic entry cannot authorize merged implementation and cannot become approved without explicit owner approval.",
+      "failure_behavior": "Block merge/activation."
+    },
+    {
+      "id": "INV-004",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "CanonicalStateClosedWorld",
+      "scope": "lifecycle",
+      "owning_domain": "Governance",
+      "authority_contracts": [
+        "C01"
+      ],
+      "requirements": [
+        "SEM-10",
+        "SEM-21",
+        "SEM-32"
+      ],
+      "assertion": "Canonical state values and lifecycle transitions are closed sets; an unregistered state or transition is invalid.",
+      "failure_behavior": "Reject transition and persistence."
+    },
+    {
+      "id": "INV-005",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "AmbiguousExternalEffectReconcilesBeforeRetry",
+      "scope": "transaction-control",
+      "owning_domain": "TransactionControl",
+      "authority_contracts": [
+        "C00",
+        "C22"
+      ],
+      "requirements": [
+        "SYS-15",
+        "TXN-6",
+        "TXN-7",
+        "TXN-8",
+        "TXN-9"
+      ],
+      "assertion": "An ambiguous external side effect is never retried before canonical provider readback; unreadable provider state leaves the operation ambiguous.",
+      "failure_behavior": "Do not retry; remain ambiguous/needs-reconciliation."
+    },
+    {
+      "id": "INV-006",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "IdempotencyKeyPayloadBinding",
+      "scope": "transaction-control",
+      "owning_domain": "TransactionControl",
+      "authority_contracts": [
+        "C22"
+      ],
+      "requirements": [
+        "TXN-3",
+        "TXN-4"
+      ],
+      "assertion": "The same idempotency key with the same payload yields the same final state/response; the same key with a different payload is rejected.",
+      "failure_behavior": "Reject mismatched reuse with zero side effect."
+    },
+    {
+      "id": "INV-007",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "RetryDoesNotDuplicateAuthoritativeEffects",
+      "scope": "transaction-control",
+      "owning_domain": "TransactionControl",
+      "authority_contracts": [
+        "C22",
+        "C32",
+        "C34"
+      ],
+      "requirements": [
+        "TXN-5",
+        "LRN-7",
+        "CERT-10"
+      ],
+      "assertion": "Retry or concurrent replay cannot create duplicate authoritative effects.",
+      "failure_behavior": "Return/reconcile the original effect."
+    },
+    {
+      "id": "INV-008",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "AtomicMultiWriteOutcome",
+      "scope": "transaction-control",
+      "owning_domain": "TransactionControl",
+      "authority_contracts": [
+        "C22",
+        "C34"
+      ],
+      "requirements": [
+        "TXN-1",
+        "CERT-9"
+      ],
+      "assertion": "Operations required to succeed together commit atomically; no partial result is observable.",
+      "failure_behavior": "Rollback the unit."
+    },
+    {
+      "id": "INV-009",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "TenantBoundaryIsAuthoritative",
+      "scope": "organization",
+      "owning_domain": "Organization",
+      "authority_contracts": [
+        "C13",
+        "C15"
+      ],
+      "requirements": [
+        "TEN-1",
+        "TEN-8",
+        "TEN-9",
+        "TEN-14",
+        "PRIV-2",
+        "PRIV-3"
+      ],
+      "assertion": "Protected reads and writes cannot cross authoritative organization/location scope.",
+      "failure_behavior": "Non-disclosing denial; zero foreign-tenant mutation."
+    },
+    {
+      "id": "INV-010",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "MembershipScopeUsesDatabaseCurrentState",
+      "scope": "organization",
+      "owning_domain": "Organization",
+      "authority_contracts": [
+        "C13",
+        "C14"
+      ],
+      "requirements": [
+        "TEN-3",
+        "TEN-4",
+        "TEN-10",
+        "AUTHZ-10"
+      ],
+      "assertion": "Membership/scope authority is resolved from current authoritative records on each protected request; inactive/revoked membership confers no scope.",
+      "failure_behavior": "Deny."
+    },
+    {
+      "id": "INV-011",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "ClientInputCannotCreateAuthority",
+      "scope": "authorization",
+      "owning_domain": "Authorization",
+      "authority_contracts": [
+        "C13",
+        "C14"
+      ],
+      "requirements": [
+        "TEN-5",
+        "AUTHZ-16",
+        "AUTHZ-17"
+      ],
+      "assertion": "Client-supplied IDs, headers, path/query/body values, frontend state, and JWT claims cannot establish tenant, target, or authorization authority.",
+      "failure_behavior": "Resolve server-side authority or deny."
+    },
+    {
+      "id": "INV-012",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "ProtectedOperationsDefaultDeny",
+      "scope": "authorization",
+      "owning_domain": "Authorization",
+      "authority_contracts": [
+        "C14"
+      ],
+      "requirements": [
+        "AUTHZ-1",
+        "AUTHZ-2",
+        "AUTHZ-3",
+        "AUTHZ-4",
+        "AUTHZ-6"
+      ],
+      "assertion": "Every protected operation is registered exactly once to one capability; absence from the registry is denial.",
+      "failure_behavior": "Fail CI/startup or deny request."
+    },
+    {
+      "id": "INV-013",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "EntitlementCannotCreateCapability",
+      "scope": "authorization",
+      "owning_domain": "Authorization",
+      "authority_contracts": [
+        "C14"
+      ],
+      "requirements": [
+        "AUTHZ-8",
+        "AUTHZ-21"
+      ],
+      "assertion": "Entitlement may restrict capability effect but cannot create a capability and is read-only to authorization.",
+      "failure_behavior": "Deny unauthorized effect; reject authorization-owned entitlement mutation."
+    },
+    {
+      "id": "INV-014",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "DeniedProtectedMutationHasNoSideEffect",
+      "scope": "authorization",
+      "owning_domain": "Authorization",
+      "authority_contracts": [
+        "C14"
+      ],
+      "requirements": [
+        "AUTHZ-5",
+        "AUTHZ-15"
+      ],
+      "assertion": "A denied protected mutation produces no state change or external side effect except explicitly permitted audit.",
+      "failure_behavior": "Zero mutation/external effect."
+    },
+    {
+      "id": "INV-015",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "PublishedContentVersionIsImmutable",
+      "scope": "content",
+      "owning_domain": "Content",
+      "authority_contracts": [
+        "C31"
+      ],
+      "requirements": [
+        "CNT-3",
+        "CNT-4",
+        "CNT-6"
+      ],
+      "assertion": "Only valid content can be published/assigned; a published content identity+version never changes in place.",
+      "failure_behavior": "Reject invalid or in-place mutation; require new version."
+    },
+    {
+      "id": "INV-016",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "ContentExistenceDoesNotGrantAccess",
+      "scope": "content",
+      "owning_domain": "Content",
+      "authority_contracts": [
+        "C31",
+        "C14"
+      ],
+      "requirements": [
+        "CNT-9",
+        "CNT-10"
+      ],
+      "assertion": "Content existence or possession of a content ID does not grant access; assignment and authorization are independent required facts.",
+      "failure_behavior": "Non-disclosing denial."
+    },
+    {
+      "id": "INV-017",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "LearningSessionMutationRequiresActiveState",
+      "scope": "learning",
+      "owning_domain": "Learning",
+      "authority_contracts": [
+        "C32"
+      ],
+      "requirements": [
+        "LRN-3"
+      ],
+      "assertion": "Learning progress events are accepted only in ACTIVE sessions; COMPLETED is terminal.",
+      "failure_behavior": "Reject post-completion or unregistered transition/event."
+    },
+    {
+      "id": "INV-018",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "LearningProgressIsServerAuthoritative",
+      "scope": "learning",
+      "owning_domain": "Learning",
+      "authority_contracts": [
+        "C32"
+      ],
+      "requirements": [
+        "LRN-4",
+        "LRN-5",
+        "LRN-6",
+        "LRN-10",
+        "LRN-11"
+      ],
+      "assertion": "Real learning progress derives from persisted canonical learner events/state with content identity/version; client-only values cannot be authoritative progress.",
+      "failure_behavior": "Do not record/display client-only progress as real."
+    },
+    {
+      "id": "INV-019",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "CertificationIssuanceIsCompleteAtomicAndIdempotent",
+      "scope": "certification",
+      "owning_domain": "Certification",
+      "authority_contracts": [
+        "C34",
+        "C22"
+      ],
+      "requirements": [
+        "CERT-1",
+        "CERT-2",
+        "CERT-3",
+        "CERT-5",
+        "CERT-6",
+        "CERT-8",
+        "CERT-9",
+        "CERT-10"
+      ],
+      "assertion": "Certification issuance requires all currently defined mandatory authority/binding facts, commits with audit atomically, and cannot duplicate under replay.",
+      "failure_behavior": "Reject issuance or rollback; never persist a partial/duplicate certification.",
+      "notes": [
+        "Criteria-version and evidence-shape details remain separately blocked; this invariant does not claim those undecided values."
+      ]
+    },
+    {
+      "id": "INV-020",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "EvidenceNonPassStatesNeverPass",
+      "scope": "verification",
+      "owning_domain": "VerificationEvidence",
+      "authority_contracts": [
+        "C00",
+        "C51"
+      ],
+      "requirements": [
+        "SYS-25",
+        "EVD-1",
+        "EVD-2",
+        "EVD-14",
+        "EVD-15"
+      ],
+      "assertion": "UNKNOWN, BLOCKED, CONTRADICTORY, skipped, missing, stale, or unreadable required evidence cannot become PASS.",
+      "failure_behavior": "Gate fails closed."
+    },
+    {
+      "id": "INV-021",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "EvidenceIsBoundToExactCandidate",
+      "scope": "verification",
+      "owning_domain": "VerificationEvidence",
+      "authority_contracts": [
+        "C00",
+        "C51"
+      ],
+      "requirements": [
+        "SYS-13",
+        "SYS-14",
+        "EVD-10",
+        "EVD-11",
+        "EVD-12",
+        "EVD-13"
+      ],
+      "assertion": "Evidence proves only the exact source SHA/environment it records; CI alone never proves production conformance.",
+      "failure_behavior": "Reject mismatched or CI-only production claim."
+    },
+    {
+      "id": "INV-022",
+      "kind": "invariant",
+      "status": "candidate",
+      "name": "OffboardingIsTotalAndIdempotent",
+      "scope": "identity",
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12",
+        "C13",
+        "C22",
+        "C23"
+      ],
+      "requirements": [
+        "IDN-17",
+        "IDN-18",
+        "IDN-19",
+        "SES-14"
+      ],
+      "assertion": "Offboarding uses one lifecycle path, ends IdentityStatus INACTIVE, revokes effective sessions/credentials/tokens/membership/grants, emits one lifecycle/audit outcome, and replay does not duplicate effects.",
+      "failure_behavior": "Atomic rollback or same final offboarded outcome."
+    }
+  ]
+}

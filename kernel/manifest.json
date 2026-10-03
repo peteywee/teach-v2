@@ -1,6 +1,6 @@
 {
   "kernel_id": "TEACH-K00",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "status": "active",
   "canonical_format": "json",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -27,7 +27,8 @@
     "events": "events.json",
     "evidence": "evidence.json",
     "schema": "schema/semantic-kernel.schema.json",
-    "state_machines": "state-machines.json"
+    "state_machines": "state-machines.json",
+    "invariants": "invariants.json"
   },
   "rules": {
     "unknown_semantic_term": "reject_or_propose_semantic_change",
@@ -51,5 +52,11 @@
     "new_command_count": 3,
     "new_event_count": 3,
     "baseline_commit": "c64c00f04197907d846c507ae956ed377826da2f"
+  },
+  "invariant_registration": {
+    "issue": "#5",
+    "registered_candidate_count": 22,
+    "blocked_count": 5,
+    "baseline_commit": "b29d0e7712d705ed30e574b39918e75a411db194"
   }
 }

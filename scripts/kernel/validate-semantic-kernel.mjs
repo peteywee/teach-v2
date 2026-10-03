@@ -11,13 +11,13 @@ const load = (name) => {
 };
 
 const manifest = load('manifest.json');
-const names = ['entities.json','values.json','identifiers.json','relationships.json','states.json','state-machines.json','capabilities.json','commands.json','events.json','evidence.json','schema/semantic-kernel.schema.json'];
+const names = ['entities.json','values.json','identifiers.json','relationships.json','states.json','state-machines.json','invariants.json','capabilities.json','commands.json','events.json','evidence.json','schema/semantic-kernel.schema.json'];
 const docs = Object.fromEntries(names.map(n => [n, load(n)]));
 if (manifest) {
   if (manifest.kernel_id !== 'TEACH-K00') errors.push('manifest.json: kernel_id must be TEACH-K00');
-  if (manifest.version !== '0.4.0') errors.push('manifest.json: version must be 0.4.0');
+  if (manifest.version !== '0.5.0') errors.push('manifest.json: version must be 0.5.0');
   if (manifest.canonical_format !== 'json') errors.push('manifest.json: canonical_format must be json');
-  for (const n of ['entities','values','identifiers','relationships','states','state_machines','capabilities','commands','events','evidence','schema']) {
+  for (const n of ['entities','values','identifiers','relationships','states','state_machines','invariants','capabilities','commands','events','evidence','schema']) {
     if (!manifest.files?.[n]) errors.push(`manifest.json: missing file mapping ${n}`);
   }
 }
@@ -34,7 +34,7 @@ function collect(file) {
     else if (!allIds.has(e.id)) allIds.set(e.id,file);
   }
 }
-for (const f of ['entities.json','values.json','identifiers.json','relationships.json','states.json','state-machines.json','commands.json','events.json']) collect(f);
+for (const f of ['entities.json','values.json','identifiers.json','relationships.json','states.json','state-machines.json','invariants.json','commands.json','events.json']) collect(f);
 const ids = new Set((docs['identifiers.json']?.entries || []).map(x => x.id));
 const entityIds = new Set((docs['entities.json']?.entries || []).map(x => x.id));
 for (const e of docs['entities.json']?.entries || []) {
@@ -149,6 +149,21 @@ if (!membershipStatus || JSON.stringify(membershipStatus.values) !== JSON.string
 
 for (const id of ['DeactivateIdentity','ReactivateIdentity','RevokeMembership']) if (!commandSet.has(id)) errors.push(`commands.json: missing ${id}`);
 for (const id of ['IdentityDeactivated','IdentityReactivated','MembershipRevoked']) if (!eventSet.has(id)) errors.push(`events.json: missing ${id}`);
+const invariantIds = new Set();
+for (const inv of docs['invariants.json']?.entries || []) {
+  if (invariantIds.has(inv.id)) errors.push(`invariants.json: duplicate ${inv.id}`);
+  invariantIds.add(inv.id);
+  if (inv.kind !== 'invariant') errors.push(`invariants.json: ${inv.id} kind must be invariant`);
+  if (inv.status !== 'candidate') errors.push(`invariants.json: ${inv.id} must remain candidate in K00 0.5.0`);
+  if (!inv.name) errors.push(`invariants.json: ${inv.id} missing name`);
+  if (!inv.owning_domain) errors.push(`invariants.json: ${inv.id} missing owning_domain`);
+  if (!Array.isArray(inv.authority_contracts) || !inv.authority_contracts.length) errors.push(`invariants.json: ${inv.id} missing authority_contracts`);
+  if (!Array.isArray(inv.requirements) || !inv.requirements.length) errors.push(`invariants.json: ${inv.id} missing requirements`);
+  if (!inv.assertion) errors.push(`invariants.json: ${inv.id} missing assertion`);
+  if (!inv.failure_behavior) errors.push(`invariants.json: ${inv.id} missing failure_behavior`);
+}
+if (invariantIds.size !== 22) errors.push(`invariants.json: expected 22 registered candidates, found ${invariantIds.size}`);
+
 
 
 if (errors.length) {
@@ -156,10 +171,11 @@ if (errors.length) {
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
-console.log('Semantic kernel PASS: TEACH-K00 0.4.0');
+console.log('Semantic kernel PASS: TEACH-K00 0.5.0');
 console.log(`Entities: ${(docs['entities.json']?.entries || []).length}`);
 console.log(`Identifiers: ${(docs['identifiers.json']?.entries || []).length}`);
 console.log(`Relationships: ${(docs['relationships.json']?.entries || []).length}`);
 console.log(`State machines: ${(docs['state-machines.json']?.entries || []).length}`);
+console.log(`Invariants: ${(docs['invariants.json']?.entries || []).length}`);
 console.log(`Commands: ${(docs['commands.json']?.entries || []).length}`);
 console.log(`Events: ${(docs['events.json']?.entries || []).length}`);
