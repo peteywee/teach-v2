@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-03
-- Contract package version: `0.4.1`
+- Contract package version: `0.4.2`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -165,3 +165,26 @@ PATCH revisions preserve the controlling owner approval when they do not change 
 | C61 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
 | C62 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
 | C63 | 1.0.0 | 1.0.1 | 2026-10-03 | Metadata/provenance normalization; no normative behavior change |
+| 00 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 01 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 02 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 11 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 12 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 13 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 14 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 15 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 21 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 22 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 23 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 31 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 32 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 33 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 34 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 41 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 42 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 51 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 52 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 53 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 61 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 62 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
+| 63 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
