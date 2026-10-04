@@ -25,14 +25,14 @@ if (app?.version!=='1.0.0' || app?.status!=='active') errors.push('whole-stack a
 if (per?.version!=='1.0.0' || per?.status!=='active') errors.push('whole-stack audit: Persistence Model missing');
 if (closure?.status!=='proposed') errors.push('whole-stack audit: semantic closure must remain proposed');
 if (ready?.current_admitted_slice_count!==0) errors.push('whole-stack audit: physical slice admitted prematurely');
-if (m?.version!=='0.13.0') errors.push('whole-stack audit: K00 changed during non-registration stages');
+if (m?.version!=='0.14.0') errors.push('whole-stack audit: K00 changed during non-registration stages');
 
 const checks=[
   ['commands-approved',(commands?.entries||[]).filter(x=>x.status==='approved').length,23],
   ['events-candidate',(events?.entries||[]).filter(x=>x.status==='candidate').length,10],
-  ['ids-approved',(ids?.entries||[]).filter(x=>x.status==='approved').length,4],
-  ['states-candidate',(states?.entries||[]).filter(x=>x.status==='candidate').length,5],
-  ['relationships-candidate',(rel?.entries||[]).filter(x=>x.status==='candidate').length,18],
+  ['ids-approved',(ids?.entries||[]).filter(x=>x.status==='approved').length,12],
+  ['states-candidate',(states?.entries||[]).filter(x=>x.status==='candidate').length,2],
+  ['relationships-candidate',(rel?.entries||[]).filter(x=>x.status==='candidate').length,8],
   ['invariants-candidate',(inv?.entries||[]).filter(x=>x.status==='candidate').length,22],
   ['decision-tables-candidate',(dt?.entries||[]).filter(x=>x.status==='candidate').length,8],
 ];

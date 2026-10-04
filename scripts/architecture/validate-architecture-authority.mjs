@@ -18,7 +18,7 @@ const invariants=load('kernel/invariants.json');
 const decisions=load('kernel/decision-tables.json');
 const gaps=load('domains/discovery-gaps.json');
 
-if (manifest?.version!=='0.13.0') errors.push(`architecture authority: expected K00 0.13.0, found ${manifest?.version}`);
+if (manifest?.version!=='0.14.0') errors.push(`architecture authority: expected K00 0.14.0, found ${manifest?.version}`);
 if (!d || d.status!=='recorded') errors.push('architecture authority: recorded discovery required');
 if (!p || p.status!=='proposed') errors.push('architecture authority: preserved proposal required');
 if (a) {
@@ -31,7 +31,6 @@ if (a) {
   if (a.next_stage!=='Application Interfaces') errors.push('architecture authority: next stage must be Application Interfaces');
 }
 if ((events?.entries||[]).filter(x=>x.status==='candidate').length!==10) errors.push('architecture authority: candidate event count must remain 10');
-if ((relationships?.entries||[]).filter(x=>x.status==='candidate').length!==18) errors.push('architecture authority: candidate relationship count must remain 18');
 if ((invariants?.entries||[]).filter(x=>x.status==='candidate').length!==22) errors.push('architecture authority: candidate invariant count must remain 22');
 if ((decisions?.entries||[]).filter(x=>x.status==='candidate').length!==8) errors.push('architecture authority: candidate decision-table count must remain 8');
 if ((gaps?.core_missing_kernel_candidates||[]).length!==9) errors.push('architecture authority: remaining core gap count must remain 9');

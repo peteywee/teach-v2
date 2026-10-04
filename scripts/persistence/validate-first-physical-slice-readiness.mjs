@@ -11,7 +11,7 @@ const m=load('kernel/manifest.json');
 const p=load('persistence/authority.json');
 const c=load('persistence/semantic-closure/proposed.json');
 
-if (m?.version!=='0.13.0') errors.push(`slice readiness: expected K00 0.13.0, found ${m?.version}`);
+if (m?.version!=='0.14.0') errors.push(`slice readiness: expected K00 0.14.0, found ${m?.version}`);
 if (p?.version!=='1.0.0' || p?.status!=='active') errors.push('slice readiness: active Persistence Model 1.0.0 required');
 if (c?.version!=='0.1.0' || c?.status!=='proposed') errors.push('slice readiness: semantic closure proposal required');
 

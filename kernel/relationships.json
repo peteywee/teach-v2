@@ -4,7 +4,7 @@
     {
       "id": "AssignmentReferencesContentPack",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "Assignment",
       "to": "ContentPack",
       "cardinality": "many-to-one",
@@ -20,12 +20,19 @@
       "does_not_grant": [
         "content_publication",
         "authorization"
-      ]
+      ],
+      "promotion_evidence": [
+        "C31",
+        "C32",
+        "C33"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "AssignmentTargetsIdentity",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "Assignment",
       "to": "Identity",
       "cardinality": "many-to-one",
@@ -40,12 +47,18 @@
       "does_not_grant": [
         "membership",
         "capability"
-      ]
+      ],
+      "promotion_evidence": [
+        "C32",
+        "C33"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "CertificationBelongsToIdentity",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "Certification",
       "to": "Identity",
       "cardinality": "many-to-one",
@@ -59,12 +72,17 @@
       "does_not_grant": [
         "membership",
         "capability"
-      ]
+      ],
+      "promotion_evidence": [
+        "C34"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "CertificationObservedByIdentity",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "Certification",
       "to": "Identity",
       "cardinality": "many-to-one-observer",
@@ -78,12 +96,18 @@
       ],
       "does_not_grant": [
         "observer_capability"
-      ]
+      ],
+      "promotion_evidence": [
+        "C14",
+        "C34"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "CertificationReferencesContentPack",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "Certification",
       "to": "ContentPack",
       "cardinality": "many-to-one",
@@ -97,7 +121,13 @@
       ],
       "does_not_grant": [
         "content_access"
-      ]
+      ],
+      "promotion_evidence": [
+        "C31",
+        "C34"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "ContentPackContainsContentBlock",
@@ -120,7 +150,7 @@
     {
       "id": "CredentialBelongsToIdentity",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "Credential",
       "to": "Identity",
       "cardinality": "many-to-one",
@@ -134,7 +164,12 @@
       "does_not_grant": [
         "authentication_success",
         "authorization"
-      ]
+      ],
+      "promotion_evidence": [
+        "C11"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "EntitlementBelongsToOrganization",
@@ -159,7 +194,7 @@
     {
       "id": "IdentityHasApplicationSession",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "Identity",
       "to": "ApplicationSession",
       "cardinality": "one-to-many",
@@ -173,12 +208,18 @@
       ],
       "does_not_grant": [
         "authorization"
-      ]
+      ],
+      "promotion_evidence": [
+        "C11",
+        "C12"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "IdentityHasLearningSession",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "Identity",
       "to": "LearningSession",
       "cardinality": "one-to-many",
@@ -191,7 +232,12 @@
       ],
       "does_not_grant": [
         "content_access"
-      ]
+      ],
+      "promotion_evidence": [
+        "C32"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "LearnerStateBelongsToIdentity",
@@ -234,7 +280,7 @@
     {
       "id": "LearningSessionUsesAssignment",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "LearningSession",
       "to": "Assignment",
       "cardinality": "many-to-one",
@@ -247,7 +293,12 @@
       ],
       "does_not_grant": [
         "assignment_creation"
-      ]
+      ],
+      "promotion_evidence": [
+        "C32"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "LifecycleEventReferencesIdentity",
@@ -332,7 +383,7 @@
     {
       "id": "ProgressEventBelongsToLearningSession",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "ProgressEvent",
       "to": "LearningSession",
       "cardinality": "many-to-one",
@@ -345,7 +396,12 @@
       ],
       "does_not_grant": [
         "session_completion"
-      ]
+      ],
+      "promotion_evidence": [
+        "C32"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     }
   ]
 }

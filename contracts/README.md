@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.11.2",
+  "version": "0.11.3",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -34,7 +34,7 @@
 
 # Teach v2 Contracts
 
-- Package version: `0.11.2`
+- Package version: `0.11.3`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
@@ -296,3 +296,7 @@ bumped every contract one minor version; see each Change Log.
 ## Governance reconciliation — strict-nine
 
 Package `0.11.2` synchronizes the central contract index and approval ledger with the direct owner-directed strict-nine change at `7534df2`: C01 `1.8.0`, SEM-36 / SEM-AC-25, K00 `0.13.0`, nine entity promotions, and the explicit Membership hold on OQ-TEN-1. The original SYS-21 ordering is recorded as `CONTRADICTORY`; the current content is ratified as `PROVEN` through GitHub issue #14. No new semantic behavior is introduced by this patch.
+
+## Persistence semantic closure registration
+
+Package `0.11.3` records the owner-approved K00 `0.14.0` persistence semantic closure under GitHub issue #17. C01 remains `1.8.0`; no C-series behavioral requirement changes in this registration-only stage.

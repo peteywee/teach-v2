@@ -4,10 +4,16 @@
     {
       "id": "ApplicationSessionId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "ApplicationSession",
-      "owning_domain": "Identity"
+      "owning_domain": "Identity",
+      "promotion_evidence": [
+        "C01 canonical identifiers",
+        "C12 session authority"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "AssignmentId",
@@ -36,10 +42,16 @@
     {
       "id": "CertificationId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "Certification",
-      "owning_domain": "Certification"
+      "owning_domain": "Certification",
+      "promotion_evidence": [
+        "C01 canonical identifiers",
+        "C34 certification authority"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "ContentBlockId",
@@ -52,10 +64,16 @@
     {
       "id": "ContentPackId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "ContentPack",
-      "owning_domain": "Content"
+      "owning_domain": "Content",
+      "promotion_evidence": [
+        "C01 canonical identifiers",
+        "C31 content authority"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "CredentialId",
@@ -76,18 +94,30 @@
     {
       "id": "IdempotencyKey",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "string",
       "represents": "IdempotentOperation",
-      "owning_domain": "TransactionControl"
+      "owning_domain": "TransactionControl",
+      "promotion_evidence": [
+        "C01 canonical identifiers",
+        "C22 TXN-2/TXN-4"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "IdentityId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "Identity",
-      "owning_domain": "Identity"
+      "owning_domain": "Identity",
+      "promotion_evidence": [
+        "C01 canonical identifiers",
+        "C11 Identity authority"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "InvitationId",
@@ -112,10 +142,16 @@
     {
       "id": "LearningSessionId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "LearningSession",
-      "owning_domain": "Learning"
+      "owning_domain": "Learning",
+      "promotion_evidence": [
+        "C01 canonical identifiers",
+        "C32 learning authority"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "LifecycleEventId",
@@ -144,10 +180,16 @@
     {
       "id": "OrganizationId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "Organization",
-      "owning_domain": "Organization"
+      "owning_domain": "Organization",
+      "promotion_evidence": [
+        "C01 canonical identifiers",
+        "C13 Organization authority"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "PasswordResetTokenId",
@@ -183,10 +225,16 @@
     {
       "id": "RequestId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "string",
       "represents": "Request",
-      "owning_domain": "Observability"
+      "owning_domain": "Observability",
+      "promotion_evidence": [
+        "C01 canonical identifiers",
+        "C23 AUD-3 / observability correlation"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "SetupTokenId",

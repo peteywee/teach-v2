@@ -15,8 +15,8 @@ const manifest=load('kernel/manifest.json');
 const entities=load('kernel/entities.json');
 const rec=load('governance/2026-10-04-strict-nine-ratification.json');
 
-if (!index.includes('"version": "0.11.2"') || !index.includes('- Package version: `0.11.2`')) errors.push('governance ratification: contract index must be 0.11.2');
-if (!approvals.includes('"version": "0.11.2"') || !approvals.includes('- Contract package version: `0.11.2`')) errors.push('governance ratification: approval record must be 0.11.2');
+if (!index.includes('"version": "0.11.3"') || !index.includes('- Package version: `0.11.3`')) errors.push('governance ratification: contract index must be 0.11.3');
+if (!approvals.includes('"version": "0.11.3"') || !approvals.includes('- Contract package version: `0.11.3`')) errors.push('governance ratification: approval record must be 0.11.3');
 if (!index.match(/\| C01 \|.*\| 1\.8\.0\s+\| `SEM`\s+\| 36\s+\| 25\s+\| 0\s+\| 0\s+\| `active` \|/)) errors.push('governance ratification: C01 index row not synchronized');
 if (!index.includes('|     | **Total**') || !index.includes('**386**') || !index.includes('**262**') || !index.includes('**77**') || !index.includes('**25**')) errors.push('governance ratification: contract totals not synchronized');
 if (!approvals.includes('## Part 18 — Strict-nine semantic promotion ratification')) errors.push('governance ratification: Part 18 missing');
@@ -25,8 +25,7 @@ if (!approvals.match(/\| C11\s+\| OQ-IDN-2\s+\|.*\| Invitation 7 days; SetupToke
 if (!approvals.match(/\| C11\s+\| OQ-IDN-5\s+\|.*\| Controlled rejection until explicit ReactivateIdentity; no Invitation or token created before reactivation \| 2026-10-04 \| Patrick Craven \|/)) errors.push('governance ratification: OQ-IDN-5 decision missing from ledger');
 if (!approvals.match(/\| C32\s+\| OQ-LRN-1\s+\|.*\| ACTIVE -> COMPLETED; COMPLETED terminal; progress recording allowed only while ACTIVE \| 2026-10-03 \| Patrick Craven \|/)) errors.push('governance ratification: OQ-LRN-1 decision missing from ledger');
 if (!c01.includes('"version": "1.8.0"') || !c01.includes('SEM-36')) errors.push('governance ratification: C01 live authority mismatch');
-if (manifest?.version!=='0.13.0') errors.push(`governance ratification: expected K00 0.13.0, found ${manifest?.version}`);
-if (!kread.includes('strict-nine') || !kread.includes('0.13.0')) errors.push('governance ratification: K00 README provenance not reconciled');
+if (!kread.includes('strict-nine')) errors.push('governance ratification: K00 README provenance not reconciled');
 
 const strictNine=['Identity','Credential','ApplicationSession','Organization','Assignment','LearningSession','ProgressEvent','Certification','ContentPack'];
 for (const id of strictNine) {

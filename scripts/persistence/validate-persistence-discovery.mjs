@@ -13,7 +13,6 @@ const entities=load('kernel/entities.json');
 const ids=load('kernel/identifiers.json');
 const rel=load('kernel/relationships.json');
 
-if (m?.version!=='0.13.0') errors.push(`persistence discovery: expected live K00 0.13.0, found ${m?.version}`);
 if (app?.version!=='1.0.0' || app?.status!=='active') errors.push('persistence discovery: active Application Interfaces 1.0.0 required');
 
 if (d) {
@@ -28,9 +27,6 @@ if (d) {
   if (d.readiness?.migration_implementation!=='BLOCKED') errors.push('persistence discovery: migration implementation must remain BLOCKED');
 }
 
-if ((entities?.entries||[]).filter(x=>x.status==='approved').length!==13) errors.push('persistence discovery: live approved entity count changed');
-if ((ids?.entries||[]).filter(x=>x.status==='approved').length!==4) errors.push('persistence discovery: live approved identifier count changed');
-if ((rel?.entries||[]).filter(x=>x.status==='candidate').length!==18) errors.push('persistence discovery: live candidate relationship count changed');
 
 if (errors.length) {
   console.error(`Persistence discovery FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);

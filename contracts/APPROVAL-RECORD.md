@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.11.2",
+  "version": "0.11.3",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-04
-- Contract package version: `0.11.2`
+- Contract package version: `0.11.3`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -359,3 +359,11 @@ Events remain unchanged at 4 approved / 10 candidate. This approval does not man
 | Membership | candidate | candidate hold | OQ-TEN-1 directly affects Membership shape | Hold ratified; Membership MUST remain candidate until OQ-TEN-1 is resolved and the promotion gate is rerun | 2026-10-04 | Patrick Craven | #14 |
 
 The three already-approved Membership commands retain only the explicit, enumerated SEM-36 exception recorded in the validator. This ratification does not broaden that exception and does not promote any relationship, invariant, decision table, capability, event, or additional entity.
+
+## Part 19 — Persistence semantic closure promotion
+
+| Artifact | From | To | Decision | Date | Owner | GitHub issue |
+| --- | --- | --- | --- | --- | --- | --- |
+| TEACH-K00 | 0.13.0 | 0.14.0 | Promote exactly 8 identifiers, 3 state sets, 3 state machines, and 10 relationships listed in `persistence/semantic-closure/proposed.json`; preserve all explicit exclusions; zero command/event/entity status changes | 2026-10-04 | Patrick Craven | #17 |
+
+Physical persistence remains governed by the Persistence Model admission gate. This approval does not authorize a table, migration, repository, transport route, or any excluded semantic promotion.

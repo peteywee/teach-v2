@@ -14,7 +14,6 @@ const ids=load('kernel/identifiers.json');
 const rel=load('kernel/relationships.json');
 
 if (app?.version!=='1.0.0' || app?.status!=='active') errors.push('persistence proposal: active Application Interfaces 1.0.0 required');
-if (m?.version!=='0.13.0') errors.push(`persistence proposal: expected K00 0.13.0, found ${m?.version}`);
 if (d?.version!=='0.1.0' || d?.status!=='recorded') errors.push('persistence proposal: recorded discovery required');
 
 if (p) {
@@ -34,8 +33,6 @@ if (p) {
   for (const token of forbidden) if (text.includes(`"${token}"`)) errors.push(`persistence proposal: premature physical schema token ${token}`);
 }
 
-if ((ids?.entries||[]).filter(x=>x.status==='approved').length!==4) errors.push('persistence proposal: approved identifier count changed');
-if ((rel?.entries||[]).filter(x=>x.status==='candidate').length!==18) errors.push('persistence proposal: candidate relationship count changed');
 
 if (errors.length) {
   console.error(`Persistence proposal FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);

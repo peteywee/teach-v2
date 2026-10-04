@@ -15,7 +15,7 @@ const names = ['entities.json','values.json','identifiers.json','relationships.j
 const docs = Object.fromEntries(names.map(n => [n, load(n)]));
 if (manifest) {
   if (manifest.kernel_id !== 'TEACH-K00') errors.push('manifest.json: kernel_id must be TEACH-K00');
-  if (manifest.version !== '0.13.0') errors.push('manifest.json: version must be 0.13.0');
+  if (manifest.version !== '0.14.0') errors.push('manifest.json: version must be 0.14.0');
   if (manifest.canonical_format !== 'json') errors.push('manifest.json: canonical_format must be json');
   for (const n of ['entities','values','identifiers','relationships','states','state_machines','invariants','decision_tables','capabilities','commands','events','evidence','schema']) {
     if (!manifest.files?.[n]) errors.push(`manifest.json: missing file mapping ${n}`);
@@ -48,7 +48,15 @@ for (const r of docs['relationships.json']?.entries || []) {
   if (!r.owning_domain) errors.push(`relationships.json: ${r.id} missing owning_domain`);
   if (!Array.isArray(r.authority_contracts) || !r.authority_contracts.length) errors.push(`relationships.json: ${r.id} missing authority_contracts`);
   if (!Array.isArray(r.does_not_grant) || !r.does_not_grant.length) errors.push(`relationships.json: ${r.id} missing does_not_grant`);
-  if (r.status !== 'candidate') errors.push(`relationships.json: ${r.id} must remain candidate in K00 0.3.0`);
+  const persistencePromotedRelationships = new Set([
+    'CredentialBelongsToIdentity','IdentityHasApplicationSession',
+    'AssignmentTargetsIdentity','AssignmentReferencesContentPack',
+    'IdentityHasLearningSession','LearningSessionUsesAssignment',
+    'ProgressEventBelongsToLearningSession','CertificationBelongsToIdentity',
+    'CertificationReferencesContentPack','CertificationObservedByIdentity'
+  ]);
+  const expectedStatus = persistencePromotedRelationships.has(r.id) ? 'approved' : 'candidate';
+  if (r.status !== expectedStatus) errors.push(`relationships.json: ${r.id} must be ${expectedStatus} in K00 0.14.0`);
 }
 const expectedRelationshipIds = new Set([
   'AssignmentReferencesContentPack',
@@ -120,14 +128,15 @@ const stateSetMap = new Map((docs['states.json']?.entries || []).map(x => [x.id,
 const commandSet = new Set((docs['commands.json']?.entries || []).map(x => x.id));
 const eventSet = new Set((docs['events.json']?.entries || []).map(x => x.id));
 const machineIds = new Set();
-const historicalCandidateMachines = new Set(['ApplicationSessionStateMachine','IdentityStateMachine','LearningSessionStateMachine','MembershipStateMachine']);
+const historicalCandidateMachines = new Set(['MembershipStateMachine']);
+const persistencePromotedMachines = new Set(['ApplicationSessionStateMachine','IdentityStateMachine','LearningSessionStateMachine']);
 const approvedLifecycleMachines = new Set(['InvitationStateMachine','SetupTokenStateMachine','PasswordResetTokenStateMachine','ReconciliationRecordStateMachine']);
 for (const m of docs['state-machines.json']?.entries || []) {
   if (machineIds.has(m.id)) errors.push(`state-machines.json: duplicate ${m.id}`);
   machineIds.add(m.id);
-  if (historicalCandidateMachines.has(m.id) && m.status !== 'candidate') errors.push(`state-machines.json: historical ${m.id} must remain candidate`);
-  if (approvedLifecycleMachines.has(m.id) && m.status !== 'approved') errors.push(`state-machines.json: ${m.id} must be approved`);
-  if (!historicalCandidateMachines.has(m.id) && !approvedLifecycleMachines.has(m.id)) errors.push(`state-machines.json: unexpected ${m.id}`);
+  if (historicalCandidateMachines.has(m.id) && m.status !== 'candidate') errors.push(`state-machines.json: ${m.id} must remain candidate`);
+  if ((persistencePromotedMachines.has(m.id) || approvedLifecycleMachines.has(m.id)) && m.status !== 'approved') errors.push(`state-machines.json: ${m.id} must be approved`);
+  if (!historicalCandidateMachines.has(m.id) && !persistencePromotedMachines.has(m.id) && !approvedLifecycleMachines.has(m.id)) errors.push(`state-machines.json: unexpected ${m.id}`);
   if (!entityIds.has(m.entity)) errors.push(`state-machines.json: ${m.id} unknown entity ${m.entity}`);
   const ss = stateSetMap.get(m.state_set);
   if (!ss) errors.push(`state-machines.json: ${m.id} unknown state_set ${m.state_set}`);
@@ -142,7 +151,7 @@ for (const m of docs['state-machines.json']?.entries || []) {
   }
   for (const terminal of m.terminal_states || []) if (!values.has(terminal)) errors.push(`state-machines.json: ${m.id} invalid terminal ${terminal}`);
 }
-const requiredMachines = new Set([...historicalCandidateMachines, ...approvedLifecycleMachines]);
+const requiredMachines = new Set([...historicalCandidateMachines, ...persistencePromotedMachines, ...approvedLifecycleMachines]);
 for (const id of requiredMachines) if (!machineIds.has(id)) errors.push(`state-machines.json: missing ${id}`);
 for (const id of machineIds) if (!requiredMachines.has(id)) errors.push(`state-machines.json: unexpected ${id}`);
 
@@ -166,6 +175,24 @@ if (!learningStatus || JSON.stringify(learningStatus.values) !== JSON.stringify(
 const membershipStatus = stateSetMap.get('MembershipStatus');
 if (!membershipStatus || JSON.stringify(membershipStatus.values) !== JSON.stringify(['ACTIVE','INACTIVE','REVOKED'])) errors.push('states.json: MembershipStatus must be ACTIVE,INACTIVE,REVOKED');
 
+
+const persistencePromotedIdentifiers = new Set(['IdentityId','OrganizationId','ApplicationSessionId','ContentPackId','LearningSessionId','CertificationId','IdempotencyKey','RequestId']);
+for (const id of persistencePromotedIdentifiers) {
+  const x=(docs['identifiers.json']?.entries||[]).find(v=>v.id===id);
+  if (x?.status!=='approved') errors.push(`identifiers.json: ${id} must be approved in K00 0.14.0`);
+}
+for (const id of ['IdentityStatus','ApplicationSessionStatus','LearningSessionStatus']) {
+  const x=stateSetMap.get(id);
+  if (x?.status!=='approved') errors.push(`states.json: ${id} must be approved in K00 0.14.0`);
+}
+for (const id of ['CredentialId','AssignmentId','ProgressEventId','CapabilityId','MembershipId','LocationId']) {
+  const x=(docs['identifiers.json']?.entries||[]).find(v=>v.id===id);
+  if (x?.status!=='candidate') errors.push(`identifiers.json: excluded ${id} must remain candidate`);
+}
+for (const id of ['MembershipStatus','EvidenceState']) {
+  const x=stateSetMap.get(id);
+  if (x?.status!=='candidate') errors.push(`states.json: excluded ${id} must remain candidate`);
+}
 
 // Per-kind semantic schema (approved 2026-10-04): commands and events must
 // carry owning_domain, definitions, and kind-specific semantic references.

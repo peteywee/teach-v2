@@ -4,7 +4,7 @@
     {
       "id": "ApplicationSessionStateMachine",
       "kind": "state_machine",
-      "status": "candidate",
+      "status": "approved",
       "entity": "ApplicationSession",
       "state_set": "ApplicationSessionStatus",
       "owning_domain": "Identity",
@@ -30,12 +30,18 @@
       "terminal_states": [
         "EXPIRED",
         "REVOKED"
-      ]
+      ],
+      "promotion_evidence": [
+        "C01 canonical values",
+        "C12 SES-20"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "IdentityStateMachine",
       "kind": "state_machine",
-      "status": "candidate",
+      "status": "approved",
       "entity": "Identity",
       "state_set": "IdentityStatus",
       "owning_domain": "Identity",
@@ -80,7 +86,13 @@
           "to": "DELETED",
           "reason": "No application ingress is authorized until C15 privacy/deletion semantics are owner-approved."
         }
-      ]
+      ],
+      "promotion_evidence": [
+        "C01 canonical values",
+        "C11 IDN-21"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "InvitationStateMachine",
@@ -126,7 +138,7 @@
     {
       "id": "LearningSessionStateMachine",
       "kind": "state_machine",
-      "status": "candidate",
+      "status": "approved",
       "entity": "LearningSession",
       "state_set": "LearningSessionStatus",
       "owning_domain": "Learning",
@@ -154,7 +166,13 @@
       ],
       "terminal_states": [
         "COMPLETED"
-      ]
+      ],
+      "promotion_evidence": [
+        "C32 LRN-3",
+        "OQ-LRN-1 resolved"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "MembershipStateMachine",

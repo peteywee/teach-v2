@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-K00",
   "class": "semantic-kernel",
-  "version": "0.13.1",
+  "version": "0.14.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -33,7 +33,7 @@
 
 Canonical machine-readable source format: JSON.
 
-K00 version: `0.13.0`.
+K00 version: `0.14.0`.
 
 Active domain ownership authority: `domains/ownership-map.json`.
 
@@ -58,3 +58,5 @@ Dependency concept registration: four previously missing entities and four canon
 Dependency lifecycle closure: Invitation, SetupToken, PasswordResetToken, ReconciliationRecord and their IDs are now `approved`; four approved state sets and four approved state machines encode their closed-world lifecycle semantics. `RevokeInvitation` is a new approved canonical command. All 23 registered commands are approved. Events remain 4 approved / 10 candidate. GitHub issue #12.
 
 Strict-nine ratification: K00 `0.13.0` promotes Identity, Credential, ApplicationSession, Organization, Assignment, LearningSession, ProgressEvent, Certification, and ContentPack to `approved`. Membership remains `candidate` under an explicit owner-directed hold on OQ-TEN-1. C01 `1.8.0` SEM-36 requires approved dependency closure, with only the enumerated Membership-command exception. Ratification issue #14.
+
+Persistence semantic closure: K00 `0.14.0` promotes exactly 24 entries under GitHub issue #17: 8 identifiers, 3 state sets, 3 state machines, and 10 relationships. Commands, events, entities, and Domain Ownership Map `1.6.0` are unchanged. The ten explicit exclusions in `persistence/semantic-closure/proposed.json` remain unpromoted.

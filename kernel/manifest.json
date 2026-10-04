@@ -1,6 +1,6 @@
 {
   "kernel_id": "TEACH-K00",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "status": "active",
   "canonical_format": "json",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -106,5 +106,18 @@
     "promoted_existing_commands": 4,
     "event_status_changes": 0,
     "baseline_commit": "168ff001ee6d8cb6b42d26a9602dba7f4c419092"
+  },
+  "persistence_semantic_closure_registration": {
+    "issue": "#17",
+    "baseline_commit": "359bf286ecdbf57376576978c38e243dd8b95ac0",
+    "approved_on": "2026-10-04",
+    "identifier_promotions": 8,
+    "state_set_promotions": 3,
+    "state_machine_promotions": 3,
+    "relationship_promotions": 10,
+    "total_promotions": 24,
+    "ownership_map_change": false,
+    "command_status_changes": 0,
+    "event_status_changes": 0
   }
 }

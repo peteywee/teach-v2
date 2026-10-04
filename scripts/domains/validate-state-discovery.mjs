@@ -101,12 +101,14 @@ if (registration) {
 
 const machineSet = new Set((machines?.entries || []).map(x => x.id));
 const historicalMachines = new Set(['ApplicationSessionStateMachine','IdentityStateMachine','LearningSessionStateMachine','MembershipStateMachine']);
+const persistencePromotedMachines = new Set(['ApplicationSessionStateMachine','IdentityStateMachine','LearningSessionStateMachine']);
 const lifecycleMachines = new Set(['InvitationStateMachine','SetupTokenStateMachine','PasswordResetTokenStateMachine','ReconciliationRecordStateMachine']);
 for (const id of [...historicalMachines,...lifecycleMachines]) {
   if (!machineSet.has(id)) errors.push(`state registration: missing registered machine ${id}`);
 }
 for (const m of machines?.entries || []) {
-  if (historicalMachines.has(m.id) && m.status !== 'candidate') errors.push(`state registration: historical ${m.id} must remain candidate`);
+  if (m.id==='MembershipStateMachine' && m.status !== 'candidate') errors.push('state registration: MembershipStateMachine must remain candidate');
+  if (persistencePromotedMachines.has(m.id) && m.status !== 'approved') errors.push(`state registration: persistence-promoted ${m.id} must be approved`);
   if (lifecycleMachines.has(m.id) && m.status !== 'approved') errors.push(`state registration: lifecycle ${m.id} must be approved`);
 }
 
@@ -127,7 +129,7 @@ if (errors.length) {
 }
 
 console.log('State-machine registration PASS');
-console.log('Historical state machines: 4 candidate');
+console.log('Historical state-machine discovery preserved; current K00: 3 persistence-promoted approved / Membership candidate');
 console.log('Dependency lifecycle state machines: 4 approved');
 console.log('Historical Membership discovery evidence preserved: CONTRADICTORY');
 console.log('SingleUseCredentialLifecycle historical blocker resolved by later owner-approved lifecycle closure');

@@ -39,7 +39,7 @@ const missing=(gaps?.core_missing_kernel_candidates||[]).length;
 const blockedCommands=(ce?.blocked_command_candidates||[]).length;
 
 if (candidateEvents!==10) errors.push(`cross-layer audit: candidate events changed to ${candidateEvents}`);
-if (candidateRelationships!==18) errors.push(`cross-layer audit: candidate relationships changed to ${candidateRelationships}`);
+if (candidateRelationships!==8) errors.push(`cross-layer audit: candidate relationships changed to ${candidateRelationships}`);
 if (candidateInvariants!==22) errors.push(`cross-layer audit: candidate invariants changed to ${candidateInvariants}`);
 if (candidateDecisionTables!==8) errors.push(`cross-layer audit: candidate decision tables changed to ${candidateDecisionTables}`);
 if (missing!==9) errors.push(`cross-layer audit: core missing candidates changed to ${missing}`);

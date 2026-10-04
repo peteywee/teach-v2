@@ -4,7 +4,7 @@
     {
       "id": "ApplicationSessionStatus",
       "kind": "state_set",
-      "status": "candidate",
+      "status": "approved",
       "values": [
         "ACTIVE",
         "EXPIRED",
@@ -14,7 +14,13 @@
       "authority_contracts": [
         "C01",
         "C12"
-      ]
+      ],
+      "promotion_evidence": [
+        "C01 canonical values",
+        "C12 SES-20"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "EvidenceState",
@@ -58,7 +64,7 @@
     {
       "id": "IdentityStatus",
       "kind": "state_set",
-      "status": "candidate",
+      "status": "approved",
       "values": [
         "ACTIVE",
         "INACTIVE",
@@ -71,7 +77,13 @@
       "authority_contracts": [
         "C01",
         "C11"
-      ]
+      ],
+      "promotion_evidence": [
+        "C01 canonical values",
+        "C11 IDN-21"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "InvitationStatus",
@@ -95,7 +107,7 @@
     {
       "id": "LearningSessionStatus",
       "kind": "state_set",
-      "status": "candidate",
+      "status": "approved",
       "values": [
         "ACTIVE",
         "COMPLETED"
@@ -107,7 +119,13 @@
       ],
       "notes": [
         "Bootstrap lifecycle intentionally contains no paused, abandoned, or reopened state."
-      ]
+      ],
+      "promotion_evidence": [
+        "C32 LRN-3",
+        "OQ-LRN-1 resolved"
+      ],
+      "promotion_issue": "#17",
+      "promoted_on": "2026-10-04"
     },
     {
       "id": "MembershipStatus",
