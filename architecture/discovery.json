@@ -1,0 +1,149 @@
+{
+  "discovery_id": "TEACH-ARCHITECTURE-DISCOVERY",
+  "version": "0.1.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-04",
+  "updated_on": "2026-10-04",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "commit": "0f37206e5a646b34c1ccd7158f1fcaee1268fe95",
+    "kernel_version": "0.12.0",
+    "ownership_map_version": "1.6.0",
+    "contract_package_version": "0.11.1"
+  },
+  "source_evidence": {
+    "declared_architecture_style": {
+      "value": "modular monolith",
+      "source": "contracts/source/2026-10-03-teach-rebuild-consolidated-decisions.md#35",
+      "authority_state": "source-of-intent; requires architecture approval before implementation reliance"
+    },
+    "declared_layer_direction": {
+      "value": [
+        "Constitution",
+        "Semantic Kernel",
+        "Contracts",
+        "Domain",
+        "Application",
+        "Infrastructure",
+        "Interfaces"
+      ],
+      "source": "contracts/source/2026-10-03-teach-rebuild-consolidated-decisions.md#44",
+      "authority_state": "source-of-intent; requires architecture approval before implementation reliance"
+    },
+    "declared_original_module_direction": {
+      "value": [
+        "Identity",
+        "Organization",
+        "Authorization",
+        "Content",
+        "Learning",
+        "Certification",
+        "Audit"
+      ],
+      "source": "contracts/source/2026-10-03-teach-rebuild-consolidated-decisions.md#35",
+      "authority_state": "source-of-intent; not exhaustive after later semantic discovery"
+    },
+    "active_contract_boundaries": [
+      "C00 SYS-6/SYS-7: one owner and one writer for mutable state",
+      "C00 SYS-8: one canonical implementation path for security-sensitive operations",
+      "C00 SYS-16: no externally observable behavior without owning contract",
+      "C02 AGT-10/AGT-11: all actors cross the same command/domain boundary; no privileged direct DB access",
+      "C14 AUTHZ-9/AUTHZ-10/AUTHZ-11/AUTHZ-21: API-enforced authorization and read-only entitlement input",
+      "C15 PRIV-3: protected queries require authoritative scope in data-access layer",
+      "C21 MIG-11: browser-reachable roles cannot access backend-owned tables",
+      "C22 TXN-1/TXN-6/TXN-7: atomicity and reconciliation-before-retry",
+      "C41 API-8/API-14/API-15: business rules below routes; commands are the state-change boundary",
+      "C42 WEB-14: browser writes only through owned API/application commands",
+      "C53 OBS-10: observability failure cannot alter request/authorization outcomes"
+    ]
+  },
+  "current_semantic_domains": [
+    "AuditLifecycle",
+    "Authorization",
+    "Certification",
+    "Content",
+    "Governance",
+    "Identity",
+    "Learning",
+    "Observability",
+    "Organization",
+    "TransactionControl",
+    "VerificationEvidence"
+  ],
+  "discovered_architecture_facts": [
+    {
+      "id": "ARCH-F01",
+      "state": "PROVEN",
+      "fact": "No architecture/ authority directory existed at the baseline commit.",
+      "implication": "Architecture can be introduced without migrating an existing v2 architecture authority."
+    },
+    {
+      "id": "ARCH-F02",
+      "state": "PROVEN",
+      "fact": "The current active Domain Ownership Map contains 11 semantic domains.",
+      "implication": "The original seven-module source direction cannot be assumed to map one-to-one onto all current semantic domains."
+    },
+    {
+      "id": "ARCH-F03",
+      "state": "PROVEN",
+      "fact": "C41 makes registered application commands the state-changing system boundary.",
+      "implication": "HTTP, UI, jobs, CLI, and agents must adapt into application commands rather than own business semantics."
+    },
+    {
+      "id": "ARCH-F04",
+      "state": "PROVEN",
+      "fact": "C00 requires exactly one writer component per mutable state and C41/C42 forbid route/browser ownership of business rules.",
+      "implication": "Cross-domain direct database mutation is not an admissible architecture shortcut."
+    },
+    {
+      "id": "ARCH-F05",
+      "state": "PROVEN",
+      "fact": "Microservices are deferred by the owner-supplied source decisions.",
+      "implication": "No service extraction is justified at architecture discovery."
+    }
+  ],
+  "decision_required": [
+    {
+      "id": "ARCH-D01",
+      "state": "BLOCKED",
+      "question": "How do the 11 semantic domains map to deployable/runtime modules versus cross-cutting or non-runtime planes?",
+      "reason": "The original source lists seven expected modules, while later approved semantic ownership added Governance, TransactionControl, VerificationEvidence, and Observability."
+    },
+    {
+      "id": "ARCH-D02",
+      "state": "BLOCKED",
+      "question": "What exact dependency rules are enforced between Domain, Application, Infrastructure, and Interfaces?",
+      "reason": "The direction is declared, but import/port/repository restrictions have not yet been approved as architecture rules."
+    },
+    {
+      "id": "ARCH-D03",
+      "state": "BLOCKED",
+      "question": "How are cross-domain reads and multi-domain transactions coordinated without violating single-writer ownership?",
+      "reason": "Contracts constrain the outcome but do not yet define the architecture mechanism."
+    },
+    {
+      "id": "ARCH-D04",
+      "state": "BLOCKED",
+      "question": "Which physical package/app paths implement the approved logical architecture?",
+      "reason": "The source explicitly leaves exact filenames and formats as an implementation decision; this should remain deferred until logical architecture is approved."
+    }
+  ],
+  "semantic_constraints_not_resolved_by_architecture": {
+    "candidate_events": 10,
+    "discovery_blocked_command_proposals": 8,
+    "remaining_core_missing_kernel_candidates": 9,
+    "candidate_relationships": 18,
+    "candidate_invariants": 22,
+    "candidate_decision_tables": 8,
+    "rule": "Architecture discovery must not promote, rely on, or synthesize these semantics."
+  },
+  "readiness": {
+    "architecture_discovery": "PROVEN",
+    "architecture_approval": "BLOCKED",
+    "application_interfaces": "BLOCKED until architecture approval",
+    "persistence_model": "BLOCKED until application-interface stage",
+    "transport_interfaces": "BLOCKED until persistence/application boundaries are approved"
+  }
+}

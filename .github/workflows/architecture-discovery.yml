@@ -1,0 +1,24 @@
+name: Architecture Discovery
+
+on:
+  pull_request:
+    paths:
+      - 'architecture/**'
+      - 'scripts/architecture/validate-architecture-discovery.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'architecture/**'
+      - 'scripts/architecture/validate-architecture-discovery.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-architecture-discovery:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate architecture discovery
+        run: node scripts/architecture/validate-architecture-discovery.mjs
