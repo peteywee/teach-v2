@@ -15,7 +15,7 @@ const names = ['entities.json','values.json','identifiers.json','relationships.j
 const docs = Object.fromEntries(names.map(n => [n, load(n)]));
 if (manifest) {
   if (manifest.kernel_id !== 'TEACH-K00') errors.push('manifest.json: kernel_id must be TEACH-K00');
-  if (manifest.version !== '0.15.0') errors.push('manifest.json: version must be 0.15.0');
+  if (manifest.version !== '0.16.0') errors.push('manifest.json: version must be 0.16.0');
   if (manifest.canonical_format !== 'json') errors.push('manifest.json: canonical_format must be json');
   for (const n of ['entities','values','identifiers','relationships','states','state_machines','invariants','decision_tables','capabilities','commands','events','evidence','schema']) {
     if (!manifest.files?.[n]) errors.push(`manifest.json: missing file mapping ${n}`);
@@ -54,10 +54,12 @@ for (const r of docs['relationships.json']?.entries || []) {
     'IdentityHasLearningSession','LearningSessionUsesAssignment',
     'ProgressEventBelongsToLearningSession','CertificationBelongsToIdentity',
     'CertificationReferencesContentPack','CertificationObservedByIdentity',
-    'ReconciliationRecordUsesIdempotencyKey'
+    'ReconciliationRecordUsesIdempotencyKey',
+    'InvitationForIdentity','SetupTokenBelongsToIdentity',
+    'PasswordResetTokenBelongsToIdentity','InvitationOwnedByIdentity'
   ]);
   const expectedStatus = persistencePromotedRelationships.has(r.id) ? 'approved' : 'candidate';
-  if (r.status !== expectedStatus) errors.push(`relationships.json: ${r.id} must be ${expectedStatus} in K00 0.15.0`);
+  if (r.status !== expectedStatus) errors.push(`relationships.json: ${r.id} must be ${expectedStatus} in K00 0.16.0`);
 }
 const expectedRelationshipIds = new Set([
   'AssignmentReferencesContentPack',
@@ -78,7 +80,11 @@ const expectedRelationshipIds = new Set([
   'MembershipLinksIdentityOrganization',
   'MembershipMayScopeLocation',
   'ProgressEventBelongsToLearningSession',
-  'ReconciliationRecordUsesIdempotencyKey'
+  'ReconciliationRecordUsesIdempotencyKey',
+  'InvitationForIdentity',
+  'SetupTokenBelongsToIdentity',
+  'PasswordResetTokenBelongsToIdentity',
+  'InvitationOwnedByIdentity'
 ]);
 const actualRelationshipIds = new Set((docs['relationships.json']?.entries || []).map(x => x.id));
 for (const id of expectedRelationshipIds) if (!actualRelationshipIds.has(id)) errors.push(`relationships.json: missing registered relationship ${id}`);
@@ -181,11 +187,11 @@ if (!membershipStatus || JSON.stringify(membershipStatus.values) !== JSON.string
 const persistencePromotedIdentifiers = new Set(['IdentityId','OrganizationId','ApplicationSessionId','ContentPackId','LearningSessionId','CertificationId','IdempotencyKey','RequestId']);
 for (const id of persistencePromotedIdentifiers) {
   const x=(docs['identifiers.json']?.entries||[]).find(v=>v.id===id);
-  if (x?.status!=='approved') errors.push(`identifiers.json: ${id} must be approved in K00 0.15.0`);
+  if (x?.status!=='approved') errors.push(`identifiers.json: ${id} must be approved in K00 0.16.0`);
 }
 for (const id of ['IdentityStatus','ApplicationSessionStatus','LearningSessionStatus']) {
   const x=stateSetMap.get(id);
-  if (x?.status!=='approved') errors.push(`states.json: ${id} must be approved in K00 0.15.0`);
+  if (x?.status!=='approved') errors.push(`states.json: ${id} must be approved in K00 0.16.0`);
 }
 for (const id of ['CredentialId','AssignmentId','ProgressEventId','CapabilityId','MembershipId','LocationId']) {
   const x=(docs['identifiers.json']?.entries||[]).find(v=>v.id===id);

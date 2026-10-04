@@ -63,7 +63,7 @@ test(
     replaceOrThrow(
       dir,
       'scripts/persistence/validate-persistence-authority.mjs',
-      "m?.version!=='0.15.0'",
+      "m?.version!=='0.16.0'",
       "m?.version!=='0.14.0'",
     );
   },
@@ -128,7 +128,7 @@ test(
     replaceOrThrow(
       dir,
       'scripts/kernel/validate-semantic-kernel.mjs',
-      "if (manifest.version !== '0.15.0')",
+      "if (manifest.version !== '0.16.0')",
       "if (manifest.version !== '0.14.0')",
     );
   },

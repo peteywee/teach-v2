@@ -22,8 +22,8 @@ if (proposal) {
   if (proposal.baseline?.commit !== '1cb51b4b0a171866628886d5445277b4f6b21e15') errors.push('relationship proposal: baseline commit mismatch');
 }
 
-if (ownership?.status !== 'active' || ownership?.version !== '1.6.0') {
-  errors.push('relationship proposal: requires active Domain Ownership Map 1.6.0');
+if (ownership?.status !== 'active' || ownership?.version !== '1.7.0') {
+  errors.push('relationship proposal: requires active Domain Ownership Map 1.7.0');
 }
 
 const entityIds = new Set((entities?.entries || []).map(x => x.id));
@@ -62,15 +62,21 @@ if (registration) {
 
 const readyIds = new Set((proposal?.ready_relationships || []).map(x => x.id));
 const blockedIds = new Set((proposal?.blocked_relationships || []).map(x => x.id));
+const laterApproved = new Set([
+  'InvitationForIdentity',
+  'SetupTokenBelongsToIdentity',
+  'PasswordResetTokenBelongsToIdentity',
+  'InvitationOwnedByIdentity',
+]);
 
 for (const id of readyIds) {
   if (!existing.has(id)) errors.push(`relationship registration: ready relationship ${id} missing from K00`);
 }
 for (const id of existing) {
-  if (!readyIds.has(id)) errors.push(`relationship registration: K00 relationship ${id} was not in the approved ready set`);
+  if (!readyIds.has(id) && !laterApproved.has(id)) errors.push(`relationship registration: K00 relationship ${id} was not in the historical ready set or a later owner-approved addition`);
 }
 for (const id of blockedIds) {
-  if (existing.has(id)) errors.push(`relationship registration: blocked relationship ${id} must not be in K00`);
+  if (existing.has(id) && !laterApproved.has(id)) errors.push(`relationship registration: blocked relationship ${id} must not be in K00 without later owner approval`);
 }
 
 const registeredIds = new Set(registration?.registered_relationships || []);
@@ -83,7 +89,9 @@ const persistencePromoted = new Set([
   'IdentityHasLearningSession','LearningSessionUsesAssignment',
   'ProgressEventBelongsToLearningSession','CertificationBelongsToIdentity',
   'CertificationReferencesContentPack','CertificationObservedByIdentity',
-  'ReconciliationRecordUsesIdempotencyKey'
+  'ReconciliationRecordUsesIdempotencyKey',
+  'InvitationForIdentity','SetupTokenBelongsToIdentity',
+  'PasswordResetTokenBelongsToIdentity','InvitationOwnedByIdentity'
 ]);
 for (const r of existingRelationships?.entries || []) {
   const expected=persistencePromoted.has(r.id)?'approved':'candidate';
@@ -98,6 +106,6 @@ if (errors.length) {
 }
 
 console.log('Relationship registration PASS');
-console.log(`Registered relationships: ${existing.size} total / 11 approved / 8 candidate`);
+console.log(`Registered relationships: ${existing.size} total / 15 approved / 8 candidate`);
 console.log(`Blocked relationships excluded: ${(proposal?.blocked_relationships || []).length}`);
-console.log('Historical registration promotions: 0; later persistence closure promotions: 10');
+console.log('Historical registration promotions: 0; later persistence closure promotions: 10; P03 owner-approved additions: 4');

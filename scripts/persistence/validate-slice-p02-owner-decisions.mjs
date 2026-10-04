@@ -21,7 +21,7 @@ const index=text('contracts/README.md');
 
 const find=(doc,id)=>(doc?.entries||[]).find(x=>x.id===id);
 
-if(manifest?.version!=='0.15.0') errors.push('SLICE-P02 decisions: K00 must remain 0.15.0');
+if(manifest?.version!=='0.16.0') errors.push('SLICE-P02 decisions: K00 must remain 0.16.0');
 if(reg?.registration_id!=='TEACH-SLICE-P02-OWNER-DECISION-REGISTRATION' || reg?.version!=='1.0.0' || reg?.status!=='recorded' || reg?.issue!=='#32') errors.push('SLICE-P02 decisions: registration identity/state mismatch');
 
 const expected=new Map([
@@ -50,8 +50,8 @@ if(!index.includes('"version": "0.14.0"') || !index.includes('- Package version:
 if(!index.includes('| C12 |')) errors.push('SLICE-P02 decisions: C12 index row missing');
 
 const p02=readiness?.candidate_slices?.find(x=>x.id==='SLICE-P02');
-if(readiness?.version!=='1.0.0' || readiness?.narrowed_next_lane?.preferred_slice!=='SLICE-P02' || readiness?.narrowed_next_lane?.physical_implementation_authorized!==true || readiness?.evidence_states?.slice_p02_owner_decisions!=='PROVEN' || readiness?.evidence_states?.slice_p02_schema_admission!=='PROVEN') errors.push('SLICE-P02 decisions: owner decisions must remain proven through readiness 1.0.0');
-if(!p02 || p02.current_state!=='ADMITTED' || (p02.blockers_removed_by_owner_decisions||[]).length!==3 || (p02.blockers||[]).length!==0) errors.push('SLICE-P02 decisions: P02 admission must preserve the three owner decisions');
+if(readiness?.version!=='1.1.0' || readiness?.evidence_states?.slice_p02_owner_decisions!=='PROVEN' || readiness?.evidence_states?.slice_p02_schema_admission!=='PROVEN' || readiness?.evidence_states?.slice_p02_implementation!=='PROVEN') errors.push('SLICE-P02 decisions: owner/admission/implementation proof must remain preserved through readiness 1.1.0');
+if(!p02 || p02.current_state!=='ADMITTED' || (p02.blockers_removed_by_owner_decisions||[]).length!==3 || (p02.blockers||[]).length!==0 || readiness?.current_physical_slice_admissions?.find(x=>x.id==='SLICE-P02')?.implementation_state!=='IMPLEMENTED') errors.push('SLICE-P02 decisions: P02 admission and IMPLEMENTED evidence must preserve the three owner decisions');
 if(readiness?.current_admitted_slice_count!==2 || !readiness?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P02')) errors.push('SLICE-P02 decisions: subsequent P02 admission evidence missing');
 
 if(errors.length){
@@ -62,5 +62,5 @@ if(errors.length){
 console.log('SLICE-P02 OWNER DECISIONS PASS');
 console.log('C12: 1.1.0');
 console.log('P02 decisions: 3 PROVEN');
-console.log('K00: 0.15.0 unchanged');
+console.log('K00: 0.16.0 unchanged');
 console.log('P02 physical schema: ADMITTED; implementation pending');

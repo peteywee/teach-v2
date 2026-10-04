@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-K00",
   "class": "semantic-kernel",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -12,15 +12,15 @@
   "approval": {
     "state": "approved",
     "approved_on": "2026-10-04",
-    "record": "contracts/APPROVAL-RECORD.md",
-    "issue": "#24",
-    "basis": "Explicit owner approval of ReconciliationRecordUsesIdempotencyKey candidate-to-approved promotion for SLICE-P01; GitHub issue #24; C01 1.8.0 / K00 0.15.0"
+    "record": "persistence/physical-slices/identity-tokens/registration.json",
+    "issue": "#40",
+    "basis": "Owner-approved SLICE-P03 relationship registration; GitHub issue #40; K00 0.16.0"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "39e1b40218cde2f6be2ce94aec8cc3f6e2fcd677",
-    "purpose": "pre-SLICE-P01 relationship promotion baseline"
+    "commit": "ee9dd542e18106c39c8c7fb1987d8c9d4780e44a",
+    "purpose": "pre-SLICE-P03 relationship registration baseline"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -33,11 +33,11 @@
 
 Canonical machine-readable source format: JSON.
 
-K00 version: `0.15.0`.
+K00 version: `0.16.0`.
 
 Active domain ownership authority: `domains/ownership-map.json`.
 
-Current relationship authority: 19 relationships are registered in K00 — 11 `approved` and 8 `candidate`; 10 blocked relationship proposals remain outside K00.
+Current relationship authority: 23 relationships are registered in K00 — 15 `approved` and 8 `candidate`; 9 historical discovery-blocked relationship proposals remain outside K00.
 
 Registry entries remain `candidate` unless explicitly promoted through SEM-30 owner approval; approved entries are implementation authority only within their still-applicable contract constraints.
 

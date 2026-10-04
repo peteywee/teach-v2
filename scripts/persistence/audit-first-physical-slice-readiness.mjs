@@ -17,7 +17,7 @@ const dt=load('kernel/decision-tables.json');
 const r=load('persistence/physical-slices/readiness.json');
 const implementation=load('persistence/physical-slices/transaction-control/implementation.json');
 
-if (m?.version!=='0.15.0') errors.push('whole-stack audit: K00 must be 0.15.0');
+if (m?.version!=='0.16.0') errors.push('whole-stack audit: K00 must be 0.16.0');
 const checks=[
  ['commands-approved',(commands?.entries||[]).filter(x=>x.status==='approved').length,23],
  ['events-candidate',(events?.entries||[]).filter(x=>x.status==='candidate').length,10],
@@ -26,16 +26,16 @@ const checks=[
  ['states-candidate',(states?.entries||[]).filter(x=>x.status==='candidate').length,2],
  ['machines-approved',(machines?.entries||[]).filter(x=>x.status==='approved').length,7],
  ['machines-candidate',(machines?.entries||[]).filter(x=>x.status==='candidate').length,1],
- ['relationships-approved',(rel?.entries||[]).filter(x=>x.status==='approved').length,11],
+ ['relationships-approved',(rel?.entries||[]).filter(x=>x.status==='approved').length,15],
  ['relationships-candidate',(rel?.entries||[]).filter(x=>x.status==='candidate').length,8],
  ['invariants-candidate',(inv?.entries||[]).filter(x=>x.status==='candidate').length,22],
  ['decision-tables-candidate',(dt?.entries||[]).filter(x=>x.status==='candidate').length,8],
 ];
 for(const [name,a,e] of checks) if(a!==e) errors.push(`whole-stack audit: ${name} expected ${e}, found ${a}`);
-if (r?.version!=='1.0.0' || r?.current_admitted_slice_count!==2 || !r?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P01') || !r?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P02')) errors.push('whole-stack audit: expected P01 and P02 admitted at readiness 1.0.0');
+if (r?.version!=='1.1.0' || r?.current_admitted_slice_count!==2 || !r?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P01') || !r?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P02')) errors.push('whole-stack audit: expected P01 and P02 admitted at readiness 1.0.0');
 if (r?.candidate_slices?.find(x=>x.id==='SLICE-P01')?.current_state!=='IMPLEMENTED') errors.push('whole-stack audit: SLICE-P01 must be IMPLEMENTED');
 const p02=r?.candidate_slices?.find(x=>x.id==='SLICE-P02');
-if (!p02 || p02.current_state!=='ADMITTED' || (p02.blockers_removed_by_owner_decisions||[]).length!==3 || (p02.blockers||[]).length!==0) errors.push('whole-stack audit: P02 must be admitted but not yet implemented');
+if (!p02 || p02.current_state!=='ADMITTED' || (p02.blockers_removed_by_owner_decisions||[]).length!==3 || (p02.blockers||[]).length!==0 || r?.current_physical_slice_admissions?.find(x=>x.id==='SLICE-P02')?.implementation_state!=='IMPLEMENTED') errors.push('whole-stack audit: P02 admission and IMPLEMENTED evidence must be preserved');
 if (implementation?.version!=='1.0.0' || implementation?.status!=='recorded' || implementation?.verification?.migration_determinism!=='PROVEN') errors.push('whole-stack audit: verified implementation evidence missing');
 if (r?.implementation_guard?.tables_generated!==3 || r?.implementation_guard?.migrations_generated!==2 || r?.implementation_guard?.repositories_generated!==3) errors.push('whole-stack audit: implemented artifact counts must be 3/2/3');
 
@@ -45,7 +45,7 @@ if(errors.length){
  process.exit(1);
 }
 console.log('POST-CLOSURE WHOLE-STACK AUDIT PASS');
-console.log('PROVEN: K00 0.15.0 exact promotion counts');
+console.log('PROVEN: K00 0.16.0 exact promotion counts');
 console.log('PROVEN: SLICE-P01 physical schema admitted and implementation verified');
 console.log('PROVEN: SLICE-P02 physical schema admitted');
 console.log('PENDING: SLICE-P02 implementation evidence');
