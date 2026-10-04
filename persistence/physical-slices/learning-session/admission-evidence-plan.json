@@ -1,9 +1,9 @@
 {
   "plan_id": "TEACH-SLICE-P05-ADMISSION-EVIDENCE-PLAN",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "recorded",
-  "issue": "#46",
-  "baseline_commit": "4d52bf0",
+  "issue": "#47",
+  "baseline_commit": "626512771b1a66751428d7bd0b5ac5fe6ddb613b",
   "slice": "SLICE-P05",
   "owning_module": "Learning",
   "records": [
@@ -13,17 +13,19 @@
   "required_evidence": [
     "empty-database migration replay is deterministic",
     "P04-to-P05 upgrade replay is deterministic",
-    "LearningSession belongs to exactly one Identity via approved IdentityHasLearningSession (one-to-many)",
-    "LearningSession references Assignment via approved LearningSessionUsesAssignment (many-to-one, nullable)",
+    "LearningSession belongs to exactly one Identity under C32 LRN-1 and approved IdentityHasLearningSession (one-to-many)",
+    "LearningSessionUsesAssignment is approved many-to-one, but physical Assignment-reference nullability/requiredness is UNKNOWN until issue #47 is owner-resolved; no column nullability may be encoded before that decision",
     "LearningSessionStatus is ACTIVE or COMPLETED (approved state set)",
     "ACTIVE to COMPLETED is the only allowed transition (OQ-LRN-1 resolved)",
-    "protected reads/writes predicated by authoritative IdentityId",
+    "protected reads/writes are predicated by authoritative IdentityId",
+    "Learning source module boundary exists under src/modules/learning before implementation authorization",
     "foreign modules cannot directly write Learning-owned LearningSession persistence"
   ],
   "constraints": [
-    "no Learning module code yet \u2014 admission only, implementation is separate batch",
+    "P05 remains BLOCKED until issue #47 resolves LearningSessionUsesAssignment physical nullability/requiredness and admission is rerun",
+    "no LearningSession physical table, migration, repository, adapter, or service while admission is BLOCKED",
     "no ProgressEvent persistence (separate slice)",
-    "no Assignment persistence (separate slice, audited in this batch)",
+    "no Assignment persistence (separate slice)",
     "no shared or production migration execution"
   ]
 }
