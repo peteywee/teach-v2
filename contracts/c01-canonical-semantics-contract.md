@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-C01",
   "class": "contract",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -11,10 +11,10 @@
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.6.0",
+    "approved_version": "1.7.0",
     "approved_on": "2026-10-04",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner explicitly approved C01 1.6.0 through event-admission approval token; GitHub issue #8"
+    "basis": "Owner explicitly approved C01 1.7.0 canonical event inventory update (IdentityDeactivated, IdentityReactivated, MembershipRevoked now defined in owning contracts) by direct owner direction on 2026-10-04"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,7 +28,7 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C01@1.5.0"],
+  "supersedes": ["TEACH-CON-C01@1.6.0"],
   "superseded_by": null,
   "depends_on": [
     "contracts/"
@@ -43,14 +43,14 @@
 | Contract ID        | C01                                                                                                                                                             |
 | Group              | C01 Canonical Semantics (Semantic Kernel, K00)                                                                                                                  |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.6.0                                                                                                                                                           |
+| Version            | 1.7.0                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-04 — C01 1.6.0 event-admission approval; see `APPROVAL-RECORD.md` and GitHub issue #8 |
+| Approved by        | Patrick Craven (owner), 2026-10-04 — C01 1.7.0 canonical event inventory update by direct owner direction |
 | Requirement prefix | `SEM`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New. Also referred to as K00, the semantic kernel.                                                                                                              |
-| Supersedes         | C01 1.5.0 |
+| Supersedes         | C01 1.6.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
 | Last updated       | 2026-10-04                                                                                                                                                      |
@@ -101,7 +101,7 @@ The consolidated decisions name the following as initial candidates. The decisio
 | Value objects    | OrganizationId, IdentityId, LocationId, CapabilityId, ContentPackId, ContentVersion, LearningSessionId, EmailAddress, IdempotencyKey, RequestId, Timestamp                                                                                                                                                                                                                    |
 | Canonical values | IdentityStatus: ACTIVE, INACTIVE, DELETED · ApplicationSessionStatus: ACTIVE, EXPIRED, REVOKED · EvidenceState: PROVEN, BLOCKED, UNKNOWN, CONTRADICTORY · Membership lifecycle (example): ACTIVE, INACTIVE, REVOKED                                                                                                                                                           |
 | Commands         | AuthenticateIdentity, CreateApplicationSession, RevokeApplicationSession, CreateMembership, DeactivateMembership, AssignContent, StartLearningSession, RecordProgressEvent, CompleteLearningSession, IssueCertification, RevokeCertification, OffboardIdentity                                                                                                                |
-| Events           | ApplicationSessionCreated, ApplicationSessionRevoked, MembershipCreated, MembershipDeactivated, ContentAssigned, LearningSessionStarted, ProgressRecorded, LearningSessionCompleted, CertificationIssued, CertificationRevoked, IdentityOffboarded                                                                                                                            |
+| Events           | ApplicationSessionCreated, ApplicationSessionRevoked, IdentityDeactivated, IdentityReactivated, MembershipCreated, MembershipDeactivated, MembershipRevoked, ContentAssigned, LearningSessionStarted, ProgressRecorded, LearningSessionCompleted, CertificationIssued, CertificationRevoked, IdentityOffboarded                                                                                                                            |
 | Domains          | Identity (Identity, Credential, ApplicationSession, Invitation, SetupToken) · Organization/Authority (Organization, Location, Membership, Capability, Entitlement) · Content (ContentPack, ContentBlock, ContentVersion) · Learning (Assignment, LearningSession, ProgressEvent, LearnerState) · Certification (Certification) · Audit/Lifecycle (AuditEvent, LifecycleEvent) |
 
 Registering an event is not a commitment to event sourcing; events are canonical facts where event semantics are useful.
@@ -194,7 +194,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
 | Blocking open questions      | 0 open                   | OQ-SEM-1/2/3/5 are resolved. OQ-SEM-4 remains open and non-blocking. |
-| Owner approval               | declared                 | C01 1.6.0 approved by Patrick Craven on 2026-10-04 through explicit event-admission approval; GitHub issue #8. |
+| Owner approval               | declared                 | C01 1.7.0 approved by Patrick Craven on 2026-10-04 by direct owner direction (canonical event inventory update). |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
@@ -214,3 +214,4 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.4.0   | 2026-10-03 | Established canonical invariant registration and explicit Governance-domain ownership for cross-cutting governance invariants. GitHub issue #5. | Patrick Craven (owner approval) |
 | 1.5.0   | 2026-10-03 | Established canonical deterministic decision-table registration and fail-closed default semantics. GitHub issue #6. | Patrick Craven (owner approval) |
 | 1.6.0   | 2026-10-04 | Defined event-admission semantics: audit records and state transitions do not implicitly create canonical domain events. GitHub issue #8. | Patrick Craven (owner approval) |
+| 1.7.0   | 2026-10-04 | Added `IdentityDeactivated`, `IdentityReactivated`, `MembershipRevoked` to the canonical event inventory; all three are now explicitly defined in their owning contracts (C11 IDN-22/IDN-23, C13 TEN-19) per SEM-35. | Patrick Craven (owner direction) |
