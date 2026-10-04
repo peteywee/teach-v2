@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.11.3",
+  "version": "0.12.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-04
-- Contract package version: `0.11.3`
+- Contract package version: `0.12.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -65,7 +65,7 @@ procedure (SYS-21).
 | C15      | OQ-PRIV-3  | Which record classes are exempt from deletion, and on what legal or audit basis?                                                                                                                                              |          |      |       |
 | C21      | OQ-MIG-1   | What backup mechanism and cadence are approved for production?                                                                                                                                                                |          |      |       |
 | C21      | OQ-MIG-2   | Where is restore proof performed (disposable environment, staging), and how recent must it be?                                                                                                                                |          |      |       |
-| C22      | OQ-TXN-1   | Are idempotency keys client-supplied (header), server-derived, or both, and how long are they retained?                                                                                                                       |          |      |       |
+| C22      | OQ-TXN-1   | Are idempotency keys client-supplied (header), server-derived, or both, and how long are they retained? | Both by operation: each retryable operation explicitly declares client-supplied or server-derived key policy with no implicit fallback; retention is operation-declared and not shorter than the complete retry/reconciliation horizon | 2026-10-04 | Patrick Craven |
 | C23      | OQ-AUD-1   | How long are audit records retained, and is retention per tenant configurable?                                                                                                                                                |          |      |       |
 | C32      | OQ-LRN-1   | What is the learning-session state machine (states and allowed transitions)?                                                                                                                                                  | ACTIVE -> COMPLETED; COMPLETED terminal; progress recording allowed only while ACTIVE | 2026-10-03 | Patrick Craven |
 | C33      | OQ-MGR-1   | Is manager visibility limited to direct reports, the whole location, or configurable?                                                                                                                                         |          |      |       |
@@ -367,3 +367,14 @@ The three already-approved Membership commands retain only the explicit, enumera
 | TEACH-K00 | 0.13.0 | 0.14.0 | Promote exactly 8 identifiers, 3 state sets, 3 state machines, and 10 relationships listed in `persistence/semantic-closure/proposed.json`; preserve all explicit exclusions; zero command/event/entity status changes | 2026-10-04 | Patrick Craven | #17 |
 
 Physical persistence remains governed by the Persistence Model admission gate. This approval does not authorize a table, migration, repository, transport route, or any excluded semantic promotion.
+
+
+## Part 20 — TransactionControl first-slice owner decisions
+
+| Artifact / Contract | From | To | Decision | Date | Owner | GitHub issue |
+| --- | --- | --- | --- | --- | --- | --- |
+| C22 Transaction, Idempotency & Reconciliation | 1.1.0 | 1.2.0 | Resolve OQ-TXN-1: each retryable operation explicitly declares client-supplied or server-derived idempotency-key policy with no implicit fallback; retention is operation-declared and not shorter than the complete retry/reconciliation horizon | 2026-10-04 | Patrick Craven | #20 |
+| TEACH-TRANSACTIONCONTROL-FIRST-SLICE-DECISION-PACKET | proposed 0.1.0 | recorded 1.0.0 | Approve `BOTH_BY_OPERATION`, `OPERATION_DECLARED_MINIMUM`, `OPTIONAL_ONE`, and `INHERIT_ORIGINATING_OPERATION_SCOPE` exactly as proposed | 2026-10-04 | Patrick Craven | #20 |
+| TEACH-FIRST-PHYSICAL-SLICE-READINESS | 0.2.0 | 0.3.0 | Close the four owner-decision blockers for SLICE-P01; retain relationship-registration and fresh schema-admission gates; admit zero physical slices | 2026-10-04 | Patrick Craven | #20 |
+
+`ReconciliationRecordUsesIdempotencyKey` remains unregistered in K00 after this approval. Its approved decision is many-to-zero-or-one (`OPTIONAL_ONE`), but relationship registration is a separate gate. ReconciliationRecord scope inherits the authoritative scope of the originating operation and cannot broaden it. This approval creates no table, migration, repository, transport route, or runtime implementation.

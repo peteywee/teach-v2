@@ -1,0 +1,28 @@
+name: TransactionControl First Slice Decision Registration
+
+on:
+  pull_request:
+    paths:
+      - 'contracts/c22-transaction-idempotency-reconciliation-contract.md'
+      - 'contracts/APPROVAL-RECORD.md'
+      - 'persistence/physical-slices/readiness.json'
+      - 'persistence/physical-slices/transaction-control/**'
+      - 'scripts/persistence/validate-transactioncontrol-first-slice-decision-registration.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'contracts/c22-transaction-idempotency-reconciliation-contract.md'
+      - 'contracts/APPROVAL-RECORD.md'
+      - 'persistence/physical-slices/readiness.json'
+      - 'persistence/physical-slices/transaction-control/**'
+      - 'scripts/persistence/validate-transactioncontrol-first-slice-decision-registration.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/persistence/validate-transactioncontrol-first-slice-decision-registration.mjs

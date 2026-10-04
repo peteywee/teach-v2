@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.11.3",
+  "version": "0.12.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -34,7 +34,7 @@
 
 # Teach v2 Contracts
 
-- Package version: `0.11.3`
+- Package version: `0.12.0`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
@@ -111,7 +111,7 @@ the requirement that keeps the feature off applies.
 | C14 | [Authorization & Capabilities](c14-authorization-capabilities-contract.md)                          | 1.1.0   | `AUTHZ` | 21           | 13               | 2              | 1                       | `active` |
 | C15 | [Data Isolation & Privacy](c15-data-isolation-privacy-contract.md)                                  | 1.0.3   | `PRIV`  | 17           | 10               | 6              | 3                       | `active` |
 | C21 | [Database & Migration](c21-database-migration-contract.md)                                          | 1.0.3   | `MIG`   | 14           | 9                | 5              | 2                       | `active` |
-| C22 | [Transaction, Idempotency & Reconciliation](c22-transaction-idempotency-reconciliation-contract.md) | 1.1.0   | `TXN`   | 16           | 12               | 2              | 1                       | `active` |
+| C22 | [Transaction, Idempotency & Reconciliation](c22-transaction-idempotency-reconciliation-contract.md) | 1.2.0   | `TXN`   | 16           | 12               | 1              | 0                       | `active` |
 | C23 | [Audit & Lifecycle Events](c23-audit-lifecycle-events-contract.md)                                  | 1.0.3   | `AUD`   | 10           | 8                | 3              | 1                       | `active` |
 | C31 | [Content & Teaching Engine](c31-content-teaching-engine-contract.md)                                | 1.0.3   | `CNT`   | 12           | 9                | 3              | 0                       | `active` |
 | C32 | [Learning Sessions & Progress](c32-learning-sessions-progress-contract.md)                          | 1.1.0   | `LRN`   | 13           | 11               | 2              | 0                       | `active` |
@@ -125,7 +125,7 @@ the requirement that keeps the feature off applies.
 | C61 | [Analytics](c61-analytics-contract.md)                                                              | 1.0.3   | `ANL`   | 8            | 7                | 2              | 0                       | `active` |
 | C62 | [PWA / Offline](c62-pwa-offline-contract.md)                                                        | 1.0.3   | `PWA`   | 9            | 4                | 1              | 0                       | `active` |
 | C63 | [Self-Service Billing](c63-billing-contract.md)                                                     | 1.1.0   | `BIL`   | 14           | 12               | 3              | 0                       | `active` |
-|     | **Total**                                                                                           |         |         | **386**      | **262**          | **77**         | **25**                  |          |
+|     | **Total**                                                                                           |         |         | **386**      | **262**          | **76**         | **24**                  |          |
 
 ## K00 semantic-kernel bootstrap
 
@@ -277,8 +277,7 @@ bump, Change Log entry, acceptance cases updated before code, and evidence regen
 - It does not claim any part of Teach currently conforms to these contracts. Implementation
   conformance is `Not yet verified` in every contract.
 - It does not claim any acceptance case exists as a test yet.
-- It does not decide any open question. Every undecided value reads `Not yet verified` and points
-  to an `OQ-` entry.
+- It does not claim all open questions are decided. Values not explicitly resolved by an owner-approved revision remain `Not yet verified` and point to an `OQ-` entry.
 - Owner approval is not independent review. The contracts were drafted and checked by Claude against
   the contract-authoring checklist only.
 
@@ -300,3 +299,8 @@ Package `0.11.2` synchronizes the central contract index and approval ledger wit
 ## Persistence semantic closure registration
 
 Package `0.11.3` records the owner-approved K00 `0.14.0` persistence semantic closure under GitHub issue #17. C01 remains `1.8.0`; no C-series behavioral requirement changes in this registration-only stage.
+
+
+## TransactionControl first-slice owner decisions
+
+Package `0.12.0` records the owner-approved TransactionControl first-slice decisions under GitHub issue #20. C22 advances to `1.2.0` and resolves OQ-TXN-1 with explicit per-operation idempotency-key source policy and operation-declared retention minimums. The approved `ReconciliationRecordUsesIdempotencyKey` cardinality and ReconciliationRecord scope decisions are recorded for the next registration gate; K00 remains `0.14.0`, the relationship is not registered in this package, and physical schema admission remains blocked.

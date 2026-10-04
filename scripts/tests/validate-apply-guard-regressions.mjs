@@ -154,11 +154,11 @@ test(
     replaceOrThrow(
       dir,
       'scripts/governance/validate-strict-nine-ratification.mjs',
+      "!index.includes('\"version\": \"0.12.0\"') || !index.includes('- Package version: `0.12.0`')",
       "!index.includes('\"version\": \"0.11.3\"') || !index.includes('- Package version: `0.11.3`')",
-      "!index.includes('\"version\": \"0.11.2\"') || !index.includes('- Package version: `0.11.2`')",
     );
   },
-  { pattern: /stale contract package version pin '0\.11\.2'/ },
+  { pattern: /stale contract package version pin '0\.11\.3'/ },
 );
 
 test(

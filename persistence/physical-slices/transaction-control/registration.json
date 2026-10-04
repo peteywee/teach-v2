@@ -1,0 +1,66 @@
+{
+  "registration_id": "TEACH-TRANSACTIONCONTROL-FIRST-SLICE-DECISION-REGISTRATION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "approved_on": "2026-10-04",
+  "issue": "#20",
+  "baseline_commit": "cfce4d28d8b2230b7a230d225c911557f2b34673",
+  "target_slice": "SLICE-P01",
+  "target_record": "ReconciliationRecord",
+  "authority": {
+    "kernel_version": "0.14.0",
+    "persistence_authority_version": "1.0.0",
+    "c22_version": "1.2.0",
+    "c15_version": "1.0.3"
+  },
+  "decisions": [
+    {
+      "id": "TXN-SLICE-D01",
+      "selection": "BOTH_BY_OPERATION",
+      "effect": "Each retryable operation explicitly declares client-supplied or server-derived idempotency-key policy; no implicit fallback."
+    },
+    {
+      "id": "TXN-SLICE-D02",
+      "selection": "OPERATION_DECLARED_MINIMUM",
+      "effect": "Each retryable operation declares idempotency-evidence retention not shorter than its complete retry/reconciliation horizon; no universal duration is invented."
+    },
+    {
+      "id": "TXN-SLICE-D03",
+      "selection": "OPTIONAL_ONE",
+      "effect": "ReconciliationRecord -> IdempotencyKey is many-to-zero-or-one; absence is allowed only for a non-retryable effect or a documented non-key safe strategy; a linked key grants no retry permission."
+    },
+    {
+      "id": "TXN-SLICE-D04",
+      "selection": "INHERIT_ORIGINATING_OPERATION_SCOPE",
+      "effect": "ReconciliationRecord inherits authoritative scope from the originating operation and cannot broaden it."
+    }
+  ],
+  "relationship_decision": {
+    "id": "ReconciliationRecordUsesIdempotencyKey",
+    "cardinality": "many-to-zero-or-one",
+    "decision_state": "OWNER_APPROVED",
+    "kernel_registration": "BLOCKED until separate relationship registration gate",
+    "does_not_grant": [
+      "retry_permission",
+      "authorization",
+      "provider_success"
+    ]
+  },
+  "readiness_effect": {
+    "owner_decisions_closed": 4,
+    "relationship_registration_required": true,
+    "schema_admission_rerun_required": true,
+    "physical_schema_authorized": false
+  },
+  "explicit_non_effects": [
+    "no K00 relationship registration",
+    "no physical slice admission",
+    "no table or column definition",
+    "no PostgreSQL type or index",
+    "no migration",
+    "no repository implementation",
+    "no transport route",
+    "no runtime behavior"
+  ]
+}
