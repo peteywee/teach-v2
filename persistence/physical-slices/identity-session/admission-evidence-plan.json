@@ -1,0 +1,44 @@
+{
+  "plan_id": "TEACH-SLICE-P02-MIGRATION-ACCEPTANCE-EVIDENCE-PLAN",
+  "version": "1.0.0",
+  "status": "recorded",
+  "recorded_on": "2026-10-04",
+  "issue": "#34",
+  "baseline_commit": "cf425980c5f411144a37e1c1d3e259254d3e6e9b",
+  "target_slice": "SLICE-P02",
+  "owning_module": "Identity",
+  "target_records": [
+    "Identity",
+    "ApplicationSession"
+  ],
+  "purpose": "Define implementation evidence for P02 without itself authorizing physical schema.",
+  "migration_evidence": [
+    "Add only the admitted Identity and ApplicationSession physical records in the next immutable ordered migration after SLICE-P01.",
+    "Applying the complete migration history to two independently empty PostgreSQL databases must produce identical schema fingerprints.",
+    "Applying pending P02 migration(s) to the current P01 schema must succeed and reconcile to the same migration-defined schema.",
+    "Already-applied migrations remain immutable; direct db push/manual shared or production DDL remains forbidden.",
+    "No shared or production migration execution is authorized by this plan."
+  ],
+  "acceptance_evidence": [
+    "Credential generation/verifier tests prove exactly 32 random bytes, unpadded base64url presentation, v1 domain-separated SHA-256 verifier, and no raw credential persistence.",
+    "Stored verifier material presented as a credential must not authenticate.",
+    "Session expiry tests prove 12-hour absolute and 30-minute idle deadlines fail closed even if an EXPIRED-state persistence write fails.",
+    "ApplicationSession must belong to exactly one Identity through non-null approved IdentityHasApplicationSession shape.",
+    "ApplicationSession data-access methods must require authoritative IdentityId for protected reads/writes.",
+    "Identity and ApplicationSession schema/repositories must not copy organization, location, role, or capability authority fields.",
+    "Identity DELETED ingress and deletion/retention automation remain absent while C15 OQ-PRIV-1/2/3 are unresolved.",
+    "Session runtime cookie/CSRF/rotation behavior remains out of scope while OQ-SES-1/2/5/6 are unresolved.",
+    "Static repository-boundary proof rejects foreign-module writes to Identity-owned persistence.",
+    "P02 implementation PR must attach migration replay, typecheck, domain tests, PostgreSQL integration tests, admission-boundary validation, and review closure."
+  ],
+  "deferred_until_admission": [
+    "table names",
+    "column names",
+    "PostgreSQL types",
+    "constraint names",
+    "index names",
+    "migration filename",
+    "repository method names"
+  ],
+  "physical_schema_authorized": false
+}

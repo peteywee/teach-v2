@@ -37,9 +37,11 @@ if (
   errors.push('SLICE-P01 implementation: active ADMIT authority missing');
 }
 if (
-  readiness?.version !== '0.8.0' ||
-  readiness?.current_admitted_slice_count !== 1 ||
-  readiness?.current_physical_slice_admissions?.[0]?.id !== 'SLICE-P01' ||
+  readiness?.version !== '0.9.0' ||
+  readiness?.current_admitted_slice_count !== 2 ||
+  !readiness?.current_physical_slice_admissions?.some(
+    (entry) => entry.id === 'SLICE-P01',
+  ) ||
   readiness?.candidate_slices?.find((entry) => entry.id === 'SLICE-P01')?.current_state !== 'IMPLEMENTED'
 ) {
   errors.push('SLICE-P01 implementation: readiness does not record exactly SLICE-P01 as implemented');

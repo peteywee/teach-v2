@@ -49,9 +49,9 @@ if(!approvals.includes('## Part 23 — SLICE-P02 owner decisions') || !approvals
 if(!index.includes('"version": "0.14.0"') || !index.includes('- Package version: `0.14.0`') || !index.includes('| C12 |')) errors.push('SLICE-P02 decisions: package/index synchronization missing');
 
 const p02=readiness?.candidate_slices?.find(x=>x.id==='SLICE-P02');
-if(readiness?.version!=='0.8.0' || readiness?.narrowed_next_lane?.preferred_slice!=='SLICE-P02' || readiness?.narrowed_next_lane?.physical_implementation_authorized!==false || readiness?.evidence_states?.slice_p02_owner_decisions!=='PROVEN' || readiness?.evidence_states?.slice_p02_schema_admission!=='BLOCKED') errors.push('SLICE-P02 decisions: readiness 0.8.0 fail-closed state mismatch');
-if(!p02 || p02.current_state!=='BLOCKED' || (p02.blockers_removed_by_owner_decisions||[]).length!==3 || (p02.blockers||[]).length!==2) errors.push('SLICE-P02 decisions: P02 blocker transition mismatch');
-if(readiness?.current_admitted_slice_count!==1 || readiness?.current_physical_slice_admissions?.[0]?.id!=='SLICE-P01') errors.push('SLICE-P02 decisions: decision stage must not admit P02');
+if(readiness?.version!=='0.9.0' || readiness?.narrowed_next_lane?.preferred_slice!=='SLICE-P02' || readiness?.narrowed_next_lane?.physical_implementation_authorized!==true || readiness?.evidence_states?.slice_p02_owner_decisions!=='PROVEN' || readiness?.evidence_states?.slice_p02_schema_admission!=='PROVEN') errors.push('SLICE-P02 decisions: owner decisions must remain proven through readiness 0.9.0 admission');
+if(!p02 || p02.current_state!=='ADMITTED' || (p02.blockers_removed_by_owner_decisions||[]).length!==3 || (p02.blockers||[]).length!==0) errors.push('SLICE-P02 decisions: P02 admission must preserve the three owner decisions');
+if(readiness?.current_admitted_slice_count!==2 || !readiness?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P02')) errors.push('SLICE-P02 decisions: subsequent P02 admission evidence missing');
 
 if(errors.length){
  console.error(`SLICE-P02 OWNER DECISIONS FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
@@ -62,4 +62,4 @@ console.log('SLICE-P02 OWNER DECISIONS PASS');
 console.log('C12: 1.1.0');
 console.log('P02 decisions: 3 PROVEN');
 console.log('K00: 0.15.0 unchanged');
-console.log('P02 physical schema: BLOCKED pending evidence plan + admission rerun');
+console.log('P02 physical schema: ADMITTED; implementation pending');
