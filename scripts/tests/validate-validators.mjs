@@ -437,6 +437,42 @@ test(
 );
 
 test(
+  "slice-p02 decisions: cross-Identity authorization flag false fails",
+  "scripts/persistence/validate-slice-p02-owner-decisions.mjs",
+  (dir) => {
+    const d = readJson(
+      dir,
+      "persistence/physical-slices/identity-session/registration.json",
+    );
+    d.ownership_scope_decision.cross_identity_admin_access_requires_external_authorization = false;
+    writeJson(
+      dir,
+      "persistence/physical-slices/identity-session/registration.json",
+      d,
+    );
+  },
+  { pattern: /ownership\/scope decision drifted/ }
+);
+
+test(
+  "slice-p02 decisions: missing cross-Identity authorization flag fails",
+  "scripts/persistence/validate-slice-p02-owner-decisions.mjs",
+  (dir) => {
+    const d = readJson(
+      dir,
+      "persistence/physical-slices/identity-session/registration.json",
+    );
+    delete d.ownership_scope_decision.cross_identity_admin_access_requires_external_authorization;
+    writeJson(
+      dir,
+      "persistence/physical-slices/identity-session/registration.json",
+      d,
+    );
+  },
+  { pattern: /ownership\/scope decision drifted/ }
+);
+
+test(
   "slice-p02 decisions: clean repo passes (positive control)",
   "scripts/persistence/validate-slice-p02-owner-decisions.mjs",
   () => {},

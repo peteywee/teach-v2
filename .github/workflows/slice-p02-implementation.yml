@@ -1,0 +1,95 @@
+name: SLICE-P02 Implementation
+
+on:
+  pull_request:
+    paths:
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'drizzle.p02.config.ts'
+      - 'src/modules/identity/**'
+      - 'tests/integration/identity/**'
+      - 'scripts/db/**'
+      - 'scripts/persistence/validate-slice-p02-*.mjs'
+      - 'scripts/tests/validate-validators.mjs'
+      - 'persistence/physical-slices/identity-session/**'
+      - '.github/workflows/slice-p02-implementation.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'drizzle.config.ts'
+      - 'drizzle/**'
+      - 'src/modules/identity/**'
+      - 'tests/integration/identity/**'
+      - 'scripts/db/**'
+      - 'scripts/persistence/validate-slice-p02-*.mjs'
+      - 'scripts/tests/validate-validators.mjs'
+      - 'persistence/physical-slices/identity-session/**'
+      - '.github/workflows/slice-p02-implementation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: teach_v2
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d teach_v2"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/teach_v2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Enable pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@12.8.1 --activate
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Generate P02 migration from P01 snapshot
+        run: |
+          rm -rf /tmp/drizzle-p02
+          cp -R drizzle /tmp/drizzle-p02
+          pnpm exec drizzle-kit generate --config=drizzle.p02.config.ts --out=/tmp/drizzle-p02 --name=slice_p02
+          migration="$(ls /tmp/drizzle-p02/0001_*.sql)"
+          printf '\n--> statement-breakpoint\n' >> "$migration"
+          cat scripts/db/slice-p02-guards.sql >> "$migration"
+          echo '---BEGIN-P02-MIGRATION---'
+          cat "$migration"
+          echo '---END-P02-MIGRATION---'
+          echo '---BEGIN-P02-JOURNAL---'
+          cat /tmp/drizzle-p02/meta/_journal.json
+          echo '---END-P02-JOURNAL---'
+          echo '---BEGIN-P02-SNAPSHOT---'
+          cat /tmp/drizzle-p02/meta/0001_snapshot.json
+          echo '---END-P02-SNAPSHOT---'
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: P02 domain and service tests
+        run: pnpm test:p02
+      - name: Validate P02 decision and implementation boundaries
+        run: |
+          node scripts/persistence/validate-slice-p02-owner-decisions.mjs
+          node scripts/persistence/validate-slice-p02-schema-admission.mjs
+          pnpm validate:slice-p02
+      - name: Verify empty and P01-to-P02 migration replay
+        run: MIGRATIONS_FOLDER=/tmp/drizzle-p02 pnpm db:verify-p02-replay
+      - name: Apply generated history to isolated CI database
+        run: MIGRATIONS_FOLDER=/tmp/drizzle-p02 pnpm db:migrate
+      - name: PostgreSQL integration tests
+        run: pnpm test:p02:integration
