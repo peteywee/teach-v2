@@ -74,5 +74,7 @@ jobs:
         run: pnpm validate:slice-p01
       - name: Verify empty-database migration replay
         run: pnpm db:verify-replay
+      - name: Apply migration to isolated CI test database
+        run: pnpm db:migrate
       - name: PostgreSQL integration tests
         run: pnpm test:integration
