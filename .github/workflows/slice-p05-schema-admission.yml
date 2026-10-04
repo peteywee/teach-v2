@@ -1,3 +1,4 @@
+# Exact-head gate: owner decision -> schema admission -> readiness -> whole-stack audit
 name: SLICE-P05 Schema Admission
 
 on:
@@ -14,6 +15,7 @@ on:
       - 'architecture/authority.json'
       - 'contracts/c32-learning-sessions-progress-contract.md'
       - 'src/modules/learning/**'
+      - 'scripts/persistence/validate-slice-p05-owner-decisions.mjs'
       - 'scripts/persistence/validate-slice-p05-schema-admission.mjs'
       - 'scripts/persistence/validate-first-physical-slice-readiness.mjs'
       - 'scripts/persistence/audit-first-physical-slice-readiness.mjs'
@@ -33,6 +35,7 @@ on:
       - 'architecture/authority.json'
       - 'contracts/c32-learning-sessions-progress-contract.md'
       - 'src/modules/learning/**'
+      - 'scripts/persistence/validate-slice-p05-owner-decisions.mjs'
       - 'scripts/persistence/validate-slice-p05-schema-admission.mjs'
       - 'scripts/persistence/validate-first-physical-slice-readiness.mjs'
       - 'scripts/persistence/audit-first-physical-slice-readiness.mjs'
@@ -47,6 +50,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: Validate SLICE-P05 owner decision
+        run: node scripts/persistence/validate-slice-p05-owner-decisions.mjs
       - name: Validate SLICE-P05 schema admission
         run: node scripts/persistence/validate-slice-p05-schema-admission.mjs
       - name: Validate physical-slice readiness

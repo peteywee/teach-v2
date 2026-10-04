@@ -13,8 +13,8 @@ This directory establishes the source boundary for the **Learning** runtime doma
 
 ## Current state
 
-Foundation only. **SLICE-P05 physical persistence is BLOCKED.**
+Foundation established. **SLICE-P05 physical persistence is ADMITTED; implementation is authorized but not yet present in this admission change.**
 
-No LearningSession table, migration, repository, persistence adapter, service, transport interface, or production database change is authorized by this file.
+This file does not itself implement a LearningSession table, migration, repository, persistence adapter, service, transport interface, or production database change.
 
-The runtime layers will be introduced only after the P05 schema-admission gate is rerun from authoritative semantics and returns `ADMIT`.
+Runtime/persistence implementation may begin only from the separately recorded P05 admission authority; shared or production migration execution remains blocked.

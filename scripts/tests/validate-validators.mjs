@@ -632,67 +632,115 @@ test(
 );
 
 // ---------------------------------------------------------------------------
+// SLICE-P05 owner decision registration
+// ---------------------------------------------------------------------------
+
+test(
+  "slice-p05 decisions: optional Assignment reference fails",
+  "scripts/persistence/validate-slice-p05-owner-decisions.mjs",
+  (dir) => {
+    const d = readJson(
+      dir,
+      "persistence/physical-slices/learning-session/registration.json",
+    );
+    d.decisions[0].selection = "OPTIONAL_ONE_ASSIGNMENT";
+    d.decisions[0].physical_reference_required = false;
+    d.decisions[0].physical_reference_nullable = true;
+    writeJson(
+      dir,
+      "persistence/physical-slices/learning-session/registration.json",
+      d,
+    );
+  },
+  { pattern: /P05-D01 must be REQUIRED_ONE_ASSIGNMENT/ }
+);
+
+test(
+  "slice-p05 decisions: registration cannot authorize implementation directly",
+  "scripts/persistence/validate-slice-p05-owner-decisions.mjs",
+  (dir) => {
+    const d = readJson(
+      dir,
+      "persistence/physical-slices/learning-session/registration.json",
+    );
+    d.effects.implementation_authorized = true;
+    writeJson(
+      dir,
+      "persistence/physical-slices/learning-session/registration.json",
+      d,
+    );
+  },
+  { pattern: /registration must authorize admission rerun only/ }
+);
+
+test(
+  "slice-p05 decisions: clean repo passes (positive control)",
+  "scripts/persistence/validate-slice-p05-owner-decisions.mjs",
+  () => {},
+  { pass: true }
+);
+
+// ---------------------------------------------------------------------------
 // SLICE-P05 schema admission
 // ---------------------------------------------------------------------------
 
 test(
-  "slice-p05 admission: premature ADMIT fails",
+  "slice-p05 admission: blocked decision fails",
   "scripts/persistence/validate-slice-p05-schema-admission.mjs",
   (dir) => {
     const d = readJson(
       dir,
       "persistence/physical-slices/learning-session/admission.json",
     );
-    d.decision = "ADMIT";
+    d.decision = "BLOCK";
     writeJson(
       dir,
       "persistence/physical-slices/learning-session/admission.json",
       d,
     );
   },
-  { pattern: /must remain BLOCKED/ }
+  { pattern: /ADMIT authorization mismatch/ }
 );
 
 test(
-  "slice-p05 admission: invented nullable Assignment reference fails",
+  "slice-p05 admission: nullable Assignment reference fails",
   "scripts/persistence/validate-slice-p05-schema-admission.mjs",
   (dir) => {
     const d = readJson(
       dir,
-      "persistence/physical-slices/learning-session/admission-evidence-plan.json",
+      "persistence/physical-slices/learning-session/registration.json",
     );
-    const i = d.required_evidence.findIndex((x) => x.includes("LearningSessionUsesAssignment"));
-    d.required_evidence[i] =
-      "LearningSession references Assignment via approved LearningSessionUsesAssignment (many-to-one, nullable)";
+    d.decisions[0].physical_reference_required = false;
+    d.decisions[0].physical_reference_nullable = true;
     writeJson(
       dir,
-      "persistence/physical-slices/learning-session/admission-evidence-plan.json",
+      "persistence/physical-slices/learning-session/registration.json",
       d,
     );
   },
-  { pattern: /must preserve UNKNOWN Assignment-reference nullability\/requiredness/ }
+  { pattern: /exact REQUIRED_ONE_ASSIGNMENT owner decision required/ }
 );
 
 test(
-  "slice-p05 admission: implementation authorization while blocked fails",
+  "slice-p05 admission: UNKNOWN criterion cannot pass",
   "scripts/persistence/validate-slice-p05-schema-admission.mjs",
   (dir) => {
     const d = readJson(
       dir,
       "persistence/physical-slices/learning-session/admission.json",
     );
-    d.implementation_authorized = true;
+    d.criteria[3].state = "UNKNOWN";
     writeJson(
       dir,
       "persistence/physical-slices/learning-session/admission.json",
       d,
     );
   },
-  { pattern: /implementation and migration authoring unauthorized/ }
+  { pattern: /all eight Persistence Model criteria must be PROVEN/ }
 );
 
 test(
-  "slice-p05 admission: clean blocked repo passes (positive control)",
+  "slice-p05 admission: clean admitted repo passes (positive control)",
   "scripts/persistence/validate-slice-p05-schema-admission.mjs",
   () => {},
   { pass: true }
