@@ -1,14 +1,19 @@
 #!/usr/bin/env node
 // Guards for owner-approval / discovery package APPLY runs.
 //
-// Two failure modes have recurred across packages 0.3.0, 0.4.0 and 0.5.0:
+// Recurrent APPLY failures this guard must catch before mutation:
 //
-//   1. A version bump in one artifact (Domain Ownership Map, K00 manifest) left
-//      another validator still pinning the old version, so APPLY died in its
-//      own VALIDATE stage.
-//   2. A patched file was missing from the APPLY stage list, so validators read
-//      it from the working tree and passed while the committed tree was broken
-//      — green locally, red in CI.
+//   1. A live version bump leaves another validator pinning an old K00,
+//      Domain Ownership Map, or contract-package version.
+//   2. A semantic promotion changes a live kernel approved/candidate count but
+//      an audit/validator still pins the previous count.
+//   3. A patched file is missing from the APPLY stage list, so validators read
+//      it from the working tree and pass while the committed tree is broken.
+//
+// Live-pin detection is structural: it first binds each local variable to the
+// artifact it loads, so aliases such as `m`, `x`, or `j` are equivalent to
+// descriptive names. Historical/frozen records are intentionally ignored unless
+// they load one of the live authority artifacts named below.
 //
 // Usage, from the repository root:
 //
@@ -16,7 +21,7 @@
 //   node scripts/packaging/validate-apply-guards.mjs staging   # after `git add`, before `git commit`
 //   node scripts/packaging/validate-apply-guards.mjs           # both
 //
-// `pins` derives expected versions from the live artifacts, so it needs no
+// `pins` derives expected versions/counts from live artifacts, so it needs no
 // arguments and catches a pin that is stale in either direction.
 
 import { readFileSync, readdirSync, statSync } from 'node:fs';
@@ -41,38 +46,83 @@ const walk = (dir) => {
   return out;
 };
 
+const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const lineOf = (text, index) => text.slice(0, index).split('\n').length;
+
 // ---------------------------------------------------------------- guard: pins
 function checkPins() {
   const ownership = load('domains/ownership-map.json');
   const manifest = load('kernel/manifest.json');
   const mapVersion = ownership?.version;
   const kernelVersion = manifest?.version;
+
+  let contractIndex = '';
+  try { contractIndex = readFileSync(join(ROOT, 'contracts/README.md'), 'utf8'); }
+  catch (e) { errors.push(`contracts/README.md: ${e.message}`); }
+  const contractVersion = contractIndex.match(/^- Package version: `(\d+\.\d+\.\d+)`/m)?.[1];
+
   if (!mapVersion) errors.push('domains/ownership-map.json: no version to compare pins against');
   if (!kernelVersion) errors.push('kernel/manifest.json: no version to compare pins against');
-  if (!mapVersion || !kernelVersion) return;
-
-  // Each rule: a pattern whose first capture group is a pinned version, and the
-  // live version that capture must equal.
-  //
-  // Only pins that gate on a LIVE artifact belong here. A registration record's
-  // `kernel_version` / `ownership_map_version` is frozen at the revision it was
-  // recorded against and must not be rewritten, and version numbers inside
-  // error-message prose are historical wording — neither can break an APPLY run,
-  // and flagging them would make this guard fail permanently.
-  const rules = [
-    [/(?:ownership\??\.|map\.)version\s*!==\s*'(\d+\.\d+\.\d+)'/g, mapVersion, 'ownership map version pin'],
-    [/manifest\??\.version\s*!==\s*'(\d+\.\d+\.\d+)'/g, kernelVersion, 'K00 manifest version pin'],
-  ];
+  if (!contractVersion) errors.push('contracts/README.md: no package version to compare pins against');
+  if (!mapVersion || !kernelVersion || !contractVersion) return;
 
   for (const file of walk('scripts')) {
     if (file === 'scripts/packaging/validate-apply-guards.mjs') continue;
-    const text = readFileSync(join(ROOT, file), 'utf8');
-    const lines = text.split('\n');
-    for (const [pattern, expected, label] of rules) {
-      for (const [i, line] of lines.entries()) {
-        for (const m of line.matchAll(pattern)) {
-          if (m[1] !== expected) {
-            errors.push(`${file}:${i + 1}: stale ${label} '${m[1]}' — live value is '${expected}'`);
+    const source = readFileSync(join(ROOT, file), 'utf8');
+    const bindings = new Map();
+
+    for (const match of source.matchAll(/\bconst\s+([A-Za-z_$][\w$]*)\s*=\s*load\(\s*['"]([^'"]+)['"]\s*\)/g)) {
+      bindings.set(match[1], { kind: 'json', path: match[2] });
+    }
+    for (const match of source.matchAll(/\bconst\s+([A-Za-z_$][\w$]*)\s*=\s*text\(\s*['"]([^'"]+)['"]\s*\)/g)) {
+      bindings.set(match[1], { kind: 'text', path: match[2] });
+    }
+
+    for (const [alias, binding] of bindings) {
+      const a = escapeRegex(alias);
+
+      if (binding.path === 'kernel/manifest.json' || binding.path === 'domains/ownership-map.json') {
+        const expected = binding.path === 'kernel/manifest.json' ? kernelVersion : mapVersion;
+        const label = binding.path === 'kernel/manifest.json' ? 'K00 manifest version pin' : 'ownership map version pin';
+        const pattern = new RegExp(`\\b${a}\\s*(?:\\?\\.|\\.)\\s*version\\s*!==?\\s*['"](\\d+\\.\\d+\\.\\d+)['"]`, 'g');
+        for (const match of source.matchAll(pattern)) {
+          if (match[1] !== expected) {
+            errors.push(`${file}:${lineOf(source, match.index)}: stale ${label} '${match[1]}' — live value is '${expected}'`);
+          }
+        }
+      }
+
+      if (binding.kind === 'json' && /^kernel\/[a-z0-9-]+\.json$/i.test(binding.path)) {
+        const artifact = load(binding.path);
+        if (Array.isArray(artifact?.entries)) {
+          const countExpr = `\\(\\s*${a}(?:\\?\\.|\\.)entries\\s*\\|\\|\\s*\\[\\]\\s*\\)\\.filter\\(\\s*[A-Za-z_$][\\w$]*\\s*=>\\s*[A-Za-z_$][\\w$]*(?:\\?\\.|\\.)status\\s*===\\s*['"]([^'"]+)['"]\\s*\\)\\.length`;
+          const patterns = [
+            new RegExp(`${countExpr}\\s*!==?\\s*(\\d+)`, 'g'),
+            new RegExp(`${countExpr}\\s*,\\s*(\\d+)\\s*\\]`, 'g'),
+          ];
+          for (const pattern of patterns) {
+            for (const match of source.matchAll(pattern)) {
+              const status = match[1];
+              const pinned = Number(match[2]);
+              const actual = artifact.entries.filter((entry) => entry?.status === status).length;
+              if (pinned !== actual) {
+                errors.push(`${file}:${lineOf(source, match.index)}: stale live kernel ${status} count pin '${pinned}' for ${binding.path} — live value is '${actual}'`);
+              }
+            }
+          }
+        }
+      }
+
+      if (binding.kind === 'text' && ['contracts/README.md', 'contracts/APPROVAL-RECORD.md'].includes(binding.path)) {
+        const lines = source.split('\n');
+        const includesCall = new RegExp(`\\b${a}\\.includes\\(`);
+        for (const [i, line] of lines.entries()) {
+          if (!includesCall.test(line)) continue;
+          if (!/(?:["']version["']\s*:|(?:Contract )?Package version:)/.test(line)) continue;
+          for (const pinned of line.match(/\d+\.\d+\.\d+/g) ?? []) {
+            if (pinned !== contractVersion) {
+              errors.push(`${file}:${i + 1}: stale contract package version pin '${pinned}' — live value is '${contractVersion}'`);
+            }
           }
         }
       }
@@ -118,6 +168,8 @@ console.log(`Apply guards PASS (${mode})`);
 if (mode !== 'staging') {
   console.log(`Domain Ownership Map pins agree: ${load('domains/ownership-map.json')?.version}`);
   console.log(`K00 manifest pins agree: ${load('kernel/manifest.json')?.version}`);
+  const contractIndex = readFileSync(join(ROOT, 'contracts/README.md'), 'utf8');
+  console.log(`Contract package pins agree: ${contractIndex.match(/^- Package version: `(\d+\.\d+\.\d+)`/m)?.[1]}`);
 }
 if (mode !== 'pins') {
   console.log('Stage list covers every modified path');

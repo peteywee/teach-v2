@@ -4,15 +4,19 @@ on:
   pull_request:
     paths:
       - 'scripts/**'
-      - 'kernel/manifest.json'
+      - 'kernel/*.json'
       - 'domains/ownership-map.json'
+      - 'contracts/README.md'
+      - 'contracts/APPROVAL-RECORD.md'
       - '.github/workflows/validate-apply-pins.yml'
   push:
     branches: [main]
     paths:
       - 'scripts/**'
-      - 'kernel/manifest.json'
+      - 'kernel/*.json'
       - 'domains/ownership-map.json'
+     - 'contracts/README.md'
+      - 'contracts/APPROVAL-RECORD.md'
       - '.github/workflows/validate-apply-pins.yml'
 
 permissions:
@@ -24,5 +28,5 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Validate live version pins
+      - name: Validate live version and count pins
         run: node scripts/packaging/validate-apply-guards.mjs pins

@@ -17,3 +17,5 @@ jobs:
           node-version: '20'
       - name: Run validator negative-path tests
         run: node scripts/tests/validate-validators.mjs
+      - name: Run APPLY guard regression tests
+        run: node scripts/tests/validate-apply-guard-regressions.mjs
