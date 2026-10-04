@@ -8,8 +8,8 @@
   "scope": "Domain model and Application ports/service; no physical persistence implementation",
   "owner_decision": "P05-D01 REQUIRED_ONE_ASSIGNMENT",
   "verification": {
-    "domain_and_application_tests": "PENDING",
-    "exact_head_ci": "PENDING",
+    "domain_and_application_tests": "PROVEN (34/34 on repository-pinned Node 20 CI)",
+    "exact_head_ci": "PROVEN_AT_VERIFICATION_SOURCE (11/11 checks)",
     "physical_persistence": "PENDING",
     "authoritative_assignment_authorization_adapter": "UNKNOWN",
     "atomic_authorization_and_insert": "PENDING",
@@ -31,5 +31,6 @@
     "authoritative Assignment authorization adapter with atomic authorization-plus-insert proof before runtime activation",
     "concurrent completion proves one successful ACTIVE-to-COMPLETED mutation"
   ],
-  "shared_or_production_migration_execution_authorized": false
+  "shared_or_production_migration_execution_authorized": false,
+  "verification_source_commit": "933708354f1f01dfa7221dbfcfe3c58af2066def"
 }
