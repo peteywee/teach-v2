@@ -52,7 +52,7 @@ if(!index.includes('| C12 |')) errors.push('SLICE-P02 decisions: C12 index row m
 const p02=readiness?.candidate_slices?.find(x=>x.id==='SLICE-P02');
 if(readiness?.version!=='1.2.0' || readiness?.evidence_states?.slice_p02_owner_decisions!=='PROVEN' || readiness?.evidence_states?.slice_p02_schema_admission!=='PROVEN' || readiness?.evidence_states?.slice_p02_implementation!=='PROVEN') errors.push('SLICE-P02 decisions: owner/admission/implementation proof must remain preserved through readiness 1.2.0');
 if(!p02 || p02.current_state!=='ADMITTED' || (p02.blockers_removed_by_owner_decisions||[]).length!==3 || (p02.blockers||[]).length!==0 || readiness?.current_physical_slice_admissions?.find(x=>x.id==='SLICE-P02')?.implementation_state!=='IMPLEMENTED') errors.push('SLICE-P02 decisions: P02 admission and IMPLEMENTED evidence must preserve the three owner decisions');
-if(readiness?.current_admitted_slice_count!==3 || !readiness?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P02')) errors.push('SLICE-P02 decisions: subsequent P02 admission evidence missing');
+if(readiness?.current_admitted_slice_count!==4 || !readiness?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P02')) errors.push('SLICE-P02 decisions: subsequent P02 admission evidence missing');
 
 if(errors.length){
  console.error(`SLICE-P02 OWNER DECISIONS FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
