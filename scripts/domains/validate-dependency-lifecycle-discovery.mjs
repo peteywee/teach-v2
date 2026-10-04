@@ -19,7 +19,7 @@ const commands=load('kernel/commands.json');
 const states=load('kernel/states.json');
 const machines=load('kernel/state-machines.json');
 
-if (manifest?.version!=='0.12.0') errors.push(`dependency lifecycle: expected K00 0.12.0, found ${manifest?.version}`);
+if (manifest?.version!=='0.13.0') errors.push(`dependency lifecycle: expected K00 0.13.0, found ${manifest?.version}`);
 if (ownership?.version!=='1.6.0' || ownership?.status!=='active') errors.push('dependency lifecycle: expected active Domain Ownership Map 1.6.0');
 
 if (proposal) {

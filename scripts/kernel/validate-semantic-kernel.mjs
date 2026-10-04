@@ -15,7 +15,7 @@ const names = ['entities.json','values.json','identifiers.json','relationships.j
 const docs = Object.fromEntries(names.map(n => [n, load(n)]));
 if (manifest) {
   if (manifest.kernel_id !== 'TEACH-K00') errors.push('manifest.json: kernel_id must be TEACH-K00');
-  if (manifest.version !== '0.12.0') errors.push('manifest.json: version must be 0.12.0');
+  if (manifest.version !== '0.13.0') errors.push('manifest.json: version must be 0.13.0');
   if (manifest.canonical_format !== 'json') errors.push('manifest.json: canonical_format must be json');
   for (const n of ['entities','values','identifiers','relationships','states','state_machines','invariants','decision_tables','capabilities','commands','events','evidence','schema']) {
     if (!manifest.files?.[n]) errors.push(`manifest.json: missing file mapping ${n}`);
@@ -328,12 +328,49 @@ if (manifest?.rules?.event_registration_requires_explicit_contract_semantics !==
 
 
 
+
+// SEM-36 (C01 1.8.0): an approved entry MUST NOT depend on a candidate entry.
+// Explicit owner-directed holds are enumerated by ID; anything else fails.
+const MEMBERSHIP_HOLD_EXCEPTION = new Set([
+  // Owner-directed hold 2026-10-04: Membership stays candidate pending OQ-TEN-1.
+  // CreateMembership, DeactivateMembership, RevokeMembership are approved with
+  // this documented exception. See Membership.promotion_hold in entities.json.
+  'CreateMembership', 'DeactivateMembership', 'RevokeMembership',
+]);
+const statusById = new Map();
+for (const [file, key] of [['entities.json','entity'],['commands.json','command'],['events.json','event'],['identifiers.json','identifier'],['values.json','value']]) {
+  for (const e of docs[file]?.entries || []) statusById.set(e.id, e.status);
+}
+function depRefs(e) {
+  const refs = [];
+  if (Array.isArray(e.requires)) refs.push(...e.requires);
+  if (e.from) refs.push(e.from);
+  if (Array.isArray(e.to)) refs.push(...e.to); else if (e.to) refs.push(e.to);
+  if (e.entity) refs.push(e.entity);
+  if (e.emitted_by) refs.push(e.emitted_by);
+  if (Array.isArray(e.scope)) refs.push(...e.scope);
+  if (e.identifier) refs.push(e.identifier);
+  return refs;
+}
+for (const [file, entries] of [['commands.json', docs['commands.json']?.entries || []], ['events.json', docs['events.json']?.entries || []]]) {
+  for (const e of entries) {
+    if (e.status !== 'approved') continue;
+    for (const ref of depRefs(e)) {
+      const st = statusById.get(ref);
+      if (st === undefined) continue; // unknown concept: promotion gate's concern, not SEM-36's
+      if (st !== 'approved' && !MEMBERSHIP_HOLD_EXCEPTION.has(e.id)) {
+        errors.push(`${file}: ${e.id} approved but depends on candidate ${ref} (SEM-36)`);
+      }
+    }
+  }
+}
+
 if (errors.length) {
   console.error(`Semantic kernel FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
-console.log('Semantic kernel PASS: TEACH-K00 0.12.0');
+console.log('Semantic kernel PASS: TEACH-K00 0.13.0');
 console.log(`Entities: ${(docs['entities.json']?.entries || []).length}`);
 console.log(`Identifiers: ${(docs['identifiers.json']?.entries || []).length}`);
 console.log(`Relationships: ${(docs['relationships.json']?.entries || []).length}`);

@@ -4,24 +4,28 @@
     {
       "id": "ApplicationSession",
       "kind": "entity",
-      "status": "candidate",
+      "status": "approved",
       "definition": "Revocable authenticated application session.",
       "identifier": "ApplicationSessionId",
       "owning_domain": "Identity",
       "relationships": [],
       "authority_implications": [],
-      "lifecycle": null
+      "lifecycle": null,
+      "approved_on": "2026-10-04",
+      "approval_basis": "Owner-directed strict-nine promotion; dependency-closure fix for approved commands."
     },
     {
       "id": "Assignment",
       "kind": "entity",
-      "status": "candidate",
+      "status": "approved",
       "definition": "Authoritative association making content available to a learner or governed scope.",
       "identifier": "AssignmentId",
       "owning_domain": "Learning",
       "relationships": [],
       "authority_implications": [],
-      "lifecycle": null
+      "lifecycle": null,
+      "approved_on": "2026-10-04",
+      "approval_basis": "Owner-directed strict-nine promotion; dependency-closure fix for approved commands."
     },
     {
       "id": "AuditEvent",
@@ -37,13 +41,15 @@
     {
       "id": "Certification",
       "kind": "entity",
-      "status": "candidate",
+      "status": "approved",
       "definition": "Evidence-backed credential issued under approved criteria.",
       "identifier": "CertificationId",
       "owning_domain": "Certification",
       "relationships": [],
       "authority_implications": [],
-      "lifecycle": null
+      "lifecycle": null,
+      "approved_on": "2026-10-04",
+      "approval_basis": "Owner-directed strict-nine promotion; dependency-closure fix for approved commands."
     },
     {
       "id": "ContentBlock",
@@ -59,24 +65,28 @@
     {
       "id": "ContentPack",
       "kind": "entity",
-      "status": "candidate",
+      "status": "approved",
       "definition": "Versioned collection of teaching content.",
       "identifier": "ContentPackId",
       "owning_domain": "Content",
       "relationships": [],
       "authority_implications": [],
-      "lifecycle": null
+      "lifecycle": null,
+      "approved_on": "2026-10-04",
+      "approval_basis": "Owner-directed strict-nine promotion; dependency-closure fix for approved commands."
     },
     {
       "id": "Credential",
       "kind": "entity",
-      "status": "candidate",
+      "status": "approved",
       "definition": "Authentication proof or secret associated with an Identity.",
       "identifier": "CredentialId",
       "owning_domain": "Identity",
       "relationships": [],
       "authority_implications": [],
-      "lifecycle": null
+      "lifecycle": null,
+      "approved_on": "2026-10-04",
+      "approval_basis": "Owner-directed strict-nine promotion; dependency-closure fix for approved commands."
     },
     {
       "id": "Entitlement",
@@ -92,13 +102,15 @@
     {
       "id": "Identity",
       "kind": "entity",
-      "status": "candidate",
+      "status": "approved",
       "definition": "Persistent application representation of a person.",
       "identifier": "IdentityId",
       "owning_domain": "Identity",
       "relationships": [],
       "authority_implications": [],
-      "lifecycle": null
+      "lifecycle": null,
+      "approved_on": "2026-10-04",
+      "approval_basis": "Owner-directed strict-nine promotion; dependency-closure fix for approved commands."
     },
     {
       "id": "Invitation",
@@ -139,13 +151,15 @@
     {
       "id": "LearningSession",
       "kind": "entity",
-      "status": "candidate",
+      "status": "approved",
       "definition": "Bounded learner attempt against assigned content.",
       "identifier": "LearningSessionId",
       "owning_domain": "Learning",
       "relationships": [],
       "authority_implications": [],
-      "lifecycle": null
+      "lifecycle": null,
+      "approved_on": "2026-10-04",
+      "approval_basis": "Owner-directed strict-nine promotion; dependency-closure fix for approved commands."
     },
     {
       "id": "LifecycleEvent",
@@ -178,18 +192,28 @@
       "owning_domain": "Organization",
       "relationships": [],
       "authority_implications": [],
-      "lifecycle": null
+      "lifecycle": null,
+      "promotion_hold": {
+        "decision": "HELD as candidate by owner direction 2026-10-04 (strict-nine promotion).",
+        "reason": "OQ-TEN-1 (C13) directly affects the Membership entity's shape: the owner has not yet decided between the Gate A single-location compatibility membership model and a normalized multi-organization, multi-location model (see TEN-15). Promoting Membership now would risk approving an entity whose structure may change.",
+        "blocked_by": "OQ-TEN-1",
+        "contract": "C13",
+        "consequence": "CreateMembership, DeactivateMembership, and RevokeMembership remain approved but carry a documented exception to SEM-36 (approved-depends-on-approved) until Membership is promoted. See the validator's MEMBERSHIP_HOLD_EXCEPTION list.",
+        "release_condition": "Owner resolves OQ-TEN-1; Membership then re-evaluated against the promotion gate."
+      }
     },
     {
       "id": "Organization",
       "kind": "entity",
-      "status": "candidate",
+      "status": "approved",
       "definition": "Primary customer, tenant, and security boundary.",
       "identifier": "OrganizationId",
       "owning_domain": "Organization",
       "relationships": [],
       "authority_implications": [],
-      "lifecycle": null
+      "lifecycle": null,
+      "approved_on": "2026-10-04",
+      "approval_basis": "Owner-directed strict-nine promotion; dependency-closure fix for approved commands."
     },
     {
       "id": "PasswordResetToken",
@@ -221,13 +245,15 @@
     {
       "id": "ProgressEvent",
       "kind": "entity",
-      "status": "candidate",
+      "status": "approved",
       "definition": "Persisted canonical learner action or progress fact.",
       "identifier": "ProgressEventId",
       "owning_domain": "Learning",
       "relationships": [],
       "authority_implications": [],
-      "lifecycle": null
+      "lifecycle": null,
+      "approved_on": "2026-10-04",
+      "approval_basis": "Owner-directed strict-nine promotion; dependency-closure fix for approved commands."
     },
     {
       "id": "ReconciliationRecord",

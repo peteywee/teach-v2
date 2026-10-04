@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-K00",
   "class": "semantic-kernel",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -33,7 +33,7 @@
 
 Canonical machine-readable source format: JSON.
 
-K00 version: `0.12.0`.
+K00 version: `0.13.0`.
 
 Active domain ownership authority: `domains/ownership-map.json`.
 
