@@ -2,34 +2,10 @@ name: SLICE-P01 Implementation
 
 on:
   pull_request:
-    paths:
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
-      - '.github/workflows/slice-p01-implementation.yml'
-      - 'tsconfig.json'
-      - 'drizzle.config.ts'
-      - 'drizzle/**'
-      - 'src/modules/transaction-control/**'
-      - 'tests/integration/transaction-control/**'
-      - 'scripts/db/**'
-      - 'scripts/persistence/validate-slice-p01-implementation-boundary.mjs'
-      - 'persistence/physical-slices/transaction-control/implementation.json'
+    branches: [main]
   push:
     branches: [main]
-    paths:
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
-      - '.github/workflows/slice-p01-implementation.yml'
-      - 'tsconfig.json'
-      - 'drizzle.config.ts'
-      - 'drizzle/**'
-      - 'src/modules/transaction-control/**'
-      - 'tests/integration/transaction-control/**'
-      - 'scripts/db/**'
-      - 'scripts/persistence/validate-slice-p01-implementation-boundary.mjs'
-      - 'persistence/physical-slices/transaction-control/implementation.json'
+  workflow_dispatch:
 
 permissions:
   contents: read

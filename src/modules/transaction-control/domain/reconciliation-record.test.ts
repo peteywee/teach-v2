@@ -41,3 +41,21 @@ test('resolution accepts only canonical confirmed outcomes', () => {
   assert.throws(() => assertConfirmedOutcome('AMBIGUOUS'), /may resolve only/);
   assert.throws(() => assertConfirmedOutcome('PARTIAL_FAILURE'), /may resolve only/);
 });
+
+for (const outcome of ['CONFIRMED_SUCCESS', 'CONFIRMED_NO_EFFECT', 'UNKNOWN', undefined]) {
+  test(`open input rejects runtime outcome ${String(outcome)}`, () => {
+    assert.throws(() => validateOpenReconciliationRecordInput({ ...base, outcome } as unknown as OpenReconciliationRecordInput), /new reconciliation outcome/);
+  });
+}
+for (const field of ['retryHorizonEndsAt', 'retentionUntil'] as const) {
+  test(`invalid ${field} cannot bypass retention comparisons`, () => {
+    const idempotency = { key: 'idem', source: 'CLIENT_SUPPLIED' as const, payloadHash: 'hash', retryHorizonEndsAt: new Date(), retentionUntil: new Date() };
+    idempotency[field] = new Date(NaN);
+    assert.throws(() => validateOpenReconciliationRecordInput({ ...base, idempotency }), /finite dates/);
+  });
+}
+test('key source has no implicit runtime fallback', () => {
+  assert.throws(() => validateOpenReconciliationRecordInput({ ...base, idempotency: {
+    key: 'idem', source: 'AUTO', payloadHash: 'hash', retryHorizonEndsAt: new Date(), retentionUntil: new Date(),
+  } } as unknown as OpenReconciliationRecordInput), /explicitly/);
+});

@@ -1,0 +1,54 @@
+{
+  "version": "0.1.0",
+  "status": "recorded",
+  "baseline_commit": "1c6065e1af5292abc2c8fdc75ee5a6e611b820bd",
+  "slice": "SLICE-P08",
+  "physical_schema_authorized": false,
+  "implementation_authorized": false,
+  "migration_authoring_authorized": false,
+  "shared_or_production_migration_execution_authorized": false,
+  "admission_id": "TEACH-SLICE-P08-SCHEMA-ADMISSION",
+  "decision": "BLOCK",
+  "criteria": [
+    {
+      "criterion": "entity is approved",
+      "state": "PROVEN",
+      "evidence": "kernel/entities.json: approved Learning-owned ProgressEvent"
+    },
+    {
+      "criterion": "canonical identifier is approved",
+      "state": "PROVEN",
+      "evidence": "kernel/identifiers.json: canonical approved ProgressEventId"
+    },
+    {
+      "criterion": "every persisted lifecycle state set is approved",
+      "state": "UNKNOWN",
+      "evidence": "No event payload or append-only physical shape has been selected; absence of a lifecycle field must be an explicit admission decision"
+    },
+    {
+      "criterion": "every relationship/cardinality encoded by the schema is approved",
+      "state": "UNKNOWN",
+      "evidence": "Registered logical relationships exist; requiredness, version binding and physical encoding remain undecided"
+    },
+    {
+      "criterion": "no blocking open question changes the record shape",
+      "state": "UNKNOWN",
+      "evidence": "Canonical event payload, ContentVersion binding, replay key source/retention and completion-versus-append ordering remain undecided"
+    },
+    {
+      "criterion": "owning module is explicit",
+      "state": "PROVEN",
+      "evidence": "Domain Ownership Map and Architecture name Learning"
+    },
+    {
+      "criterion": "protected ownership/scope fields are derivable from approved semantics",
+      "state": "UNKNOWN",
+      "evidence": "Authoritative learner-only scope and session Assignment authorization are unproven; manager progress writes must be denied"
+    },
+    {
+      "criterion": "migration and acceptance evidence plan exists",
+      "state": "PROVEN",
+      "evidence": "progress-event/admission-evidence-plan.json@0.1.0 defines replay and negative/runtime evidence"
+    }
+  ]
+}

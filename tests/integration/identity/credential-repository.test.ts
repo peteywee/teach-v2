@@ -211,3 +211,24 @@ test('P04 Credential table copies no tenant or authorization authority columns',
   assert.equal(rows.rows.some((row) => forbidden.test(row.column_name)), false);
   assert.equal(rows.rows.some((row) => row.column_name === 'identity_id'), true);
 });
+
+test('16 concurrent Credential revocations mutate once and preserve original scope', async () => {
+  const now = new Date('2026-10-04T12:00:00Z'); await identities.create({id:'owner',now});
+  await credentials.create({id:'revoke-race',identityId:'owner',credentialType:'PASSWORD',passwordHash:'$hash',now});
+  const results = await Promise.all(Array.from({length:16},()=>credentials.revoke({id:'revoke-race',identityId:'owner',now})));
+  assert.equal(results.filter(Boolean).length,1);
+  assert.equal((await credentials.findById({id:'revoke-race',identityId:'owner'}))?.revokedAt?.getTime(),now.getTime());
+});
+test('failed Credential revocation commits no partial status or timestamp change', async () => {
+  const now = new Date('2026-10-04T12:00:00Z'); await identities.create({id:'owner',now});
+  await credentials.create({id:'revoke-fault',identityId:'owner',credentialType:'PASSWORD',passwordHash:'$hash',now});
+  await pool.query(`create function test_fail_credential_revoke() returns trigger language plpgsql as $$ begin raise exception 'forced credential failure'; end $$`);
+  await pool.query('create trigger test_fail_credential_revoke before update on identity_credentials for each row execute function test_fail_credential_revoke()');
+  try {
+    await assert.rejects(credentials.revoke({id:'revoke-fault',identityId:'owner',now:new Date(now.getTime()+1000)}),/forced credential failure/);
+    const row = await credentials.findById({id:'revoke-fault',identityId:'owner'});
+    assert.equal(row?.revokedAt,null); assert.equal(row?.updatedAt.getTime(),now.getTime());
+  } finally {
+    await pool.query('drop trigger if exists test_fail_credential_revoke on identity_credentials'); await pool.query('drop function if exists test_fail_credential_revoke()');
+  }
+});

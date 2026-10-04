@@ -1,8 +1,8 @@
 {
   "queue_id": "TEACH-SLICE-QUEUE-POST-P05",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "updated_on": "2026-10-04",
-  "baseline_commit": "045114b9a211bce4485f7d3acd88230e8448e1e9",
+  "baseline_commit": "1c6065e1af5292abc2c8fdc75ee5a6e611b820bd",
   "readiness_kind": "dependency discovery and admission gates; not implementation authorization",
   "slices": [
     {
@@ -43,12 +43,12 @@
         "CertificationReferencesContentPack",
         "CertificationObservedByIdentity"
       ],
-      "evidence_plan": null,
+      "evidence_plan": "persistence/physical-slices/certification/admission-evidence-plan.json",
       "blockers": [
-        "no schema admission/evidence plan",
         "unselected lifecycle and approved criteria shape",
         "missing authoritative content/version and protected authorization dependencies"
-      ]
+      ],
+      "admission_record": "persistence/physical-slices/certification/admission.json"
     },
     {
       "slice": "P08",
@@ -62,12 +62,12 @@
       "relationships": [
         "ProgressEventBelongsToLearningSession"
       ],
-      "evidence_plan": null,
+      "evidence_plan": "persistence/physical-slices/progress-event/admission-evidence-plan.json",
       "blockers": [
-        "no schema admission/evidence plan",
         "candidate ContentVersion and unselected canonical event payload/version binding",
         "unproven Learning runtime authorization and retry/no-duplicate policy"
-      ]
+      ],
+      "admission_record": "persistence/physical-slices/progress-event/admission.json"
     }
   ]
 }

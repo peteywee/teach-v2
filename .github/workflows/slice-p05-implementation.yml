@@ -2,32 +2,10 @@ name: SLICE-P05 Physical Implementation
 
 on:
   pull_request:
-    paths:
-      - 'src/modules/learning/**'
-      - 'src/bootstrap/learning-persistence-schema.ts'
-      - 'tests/integration/learning/**'
-      - 'drizzle/**'
-      - 'drizzle.config.ts'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'scripts/db/**'
-      - 'scripts/persistence/**'
-      - 'persistence/physical-slices/**'
-      - '.github/workflows/slice-p05-implementation.yml'
+    branches: [main]
   push:
     branches: [main]
-    paths:
-      - 'src/modules/learning/**'
-      - 'src/bootstrap/learning-persistence-schema.ts'
-      - 'tests/integration/learning/**'
-      - 'drizzle/**'
-      - 'drizzle.config.ts'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'scripts/db/**'
-      - 'scripts/persistence/**'
-      - 'persistence/physical-slices/**'
-      - '.github/workflows/slice-p05-implementation.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read

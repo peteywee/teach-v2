@@ -75,6 +75,9 @@ export function validateOpenReconciliationRecordInput(
   requireNonBlank(input.id, 'id');
   requireNonBlank(input.operationName, 'operationName');
   requireNonBlank(input.providerName, 'providerName');
+  if (input.outcome !== 'AMBIGUOUS' && input.outcome !== 'PARTIAL_FAILURE') {
+    throw new RangeError('new reconciliation outcome must be AMBIGUOUS or PARTIAL_FAILURE');
+  }
 
   if (input.providerReference !== undefined) {
     requireNonBlank(input.providerReference, 'providerReference');
@@ -84,6 +87,14 @@ export function validateOpenReconciliationRecordInput(
 
   requireNonBlank(input.idempotency.key, 'idempotency.key');
   requireNonBlank(input.idempotency.payloadHash, 'idempotency.payloadHash');
+  if (!idempotencyKeySources.includes(input.idempotency.source)) {
+    throw new RangeError('idempotency source must be explicitly CLIENT_SUPPLIED or SERVER_DERIVED');
+  }
+  for (const date of [input.idempotency.retryHorizonEndsAt, input.idempotency.retentionUntil]) {
+    if (!(date instanceof Date) || !Number.isFinite(date.getTime())) {
+      throw new RangeError('idempotency horizon and retention must be finite dates');
+    }
+  }
 
   if (
     input.idempotency.retentionUntil.getTime() <

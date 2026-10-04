@@ -53,3 +53,17 @@ test('absolute and idle boundaries fail closed exactly at the approved limits', 
     { allowed: false, reason: 'ABSOLUTE_EXPIRED' },
   );
 });
+
+for (const field of ['issuedAt', 'absoluteExpiresAt', 'lastUsedAt', 'now'] as const) {
+  test(`invalid ${field} fails closed instead of bypassing expiry`, () => {
+    const at = new Date('2026-10-04T12:00:00Z');
+    const values = { identityActive: true, status: 'ACTIVE' as const, issuedAt: at, absoluteExpiresAt: new Date(at.getTime() + SESSION_ABSOLUTE_LIFETIME_MS), lastUsedAt: at, now: at };
+    values[field] = new Date(NaN);
+    assert.deepEqual(evaluateSessionAuthentication(values, values.now), { allowed: false, reason: 'INVALID_TIME' });
+  });
+}
+test('session and single-use verifiers are separated even for identical raw bytes', async () => {
+  const { deriveSingleUseVerifier } = await import('./single-use-secret.js');
+  const secret = Buffer.alloc(32, 1).toString('base64url');
+  assert.notDeepEqual(deriveSessionVerifier(secret), deriveSingleUseVerifier(secret));
+});

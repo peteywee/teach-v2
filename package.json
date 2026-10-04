@@ -9,11 +9,11 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test src/modules/transaction-control/domain/reconciliation-record.test.ts",
+    "test": "tsx --test src/modules/transaction-control/domain/reconciliation-record.test.ts src/modules/transaction-control/application/reconciliation-service.test.ts",
     "test:integration": "tsx --test tests/integration/transaction-control/reconciliation-record-repository.test.ts",
     "test:p02": "tsx --test src/modules/identity/domain/identity.test.ts src/modules/identity/domain/application-session.test.ts src/modules/identity/application/session-service.test.ts",
     "test:p02:integration": "tsx --test tests/integration/identity/identity-session-repository.test.ts",
-    "test:p03": "tsx --test src/modules/identity/domain/single-use-secret.test.ts",
+    "test:p03": "tsx --test src/modules/identity/domain/single-use-secret.test.ts src/modules/identity/application/identity-token-service.test.ts",
     "test:p03:integration": "tsx --test tests/integration/identity/identity-token-repository.test.ts",
     "db:migrate": "tsx scripts/db/migrate.ts",
     "db:verify-replay": "tsx scripts/db/verify-migration-replay.ts",

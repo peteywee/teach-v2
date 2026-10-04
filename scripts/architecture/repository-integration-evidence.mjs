@@ -1,5 +1,7 @@
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { resolve, join, dirname } from 'node:path';
+import { inspectFutureAdmission } from '../persistence/future-admission-evidence.mjs';
+import { inspectCommandCoverage } from './command-coverage-evidence.mjs';
 import { inspectAssignmentAdmission } from '../persistence/assignment-admission-evidence.mjs';
 
 export function inspectRepositoryIntegration(root) {
@@ -37,6 +39,19 @@ export function inspectRepositoryIntegration(root) {
       if(inputs && (inputs!==snapshots || !imports.includes('./input-snapshot.mjs'))) fail(`${path}: capture every mutable repository input before await`);
     }
     if(/\bpgTable\s*\(/.test(source) && /assignment|certification|progress.event/i.test(path)) fail(`${path}: future physical schema has no ADMIT authority`);
+    for(const match of source.matchAll(/\bpgTable\s*\(\s*['"]([^'"]+)['"]/g)) {
+      if(/assignment|certification|progress.?event/i.test(match[1])) fail(`${path}: future physical table has no ADMIT authority`);
+    }
+  }
+  for(const path of walk('drizzle')) {
+    if(path.endsWith('.sql')) {
+      for(const match of text(path).matchAll(/CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(?:"?public"?\.)?"?([a-z_][a-z0-9_]*)/gi)) {
+        if(/assignment|certification|progress.?event/i.test(match[1])) fail(`${path}: future migration table has no ADMIT authority`);
+      }
+    }
+    if(/_snapshot\.json$/.test(path)) for(const table of Object.keys(load(path)?.tables||{})) {
+      if(/assignment|certification|progress.?event/i.test(table)) fail(`${path}: future snapshot table has no ADMIT authority`);
+    }
   }
   const composition=text('src/bootstrap/learning-persistence-schema.ts');
   if(/Repository|\.insert\(|\.update\(|\.delete\(/.test(composition)) fail('build-time schema composition cannot activate runtime persistence');
@@ -44,7 +59,7 @@ export function inspectRepositoryIntegration(root) {
   const relationships=load('kernel/relationships.json');
   const ids=load('kernel/identifiers.json');
   const entities=load('kernel/entities.json');
-  if(queue?.version!=='1.1.0' || !Array.isArray(queue?.slices) || queue.slices.length!==3 ||
+  if(queue?.version!=='1.2.0' || !Array.isArray(queue?.slices) || queue.slices.length!==3 ||
      JSON.stringify(queue.slices.map(x=>x.slice))!==JSON.stringify(['P06','P07','P08'])) fail('exact future-slice gate inventory required');
   for(const item of queue?.slices||[]) {
     if(item.status!=='GATE_REQUIRED' || item.admission_decision!=='BLOCK' || item.implementation_authorized!==false || item.migration_authoring_authorized!==false ||
@@ -54,6 +69,7 @@ export function inspectRepositoryIntegration(root) {
     if(entity?.status!=='approved' || entity?.owning_domain!==item.domain || identifier?.status!=='approved' || identifier?.represents!==item.entity) fail(`${item.slice}: approved logical identity/ownership required`);
     const expected=(relationships?.entries||[]).filter(x=>x.status==='approved' && x.from===item.entity && x.owning_domain===item.domain).map(x=>x.id).sort();
     if(!Array.isArray(item.relationships) || JSON.stringify([...item.relationships].sort())!==JSON.stringify(expected)) fail(`${item.slice}: queue relationship set must match the live registry`);
+    if(item.evidence_plan===null) fail(`${item.slice}: evidence plan is required`);
     if(item.evidence_plan!==null && (typeof item.evidence_plan!=='string' || !existsSync(join(root,item.evidence_plan)))) fail(`${item.slice}: referenced evidence plan missing`);
   }
   // Every entry point that may mutate a database must guard before its Pool.
@@ -64,7 +80,11 @@ export function inspectRepositoryIntegration(root) {
     const pool=source.search(/new\s+(?:pg\.)?Pool\s*\(/);
     if(!source.includes('import { assertIsolatedDatabaseTarget }') || guard<0 || pool<0 || guard>pool) fail(`${path}: isolated target guard must run before any Pool`);
   }
-  for(const n of [1,2,3,4,5]) if(!text(`.github/workflows/slice-p0${n}-implementation.yml`).includes("TEACH_ISOLATED_DB: '1'")) fail(`P0${n}: isolated CI declaration required`);
-  errors.push(...inspectAssignmentAdmission(root));
+  for(const n of [1,2,3,4,5]) {
+    const workflow=text(`.github/workflows/slice-p0${n}-implementation.yml`);
+    if(!workflow.includes("TEACH_ISOLATED_DB: '1'")) fail(`P0${n}: isolated CI declaration required`);
+    if(/\bpaths(?:-ignore)?:/.test(workflow) || !/pull_request:\s*\n\s*branches: \[main\]/.test(workflow) || !/push:\s*\n\s*branches: \[main\]/.test(workflow)) fail(`P0${n}: physical proofs must run on every PR and main tree`);
+  }
+  errors.push(...inspectAssignmentAdmission(root), ...inspectFutureAdmission(root,'P07'), ...inspectFutureAdmission(root,'P08'), ...inspectCommandCoverage(root));
   return errors;
 }

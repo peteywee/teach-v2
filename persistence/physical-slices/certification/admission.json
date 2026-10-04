@@ -1,0 +1,54 @@
+{
+  "version": "0.1.0",
+  "status": "recorded",
+  "baseline_commit": "1c6065e1af5292abc2c8fdc75ee5a6e611b820bd",
+  "slice": "SLICE-P07",
+  "physical_schema_authorized": false,
+  "implementation_authorized": false,
+  "migration_authoring_authorized": false,
+  "shared_or_production_migration_execution_authorized": false,
+  "admission_id": "TEACH-SLICE-P07-SCHEMA-ADMISSION",
+  "decision": "BLOCK",
+  "criteria": [
+    {
+      "criterion": "entity is approved",
+      "state": "PROVEN",
+      "evidence": "kernel/entities.json: approved Certification-owned Certification"
+    },
+    {
+      "criterion": "canonical identifier is approved",
+      "state": "PROVEN",
+      "evidence": "kernel/identifiers.json: canonical approved CertificationId"
+    },
+    {
+      "criterion": "every persisted lifecycle state set is approved",
+      "state": "UNKNOWN",
+      "evidence": "No Certification lifecycle/state set is registered; revocation history and approved criteria shape remain undecided"
+    },
+    {
+      "criterion": "every relationship/cardinality encoded by the schema is approved",
+      "state": "UNKNOWN",
+      "evidence": "Registered logical relationships exist; requiredness, version binding and physical encoding remain undecided"
+    },
+    {
+      "criterion": "no blocking open question changes the record shape",
+      "state": "UNKNOWN",
+      "evidence": "C34 OQ-CERT-1 public/private boundary and OQ-CERT-2 criteria approval authority remain blocking; content version representation is undecided"
+    },
+    {
+      "criterion": "owning module is explicit",
+      "state": "PROVEN",
+      "evidence": "Domain Ownership Map and Architecture name Certification"
+    },
+    {
+      "criterion": "protected ownership/scope fields are derivable from approved semantics",
+      "state": "UNKNOWN",
+      "evidence": "Active learner membership, Assignment authorization and observer capability/scope have no authoritative runtime implementation"
+    },
+    {
+      "criterion": "migration and acceptance evidence plan exists",
+      "state": "PROVEN",
+      "evidence": "certification/admission-evidence-plan.json@0.1.0 defines replay and negative/runtime evidence"
+    }
+  ]
+}

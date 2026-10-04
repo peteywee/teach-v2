@@ -26,6 +26,7 @@ export async function authenticateApplicationSession(
   credential: string,
   now: Date,
 ): Promise<ApplicationSessionRecord | null> {
+  if (!(now instanceof Date) || !Number.isFinite(now.getTime())) return null;
   let verifier: Buffer;
   try {
     verifier = deriveSessionVerifier(credential);

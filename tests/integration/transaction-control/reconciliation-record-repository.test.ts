@@ -10,6 +10,7 @@ import {
 } from '../../../src/modules/transaction-control/application/ports/reconciliation-record-repository.js';
 import type { OpenReconciliationRecordInput } from '../../../src/modules/transaction-control/domain/reconciliation-record.js';
 import { PostgresReconciliationRecordRepository } from '../../../src/modules/transaction-control/infrastructure/persistence/postgres-reconciliation-record-repository.js';
+import { reconcileExternalEffect } from '../../../src/modules/transaction-control/application/reconciliation-service.js';
 import * as schema from '../../../src/modules/transaction-control/infrastructure/persistence/schema.js';
 
 const { Pool } = pg;
@@ -323,3 +324,28 @@ function input(
     },
   };
 }
+
+for (const outcome of ['CONFIRMED_SUCCESS', 'CONFIRMED_NO_EFFECT', 'UNAVAILABLE'] as const) {
+  test(`Application reconciliation persists canonical ${outcome} with no provider sends`, async () => {
+    await repository.createOpen(input({ id: 'service-readback' }));
+    let reads = 0;
+    const provider = { async readCanonicalState() { reads++; return { outcome }; } };
+    const row = await reconcileExternalEffect(repository, provider, { id: 'service-readback', authoritativeScope: { organizationId: 'acme' } }, () => new Date('2026-10-04T12:00:00Z'));
+    assert.equal(reads, 1);
+    assert.equal(row.status, outcome === 'UNAVAILABLE' ? 'OPEN' : 'RESOLVED');
+    assert.equal((await repository.getById('service-readback', { organizationId: 'acme' }))?.outcome, outcome === 'UNAVAILABLE' ? 'AMBIGUOUS' : outcome);
+    assert.equal(await repository.getById('service-readback', { organizationId: 'other' }), null);
+  });
+}
+
+test('16 conflicting resolutions preserve one terminal canonical outcome', async () => {
+  await repository.createOpen(input({id:'terminal-race'}));
+  const outcomes = Array.from({length:16},(_,i)=>i%2 ? 'CONFIRMED_SUCCESS' as const : 'CONFIRMED_NO_EFFECT' as const);
+  const settled = await Promise.allSettled(outcomes.map(outcome=>repository.resolve({id:'terminal-race',authoritativeScope:{organizationId:'acme'},outcome,readbackAt:new Date('2026-10-04T12:00:00Z')})));
+  const row = await repository.getById('terminal-race',{organizationId:'acme'});
+  assert.equal(row?.status,'RESOLVED');
+  for (const [i,result] of settled.entries()) {
+    if(outcomes[i]===row?.outcome) {assert.equal(result.status,'fulfilled'); if(result.status==='fulfilled') assert.equal(result.value.outcome,row.outcome);}
+    else {assert.equal(result.status,'rejected');if(result.status==='rejected') assert.ok(result.reason instanceof ReconciliationRecordConflictError);}
+  }
+});
