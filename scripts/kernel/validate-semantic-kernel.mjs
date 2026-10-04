@@ -11,13 +11,13 @@ const load = (name) => {
 };
 
 const manifest = load('manifest.json');
-const names = ['entities.json','values.json','identifiers.json','relationships.json','states.json','state-machines.json','invariants.json','capabilities.json','commands.json','events.json','evidence.json','schema/semantic-kernel.schema.json'];
+const names = ['entities.json','values.json','identifiers.json','relationships.json','states.json','state-machines.json','invariants.json','decision-tables.json','capabilities.json','commands.json','events.json','evidence.json','schema/semantic-kernel.schema.json'];
 const docs = Object.fromEntries(names.map(n => [n, load(n)]));
 if (manifest) {
   if (manifest.kernel_id !== 'TEACH-K00') errors.push('manifest.json: kernel_id must be TEACH-K00');
-  if (manifest.version !== '0.5.0') errors.push('manifest.json: version must be 0.5.0');
+  if (manifest.version !== '0.6.0') errors.push('manifest.json: version must be 0.6.0');
   if (manifest.canonical_format !== 'json') errors.push('manifest.json: canonical_format must be json');
-  for (const n of ['entities','values','identifiers','relationships','states','state_machines','invariants','capabilities','commands','events','evidence','schema']) {
+  for (const n of ['entities','values','identifiers','relationships','states','state_machines','invariants','decision_tables','capabilities','commands','events','evidence','schema']) {
     if (!manifest.files?.[n]) errors.push(`manifest.json: missing file mapping ${n}`);
   }
 }
@@ -34,7 +34,7 @@ function collect(file) {
     else if (!allIds.has(e.id)) allIds.set(e.id,file);
   }
 }
-for (const f of ['entities.json','values.json','identifiers.json','relationships.json','states.json','state-machines.json','invariants.json','commands.json','events.json']) collect(f);
+for (const f of ['entities.json','values.json','identifiers.json','relationships.json','states.json','state-machines.json','invariants.json','decision-tables.json','commands.json','events.json']) collect(f);
 const ids = new Set((docs['identifiers.json']?.entries || []).map(x => x.id));
 const entityIds = new Set((docs['entities.json']?.entries || []).map(x => x.id));
 for (const e of docs['entities.json']?.entries || []) {
@@ -163,6 +163,22 @@ for (const inv of docs['invariants.json']?.entries || []) {
   if (!inv.failure_behavior) errors.push(`invariants.json: ${inv.id} missing failure_behavior`);
 }
 if (invariantIds.size !== 22) errors.push(`invariants.json: expected 22 registered candidates, found ${invariantIds.size}`);
+const decisionIds = new Set();
+for (const dt of docs['decision-tables.json']?.entries || []) {
+  if (decisionIds.has(dt.id)) errors.push(`decision-tables.json: duplicate ${dt.id}`);
+  decisionIds.add(dt.id);
+  if (dt.kind !== 'decision_table') errors.push(`decision-tables.json: ${dt.id} kind must be decision_table`);
+  if (dt.status !== 'candidate') errors.push(`decision-tables.json: ${dt.id} must remain candidate in K00 0.6.0`);
+  if (!dt.owning_domain) errors.push(`decision-tables.json: ${dt.id} missing owning_domain`);
+  if (!Array.isArray(dt.authority_contracts) || !dt.authority_contracts.length) errors.push(`decision-tables.json: ${dt.id} missing authority_contracts`);
+  if (!Array.isArray(dt.requirements) || !dt.requirements.length) errors.push(`decision-tables.json: ${dt.id} missing requirements`);
+  if (!Array.isArray(dt.inputs) || !dt.inputs.length) errors.push(`decision-tables.json: ${dt.id} missing inputs`);
+  if (!Array.isArray(dt.rules) || !dt.rules.length) errors.push(`decision-tables.json: ${dt.id} missing rules`);
+  if (!dt.default_outcome) errors.push(`decision-tables.json: ${dt.id} missing default_outcome`);
+  if (!dt.failure_behavior) errors.push(`decision-tables.json: ${dt.id} missing failure_behavior`);
+}
+if (decisionIds.size !== 8) errors.push(`decision-tables.json: expected 8 registered candidates, found ${decisionIds.size}`);
+
 
 
 
@@ -171,11 +187,12 @@ if (errors.length) {
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
-console.log('Semantic kernel PASS: TEACH-K00 0.5.0');
+console.log('Semantic kernel PASS: TEACH-K00 0.6.0');
 console.log(`Entities: ${(docs['entities.json']?.entries || []).length}`);
 console.log(`Identifiers: ${(docs['identifiers.json']?.entries || []).length}`);
 console.log(`Relationships: ${(docs['relationships.json']?.entries || []).length}`);
 console.log(`State machines: ${(docs['state-machines.json']?.entries || []).length}`);
 console.log(`Invariants: ${(docs['invariants.json']?.entries || []).length}`);
+console.log(`Decision tables: ${(docs['decision-tables.json']?.entries || []).length}`);
 console.log(`Commands: ${(docs['commands.json']?.entries || []).length}`);
 console.log(`Events: ${(docs['events.json']?.entries || []).length}`);

@@ -10,12 +10,14 @@ const load = (p) => {
 };
 
 const proposal = load('domains/decisions/proposed.json');
+const registration = load('domains/decisions/registration.json');
+const kernelTables = load('kernel/decision-tables.json');
 const manifest = load('kernel/manifest.json');
 const ownership = load('domains/ownership-map.json');
 const invariants = load('kernel/invariants.json');
 
-if (manifest?.version !== '0.5.0') errors.push(`decision discovery: expected K00 0.5.0, found ${manifest?.version}`);
-if (ownership?.version !== '1.2.0' || ownership?.status !== 'active') errors.push('decision discovery: expected active Domain Ownership Map 1.2.0');
+if (manifest?.version !== '0.6.0') errors.push(`decision discovery: expected K00 0.6.0, found ${manifest?.version}`);
+if (ownership?.version !== '1.3.0' || ownership?.status !== 'active') errors.push('decision discovery: expected active Domain Ownership Map 1.3.0');
 if ((invariants?.entries || []).length !== 22) errors.push('decision discovery: expected 22 registered invariant candidates');
 
 if (proposal) {
@@ -55,13 +57,30 @@ for (const dt of blocked) {
 if (ready.length !== 8) errors.push(`decision discovery: expected 8 ready, found ${ready.length}`);
 if (blocked.length !== 3) errors.push(`decision discovery: expected 3 blocked, found ${blocked.length}`);
 
+if (registration) {
+  if (registration.version !== '1.0.0') errors.push('decision registration: version must be 1.0.0');
+  if (registration.status !== 'recorded') errors.push('decision registration: status must be recorded');
+  if (registration.kernel_version !== '0.6.0') errors.push('decision registration: kernel_version must be 0.6.0');
+  if (registration.ownership_map_version !== '1.3.0') errors.push('decision registration: ownership_map_version must be 1.3.0');
+  if (registration.candidate_to_approved_promotions !== 0) errors.push('decision registration: promotions must remain zero');
+}
+const readyIds = new Set(ready.map(x => x.id));
+const blockedIds = new Set(blocked.map(x => x.id));
+const kernelEntries = kernelTables?.entries || [];
+const kernelIds = new Set(kernelEntries.map(x => x.id));
+for (const id of readyIds) if (!kernelIds.has(id)) errors.push(`decision registration: ready table ${id} missing from K00`);
+for (const id of kernelIds) if (!readyIds.has(id)) errors.push(`decision registration: unexpected K00 table ${id}`);
+for (const id of blockedIds) if (kernelIds.has(id)) errors.push(`decision registration: blocked table ${id} must remain outside K00`);
+for (const dt of kernelEntries) if (dt.status !== 'candidate') errors.push(`decision registration: ${dt.id} must remain candidate`);
+
+
 if (errors.length) {
   console.error(`Decision-table discovery FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
 
-console.log('Decision-table discovery PASS');
-console.log(`Ready decision-table candidates: ${ready.length}`);
-console.log(`Blocked decision-table candidates: ${blocked.length}`);
-console.log('K00 decision-table authority changed: no');
+console.log('Decision-table registration PASS');
+console.log(`Registered candidate decision tables: ${(kernelTables?.entries || []).length}`);
+console.log(`Blocked decision tables excluded: ${blocked.length}`);
+console.log('Candidate-to-approved promotions: 0');

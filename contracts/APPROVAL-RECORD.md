@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-03
-- Contract package version: `0.8.0`
+- Contract package version: `0.9.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -265,3 +265,12 @@ PATCH revisions preserve the controlling owner approval when they do not change 
 | TEACH-K00 | 0.4.0 | 0.5.0 | Register 22 PROVEN invariant candidates; keep 5 blocked invariants outside K00; no semantic promotion | 2026-10-03 | Patrick Craven | #5 |
 | TEACH-DOMAIN-OWNERSHIP | 1.1.0 | 1.2.0 | Add Governance semantic domain and invariant ownership assignments | 2026-10-03 | Patrick Craven | #5 |
 | TEACH-INVARIANT-DISCOVERY | 0.1.0 | 0.2.0 | Record invariant-discovery disposition and registration evidence | 2026-10-03 | Patrick Craven | #5 |
+
+## Part 10 — Decision-table registration approval
+
+| Artifact / Contract | From | To | Decision | Date | Owner | GitHub issue |
+| --- | --- | --- | --- | --- | --- | --- |
+| C01 Canonical Semantics | 1.4.0 | 1.5.0 | Establish canonical deterministic decision-table registry with fail-closed defaults | 2026-10-03 | Patrick Craven | #6 |
+| TEACH-K00 | 0.5.0 | 0.6.0 | Register 8 ready decision tables as `candidate`; keep 3 blocked tables outside K00; no semantic promotion | 2026-10-03 | Patrick Craven | #6 |
+| TEACH-DOMAIN-OWNERSHIP | 1.2.0 | 1.3.0 | Add ownership assignments for registered decision tables | 2026-10-03 | Patrick Craven | #6 |
+| TEACH-DECISION-TABLE-DISCOVERY | 0.1.0 | 0.2.0 | Record discovery disposition and registration evidence | 2026-10-03 | Patrick Craven | #6 |

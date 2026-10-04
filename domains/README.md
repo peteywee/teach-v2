@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-DOMAIN-DISCOVERY",
   "class": "specification",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -11,8 +11,8 @@
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "b29d0e7712d705ed30e574b39918e75a411db194",
-    "purpose": "pre-invariant-registration baseline"
+    "commit": "f8e51057d341d74090cba43698e00f406fdcd8ea",
+    "purpose": "pre-decision-table-registration baseline"
   },
   "approval": {
     "state": "approved",
@@ -50,3 +50,5 @@ Current proposed domain boundaries:
 Domain Ownership Map `1.1.0` adds owner-approved state-set, lifecycle-command/event, and state-machine ownership assignments from GitHub issue #4.
 
 Domain Ownership Map `1.2.0` adds the Governance semantic domain and owner assignments for all 22 registered invariant candidates; GitHub issue #5.
+
+Domain Ownership Map `1.3.0` adds owner assignments for eight registered decision tables; GitHub issue #6.

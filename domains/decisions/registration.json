@@ -1,0 +1,48 @@
+{
+  "registration_id": "TEACH-DECISION-TABLE-REGISTRATION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "approved_on": "2026-10-03",
+  "issue": "#6",
+  "baseline_commit": "f8e51057d341d74090cba43698e00f406fdcd8ea",
+  "kernel_version": "0.6.0",
+  "ownership_map_version": "1.3.0",
+  "registered_candidate_decision_tables": [
+    "DT-001",
+    "DT-002",
+    "DT-003",
+    "DT-004",
+    "DT-005",
+    "DT-006",
+    "DT-007",
+    "DT-008"
+  ],
+  "blocked_decision_tables": [
+    {
+      "id": "DT-B01",
+      "blocked_by": [
+        "OQ-AUTHZ-1",
+        "missing-k00:Role",
+        "capability-vocabulary-not-yet-populated"
+      ]
+    },
+    {
+      "id": "DT-B02",
+      "blocked_by": [
+        "OQ-PRIV-1",
+        "OQ-PRIV-2",
+        "OQ-PRIV-3"
+      ]
+    },
+    {
+      "id": "DT-B03",
+      "blocked_by": [
+        "OQ-CERT-2",
+        "OQ-CERT-3",
+        "missing-k00:CertificationCriteriaVersion"
+      ]
+    }
+  ],
+  "candidate_to_approved_promotions": 0
+}
