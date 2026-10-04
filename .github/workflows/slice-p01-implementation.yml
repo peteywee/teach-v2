@@ -64,6 +64,11 @@ jobs:
           corepack prepare pnpm@12.8.1 --activate
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile --allow-build=esbuild
+      - name: Emit bootstrap lockfile
+        run: |
+          echo '---BEGIN-PNPM-LOCK---'
+          cat pnpm-lock.yaml
+          echo '---END-PNPM-LOCK---'
       - name: Typecheck
         run: pnpm typecheck
       - name: Domain tests

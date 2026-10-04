@@ -213,13 +213,19 @@ function assertEquivalentReplay(
   const idempotency = input.idempotency;
 
   if (
+    existing.outcome !== input.outcome ||
     existing.operationName !== input.operationName ||
     existing.scopeFingerprint !== input.scopeFingerprint ||
+    stableJson(existing.authoritativeScope) !== stableJson(input.authoritativeScope) ||
     existing.providerName !== input.providerName ||
     existing.providerReference !== (input.providerReference ?? null) ||
     existing.idempotencyKey !== (idempotency?.key ?? null) ||
     existing.idempotencyKeySource !== (idempotency?.source ?? null) ||
-    existing.payloadHash !== (idempotency?.payloadHash ?? null)
+    existing.payloadHash !== (idempotency?.payloadHash ?? null) ||
+    existing.retryHorizonEndsAt?.getTime() !==
+      (idempotency?.retryHorizonEndsAt.getTime() ?? undefined) ||
+    existing.idempotencyRetentionUntil?.getTime() !==
+      (idempotency?.retentionUntil.getTime() ?? undefined)
   ) {
     throw new ReconciliationRecordConflictError(
       'replayed reconciliation record id carries different immutable inputs',
@@ -249,4 +255,18 @@ function mapRow(row: ReconciliationRecordRow): ReconciliationRecord {
     updatedAt: row.updatedAt,
     resolvedAt: row.resolvedAt,
   };
+}
+
+function stableJson(value: unknown): string {
+  if (Array.isArray(value)) {
+    return `[${value.map(stableJson).join(',')}]`;
+  }
+  if (value && typeof value === 'object') {
+    const record = value as Record<string, unknown>;
+    return `{${Object.keys(record)
+      .sort()
+      .map((key) => `${JSON.stringify(key)}:${stableJson(record[key])}`)
+      .join(',')}}`;
+  }
+  return JSON.stringify(value);
 }

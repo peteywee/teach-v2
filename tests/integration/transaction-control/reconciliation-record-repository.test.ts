@@ -114,6 +114,46 @@ test('same IdempotencyKey identifier cannot bind to a different operation or pay
   assert.equal(count.rows[0]?.count, '1');
 });
 
+test('concurrent same-id replay produces one authoritative row', async () => {
+  const request = input({ id: 'recon-concurrent-replay' });
+  const results = await Promise.all(
+    Array.from({ length: 8 }, () => repository.createOpen(request)),
+  );
+
+  assert.equal(new Set(results.map((row) => row.id)).size, 1);
+
+  const count = await pool.query<{ count: string }>(
+    `select count(*)::text as count from ${table}`,
+  );
+  assert.equal(count.rows[0]?.count, '1');
+});
+
+test('concurrent conflicting IdempotencyKey bindings allow exactly one winner', async () => {
+  const settled = await Promise.allSettled([
+    repository.createOpen(
+      input({ id: 'recon-race-a', operationName: 'SendInvitationEmail' }),
+    ),
+    repository.createOpen(
+      input({ id: 'recon-race-b', operationName: 'IssueCertification' }),
+    ),
+  ]);
+
+  const fulfilled = settled.filter((result) => result.status === 'fulfilled');
+  const rejected = settled.filter((result) => result.status === 'rejected');
+
+  assert.equal(fulfilled.length, 1);
+  assert.equal(rejected.length, 1);
+  assert.ok(
+    rejected[0]?.status === 'rejected' &&
+      rejected[0].reason instanceof IdempotencyKeyBindingConflictError,
+  );
+
+  const count = await pool.query<{ count: string }>(
+    `select count(*)::text as count from ${table}`,
+  );
+  assert.equal(count.rows[0]?.count, '1');
+});
+
 test('many records may reference one key when operation and payload binding are identical', async () => {
   await repository.createOpen(input({ id: 'recon-many-1' }));
   await repository.createOpen(input({ id: 'recon-many-2' }));
