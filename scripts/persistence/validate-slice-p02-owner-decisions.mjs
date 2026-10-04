@@ -40,13 +40,14 @@ const relation=find(relationships,'IdentityHasApplicationSession');
 if(!relation || relation.status!=='approved' || relation.cardinality!=='one-to-many' || relation.owning_domain!=='Identity') errors.push('SLICE-P02 decisions: approved IdentityHasApplicationSession one-to-many authority required');
 
 const scope=reg?.ownership_scope_decision;
-if(scope?.identity_organization_owned!==false || scope?.identity_explicit_ownership_key!=='IdentityId' || scope?.application_session_owner!=='Identity' || scope?.application_session_identity_fk_required!==true || scope?.tenant_authority_columns_forbidden!==true || scope?.protected_session_queries_require_authoritative_identity_id!==true) errors.push('SLICE-P02 decisions: ownership/scope decision drifted');
+if(scope?.identity_organization_owned!==false || scope?.identity_explicit_ownership_key!=='IdentityId' || scope?.application_session_owner!=='Identity' || scope?.application_session_identity_fk_required!==true || scope?.tenant_authority_columns_forbidden!==true || scope?.protected_session_queries_require_authoritative_identity_id!==true || scope?.cross_identity_admin_access_requires_external_authorization!==true) errors.push('SLICE-P02 decisions: ownership/scope decision drifted');
 if(reg?.readiness_effect?.physical_schema_authorized!==false || reg?.readiness_effect?.schema_admission_rerun_required!==true) errors.push('SLICE-P02 decisions: registration must remain non-authorizing');
 
 if(!c12.includes('"version": "1.1.0"') || c12.includes('| OQ-SES-3 |') || c12.includes('| OQ-SES-4 |')) errors.push('SLICE-P02 decisions: C12 1.1.0 must resolve OQ-SES-3/4');
 for(const token of ['SESSION_VERIFIER_V1_SHA256_256BIT','ABSOLUTE_12H_IDLE_30M','exactly 32 cryptographically secure random bytes','absolute lifetime is 12 hours','idle lifetime is 30 minutes']) if(!c12.includes(token)) errors.push(`SLICE-P02 decisions: C12 missing ${token}`);
 if(!approvals.includes('## Part 23 — SLICE-P02 owner decisions') || !approvals.includes('IDENTITY_GLOBAL_PRINCIPAL_SESSION_IDENTITY_OWNED') || !approvals.includes('| #32 |')) errors.push('SLICE-P02 decisions: canonical approval ledger entry missing');
-if(!index.includes('"version": "0.14.0"') || !index.includes('- Package version: `0.14.0`') || !index.includes('| C12 |')) errors.push('SLICE-P02 decisions: package/index synchronization missing');
+if(!index.includes('"version": "0.14.0"') || !index.includes('- Package version: `0.14.0`')) errors.push('SLICE-P02 decisions: contract package synchronization missing');
+if(!index.includes('| C12 |')) errors.push('SLICE-P02 decisions: C12 index row missing');
 
 const p02=readiness?.candidate_slices?.find(x=>x.id==='SLICE-P02');
 if(readiness?.version!=='0.9.0' || readiness?.narrowed_next_lane?.preferred_slice!=='SLICE-P02' || readiness?.narrowed_next_lane?.physical_implementation_authorized!==true || readiness?.evidence_states?.slice_p02_owner_decisions!=='PROVEN' || readiness?.evidence_states?.slice_p02_schema_admission!=='PROVEN') errors.push('SLICE-P02 decisions: owner decisions must remain proven through readiness 0.9.0 admission');

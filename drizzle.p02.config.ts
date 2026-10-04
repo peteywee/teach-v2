@@ -9,7 +9,7 @@ export default defineConfig({
     './src/modules/transaction-control/infrastructure/persistence/schema.ts',
     './src/modules/identity/infrastructure/persistence/schema.ts',
   ],
-  out: './drizzle',
+  out: './.tmp-drizzle-p02',
   dialect: 'postgresql',
   dbCredentials: { url },
   strict: true,

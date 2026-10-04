@@ -1,0 +1,38 @@
+{
+  "implementation_id": "TEACH-SLICE-P02-IMPLEMENTATION",
+  "version": "0.1.0",
+  "status": "candidate",
+  "issue": "#36",
+  "baseline_commit": "f811f008c2483cbd473e5115403ef00c2d849eff",
+  "admission": "persistence/physical-slices/identity-session/admission.json@1.0.0",
+  "slice": "SLICE-P02",
+  "owning_module": "Identity",
+  "target_records": [
+    "Identity",
+    "ApplicationSession"
+  ],
+  "implementation_scope": {
+    "physical_tables": [
+      "identity_identities",
+      "identity_application_sessions"
+    ],
+    "migration": "PENDING CI-generated immutable 0001",
+    "repositories": [
+      "src/modules/identity/infrastructure/persistence/postgres-identity-repository.ts",
+      "src/modules/identity/infrastructure/persistence/postgres-application-session-repository.ts"
+    ]
+  },
+  "verification": {
+    "typecheck": "PENDING",
+    "domain_tests": "PENDING",
+    "implementation_boundary": "PENDING",
+    "migration_generation": "PENDING",
+    "two_empty_database_replay": "PENDING",
+    "p01_to_p02_upgrade_replay": "PENDING",
+    "postgres_integration_tests": "PENDING",
+    "validator_negative_paths": "PENDING",
+    "exact_head_ci": "PENDING"
+  },
+  "shared_or_production_migration_execution_authorized": false,
+  "full_relational_schema_authorized": false
+}

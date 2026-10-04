@@ -12,7 +12,9 @@ const pool = new Pool({ connectionString });
 
 try {
   const db = drizzle(pool);
-  await migrate(db, { migrationsFolder: 'drizzle' });
+  await migrate(db, {
+    migrationsFolder: process.env.MIGRATIONS_FOLDER ?? 'drizzle',
+  });
   console.log('Drizzle migrations applied');
 } finally {
   await pool.end();
