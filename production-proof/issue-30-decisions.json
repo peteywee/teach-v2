@@ -1,0 +1,76 @@
+{
+  "decision_id": "TEACH-PRODUCTION-PROOF-OWNER-DECISIONS",
+  "version": "1.0.0",
+  "status": "recorded",
+  "issue": "#30",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "approved_on": "2026-10-04",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "commit": "dbec8199a240c41c32f01c09b0a5b8ee1c5381ec"
+  },
+  "contract_revisions": {
+    "C21": {
+      "from": "1.0.3",
+      "to": "1.1.0"
+    },
+    "C52": {
+      "from": "1.0.3",
+      "to": "1.1.0"
+    },
+    "package": {
+      "from": "0.12.1",
+      "to": "0.13.0"
+    }
+  },
+  "decisions": [
+    {
+      "id": "OQ-MIG-1",
+      "selection": "MIGRATION_SCOPED_PLATFORM_NATIVE_BACKUP",
+      "semantics": {
+        "mechanism": "platform-native transactionally consistent backup/snapshot/PITR",
+        "automated_backup_max_interval_hours": 24,
+        "pre_migration_restore_point": "required after candidate freeze and before every production schema/data migration",
+        "provider_neutral": true
+      }
+    },
+    {
+      "id": "OQ-MIG-2",
+      "selection": "ISOLATED_RESTORE_MAX_30D",
+      "semantics": {
+        "target": "disposable isolated environment",
+        "database_engine_major": "must match production",
+        "max_age_days": 30,
+        "invalidate_on_backup_configuration_change": true
+      }
+    },
+    {
+      "id": "OQ-REL-2",
+      "selection": "CANONICAL_CONFIG_MANIFEST_SHA256",
+      "semantics": {
+        "canonical_manifest": "deterministic sorted JSON",
+        "non_secret_values": "represented directly",
+        "secrets": "stable deployment-bound provider revision identifiers only",
+        "raw_secret_values_allowed": false,
+        "secret_derived_hashes_allowed": false,
+        "identity_algorithm": "SHA-256"
+      }
+    }
+  ],
+  "non_decisions": [
+    "hosting/database provider",
+    "browser-reachable database role existence",
+    "pipeline-vs-manual production migration execution",
+    "legacy data import path",
+    "deployed smoke-test scope",
+    "rollback support duration"
+  ],
+  "effects": {
+    "provider_neutral_validation_machinery_authorized": true,
+    "shared_or_production_migration_execution_authorized": false,
+    "production_promotion_authorized": false,
+    "production_provider_capability_proven": false,
+    "release_candidate_proven": false
+  }
+}
