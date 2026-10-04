@@ -21,7 +21,7 @@ if(reg?.relationship_decision?.kernel_registration!=='BLOCKED until separate rel
 if(reg?.readiness_effect?.physical_schema_authorized!==false) errors.push('transaction decision registration: physical schema must remain unauthorized');
 const rr=(relationships?.entries||[]).find(x=>x.id==='ReconciliationRecordUsesIdempotencyKey');
 if(!rr || rr.status!=='candidate' || rr.cardinality!=='many-to-zero-or-one') errors.push('transaction decision registration: later relationship registration must exist as candidate many-to-zero-or-one');
-if(readiness?.version!=='0.4.0' || (readiness?.narrowed_next_lane?.owner_decisions_required||[]).length!==1) errors.push('transaction decision registration: readiness 0.4.0 must preserve only owner semantic-promotion gate');
+if(readiness?.version!=='0.4.0' || (readiness?.narrowed_next_lane?.owner_decisions_required||[]).length!==0 || (readiness?.narrowed_next_lane?.semantic_promotions_required||[]).length!==1) errors.push('transaction decision registration: readiness 0.4.0 must close slice decisions and preserve one semantic-promotion gate');
 if(readiness?.current_admitted_slice_count!==0 || readiness?.implementation_guard?.physical_schema_authorized!==false) errors.push('transaction decision registration: zero physical slices must remain admitted');
 if(!c22.includes('"version": "1.2.0"') || c22.includes('| OQ-TXN-1 |')) errors.push('transaction decision registration: C22 1.2.0 must resolve OQ-TXN-1');
 if(!c22.includes('client-supplied or server-derived') || !c22.includes('not shorter than its complete retry and reconciliation horizon')) errors.push('transaction decision registration: C22 TXN-2 decision text missing');

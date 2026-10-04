@@ -36,7 +36,7 @@ const counts={
   candidateDecisions:(dt?.entries||[]).filter(x=>x.status==='candidate').length,
   gaps:(gaps?.core_missing_kernel_candidates||[]).length,
 };
-const expected={approvedEntities:13,approvedIds:12,candidateStates:2,candidateRelationships:8,candidateEvents:10,candidateInvariants:22,candidateDecisions:8,gaps:9};
+const expected={approvedEntities:13,approvedIds:12,candidateStates:2,candidateRelationships:9,candidateEvents:10,candidateInvariants:22,candidateDecisions:8,gaps:9};
 for (const [k,v] of Object.entries(expected)) if (counts[k]!==v) errors.push(`persistence audit: ${k} expected ${v}, found ${counts[k]}`);
 
 if (per?.full_relational_schema_status!=='BLOCKED' || per?.migration_implementation_status!=='BLOCKED') errors.push('persistence audit: physical implementation was unblocked by policy approval');

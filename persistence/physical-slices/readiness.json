@@ -146,11 +146,12 @@
   "narrowed_next_lane": {
     "preferred_slice": "SLICE-P01",
     "reason": "Fresh admission evaluation after relationship registration is BLOCKED only because ReconciliationRecordUsesIdempotencyKey remains candidate.",
-    "owner_decisions_required": [
-      "Explicit owner approval naming the semantic promotion ReconciliationRecordUsesIdempotencyKey: candidate -> approved"
-    ],
+    "owner_decisions_required": [],
     "physical_implementation_authorized": false,
-    "next_required_gate": "Owner approve ReconciliationRecordUsesIdempotencyKey candidate -> approved semantic promotion"
+    "next_required_gate": "Owner approve ReconciliationRecordUsesIdempotencyKey candidate -> approved semantic promotion",
+    "semantic_promotions_required": [
+      "ReconciliationRecordUsesIdempotencyKey: candidate -> approved"
+    ]
   },
   "implementation_guard": {
     "tables_generated": 0,
