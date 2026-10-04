@@ -5,6 +5,8 @@ on:
     paths:
       - 'package.json'
       - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/slice-p01-implementation.yml'
       - 'tsconfig.json'
       - 'drizzle.config.ts'
       - 'drizzle/**'
@@ -18,6 +20,8 @@ on:
     paths:
       - 'package.json'
       - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/slice-p01-implementation.yml'
       - 'tsconfig.json'
       - 'drizzle.config.ts'
       - 'drizzle/**'

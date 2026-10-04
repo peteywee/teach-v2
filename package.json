@@ -13,7 +13,8 @@
     "test:integration": "tsx --test tests/integration/transaction-control/reconciliation-record-repository.test.ts",
     "db:migrate": "tsx scripts/db/migrate.ts",
     "db:verify-replay": "tsx scripts/db/verify-migration-replay.ts",
-    "validate:slice-p01": "node scripts/persistence/validate-slice-p01-implementation-boundary.mjs"
+    "validate:slice-p01": "node scripts/persistence/validate-slice-p01-implementation-boundary.mjs",
+    "check:slice-p01": "pnpm typecheck && pnpm test && pnpm validate:slice-p01"
   },
   "dependencies": {
     "drizzle-orm": "0.45.3",
