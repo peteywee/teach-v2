@@ -23,6 +23,8 @@ const domain = text(
   'src/modules/transaction-control/domain/reconciliation-record.ts',
 );
 const migration = text('drizzle/0000_slice_p01_reconciliation.sql');
+const snapshot = load('drizzle/meta/0000_snapshot.json');
+const lockfile = text('pnpm-lock.yaml');
 
 if (
   admission?.version !== '2.0.0' ||
@@ -69,6 +71,25 @@ if (candidateValue?.status !== 'candidate') {
 if (!schema.includes('kernel/identifiers.json:IdempotencyKey')) {
   errors.push(
     'SLICE-P01 implementation: schema must document approved identifier authority for idempotency_key',
+  );
+}
+
+
+if (
+  snapshot?.version !== '7' ||
+  !snapshot?.tables?.['public.transaction_control_reconciliation_records']
+) {
+  errors.push(
+    'SLICE-P01 implementation: Drizzle baseline snapshot missing or does not contain the admitted table',
+  );
+}
+if (
+  !lockfile.includes("lockfileVersion: '9.0'") ||
+  !lockfile.includes('drizzle-orm@0.45.3') ||
+  !lockfile.includes('pg@8.23.1')
+) {
+  errors.push(
+    'SLICE-P01 implementation: frozen pnpm lockfile missing admitted implementation dependencies',
   );
 }
 

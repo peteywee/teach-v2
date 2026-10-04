@@ -10,7 +10,6 @@ const base: OpenReconciliationRecordInput = {
   id: 'recon-1',
   outcome: 'AMBIGUOUS',
   operationName: 'SendInvitationEmail',
-  scopeFingerprint: 'org:acme',
   authoritativeScope: { organizationId: 'acme' },
   providerName: 'email-provider',
 };

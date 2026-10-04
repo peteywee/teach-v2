@@ -63,19 +63,9 @@ jobs:
           corepack enable
           corepack prepare pnpm@12.8.1 --activate
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile --allow-build=esbuild
-      - name: Emit bootstrap lockfile
-        run: |
-          echo '---BEGIN-PNPM-LOCK---'
-          cat pnpm-lock.yaml
-          echo '---END-PNPM-LOCK---'
-      - name: Emit generated Drizzle snapshot
-        run: |
-          rm -rf /tmp/drizzle-snapshot
-          pnpm exec drizzle-kit generate --dialect=postgresql --schema=./src/modules/transaction-control/infrastructure/persistence/schema.ts --out=/tmp/drizzle-snapshot --name=slice_p01
-          echo '---BEGIN-DRIZZLE-SNAPSHOT---'
-          cat /tmp/drizzle-snapshot/meta/0000_snapshot.json
-          echo '---END-DRIZZLE-SNAPSHOT---'
+        run: pnpm install --frozen-lockfile
+      - name: Check Drizzle migration history
+        run: pnpm exec drizzle-kit check
       - name: Typecheck
         run: pnpm typecheck
       - name: Domain tests
