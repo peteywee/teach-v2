@@ -1,6 +1,6 @@
 {
   "admission_id": "TEACH-SLICE-P04-PHYSICAL-SCHEMA-ADMISSION",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "recorded",
   "evaluated_on": "2026-10-04",
   "issue": "#46",
@@ -22,12 +22,22 @@
     {
       "criterion": "canonical identifier is approved",
       "state": "PROVEN",
-      "evidence": "CredentialId is approved in K00"
+      "evidence": "CredentialId is approved in K00 0.16.0"
+    },
+    {
+      "criterion": "every persisted lifecycle state set is approved",
+      "state": "PROVEN",
+      "evidence": "P04 encodes no Credential lifecycle state set or state machine; revokedAt is an implementation timestamp, not a K00 lifecycle state"
     },
     {
       "criterion": "every relationship/cardinality encoded by the schema is approved",
       "state": "PROVEN",
-      "evidence": "CredentialBelongsToIdentity is approved many-to-one"
+      "evidence": "CredentialBelongsToIdentity is approved Identity-owned many-to-one"
+    },
+    {
+      "criterion": "no blocking open question changes the record shape",
+      "state": "PROVEN",
+      "evidence": "OQ-IDN-1 and OQ-IDN-3 remain open but affect hashing/session-revocation behavior, not the generic P04 Credential record shape; P04 does not resolve them"
     },
     {
       "criterion": "owning module is explicit",
@@ -37,12 +47,12 @@
     {
       "criterion": "protected ownership/scope fields are derivable from approved semantics",
       "state": "PROVEN",
-      "evidence": "CredentialBelongsToIdentity provides authoritative IdentityId FK"
+      "evidence": "CredentialBelongsToIdentity provides required authoritative IdentityId ownership; credential possession grants no authorization"
     },
     {
       "criterion": "migration and acceptance evidence plan exists",
       "state": "PROVEN",
-      "evidence": "persistence/physical-slices/identity-credentials/admission-evidence-plan.json@1.0.0"
+      "evidence": "persistence/physical-slices/identity-credentials/admission-evidence-plan.json@1.1.0"
     }
   ],
   "blockers": [],
@@ -50,5 +60,8 @@
   "implementation_authorized": true,
   "migration_authoring_authorized": true,
   "shared_or_production_migration_execution_authorized": false,
-  "next_required_gate": "Implement SLICE-P04 physical persistence and prove acceptance evidence"
+  "next_required_gate": "Repair and prove authoritative P04 migration history under issue #52, then preserve P04 as implementation baseline for P05",
+  "retrospective_verification_issue": "#48",
+  "migration_history_repair_issue": "#52",
+  "full_relational_schema_authorized": false
 }
