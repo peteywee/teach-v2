@@ -1,3 +1,4 @@
+import { snapshotPersistenceInput } from './input-snapshot.mjs';
 import { and, eq, sql } from 'drizzle-orm';
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import {
@@ -29,6 +30,7 @@ export class PostgresApplicationSessionRepository
     };
     readonly now: Date;
   }): Promise<ApplicationSessionRecord> {
+    input = snapshotPersistenceInput(input);
     if (input.id.trim().length === 0) {
       throw new RangeError('ApplicationSessionId must be non-blank');
     }
@@ -66,6 +68,7 @@ export class PostgresApplicationSessionRepository
     readonly id: string;
     readonly identityId: string;
   }): Promise<ApplicationSessionRecord | null> {
+    input = snapshotPersistenceInput(input);
     const [row] = await this.db
       .select()
       .from(applicationSessions)
@@ -84,6 +87,7 @@ export class PostgresApplicationSessionRepository
     readonly identityId: string;
     readonly now: Date;
   }): Promise<ApplicationSessionRecord> {
+    input = snapshotPersistenceInput(input);
     const [updated] = await this.db
       .update(applicationSessions)
       .set({
@@ -111,6 +115,7 @@ export class PostgresApplicationSessionRepository
     readonly verifier: Buffer;
     readonly now: Date;
   }): Promise<ApplicationSessionRecord | null> {
+    input = snapshotPersistenceInput(input);
     const authenticated = await this.db.transaction(async (tx) => {
       const [candidate] = await tx
         .select({

@@ -34,7 +34,10 @@
     "test:p05:integration": "tsx --test tests/integration/learning/learning-session-repository.test.ts",
     "db:verify-p05-replay": "tsx scripts/db/verify-slice-p05-migration-replay.ts",
     "db:verify-p05-generation": "node scripts/db/verify-slice-p05-generation.mjs",
-    "validate:slice-p05": "node scripts/persistence/validate-slice-p05-implementation-boundary.mjs"
+    "validate:slice-p05": "node scripts/persistence/validate-slice-p05-implementation-boundary.mjs",
+    "audit:whole": "node scripts/architecture/validate-whole-repository.mjs",
+    "validate:slice-p06": "node scripts/persistence/validate-slice-p06-schema-admission.mjs",
+    "test:db-target": "node --test scripts/tests/validate-isolated-database-target.mjs"
   },
   "dependencies": {
     "drizzle-orm": "0.45.3",

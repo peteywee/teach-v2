@@ -1,3 +1,4 @@
+import { snapshotPersistenceInput } from './input-snapshot.mjs';
 import { and, eq, sql } from 'drizzle-orm';
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import {
@@ -21,6 +22,7 @@ export class PostgresIdentityRepository implements IdentityRepository {
   constructor(private readonly db: NodePgDatabase<typeof schema>) {}
 
   async create(input: { readonly id: string; readonly now: Date }): Promise<IdentityRecord> {
+    input = snapshotPersistenceInput(input);
     if (input.id.trim().length === 0) throw new RangeError('IdentityId must be non-blank');
     const [created] = await this.db
       .insert(identities)
@@ -44,6 +46,7 @@ export class PostgresIdentityRepository implements IdentityRepository {
   }
 
   async deactivate(input: { readonly id: string; readonly now: Date }): Promise<IdentityRecord> {
+    input = snapshotPersistenceInput(input);
     return this.db.transaction(async (tx) => {
       const status = await lockIdentityStatus(tx, input.id);
       if (status === null) throw new IdentityNotFoundError();
@@ -88,6 +91,7 @@ export class PostgresIdentityRepository implements IdentityRepository {
   }
 
   async reactivate(input: { readonly id: string; readonly now: Date }): Promise<IdentityRecord> {
+    input = snapshotPersistenceInput(input);
     return this.db.transaction(async (tx) => {
       const status = await lockIdentityStatus(tx, input.id);
       if (status === null) throw new IdentityNotFoundError();

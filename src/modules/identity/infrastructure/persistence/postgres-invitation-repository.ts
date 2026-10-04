@@ -1,3 +1,4 @@
+import { snapshotPersistenceInput } from './input-snapshot.mjs';
 import { and, eq, sql } from 'drizzle-orm';
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import type { InvitationRepository } from '../../application/ports/identity-token-repository.js';
@@ -22,6 +23,7 @@ export class PostgresInvitationRepository implements InvitationRepository {
     readonly secret:{readonly verifierVersion:'v1';readonly verifier:Buffer};
     readonly now:Date;
   }):Promise<InvitationRecord> {
+    input = snapshotPersistenceInput(input);
     return this.db.transaction(async tx=>{
       await requireActiveIdentity(tx,input.ownerIdentityId);
       if(input.invitedIdentityId!==null) await requireActiveIdentity(tx,input.invitedIdentityId);
@@ -43,6 +45,7 @@ export class PostgresInvitationRepository implements InvitationRepository {
   }
 
   async getById(input:{readonly id:string;readonly ownerIdentityId:string}):Promise<InvitationRecord|null> {
+    input = snapshotPersistenceInput(input);
     const [row]=await this.db.select().from(invitations).where(and(
       eq(invitations.id,input.id),
       eq(invitations.ownerIdentityId,input.ownerIdentityId),
@@ -55,6 +58,7 @@ export class PostgresInvitationRepository implements InvitationRepository {
     readonly secret:{readonly verifierVersion:'v1';readonly verifier:Buffer};
     readonly now:Date;
   }):Promise<InvitationRecord|null> {
+    input = snapshotPersistenceInput(input);
     const [row]=await this.db.update(invitations).set({
       status:'ACCEPTED',
       acceptedAt:input.now,
@@ -77,6 +81,7 @@ export class PostgresInvitationRepository implements InvitationRepository {
     readonly ownerIdentityId:string;
     readonly now:Date;
   }):Promise<InvitationRecord|null> {
+    input = snapshotPersistenceInput(input);
     const [row]=await this.db.update(invitations).set({
       status:'REVOKED',
       revokedAt:input.now,

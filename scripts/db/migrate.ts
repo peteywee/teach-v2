@@ -1,9 +1,10 @@
+import { assertIsolatedDatabaseTarget } from './isolated-database-target.mjs';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import pg from 'pg';
 
 const { Pool } = pg;
-const connectionString = process.env.DATABASE_URL;
+const connectionString = assertIsolatedDatabaseTarget(process.env.DATABASE_URL);
 if (!connectionString) {
   throw new Error('DATABASE_URL is required');
 }

@@ -1,3 +1,4 @@
+import { assertIsolatedDatabaseTarget } from './isolated-database-target.mjs';
 import { createHash } from 'node:crypto';
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -6,9 +7,8 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import pg from 'pg';
 
 const { Pool } = pg;
-const connectionString = process.env.DATABASE_URL;
+const connectionString = assertIsolatedDatabaseTarget(process.env.DATABASE_URL);
 if (!connectionString) throw new Error('DATABASE_URL is required');
-if (process.env.TEACH_ISOLATED_DB !== '1') throw new Error('P05 replay requires explicitly isolated test databases');
 
 const migrationsFolder = resolve(process.env.MIGRATIONS_FOLDER ?? 'drizzle');
 const baseUrl = new URL(connectionString);

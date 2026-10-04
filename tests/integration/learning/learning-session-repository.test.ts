@@ -1,3 +1,4 @@
+import { assertIsolatedDatabaseTarget } from '../../../scripts/db/isolated-database-target.mjs';
 import assert from 'node:assert/strict';
 import { after, beforeEach, test } from 'node:test';
 import { drizzle } from 'drizzle-orm/node-postgres';
@@ -6,8 +7,8 @@ import { learningSessions } from '../../../src/bootstrap/learning-persistence-sc
 import { PostgresLearningSessionRepository } from '../../../src/modules/learning/infrastructure/persistence/postgres-learning-session-repository.js';
 import { completeLearningSession, newLearningSession } from '../../../src/modules/learning/domain/learning-session.js';
 
-if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL is required');
-const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL, max: 20, statement_timeout: 5000 });
+const connectionString = assertIsolatedDatabaseTarget(process.env.DATABASE_URL);
+const pool = new pg.Pool({ connectionString, max: 20, statement_timeout: 5000 });
 const repository = new PostgresLearningSessionRepository(drizzle(pool, { schema: { learningSessions } }), learningSessions);
 const references = { id: 'session-1', identityId: 'learner-1', assignmentId: 'assignment-1' };
 const scope = { id: references.id, identityId: references.identityId };

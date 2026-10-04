@@ -1,0 +1,23 @@
+{
+  "admission_id": "TEACH-SLICE-P06-SCHEMA-ADMISSION",
+  "version": "0.1.0",
+  "status": "recorded",
+  "slice": "SLICE-P06",
+  "issue": "#60",
+  "baseline_commit": "045114b9a211bce4485f7d3acd88230e8448e1e9",
+  "decision": "BLOCK",
+  "physical_schema_authorized": false,
+  "implementation_authorized": false,
+  "migration_authoring_authorized": false,
+  "shared_or_production_migration_execution_authorized": false,
+  "criteria": [
+    {"criterion": "entity is approved", "state": "PROVEN", "evidence": "kernel/entities.json: Assignment approved, owned by Learning"},
+    {"criterion": "canonical identifier is approved", "state": "PROVEN", "evidence": "kernel/identifiers.json: AssignmentId approved under issue #46"},
+    {"criterion": "every persisted lifecycle state set is approved", "state": "UNKNOWN", "evidence": "No Assignment lifecycle/physical shape has been selected; do not invent a persisted state set"},
+    {"criterion": "every relationship/cardinality encoded by the schema is approved", "state": "UNKNOWN", "evidence": "Two logical Assignment relationships approved; version/reference/scope physical encoding remains undecided"},
+    {"criterion": "no blocking open question changes the record shape", "state": "UNKNOWN", "evidence": "Content version representation (OQ-CNT-1), Assignment shape, and protected scope remain undecided"},
+    {"criterion": "owning module is explicit", "state": "PROVEN", "evidence": "Domain Ownership Map and Architecture name Learning"},
+    {"criterion": "protected ownership/scope fields are derivable from approved semantics", "state": "UNKNOWN", "evidence": "Authoritative Assignment organization/location and capability scope cannot be invented while their gates remain unresolved"},
+    {"criterion": "migration and acceptance evidence plan exists", "state": "PROVEN", "evidence": "assignment/admission-evidence-plan.json@0.1.0 records replay, scope, version, audit, contention and runtime atomicity proofs"}
+  ]
+}

@@ -1,7 +1,7 @@
+import { snapshotPersistenceInput } from './input-snapshot.mjs';
 import { and, eq, sql } from 'drizzle-orm';
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import {
-  assertCredentialNotRevoked,
   assertValidCredential,
   type CredentialRecord,
   type CredentialType,
@@ -9,21 +9,9 @@ import {
 import * as identitySchema from './schema.js';
 import * as credentialSchema from './credential-schema.js';
 import { credentials, type CredentialRow } from './credential-schema.js';
+import type { CredentialRepository } from '../../application/ports/credential-repository.js';
 
 type DbSchema = typeof identitySchema & typeof credentialSchema;
-
-export interface CredentialRepository {
-  create(input: {
-    readonly id: string;
-    readonly identityId: string;
-    readonly credentialType: CredentialType;
-    readonly passwordHash: string | null;
-    readonly now: Date;
-  }): Promise<CredentialRecord>;
-  findById(input: { readonly id: string; readonly identityId: string }): Promise<CredentialRecord | null>;
-  revoke(input: { readonly id: string; readonly identityId: string; readonly now: Date }): Promise<CredentialRecord | null>;
-  listByIdentity(input: { readonly identityId: string }): Promise<CredentialRecord[]>;
-}
 
 export class PostgresCredentialRepository implements CredentialRepository {
   constructor(private readonly db: NodePgDatabase<DbSchema>) {}
@@ -35,6 +23,7 @@ export class PostgresCredentialRepository implements CredentialRepository {
     readonly passwordHash: string | null;
     readonly now: Date;
   }): Promise<CredentialRecord> {
+    input = snapshotPersistenceInput(input);
     assertValidCredential(input);
     return this.db.transaction(async (tx) => {
       // IDN-14: Identity must be ACTIVE to receive credentials
@@ -61,6 +50,7 @@ export class PostgresCredentialRepository implements CredentialRepository {
   }
 
   async findById(input: { readonly id: string; readonly identityId: string }): Promise<CredentialRecord | null> {
+    input = snapshotPersistenceInput(input);
     const [row] = await this.db
       .select()
       .from(credentials)
@@ -70,6 +60,7 @@ export class PostgresCredentialRepository implements CredentialRepository {
   }
 
   async revoke(input: { readonly id: string; readonly identityId: string; readonly now: Date }): Promise<CredentialRecord | null> {
+    input = snapshotPersistenceInput(input);
     const [row] = await this.db
       .update(credentials)
       .set({ revokedAt: input.now, updatedAt: input.now })
@@ -85,6 +76,7 @@ export class PostgresCredentialRepository implements CredentialRepository {
   }
 
   async listByIdentity(input: { readonly identityId: string }): Promise<CredentialRecord[]> {
+    input = snapshotPersistenceInput(input);
     const rows = await this.db
       .select()
       .from(credentials)

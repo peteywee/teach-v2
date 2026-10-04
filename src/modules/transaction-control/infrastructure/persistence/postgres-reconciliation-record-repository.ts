@@ -1,3 +1,4 @@
+import { snapshotPersistenceInput } from './input-snapshot.mjs';
 import { createHash } from 'node:crypto';
 import { and, eq, sql } from 'drizzle-orm';
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
@@ -30,6 +31,7 @@ export class PostgresReconciliationRecordRepository
   async createOpen(
     input: OpenReconciliationRecordInput,
   ): Promise<ReconciliationRecord> {
+    input = snapshotPersistenceInput(input);
     validateOpenReconciliationRecordInput(input);
     const scopeFingerprint = deriveScopeFingerprint(input.authoritativeScope);
 
@@ -126,6 +128,7 @@ export class PostgresReconciliationRecordRepository
   async recordReadbackUnavailable(
     input: ReconciliationReadbackUnavailableInput,
   ): Promise<ReconciliationRecord> {
+    input = snapshotPersistenceInput(input);
     if (input.error.trim().length === 0) {
       throw new RangeError('readback error must be non-blank');
     }
@@ -165,6 +168,7 @@ export class PostgresReconciliationRecordRepository
   async resolve(
     input: ResolveReconciliationRecordInput,
   ): Promise<ReconciliationRecord> {
+    input = snapshotPersistenceInput(input);
     assertConfirmedOutcome(input.outcome);
 
     const [updated] = await this.db

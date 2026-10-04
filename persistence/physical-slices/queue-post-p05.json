@@ -1,37 +1,73 @@
 {
   "queue_id": "TEACH-SLICE-QUEUE-POST-P05",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "updated_on": "2026-10-04",
+  "baseline_commit": "045114b9a211bce4485f7d3acd88230e8448e1e9",
+  "readiness_kind": "dependency discovery and admission gates; not implementation authorization",
   "slices": [
     {
       "slice": "P06",
       "entity": "Assignment",
       "domain": "Learning",
-      "status": "READY",
-      "blockers": [],
-      "identifier": "AssignmentId (approved)",
-      "relationships": "3 approved",
-      "note": "Prequalified in P05 batch audit. Learning module will exist after P05 implementation."
+      "status": "GATE_REQUIRED",
+      "admission_decision": "BLOCK",
+      "implementation_authorized": false,
+      "migration_authoring_authorized": false,
+      "identifier": "AssignmentId",
+      "relationships": [
+        "AssignmentTargetsIdentity",
+        "AssignmentReferencesContentPack"
+      ],
+      "evidence_plan": "persistence/physical-slices/assignment/admission-evidence-plan.json",
+      "blockers": [
+        "unselected Assignment lifecycle/shape",
+        "candidate ContentVersion and unselected content version representation",
+        "missing authoritative Content read",
+        "unresolved protected membership/capability scope",
+        "missing atomic audit append"
+      ],
+      "owner_gate": "#60",
+      "runtime_followup": "#58"
     },
     {
       "slice": "P07",
       "entity": "Certification",
       "domain": "Certification",
-      "status": "READY",
-      "blockers": [],
-      "identifier": "CertificationId (approved)",
-      "relationships": "3 approved",
-      "note": "Prequalified in P05 batch audit."
+      "status": "GATE_REQUIRED",
+      "admission_decision": "BLOCK",
+      "implementation_authorized": false,
+      "migration_authoring_authorized": false,
+      "identifier": "CertificationId",
+      "relationships": [
+        "CertificationBelongsToIdentity",
+        "CertificationReferencesContentPack",
+        "CertificationObservedByIdentity"
+      ],
+      "evidence_plan": null,
+      "blockers": [
+        "no schema admission/evidence plan",
+        "unselected lifecycle and approved criteria shape",
+        "missing authoritative content/version and protected authorization dependencies"
+      ]
     },
     {
       "slice": "P08",
       "entity": "ProgressEvent",
       "domain": "Learning",
-      "status": "READY",
-      "blockers": [],
-      "identifier": "ProgressEventId (approved)",
-      "relationships": "0 approved (check needed)",
-      "note": "Identifier promoted in P04 batch. Relationships need audit."
+      "status": "GATE_REQUIRED",
+      "admission_decision": "BLOCK",
+      "implementation_authorized": false,
+      "migration_authoring_authorized": false,
+      "identifier": "ProgressEventId",
+      "relationships": [
+        "ProgressEventBelongsToLearningSession"
+      ],
+      "evidence_plan": null,
+      "blockers": [
+        "no schema admission/evidence plan",
+        "candidate ContentVersion and unselected canonical event payload/version binding",
+        "unproven Learning runtime authorization and retry/no-duplicate policy"
+      ]
     }
   ]
 }

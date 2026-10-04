@@ -1,3 +1,4 @@
+import { assertIsolatedDatabaseTarget } from '../../../scripts/db/isolated-database-target.mjs';
 import assert from 'node:assert/strict';
 import { after,before,beforeEach,test } from 'node:test';
 import { drizzle } from 'drizzle-orm/node-postgres';
@@ -17,7 +18,7 @@ import * as identitySchema from '../../../src/modules/identity/infrastructure/pe
 import * as tokenSchema from '../../../src/modules/identity/infrastructure/persistence/token-schema.js';
 
 const {Pool}=pg;
-const connectionString=process.env.DATABASE_URL;
+const connectionString=assertIsolatedDatabaseTarget(process.env.DATABASE_URL);
 if(!connectionString) throw new Error('DATABASE_URL is required');
 const pool=new Pool({connectionString});
 const db=drizzle(pool,{schema:{...identitySchema,...tokenSchema}});

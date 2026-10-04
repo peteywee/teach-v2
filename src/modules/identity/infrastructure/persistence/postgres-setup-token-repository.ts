@@ -1,3 +1,4 @@
+import { snapshotPersistenceInput } from './input-snapshot.mjs';
 import { and, eq, sql } from 'drizzle-orm';
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import type { SingleUseTokenRepository } from '../../application/ports/identity-token-repository.js';
@@ -19,6 +20,7 @@ export class PostgresSetupTokenRepository implements SingleUseTokenRepository {
     readonly secret:{readonly verifierVersion:'v1';readonly verifier:Buffer};
     readonly now:Date;
   }):Promise<SingleUseTokenRecord> {
+    input = snapshotPersistenceInput(input);
     return this.db.transaction(async tx=>{
       const lock=await tx.execute(sql`select "status" from "identity_identities" where "id"=${input.identityId} for update`);
       if(lock.rows[0]?.status!=='ACTIVE') throw new Error('authoritative Identity must be ACTIVE');
@@ -40,6 +42,7 @@ export class PostgresSetupTokenRepository implements SingleUseTokenRepository {
     readonly secret:{readonly verifierVersion:'v1';readonly verifier:Buffer};
     readonly now:Date;
   }):Promise<SingleUseTokenRecord|null> {
+    input = snapshotPersistenceInput(input);
     const [row]=await this.db.update(setupTokens).set({
       status:'CONSUMED',consumedAt:input.now,updatedAt:input.now,
     }).where(and(
@@ -55,6 +58,7 @@ export class PostgresSetupTokenRepository implements SingleUseTokenRepository {
   }
 
   async revoke(input:{readonly id:string;readonly identityId:string;readonly now:Date}):Promise<SingleUseTokenRecord|null> {
+    input = snapshotPersistenceInput(input);
     const [row]=await this.db.update(setupTokens).set({
       status:'REVOKED',revokedAt:input.now,updatedAt:input.now,
     }).where(and(

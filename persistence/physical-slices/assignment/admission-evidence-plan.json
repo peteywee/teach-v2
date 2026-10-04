@@ -1,0 +1,46 @@
+{
+  "plan_id": "TEACH-SLICE-P06-ADMISSION-EVIDENCE-PLAN",
+  "version": "0.1.0",
+  "status": "recorded",
+  "issue": "#60",
+  "baseline_commit": "045114b9a211bce4485f7d3acd88230e8448e1e9",
+  "slice": "SLICE-P06",
+  "owning_module": "Learning",
+  "records": ["Assignment"],
+  "physical_schema_authorized": false,
+  "implementation_authorized": false,
+  "migration_authoring_authorized": false,
+  "runtime_activation": "BLOCKED",
+  "shared_or_production_migration_execution_authorized": false,
+  "shape_decision": "UNKNOWN",
+  "lifecycle_decision": "UNKNOWN",
+  "protected_scope_decision": "UNKNOWN",
+  "content_version_decision": "UNKNOWN",
+  "registered_relationships": ["AssignmentTargetsIdentity", "AssignmentReferencesContentPack"],
+  "required_evidence": [
+    "two independent empty-database replays produce identical full-schema fingerprints",
+    "P05-to-P06 upgrade replay matches the empty-database fingerprint",
+    "exact authoritative assigned content-version binding is proven; ContentPackId possession does not grant access",
+    "authoritative manager capability and learner organization/location scope are resolved before writes",
+    "missing, unassigned, wrong-scope, unavailable, and changed authorization deny without inserting an Assignment or LearningSession",
+    "required audit append commits atomically with Assignment mutation; audit failure rolls back all writes",
+    "duplicate and concurrent assignment behavior follows an explicitly approved policy",
+    "foreign-module direct persistence writes and imports are rejected",
+    "runtime start binds authoritative Assignment authorization and LearningSession insertion atomically as required by issue #58"
+  ],
+  "unresolved_gates": [
+    "ContentVersion is candidate; content version scheme and physical binding are not selected (C31 OQ-CNT-1, C32 LRN-2)",
+    "ContentPack storage and authoritative ContentReadInterface are absent",
+    "Assignment lifecycle, mutation, requiredness, and uniqueness/retry shape have not been selected",
+    "Membership scope and capability vocabulary remain gated; MGR-2/5/7 cannot be replaced by client assertions",
+    "same-transaction audit append infrastructure is absent (C23, APP-7)"
+  ],
+  "constraints": [
+    "This is an evidence plan; it admits no physical schema",
+    "Only a subsequent automated ADMIT evaluation may authorize physical authoring",
+    "No candidate semantic promotion is performed by this plan",
+    "Do not invent Assignment lifecycle states, capability names, or content-version representation",
+    "Do not weaken P05 REQUIRED_ONE_ASSIGNMENT or equate non-null assignment_id with authorization",
+    "No Certification, ProgressEvent, transport routes, runtime activation, or shared/production execution"
+  ]
+}
