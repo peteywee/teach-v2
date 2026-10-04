@@ -15,7 +15,7 @@ const names = ['entities.json','values.json','identifiers.json','relationships.j
 const docs = Object.fromEntries(names.map(n => [n, load(n)]));
 if (manifest) {
   if (manifest.kernel_id !== 'TEACH-K00') errors.push('manifest.json: kernel_id must be TEACH-K00');
-  if (manifest.version !== '0.9.0') errors.push('manifest.json: version must be 0.9.0');
+  if (manifest.version !== '0.10.0') errors.push('manifest.json: version must be 0.10.0');
   if (manifest.canonical_format !== 'json') errors.push('manifest.json: canonical_format must be json');
   for (const n of ['entities','values','identifiers','relationships','states','state_machines','invariants','decision_tables','capabilities','commands','events','evidence','schema']) {
     if (!manifest.files?.[n]) errors.push(`manifest.json: missing file mapping ${n}`);
@@ -156,6 +156,81 @@ for (const c of docs['commands.json']?.entries || []) {
   if (!c.authority) errors.push(`commands.json: ${c.id} missing authority`);
   if (!Array.isArray(c.requires)) errors.push(`commands.json: ${c.id} requires must be an array`);
 }
+
+const expectedApprovedCommandEvidence = new Map([
+  ['AssignContent',['MGR-7','LRN-2']],
+  ['AuthenticateIdentity',['IDN-14','SES-17']],
+  ['ChangeCredential',['IDN-15','IDN-16']],
+  ['CompleteLearningSession',['LRN-3']],
+  ['CreateApplicationSession',['SES-1','SES-3','SES-10']],
+  ['CreateIdentity',['IDN-1','IDN-16']],
+  ['CreateMembership',['TEN-3','TEN-18']],
+  ['DeactivateIdentity',['IDN-21','IDN-22']],
+  ['DeactivateMembership',['TEN-10','TEN-18']],
+  ['IssueCertification',['CERT-1','CERT-8','CERT-9','CERT-10']],
+  ['OffboardIdentity',['IDN-17','IDN-18','IDN-19','IDN-21']],
+  ['PublishContentPack',['CNT-3','CNT-6']],
+  ['ReactivateIdentity',['IDN-21','IDN-23']],
+  ['RecordProgressEvent',['LRN-3','LRN-4','LRN-7','LRN-10']],
+  ['RevokeApplicationSession',['SES-12','SES-14','SES-20']],
+  ['RevokeCertification',['CERT-11','CERT-12']],
+  ['RevokeMembership',['TEN-18','TEN-19']],
+  ['StartLearningSession',['LRN-2','LRN-3']],
+]);
+const expectedBlockedCommandBlockers = new Map([
+  ['AcceptInvitation',['missing-k00:Invitation']],
+  ['InviteIdentity',['missing-k00:Invitation']],
+  ['ReconcileExternalEffect',['missing-k00:ReconciliationRecord']],
+  ['RevokeSingleUseToken',['missing-k00:SetupToken','missing-k00:PasswordResetToken']],
+]);
+const requirementFiles = new Map([
+  ['IDN','contracts/c11-identity-credentials-contract.md'],
+  ['SES','contracts/c12-application-sessions-contract.md'],
+  ['TEN','contracts/c13-tenancy-membership-contract.md'],
+  ['CNT','contracts/c31-content-teaching-engine-contract.md'],
+  ['LRN','contracts/c32-learning-sessions-progress-contract.md'],
+  ['MGR','contracts/c33-manager-operations-contract.md'],
+  ['CERT','contracts/c34-certification-credentials-contract.md'],
+]);
+const ownerPrefixes = new Map([
+  ['Identity',new Set(['IDN','SES'])],
+  ['Organization',new Set(['TEN'])],
+  ['Content',new Set(['CNT'])],
+  ['Learning',new Set(['LRN','MGR'])],
+  ['Certification',new Set(['CERT'])],
+]);
+const semanticDependencyIds = new Set();
+for (const f of ['entities.json','identifiers.json','values.json','states.json','relationships.json']) {
+  for (const e of docs[f]?.entries || []) semanticDependencyIds.add(e.id);
+}
+const contractTextCache = new Map();
+function contractText(path) {
+  if (!contractTextCache.has(path)) contractTextCache.set(path, readFileSync(join(ROOT,path),'utf8'));
+  return contractTextCache.get(path);
+}
+for (const c of docs['commands.json']?.entries || []) {
+  if (expectedApprovedCommandEvidence.has(c.id)) {
+    if (c.status !== 'approved') errors.push(`commands.json: ${c.id} must be approved`);
+    const expected = expectedApprovedCommandEvidence.get(c.id);
+    if (JSON.stringify(c.promotion_evidence) !== JSON.stringify(expected)) errors.push(`commands.json: ${c.id} promotion_evidence mismatch`);
+    for (const dep of c.requires || []) if (!semanticDependencyIds.has(dep)) errors.push(`commands.json: ${c.id} approved with missing dependency ${dep}`);
+    const allowed = ownerPrefixes.get(c.owning_domain);
+    for (const req of expected) {
+      const prefix = req.split('-',1)[0];
+      if (!allowed?.has(prefix)) errors.push(`commands.json: ${c.id} evidence ${req} is outside owning-domain contracts`);
+      const path = requirementFiles.get(prefix);
+      if (!path || !contractText(path).includes(`**${req}**`)) errors.push(`commands.json: ${c.id} evidence ${req} not found in active contract`);
+    }
+  } else if (expectedBlockedCommandBlockers.has(c.id)) {
+    if (c.status !== 'candidate') errors.push(`commands.json: ${c.id} must remain candidate`);
+    const expected = expectedBlockedCommandBlockers.get(c.id);
+    if (JSON.stringify(c.promotion_blockers) !== JSON.stringify(expected)) errors.push(`commands.json: ${c.id} promotion_blockers mismatch`);
+  } else {
+    errors.push(`commands.json: ${c.id} missing command-promotion disposition`);
+  }
+}
+if ([...(docs['commands.json']?.entries || [])].filter(c => c.status === 'approved').length !== 18) errors.push('commands.json: expected 18 approved commands');
+if ([...(docs['commands.json']?.entries || [])].filter(c => c.status === 'candidate').length !== 4) errors.push('commands.json: expected 4 candidate commands');
 for (const e of docs['events.json']?.entries || []) {
   if (!e.owning_domain) errors.push(`events.json: ${e.id} missing owning_domain`);
   if (!e.definition) errors.push(`events.json: ${e.id} missing definition`);
@@ -214,7 +289,7 @@ if (errors.length) {
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
-console.log('Semantic kernel PASS: TEACH-K00 0.9.0');
+console.log('Semantic kernel PASS: TEACH-K00 0.10.0');
 console.log(`Entities: ${(docs['entities.json']?.entries || []).length}`);
 console.log(`Identifiers: ${(docs['identifiers.json']?.entries || []).length}`);
 console.log(`Relationships: ${(docs['relationships.json']?.entries || []).length}`);

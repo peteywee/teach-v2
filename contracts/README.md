@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -34,7 +34,7 @@
 
 # Teach v2 Contracts
 
-- Package version: `0.10.1`
+- Package version: `0.10.2`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
@@ -154,6 +154,10 @@ Package `0.10.0` establishes C01 1.6.0 event-admission semantics: audit records 
 ## October 4 governance reconciliation
 
 Package `0.10.1` reconciles the central ledger with already-live owner-directed revisions: C11 `1.2.0`, C13 `1.3.0`, C01 `1.7.0`, and K00 `0.9.0`. The prior active contract versions are preserved under `contracts/superseded/`. Governance issue #9 records that the original revisions were merged before the full SYS-21 procedure was completed; this package remediates the record and does not claim retroactive procedural compliance.
+
+## Command semantic promotion
+
+Package `0.10.2` records K00 `0.10.0` command promotion under existing C01 SEM-30. Eighteen commands are approved from direct owning-contract evidence; four remain candidate because required K00 concepts are absent. No C-series contract behavior changes in this package. GitHub issue: #10.
 
 ## Contract activation order
 

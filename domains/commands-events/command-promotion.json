@@ -1,0 +1,174 @@
+{
+  "promotion_id": "TEACH-COMMAND-PROMOTION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "approved_on": "2026-10-04",
+  "issue": "#10",
+  "baseline_commit": "a35d845758af0dbf614282d409e19dc075023df7",
+  "kernel_version": "0.10.0",
+  "promoted_commands": [
+    {
+      "id": "AssignContent",
+      "evidence": [
+        "MGR-7",
+        "LRN-2"
+      ]
+    },
+    {
+      "id": "AuthenticateIdentity",
+      "evidence": [
+        "IDN-14",
+        "SES-17"
+      ]
+    },
+    {
+      "id": "ChangeCredential",
+      "evidence": [
+        "IDN-15",
+        "IDN-16"
+      ]
+    },
+    {
+      "id": "CompleteLearningSession",
+      "evidence": [
+        "LRN-3"
+      ]
+    },
+    {
+      "id": "CreateApplicationSession",
+      "evidence": [
+        "SES-1",
+        "SES-3",
+        "SES-10"
+      ]
+    },
+    {
+      "id": "CreateIdentity",
+      "evidence": [
+        "IDN-1",
+        "IDN-16"
+      ]
+    },
+    {
+      "id": "CreateMembership",
+      "evidence": [
+        "TEN-3",
+        "TEN-18"
+      ]
+    },
+    {
+      "id": "DeactivateIdentity",
+      "evidence": [
+        "IDN-21",
+        "IDN-22"
+      ]
+    },
+    {
+      "id": "DeactivateMembership",
+      "evidence": [
+        "TEN-10",
+        "TEN-18"
+      ]
+    },
+    {
+      "id": "IssueCertification",
+      "evidence": [
+        "CERT-1",
+        "CERT-8",
+        "CERT-9",
+        "CERT-10"
+      ]
+    },
+    {
+      "id": "OffboardIdentity",
+      "evidence": [
+        "IDN-17",
+        "IDN-18",
+        "IDN-19",
+        "IDN-21"
+      ]
+    },
+    {
+      "id": "PublishContentPack",
+      "evidence": [
+        "CNT-3",
+        "CNT-6"
+      ]
+    },
+    {
+      "id": "ReactivateIdentity",
+      "evidence": [
+        "IDN-21",
+        "IDN-23"
+      ]
+    },
+    {
+      "id": "RecordProgressEvent",
+      "evidence": [
+        "LRN-3",
+        "LRN-4",
+        "LRN-7",
+        "LRN-10"
+      ]
+    },
+    {
+      "id": "RevokeApplicationSession",
+      "evidence": [
+        "SES-12",
+        "SES-14",
+        "SES-20"
+      ]
+    },
+    {
+      "id": "RevokeCertification",
+      "evidence": [
+        "CERT-11",
+        "CERT-12"
+      ]
+    },
+    {
+      "id": "RevokeMembership",
+      "evidence": [
+        "TEN-18",
+        "TEN-19"
+      ]
+    },
+    {
+      "id": "StartLearningSession",
+      "evidence": [
+        "LRN-2",
+        "LRN-3"
+      ]
+    }
+  ],
+  "blocked_candidate_commands": [
+    {
+      "id": "AcceptInvitation",
+      "blockers": [
+        "missing-k00:Invitation"
+      ]
+    },
+    {
+      "id": "InviteIdentity",
+      "blockers": [
+        "missing-k00:Invitation"
+      ]
+    },
+    {
+      "id": "ReconcileExternalEffect",
+      "blockers": [
+        "missing-k00:ReconciliationRecord"
+      ]
+    },
+    {
+      "id": "RevokeSingleUseToken",
+      "blockers": [
+        "missing-k00:SetupToken",
+        "missing-k00:PasswordResetToken"
+      ]
+    }
+  ],
+  "candidate_to_approved_promotions": 18,
+  "event_status_changes": 0
+}

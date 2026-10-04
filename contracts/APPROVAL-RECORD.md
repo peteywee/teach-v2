@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-04
-- Contract package version: `0.10.1`
+- Contract package version: `0.10.2`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -303,3 +303,12 @@ PATCH revisions preserve the controlling owner approval when they do not change 
 | TEACH-K00 | 0.8.0 | 0.9.0 | `881c890` — per-kind command/event schema and first four event promotions | Ratified as current active semantic kernel | #9 |
 
 Prior versions are preserved during this reconciliation from their exact historical Git content. The next semantic change remains subject to the normal pre-change issue and explicit owner-approval path.
+
+## Part 14 — Command semantic promotion
+
+| Artifact | From | To | Decision | Date | Owner | GitHub issue |
+| --- | --- | --- | --- | --- | --- | --- |
+| TEACH-K00 | 0.9.0 | 0.10.0 | Promote 18 commands with direct owning-contract evidence; keep 4 commands candidate due missing K00 concepts; no event status change | 2026-10-04 | Patrick Craven | #10 |
+| TEACH-COMMAND-EVENT-DISCOVERY | 0.3.0 | 0.4.0 | Record promotion evidence and blockers for all 22 registered commands | 2026-10-04 | Patrick Craven | #10 |
+
+The four unpromoted commands are not implementation authority under SEM-2. Their blockers must be resolved by a later semantic change before promotion.

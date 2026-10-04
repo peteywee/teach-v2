@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-COMMAND-EVENT-DISCOVERY",
   "class": "specification",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "claims_truth_state": "declared",
   "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -63,3 +63,15 @@ GitHub issue #8 makes event admission explicit under C01 1.6.0.
 - Future event additions: require an approved semantic change with explicit owning-domain contract support
 
 Architecture is the next dependency-ready build-sequence stage.
+
+## Command promotion
+
+GitHub issue #10 applies SEM-30 owner approval to the contract-proven command baseline.
+
+- Approved commands: 18
+- Candidate commands blocked by missing K00 concepts: 4
+- Discovery-blocked command proposals outside K00: 8
+- Event status changes: 0
+- K00 version: 0.10.0
+
+The four remaining registered command candidates are `InviteIdentity`, `AcceptInvitation`, `ReconcileExternalEffect`, and `RevokeSingleUseToken`. Architecture must not rely on those commands until their missing K00 concepts are registered and they receive a separate promotion.

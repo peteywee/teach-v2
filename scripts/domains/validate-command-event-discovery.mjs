@@ -9,13 +9,14 @@ const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch
 const proposal=load('domains/commands-events/proposed.json');
 const registration=load('domains/commands-events/command-registration.json');
 const eventAdmission=load('domains/commands-events/event-admission.json');
+const commandPromotion=load('domains/commands-events/command-promotion.json');
 const manifest=load('kernel/manifest.json');
 const ownership=load('domains/ownership-map.json');
 const commands=load('kernel/commands.json');
 const events=load('kernel/events.json');
 const decisions=load('kernel/decision-tables.json');
 
-if (manifest?.version !== '0.9.0') errors.push(`command/event discovery: expected K00 0.9.0, found ${manifest?.version}`);
+if (manifest?.version !== '0.10.0') errors.push(`command/event discovery: expected K00 0.10.0, found ${manifest?.version}`);
 if (ownership?.version !== '1.4.0' || ownership?.status !== 'active') errors.push('command/event discovery: expected active Domain Ownership Map 1.4.0');
 if ((decisions?.entries || []).length !== 8) errors.push('command/event discovery: expected 8 registered decision tables');
 if (proposal?.version !== '0.1.0' || proposal?.status !== 'proposed') errors.push('command/event discovery: proposal must be proposed 0.1.0');
@@ -73,6 +74,23 @@ if (eventAdmission) {
   if (eventAdmission.events_gate !== 'closed-for-current-baseline') errors.push('event admission: events gate must be closed for current baseline');
   for (const d of eventAdmission.discovery_event_disposition || []) if (d.disposition !== 'NOT_ADMITTED') errors.push(`event admission: ${d.id} disposition must be NOT_ADMITTED`);
 }
+if (commandPromotion) {
+  if (commandPromotion.version !== '1.0.0') errors.push('command promotion: version must be 1.0.0');
+  if (commandPromotion.status !== 'recorded') errors.push('command promotion: status must be recorded');
+  if (commandPromotion.kernel_version !== '0.10.0') errors.push('command promotion: kernel_version must be 0.10.0');
+  if (commandPromotion.promoted_commands?.length !== 18) errors.push('command promotion: expected 18 promoted commands');
+  if (commandPromotion.blocked_candidate_commands?.length !== 4) errors.push('command promotion: expected 4 blocked candidate commands');
+  if (commandPromotion.candidate_to_approved_promotions !== 18) errors.push('command promotion: promotion count must be 18');
+  if (commandPromotion.event_status_changes !== 0) errors.push('command promotion: event status changes must be 0');
+  for (const d of commandPromotion.promoted_commands || []) {
+    const c = (commands?.entries || []).find(x => x.id === d.id);
+    if (c?.status !== 'approved') errors.push(`command promotion: ${d.id} is not approved`);
+  }
+  for (const d of commandPromotion.blocked_candidate_commands || []) {
+    const c = (commands?.entries || []).find(x => x.id === d.id);
+    if (c?.status !== 'candidate') errors.push(`command promotion: ${d.id} must remain candidate`);
+  }
+}
 if (manifest?.rules?.audit_record_implies_domain_event !== false) errors.push('event admission: audit record must not imply domain event');
 if (manifest?.rules?.state_transition_implies_event !== false) errors.push('event admission: state transition must not imply event');
 if (manifest?.rules?.event_registration_requires_explicit_contract_semantics !== true) errors.push('event admission: explicit contract semantics rule missing');
@@ -90,4 +108,5 @@ console.log('Blocked command candidates excluded: 8');
 console.log('K00 events unchanged: 14');
 console.log('Events gate: closed for current semantic baseline');
 console.log('Blocked event candidates excluded: 9');
-console.log('Candidate-to-approved promotions: 0');
+console.log('Command promotions: 18 approved / 4 candidate');
+console.log('Event status changes in command promotion: 0');

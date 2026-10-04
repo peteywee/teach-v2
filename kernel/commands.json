@@ -11,12 +11,15 @@
       "requires": [
         "Invitation",
         "Identity"
+      ],
+      "promotion_blockers": [
+        "missing-k00:Invitation"
       ]
     },
     {
       "id": "AssignContent",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Learning",
       "definition": "Assigns a content pack to a learner.",
       "authority": "Creates Assignment records linking content to learners.",
@@ -24,70 +27,94 @@
         "ContentPack",
         "Assignment",
         "Identity"
+      ],
+      "promotion_evidence": [
+        "MGR-7",
+        "LRN-2"
       ]
     },
     {
       "id": "AuthenticateIdentity",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Identity",
       "definition": "Authenticates an identity's credential and establishes a session.",
       "authority": "Creates ApplicationSession; reads Identity and Credential.",
       "requires": [
         "Identity",
         "Credential"
+      ],
+      "promotion_evidence": [
+        "IDN-14",
+        "SES-17"
       ]
     },
     {
       "id": "ChangeCredential",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Identity",
       "definition": "Changes an identity's credential.",
       "authority": "Mutates Credential; revokes sessions per the session-revocation policy.",
       "requires": [
         "Identity",
         "Credential"
+      ],
+      "promotion_evidence": [
+        "IDN-15",
+        "IDN-16"
       ]
     },
     {
       "id": "CompleteLearningSession",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Learning",
       "definition": "Marks a learning session complete.",
       "authority": "Transitions LearningSession to completed.",
       "requires": [
         "LearningSession"
+      ],
+      "promotion_evidence": [
+        "LRN-3"
       ]
     },
     {
       "id": "CreateApplicationSession",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Identity",
       "definition": "Creates an application session for an authenticated identity.",
       "authority": "Creates ApplicationSession.",
       "requires": [
         "Identity",
         "ApplicationSession"
+      ],
+      "promotion_evidence": [
+        "SES-1",
+        "SES-3",
+        "SES-10"
       ]
     },
     {
       "id": "CreateIdentity",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Identity",
       "definition": "Creates a new application identity.",
       "authority": "Creates Identity and its primary Credential.",
       "requires": [
         "Identity"
+      ],
+      "promotion_evidence": [
+        "IDN-1",
+        "IDN-16"
       ]
     },
     {
       "id": "CreateMembership",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Organization",
       "definition": "Creates a membership linking an identity to an organization.",
       "authority": "Creates Membership.",
@@ -95,28 +122,40 @@
         "Membership",
         "Identity",
         "Organization"
+      ],
+      "promotion_evidence": [
+        "TEN-3",
+        "TEN-18"
       ]
     },
     {
       "id": "DeactivateIdentity",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Identity",
       "definition": "Deactivates an identity for a reason other than offboarding.",
       "authority": "Transitions Identity ACTIVE -> INACTIVE; emits IdentityDeactivated.",
       "requires": [
         "Identity"
+      ],
+      "promotion_evidence": [
+        "IDN-21",
+        "IDN-22"
       ]
     },
     {
       "id": "DeactivateMembership",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Organization",
       "definition": "Deactivates a membership.",
       "authority": "Transitions Membership ACTIVE -> INACTIVE.",
       "requires": [
         "Membership"
+      ],
+      "promotion_evidence": [
+        "TEN-10",
+        "TEN-18"
       ]
     },
     {
@@ -129,51 +168,74 @@
       "requires": [
         "Invitation",
         "Identity"
+      ],
+      "promotion_blockers": [
+        "missing-k00:Invitation"
       ]
     },
     {
       "id": "IssueCertification",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Certification",
       "definition": "Issues a certification to an identity.",
       "authority": "Creates Certification.",
       "requires": [
         "Certification",
         "Identity"
+      ],
+      "promotion_evidence": [
+        "CERT-1",
+        "CERT-8",
+        "CERT-9",
+        "CERT-10"
       ]
     },
     {
       "id": "OffboardIdentity",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Identity",
       "definition": "Offboards an identity.",
       "authority": "Transitions Identity to INACTIVE; revokes sessions, credentials, and memberships; emits IdentityOffboarded.",
       "requires": [
         "Identity"
+      ],
+      "promotion_evidence": [
+        "IDN-17",
+        "IDN-18",
+        "IDN-19",
+        "IDN-21"
       ]
     },
     {
       "id": "PublishContentPack",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Content",
       "definition": "Publishes a content pack.",
       "authority": "Transitions ContentPack to published state.",
       "requires": [
         "ContentPack"
+      ],
+      "promotion_evidence": [
+        "CNT-3",
+        "CNT-6"
       ]
     },
     {
       "id": "ReactivateIdentity",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Identity",
       "definition": "Reactivates a deactivated identity.",
       "authority": "Transitions Identity INACTIVE -> ACTIVE; emits IdentityReactivated.",
       "requires": [
         "Identity"
+      ],
+      "promotion_evidence": [
+        "IDN-21",
+        "IDN-23"
       ]
     },
     {
@@ -185,51 +247,73 @@
       "authority": "Records reconciliation; retries or compensates the external effect.",
       "requires": [
         "ReconciliationRecord"
+      ],
+      "promotion_blockers": [
+        "missing-k00:ReconciliationRecord"
       ]
     },
     {
       "id": "RecordProgressEvent",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Learning",
       "definition": "Records a progress event in a learning session.",
       "authority": "Appends ProgressEvent to a LearningSession.",
       "requires": [
         "LearningSession",
         "ProgressEvent"
+      ],
+      "promotion_evidence": [
+        "LRN-3",
+        "LRN-4",
+        "LRN-7",
+        "LRN-10"
       ]
     },
     {
       "id": "RevokeApplicationSession",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Identity",
       "definition": "Revokes an application session before expiry.",
       "authority": "Transitions ApplicationSession to revoked; emits ApplicationSessionRevoked.",
       "requires": [
         "ApplicationSession"
+      ],
+      "promotion_evidence": [
+        "SES-12",
+        "SES-14",
+        "SES-20"
       ]
     },
     {
       "id": "RevokeCertification",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Certification",
       "definition": "Revokes a certification.",
       "authority": "Transitions Certification to revoked; emits CertificationRevoked.",
       "requires": [
         "Certification"
+      ],
+      "promotion_evidence": [
+        "CERT-11",
+        "CERT-12"
       ]
     },
     {
       "id": "RevokeMembership",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Organization",
       "definition": "Revokes a membership.",
       "authority": "Transitions Membership INACTIVE -> REVOKED; emits MembershipRevoked.",
       "requires": [
         "Membership"
+      ],
+      "promotion_evidence": [
+        "TEN-18",
+        "TEN-19"
       ]
     },
     {
@@ -242,18 +326,26 @@
       "requires": [
         "SetupToken",
         "PasswordResetToken"
+      ],
+      "promotion_blockers": [
+        "missing-k00:SetupToken",
+        "missing-k00:PasswordResetToken"
       ]
     },
     {
       "id": "StartLearningSession",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Learning",
       "definition": "Starts a learning session from an assignment.",
       "authority": "Creates LearningSession; emits LearningSessionStarted.",
       "requires": [
         "LearningSession",
         "Assignment"
+      ],
+      "promotion_evidence": [
+        "LRN-2",
+        "LRN-3"
       ]
     }
   ]
