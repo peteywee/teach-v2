@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.11.1",
+  "version": "0.11.2",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-04
-- Contract package version: `0.11.1`
+- Contract package version: `0.11.2`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -47,10 +47,10 @@ procedure (SYS-21).
 | C01      | OQ-SEM-2   | The decisions give IdentityStatus as ACTIVE, INACTIVE, DELETED, and also require `offboarded` to stay distinct. Is offboarded an IdentityStatus value, or the `IdentityOffboarded` event whose result is INACTIVE or DELETED? | OFFBOARDED is not IdentityStatus; IdentityOffboarded is lifecycle event; IdentityStatus remains ACTIVE/INACTIVE/DELETED | 2026-10-03 | Patrick Craven |
 | C01      | OQ-SEM-3   | Capability identifiers appear in both the kernel concept list and C14's vocabulary. Does C01 own capability identifiers while C14 owns what they authorize, or does C14 own capabilities entirely?                            | C01 owns capability identifiers/names; C14 owns authorization meaning, assignment, scope, evaluation, denial | 2026-10-03 | Patrick Craven |
 | C11      | OQ-IDN-1   | Which password hashing algorithm and parameters are approved?                                                                                                                                                                 |          |      |       |
-| C11      | OQ-IDN-2   | What are the lifetimes of invitation, frontline setup, and password-reset tokens?                                                                                                                                             |          |      |       |
+| C11      | OQ-IDN-2   | What are the lifetimes of invitation, frontline setup, and password-reset tokens?                                                                                                                                             | Invitation 7 days; SetupToken 15 minutes; PasswordResetToken 1 hour | 2026-10-04 | Patrick Craven |
 | C11      | OQ-IDN-3   | Which sessions does a credential change revoke: all sessions, all other sessions, or another policy?                                                                                                                          |          |      |       |
 | C11      | OQ-IDN-4   | What is the OAuth linking rule: verified-email match, explicit user-initiated linking only, or another rule?                                                                                                                  |          |      |       |
-| C11      | OQ-IDN-5   | For an offboarded identity's email, is a new invitation a controlled reactivation or a controlled rejection? (Required decision carried from Gate A.)                                                                         |          |      |       |
+| C11      | OQ-IDN-5   | For an offboarded identity's email, is a new invitation a controlled reactivation or a controlled rejection? (Required decision carried from Gate A.)                                                                         | Controlled rejection until explicit ReactivateIdentity; no Invitation or token created before reactivation | 2026-10-04 | Patrick Craven |
 | C12      | OQ-SES-1   | Which `SameSite` value is approved: `Strict` or `Lax`?                                                                                                                                                                        |          |      |       |
 | C12      | OQ-SES-2   | Which cookie domain and path are approved given the web and API hostnames?                                                                                                                                                    |          |      |       |
 | C12      | OQ-SES-3   | Which hash or verifier construction is approved for session credentials at rest?                                                                                                                                              |          |      |       |
@@ -67,7 +67,7 @@ procedure (SYS-21).
 | C21      | OQ-MIG-2   | Where is restore proof performed (disposable environment, staging), and how recent must it be?                                                                                                                                |          |      |       |
 | C22      | OQ-TXN-1   | Are idempotency keys client-supplied (header), server-derived, or both, and how long are they retained?                                                                                                                       |          |      |       |
 | C23      | OQ-AUD-1   | How long are audit records retained, and is retention per tenant configurable?                                                                                                                                                |          |      |       |
-| C32      | OQ-LRN-1   | What is the learning-session state machine (states and allowed transitions)?                                                                                                                                                  |          |      |       |
+| C32      | OQ-LRN-1   | What is the learning-session state machine (states and allowed transitions)?                                                                                                                                                  | ACTIVE -> COMPLETED; COMPLETED terminal; progress recording allowed only while ACTIVE | 2026-10-03 | Patrick Craven |
 | C33      | OQ-MGR-1   | Is manager visibility limited to direct reports, the whole location, or configurable?                                                                                                                                         |          |      |       |
 | C34      | OQ-CERT-1  | Is credential verification public (anyone with the link) or private (authenticated, scoped)? (Deferred by Gate A.)                                                                                                            |          |      |       |
 | C34      | OQ-CERT-2  | Who approves certification criteria versions, and where is approval recorded?                                                                                                                                                 |          |      |       |
@@ -343,3 +343,19 @@ Legacy `peteywee/teach` was consulted only as non-authoritative reference eviden
 | TEACH-COMMAND-EVENT-DISCOVERY | 0.5.0 | 0.6.0 | Record final command promotion; 23 commands approved / 0 candidate | 2026-10-04 | Patrick Craven | #12 |
 
 Events remain unchanged at 4 approved / 10 candidate. This approval does not manufacture domain events from lifecycle transitions.
+## Part 18 — Strict-nine semantic promotion ratification
+
+**Procedural truth state:** direct owner direction landed in `7534df2` before the dedicated SYS-21 issue and canonical ledger update. GitHub issue #14 ratifies the current authority without pretending the original ordering was compliant.
+
+- Original SYS-21 procedure: **CONTRADICTORY**.
+- Current semantic content after ratification/readback: **PROVEN**.
+- Semantic behavior newly introduced by this reconciliation package: **none**.
+
+| Artifact / Contract | From | To | Original change | Ratified decision | Date | Owner | Remediation issue |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| C01 Canonical Semantics | 1.7.0 | 1.8.0 | `7534df2` — add SEM-36 and SEM-AC-25 dependency-closure rule | Ratified as current active contract authority | 2026-10-04 | Patrick Craven | #14 |
+| TEACH-K00 | 0.12.0 | 0.13.0 | `7534df2` — strict-nine entity promotion | Ratified as current active semantic kernel | 2026-10-04 | Patrick Craven | #14 |
+| Strict-nine entities | candidate | approved | Identity, Credential, ApplicationSession, Organization, Assignment, LearningSession, ProgressEvent, Certification, ContentPack | Ratified exactly as merged | 2026-10-04 | Patrick Craven | #14 |
+| Membership | candidate | candidate hold | OQ-TEN-1 directly affects Membership shape | Hold ratified; Membership MUST remain candidate until OQ-TEN-1 is resolved and the promotion gate is rerun | 2026-10-04 | Patrick Craven | #14 |
+
+The three already-approved Membership commands retain only the explicit, enumerated SEM-36 exception recorded in the validator. This ratification does not broaden that exception and does not promote any relationship, invariant, decision table, capability, event, or additional entity.

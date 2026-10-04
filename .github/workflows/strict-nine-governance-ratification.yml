@@ -1,0 +1,26 @@
+name: Strict-Nine Governance Ratification
+
+on:
+  pull_request:
+    paths:
+      - 'contracts/**'
+      - 'kernel/README.md'
+      - 'governance/2026-10-04-strict-nine-ratification.json'
+      - 'scripts/governance/validate-strict-nine-ratification.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'contracts/**'
+      - 'kernel/README.md'
+      - 'governance/2026-10-04-strict-nine-ratification.json'
+      - 'scripts/governance/validate-strict-nine-ratification.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/governance/validate-strict-nine-ratification.mjs

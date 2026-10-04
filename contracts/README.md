@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.11.1",
+  "version": "0.11.2",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -34,7 +34,7 @@
 
 # Teach v2 Contracts
 
-- Package version: `0.11.1`
+- Package version: `0.11.2`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
@@ -103,7 +103,7 @@ the requirement that keeps the feature off applies.
 | ID  | Contract                                                                                            | Version | Prefix  | Requirements | Acceptance cases | Open questions | Blocking implementation | Status   |
 | --- | --------------------------------------------------------------------------------------------------- | ------- | ------- | ------------ | ---------------- | -------------- | ----------------------- | -------- |
 | C00 | [System Authority](c00-system-authority-contract.md)                                                | 1.0.3   | `SYS`   | 34           | 20               | 6              | 0                       | `active` |
-| C01 | [Canonical Semantics](c01-canonical-semantics-contract.md)                                          | 1.7.0   | `SEM`   | 35           | 24               | 0              | 0                       | `active` |
+| C01 | [Canonical Semantics](c01-canonical-semantics-contract.md)                                          | 1.8.0   | `SEM`   | 36           | 25               | 0              | 0                       | `active` |
 | C02 | [Automation & Agent Authority](c02-automation-agent-authority-contract.md)                          | 1.0.3   | `AGT`   | 17           | 13               | 3              | 0                       | `active` |
 | C11 | [Identity & Credentials](c11-identity-credentials-contract.md)                                      | 1.3.0   | `IDN`   | 29           | 22               | 7              | 3                       | `active` |
 | C12 | [Application Sessions](c12-application-sessions-contract.md)                                        | 1.0.3   | `SES`   | 20           | 14               | 7              | 6                       | `active` |
@@ -125,7 +125,7 @@ the requirement that keeps the feature off applies.
 | C61 | [Analytics](c61-analytics-contract.md)                                                              | 1.0.3   | `ANL`   | 8            | 7                | 2              | 0                       | `active` |
 | C62 | [PWA / Offline](c62-pwa-offline-contract.md)                                                        | 1.0.3   | `PWA`   | 9            | 4                | 1              | 0                       | `active` |
 | C63 | [Self-Service Billing](c63-billing-contract.md)                                                     | 1.1.0   | `BIL`   | 14           | 12               | 3              | 0                       | `active` |
-|     | **Total**                                                                                           |         |         | **385**      | **261**          | **77**         | **25**                  |          |
+|     | **Total**                                                                                           |         |         | **386**      | **262**          | **77**         | **25**                  |          |
 
 ## K00 semantic-kernel bootstrap
 
@@ -224,8 +224,10 @@ Execution hierarchy: Contract → Epic → Vertical Slice → Work Package → B
 
 ## Decisions recorded outside these contracts
 
-The consolidated decisions also set direction that is architectural rather than behavioral. These
-are owner-declared and are not yet captured in an architecture decision record:
+The consolidated decisions also set direction that is architectural rather than behavioral. The
+logical architecture is now captured in `architecture/authority.json` version `1.0.0`; the bullets
+below preserve the original source direction while later implementation-specific choices remain
+deferred to their build-sequence stages:
 
 - Development model: contract-driven, semantic-kernel-driven, domain-oriented, decision-explicit,
   modular monolith, vertical-slice delivery, Agile execution, evidence-gated completion.
@@ -290,3 +292,7 @@ Owner-supplied documents are preserved as non-normative records in `source/`:
 
 Retargeting to v2 and anchoring to `peteywee/teach-v2` `main` (owner statements, 2026-10-03) each
 bumped every contract one minor version; see each Change Log.
+
+## Governance reconciliation — strict-nine
+
+Package `0.11.2` synchronizes the central contract index and approval ledger with the direct owner-directed strict-nine change at `7534df2`: C01 `1.8.0`, SEM-36 / SEM-AC-25, K00 `0.13.0`, nine entity promotions, and the explicit Membership hold on OQ-TEN-1. The original SYS-21 ordering is recorded as `CONTRADICTORY`; the current content is ratified as `PROVEN` through GitHub issue #14. No new semantic behavior is introduced by this patch.

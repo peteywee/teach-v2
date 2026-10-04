@@ -1,0 +1,41 @@
+{
+  "record_id": "TEACH-GOV-STRICT-NINE-RATIFICATION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "date": "2026-10-04",
+  "issue": "#14",
+  "original_change_commit": "7534df216b702df5132a206a1b22003d9f983bea",
+  "original_procedure_state": "CONTRADICTORY",
+  "current_content_state": "PROVEN",
+  "ratified_changes": {
+    "C01": {
+      "from": "1.7.0",
+      "to": "1.8.0",
+      "requirements": [
+        "SEM-36"
+      ],
+      "acceptance": [
+        "SEM-AC-25"
+      ]
+    },
+    "K00": {
+      "from": "0.12.0",
+      "to": "0.13.0"
+    },
+    "promoted_entities": [
+      "Identity",
+      "Credential",
+      "ApplicationSession",
+      "Organization",
+      "Assignment",
+      "LearningSession",
+      "ProgressEvent",
+      "Certification",
+      "ContentPack"
+    ],
+    "held_entity": "Membership",
+    "hold_reason": "OQ-TEN-1",
+    "command_or_event_status_changes": 0
+  }
+}
