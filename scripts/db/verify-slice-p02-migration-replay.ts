@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { cpSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { drizzle } from 'drizzle-orm/node-postgres';
@@ -21,16 +21,19 @@ const names = {
 };
 const admin = new Pool({ connectionString: adminUrl.toString() });
 const p01Folder = resolve(`/tmp/teach-v2-p01-${suffix}`);
+const p02Folder = resolve(`/tmp/teach-v2-p02-${suffix}`);
 
 try {
+  prepareP02Folder(p02Folder, migrationsFolder);
+
   for (const name of Object.values(names)) {
     await dropDatabase(name);
     await admin.query(`create database ${quoteIdent(name)}`);
   }
 
   const [first, second] = await Promise.all([
-    migrateAndFingerprint(names.first, migrationsFolder),
-    migrateAndFingerprint(names.second, migrationsFolder),
+    migrateAndFingerprint(names.first, p02Folder),
+    migrateAndFingerprint(names.second, p02Folder),
   ]);
   if (first !== second) {
     throw new Error(`two-empty-database replay diverged: ${first} != ${second}`);
@@ -44,7 +47,7 @@ try {
     const p01Tables = await publicTables(upgradePool);
     assertTables(p01Tables, ['transaction_control_reconciliation_records'], 'P01 baseline');
 
-    await migrate(drizzle(upgradePool), { migrationsFolder });
+    await migrate(drizzle(upgradePool), { migrationsFolder: p02Folder });
     const upgraded = await fingerprint(upgradePool);
     if (upgraded !== first) {
       throw new Error(`P01 -> P02 upgrade fingerprint diverged: ${upgraded} != ${first}`);
@@ -54,13 +57,62 @@ try {
   }
 
   console.log('SLICE-P02 MIGRATION REPLAY PASS');
+  console.log('P02 migration prefix pinned through 0001_odd_photon');
   console.log('two independent empty databases: identical');
   console.log('P01 -> P02 pending migration: identical');
   console.log(`schema fingerprint: ${first}`);
 } finally {
   rmSync(p01Folder, { recursive: true, force: true });
+  rmSync(p02Folder, { recursive: true, force: true });
   for (const name of Object.values(names)) await dropDatabase(name);
   await admin.end();
+}
+
+function prepareP02Folder(target: string, source: string): void {
+  mkdirSync(join(target, 'meta'), { recursive: true });
+  for (const migration of [
+    '0000_slice_p01_reconciliation.sql',
+    '0001_odd_photon.sql',
+  ]) {
+    cpSync(join(source, migration), join(target, migration));
+  }
+
+  const sourceJournal = JSON.parse(
+    readFileSync(join(source, 'meta', '_journal.json'), 'utf8'),
+  ) as {
+    version: string;
+    dialect: string;
+    entries: Array<{
+      idx: number;
+      version: string;
+      when: number;
+      tag: string;
+      breakpoints: boolean;
+    }>;
+  };
+  const entries = sourceJournal.entries.slice(0, 2);
+  if (
+    entries.length !== 2 ||
+    entries[0]?.idx !== 0 ||
+    entries[0]?.tag !== '0000_slice_p01_reconciliation' ||
+    entries[1]?.idx !== 1 ||
+    entries[1]?.tag !== '0001_odd_photon'
+  ) {
+    throw new Error('P02 migration prefix no longer matches the admitted 0000/0001 history');
+  }
+
+  writeFileSync(
+    join(target, 'meta', '_journal.json'),
+    JSON.stringify(
+      {
+        version: sourceJournal.version,
+        dialect: sourceJournal.dialect,
+        entries,
+      },
+      null,
+      2,
+    ) + '\n',
+  );
 }
 
 function prepareP01Folder(target: string): void {
