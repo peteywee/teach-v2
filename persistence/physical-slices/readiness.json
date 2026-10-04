@@ -8,7 +8,7 @@
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "84c94ba1abe466907b63d79b281ac4df36b77b6c",
+    "commit": "626512771b1a66751428d7bd0b5ac5fe6ddb613b",
     "kernel_version": "0.16.0",
     "persistence_authority_version": "1.0.0",
     "semantic_closure_registration_version": "1.0.0",
@@ -83,16 +83,9 @@
       "decision": "ADMIT",
       "admitted_on": "2026-10-04",
       "implementation_state": "IMPLEMENTED"
-    },
-    {
-      "id": "SLICE-P05",
-      "admission": "persistence/physical-slices/learning-session/admission.json@1.0.0",
-      "decision": "ADMIT",
-      "admitted_on": "2026-10-04",
-      "implementation_state": "ADMITTED"
     }
   ],
-  "current_admitted_slice_count": 5,
+  "current_admitted_slice_count": 4,
   "candidate_slices": [
     {
       "id": "SLICE-P01",
@@ -205,65 +198,63 @@
     },
     {
       "id": "SLICE-P04",
-      "name": "Organization/tenant persistence",
-      "owning_module": "Organization",
+      "name": "Credential persistence",
+      "owning_module": "Identity",
       "records": [
-        "Organization",
-        "Membership",
-        "Location",
-        "Entitlement"
+        "Credential"
       ],
       "current_state": "IMPLEMENTED",
-      "blockers": [
-        "Membership, Location, and Entitlement remain candidate",
-        "OQ-TEN-1 remains open and directly affects Membership shape",
-        "OQ-TEN-2 remains open and affects multi-membership scope selection"
+      "blockers": [],
+      "blockers_removed_by_semantic_promotion": [
+        "CredentialId promoted to approved before physical implementation"
       ],
-      "blockers_removed_by_k00_014": [
-        "OrganizationId"
-      ]
+      "blockers_removed_by_admission": [
+        "Credential entity, identifier, Identity ownership relationship, protected IdentityId scope, and evidence plan recorded"
+      ],
+      "admission_issue": "#46",
+      "admission_version": "1.0.0",
+      "admitted_on": "2026-10-04",
+      "implementation_authorized": true,
+      "shared_or_production_migration_execution_authorized": false,
+      "implementation_version": "1.0.0",
+      "implementation_evidence": "PROVEN"
     },
     {
       "id": "SLICE-P05",
-      "name": "Learning/content/certification persistence",
-      "owning_module": "multi-owner coordinated slice",
+      "name": "LearningSession persistence",
+      "owning_module": "Learning",
       "records": [
-        "ContentPack",
-        "Assignment",
-        "LearningSession",
-        "ProgressEvent",
-        "Certification"
+        "LearningSession"
       ],
-      "current_state": "ADMITTED",
+      "current_state": "BLOCKED",
       "blockers": [
-        "AssignmentId and ProgressEventId are still candidate and not named in current C01 canonical identifier set",
-        "ContentBlock remains candidate",
-        "CertificationCriteriaVersion remains a missing core semantic candidate",
-        "Certification revocation classification remains unresolved"
+        "LearningSessionUsesAssignment physical nullability/requiredness is UNKNOWN pending owner decision #47"
       ],
-      "blockers_removed_by_k00_014": [
-        "ContentPackId",
-        "LearningSessionId",
-        "CertificationId",
-        "LearningSessionStatus",
-        "LearningSessionStateMachine",
-        "AssignmentTargetsIdentity",
-        "AssignmentReferencesContentPack",
-        "IdentityHasLearningSession",
-        "LearningSessionUsesAssignment",
-        "ProgressEventBelongsToLearningSession",
-        "CertificationBelongsToIdentity",
-        "CertificationReferencesContentPack",
-        "CertificationObservedByIdentity"
-      ]
+      "blockers_removed_by_semantic_promotion": [
+        "LearningSessionId is approved",
+        "LearningSessionStatus and LearningSessionStateMachine are approved",
+        "IdentityHasLearningSession is approved one-to-many",
+        "LearningSessionUsesAssignment is approved many-to-one"
+      ],
+      "blockers_removed_by_architecture": [
+        "Architecture 1.0.0 names Learning as a runtime domain module",
+        "src/modules/learning establishes the source boundary without physical persistence implementation"
+      ],
+      "admission_issue": "#47",
+      "admission_version": "1.1.0",
+      "implementation_authorized": false,
+      "migration_authoring_authorized": false,
+      "shared_or_production_migration_execution_authorized": false
     }
   ],
   "narrowed_next_lane": {
     "preferred_slice": "SLICE-P05",
-    "reason": "LearningSession selected; P05 admitted, implementation authorized.",
-    "owner_decisions_required": [],
-    "physical_implementation_authorized": true,
-    "next_required_gate": "Implement SLICE-P05 physical persistence (Learning module)",
+    "reason": "LearningSession selected; P05 admission corrected to BLOCK because Assignment-reference nullability/requiredness is not authoritative.",
+    "owner_decisions_required": [
+      "#47 LearningSessionUsesAssignment physical nullability/requiredness"
+    ],
+    "physical_implementation_authorized": false,
+    "next_required_gate": "Resolve #47, register the decision, and rerun SLICE-P05 schema admission",
     "semantic_promotions_required": []
   },
   "implementation_guard": {
@@ -302,6 +293,10 @@
     "slice_p03_schema_admission": "PROVEN",
     "slice_p03_implementation": "PROVEN",
     "slice_p04_schema_admission": "PROVEN",
-    "slice_p04_implementation": "IN_PROGRESS"
+    "slice_p04_implementation": "PROVEN",
+    "slice_p05_schema_admission": "BLOCKED",
+    "slice_p05_relationship_nullability": "UNKNOWN",
+    "slice_p05_module_foundation": "PROVEN",
+    "slice_p05_implementation": "BLOCKED"
   }
 }
