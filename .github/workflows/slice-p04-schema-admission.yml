@@ -1,0 +1,37 @@
+name: SLICE-P04 Schema Admission
+
+on:
+  pull_request:
+    paths:
+      - 'persistence/physical-slices/identity-credentials/**'
+      - 'kernel/entities.json'
+      - 'kernel/identifiers.json'
+      - 'kernel/relationships.json'
+      - 'domains/ownership-map.json'
+      - 'contracts/c11-identity-credentials-contract.md'
+      - 'scripts/persistence/validate-slice-p04-schema-admission.mjs'
+      - 'scripts/tests/validate-validators.mjs'
+      - '.github/workflows/slice-p04-schema-admission.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'persistence/physical-slices/identity-credentials/**'
+      - 'kernel/entities.json'
+      - 'kernel/identifiers.json'
+      - 'kernel/relationships.json'
+      - 'domains/ownership-map.json'
+      - 'contracts/c11-identity-credentials-contract.md'
+      - 'scripts/persistence/validate-slice-p04-schema-admission.mjs'
+      - 'scripts/tests/validate-validators.mjs'
+      - '.github/workflows/slice-p04-schema-admission.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate SLICE-P04 schema admission
+        run: node scripts/persistence/validate-slice-p04-schema-admission.mjs
