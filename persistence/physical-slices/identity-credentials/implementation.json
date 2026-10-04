@@ -48,7 +48,8 @@
     "postgres_integration_tests": "PASS (6/6)",
     "validator_negative_paths": "PASS",
     "historical_p03_replay": "PASS after prefix scoping through 0002",
-    "exact_head_ci": "PASS (16/16 workflows on verification_source_commit)"
+    "exact_head_ci": "PASS",
+    "exact_head_ci_detail": "16/16 workflows passed on verification_source_commit ff2287b7d4818151803d8db38a91951f42b22742"
   },
   "corrected_defects": [
     "P04 migration is now present in the authoritative Drizzle journal and snapshot chain",
