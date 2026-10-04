@@ -22,7 +22,7 @@ if(reg?.readiness_effect?.physical_schema_authorized!==false) errors.push('trans
 const rr=(relationships?.entries||[]).find(x=>x.id==='ReconciliationRecordUsesIdempotencyKey');
 if(!rr || rr.status!=='approved' || rr.cardinality!=='many-to-zero-or-one') errors.push('transaction decision registration: owner-approved relationship promotion must exist as approved many-to-zero-or-one');
 if(readiness?.version!=='0.9.0' || readiness?.evidence_states?.admission_rerun!=='PROVEN' || readiness?.evidence_states?.slice_p01_implementation!=='PROVEN' || readiness?.candidate_slices?.find(x=>x.id==='SLICE-P01')?.current_state!=='IMPLEMENTED') errors.push('transaction decision registration: readiness 0.9.0 must preserve P01 admission and implementation proof');
-if(readiness?.current_admitted_slice_count!==1 || readiness?.current_physical_slice_admissions?.[0]?.id!=='SLICE-P01' || readiness?.implementation_guard?.physical_schema_authorized!==true) errors.push('transaction decision registration: SLICE-P01 admission evidence missing');
+if(readiness?.current_admitted_slice_count!==2 || !readiness?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P01') || readiness?.implementation_guard?.physical_schema_authorized!==true) errors.push('transaction decision registration: preserved SLICE-P01 admission evidence missing');
 if(!c22.includes('"version": "1.2.0"') || c22.includes('| OQ-TXN-1 |')) errors.push('transaction decision registration: C22 1.2.0 must resolve OQ-TXN-1');
 if(!c22.includes('client-supplied or server-derived') || !c22.includes('not shorter than its complete retry and reconciliation horizon')) errors.push('transaction decision registration: C22 TXN-2 decision text missing');
 if(!approvals.includes('| C22      | OQ-TXN-1') || !approvals.includes('2026-10-04 | Patrick Craven |')) errors.push('transaction decision registration: approval ledger decision missing');
@@ -34,4 +34,4 @@ console.log('K00: 0.15.0 unchanged');
 console.log('Relationship registration: PROVEN');
 console.log('Relationship promotion: PROVEN');
 console.log('Admission rerun: PROVEN / SLICE-P01 IMPLEMENTED');
-console.log('Physical slices admitted: 1');
+console.log('Physical slices admitted: 2 (P01 preserved; P02 subsequently admitted)');

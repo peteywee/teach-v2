@@ -41,7 +41,7 @@ if (errors.length) {
 }
 console.log('Post-closure physical slice readiness PASS');
 console.log('K00: 0.15.0');
-console.log('Physical slices admitted: 1 (SLICE-P01)');
+console.log('Physical slices admitted: 2 (SLICE-P01, SLICE-P02)');
 console.log('Implemented slice: SLICE-P01 TransactionControl');
 console.log('P01 implementation evidence: PROVEN');
 console.log('P02 owner decisions: PROVEN');
