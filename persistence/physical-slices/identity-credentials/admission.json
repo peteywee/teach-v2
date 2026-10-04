@@ -11,7 +11,7 @@
     "Credential"
   ],
   "owning_module": "Identity",
-  "decision": "BLOCKED",
+  "decision": "ADMIT",
   "governing_authority": "TEACH-PERSISTENCE-MODEL@1.0.0",
   "criteria": [
     {
@@ -21,8 +21,8 @@
     },
     {
       "criterion": "canonical identifier is approved",
-      "state": "BLOCKED",
-      "evidence": "CredentialId is candidate, not approved. Promotion required before admission."
+      "state": "PROVEN",
+      "evidence": "CredentialId is approved in K00"
     },
     {
       "criterion": "every relationship/cardinality encoded by the schema is approved",
@@ -45,16 +45,10 @@
       "evidence": "persistence/physical-slices/identity-credentials/admission-evidence-plan.json@1.0.0"
     }
   ],
-  "blockers": [
-    {
-      "id": "CREDENTIALID-NOT-APPROVED",
-      "description": "CredentialId identifier is candidate. K00 promotion to approved required.",
-      "unblocks": "P04 schema admission"
-    }
-  ],
-  "physical_schema_authorized": false,
-  "implementation_authorized": false,
-  "migration_authoring_authorized": false,
+  "blockers": [],
+  "physical_schema_authorized": true,
+  "implementation_authorized": true,
+  "migration_authoring_authorized": true,
   "shared_or_production_migration_execution_authorized": false,
-  "next_required_gate": "Promote CredentialId to approved, then re-run P04 admission"
+  "next_required_gate": "Implement SLICE-P04 physical persistence and prove acceptance evidence"
 }

@@ -184,7 +184,7 @@ const membershipStatus = stateSetMap.get('MembershipStatus');
 if (!membershipStatus || JSON.stringify(membershipStatus.values) !== JSON.stringify(['ACTIVE','INACTIVE','REVOKED'])) errors.push('states.json: MembershipStatus must be ACTIVE,INACTIVE,REVOKED');
 
 
-const persistencePromotedIdentifiers = new Set(['IdentityId','OrganizationId','ApplicationSessionId','ContentPackId','LearningSessionId','CertificationId','IdempotencyKey','RequestId']);
+const persistencePromotedIdentifiers = new Set(['IdentityId','OrganizationId','ApplicationSessionId','ContentPackId','LearningSessionId','CertificationId','IdempotencyKey','RequestId','CredentialId','AssignmentId','ProgressEventId']);
 for (const id of persistencePromotedIdentifiers) {
   const x=(docs['identifiers.json']?.entries||[]).find(v=>v.id===id);
   if (x?.status!=='approved') errors.push(`identifiers.json: ${id} must be approved in K00 0.16.0`);
@@ -193,7 +193,7 @@ for (const id of ['IdentityStatus','ApplicationSessionStatus','LearningSessionSt
   const x=stateSetMap.get(id);
   if (x?.status!=='approved') errors.push(`states.json: ${id} must be approved in K00 0.16.0`);
 }
-for (const id of ['CredentialId','AssignmentId','ProgressEventId','CapabilityId','MembershipId','LocationId']) {
+for (const id of ['CapabilityId','MembershipId','LocationId']) {
   const x=(docs['identifiers.json']?.entries||[]).find(v=>v.id===id);
   if (x?.status!=='candidate') errors.push(`identifiers.json: excluded ${id} must remain candidate`);
 }

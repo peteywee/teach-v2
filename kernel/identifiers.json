@@ -18,10 +18,17 @@
     {
       "id": "AssignmentId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "Assignment",
-      "owning_domain": "Learning"
+      "owning_domain": "Learning",
+      "promotion_evidence": [
+        "C11",
+        "C31",
+        "C32"
+      ],
+      "promoted_on": "2026-10-04",
+      "promotion_issue": "#46"
     },
     {
       "id": "AuditEventId",
@@ -78,10 +85,17 @@
     {
       "id": "CredentialId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "Credential",
-      "owning_domain": "Identity"
+      "owning_domain": "Identity",
+      "promotion_evidence": [
+        "C11",
+        "C31",
+        "C32"
+      ],
+      "promoted_on": "2026-10-04",
+      "promotion_issue": "#46"
     },
     {
       "id": "EntitlementId",
@@ -205,10 +219,17 @@
     {
       "id": "ProgressEventId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "ProgressEvent",
-      "owning_domain": "Learning"
+      "owning_domain": "Learning",
+      "promotion_evidence": [
+        "C11",
+        "C31",
+        "C32"
+      ],
+      "promoted_on": "2026-10-04",
+      "promotion_issue": "#46"
     },
     {
       "id": "ReconciliationRecordId",
