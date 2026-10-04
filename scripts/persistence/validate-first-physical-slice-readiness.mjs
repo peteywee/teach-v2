@@ -42,7 +42,7 @@ if(r){
 
   if(r.narrowed_next_lane?.preferred_slice!=='SLICE-P05' || r.narrowed_next_lane?.physical_implementation_authorized!==true || (r.narrowed_next_lane?.owner_decisions_required||[]).length!==0) errors.push('slice readiness: P05 implementation must be next authorized lane');
 
-  if(p04Implementation?.version!=='1.0.0' || p04Implementation?.status!=='proven') errors.push('slice readiness: P04 Credential implementation evidence missing');
+  if(p04Implementation?.version!=='1.1.0' || p04Implementation?.status!=='proven') errors.push('slice readiness: P04 Credential implementation evidence missing');
   if(p05Registration?.version!=='1.0.0' || p05Registration?.decisions?.[0]?.selection!=='REQUIRED_ONE_ASSIGNMENT') errors.push('slice readiness: P05 owner decision evidence missing');
   if(p05Admission?.version!=='1.2.0' || p05Admission?.decision!=='ADMIT' || p05Admission?.physical_schema_authorized!==true || p05Admission?.implementation_authorized!==true || p05Admission?.migration_authoring_authorized!==true) errors.push('slice readiness: P05 admission mismatch');
   if(p05Plan?.version!=='1.2.0' || p05Plan?.physical_schema_authorized!==false || !(p05Plan?.required_evidence||[]).some(x=>x.includes('REQUIRED_ONE_ASSIGNMENT'))) errors.push('slice readiness: P05 evidence plan mismatch');
