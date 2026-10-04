@@ -1,0 +1,24 @@
+name: Architecture Proposal
+
+on:
+  pull_request:
+    paths:
+      - 'architecture/**'
+      - 'scripts/architecture/validate-architecture-proposal.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'architecture/**'
+      - 'scripts/architecture/validate-architecture-proposal.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-architecture-proposal:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate architecture proposal
+        run: node scripts/architecture/validate-architecture-proposal.mjs

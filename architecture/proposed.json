@@ -1,0 +1,176 @@
+{
+  "proposal_id": "TEACH-ARCHITECTURE-PROPOSAL",
+  "version": "0.1.0",
+  "status": "proposed",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-04",
+  "updated_on": "2026-10-04",
+  "generated_from": {
+    "repo": "peteywee/teach-v2",
+    "minimum_ancestor": "0f37206e5a646b34c1ccd7158f1fcaee1268fe95",
+    "discovery": "TEACH-ARCHITECTURE-DISCOVERY@0.1.0"
+  },
+  "approval_required": true,
+  "recommendations": {
+    "ARCH-D01": {
+      "decision": "Approve a modular monolith with one initial backend deployment and explicit logical module boundaries.",
+      "runtime_domain_modules": [
+        "Identity",
+        "Organization",
+        "Authorization",
+        "Content",
+        "Learning",
+        "Certification",
+        "AuditLifecycle",
+        "TransactionControl"
+      ],
+      "support_planes": [
+        {
+          "semantic_domain": "Observability",
+          "placement": "runtime infrastructure support",
+          "constraint": "May observe/report but must not alter authorization or command outcomes."
+        },
+        {
+          "semantic_domain": "VerificationEvidence",
+          "placement": "verification/release plane",
+          "constraint": "Not an application runtime authority until an approved runtime requirement requires it."
+        },
+        {
+          "semantic_domain": "Governance",
+          "placement": "build-time/governance plane",
+          "constraint": "Owns governance semantics but is not a production business module."
+        }
+      ],
+      "rationale": "TransactionControl owns runtime reconciliation state and a registered command, so it requires an owning runtime component. Governance and VerificationEvidence do not currently justify production business modules; Observability is a runtime support concern constrained by C53."
+    },
+    "ARCH-D02": {
+      "decision": "Approve logical layering and enforce code dependencies separately from governance precedence.",
+      "governance_precedence": [
+        "Constitution",
+        "Semantic Kernel",
+        "Contracts"
+      ],
+      "runtime_layers": [
+        "Domain",
+        "Application",
+        "Infrastructure",
+        "Interfaces"
+      ],
+      "code_dependency_rules": [
+        "Domain must not import Application, Infrastructure, HTTP/UI frameworks, or transport adapters.",
+        "Application may depend on Domain and defines orchestration/use-case boundaries.",
+        "Infrastructure implements persistence/provider ports required by Domain/Application and may depend inward on their contracts.",
+        "Interfaces may depend on Application and transport schemas but must not contain domain rules or direct persistence access.",
+        "Generated artifacts may depend on K00 but must not invent semantics."
+      ]
+    },
+    "ARCH-D03": {
+      "decision": "Approve explicit cross-domain command/query boundaries with single-writer enforcement.",
+      "write_rules": [
+        "Only the owning module may mutate its authoritative state.",
+        "Cross-domain writes invoke the owning module through a registered command/application interface.",
+        "No module may import another module's repository or issue SQL against another module's owned persistence.",
+        "Application orchestration may coordinate multiple owning command handlers inside one transaction context when an active contract requires atomicity; shared transaction context does not transfer write authority."
+      ],
+      "read_rules": [
+        "Cross-domain reads use explicit read/query interfaces or approved snapshots supplied by the owning module.",
+        "Authorization may consume authoritative Identity/Organization facts read-only and may not mutate them.",
+        "Client-supplied scope or IDs never become authority merely by crossing an interface."
+      ]
+    },
+    "ARCH-D04": {
+      "decision": "Defer exact package/app directory names to implementation planning after logical architecture approval.",
+      "constraints": [
+        "No physical layout may collapse domain ownership boundaries.",
+        "No package placement may allow Interfaces to bypass Application or Domain.",
+        "Persistence model and transport route inventory remain later build stages."
+      ]
+    },
+    "ARCH-D05": {
+      "decision": "Do not introduce microservices, a message broker, or an event-bus dependency as part of the initial architecture baseline.",
+      "constraints": [
+        "Approved domain events may exist as semantic facts, but architecture must not synthesize or depend on candidate events.",
+        "In-process command/query boundaries are the default integration mechanism for the modular monolith.",
+        "Service extraction requires later evidence and an approved architecture revision."
+      ]
+    }
+  },
+  "architecture_rules": [
+    {
+      "id": "ARC-1",
+      "rule": "Teach is a modular monolith by default; initial backend business modules share one deployment boundary."
+    },
+    {
+      "id": "ARC-2",
+      "rule": "Every mutable fact has one owning runtime component and one write path."
+    },
+    {
+      "id": "ARC-3",
+      "rule": "Cross-domain mutation occurs only through the owning module's registered command/application boundary."
+    },
+    {
+      "id": "ARC-4",
+      "rule": "Cross-domain repository imports and foreign-table writes are forbidden."
+    },
+    {
+      "id": "ARC-5",
+      "rule": "Domain code is transport-agnostic and infrastructure-agnostic."
+    },
+    {
+      "id": "ARC-6",
+      "rule": "Application orchestrates use cases; Interfaces adapt HTTP/UI/jobs/CLI/agents into Application."
+    },
+    {
+      "id": "ARC-7",
+      "rule": "Infrastructure implements persistence/provider ports; it does not own business semantics."
+    },
+    {
+      "id": "ARC-8",
+      "rule": "Authorization, transaction, audit, and reconciliation rules remain deterministic and agent-independent."
+    },
+    {
+      "id": "ARC-9",
+      "rule": "Observability is side-effect-neutral with respect to authorization and request outcomes."
+    },
+    {
+      "id": "ARC-10",
+      "rule": "Candidate K00 semantics are not architecture authority and cannot be consumed by implementation."
+    },
+    {
+      "id": "ARC-11",
+      "rule": "Persistence schema design is deferred until the Persistence Model stage; architecture defines ownership/boundaries, not tables."
+    },
+    {
+      "id": "ARC-12",
+      "rule": "Transport route/schema design is deferred until the Transport Interfaces stage; /api/v1 and C41 constraints remain controlling."
+    },
+    {
+      "id": "ARC-13",
+      "rule": "Microservices and broker infrastructure are deferred until evidence justifies extraction and an approved revision authorizes it."
+    }
+  ],
+  "acceptance_targets": [
+    "Architecture test: Domain packages import no HTTP/UI framework and no Infrastructure package.",
+    "Architecture test: Interfaces import no database client/repository implementation.",
+    "Architecture test: cross-domain mutation call sites target registered application commands, not foreign repositories.",
+    "Architecture test: every persisted mutable aggregate maps to exactly one owning module before persistence implementation is accepted.",
+    "Architecture test: RuntimeAgent/AutomationActor paths cross the same Application/Domain boundary as human transports.",
+    "Architecture test: no candidate event, command proposal, relationship, invariant, or decision table is referenced as implementation authority."
+  ],
+  "explicitly_not_decided": [
+    "Exact package names and directory layout.",
+    "ORM table design, keys, indexes, and migrations.",
+    "HTTP route inventory beyond already-active C41 constraints.",
+    "Frontend component structure.",
+    "Provider/client library choices.",
+    "Microservice extraction boundaries.",
+    "Any of the 9 remaining missing semantic candidates.",
+    "Any of the 8 discovery-blocked command proposals.",
+    "Any candidate event promotion."
+  ],
+  "readiness": {
+    "architecture_proposal": "PROVEN",
+    "owner_approval": "BLOCKED",
+    "application_interfaces": "BLOCKED until architecture owner approval"
+  }
+}

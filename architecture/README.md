@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-ARCHITECTURE",
   "class": "specification",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "claims_truth_state": "declared",
   "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -32,3 +32,9 @@ The discovery preserves four separate facts:
 - unresolved semantic candidates remain outside architecture authority.
 
 No file in this stage authorizes application implementation, package layout, persistence schema, transport routes, or event-driven integration.
+
+## Decision-ready proposal
+
+`proposed.json` and `DECISION-PACKET.md` contain the recommended logical architecture.
+
+The proposal is not implementation authority. It remains `proposed` until an explicit owner-approval package records the decision. Application Interfaces remain blocked until that approval.
