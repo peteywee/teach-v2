@@ -89,7 +89,7 @@ test(
     replaceOrThrow(
       dir,
       'scripts/persistence/validate-persistence-authority.mjs',
-      ".filter(x=>x.status==='approved').length!==12",
+      ".filter(x=>x.status==='approved').length!==15",
       ".filter(x=>x.status==='approved').length!==4",
     );
   },
@@ -101,7 +101,7 @@ test(
   (dir) => {
     replaceOrThrow(
       dir,
-      'scripts/persistence/validate-persistence-authority.mjs',
+      'scripts/persistence/validate-persistence-semantic-closure-registration.mjs',
       ".filter(x=>x.status==='approved').length!==15",
       ".filter(x=>x.status==='approved').length!==0",
     );
