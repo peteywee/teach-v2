@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -34,7 +34,7 @@
 
 # Teach v2 Contracts
 
-- Package version: `0.13.0`
+- Package version: `0.14.0`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
@@ -106,7 +106,7 @@ the requirement that keeps the feature off applies.
 | C01 | [Canonical Semantics](c01-canonical-semantics-contract.md)                                          | 1.8.0   | `SEM`   | 36           | 25               | 0              | 0                       | `active` |
 | C02 | [Automation & Agent Authority](c02-automation-agent-authority-contract.md)                          | 1.0.3   | `AGT`   | 17           | 13               | 3              | 0                       | `active` |
 | C11 | [Identity & Credentials](c11-identity-credentials-contract.md)                                      | 1.3.0   | `IDN`   | 29           | 22               | 7              | 3                       | `active` |
-| C12 | [Application Sessions](c12-application-sessions-contract.md)                                        | 1.0.3   | `SES`   | 20           | 14               | 7              | 6                       | `active` |
+| C12 | [Application Sessions](c12-application-sessions-contract.md)                                        | 1.1.0   | `SES`   | 20           | 14               | 5              | 4                       | `active` |
 | C13 | [Tenancy & Membership](c13-tenancy-membership-contract.md)                                          | 1.3.0   | `TEN`   | 19           | 13               | 3              | 2                       | `active` |
 | C14 | [Authorization & Capabilities](c14-authorization-capabilities-contract.md)                          | 1.1.0   | `AUTHZ` | 21           | 13               | 2              | 1                       | `active` |
 | C15 | [Data Isolation & Privacy](c15-data-isolation-privacy-contract.md)                                  | 1.0.3   | `PRIV`  | 17           | 10               | 6              | 3                       | `active` |
@@ -125,7 +125,7 @@ the requirement that keeps the feature off applies.
 | C61 | [Analytics](c61-analytics-contract.md)                                                              | 1.0.3   | `ANL`   | 8            | 7                | 2              | 0                       | `active` |
 | C62 | [PWA / Offline](c62-pwa-offline-contract.md)                                                        | 1.0.3   | `PWA`   | 9            | 4                | 1              | 0                       | `active` |
 | C63 | [Self-Service Billing](c63-billing-contract.md)                                                     | 1.1.0   | `BIL`   | 14           | 12               | 3              | 0                       | `active` |
-|     | **Total**                                                                                           |         |         | **386**      | **262**          | **73**         | **21**                  |          |
+|     | **Total**                                                                                           |         |         | **386**      | **262**          | **71**         | **19**                  |          |
 
 ## K00 semantic-kernel bootstrap
 
@@ -312,3 +312,7 @@ Package `0.12.1` records the explicit owner-approved SEM-30 promotion in GitHub 
 ## Production-proof owner decisions
 
 Package `0.13.0` records the owner-approved production-proof policy decisions from GitHub issue #30. C21 advances from `1.0.3` to `1.1.0`, resolving OQ-MIG-1 as `MIGRATION_SCOPED_PLATFORM_NATIVE_BACKUP` and OQ-MIG-2 as `ISOLATED_RESTORE_MAX_30D`. C52 advances from `1.0.3` to `1.1.0`, resolving OQ-REL-2 as `CANONICAL_CONFIG_MANIFEST_SHA256`. This package does not choose a hosting provider, does not establish actual backup/restore evidence, does not create a releasable production candidate, and does not authorize shared/production migration execution or production promotion.
+
+## SLICE-P02 owner decisions
+
+Package `0.14.0` records the owner-approved SLICE-P02 persistence-shape decisions from GitHub issue #32. C12 advances from `1.0.3` to `1.1.0`, resolving OQ-SES-3 as `SESSION_VERIFIER_V1_SHA256_256BIT` and OQ-SES-4 as `ABSOLUTE_12H_IDLE_30M`. The P02 ownership/scope decision is recorded as `IDENTITY_GLOBAL_PRINCIPAL_SESSION_IDENTITY_OWNED`. This package authorizes only the fresh Persistence Model admission evaluation; it does not itself authorize a table, migration, repository, cookie, route, or runtime session implementation.

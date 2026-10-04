@@ -1,0 +1,66 @@
+{
+  "registration_id": "TEACH-SLICE-P02-OWNER-DECISION-REGISTRATION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "approved_on": "2026-10-04",
+  "issue": "#32",
+  "baseline_commit": "ee01f66b6bb6c7ccfa2cb7841cfa9e209e2a93d5",
+  "target_slice": "SLICE-P02",
+  "target_records": [
+    "Identity",
+    "ApplicationSession"
+  ],
+  "authority": {
+    "kernel_version": "0.15.0",
+    "persistence_authority_version": "1.0.0",
+    "c12_version": "1.1.0",
+    "c15_version": "1.0.3"
+  },
+  "decisions": [
+    {
+      "id": "P02-D01",
+      "selection": "SESSION_VERIFIER_V1_SHA256_256BIT",
+      "effect": "Session credential is exactly 32 CSPRNG bytes serialized as unpadded base64url; PostgreSQL stores only verifier version plus SHA-256('teach-session-v1\\\\0' || rawCredentialBytes); stored verifier never authenticates."
+    },
+    {
+      "id": "P02-D02",
+      "selection": "ABSOLUTE_12H_IDLE_30M",
+      "effect": "ApplicationSession absolute lifetime is 12 hours from immutable issuance and idle lifetime is 30 minutes from authoritative server-side last use; either limit fails closed independently of lazy EXPIRED persistence."
+    },
+    {
+      "id": "P02-D03",
+      "selection": "IDENTITY_GLOBAL_PRINCIPAL_SESSION_IDENTITY_OWNED",
+      "effect": "Identity is a global application principal with IdentityId as explicit identity ownership key; ApplicationSession belongs to exactly one Identity; organization/location/role/capability authority is not copied into P02 records."
+    }
+  ],
+  "ownership_scope_decision": {
+    "identity_organization_owned": false,
+    "identity_explicit_ownership_key": "IdentityId",
+    "application_session_owner": "Identity",
+    "relationship": "IdentityHasApplicationSession",
+    "relationship_cardinality": "one-to-many",
+    "application_session_identity_fk_required": true,
+    "tenant_authority_columns_forbidden": true,
+    "protected_session_queries_require_authoritative_identity_id": true,
+    "cross_identity_admin_access_requires_external_authorization": true
+  },
+  "readiness_effect": {
+    "owner_decisions_closed": 3,
+    "migration_acceptance_evidence_plan_required": true,
+    "schema_admission_rerun_required": true,
+    "physical_schema_authorized": false
+  },
+  "explicit_non_effects": [
+    "no physical slice admission",
+    "no table or column definition",
+    "no PostgreSQL type or index",
+    "no migration",
+    "no repository implementation",
+    "no cookie attributes",
+    "no transport route",
+    "no CSRF implementation",
+    "no runtime session implementation",
+    "no Membership topology decision"
+  ]
+}

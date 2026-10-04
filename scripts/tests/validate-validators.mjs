@@ -415,6 +415,35 @@ test(
 );
 
 // ---------------------------------------------------------------------------
+// SLICE-P02 owner decision registration
+// ---------------------------------------------------------------------------
+
+test(
+  "slice-p02 decisions: wrong verifier selection fails",
+  "scripts/persistence/validate-slice-p02-owner-decisions.mjs",
+  (dir) => {
+    const d = readJson(
+      dir,
+      "persistence/physical-slices/identity-session/registration.json",
+    );
+    d.decisions.find((entry) => entry.id === "P02-D01").selection = "WRONG";
+    writeJson(
+      dir,
+      "persistence/physical-slices/identity-session/registration.json",
+      d,
+    );
+  },
+  { pattern: /P02-D01 must be SESSION_VERIFIER_V1_SHA256_256BIT/ }
+);
+
+test(
+  "slice-p02 decisions: clean repo passes (positive control)",
+  "scripts/persistence/validate-slice-p02-owner-decisions.mjs",
+  () => {},
+  { pass: true }
+);
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 

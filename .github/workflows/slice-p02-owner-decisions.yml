@@ -1,0 +1,31 @@
+name: SLICE-P02 Owner Decisions
+
+on:
+  pull_request:
+    paths:
+      - 'contracts/**'
+      - 'persistence/physical-slices/identity-session/**'
+      - 'persistence/physical-slices/readiness.json'
+      - 'scripts/persistence/**'
+      - 'scripts/tests/validate-validators.mjs'
+      - '.github/workflows/slice-p02-owner-decisions.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'contracts/**'
+      - 'persistence/physical-slices/identity-session/**'
+      - 'persistence/physical-slices/readiness.json'
+      - 'scripts/persistence/**'
+      - 'scripts/tests/validate-validators.mjs'
+      - '.github/workflows/slice-p02-owner-decisions.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate SLICE-P02 owner decisions
+        run: node scripts/persistence/validate-slice-p02-owner-decisions.mjs
