@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 // Negative-path tests for the teach-v2 validators.
 //
-// Every validator in this repo is checked against good data in CI. These tests
-// check the validators against BAD data: each case mutates a scratch copy of
-// the repo, runs the target validator, and asserts it fails with the expected
-// error (or passes, for positive controls). A validator that cannot fail is a
-// validator that cannot be trusted.
+// TESTING STANDARD (owner-directed 2026-10-04): every validator must have both
+// a positive case (clean repo passes) and at least one negative case (mutated
+// repo fails with the expected error). A new validator without both is
+// incomplete and must not be merged.
+//
+// Each case mutates a scratch copy of the repo, runs the target validator,
+// and asserts the outcome. A validator that cannot fail is a validator that
+// cannot be trusted; a validator that cannot pass is broken.
 //
 // Usage: node scripts/tests/validate-validators.mjs
 // Exit 0 = all tests pass. Exit 1 = at least one test failed.
@@ -317,6 +320,69 @@ test(
     writeJson(dir, "domains/dependencies/lifecycle-registration.json", d);
   },
   { pattern: /command closure/ }
+);
+
+
+// ---------------------------------------------------------------------------
+// Positive controls: every validator must also pass on the clean repo.
+// Standard: every validator gets at least one negative case (above) and one
+// positive case (below). A new validator without both is incomplete.
+// ---------------------------------------------------------------------------
+
+test(
+  "ownership: clean repo passes (positive control)",
+  "scripts/domains/validate-domain-ownership.mjs",
+  () => {},
+  { pass: true }
+);
+
+test(
+  "invariant discovery: clean repo passes (positive control)",
+  "scripts/domains/validate-invariant-discovery.mjs",
+  () => {},
+  { pass: true }
+);
+
+test(
+  "decision-table discovery: clean repo passes (positive control)",
+  "scripts/domains/validate-decision-table-discovery.mjs",
+  () => {},
+  { pass: true }
+);
+
+test(
+  "command-event discovery: clean repo passes (positive control)",
+  "scripts/domains/validate-command-event-discovery.mjs",
+  () => {},
+  { pass: true }
+);
+
+test(
+  "state discovery: clean repo passes (positive control)",
+  "scripts/domains/validate-state-discovery.mjs",
+  () => {},
+  { pass: true }
+);
+
+test(
+  "relationship discovery: clean repo passes (positive control)",
+  "scripts/domains/validate-relationships.mjs",
+  () => {},
+  { pass: true }
+);
+
+test(
+  "dependency concepts: clean repo passes (positive control)",
+  "scripts/domains/validate-dependency-concepts.mjs",
+  () => {},
+  { pass: true }
+);
+
+test(
+  "dependency lifecycle: clean repo passes (positive control)",
+  "scripts/domains/validate-dependency-lifecycle-discovery.mjs",
+  () => {},
+  { pass: true }
 );
 
 // ---------------------------------------------------------------------------
