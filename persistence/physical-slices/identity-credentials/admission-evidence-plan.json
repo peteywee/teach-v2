@@ -1,0 +1,30 @@
+{
+  "plan_id": "TEACH-SLICE-P04-ADMISSION-EVIDENCE-PLAN",
+  "version": "1.0.0",
+  "status": "recorded",
+  "issue": "#46",
+  "baseline_commit": "639eb58",
+  "slice": "SLICE-P04",
+  "owning_module": "Identity",
+  "records": [
+    "Credential"
+  ],
+  "physical_schema_authorized": false,
+  "required_evidence": [
+    "empty-database migration replay is deterministic",
+    "P03-to-P04 upgrade replay is deterministic",
+    "passwords persist only as salted hashes (IDN-5); plaintext passwords/PINs never persisted (IDN-6)",
+    "credential possession does not establish membership, role, or capability (IDN-4)",
+    "credential change revokes designated sessions via C12 revocation path (IDN-15)",
+    "Credential belongs to exactly one Identity via approved CredentialBelongsToIdentity (many-to-one)",
+    "protected reads/writes predicated by authoritative IdentityId",
+    "manager cannot choose, view, or retrieve employee credentials (IDN-13)",
+    "foreign modules cannot directly write Identity-owned Credential persistence"
+  ],
+  "constraints": [
+    "no Membership/Organization persistence",
+    "no plaintext credential storage",
+    "no credential-derived authorization claims",
+    "no shared or production migration execution"
+  ]
+}

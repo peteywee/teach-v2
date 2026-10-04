@@ -1,0 +1,60 @@
+{
+  "admission_id": "TEACH-SLICE-P04-PHYSICAL-SCHEMA-ADMISSION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "evaluated_on": "2026-10-04",
+  "issue": "#46",
+  "semantic_baseline_commit": "639eb58",
+  "kernel_version": "0.16.0",
+  "slice": "SLICE-P04",
+  "records": [
+    "Credential"
+  ],
+  "owning_module": "Identity",
+  "decision": "BLOCKED",
+  "governing_authority": "TEACH-PERSISTENCE-MODEL@1.0.0",
+  "criteria": [
+    {
+      "criterion": "entity is approved",
+      "state": "PROVEN",
+      "evidence": "Credential is approved in K00 0.16.0"
+    },
+    {
+      "criterion": "canonical identifier is approved",
+      "state": "BLOCKED",
+      "evidence": "CredentialId is candidate, not approved. Promotion required before admission."
+    },
+    {
+      "criterion": "every relationship/cardinality encoded by the schema is approved",
+      "state": "PROVEN",
+      "evidence": "CredentialBelongsToIdentity is approved many-to-one"
+    },
+    {
+      "criterion": "owning module is explicit",
+      "state": "PROVEN",
+      "evidence": "Identity"
+    },
+    {
+      "criterion": "protected ownership/scope fields are derivable from approved semantics",
+      "state": "PROVEN",
+      "evidence": "CredentialBelongsToIdentity provides authoritative IdentityId FK"
+    },
+    {
+      "criterion": "migration and acceptance evidence plan exists",
+      "state": "PROVEN",
+      "evidence": "persistence/physical-slices/identity-credentials/admission-evidence-plan.json@1.0.0"
+    }
+  ],
+  "blockers": [
+    {
+      "id": "CREDENTIALID-NOT-APPROVED",
+      "description": "CredentialId identifier is candidate. K00 promotion to approved required.",
+      "unblocks": "P04 schema admission"
+    }
+  ],
+  "physical_schema_authorized": false,
+  "implementation_authorized": false,
+  "migration_authoring_authorized": false,
+  "shared_or_production_migration_execution_authorized": false,
+  "next_required_gate": "Promote CredentialId to approved, then re-run P04 admission"
+}
