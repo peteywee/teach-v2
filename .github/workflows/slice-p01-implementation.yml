@@ -59,7 +59,7 @@ jobs:
           corepack enable
           corepack prepare pnpm@12.8.1 --activate
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --no-frozen-lockfile --allow-build=esbuild
       - name: Typecheck
         run: pnpm typecheck
       - name: Domain tests
