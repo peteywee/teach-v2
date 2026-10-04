@@ -1,0 +1,58 @@
+name: P04 Migration Repair Generate
+
+on:
+  pull_request:
+    paths:
+      - 'drizzle.p04-repair.config.ts'
+      - '.github/workflows/p04-migration-repair-generate.yml'
+      - 'drizzle/**'
+      - 'src/modules/identity/infrastructure/persistence/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Enable pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@12.8.1 --activate
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Prepare exact P03 history
+        run: |
+          rm -rf .tmp-drizzle-p04-repair
+          mkdir -p .tmp-drizzle-p04-repair/meta
+          cp drizzle/0000_slice_p01_reconciliation.sql .tmp-drizzle-p04-repair/
+          cp drizzle/0001_odd_photon.sql .tmp-drizzle-p04-repair/
+          cp drizzle/0002_quick_venus.sql .tmp-drizzle-p04-repair/
+          cp drizzle/meta/0000_snapshot.json .tmp-drizzle-p04-repair/meta/
+          cp drizzle/meta/0001_snapshot.json .tmp-drizzle-p04-repair/meta/
+          cp drizzle/meta/0002_snapshot.json .tmp-drizzle-p04-repair/meta/
+          cp drizzle/meta/_journal.json .tmp-drizzle-p04-repair/meta/
+      - name: Generate authoritative P04 migration artifacts
+        run: pnpm exec drizzle-kit generate --config=drizzle.p04-repair.config.ts --name slice_p04_credential
+      - name: Verify generated P04 target
+        run: |
+          generated="$(find .tmp-drizzle-p04-repair -maxdepth 1 -type f -name '0003_*.sql' -print -quit)"
+          test -n "$generated"
+          grep -q 'CREATE TABLE "identity_credentials"' "$generated"
+          grep -q 'REFERENCES "identity_identities"("id")' "$generated"
+          ! grep -q 'REFERENCES "identities"("id")' "$generated"
+          node -e "const j=require('./.tmp-drizzle-p04-repair/meta/_journal.json'); if(j.entries.length!==4 || j.entries[3].idx!==3) process.exit(1)"
+      - name: Upload generated P04 history
+        uses: actions/upload-artifact@v4
+        with:
+          name: p04-generated-history
+          path: |
+            .tmp-drizzle-p04-repair/0003_*.sql
+            .tmp-drizzle-p04-repair/meta/0003_snapshot.json
+            .tmp-drizzle-p04-repair/meta/_journal.json
+          if-no-files-found: error
