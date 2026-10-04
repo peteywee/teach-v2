@@ -25,7 +25,7 @@ if (!approvals.match(/\| C11\s+\| OQ-IDN-2\s+\|.*\| Invitation 7 days; SetupToke
 if (!approvals.match(/\| C11\s+\| OQ-IDN-5\s+\|.*\| Controlled rejection until explicit ReactivateIdentity; no Invitation or token created before reactivation \| 2026-10-04 \| Patrick Craven \|/)) errors.push('governance ratification: OQ-IDN-5 decision missing from ledger');
 if (!approvals.match(/\| C32\s+\| OQ-LRN-1\s+\|.*\| ACTIVE -> COMPLETED; COMPLETED terminal; progress recording allowed only while ACTIVE \| 2026-10-03 \| Patrick Craven \|/)) errors.push('governance ratification: OQ-LRN-1 decision missing from ledger');
 if (!c01.includes('"version": "1.8.0"') || !c01.includes('SEM-36')) errors.push('governance ratification: C01 live authority mismatch');
-if (!kread.includes('strict-nine')) errors.push('governance ratification: K00 README provenance not reconciled');
+if (!/strict-nine/i.test(kread)) errors.push('governance ratification: K00 README provenance not reconciled');
 
 const strictNine=['Identity','Credential','ApplicationSession','Organization','Assignment','LearningSession','ProgressEvent','Certification','ContentPack'];
 for (const id of strictNine) {
