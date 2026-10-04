@@ -23,7 +23,7 @@ if (proposal) {
   if (proposal.baseline?.commit !== '0d0da31243b78f83aac66e21733fc0b9a2371f83') errors.push('invariant discovery: baseline mismatch');
 }
 
-if (manifest?.version !== '0.8.0') errors.push(`invariant registration: expected K00 0.8.0, found ${manifest?.version}`);
+if (manifest?.version !== '0.9.0') errors.push(`invariant registration: expected K00 0.9.0, found ${manifest?.version}`);
 if (ownership?.version !== '1.4.0' || ownership?.status !== 'active') errors.push('invariant registration: requires active Domain Ownership Map 1.4.0');
 if ((machines?.entries || []).length !== 4) errors.push('invariant discovery: expected 4 registered state machines');
 

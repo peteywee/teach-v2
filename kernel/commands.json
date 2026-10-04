@@ -4,112 +4,257 @@
     {
       "id": "AcceptInvitation",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Identity",
+      "definition": "Accepts an invitation, creating the identity's membership.",
+      "authority": "Consumes an Invitation; creates Identity-Membership linkage.",
+      "requires": [
+        "Invitation",
+        "Identity"
+      ]
     },
     {
       "id": "AssignContent",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Learning",
+      "definition": "Assigns a content pack to a learner.",
+      "authority": "Creates Assignment records linking content to learners.",
+      "requires": [
+        "ContentPack",
+        "Assignment",
+        "Identity"
+      ]
     },
     {
       "id": "AuthenticateIdentity",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Identity",
+      "definition": "Authenticates an identity's credential and establishes a session.",
+      "authority": "Creates ApplicationSession; reads Identity and Credential.",
+      "requires": [
+        "Identity",
+        "Credential"
+      ]
     },
     {
       "id": "ChangeCredential",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Identity",
+      "definition": "Changes an identity's credential.",
+      "authority": "Mutates Credential; revokes sessions per the session-revocation policy.",
+      "requires": [
+        "Identity",
+        "Credential"
+      ]
     },
     {
       "id": "CompleteLearningSession",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Learning",
+      "definition": "Marks a learning session complete.",
+      "authority": "Transitions LearningSession to completed.",
+      "requires": [
+        "LearningSession"
+      ]
     },
     {
       "id": "CreateApplicationSession",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Identity",
+      "definition": "Creates an application session for an authenticated identity.",
+      "authority": "Creates ApplicationSession.",
+      "requires": [
+        "Identity",
+        "ApplicationSession"
+      ]
     },
     {
       "id": "CreateIdentity",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Identity",
+      "definition": "Creates a new application identity.",
+      "authority": "Creates Identity and its primary Credential.",
+      "requires": [
+        "Identity"
+      ]
     },
     {
       "id": "CreateMembership",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Organization",
+      "definition": "Creates a membership linking an identity to an organization.",
+      "authority": "Creates Membership.",
+      "requires": [
+        "Membership",
+        "Identity",
+        "Organization"
+      ]
     },
     {
       "id": "DeactivateIdentity",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Identity",
+      "definition": "Deactivates an identity for a reason other than offboarding.",
+      "authority": "Transitions Identity ACTIVE -> INACTIVE; emits IdentityDeactivated.",
+      "requires": [
+        "Identity"
+      ]
     },
     {
       "id": "DeactivateMembership",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Organization",
+      "definition": "Deactivates a membership.",
+      "authority": "Transitions Membership ACTIVE -> INACTIVE.",
+      "requires": [
+        "Membership"
+      ]
     },
     {
       "id": "InviteIdentity",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Identity",
+      "definition": "Invites a prospective identity to join.",
+      "authority": "Creates Invitation.",
+      "requires": [
+        "Invitation",
+        "Identity"
+      ]
     },
     {
       "id": "IssueCertification",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Certification",
+      "definition": "Issues a certification to an identity.",
+      "authority": "Creates Certification.",
+      "requires": [
+        "Certification",
+        "Identity"
+      ]
     },
     {
       "id": "OffboardIdentity",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Identity",
+      "definition": "Offboards an identity.",
+      "authority": "Transitions Identity to INACTIVE; revokes sessions, credentials, and memberships; emits IdentityOffboarded.",
+      "requires": [
+        "Identity"
+      ]
     },
     {
       "id": "PublishContentPack",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Content",
+      "definition": "Publishes a content pack.",
+      "authority": "Transitions ContentPack to published state.",
+      "requires": [
+        "ContentPack"
+      ]
     },
     {
       "id": "ReactivateIdentity",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Identity",
+      "definition": "Reactivates a deactivated identity.",
+      "authority": "Transitions Identity INACTIVE -> ACTIVE; emits IdentityReactivated.",
+      "requires": [
+        "Identity"
+      ]
     },
     {
       "id": "ReconcileExternalEffect",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "TransactionControl",
+      "definition": "Reconciles an ambiguous external effect before retry.",
+      "authority": "Records reconciliation; retries or compensates the external effect.",
+      "requires": [
+        "ReconciliationRecord"
+      ]
     },
     {
       "id": "RecordProgressEvent",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Learning",
+      "definition": "Records a progress event in a learning session.",
+      "authority": "Appends ProgressEvent to a LearningSession.",
+      "requires": [
+        "LearningSession",
+        "ProgressEvent"
+      ]
     },
     {
       "id": "RevokeApplicationSession",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Identity",
+      "definition": "Revokes an application session before expiry.",
+      "authority": "Transitions ApplicationSession to revoked; emits ApplicationSessionRevoked.",
+      "requires": [
+        "ApplicationSession"
+      ]
     },
     {
       "id": "RevokeCertification",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Certification",
+      "definition": "Revokes a certification.",
+      "authority": "Transitions Certification to revoked; emits CertificationRevoked.",
+      "requires": [
+        "Certification"
+      ]
     },
     {
       "id": "RevokeMembership",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Organization",
+      "definition": "Revokes a membership.",
+      "authority": "Transitions Membership INACTIVE -> REVOKED; emits MembershipRevoked.",
+      "requires": [
+        "Membership"
+      ]
     },
     {
       "id": "RevokeSingleUseToken",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Identity",
+      "definition": "Revokes a single-use token before expiry.",
+      "authority": "Marks the token revoked; subsequent use is rejected.",
+      "requires": [
+        "SetupToken",
+        "PasswordResetToken"
+      ]
     },
     {
       "id": "StartLearningSession",
       "kind": "command",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Learning",
+      "definition": "Starts a learning session from an assignment.",
+      "authority": "Creates LearningSession; emits LearningSessionStarted.",
+      "requires": [
+        "LearningSession",
+        "Assignment"
+      ]
     }
   ]
 }

@@ -4,72 +4,128 @@
     {
       "id": "ApplicationSessionCreated",
       "kind": "event",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Identity",
+      "definition": "A new application session was created for an authenticated identity.",
+      "emitted_by": "CreateApplicationSession",
+      "sem35_evidence": null
     },
     {
       "id": "ApplicationSessionRevoked",
       "kind": "event",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Identity",
+      "definition": "An application session was revoked before its natural expiry.",
+      "emitted_by": "RevokeApplicationSession",
+      "sem35_evidence": null
     },
     {
       "id": "CertificationIssued",
       "kind": "event",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Certification",
+      "definition": "A certification was issued to an identity.",
+      "emitted_by": "IssueCertification",
+      "sem35_evidence": null
     },
     {
       "id": "CertificationRevoked",
       "kind": "event",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Certification",
+      "definition": "A certification was revoked.",
+      "emitted_by": "RevokeCertification",
+      "sem35_evidence": null
     },
     {
       "id": "ContentAssigned",
       "kind": "event",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Learning",
+      "definition": "Content was assigned to a learner.",
+      "emitted_by": "AssignContent",
+      "sem35_evidence": null
     },
     {
       "id": "IdentityDeactivated",
       "kind": "event",
-      "status": "candidate"
+      "status": "approved",
+      "owning_domain": "Identity",
+      "definition": "An identity was deactivated for a reason other than offboarding.",
+      "emitted_by": "DeactivateIdentity",
+      "sem35_evidence": "IDN-22"
     },
     {
       "id": "IdentityOffboarded",
       "kind": "event",
-      "status": "candidate"
+      "status": "approved",
+      "owning_domain": "Identity",
+      "definition": "An identity was offboarded.",
+      "emitted_by": "OffboardIdentity",
+      "sem35_evidence": "SEM-29"
     },
     {
       "id": "IdentityReactivated",
       "kind": "event",
-      "status": "candidate"
+      "status": "approved",
+      "owning_domain": "Identity",
+      "definition": "A deactivated identity was reactivated.",
+      "emitted_by": "ReactivateIdentity",
+      "sem35_evidence": "IDN-23"
     },
     {
       "id": "LearningSessionCompleted",
       "kind": "event",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Learning",
+      "definition": "A learning session was completed.",
+      "emitted_by": "CompleteLearningSession",
+      "sem35_evidence": null
     },
     {
       "id": "LearningSessionStarted",
       "kind": "event",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Learning",
+      "definition": "A learning session was started.",
+      "emitted_by": "StartLearningSession",
+      "sem35_evidence": null
     },
     {
       "id": "MembershipCreated",
       "kind": "event",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Organization",
+      "definition": "A membership was created.",
+      "emitted_by": "CreateMembership",
+      "sem35_evidence": null
     },
     {
       "id": "MembershipDeactivated",
       "kind": "event",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Organization",
+      "definition": "A membership was deactivated.",
+      "emitted_by": "DeactivateMembership",
+      "sem35_evidence": null
     },
     {
       "id": "MembershipRevoked",
       "kind": "event",
-      "status": "candidate"
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "A membership was revoked.",
+      "emitted_by": "RevokeMembership",
+      "sem35_evidence": "TEN-19"
     },
     {
       "id": "ProgressRecorded",
       "kind": "event",
-      "status": "candidate"
+      "status": "candidate",
+      "owning_domain": "Learning",
+      "definition": "A progress event was recorded in a learning session.",
+      "emitted_by": "RecordProgressEvent",
+      "sem35_evidence": null
     }
   ]
 }
