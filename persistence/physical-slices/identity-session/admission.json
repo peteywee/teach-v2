@@ -1,0 +1,90 @@
+{
+  "admission_id": "TEACH-SLICE-P02-PHYSICAL-SCHEMA-ADMISSION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "evaluated_on": "2026-10-04",
+  "issue": "#34",
+  "semantic_baseline_commit": "cf425980c5f411144a37e1c1d3e259254d3e6e9b",
+  "kernel_version": "0.15.0",
+  "slice": "SLICE-P02",
+  "records": [
+    "Identity",
+    "ApplicationSession"
+  ],
+  "owning_module": "Identity",
+  "decision": "ADMIT",
+  "governing_authority": "TEACH-PERSISTENCE-MODEL@1.0.0",
+  "criteria": [
+    {
+      "criterion": "entity is approved",
+      "state": "PROVEN",
+      "evidence": "Identity and ApplicationSession are approved in K00"
+    },
+    {
+      "criterion": "canonical identifier is approved",
+      "state": "PROVEN",
+      "evidence": "IdentityId and ApplicationSessionId are approved in K00"
+    },
+    {
+      "criterion": "every persisted lifecycle state set is approved",
+      "state": "PROVEN",
+      "evidence": "IdentityStatus, ApplicationSessionStatus, IdentityStateMachine, and ApplicationSessionStateMachine are approved in K00"
+    },
+    {
+      "criterion": "every relationship/cardinality encoded by the schema is approved",
+      "state": "PROVEN",
+      "evidence": "IdentityHasApplicationSession is approved one-to-many under C11/C12; P02 requires non-null session -> Identity ownership"
+    },
+    {
+      "criterion": "no blocking open question changes the record shape",
+      "state": "PROVEN",
+      "evidence": "C12 OQ-SES-3/4 resolved by #32; OQ-SES-1/2/5/6 govern cookie/CSRF/runtime behavior and are not encoded by P02 schema; OQ-SES-7 is non-blocking; C15 deletion/retention policy remains explicitly unencoded"
+    },
+    {
+      "criterion": "owning module is explicit",
+      "state": "PROVEN",
+      "evidence": "Identity module owns Identity and ApplicationSession under Persistence Model logical ownership and K00 domain ownership"
+    },
+    {
+      "criterion": "protected ownership/scope fields are derivable from approved semantics",
+      "state": "PROVEN",
+      "evidence": "P02-D03 records IdentityId as Identity ownership key and non-null ApplicationSession identity ownership; protected session queries require authoritative IdentityId; tenant authority columns are forbidden"
+    },
+    {
+      "criterion": "migration and acceptance evidence plan exists",
+      "state": "PROVEN",
+      "evidence": "persistence/physical-slices/identity-session/admission-evidence-plan.json@1.0.0"
+    }
+  ],
+  "blockers": [],
+  "admitted_physical_slices": 2,
+  "physical_schema_authorized": true,
+  "implementation_authorized": true,
+  "migration_authoring_authorized": true,
+  "shared_or_production_migration_execution_authorized": false,
+  "full_relational_schema_authorized": false,
+  "implementation_constraints": [
+    "Implement only SLICE-P02 Identity and ApplicationSession persistence.",
+    "Do not introduce Credential, Invitation, token, Membership, Organization, authorization, audit, or other slice tables.",
+    "Identity is not Organization-owned and must not acquire organization/location/role/capability authority columns.",
+    "ApplicationSession belongs to exactly one Identity through a required identity reference.",
+    "Protected ApplicationSession repository operations require authoritative IdentityId.",
+    "Persist only the v1 verifier of a 32-byte session credential; never persist the raw credential.",
+    "Enforce the 12-hour absolute and 30-minute idle lifetime semantics without making denial depend on an expiry-state write.",
+    "Do not implement Identity DELETED ingress, purge, anonymization, or retention policy while C15 policy questions remain unresolved.",
+    "Do not implement cookie SameSite/Domain/Path, CSRF, session rotation, or transport behavior from this admission.",
+    "Every schema change ships with an immutable ordered migration; do not edit 0000 or execute shared/production migration.",
+    "Repository writes remain owned by the Identity module; foreign modules may not write P02 persistence directly."
+  ],
+  "required_implementation_evidence": [
+    "two-independent-empty-database migration replay and deterministic schema fingerprint",
+    "P01-to-P02 pending migration replay",
+    "session verifier generation/storage/authentication negative tests",
+    "absolute and idle expiry fail-closed tests",
+    "ApplicationSession authoritative IdentityId scope tests",
+    "no copied tenant/role/capability authority fields",
+    "Identity DELETED ingress remains absent",
+    "Identity repository ownership boundary"
+  ],
+  "next_required_gate": "Implement SLICE-P02 physical persistence and prove required acceptance evidence before any shared/production migration execution"
+}

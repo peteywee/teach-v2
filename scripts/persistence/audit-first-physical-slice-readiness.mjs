@@ -32,10 +32,10 @@ const checks=[
  ['decision-tables-candidate',(dt?.entries||[]).filter(x=>x.status==='candidate').length,8],
 ];
 for(const [name,a,e] of checks) if(a!==e) errors.push(`whole-stack audit: ${name} expected ${e}, found ${a}`);
-if (r?.version!=='0.8.0' || r?.current_admitted_slice_count!==1 || r?.current_physical_slice_admissions?.[0]?.id!=='SLICE-P01') errors.push('whole-stack audit: expected exactly SLICE-P01 admitted/implemented while P02 remains admission-blocked at readiness 0.8.0');
+if (r?.version!=='0.9.0' || r?.current_admitted_slice_count!==2 || !r?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P01') || !r?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P02')) errors.push('whole-stack audit: expected P01 and P02 admitted at readiness 0.9.0');
 if (r?.candidate_slices?.find(x=>x.id==='SLICE-P01')?.current_state!=='IMPLEMENTED') errors.push('whole-stack audit: SLICE-P01 must be IMPLEMENTED');
 const p02=r?.candidate_slices?.find(x=>x.id==='SLICE-P02');
-if (!p02 || p02.current_state!=='BLOCKED' || (p02.blockers_removed_by_owner_decisions||[]).length!==3) errors.push('whole-stack audit: P02 decisions must be closed without admission');
+if (!p02 || p02.current_state!=='ADMITTED' || (p02.blockers_removed_by_owner_decisions||[]).length!==3 || (p02.blockers||[]).length!==0) errors.push('whole-stack audit: P02 must be admitted but not yet implemented');
 if (implementation?.version!=='1.0.0' || implementation?.status!=='recorded' || implementation?.verification?.migration_determinism!=='PROVEN') errors.push('whole-stack audit: verified implementation evidence missing');
 if (r?.implementation_guard?.tables_generated!==1 || r?.implementation_guard?.migrations_generated!==1 || r?.implementation_guard?.repositories_generated!==1) errors.push('whole-stack audit: implemented artifact counts must be 1/1/1');
 
@@ -47,6 +47,7 @@ if(errors.length){
 console.log('POST-CLOSURE WHOLE-STACK AUDIT PASS');
 console.log('PROVEN: K00 0.15.0 exact promotion counts');
 console.log('PROVEN: SLICE-P01 physical schema admitted and implementation verified');
-console.log('PROVEN: SLICE-P02 owner shape decisions recorded');
-console.log('BLOCKED: SLICE-P02 physical admission, full relational schema, shared/production migration execution');
-console.log('NEXT: P02 evidence plan + fresh schema-admission evaluation');
+console.log('PROVEN: SLICE-P02 physical schema admitted');
+console.log('PENDING: SLICE-P02 implementation evidence');
+console.log('BLOCKED: full relational schema and shared/production migration execution');
+console.log('NEXT: implement P02 and prove acceptance evidence');
