@@ -38,7 +38,7 @@ if (
 }
 if (
   readiness?.version !== '1.2.0' ||
-  readiness?.current_admitted_slice_count !== 3 ||
+  readiness?.current_admitted_slice_count !== 4 ||
   !readiness?.current_physical_slice_admissions?.some(
     (entry) => entry.id === 'SLICE-P01',
   ) ||
