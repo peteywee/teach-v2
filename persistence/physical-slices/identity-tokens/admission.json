@@ -1,0 +1,95 @@
+{
+  "admission_id": "TEACH-SLICE-P03-PHYSICAL-SCHEMA-ADMISSION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "evaluated_on": "2026-10-04",
+  "issue": "#42",
+  "semantic_baseline_commit": "84c94ba1abe466907b63d79b281ac4df36b77b6c",
+  "kernel_version": "0.16.0",
+  "slice": "SLICE-P03",
+  "records": [
+    "Invitation",
+    "SetupToken",
+    "PasswordResetToken"
+  ],
+  "owning_module": "Identity",
+  "decision": "ADMIT",
+  "governing_authority": "TEACH-PERSISTENCE-MODEL@1.0.0",
+  "criteria": [
+    {
+      "criterion": "entity is approved",
+      "state": "PROVEN",
+      "evidence": "Invitation, SetupToken, and PasswordResetToken are approved in K00 0.16.0"
+    },
+    {
+      "criterion": "canonical identifier is approved",
+      "state": "PROVEN",
+      "evidence": "InvitationId, SetupTokenId, and PasswordResetTokenId are approved in K00 0.16.0"
+    },
+    {
+      "criterion": "every persisted lifecycle state set is approved",
+      "state": "PROVEN",
+      "evidence": "InvitationStatus and SingleUseTokenStatus plus InvitationStateMachine, SetupTokenStateMachine, and PasswordResetTokenStateMachine are approved"
+    },
+    {
+      "criterion": "every relationship/cardinality encoded by the schema is approved",
+      "state": "PROVEN",
+      "evidence": "InvitationForIdentity is approved many-to-zero-or-one; InvitationOwnedByIdentity, SetupTokenBelongsToIdentity, and PasswordResetTokenBelongsToIdentity are approved many-to-one under issue #40"
+    },
+    {
+      "criterion": "no blocking open question changes the record shape",
+      "state": "PROVEN",
+      "evidence": "C11 OQ-IDN-1/3/4 govern password hashing, session revocation policy, and OAuth linking and are not encoded by P03; C15 OQ-PRIV-1/2/3 deletion/anonymization/retention/exemption policy remains explicitly unencoded; C11 1.3.0 already fixes P03 hash-only, lifecycle, single-use, revocation, and expiry semantics"
+    },
+    {
+      "criterion": "owning module is explicit",
+      "state": "PROVEN",
+      "evidence": "Identity owns Invitation, SetupToken, PasswordResetToken and all four P03 relationships in Domain Ownership Map 1.7.0"
+    },
+    {
+      "criterion": "protected ownership/scope fields are derivable from approved semantics",
+      "state": "PROVEN",
+      "evidence": "P03-D04 and InvitationOwnedByIdentity require authoritative owner IdentityId; SetupToken and PasswordResetToken require IdentityId ownership; protected reads/writes require authoritative IdentityId and tenant/location/role/capability authority columns are forbidden"
+    },
+    {
+      "criterion": "migration and acceptance evidence plan exists",
+      "state": "PROVEN",
+      "evidence": "persistence/physical-slices/identity-tokens/admission-evidence-plan.json@1.0.0"
+    }
+  ],
+  "blockers": [],
+  "admitted_physical_slices": 3,
+  "physical_schema_authorized": true,
+  "implementation_authorized": true,
+  "migration_authoring_authorized": true,
+  "shared_or_production_migration_execution_authorized": false,
+  "full_relational_schema_authorized": false,
+  "implementation_constraints": [
+    "Implement only SLICE-P03 Invitation, SetupToken, and PasswordResetToken persistence in the Identity module.",
+    "Do not introduce Credential, Membership, Organization, tenant, authorization, audit, or other slice tables.",
+    "Invitation requires authoritative owner IdentityId; optional invited IdentityId remains distinct and may be null.",
+    "SetupToken and PasswordResetToken require authoritative IdentityId ownership.",
+    "Persist only cryptographic verifier/hash material for Invitation acceptance secrets and single-use tokens; never persist raw reusable secrets.",
+    "Enforce Invitation 7-day, SetupToken 15-minute, and PasswordResetToken 1-hour expiry semantics.",
+    "Single-use consumption and revocation must be atomic; terminal states cannot be reused.",
+    "Protected P03 reads/writes require authoritative IdentityId.",
+    "Do not copy organization/location/role/capability authority into P03 persistence.",
+    "Do not encode C15 deletion, anonymization, general retention, or legal-exemption semantics while OQ-PRIV-1/2/3 remain open.",
+    "Every schema change ships with the next immutable ordered Drizzle migration; do not edit existing migrations.",
+    "Do not execute shared or production migrations."
+  ],
+  "required_implementation_evidence": [
+    "two-independent-empty-database migration replay and deterministic schema fingerprint",
+    "P02-to-P03 upgrade replay",
+    "hash/verifier-only storage and raw-secret negative tests",
+    "Invitation 7-day, SetupToken 15-minute, PasswordResetToken 1-hour expiry tests",
+    "atomic single-use consumption and second-consumption no-side-effect test",
+    "revoked/expired secret rejection tests",
+    "optional invited Identity versus required Invitation owner Identity tests",
+    "required SetupToken/PasswordResetToken Identity ownership tests",
+    "authoritative IdentityId scope negative tests",
+    "no copied tenant/location/role/capability fields",
+    "Identity repository ownership-boundary test"
+  ],
+  "next_required_gate": "Implement SLICE-P03 physical persistence and prove required acceptance evidence before any shared/production migration execution"
+}

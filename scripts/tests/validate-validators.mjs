@@ -556,6 +556,53 @@ test(
 );
 
 // ---------------------------------------------------------------------------
+// SLICE-P03 schema admission
+// ---------------------------------------------------------------------------
+
+test(
+  "slice-p03 admission: blocked decision fails",
+  "scripts/persistence/validate-slice-p03-schema-admission.mjs",
+  (dir) => {
+    const d = readJson(
+      dir,
+      "persistence/physical-slices/identity-tokens/admission.json",
+    );
+    d.decision = "BLOCK";
+    writeJson(
+      dir,
+      "persistence/physical-slices/identity-tokens/admission.json",
+      d,
+    );
+  },
+  { pattern: /ADMIT authorization mismatch/ }
+);
+
+test(
+  "slice-p03 admission: optional owner fails",
+  "scripts/persistence/validate-slice-p03-schema-admission.mjs",
+  (dir) => {
+    const d = readJson(
+      dir,
+      "persistence/physical-slices/identity-tokens/registration.json",
+    );
+    d.scope_rules.invitation_owner_identity_required = false;
+    writeJson(
+      dir,
+      "persistence/physical-slices/identity-tokens/registration.json",
+      d,
+    );
+  },
+  { pattern: /exact #40 scope rules required/ }
+);
+
+test(
+  "slice-p03 admission: clean repo passes (positive control)",
+  "scripts/persistence/validate-slice-p03-schema-admission.mjs",
+  () => {},
+  { pass: true }
+);
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 
