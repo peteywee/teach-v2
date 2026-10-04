@@ -1,6 +1,6 @@
 {
   "plan_id": "TEACH-SLICE-P04-ADMISSION-EVIDENCE-PLAN",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "recorded",
   "issue": "#46",
   "baseline_commit": "639eb58",
@@ -11,20 +11,24 @@
   ],
   "physical_schema_authorized": false,
   "required_evidence": [
+    "authoritative Drizzle migration history includes P04 as journal idx 3 with generated snapshot",
     "empty-database migration replay is deterministic",
     "P03-to-P04 upgrade replay is deterministic",
-    "passwords persist only as salted hashes (IDN-5); plaintext passwords/PINs never persisted (IDN-6)",
+    "identity_credentials foreign key targets public.identity_identities(id)",
+    "password/PIN persistence accepts only non-null hash material while OAUTH_LINK carries no password hash",
     "credential possession does not establish membership, role, or capability (IDN-4)",
-    "credential change revokes designated sessions via C12 revocation path (IDN-15)",
     "Credential belongs to exactly one Identity via approved CredentialBelongsToIdentity (many-to-one)",
-    "protected reads/writes predicated by authoritative IdentityId",
-    "manager cannot choose, view, or retrieve employee credentials (IDN-13)",
+    "protected reads/writes are predicated by authoritative IdentityId",
+    "manager-facing or cross-Identity access is not granted by the Credential repository",
     "foreign modules cannot directly write Identity-owned Credential persistence"
   ],
   "constraints": [
     "no Membership/Organization persistence",
     "no plaintext credential storage",
     "no credential-derived authorization claims",
+    "OQ-IDN-1 hashing algorithm/parameters and OQ-IDN-3 session-revocation policy are not decided by this physical slice",
     "no shared or production migration execution"
-  ]
+  ],
+  "retrospective_verification_issue": "#48",
+  "migration_history_repair_issue": "#52"
 }
