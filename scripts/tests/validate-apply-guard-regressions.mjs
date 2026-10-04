@@ -158,7 +158,7 @@ test(
       "!index.includes('\"version\": \"0.11.3\"') || !index.includes('- Package version: `0.11.3`')",
     );
   },
-  { pattern: /stale contract package version pin '0\.11\.2'/ },
+  { pattern: /stale contract package version pin '0\.11\.3'/ },
 );
 
 test(
