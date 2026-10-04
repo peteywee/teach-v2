@@ -32,10 +32,12 @@ const checks=[
  ['decision-tables-candidate',(dt?.entries||[]).filter(x=>x.status==='candidate').length,8],
 ];
 for(const [name,a,e] of checks) if(a!==e) errors.push(`whole-stack audit: ${name} expected ${e}, found ${a}`);
-if (r?.version!=='1.1.0' || r?.current_admitted_slice_count!==2 || !r?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P01') || !r?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P02')) errors.push('whole-stack audit: expected P01 and P02 admitted at readiness 1.0.0');
+if (r?.version!=='1.2.0' || r?.current_admitted_slice_count!==3 || !r?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P01') || !r?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P02')) errors.push('whole-stack audit: expected P01 and P02 admitted at readiness 1.0.0');
 if (r?.candidate_slices?.find(x=>x.id==='SLICE-P01')?.current_state!=='IMPLEMENTED') errors.push('whole-stack audit: SLICE-P01 must be IMPLEMENTED');
 const p02=r?.candidate_slices?.find(x=>x.id==='SLICE-P02');
 if (!p02 || p02.current_state!=='ADMITTED' || (p02.blockers_removed_by_owner_decisions||[]).length!==3 || (p02.blockers||[]).length!==0 || r?.current_physical_slice_admissions?.find(x=>x.id==='SLICE-P02')?.implementation_state!=='IMPLEMENTED') errors.push('whole-stack audit: P02 admission and IMPLEMENTED evidence must be preserved');
+const p03=r?.candidate_slices?.find(x=>x.id==='SLICE-P03');
+if (!p03 || p03.current_state!=='ADMITTED' || p03.implementation_authorized!==true || (p03.blockers||[]).length!==0) errors.push('whole-stack audit: P03 must be admitted and implementation-authorized');
 if (implementation?.version!=='1.0.0' || implementation?.status!=='recorded' || implementation?.verification?.migration_determinism!=='PROVEN') errors.push('whole-stack audit: verified implementation evidence missing');
 if (r?.implementation_guard?.tables_generated!==3 || r?.implementation_guard?.migrations_generated!==2 || r?.implementation_guard?.repositories_generated!==3) errors.push('whole-stack audit: implemented artifact counts must be 3/2/3');
 

@@ -1,6 +1,6 @@
 {
   "readiness_id": "TEACH-FIRST-PHYSICAL-SLICE-READINESS",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-04",
@@ -8,7 +8,7 @@
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "ee9dd542e18106c39c8c7fb1987d8c9d4780e44a",
+    "commit": "84c94ba1abe466907b63d79b281ac4df36b77b6c",
     "kernel_version": "0.16.0",
     "persistence_authority_version": "1.0.0",
     "semantic_closure_registration_version": "1.0.0",
@@ -25,7 +25,9 @@
     "slice_p02_implementation_version": "1.0.0",
     "slice_p02_implementation_issue": "#36",
     "slice_p03_owner_decision_issue": "#40",
-    "slice_p03_registration_version": "1.0.0"
+    "slice_p03_registration_version": "1.0.0",
+    "slice_p03_schema_admission_issue": "#42",
+    "slice_p03_admission_version": "1.0.0"
   },
   "admission_rule": "ADMIT only when every semantic dependency and every shape-affecting owner decision required by the physical schema is approved. Missing, candidate, UNKNOWN, BLOCKED, or contradictory evidence fails closed.",
   "current_physical_slice_admissions": [
@@ -57,9 +59,25 @@
       "shared_or_production_migration_execution_authorized": false,
       "implementation_state": "IMPLEMENTED",
       "implementation": "persistence/physical-slices/identity-session/implementation.json@1.0.0"
+    },
+    {
+      "id": "SLICE-P03",
+      "name": "Invitation and single-use token persistence",
+      "records": [
+        "Invitation",
+        "SetupToken",
+        "PasswordResetToken"
+      ],
+      "owning_module": "Identity",
+      "admission": "persistence/physical-slices/identity-tokens/admission.json@1.0.0",
+      "status": "ADMITTED",
+      "implementation_authorized": true,
+      "migration_authoring_authorized": true,
+      "shared_or_production_migration_execution_authorized": false,
+      "implementation_state": "PENDING"
     }
   ],
-  "current_admitted_slice_count": 2,
+  "current_admitted_slice_count": 3,
   "candidate_slices": [
     {
       "id": "SLICE-P01",
@@ -143,10 +161,8 @@
         "SetupToken",
         "PasswordResetToken"
       ],
-      "current_state": "BLOCKED",
-      "blockers": [
-        "fresh Persistence Model schema-admission evaluation required against K00 0.16.0 and P03 evidence plan"
-      ],
+      "current_state": "ADMITTED",
+      "blockers": [],
       "blockers_removed_by_k00_014": [],
       "blockers_removed_by_owner_decisions": [
         "InvitationForIdentity approved as many-to-zero-or-one invited Identity",
@@ -162,7 +178,15 @@
       ],
       "blockers_removed_by_admission_evidence_plan": [
         "SLICE-P03 migration and acceptance evidence plan recorded at persistence/physical-slices/identity-tokens/admission-evidence-plan.json"
-      ]
+      ],
+      "blockers_removed_by_admission": [
+        "All eight Persistence Model 1.0.0 admission criteria are PROVEN against exact K00 0.16.0 authority baseline"
+      ],
+      "admission_issue": "#42",
+      "admission_version": "1.0.0",
+      "admitted_on": "2026-10-04",
+      "implementation_authorized": true,
+      "shared_or_production_migration_execution_authorized": false
     },
     {
       "id": "SLICE-P04",
@@ -221,10 +245,10 @@
   ],
   "narrowed_next_lane": {
     "preferred_slice": "SLICE-P03",
-    "reason": "SLICE-P03 owner decisions, approved relationships, and admission evidence plan are recorded; implementation remains blocked until fresh schema admission.",
+    "reason": "SLICE-P03 is admitted for bounded Identity-owned Invitation and single-use token persistence implementation.",
     "owner_decisions_required": [],
-    "physical_implementation_authorized": false,
-    "next_required_gate": "Run fresh SLICE-P03 Persistence Model schema admission against K00 0.16.0",
+    "physical_implementation_authorized": true,
+    "next_required_gate": "Implement SLICE-P03 physical persistence and prove acceptance evidence",
     "semantic_promotions_required": []
   },
   "implementation_guard": {
@@ -260,7 +284,7 @@
     "slice_p03_owner_decisions": "PROVEN",
     "slice_p03_relationship_registration": "PROVEN",
     "slice_p03_admission_evidence_plan": "PROVEN",
-    "slice_p03_schema_admission": "BLOCKED",
+    "slice_p03_schema_admission": "PROVEN",
     "slice_p03_implementation": "BLOCKED"
   }
 }

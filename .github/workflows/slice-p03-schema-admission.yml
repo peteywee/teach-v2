@@ -1,0 +1,33 @@
+name: SLICE-P03 Schema Admission
+
+on:
+  pull_request:
+    paths:
+      - 'persistence/physical-slices/identity-tokens/**'
+      - 'persistence/physical-slices/readiness.json'
+      - 'scripts/persistence/validate-slice-p03-schema-admission.mjs'
+      - 'scripts/persistence/validate-first-physical-slice-readiness.mjs'
+      - 'scripts/persistence/audit-first-physical-slice-readiness.mjs'
+      - 'scripts/tests/validate-validators.mjs'
+      - '.github/workflows/slice-p03-schema-admission.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'persistence/physical-slices/identity-tokens/**'
+      - 'persistence/physical-slices/readiness.json'
+      - 'scripts/persistence/validate-slice-p03-schema-admission.mjs'
+      - 'scripts/persistence/validate-first-physical-slice-readiness.mjs'
+      - 'scripts/persistence/audit-first-physical-slice-readiness.mjs'
+      - 'scripts/tests/validate-validators.mjs'
+      - '.github/workflows/slice-p03-schema-admission.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate SLICE-P03 schema admission
+        run: node scripts/persistence/validate-slice-p03-schema-admission.mjs
