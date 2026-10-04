@@ -87,10 +87,10 @@ check('valid appended history passes without hardcoded totals', (dir) => {
   journal.entries.push({ idx, version: '7', when: last.when + 1, tag: `${prefix}_structural_fixture`, breakpoints: true });
   write(dir, journalPath, journal);
   const readiness = json(dir, readinessPath); readiness.implementation_guard.migrations_generated++; write(dir, readinessPath, readiness);
-  const foundationPath = 'persistence/physical-slices/learning-session/foundation.json';
-  const foundation = json(dir, foundationPath);
-  foundation.physical_artifact_totals.migration_files++;
-  write(dir, foundationPath, foundation);
+  const implementationPath = 'persistence/physical-slices/learning-session/implementation.json';
+  const implementation = json(dir, implementationPath);
+  implementation.physical_artifact_totals.migration_files++;
+  write(dir, implementationPath, implementation);
 });
 
 console.log(`${count - failed}/${count} migration-history guard tests passed`);

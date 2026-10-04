@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
+import { inspectLearningImplementation } from './learning-implementation-evidence.mjs';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
@@ -38,7 +39,7 @@ for(const [name,actual,expected] of checks) if(actual!==expected) errors.push(`w
 
 const admissions=r?.current_physical_slice_admissions||[];
 const admittedIds=admissions.map(x=>x.id).sort();
-if(r?.version!=='1.2.0' || r?.current_admitted_slice_count!==5 || JSON.stringify(admittedIds)!==JSON.stringify(['SLICE-P01','SLICE-P02','SLICE-P03','SLICE-P04','SLICE-P05'])) errors.push('whole-stack audit: current admitted set must be exactly P01-P05');
+if(r?.version!=='1.3.0' || r?.current_admitted_slice_count!==5 || JSON.stringify(admittedIds)!==JSON.stringify(['SLICE-P01','SLICE-P02','SLICE-P03','SLICE-P04','SLICE-P05'])) errors.push('whole-stack audit: current admitted set must be exactly P01-P05');
 
 for(const id of ['SLICE-P01','SLICE-P02','SLICE-P03','SLICE-P04']){
   const x=admissions.find(a=>a.id===id);
@@ -51,8 +52,10 @@ if(p04Implementation?.version!=='1.1.0' || p04Implementation?.status!=='proven' 
 if(p05Registration?.version!=='1.0.0' || p05Registration?.decisions?.[0]?.selection!=='REQUIRED_ONE_ASSIGNMENT') errors.push('whole-stack audit: P05 owner decision missing');
 if(p05Admission?.version!=='1.2.0' || p05Admission?.decision!=='ADMIT' || p05Admission?.implementation_authorized!==true) errors.push('whole-stack audit: P05 admission must be ADMIT');
 
-if(r?.implementation_guard?.tables_generated!==7 || r?.implementation_guard?.migrations_generated!==4 || r?.implementation_guard?.repositories_generated!==7 || r?.implementation_guard?.implemented_slice_count!==4) errors.push('whole-stack audit: admission-stage artifact totals must remain 7/4/7/4');
+if(r?.implementation_guard?.tables_generated!==8 || r?.implementation_guard?.migrations_generated!==5 || r?.implementation_guard?.repositories_generated!==8 || r?.implementation_guard?.implemented_slice_count!==5) errors.push('whole-stack audit: admission-stage artifact totals must remain 8/5/8/5');
 if(r?.implementation_guard?.shared_or_production_migration_execution_authorized!==false || r?.implementation_guard?.full_relational_schema_authorized!==false) errors.push('whole-stack audit: production/full relational schema execution must remain blocked');
+
+errors.push(...inspectLearningImplementation(ROOT));
 
 if(errors.length){
  console.error(`POST-CLOSURE WHOLE-STACK AUDIT FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
@@ -64,6 +67,6 @@ console.log('PROVEN: K00 0.16.0 semantic counts');
 console.log('PROVEN: P01-P04 implementation state');
 console.log('PROVEN: P05 REQUIRED_ONE_ASSIGNMENT owner decision');
 console.log('PROVEN: P05 LearningSession schema admission');
-console.log('PENDING: P05 physical implementation evidence');
-console.log('PROVEN totals before P05 implementation: 7 tables / 4 migrations / 7 repositories / 4 implemented slices');
+console.log(`P05 physical verification: ${r?.evidence_states?.slice_p05_implementation}`);
+console.log('Artifact totals: 8 tables / 5 migrations / 8 repositories / 5 implemented slices');
 console.log('BLOCKED: shared/production migration execution');

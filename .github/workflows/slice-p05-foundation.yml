@@ -3,6 +3,9 @@ name: SLICE-P05 Domain Application Foundation
 on:
   pull_request:
     paths:
+      - 'scripts/persistence/learning-implementation-evidence.mjs'
+      - 'scripts/persistence/validate-slice-p05-implementation-boundary.mjs'
+      - 'src/bootstrap/learning-persistence-schema.ts'
       - 'scripts/persistence/admission-criteria.mjs'
       - 'persistence/authority.json'
       - 'src/modules/learning/**'
@@ -21,6 +24,9 @@ on:
   push:
     branches: [main]
     paths:
+      - 'scripts/persistence/learning-implementation-evidence.mjs'
+      - 'scripts/persistence/validate-slice-p05-implementation-boundary.mjs'
+      - 'src/bootstrap/learning-persistence-schema.ts'
       - 'scripts/persistence/admission-criteria.mjs'
       - 'persistence/authority.json'
       - 'src/modules/learning/**'

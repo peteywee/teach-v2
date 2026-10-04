@@ -21,7 +21,7 @@ if(reg?.relationship_decision?.kernel_registration!=='BLOCKED until separate rel
 if(reg?.readiness_effect?.physical_schema_authorized!==false) errors.push('transaction decision registration: physical schema must remain unauthorized');
 const rr=(relationships?.entries||[]).find(x=>x.id==='ReconciliationRecordUsesIdempotencyKey');
 if(!rr || rr.status!=='approved' || rr.cardinality!=='many-to-zero-or-one') errors.push('transaction decision registration: owner-approved relationship promotion must exist as approved many-to-zero-or-one');
-if(!['0.9.0','1.0.0','1.1.0','1.2.0'].includes(readiness?.version) || readiness?.evidence_states?.admission_rerun!=='PROVEN' || readiness?.evidence_states?.slice_p01_implementation!=='PROVEN' || readiness?.current_physical_slice_admissions?.find(x=>x.id==='SLICE-P01')?.implementation_state!=='PROVEN') errors.push('transaction decision registration: readiness must preserve P01 admission and implementation proof');
+if(!['0.9.0','1.0.0','1.1.0','1.3.0'].includes(readiness?.version) || readiness?.evidence_states?.admission_rerun!=='PROVEN' || readiness?.evidence_states?.slice_p01_implementation!=='PROVEN' || readiness?.current_physical_slice_admissions?.find(x=>x.id==='SLICE-P01')?.implementation_state!=='PROVEN') errors.push('transaction decision registration: readiness must preserve P01 admission and implementation proof');
 if(!readiness?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P01') || readiness?.implementation_guard?.physical_schema_authorized!==true) errors.push('transaction decision registration: preserved SLICE-P01 admission evidence missing');
 if(!c22.includes('"version": "1.2.0"') || c22.includes('| OQ-TXN-1 |')) errors.push('transaction decision registration: C22 1.2.0 must resolve OQ-TXN-1');
 if(!c22.includes('client-supplied or server-derived') || !c22.includes('not shorter than its complete retry and reconciliation horizon')) errors.push('transaction decision registration: C22 TXN-2 decision text missing');
@@ -35,3 +35,4 @@ console.log('Relationship registration: PROVEN');
 console.log('Relationship promotion: PROVEN');
 console.log('Admission rerun: PROVEN / SLICE-P01 IMPLEMENTED');
 console.log('Historical P01 decision proof preserved independently of later admitted-slice totals');
+

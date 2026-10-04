@@ -1,0 +1,87 @@
+name: SLICE-P05 Physical Implementation
+
+on:
+  pull_request:
+    paths:
+      - 'src/modules/learning/**'
+      - 'src/bootstrap/learning-persistence-schema.ts'
+      - 'tests/integration/learning/**'
+      - 'drizzle/**'
+      - 'drizzle.config.ts'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'scripts/db/verify-slice-p05-*'
+      - 'scripts/persistence/**'
+      - 'persistence/physical-slices/**'
+      - '.github/workflows/slice-p05-implementation.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/modules/learning/**'
+      - 'src/bootstrap/learning-persistence-schema.ts'
+      - 'tests/integration/learning/**'
+      - 'drizzle/**'
+      - 'drizzle.config.ts'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'scripts/db/verify-slice-p05-*'
+      - 'scripts/persistence/**'
+      - 'persistence/physical-slices/**'
+      - '.github/workflows/slice-p05-implementation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: teach_v2
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d teach_v2"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/teach_v2
+      TEACH_ISOLATED_DB: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Enable pinned pnpm and install exact dependencies
+        run: |
+          corepack enable
+          corepack prepare pnpm@12.8.1 --activate
+          pnpm install --frozen-lockfile
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Verify pinned Drizzle generation and history
+        run: |
+          pnpm exec drizzle-kit check
+          pnpm db:verify-p05-generation
+      - name: Verify Domain and Application foundation
+        run: pnpm test:p05:foundation
+      - name: Verify admission, ownership, and evidence boundaries
+        run: |
+          node scripts/persistence/validate-slice-p05-owner-decisions.mjs
+          node scripts/persistence/validate-slice-p05-schema-admission.mjs
+          pnpm validate:slice-p05
+          node scripts/persistence/validate-slice-p05-foundation.mjs
+          node scripts/persistence/validate-first-physical-slice-readiness.mjs
+          node scripts/persistence/audit-first-physical-slice-readiness.mjs
+          node scripts/packaging/validate-apply-guards.mjs pins
+      - name: Verify empty and P04-to-P05 replay
+        run: pnpm db:verify-p05-replay
+      - name: Apply immutable history to isolated CI database
+        run: pnpm db:migrate
+      - name: PostgreSQL reference, scope, lifecycle, and concurrent completion tests
+        run: pnpm test:p05:integration

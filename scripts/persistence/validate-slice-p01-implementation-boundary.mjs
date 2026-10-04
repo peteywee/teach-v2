@@ -37,7 +37,7 @@ if (
   errors.push('SLICE-P01 implementation: active ADMIT authority missing');
 }
 if (
-  readiness?.version !== '1.2.0' ||
+  readiness?.version !== '1.3.0' ||
   
   !readiness?.current_physical_slice_admissions?.some(
     (entry) => entry.id === 'SLICE-P01',
@@ -191,3 +191,4 @@ function walk(dir) {
   }
   return out;
 }
+

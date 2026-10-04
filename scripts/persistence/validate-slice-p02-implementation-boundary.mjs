@@ -18,7 +18,7 @@ const migration=text('drizzle/0001_odd_photon.sql');
 const drizzleConfig=text('drizzle.config.ts');
 
 if(admission?.version!=='1.0.0' || admission?.decision!=='ADMIT' || admission?.implementation_authorized!==true) errors.push('SLICE-P02 implementation: active ADMIT authority missing');
-if(readiness?.version!=='1.2.0' || readiness?.current_physical_slice_admissions?.find(x=>x.id==='SLICE-P02')?.implementation_state!=='IMPLEMENTED') errors.push('SLICE-P02 implementation: readiness 1.2.0 IMPLEMENTED state required');
+if(readiness?.version!=='1.3.0' || readiness?.current_physical_slice_admissions?.find(x=>x.id==='SLICE-P02')?.implementation_state!=='IMPLEMENTED') errors.push('SLICE-P02 implementation: readiness 1.3.0 IMPLEMENTED state required');
 if(readiness?.implementation_guard?.shared_or_production_migration_execution_authorized!==false) errors.push('SLICE-P02 implementation: shared/production migration execution must remain blocked');
 
 const ownership=registration?.ownership_scope_decision;
@@ -73,3 +73,4 @@ function walk(dir){
  }
  return out;
 }
+

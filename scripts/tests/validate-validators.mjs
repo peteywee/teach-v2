@@ -893,7 +893,7 @@ test('foundation: physical Learning implementation requires separate evidence', 
 }, { pattern: /physical Learning implementation cannot be covered/ });
 test('foundation: contradictory P05 readiness fails', foundationScript, (dir) => {
   const path = 'persistence/physical-slices/readiness.json'; const value = readJson(dir, path);
-  value.current_physical_slice_admissions.find((item) => item.id === 'SLICE-P05').implementation_state = 'IMPLEMENTED';
+  value.current_physical_slice_admissions.find((item) => item.id === 'SLICE-P05').implementation_state = 'PROVEN';
   writeJson(dir, path, value);
 }, { pattern: /P05 readiness must remain admitted/ });
 test('foundation: matching invented repository counts still fail actual artifacts', foundationScript, (dir) => {
@@ -907,6 +907,44 @@ test('pins: forged foundation authorization fails', 'scripts/packaging/validate-
   value.shared_or_production_migration_execution_authorized = true; value.physical_artifact_totals.tables = 999;
   writeJson(dir, foundationPath, value);
 }, { pattern: /runtime activation must remain BLOCKED/ });
+
+const implementationPath = 'persistence/physical-slices/learning-session/implementation.json';
+const implementationScript = 'scripts/persistence/validate-slice-p05-implementation-boundary.mjs';
+const implementationMutations = [
+  ['runtime activation', (d) => { d.runtime_activation = 'ACTIVE'; }, /runtime activation must remain BLOCKED/],
+  ['production execution', (d) => { d.shared_or_production_migration_execution_authorized = true; }, /shared\/production migration execution must remain blocked/],
+  ['invented Assignment existence', (d) => { d.assignment_reference.existence_proven = true; }, /must not claim existence/],
+  ['nullable Assignment reference', (d) => { d.assignment_reference.nullable = true; }, /must not claim existence/],
+  ['invented Assignment authorization', (d) => { d.authoritative_assignment_authorization_adapter = 'PROVEN'; }, /explicit runtime blockers/],
+  ['invented atomic authorization', (d) => { d.atomic_authorization_and_insert = 'PROVEN'; }, /explicit runtime blockers/],
+  ['repository total drift', (d) => { d.physical_artifact_totals.repositories = 999; }, /totals must match actual artifacts/],
+  ['inconsistent verification state', (d) => { d.verification.exact_head_ci = 'UNKNOWN'; }, /all physical verification fields/],
+];
+for (const [name, mutate, pattern] of implementationMutations) {
+  test(`p05 physical evidence: ${name} fails`, implementationScript, (dir) => {
+    const value = readJson(dir, implementationPath); mutate(value); writeJson(dir, implementationPath, value);
+  }, { pattern });
+}
+test('p05 implementation: clean checkpoint passes', implementationScript, () => {}, { pass: true });
+test('p05 implementation: no ADMIT means no authoring', implementationScript, (dir) => {
+  const path = 'persistence/physical-slices/learning-session/admission.json'; const value = readJson(dir, path);
+  value.decision = 'BLOCK'; writeJson(dir, path, value);
+}, { pattern: /active ADMIT authority required/ });
+test('p05 implementation: foreign module import fails', implementationScript, (dir) => {
+  writeFileSync(join(dir, 'src/modules/identity/domain/foreign-learning.ts'), "import '../../../learning/infrastructure/persistence/schema.js';\n");
+}, { pattern: /foreign module imports Learning persistence/ });
+test('p05 implementation: wrong Identity FK target fails', implementationScript, (dir) => {
+  const path = 'drizzle/meta/0004_snapshot.json'; const value = readJson(dir, path);
+  Object.values(value.tables['public.learning_sessions'].foreignKeys)[0].tableTo = 'identities';
+  writeJson(dir, path, value);
+}, { pattern: /FK must reference canonical Identity/ });
+
+test('P01 decision packet: current readiness passes', 'scripts/persistence/validate-transactioncontrol-first-slice-decision-packet.mjs', () => {}, { pass: true });
+test('P01 decision packet: missing preserved implementation fails', 'scripts/persistence/validate-transactioncontrol-first-slice-decision-packet.mjs', (dir) => {
+  const path = 'persistence/physical-slices/readiness.json'; const value = readJson(dir, path);
+  value.current_physical_slice_admissions.find((item) => item.id === 'SLICE-P01').implementation_state = 'PENDING';
+  writeJson(dir, path, value);
+}, { pattern: /readiness must preserve SLICE-P01/ });
 
 // ---------------------------------------------------------------------------
 // Report

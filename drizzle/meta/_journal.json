@@ -29,6 +29,13 @@
       "when": 1791140554656,
       "tag": "0003_slice_p04_credential",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791145431316,
+      "tag": "0004_slice_p05_learning_session",
+      "breakpoints": true
     }
   ]
 }

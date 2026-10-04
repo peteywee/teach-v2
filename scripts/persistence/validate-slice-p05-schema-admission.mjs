@@ -67,9 +67,9 @@ if(admission?.shared_or_production_migration_execution_authorized!==false || adm
 
 const admissions=readiness?.current_physical_slice_admissions||[];
 const p05Admission=admissions.find(x=>x.id==='SLICE-P05');
-if(readiness?.version!=='1.2.0' || readiness?.current_admitted_slice_count!==5 || !p05Admission || p05Admission.status!=='ADMITTED' || p05Admission.implementation_authorized!==true) errors.push('SLICE-P05 admission: readiness must contain admitted P05');
+if(readiness?.version!=='1.3.0' || readiness?.current_admitted_slice_count!==5 || !p05Admission || p05Admission.status!=='ADMITTED' || p05Admission.implementation_authorized!==true) errors.push('SLICE-P05 admission: readiness must contain admitted P05');
 const p05=readiness?.candidate_slices?.find(x=>x.id==='SLICE-P05');
-if(!p05 || p05.current_state!=='ADMITTED' || p05.implementation_authorized!==true || p05.migration_authoring_authorized!==true || (p05.blockers||[]).length!==0) errors.push('SLICE-P05 admission: P05 readiness state mismatch');
+if(!p05 || !['ADMITTED','IMPLEMENTED'].includes(p05.current_state) || p05.implementation_authorized!==true || p05.migration_authoring_authorized!==true || (p05.blockers||[]).length!==0) errors.push('SLICE-P05 admission: P05 readiness state mismatch');
 if(readiness?.narrowed_next_lane?.physical_implementation_authorized!==true || (readiness?.narrowed_next_lane?.owner_decisions_required||[]).length!==0) errors.push('SLICE-P05 admission: next lane must authorize P05 implementation with no owner gate');
 if(readiness?.evidence_states?.slice_p05_owner_decision!=='PROVEN' || readiness?.evidence_states?.slice_p05_schema_admission!=='PROVEN' || readiness?.evidence_states?.slice_p05_relationship_nullability!=='PROVEN') errors.push('SLICE-P05 admission: readiness evidence states must be PROVEN');
 

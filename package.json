@@ -30,7 +30,11 @@
     "db:verify-p04-replay": "tsx scripts/db/verify-slice-p04-migration-replay.ts",
     "validate:slice-p04": "node scripts/persistence/validate-slice-p04-implementation-boundary.mjs",
     "check:slice-p04": "pnpm typecheck && pnpm test:p04 && node scripts/persistence/validate-slice-p04-schema-admission.mjs && pnpm validate:slice-p04",
-    "test:p05:foundation": "tsx --test src/modules/learning/domain/learning-session.test.ts src/modules/learning/application/learning-session-service.test.ts"
+    "test:p05:foundation": "tsx --test src/modules/learning/domain/learning-session.test.ts src/modules/learning/application/learning-session-service.test.ts",
+    "test:p05:integration": "tsx --test tests/integration/learning/learning-session-repository.test.ts",
+    "db:verify-p05-replay": "tsx scripts/db/verify-slice-p05-migration-replay.ts",
+    "db:verify-p05-generation": "node scripts/db/verify-slice-p05-generation.mjs",
+    "validate:slice-p05": "node scripts/persistence/validate-slice-p05-implementation-boundary.mjs"
   },
   "dependencies": {
     "drizzle-orm": "0.45.3",

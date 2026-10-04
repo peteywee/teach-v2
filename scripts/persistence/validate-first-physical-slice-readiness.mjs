@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
+import { inspectLearningImplementation } from './learning-implementation-evidence.mjs';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
@@ -20,7 +21,7 @@ if(m?.version!=='0.16.0') errors.push(`slice readiness: expected K00 0.16.0, fou
 if(reg?.version!=='1.0.0' || reg?.status!=='recorded') errors.push('slice readiness: semantic closure registration missing');
 
 if(r){
-  if(r.readiness_id!=='TEACH-FIRST-PHYSICAL-SLICE-READINESS' || r.version!=='1.2.0' || r.status!=='recorded') errors.push('slice readiness: identity/state mismatch');
+  if(r.readiness_id!=='TEACH-FIRST-PHYSICAL-SLICE-READINESS' || r.version!=='1.3.0' || r.status!=='recorded') errors.push('slice readiness: identity/state mismatch');
 
   const admissions=r.current_physical_slice_admissions||[];
   const admittedIds=admissions.map(x=>x.id).sort();
@@ -49,9 +50,11 @@ if(r){
   if(!learningBoundary.includes('SLICE-P05 physical persistence is ADMITTED')) errors.push('slice readiness: Learning source-module boundary missing admitted state');
 
   if(r.evidence_states?.slice_p05_owner_decision!=='PROVEN' || r.evidence_states?.slice_p05_schema_admission!=='PROVEN' || r.evidence_states?.slice_p05_relationship_nullability!=='PROVEN') errors.push('slice readiness: P05 evidence-state transition mismatch');
-  if(r.implementation_guard?.tables_generated!==7 || r.implementation_guard?.migrations_generated!==4 || r.implementation_guard?.repositories_generated!==7 || r.implementation_guard?.implemented_slice_count!==4) errors.push('slice readiness: admission must not invent P05 implementation artifacts');
+  if(r.implementation_guard?.tables_generated!==8 || r.implementation_guard?.migrations_generated!==5 || r.implementation_guard?.repositories_generated!==8 || r.implementation_guard?.implemented_slice_count!==5) errors.push('slice readiness: admission must not invent P05 implementation artifacts');
   if(r.implementation_guard?.shared_or_production_migration_execution_authorized!==false || r.implementation_guard?.full_relational_schema_authorized!==false) errors.push('slice readiness: production/full-schema execution must remain blocked');
 }
+
+errors.push(...inspectLearningImplementation(ROOT));
 
 if(errors.length){
   console.error(`Post-closure physical slice readiness FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
@@ -61,9 +64,9 @@ if(errors.length){
 
 console.log('Post-closure physical slice readiness PASS');
 console.log('K00: 0.16.0');
-console.log('Implemented slices: P01-P04');
+console.log('Implemented artifacts: P01-P05; acceptance evidence is recorded separately');
 console.log('P05 LearningSession schema admission: ADMIT / PROVEN');
 console.log('P05 Assignment reference: REQUIRED / NON-NULL');
 console.log('P05 physical implementation/migration authoring: AUTHORIZED');
-console.log('Implemented artifact totals remain 7/4/7/4 until P05 implementation proves otherwise');
+console.log('Artifact totals: 8/5/8/5; runtime activation remains BLOCKED');
 console.log('Shared/production migration execution: BLOCKED');

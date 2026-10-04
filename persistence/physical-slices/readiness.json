@@ -1,6 +1,6 @@
 {
   "readiness_id": "TEACH-FIRST-PHYSICAL-SLICE-READINESS",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-04",
@@ -8,7 +8,7 @@
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "971b77faad88c4be5119324b5c324b56d0a78055",
+    "commit": "9e3a0961633599f422e8b63dda74695d803d8146",
     "kernel_version": "0.16.0",
     "persistence_authority_version": "1.0.0",
     "semantic_closure_registration_version": "1.0.0",
@@ -30,7 +30,8 @@
     "slice_p03_admission_version": "1.0.0",
     "p04_repair_issue": "#52",
     "p04_retrospective_validation_issue": "#48",
-    "p04_repair_verification_commit": "ff2287b7d4818151803d8db38a91951f42b22742"
+    "p04_repair_verification_commit": "ff2287b7d4818151803d8db38a91951f42b22742",
+    "slice_p05_implementation_issue": "#51"
   },
   "admission_rule": "ADMIT only when every semantic dependency and every shape-affecting owner decision required by the physical schema is approved. Missing, candidate, UNKNOWN, BLOCKED, or contradictory evidence fails closed.",
   "current_physical_slice_admissions": [
@@ -100,7 +101,8 @@
       "implementation_authorized": true,
       "migration_authoring_authorized": true,
       "shared_or_production_migration_execution_authorized": false,
-      "implementation_state": "ADMITTED"
+      "implementation_state": "IMPLEMENTED",
+      "implementation": "persistence/physical-slices/learning-session/implementation.json@1.0.0"
     }
   ],
   "current_admitted_slice_count": 5,
@@ -256,7 +258,7 @@
       "records": [
         "LearningSession"
       ],
-      "current_state": "ADMITTED",
+      "current_state": "IMPLEMENTED",
       "blockers": [],
       "blockers_removed_by_semantic_promotion": [
         "LearningSessionId is approved",
@@ -281,25 +283,29 @@
       "blockers_removed_by_admission": [
         "All eight Persistence Model 1.0.0 admission criteria are PROVEN against P05 registration 1.0.0 and exact pre-decision main"
       ],
-      "admitted_on": "2026-10-04"
+      "admitted_on": "2026-10-04",
+      "implementation_version": "1.0.0",
+      "implementation_evidence": "PENDING",
+      "runtime_activation": "BLOCKED"
     }
   ],
   "narrowed_next_lane": {
     "preferred_slice": "SLICE-P05",
-    "reason": "LearningSession P05 owner decision is registered and schema admission is ADMIT.",
+    "reason": "P05 physical storage is implemented; runtime activation awaits authoritative Assignment authorization and atomicity proof.",
     "owner_decisions_required": [],
     "physical_implementation_authorized": true,
-    "next_required_gate": "Implement SLICE-P05 LearningSession physical persistence and prove acceptance evidence",
-    "semantic_promotions_required": []
+    "next_required_gate": "Verify P05 physical acceptance evidence; then prove Assignment authorization-plus-insert atomicity before runtime activation",
+    "semantic_promotions_required": [],
+    "runtime_activation": "BLOCKED"
   },
   "implementation_guard": {
-    "tables_generated": 7,
-    "migrations_generated": 4,
-    "repositories_generated": 7,
+    "tables_generated": 8,
+    "migrations_generated": 5,
+    "repositories_generated": 8,
     "physical_schema_authorized": true,
     "shared_or_production_migration_execution_authorized": false,
     "full_relational_schema_authorized": false,
-    "implemented_slice_count": 4
+    "implemented_slice_count": 5
   },
   "evidence_states": {
     "persistence_authority": "PROVEN",
@@ -338,6 +344,9 @@
     "slice_p04_migration_determinism": "PROVEN",
     "slice_p04_p03_upgrade_replay": "PROVEN",
     "slice_p04_postgres_integration": "PROVEN",
-    "slice_p04_review_findings": "PROVEN"
+    "slice_p04_review_findings": "PROVEN",
+    "slice_p05_runtime_activation": "BLOCKED",
+    "slice_p05_assignment_authorization": "UNKNOWN",
+    "slice_p05_atomic_authorization_insert": "PENDING"
   }
 }
