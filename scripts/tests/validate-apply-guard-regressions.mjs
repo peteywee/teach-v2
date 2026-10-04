@@ -102,7 +102,7 @@ test(
     replaceOrThrow(
       dir,
       'scripts/persistence/validate-persistence-authority.mjs',
-      ".filter(x=>x.status==='approved').length!==11",
+      ".filter(x=>x.status==='approved').length!==15",
       ".filter(x=>x.status==='approved').length!==0",
     );
   },
