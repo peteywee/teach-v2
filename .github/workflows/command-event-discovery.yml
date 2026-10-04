@@ -1,0 +1,32 @@
+name: Command Event Discovery
+
+on:
+  pull_request:
+    paths:
+      - 'domains/commands-events/**'
+      - 'kernel/commands.json'
+      - 'kernel/events.json'
+      - 'kernel/decision-tables.json'
+      - 'contracts/**'
+      - 'scripts/domains/validate-command-event-discovery.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'domains/commands-events/**'
+      - 'kernel/commands.json'
+      - 'kernel/events.json'
+      - 'kernel/decision-tables.json'
+      - 'contracts/**'
+      - 'scripts/domains/validate-command-event-discovery.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-command-event-discovery:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate command/event discovery
+        run: node scripts/domains/validate-command-event-discovery.mjs

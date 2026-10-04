@@ -1,0 +1,160 @@
+{
+  "command_event_discovery_id": "TEACH-COMMAND-EVENT-DISCOVERY",
+  "version": "0.1.0",
+  "status": "proposed",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-03",
+  "updated_on": "2026-10-03",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "commit": "7f747aa4ca524884d33b65260fd41b05452dcfa0",
+    "required_kernel_version": "0.6.0",
+    "required_c01_version": "1.5.0",
+    "required_ownership_map_version": "1.3.0"
+  },
+  "rules": {
+    "commands_are_state_change_boundary": true,
+    "audit_record_is_not_automatically_domain_event": true,
+    "unknown_or_ambiguous_event_classification_is_blocked": true,
+    "discovery_is_not_kernel_authority": true
+  },
+  "existing_registered_commands": [
+    "AssignContent",
+    "AuthenticateIdentity",
+    "CompleteLearningSession",
+    "CreateApplicationSession",
+    "CreateMembership",
+    "DeactivateIdentity",
+    "DeactivateMembership",
+    "IssueCertification",
+    "OffboardIdentity",
+    "ReactivateIdentity",
+    "RecordProgressEvent",
+    "RevokeApplicationSession",
+    "RevokeCertification",
+    "RevokeMembership",
+    "StartLearningSession"
+  ],
+  "ready_command_candidates": [
+    {
+      "id": "CreateIdentity",
+      "owning_domain": "Identity",
+      "authority_contracts": ["C11", "C41"],
+      "requirements": ["IDN-16", "API-14"],
+      "reason": "Identity creation is an explicit identity lifecycle mutation and application state changes cross the command boundary."
+    },
+    {
+      "id": "InviteIdentity",
+      "owning_domain": "Identity",
+      "authority_contracts": ["C11", "C41"],
+      "requirements": ["IDN-12", "IDN-16", "IDN-20", "API-14"],
+      "reason": "Invitation initiation is an explicit lifecycle mutation; unresolved offboarded-email behavior remains fail-closed inside the command."
+    },
+    {
+      "id": "AcceptInvitation",
+      "owning_domain": "Identity",
+      "authority_contracts": ["C11", "C41"],
+      "requirements": ["IDN-16", "API-14"],
+      "reason": "Invitation acceptance is an explicit identity lifecycle mutation."
+    },
+    {
+      "id": "ChangeCredential",
+      "owning_domain": "Identity",
+      "authority_contracts": ["C11", "C12", "C41"],
+      "requirements": ["IDN-15", "IDN-16", "SES-14", "API-14"],
+      "reason": "Credential change mutates authoritative identity state and must invoke canonical session revocation policy."
+    },
+    {
+      "id": "RevokeSingleUseToken",
+      "owning_domain": "Identity",
+      "authority_contracts": ["C11", "C41"],
+      "requirements": ["IDN-11", "API-14"],
+      "reason": "Single-use token revocation is an explicit state mutation."
+    },
+    {
+      "id": "PublishContentPack",
+      "owning_domain": "Content",
+      "authority_contracts": ["C31", "C41"],
+      "requirements": ["CNT-3", "CNT-4", "CNT-6", "API-14"],
+      "reason": "Publication changes authoritative content lifecycle state and must reject invalid or in-place mutation."
+    },
+    {
+      "id": "ReconcileExternalEffect",
+      "owning_domain": "TransactionControl",
+      "authority_contracts": ["C22", "C41"],
+      "requirements": ["TXN-6", "TXN-7", "TXN-8", "TXN-9", "API-14"],
+      "reason": "Canonical provider readback followed by local reconciliation is a state-changing operation with fail-closed retry semantics."
+    }
+  ],
+  "blocked_command_candidates": [
+    {
+      "id": "LinkOAuthIdentity",
+      "authority_contracts": ["C11"],
+      "blocked_by": ["OQ-IDN-4", "missing-k00:OAuthIdentityLink"]
+    },
+    {
+      "id": "SetEntitlement",
+      "authority_contracts": ["C13", "C63"],
+      "blocked_by": ["canonical Organization entitlement-mutation command name/shape not yet approved"]
+    },
+    {
+      "id": "SubmitDataExportRequest",
+      "authority_contracts": ["C15"],
+      "blocked_by": ["missing-k00:DataExportRequest", "privacy request lifecycle not yet modeled"]
+    },
+    {
+      "id": "SubmitDataDeletionRequest",
+      "authority_contracts": ["C15"],
+      "blocked_by": ["missing-k00:DataDeletionRequest", "OQ-PRIV-1", "OQ-PRIV-2", "OQ-PRIV-3"]
+    },
+    {
+      "id": "GrantRole",
+      "authority_contracts": ["C14"],
+      "blocked_by": ["missing-k00:Role", "OQ-AUTHZ-1"]
+    },
+    {
+      "id": "RevokeRole",
+      "authority_contracts": ["C14"],
+      "blocked_by": ["missing-k00:Role", "OQ-AUTHZ-1"]
+    },
+    {
+      "id": "GrantCapability",
+      "authority_contracts": ["C14"],
+      "blocked_by": ["capability-vocabulary-not-yet-populated", "OQ-AUTHZ-1"]
+    },
+    {
+      "id": "RevokeCapability",
+      "authority_contracts": ["C14"],
+      "blocked_by": ["capability-vocabulary-not-yet-populated", "OQ-AUTHZ-1"]
+    }
+  ],
+  "existing_registered_events": [
+    "ApplicationSessionCreated",
+    "ApplicationSessionRevoked",
+    "CertificationIssued",
+    "CertificationRevoked",
+    "ContentAssigned",
+    "IdentityDeactivated",
+    "IdentityOffboarded",
+    "IdentityReactivated",
+    "LearningSessionCompleted",
+    "LearningSessionStarted",
+    "MembershipCreated",
+    "MembershipDeactivated",
+    "MembershipRevoked",
+    "ProgressRecorded"
+  ],
+  "ready_event_candidates": [],
+  "blocked_event_candidates": [
+    {"id":"IdentityCreated","authority_contracts":["C11","C23"],"blocked_by":["C11 requires an audit event, but C01 canonical domain-event classification is not specified"]},
+    {"id":"IdentityInvited","authority_contracts":["C11","C23"],"blocked_by":["audit-record-vs-domain-event classification not specified"]},
+    {"id":"InvitationAccepted","authority_contracts":["C11","C23"],"blocked_by":["audit-record-vs-domain-event classification not specified"]},
+    {"id":"CredentialChanged","authority_contracts":["C11","C23"],"blocked_by":["audit-record-vs-domain-event classification not specified"]},
+    {"id":"SingleUseTokenRevoked","authority_contracts":["C11","C23"],"blocked_by":["canonical event emission is not required by active contracts"]},
+    {"id":"ApplicationSessionExpired","authority_contracts":["C12"],"blocked_by":["state transition is canonical, but event emission is not required by active contracts"]},
+    {"id":"ContentPackPublished","authority_contracts":["C31"],"blocked_by":["publication semantics are defined, but canonical event emission is not required"]},
+    {"id":"ExternalEffectReconciled","authority_contracts":["C22"],"blocked_by":["reconciliation behavior is defined, but canonical event emission is not required"]},
+    {"id":"EntitlementChanged","authority_contracts":["C13","C63"],"blocked_by":["entitlement mutation command/event vocabulary not yet approved"]}
+  ]
+}
