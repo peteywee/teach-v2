@@ -6,12 +6,14 @@ on:
       - 'persistence/physical-slices/**'
       - 'scripts/persistence/validate-first-physical-slice-readiness.mjs'
       - 'scripts/persistence/audit-first-physical-slice-readiness.mjs'
+      - 'scripts/persistence/validate-slice-p01-schema-admission.mjs'
   push:
     branches: [main]
     paths:
       - 'persistence/physical-slices/**'
       - 'scripts/persistence/validate-first-physical-slice-readiness.mjs'
       - 'scripts/persistence/audit-first-physical-slice-readiness.mjs'
+      - 'scripts/persistence/validate-slice-p01-schema-admission.mjs'
 
 permissions:
   contents: read
@@ -23,3 +25,4 @@ jobs:
       - uses: actions/checkout@v4
       - run: node scripts/persistence/validate-first-physical-slice-readiness.mjs
       - run: node scripts/persistence/audit-first-physical-slice-readiness.mjs
+      - run: node scripts/persistence/validate-slice-p01-schema-admission.mjs

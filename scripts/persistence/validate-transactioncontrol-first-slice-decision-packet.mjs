@@ -11,7 +11,7 @@ const m=load('kernel/manifest.json');
 const ids=load('kernel/identifiers.json');
 
 if(m?.version!=='0.14.0') errors.push(`transaction slice: expected K00 0.14.0, found ${m?.version}`);
-if(r?.version!=='0.3.0' || r?.narrowed_next_lane?.preferred_slice!=='SLICE-P01') errors.push('transaction slice: readiness 0.3.0 must select SLICE-P01');
+if(r?.version!=='0.4.0' || r?.narrowed_next_lane?.preferred_slice!=='SLICE-P01') errors.push('transaction slice: readiness 0.4.0 must select SLICE-P01');
 if((ids?.entries||[]).find(x=>x.id==='IdempotencyKey')?.status!=='approved') errors.push('transaction slice: IdempotencyKey must be approved');
 if(p){
  if(p.proposal_id!=='TEACH-TRANSACTIONCONTROL-FIRST-SLICE-DECISION-PACKET' || p.version!=='0.1.0' || p.status!=='proposed') errors.push('transaction slice: proposal identity/state mismatch');

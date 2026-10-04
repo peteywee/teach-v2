@@ -41,4 +41,4 @@ if(errors.length){
 console.log('POST-CLOSURE WHOLE-STACK AUDIT PASS');
 console.log('PROVEN: K00 0.14.0 exact promotion counts');
 console.log('BLOCKED: physical schema — 0 admitted slices');
-console.log('NEXT: ReconciliationRecordUsesIdempotencyKey relationship registration');
+console.log('NEXT: explicit owner approval for ReconciliationRecordUsesIdempotencyKey candidate -> approved');

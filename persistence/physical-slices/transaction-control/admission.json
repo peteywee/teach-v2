@@ -1,0 +1,68 @@
+{
+  "admission_id": "TEACH-SLICE-P01-PHYSICAL-SCHEMA-ADMISSION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "evaluated_on": "2026-10-04",
+  "issue": "#22",
+  "semantic_baseline_commit": "8b2acf2c8d121315641cd726528a7add926331cd",
+  "slice": "SLICE-P01",
+  "record": "ReconciliationRecord",
+  "decision": "BLOCK",
+  "governing_authority": "TEACH-PERSISTENCE-MODEL@1.0.0",
+  "criteria": [
+    {
+      "criterion": "entity is approved",
+      "state": "PROVEN",
+      "evidence": "ReconciliationRecord is approved in K00"
+    },
+    {
+      "criterion": "canonical identifier is approved",
+      "state": "PROVEN",
+      "evidence": "ReconciliationRecordId is approved in K00"
+    },
+    {
+      "criterion": "every persisted lifecycle state set is approved",
+      "state": "PROVEN",
+      "evidence": "ReconciliationRecordStatus and ExternalEffectOutcome are approved in K00"
+    },
+    {
+      "criterion": "every relationship/cardinality encoded by the schema is approved",
+      "state": "BLOCKED",
+      "evidence": "ReconciliationRecordUsesIdempotencyKey is registered with many-to-zero-or-one cardinality but status is candidate"
+    },
+    {
+      "criterion": "no blocking open question changes the record shape",
+      "state": "PROVEN",
+      "evidence": "C22 OQ-TXN-1 resolved; TXN-SLICE-D01 through D04 owner-approved"
+    },
+    {
+      "criterion": "owning module is explicit",
+      "state": "PROVEN",
+      "evidence": "TransactionControl owns ReconciliationRecord and the relationship"
+    },
+    {
+      "criterion": "protected ownership/scope fields are derivable from approved semantics",
+      "state": "PROVEN",
+      "evidence": "TXN-SLICE-D04 requires inheritance from the originating operation and forbids scope broadening"
+    },
+    {
+      "criterion": "migration and acceptance evidence plan exists",
+      "state": "PROVEN",
+      "evidence": "persistence/physical-slices/transaction-control/admission-evidence-plan.json@1.0.0"
+    }
+  ],
+  "blockers": [
+    "ReconciliationRecordUsesIdempotencyKey must be explicitly owner-approved from candidate to approved before physical schema admission"
+  ],
+  "next_required_gate": "Explicit owner semantic-promotion approval for ReconciliationRecordUsesIdempotencyKey candidate -> approved",
+  "admitted_physical_slices": 0,
+  "physical_schema_authorized": false,
+  "prohibited_effects": [
+    "no candidate-to-approved promotion",
+    "no table",
+    "no migration",
+    "no repository",
+    "no transport route",
+    "no runtime implementation"
+  ]
+}
