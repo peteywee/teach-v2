@@ -15,7 +15,7 @@ on:
       - 'scripts/**'
       - 'kernel/*.json'
       - 'domains/ownership-map.json'
-     - 'contracts/README.md'
+      - 'contracts/README.md'
       - 'contracts/APPROVAL-RECORD.md'
       - '.github/workflows/validate-apply-pins.yml'
 

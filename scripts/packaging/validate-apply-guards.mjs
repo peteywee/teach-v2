@@ -49,6 +49,28 @@ const walk = (dir) => {
 const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const lineOf = (text, index) => text.slice(0, index).split('\n').length;
 
+const normalizeLoadPath = (base, rel) => {
+  const cleanRel = rel.replace(/^\.\//, '');
+  if (!base) return cleanRel;
+  return `${base.replace(/\/$/, '')}/${cleanRel.replace(/^\//, '')}`;
+};
+
+function detectLoadBase(source) {
+  const bases = new Map([['ROOT', '']]);
+  for (const match of source.matchAll(/\bconst\s+([A-Za-z_$][\w$]*)\s*=\s*(?:join|resolve)\(\s*ROOT\s*,\s*['"]([^'"]+)['"]\s*\)/g)) {
+    bases.set(match[1], match[2].replace(/^\.\//, '').replace(/\/$/, ''));
+  }
+
+  const declaration = source.match(/\bconst\s+load\s*=\s*\(\s*([A-Za-z_$][\w$]*)\s*\)\s*=>/);
+  if (!declaration) return '';
+
+  const param = declaration[1];
+  const snippet = source.slice(declaration.index, declaration.index + 800);
+  const joined = snippet.match(new RegExp(`join\\(\\s*([A-Za-z_$][\\w$]*)\\s*,\\s*${escapeRegex(param)}\\s*\\)`));
+  if (!joined) return '';
+  return bases.get(joined[1]) ?? '';
+}
+
 // ---------------------------------------------------------------- guard: pins
 function checkPins() {
   const ownership = load('domains/ownership-map.json');
@@ -70,12 +92,17 @@ function checkPins() {
     if (file === 'scripts/packaging/validate-apply-guards.mjs') continue;
     const source = readFileSync(join(ROOT, file), 'utf8');
     const bindings = new Map();
+    const collections = new Map();
+    const loadBase = detectLoadBase(source);
 
     for (const match of source.matchAll(/\bconst\s+([A-Za-z_$][\w$]*)\s*=\s*load\(\s*['"]([^'"]+)['"]\s*\)/g)) {
-      bindings.set(match[1], { kind: 'json', path: match[2] });
+      bindings.set(match[1], { kind: 'json', path: normalizeLoadPath(loadBase, match[2]) });
     }
     for (const match of source.matchAll(/\bconst\s+([A-Za-z_$][\w$]*)\s*=\s*text\(\s*['"]([^'"]+)['"]\s*\)/g)) {
       bindings.set(match[1], { kind: 'text', path: match[2] });
+    }
+    for (const match of source.matchAll(/\bconst\s+([A-Za-z_$][\w$]*)\s*=\s*Object\.fromEntries\([^;]*?\bload\(\s*[A-Za-z_$][\w$]*\s*\)[^;]*?\);/g)) {
+      collections.set(match[1], { base: loadBase });
     }
 
     for (const [alias, binding] of bindings) {
@@ -123,6 +150,31 @@ function checkPins() {
             if (pinned !== contractVersion) {
               errors.push(`${file}:${i + 1}: stale contract package version pin '${pinned}' — live value is '${contractVersion}'`);
             }
+          }
+        }
+      }
+    }
+
+    for (const [collection, binding] of collections) {
+      const c = escapeRegex(collection);
+      const countExpr = `(?:\\[\\.\\.\\.\\s*)?\\(\\s*${c}\\[\\s*['"]([^'"]+\\.json)['"]\\s*\\](?:\\?\\.|\\.)entries\\s*\\|\\|\\s*\\[\\]\\s*\\)(?:\\s*\\])?\\.filter\\(\\s*[A-Za-z_$][\\w$]*\\s*=>\\s*[A-Za-z_$][\\w$]*(?:\\?\\.|\\.)status\\s*===\\s*['"]([^'"]+)['"]\\s*\\)\\.length`;
+      const patterns = [
+        new RegExp(`${countExpr}\\s*!==?\\s*(\\d+)`, 'g'),
+        new RegExp(`${countExpr}\\s*,\\s*(\\d+)\\s*\\]`, 'g'),
+      ];
+
+      for (const pattern of patterns) {
+        for (const match of source.matchAll(pattern)) {
+          const artifactPath = normalizeLoadPath(binding.base, match[1]);
+          if (!/^kernel\/[a-z0-9-]+\.json$/i.test(artifactPath)) continue;
+          const artifact = load(artifactPath);
+          if (!Array.isArray(artifact?.entries)) continue;
+
+          const status = match[2];
+          const pinned = Number(match[3]);
+          const actual = artifact.entries.filter((entry) => entry?.status === status).length;
+          if (pinned !== actual) {
+            errors.push(`${file}:${lineOf(source, match.index)}: stale live kernel ${status} count pin '${pinned}' for ${artifactPath} — live value is '${actual}'`);
           }
         }
       }

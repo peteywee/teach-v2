@@ -123,6 +123,32 @@ test(
 );
 
 test(
+  'relative loader: kernel-rooted manifest pin fails',
+  (dir) => {
+    replaceOrThrow(
+      dir,
+      'scripts/kernel/validate-semantic-kernel.mjs',
+      "if (manifest.version !== '0.14.0')",
+      "if (manifest.version !== '0.13.0')",
+    );
+  },
+  { pattern: /stale K00 manifest version pin '0\.13\.0'/ },
+);
+
+test(
+  'derived registry: stale approved commands count fails',
+  (dir) => {
+    replaceOrThrow(
+      dir,
+      'scripts/kernel/validate-semantic-kernel.mjs',
+      "if ([...(docs['commands.json']?.entries || [])].filter(c => c.status === 'approved').length !== 23)",
+      "if ([...(docs['commands.json']?.entries || [])].filter(c => c.status === 'approved').length !== 22)",
+    );
+  },
+  { pattern: /stale live kernel approved count pin '22'.*kernel\/commands\.json/ },
+);
+
+test(
   'contract package: stale live package pin fails',
   (dir) => {
     replaceOrThrow(
