@@ -1,0 +1,530 @@
+{
+  "discovery_id": "TEACH-PERSISTENCE-SEMANTIC-CLOSURE-DISCOVERY",
+  "version": "0.1.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-04",
+  "updated_on": "2026-10-04",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "commit": "53b6af01a281773d47d87f3ea396ac546684ad92",
+    "kernel_version": "0.13.0",
+    "persistence_authority_version": "1.0.0"
+  },
+  "promotion_rule": "SEM-30: candidate-to-approved promotion requires explicit owner approval. Discovery itself performs no promotion.",
+  "ready_for_owner_promotion": {
+    "identifiers": [
+      {
+        "id": "IdentityId",
+        "current_status": "candidate",
+        "evidence": [
+          "C01 canonical identifiers",
+          "C11 Identity authority"
+        ],
+        "state": "READY_FOR_OWNER_PROMOTION"
+      },
+      {
+        "id": "OrganizationId",
+        "current_status": "candidate",
+        "evidence": [
+          "C01 canonical identifiers",
+          "C13 Organization authority"
+        ],
+        "state": "READY_FOR_OWNER_PROMOTION"
+      },
+      {
+        "id": "ApplicationSessionId",
+        "current_status": "candidate",
+        "evidence": [
+          "C01 canonical identifiers",
+          "C12 session authority"
+        ],
+        "state": "READY_FOR_OWNER_PROMOTION"
+      },
+      {
+        "id": "ContentPackId",
+        "current_status": "candidate",
+        "evidence": [
+          "C01 canonical identifiers",
+          "C31 content authority"
+        ],
+        "state": "READY_FOR_OWNER_PROMOTION"
+      },
+      {
+        "id": "LearningSessionId",
+        "current_status": "candidate",
+        "evidence": [
+          "C01 canonical identifiers",
+          "C32 learning authority"
+        ],
+        "state": "READY_FOR_OWNER_PROMOTION"
+      },
+      {
+        "id": "CertificationId",
+        "current_status": "candidate",
+        "evidence": [
+          "C01 canonical identifiers",
+          "C34 certification authority"
+        ],
+        "state": "READY_FOR_OWNER_PROMOTION"
+      },
+      {
+        "id": "IdempotencyKey",
+        "current_status": "candidate",
+        "evidence": [
+          "C01 canonical identifiers",
+          "C22 TXN-2/TXN-4"
+        ],
+        "state": "READY_FOR_OWNER_PROMOTION"
+      },
+      {
+        "id": "RequestId",
+        "current_status": "candidate",
+        "evidence": [
+          "C01 canonical identifiers",
+          "C23 AUD-3 / observability correlation"
+        ],
+        "state": "READY_FOR_OWNER_PROMOTION"
+      }
+    ],
+    "state_sets_and_machines": [
+      {
+        "id": "IdentityStatus",
+        "machine": "IdentityStateMachine",
+        "evidence": [
+          "C01 canonical values",
+          "C11 IDN-21"
+        ],
+        "state": "READY_FOR_OWNER_PROMOTION",
+        "current_state_status": "candidate",
+        "current_machine_status": "candidate"
+      },
+      {
+        "id": "ApplicationSessionStatus",
+        "machine": "ApplicationSessionStateMachine",
+        "evidence": [
+          "C01 canonical values",
+          "C12 SES-20"
+        ],
+        "state": "READY_FOR_OWNER_PROMOTION",
+        "current_state_status": "candidate",
+        "current_machine_status": "candidate"
+      },
+      {
+        "id": "LearningSessionStatus",
+        "machine": "LearningSessionStateMachine",
+        "evidence": [
+          "C32 LRN-3",
+          "OQ-LRN-1 resolved"
+        ],
+        "state": "READY_FOR_OWNER_PROMOTION",
+        "current_state_status": "candidate",
+        "current_machine_status": "candidate"
+      }
+    ],
+    "relationships": [
+      {
+        "id": "CredentialBelongsToIdentity",
+        "current_status": "candidate",
+        "from": "Credential",
+        "to": "Identity",
+        "cardinality": "many-to-one",
+        "owning_domain": "Identity",
+        "authority_contracts": [
+          "C11"
+        ],
+        "endpoint_statuses": {
+          "Credential": "approved",
+          "Identity": "approved"
+        },
+        "state": "READY_FOR_OWNER_PROMOTION",
+        "blockers": []
+      },
+      {
+        "id": "IdentityHasApplicationSession",
+        "current_status": "candidate",
+        "from": "Identity",
+        "to": "ApplicationSession",
+        "cardinality": "one-to-many",
+        "owning_domain": "Identity",
+        "authority_contracts": [
+          "C11",
+          "C12"
+        ],
+        "endpoint_statuses": {
+          "Identity": "approved",
+          "ApplicationSession": "approved"
+        },
+        "state": "READY_FOR_OWNER_PROMOTION",
+        "blockers": []
+      },
+      {
+        "id": "AssignmentTargetsIdentity",
+        "current_status": "candidate",
+        "from": "Assignment",
+        "to": "Identity",
+        "cardinality": "many-to-one",
+        "owning_domain": "Learning",
+        "authority_contracts": [
+          "C32",
+          "C33"
+        ],
+        "endpoint_statuses": {
+          "Assignment": "approved",
+          "Identity": "approved"
+        },
+        "state": "READY_FOR_OWNER_PROMOTION",
+        "blockers": []
+      },
+      {
+        "id": "AssignmentReferencesContentPack",
+        "current_status": "candidate",
+        "from": "Assignment",
+        "to": "ContentPack",
+        "cardinality": "many-to-one",
+        "owning_domain": "Learning",
+        "authority_contracts": [
+          "C31",
+          "C32",
+          "C33"
+        ],
+        "endpoint_statuses": {
+          "Assignment": "approved",
+          "ContentPack": "approved"
+        },
+        "state": "READY_FOR_OWNER_PROMOTION",
+        "blockers": []
+      },
+      {
+        "id": "IdentityHasLearningSession",
+        "current_status": "candidate",
+        "from": "Identity",
+        "to": "LearningSession",
+        "cardinality": "one-to-many",
+        "owning_domain": "Learning",
+        "authority_contracts": [
+          "C32"
+        ],
+        "endpoint_statuses": {
+          "Identity": "approved",
+          "LearningSession": "approved"
+        },
+        "state": "READY_FOR_OWNER_PROMOTION",
+        "blockers": []
+      },
+      {
+        "id": "LearningSessionUsesAssignment",
+        "current_status": "candidate",
+        "from": "LearningSession",
+        "to": "Assignment",
+        "cardinality": "many-to-one",
+        "owning_domain": "Learning",
+        "authority_contracts": [
+          "C32"
+        ],
+        "endpoint_statuses": {
+          "LearningSession": "approved",
+          "Assignment": "approved"
+        },
+        "state": "READY_FOR_OWNER_PROMOTION",
+        "blockers": []
+      },
+      {
+        "id": "ProgressEventBelongsToLearningSession",
+        "current_status": "candidate",
+        "from": "ProgressEvent",
+        "to": "LearningSession",
+        "cardinality": "many-to-one",
+        "owning_domain": "Learning",
+        "authority_contracts": [
+          "C32"
+        ],
+        "endpoint_statuses": {
+          "ProgressEvent": "approved",
+          "LearningSession": "approved"
+        },
+        "state": "READY_FOR_OWNER_PROMOTION",
+        "blockers": []
+      },
+      {
+        "id": "CertificationBelongsToIdentity",
+        "current_status": "candidate",
+        "from": "Certification",
+        "to": "Identity",
+        "cardinality": "many-to-one",
+        "owning_domain": "Certification",
+        "authority_contracts": [
+          "C34"
+        ],
+        "endpoint_statuses": {
+          "Certification": "approved",
+          "Identity": "approved"
+        },
+        "state": "READY_FOR_OWNER_PROMOTION",
+        "blockers": []
+      },
+      {
+        "id": "CertificationReferencesContentPack",
+        "current_status": "candidate",
+        "from": "Certification",
+        "to": "ContentPack",
+        "cardinality": "many-to-one",
+        "owning_domain": "Certification",
+        "authority_contracts": [
+          "C31",
+          "C34"
+        ],
+        "endpoint_statuses": {
+          "Certification": "approved",
+          "ContentPack": "approved"
+        },
+        "state": "READY_FOR_OWNER_PROMOTION",
+        "blockers": []
+      },
+      {
+        "id": "CertificationObservedByIdentity",
+        "current_status": "candidate",
+        "from": "Certification",
+        "to": "Identity",
+        "cardinality": "many-to-one-observer",
+        "owning_domain": "Certification",
+        "authority_contracts": [
+          "C14",
+          "C34"
+        ],
+        "endpoint_statuses": {
+          "Certification": "approved",
+          "Identity": "approved"
+        },
+        "state": "READY_FOR_OWNER_PROMOTION",
+        "blockers": []
+      }
+    ]
+  },
+  "blocked": {
+    "identifiers": [
+      {
+        "id": "CredentialId",
+        "state": "BLOCKED",
+        "reason": "Registered candidate but not named in C01 canonical identifier set; requires explicit canonical naming/evidence."
+      },
+      {
+        "id": "AssignmentId",
+        "state": "BLOCKED",
+        "reason": "Registered candidate but not named in C01 canonical identifier set; requires explicit canonical naming/evidence."
+      },
+      {
+        "id": "ProgressEventId",
+        "state": "BLOCKED",
+        "reason": "Registered candidate but not named in C01 canonical identifier set; requires explicit canonical naming/evidence."
+      },
+      {
+        "id": "CapabilityId",
+        "state": "BLOCKED",
+        "reason": "Canonical name exists, but C14 capability vocabulary/bundle decision remains unresolved."
+      },
+      {
+        "id": "MembershipId",
+        "state": "BLOCKED",
+        "reason": "Membership entity remains candidate under OQ-TEN-1 owner hold."
+      },
+      {
+        "id": "LocationId",
+        "state": "BLOCKED",
+        "reason": "Location entity remains candidate and organization model is not dependency-closed."
+      }
+    ],
+    "state_sets_and_machines": [
+      {
+        "id": "MembershipStatus",
+        "machine": "MembershipStateMachine",
+        "state": "BLOCKED",
+        "reason": "Membership remains candidate under OQ-TEN-1 even though the bootstrap state vocabulary is registered."
+      },
+      {
+        "id": "EvidenceState",
+        "state": "OUT_OF_SCOPE",
+        "reason": "Contract-proven evidence classification, but not required to close the first application persistence lane."
+      }
+    ],
+    "relationships": [
+      {
+        "id": "ContentPackContainsContentBlock",
+        "state": "BLOCKED",
+        "reason": "candidate endpoint(s): ContentBlock",
+        "endpoints": [
+          "ContentPack",
+          "ContentBlock"
+        ]
+      },
+      {
+        "id": "EntitlementBelongsToOrganization",
+        "state": "BLOCKED",
+        "reason": "candidate endpoint(s): Entitlement",
+        "endpoints": [
+          "Entitlement",
+          "Organization"
+        ]
+      },
+      {
+        "id": "LearnerStateBelongsToIdentity",
+        "state": "BLOCKED",
+        "reason": "candidate endpoint(s): LearnerState",
+        "endpoints": [
+          "LearnerState",
+          "Identity"
+        ]
+      },
+      {
+        "id": "LearnerStateTracksContentPack",
+        "state": "BLOCKED",
+        "reason": "candidate endpoint(s): LearnerState",
+        "endpoints": [
+          "LearnerState",
+          "ContentPack"
+        ]
+      },
+      {
+        "id": "LifecycleEventReferencesIdentity",
+        "state": "BLOCKED",
+        "reason": "candidate endpoint(s): LifecycleEvent",
+        "endpoints": [
+          "LifecycleEvent",
+          "Identity"
+        ]
+      },
+      {
+        "id": "LocationBelongsToOrganization",
+        "state": "BLOCKED",
+        "reason": "candidate endpoint(s): Location",
+        "endpoints": [
+          "Location",
+          "Organization"
+        ]
+      },
+      {
+        "id": "MembershipLinksIdentityOrganization",
+        "state": "BLOCKED",
+        "reason": "candidate endpoint(s): Membership",
+        "endpoints": [
+          "Membership",
+          "Identity",
+          "Organization"
+        ]
+      },
+      {
+        "id": "MembershipMayScopeLocation",
+        "state": "BLOCKED",
+        "reason": "candidate endpoint(s): Membership, Location",
+        "endpoints": [
+          "Membership",
+          "Location"
+        ]
+      }
+    ],
+    "missing_core_semantics": [
+      {
+        "id": "OAuthIdentityLink",
+        "kind": "entity",
+        "authority_contracts": [
+          "C11"
+        ]
+      },
+      {
+        "id": "ReportingRelationship",
+        "kind": "relationship",
+        "authority_contracts": [
+          "C13"
+        ]
+      },
+      {
+        "id": "ProtectedOperation",
+        "kind": "concept",
+        "authority_contracts": [
+          "C14"
+        ]
+      },
+      {
+        "id": "Role",
+        "kind": "concept",
+        "authority_contracts": [
+          "C14"
+        ]
+      },
+      {
+        "id": "DataExportRequest",
+        "kind": "entity",
+        "authority_contracts": [
+          "C15"
+        ]
+      },
+      {
+        "id": "DataDeletionRequest",
+        "kind": "entity",
+        "authority_contracts": [
+          "C15"
+        ]
+      },
+      {
+        "id": "CertificationCriteriaVersion",
+        "kind": "value_object",
+        "authority_contracts": [
+          "C34"
+        ]
+      },
+      {
+        "id": "CertificationRevocation",
+        "kind": "entity_or_event",
+        "authority_contracts": [
+          "C34"
+        ]
+      },
+      {
+        "id": "EvidenceRecord",
+        "kind": "entity",
+        "authority_contracts": [
+          "C51"
+        ]
+      }
+    ]
+  },
+  "stale_blocker_rediscovery": [
+    {
+      "id": "InvitationForIdentity",
+      "previous_blocker": "missing-k00:Invitation",
+      "current_fact": "Invitation is now approved",
+      "state": "REDISCOVERY_REQUIRED",
+      "reason": "Original blocked record did not establish the post-registration cardinality/optionality needed for promotion."
+    },
+    {
+      "id": "ReconciliationRecordUsesIdempotencyKey",
+      "previous_blocker": "missing-k00:ReconciliationRecord",
+      "current_fact": "ReconciliationRecord is approved; IdempotencyKey remains candidate",
+      "state": "REDISCOVERY_REQUIRED_AFTER_IDENTIFIER_DECISION",
+      "reason": "Original blocked record did not establish a registered current relationship/cardinality."
+    }
+  ],
+  "proposed_revision_if_approved": {
+    "identifier_promotions": 8,
+    "state_set_promotions": 3,
+    "state_machine_promotions": 3,
+    "relationship_promotions": 10,
+    "total_candidate_to_approved_promotions": 24,
+    "k00_target_version": "0.14.0",
+    "ownership_map_change": "none expected for already-owned registered entries; verify during registration package",
+    "event_status_changes": 0,
+    "command_status_changes": 0
+  },
+  "evidence_states": {
+    "ready": "PROVEN",
+    "blocked": "BLOCKED",
+    "unknown": "none introduced",
+    "contradictory": "none introduced"
+  },
+  "readiness": {
+    "semantic_closure_discovery": "PROVEN",
+    "semantic_closure_owner_approval": "BLOCKED",
+    "physical_schema": "BLOCKED"
+  }
+}
