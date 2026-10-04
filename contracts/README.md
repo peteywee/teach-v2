@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -34,7 +34,7 @@
 
 # Teach v2 Contracts
 
-- Package version: `0.10.0`
+- Package version: `0.10.1`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
@@ -103,11 +103,11 @@ the requirement that keeps the feature off applies.
 | ID  | Contract                                                                                            | Version | Prefix  | Requirements | Acceptance cases | Open questions | Blocking implementation | Status   |
 | --- | --------------------------------------------------------------------------------------------------- | ------- | ------- | ------------ | ---------------- | -------------- | ----------------------- | -------- |
 | C00 | [System Authority](c00-system-authority-contract.md)                                                | 1.0.3   | `SYS`   | 34           | 20               | 6              | 0                       | `active` |
-| C01 | [Canonical Semantics](c01-canonical-semantics-contract.md)                                          | 1.6.0   | `SEM`   | 35           | 24               | 0              | 0                       | `active` |
+| C01 | [Canonical Semantics](c01-canonical-semantics-contract.md)                                          | 1.7.0   | `SEM`   | 35           | 24               | 0              | 0                       | `active` |
 | C02 | [Automation & Agent Authority](c02-automation-agent-authority-contract.md)                          | 1.0.3   | `AGT`   | 17           | 13               | 3              | 0                       | `active` |
-| C11 | [Identity & Credentials](c11-identity-credentials-contract.md)                                      | 1.1.0   | `IDN`   | 21           | 17               | 7              | 5                       | `active` |
+| C11 | [Identity & Credentials](c11-identity-credentials-contract.md)                                      | 1.2.0   | `IDN`   | 23           | 17               | 7              | 5                       | `active` |
 | C12 | [Application Sessions](c12-application-sessions-contract.md)                                        | 1.0.3   | `SES`   | 20           | 14               | 7              | 6                       | `active` |
-| C13 | [Tenancy & Membership](c13-tenancy-membership-contract.md)                                          | 1.2.0   | `TEN`   | 18           | 13               | 3              | 2                       | `active` |
+| C13 | [Tenancy & Membership](c13-tenancy-membership-contract.md)                                          | 1.3.0   | `TEN`   | 19           | 13               | 3              | 2                       | `active` |
 | C14 | [Authorization & Capabilities](c14-authorization-capabilities-contract.md)                          | 1.1.0   | `AUTHZ` | 21           | 13               | 2              | 1                       | `active` |
 | C15 | [Data Isolation & Privacy](c15-data-isolation-privacy-contract.md)                                  | 1.0.3   | `PRIV`  | 17           | 10               | 6              | 3                       | `active` |
 | C21 | [Database & Migration](c21-database-migration-contract.md)                                          | 1.0.3   | `MIG`   | 14           | 9                | 5              | 2                       | `active` |
@@ -125,7 +125,7 @@ the requirement that keeps the feature off applies.
 | C61 | [Analytics](c61-analytics-contract.md)                                                              | 1.0.3   | `ANL`   | 8            | 7                | 2              | 0                       | `active` |
 | C62 | [PWA / Offline](c62-pwa-offline-contract.md)                                                        | 1.0.3   | `PWA`   | 9            | 4                | 1              | 0                       | `active` |
 | C63 | [Self-Service Billing](c63-billing-contract.md)                                                     | 1.1.0   | `BIL`   | 14           | 12               | 3              | 0                       | `active` |
-|     | **Total**                                                                                           |         |         | **373**      | **254**          | **77**         | **27**                  |          |
+|     | **Total**                                                                                           |         |         | **376**      | **254**          | **77**         | **27**                  |          |
 
 ## K00 semantic-kernel bootstrap
 
@@ -150,6 +150,10 @@ Package `0.9.0` establishes `kernel/decision-tables.json` under C01 1.5.0, regis
 ## Event admission closure
 
 Package `0.10.0` establishes C01 1.6.0 event-admission semantics: audit records and state transitions do not implicitly create canonical business events. K00 advances to `0.8.0` with the existing 14-event registry unchanged; 9 discovered names are not admitted at this baseline. GitHub issue: #8.
+
+## October 4 governance reconciliation
+
+Package `0.10.1` reconciles the central ledger with already-live owner-directed revisions: C11 `1.2.0`, C13 `1.3.0`, C01 `1.7.0`, and K00 `0.9.0`. The prior active contract versions are preserved under `contracts/superseded/`. Governance issue #9 records that the original revisions were merged before the full SYS-21 procedure was completed; this package remediates the record and does not claim retroactive procedural compliance.
 
 ## Contract activation order
 

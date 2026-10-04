@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-04
-- Contract package version: `0.10.0`
+- Contract package version: `0.10.1`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -290,3 +290,16 @@ PATCH revisions preserve the controlling owner approval when they do not change 
 | C01 Canonical Semantics | 1.5.0 | 1.6.0 | Audit records and state transitions do not implicitly create canonical business events; explicit owning-domain event semantics are required | 2026-10-04 | Patrick Craven | #8 |
 | TEACH-K00 | 0.7.0 | 0.8.0 | Record event-admission rule; retain 14 events; admit 0 new events; no semantic promotion | 2026-10-04 | Patrick Craven | #8 |
 | TEACH-COMMAND-EVENT-DISCOVERY | 0.2.0 | 0.3.0 | Close Events gate for current baseline; 9 discovered names are not admitted without explicit contract support | 2026-10-04 | Patrick Craven | #8 |
+
+## Part 13 — October 4 governance reconciliation
+
+**Procedural truth state:** the revisions below were already live by direct owner direction before a SYS-21 GitHub issue and superseded-copy preservation were completed. Governance issue #9 records and remediates that process gap. This record does **not** claim the original merge sequence was SYS-21 compliant.
+
+| Artifact / Contract | From | To | Original change | Current owner decision | Remediation issue |
+| --- | --- | --- | --- | --- | --- |
+| C11 Identity & Credentials | 1.1.0 | 1.2.0 | `058c5be8` — defined IDN-22/IDN-23 canonical lifecycle events | Ratified as current active contract | #9 |
+| C13 Tenancy & Membership | 1.2.0 | 1.3.0 | `058c5be8` — defined TEN-19 MembershipRevoked semantics | Ratified as current active contract | #9 |
+| C01 Canonical Semantics | 1.6.0 | 1.7.0 | `e4762f0` — synchronized canonical event inventory | Ratified as current active contract | #9 |
+| TEACH-K00 | 0.8.0 | 0.9.0 | `881c890` — per-kind command/event schema and first four event promotions | Ratified as current active semantic kernel | #9 |
+
+Prior versions are preserved during this reconciliation from their exact historical Git content. The next semantic change remains subject to the normal pre-change issue and explicit owner-approval path.
