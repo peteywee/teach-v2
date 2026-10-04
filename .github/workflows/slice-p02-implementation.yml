@@ -65,7 +65,7 @@ jobs:
         run: |
           rm -rf /tmp/drizzle-p02
           cp -R drizzle /tmp/drizzle-p02
-          pnpm exec drizzle-kit generate --config=drizzle.p02.config.ts --out=/tmp/drizzle-p02 --name=slice_p02
+          pnpm exec drizzle-kit generate --config=drizzle.p02.config.ts
           migration="$(ls /tmp/drizzle-p02/0001_*.sql)"
           printf '\n--> statement-breakpoint\n' >> "$migration"
           cat scripts/db/slice-p02-guards.sql >> "$migration"
