@@ -1,0 +1,47 @@
+{
+  "implementation_id": "TEACH-SLICE-P01-IMPLEMENTATION",
+  "version": "0.1.0",
+  "status": "candidate",
+  "issue": "#28",
+  "baseline_commit": "4ca5356779e8901b55811061c747b997acc4aae4",
+  "admission": "persistence/physical-slices/transaction-control/admission.json@2.0.0",
+  "slice": "SLICE-P01",
+  "owning_module": "TransactionControl",
+  "target_record": "ReconciliationRecord",
+  "implementation_scope": {
+    "physical_tables": [
+      "transaction_control_reconciliation_records"
+    ],
+    "migration_files": [
+      "drizzle/0000_slice_p01_reconciliation.sql"
+    ],
+    "repository": "src/modules/transaction-control/infrastructure/persistence/postgres-reconciliation-record-repository.ts"
+  },
+  "semantic_bindings": {
+    "id": "ReconciliationRecordId",
+    "status": "ReconciliationRecordStatus",
+    "outcome": "ExternalEffectOutcome",
+    "idempotency_identifier": "IdempotencyKey",
+    "relationship": "ReconciliationRecordUsesIdempotencyKey",
+    "idempotency_cardinality": "many-to-zero-or-one",
+    "scope_policy": "INHERIT_ORIGINATING_OPERATION_SCOPE"
+  },
+  "verification": {
+    "typecheck": "PENDING",
+    "domain_tests": "PENDING",
+    "implementation_boundary": "PENDING",
+    "empty_database_migration_replay": "PENDING",
+    "migration_determinism": "PENDING",
+    "postgres_integration_tests": "PENDING",
+    "exact_head_ci": "PENDING"
+  },
+  "required_negative_proofs": [
+    "unreadable provider state remains OPEN",
+    "different-operation or different-payload IdempotencyKey reuse is rejected",
+    "authoritative scope cannot broaden",
+    "RESOLVED state is terminal",
+    "foreign modules cannot write TransactionControl persistence directly"
+  ],
+  "shared_or_production_migration_execution_authorized": false,
+  "full_relational_schema_authorized": false
+}

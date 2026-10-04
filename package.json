@@ -1,0 +1,29 @@
+{
+  "name": "teach-v2",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.8.1",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test src/modules/transaction-control/domain/reconciliation-record.test.ts",
+    "test:integration": "tsx --test tests/integration/transaction-control/reconciliation-record-repository.test.ts",
+    "db:migrate": "tsx scripts/db/migrate.ts",
+    "db:verify-replay": "tsx scripts/db/verify-migration-replay.ts",
+    "validate:slice-p01": "node scripts/persistence/validate-slice-p01-implementation-boundary.mjs"
+  },
+  "dependencies": {
+    "drizzle-orm": "0.45.3",
+    "pg": "8.23.1"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.4",
+    "@types/pg": "8.23.1",
+    "drizzle-kit": "0.31.11",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
+  }
+}
