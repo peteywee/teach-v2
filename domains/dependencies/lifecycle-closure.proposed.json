@@ -1,0 +1,135 @@
+{
+  "discovery_id": "TEACH-DEPENDENCY-LIFECYCLE-DISCOVERY",
+  "version": "0.1.0",
+  "status": "proposed",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-04",
+  "updated_on": "2026-10-04",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "commit": "636277f50cab71deb9b2dd42a0659961bf5f763d",
+    "required_kernel_version": "0.11.0",
+    "required_ownership_map_version": "1.5.0"
+  },
+  "rules": {
+    "discovery_is_not_authority": true,
+    "unknown_lifecycle_terms_must_not_be_invented": true,
+    "registered_candidate_does_not_equal_promotion_ready": true,
+    "command_promotion_in_this_stage": false
+  },
+  "decision_groups": [
+    {
+      "id": "DLC-001",
+      "name": "InvitationLifecycle",
+      "entities": [
+        "Invitation"
+      ],
+      "authority_contracts": [
+        "C11",
+        "C22"
+      ],
+      "contract_facts": [
+        "Invitation lifecycle changes are audited under IDN-16.",
+        "Invitation/token lifetime remains owner-undecided under OQ-IDN-2.",
+        "Offboarded-identity invitation handling remains owner-undecided under OQ-IDN-5 and fails closed under IDN-20.",
+        "Retries must not create duplicate invitations under TXN-5."
+      ],
+      "missing_decisions": [
+        "Canonical Invitation lifecycle state-set name and values.",
+        "Which transitions consume, expire, revoke, reject, or otherwise terminate an Invitation.",
+        "Whether Invitation owns a distinct token record or references another registered single-use token concept.",
+        "OQ-IDN-2 lifetime.",
+        "OQ-IDN-5 offboarded-email invitation rule."
+      ],
+      "blocks_commands": [
+        "InviteIdentity",
+        "AcceptInvitation"
+      ],
+      "evidence_state": "BLOCKED"
+    },
+    {
+      "id": "DLC-002",
+      "name": "SingleUseTokenLifecycle",
+      "entities": [
+        "SetupToken",
+        "PasswordResetToken"
+      ],
+      "authority_contracts": [
+        "C11"
+      ],
+      "contract_facts": [
+        "Single-use tokens are cryptographically generated and stored only as hashes under IDN-7/IDN-8.",
+        "Every token expires under IDN-9.",
+        "Every token is consumable at most once under IDN-10.",
+        "Every token is revocable before expiry under IDN-11.",
+        "Expired, revoked, or otherwise invalid setup/reset tokens cannot authenticate under IDN-14."
+      ],
+      "missing_decisions": [
+        "Canonical single-use-token lifecycle state-set name and values.",
+        "Whether SetupToken and PasswordResetToken share one state set.",
+        "Exact transition model for consumption, expiry, and revocation.",
+        "OQ-IDN-2 setup-token and password-reset-token lifetimes."
+      ],
+      "blocks_commands": [
+        "RevokeSingleUseToken"
+      ],
+      "evidence_state": "BLOCKED"
+    },
+    {
+      "id": "DLC-003",
+      "name": "ReconciliationRecordLifecycle",
+      "entities": [
+        "ReconciliationRecord"
+      ],
+      "authority_contracts": [
+        "C22"
+      ],
+      "contract_facts": [
+        "Ambiguous external effects cannot be retried automatically under TXN-6.",
+        "Canonical provider state must be read before retry under TXN-7.",
+        "Unreadable provider state preserves ambiguity and forbids retry under TXN-8.",
+        "Ambiguous and partial-failure outcomes must be explicit states and cannot be reported as success under TXN-9."
+      ],
+      "missing_decisions": [
+        "Canonical ReconciliationRecord lifecycle state-set name and values.",
+        "Canonical transitions for readback-success, readback-no-effect, unreadable-provider-state, and terminal resolution.",
+        "Whether provider-specific detail is modeled as data on the generic record or requires provider-specific semantic extension."
+      ],
+      "blocks_commands": [
+        "ReconcileExternalEffect"
+      ],
+      "evidence_state": "BLOCKED"
+    }
+  ],
+  "command_readiness": [
+    {
+      "id": "InviteIdentity",
+      "state": "BLOCKED",
+      "blocked_by": [
+        "DLC-001"
+      ]
+    },
+    {
+      "id": "AcceptInvitation",
+      "state": "BLOCKED",
+      "blocked_by": [
+        "DLC-001"
+      ]
+    },
+    {
+      "id": "RevokeSingleUseToken",
+      "state": "BLOCKED",
+      "blocked_by": [
+        "DLC-002"
+      ]
+    },
+    {
+      "id": "ReconcileExternalEffect",
+      "state": "BLOCKED",
+      "blocked_by": [
+        "DLC-003"
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-DEPENDENCY-CONCEPTS",
   "class": "specification",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "claims_truth_state": "declared",
   "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -30,3 +30,13 @@ Registered as K00 `candidate`:
 - ReconciliationRecord / ReconciliationRecordId
 
 Registration removes the `missing-k00` condition only. The lifecycle vocabularies remain unresolved, so the four dependent commands remain candidate and are not implementation authority.
+
+## Lifecycle closure discovery
+
+Three lifecycle decision groups are now recorded as proposed:
+
+- Invitation lifecycle.
+- SetupToken / PasswordResetToken single-use lifecycle.
+- ReconciliationRecord lifecycle.
+
+No new state set or state machine is registered by this discovery. All four dependent commands remain candidate until an owner-approved semantic closure package resolves the required lifecycle vocabulary.

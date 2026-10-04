@@ -1,0 +1,26 @@
+name: Dependency Lifecycle Discovery
+
+on:
+  pull_request:
+    paths:
+      - 'domains/dependencies/**'
+      - 'kernel/**'
+      - 'scripts/domains/validate-dependency-lifecycle-discovery.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'domains/dependencies/**'
+      - 'kernel/**'
+      - 'scripts/domains/validate-dependency-lifecycle-discovery.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-dependency-lifecycle-discovery:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate dependency lifecycle discovery
+        run: node scripts/domains/validate-dependency-lifecycle-discovery.mjs
