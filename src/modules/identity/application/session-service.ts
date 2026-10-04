@@ -14,7 +14,10 @@ export async function issueApplicationSession(
   const credential = issueSessionCredential();
   const session = await repository.create({
     ...input,
-    credential,
+    credential: {
+      verifierVersion: credential.verifierVersion,
+      verifier: credential.verifier,
+    },
   });
   return { credential: credential.credential, session };
 }

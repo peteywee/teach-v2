@@ -1,7 +1,4 @@
-import type {
-  ApplicationSessionRecord,
-  IssuedSessionCredential,
-} from '../../domain/application-session.js';
+import type { ApplicationSessionRecord } from '../../domain/application-session.js';
 import type { IdentityStatus } from '../../domain/identity.js';
 
 export interface SessionAuthenticationLookup {
@@ -13,7 +10,10 @@ export interface ApplicationSessionRepository {
   create(input: {
     readonly id: string;
     readonly identityId: string;
-    readonly credential: IssuedSessionCredential;
+    readonly credential: {
+      readonly verifierVersion: 'v1';
+      readonly verifier: Buffer;
+    };
     readonly now: Date;
   }): Promise<ApplicationSessionRecord>;
 

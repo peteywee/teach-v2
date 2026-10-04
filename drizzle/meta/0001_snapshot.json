@@ -1,0 +1,447 @@
+{
+  "id": "d70f7b46-9f6e-45eb-a0f4-535710f66c3e",
+  "prevId": "ba2f6ef1-f2f2-4be1-9070-dc8b88e05cf9",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.transaction_control_reconciliation_records": {
+      "name": "transaction_control_reconciliation_records",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'OPEN'"
+        },
+        "outcome": {
+          "name": "outcome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "operation_name": {
+          "name": "operation_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "scope_fingerprint": {
+          "name": "scope_fingerprint",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "authoritative_scope": {
+          "name": "authoritative_scope",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "provider_name": {
+          "name": "provider_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "provider_reference": {
+          "name": "provider_reference",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "provider_detail": {
+          "name": "provider_detail",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        },
+        "last_readback_at": {
+          "name": "last_readback_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_readback_error": {
+          "name": "last_readback_error",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "idempotency_key": {
+          "name": "idempotency_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "idempotency_key_source": {
+          "name": "idempotency_key_source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "payload_hash": {
+          "name": "payload_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "retry_horizon_ends_at": {
+          "name": "retry_horizon_ends_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "idempotency_retention_until": {
+          "name": "idempotency_retention_until",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "resolved_at": {
+          "name": "resolved_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "transaction_control_reconciliation_status_idx": {
+          "name": "transaction_control_reconciliation_status_idx",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "transaction_control_reconciliation_scope_idx": {
+          "name": "transaction_control_reconciliation_scope_idx",
+          "columns": [
+            {
+              "expression": "scope_fingerprint",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "transaction_control_reconciliation_idempotency_key_idx": {
+          "name": "transaction_control_reconciliation_idempotency_key_idx",
+          "columns": [
+            {
+              "expression": "idempotency_key",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "transaction_control_reconciliation_status_outcome_check": {
+          "name": "transaction_control_reconciliation_status_outcome_check",
+          "value": "(\n        (\n          \"transaction_control_reconciliation_records\".\"status\" = 'OPEN'\n          AND \"transaction_control_reconciliation_records\".\"outcome\" IN ('AMBIGUOUS', 'PARTIAL_FAILURE')\n          AND \"transaction_control_reconciliation_records\".\"resolved_at\" IS NULL\n        )\n        OR\n        (\n          \"transaction_control_reconciliation_records\".\"status\" = 'RESOLVED'\n          AND \"transaction_control_reconciliation_records\".\"outcome\" IN ('CONFIRMED_SUCCESS', 'CONFIRMED_NO_EFFECT')\n          AND \"transaction_control_reconciliation_records\".\"resolved_at\" IS NOT NULL\n        )\n      )"
+        },
+        "transaction_control_reconciliation_idempotency_binding_check": {
+          "name": "transaction_control_reconciliation_idempotency_binding_check",
+          "value": "(\n        (\n          \"transaction_control_reconciliation_records\".\"idempotency_key\" IS NULL\n          AND \"transaction_control_reconciliation_records\".\"idempotency_key_source\" IS NULL\n          AND \"transaction_control_reconciliation_records\".\"payload_hash\" IS NULL\n          AND \"transaction_control_reconciliation_records\".\"retry_horizon_ends_at\" IS NULL\n          AND \"transaction_control_reconciliation_records\".\"idempotency_retention_until\" IS NULL\n        )\n        OR\n        (\n          \"transaction_control_reconciliation_records\".\"idempotency_key\" IS NOT NULL\n          AND \"transaction_control_reconciliation_records\".\"idempotency_key_source\" IN ('CLIENT_SUPPLIED', 'SERVER_DERIVED')\n          AND \"transaction_control_reconciliation_records\".\"payload_hash\" IS NOT NULL\n          AND \"transaction_control_reconciliation_records\".\"retry_horizon_ends_at\" IS NOT NULL\n          AND \"transaction_control_reconciliation_records\".\"idempotency_retention_until\" IS NOT NULL\n          AND \"transaction_control_reconciliation_records\".\"idempotency_retention_until\" >= \"transaction_control_reconciliation_records\".\"retry_horizon_ends_at\"\n        )\n      )"
+        },
+        "transaction_control_reconciliation_nonblank_check": {
+          "name": "transaction_control_reconciliation_nonblank_check",
+          "value": "\n        length(btrim(\"transaction_control_reconciliation_records\".\"id\")) > 0\n        AND length(btrim(\"transaction_control_reconciliation_records\".\"operation_name\")) > 0\n        AND length(btrim(\"transaction_control_reconciliation_records\".\"scope_fingerprint\")) > 0\n        AND length(btrim(\"transaction_control_reconciliation_records\".\"provider_name\")) > 0\n      "
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.identity_application_sessions": {
+      "name": "identity_application_sessions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "identity_id": {
+          "name": "identity_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'ACTIVE'"
+        },
+        "verifier_version": {
+          "name": "verifier_version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'v1'"
+        },
+        "credential_verifier": {
+          "name": "credential_verifier",
+          "type": "bytea",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "issued_at": {
+          "name": "issued_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "absolute_expires_at": {
+          "name": "absolute_expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_used_at": {
+          "name": "last_used_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "revoked_at": {
+          "name": "revoked_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expired_at": {
+          "name": "expired_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "identity_application_session_verifier_uq": {
+          "name": "identity_application_session_verifier_uq",
+          "columns": [
+            {
+              "expression": "credential_verifier",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "identity_application_session_identity_status_idx": {
+          "name": "identity_application_session_identity_status_idx",
+          "columns": [
+            {
+              "expression": "identity_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "identity_application_session_identity_fk": {
+          "name": "identity_application_session_identity_fk",
+          "tableFrom": "identity_application_sessions",
+          "tableTo": "identity_identities",
+          "columnsFrom": [
+            "identity_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "identity_application_session_status_check": {
+          "name": "identity_application_session_status_check",
+          "value": "\"identity_application_sessions\".\"status\" IN ('ACTIVE', 'EXPIRED', 'REVOKED')"
+        },
+        "identity_application_session_verifier_check": {
+          "name": "identity_application_session_verifier_check",
+          "value": "\"identity_application_sessions\".\"verifier_version\" = 'v1' AND octet_length(\"identity_application_sessions\".\"credential_verifier\") = 32"
+        },
+        "identity_application_session_absolute_lifetime_check": {
+          "name": "identity_application_session_absolute_lifetime_check",
+          "value": "\"identity_application_sessions\".\"absolute_expires_at\" = \"identity_application_sessions\".\"issued_at\" + interval '12 hours'"
+        },
+        "identity_application_session_last_use_check": {
+          "name": "identity_application_session_last_use_check",
+          "value": "\"identity_application_sessions\".\"last_used_at\" >= \"identity_application_sessions\".\"issued_at\" AND \"identity_application_sessions\".\"last_used_at\" <= \"identity_application_sessions\".\"absolute_expires_at\""
+        },
+        "identity_application_session_terminal_timestamp_check": {
+          "name": "identity_application_session_terminal_timestamp_check",
+          "value": "(\n        (\"identity_application_sessions\".\"status\" = 'ACTIVE' AND \"identity_application_sessions\".\"revoked_at\" IS NULL AND \"identity_application_sessions\".\"expired_at\" IS NULL)\n        OR\n        (\"identity_application_sessions\".\"status\" = 'REVOKED' AND \"identity_application_sessions\".\"revoked_at\" IS NOT NULL AND \"identity_application_sessions\".\"expired_at\" IS NULL)\n        OR\n        (\"identity_application_sessions\".\"status\" = 'EXPIRED' AND \"identity_application_sessions\".\"expired_at\" IS NOT NULL AND \"identity_application_sessions\".\"revoked_at\" IS NULL)\n      )"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.identity_identities": {
+      "name": "identity_identities",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'ACTIVE'"
+        },
+        "offboarded_at": {
+          "name": "offboarded_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "identity_identity_status_idx": {
+          "name": "identity_identity_status_idx",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "identity_identity_status_check": {
+          "name": "identity_identity_status_check",
+          "value": "\"identity_identities\".\"status\" IN ('ACTIVE', 'INACTIVE', 'DELETED')"
+        },
+        "identity_identity_nonblank_check": {
+          "name": "identity_identity_nonblank_check",
+          "value": "length(btrim(\"identity_identities\".\"id\")) > 0"
+        }
+      },
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

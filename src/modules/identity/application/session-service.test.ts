@@ -45,7 +45,7 @@ test('issuance returns the raw credential once while repository receives only ve
   assert.match(result.credential, /^[A-Za-z0-9_-]{43}$/);
   assert.equal(repository.createCalls, 1);
   assert.equal(repository.lastCreateCredential?.verifier.length, 32);
-  assert.equal('credential' in (repository.lastCreateCredential ?? {}), true);
+  assert.equal('credential' in (repository.lastCreateCredential ?? {}), false);
 });
 
 function record(overrides: Partial<ApplicationSessionRecord> = {}): ApplicationSessionRecord {
@@ -74,13 +74,13 @@ function fakeRepository(input: {
   markExpiredCalls: number;
   touchCalls: number;
   createCalls: number;
-  lastCreateCredential: { verifierVersion: 'v1'; verifier: Buffer; credential: string } | null;
+  lastCreateCredential: { verifierVersion: 'v1'; verifier: Buffer } | null;
 } {
   const repo = {
     markExpiredCalls: 0,
     touchCalls: 0,
     createCalls: 0,
-    lastCreateCredential: null as { verifierVersion: 'v1'; verifier: Buffer; credential: string } | null,
+    lastCreateCredential: null as { verifierVersion: 'v1'; verifier: Buffer } | null,
     async create(createInput) {
       repo.createCalls++;
       repo.lastCreateCredential = createInput.credential;
@@ -108,7 +108,7 @@ function fakeRepository(input: {
     markExpiredCalls: number;
     touchCalls: number;
     createCalls: number;
-    lastCreateCredential: { verifierVersion: 'v1'; verifier: Buffer; credential: string } | null;
+    lastCreateCredential: { verifierVersion: 'v1'; verifier: Buffer } | null;
   };
   return repo;
 }
