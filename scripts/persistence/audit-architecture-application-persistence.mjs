@@ -24,7 +24,7 @@ if (arch?.version!=='1.0.0' || arch?.status!=='active') errors.push('persistence
 if (app?.version!=='1.0.0' || app?.status!=='active') errors.push('persistence audit: Application Interfaces 1.0.0 missing');
 if (per?.version!=='1.0.0' || per?.status!=='active') errors.push('persistence audit: Persistence Model 1.0.0 missing');
 if (proposal?.version!=='0.1.0' || proposal?.status!=='proposed') errors.push('persistence audit: historical proposal must remain proposed');
-if (m?.version!=='0.14.0') errors.push(`persistence audit: K00 drifted to ${m?.version}`);
+if (m?.version!=='0.15.0') errors.push(`persistence audit: K00 drifted to ${m?.version}`);
 
 const counts={
   approvedEntities:(entities?.entries||[]).filter(x=>x.status==='approved').length,
@@ -36,7 +36,7 @@ const counts={
   candidateDecisions:(dt?.entries||[]).filter(x=>x.status==='candidate').length,
   gaps:(gaps?.core_missing_kernel_candidates||[]).length,
 };
-const expected={approvedEntities:13,approvedIds:12,candidateStates:2,candidateRelationships:9,candidateEvents:10,candidateInvariants:22,candidateDecisions:8,gaps:9};
+const expected={approvedEntities:13,approvedIds:12,candidateStates:2,candidateRelationships:8,candidateEvents:10,candidateInvariants:22,candidateDecisions:8,gaps:9};
 for (const [k,v] of Object.entries(expected)) if (counts[k]!==v) errors.push(`persistence audit: ${k} expected ${v}, found ${counts[k]}`);
 
 if (per?.full_relational_schema_status!=='BLOCKED' || per?.migration_implementation_status!=='BLOCKED') errors.push('persistence audit: physical implementation was unblocked by policy approval');
@@ -50,5 +50,5 @@ console.log('ARCHITECTURE/APPLICATION/PERSISTENCE AUTHORITY AUDIT PASS');
 console.log('PROVEN: Architecture 1.0.0 active');
 console.log('PROVEN: Application Interfaces 1.0.0 active');
 console.log('PROVEN: Persistence Model 1.0.0 active');
-console.log('PROVEN: K00 semantic counts unchanged by persistence approval');
+console.log('PROVEN: K00 semantic counts reconciled after SLICE-P01 relationship promotion');
 console.log('BLOCKED: full relational schema and migrations');

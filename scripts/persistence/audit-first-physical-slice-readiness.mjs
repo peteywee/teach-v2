@@ -16,7 +16,7 @@ const inv=load('kernel/invariants.json');
 const dt=load('kernel/decision-tables.json');
 const r=load('persistence/physical-slices/readiness.json');
 
-if (m?.version!=='0.14.0') errors.push('whole-stack audit: K00 must be 0.14.0');
+if (m?.version!=='0.15.0') errors.push('whole-stack audit: K00 must be 0.15.0');
 const checks=[
  ['commands-approved',(commands?.entries||[]).filter(x=>x.status==='approved').length,23],
  ['events-candidate',(events?.entries||[]).filter(x=>x.status==='candidate').length,10],
@@ -25,8 +25,8 @@ const checks=[
  ['states-candidate',(states?.entries||[]).filter(x=>x.status==='candidate').length,2],
  ['machines-approved',(machines?.entries||[]).filter(x=>x.status==='approved').length,7],
  ['machines-candidate',(machines?.entries||[]).filter(x=>x.status==='candidate').length,1],
- ['relationships-approved',(rel?.entries||[]).filter(x=>x.status==='approved').length,10],
- ['relationships-candidate',(rel?.entries||[]).filter(x=>x.status==='candidate').length,9],
+ ['relationships-approved',(rel?.entries||[]).filter(x=>x.status==='approved').length,11],
+ ['relationships-candidate',(rel?.entries||[]).filter(x=>x.status==='candidate').length,8],
  ['invariants-candidate',(inv?.entries||[]).filter(x=>x.status==='candidate').length,22],
  ['decision-tables-candidate',(dt?.entries||[]).filter(x=>x.status==='candidate').length,8],
 ];
@@ -39,6 +39,6 @@ if(errors.length){
  process.exit(1);
 }
 console.log('POST-CLOSURE WHOLE-STACK AUDIT PASS');
-console.log('PROVEN: K00 0.14.0 exact promotion counts');
+console.log('PROVEN: K00 0.15.0 exact promotion counts');
 console.log('BLOCKED: physical schema — 0 admitted slices');
-console.log('NEXT: explicit owner approval for ReconciliationRecordUsesIdempotencyKey candidate -> approved');
+console.log('NEXT: rerun SLICE-P01 physical-schema admission against K00 0.15.0');

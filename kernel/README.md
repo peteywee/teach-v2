@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-K00",
   "class": "semantic-kernel",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -13,14 +13,14 @@
     "state": "approved",
     "approved_on": "2026-10-04",
     "record": "contracts/APPROVAL-RECORD.md",
-    "issue": "#14",
-    "basis": "Direct owner-directed strict-nine promotion ratified through Part 18; C01 1.8.0 / K00 0.13.0"
+    "issue": "#24",
+    "basis": "Explicit owner approval of ReconciliationRecordUsesIdempotencyKey candidate-to-approved promotion for SLICE-P01; GitHub issue #24; C01 1.8.0 / K00 0.15.0"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "0f37206e5a646b34c1ccd7158f1fcaee1268fe95",
-    "purpose": "pre-strict-nine semantic promotion baseline"
+    "commit": "39e1b40218cde2f6be2ce94aec8cc3f6e2fcd677",
+    "purpose": "pre-SLICE-P01 relationship promotion baseline"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -33,11 +33,11 @@
 
 Canonical machine-readable source format: JSON.
 
-K00 version: `0.14.0`.
+K00 version: `0.15.0`.
 
 Active domain ownership authority: `domains/ownership-map.json`.
 
-Relationship registration: 18 dependency-ready relationships are registered as `candidate`; 11 blocked relationship proposals remain outside K00.
+Current relationship authority: 19 relationships are registered in K00 — 11 `approved` and 8 `candidate`; 10 blocked relationship proposals remain outside K00.
 
 Registry entries remain `candidate` unless explicitly promoted through SEM-30 owner approval; approved entries are implementation authority only within their still-applicable contract constraints.
 
@@ -60,3 +60,6 @@ Dependency lifecycle closure: Invitation, SetupToken, PasswordResetToken, Reconc
 Strict-nine ratification: K00 `0.13.0` promotes Identity, Credential, ApplicationSession, Organization, Assignment, LearningSession, ProgressEvent, Certification, and ContentPack to `approved`. Membership remains `candidate` under an explicit owner-directed hold on OQ-TEN-1. C01 `1.8.0` SEM-36 requires approved dependency closure, with only the enumerated Membership-command exception. Ratification issue #14.
 
 Persistence semantic closure: K00 `0.14.0` promotes exactly 24 entries under GitHub issue #17: 8 identifiers, 3 state sets, 3 state machines, and 10 relationships. Commands, events, entities, and Domain Ownership Map `1.6.0` are unchanged. The ten explicit exclusions in `persistence/semantic-closure/proposed.json` remain unpromoted.
+
+
+SLICE-P01 relationship promotion: K00 `0.15.0` promotes exactly `ReconciliationRecordUsesIdempotencyKey` from `candidate` to `approved` under explicit owner approval in GitHub issue #24. Its `many-to-zero-or-one` cardinality, TransactionControl ownership, C22 authority, `idempotent_reconciliation_lookup` enablement, and non-grants (`key_reuse_across_operations`, `scope_broadening`) are unchanged. No other semantic entry changes status, and this promotion does not itself authorize physical schema implementation.

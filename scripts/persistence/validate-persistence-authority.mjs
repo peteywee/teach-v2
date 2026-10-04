@@ -15,7 +15,7 @@ const m=load('kernel/manifest.json');
 const ids=load('kernel/identifiers.json');
 const rel=load('kernel/relationships.json');
 
-if (m?.version!=='0.14.0') errors.push(`persistence authority: expected K00 0.14.0, found ${m?.version}`);
+if (m?.version!=='0.15.0') errors.push(`persistence authority: expected K00 0.15.0, found ${m?.version}`);
 if (arch?.version!=='1.0.0' || arch?.status!=='active') errors.push('persistence authority: Architecture 1.0.0 required');
 if (app?.version!=='1.0.0' || app?.status!=='active') errors.push('persistence authority: Application Interfaces 1.0.0 required');
 if (d?.version!=='0.1.0' || d?.status!=='recorded') errors.push('persistence authority: discovery 0.1.0 required');
@@ -34,7 +34,7 @@ if (a) {
 }
 
 if ((ids?.entries||[]).filter(x=>x.status==='approved').length!==12) errors.push('persistence authority: identifier promotions occurred unexpectedly');
-if ((rel?.entries||[]).filter(x=>x.status==='approved').length!==10) errors.push('persistence authority: relationship promotions occurred unexpectedly');
+if ((rel?.entries||[]).filter(x=>x.status==='approved').length!==11) errors.push('persistence authority: relationship promotions occurred unexpectedly');
 
 if (errors.length) {
   console.error(`Persistence authority FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);

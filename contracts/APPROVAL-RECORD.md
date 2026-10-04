@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-04
-- Contract package version: `0.12.0`
+- Contract package version: `0.12.1`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -378,3 +378,13 @@ Physical persistence remains governed by the Persistence Model admission gate. T
 | TEACH-FIRST-PHYSICAL-SLICE-READINESS | 0.2.0 | 0.3.0 | Close the four owner-decision blockers for SLICE-P01; retain relationship-registration and fresh schema-admission gates; admit zero physical slices | 2026-10-04 | Patrick Craven | #20 |
 
 `ReconciliationRecordUsesIdempotencyKey` remains unregistered in K00 after this approval. Its approved decision is many-to-zero-or-one (`OPTIONAL_ONE`), but relationship registration is a separate gate. ReconciliationRecord scope inherits the authoritative scope of the originating operation and cannot broaden it. This approval creates no table, migration, repository, transport route, or runtime implementation.
+
+
+## Part 21 — SLICE-P01 relationship semantic promotion
+
+| Artifact | From | To | Decision | Date | Owner | GitHub issue |
+| --- | --- | --- | --- | --- | --- | --- |
+| TEACH-K00 | 0.14.0 | 0.15.0 | Promote exactly `ReconciliationRecordUsesIdempotencyKey` from `candidate` to `approved`; preserve `many-to-zero-or-one`, TransactionControl ownership, C22 authority, and all non-grants; no other semantic status change | 2026-10-04 | Patrick Craven | #24 |
+| ReconciliationRecordUsesIdempotencyKey | candidate | approved | Approve the named SLICE-P01 semantic revision required by PER-4/PER-5; promotion grants semantic implementation authority for this relationship only and does not itself admit physical schema | 2026-10-04 | Patrick Craven | #24 |
+
+This SEM-30 approval does not create or authorize a table, column, index, migration, repository, transport route, runtime implementation, or production database change. SLICE-P01 admission must be rerun after the K00 `0.15.0` promotion.

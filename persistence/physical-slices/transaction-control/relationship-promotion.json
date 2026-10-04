@@ -1,0 +1,41 @@
+{
+  "promotion_id": "TEACH-SLICE-P01-RELATIONSHIP-PROMOTION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "approved_on": "2026-10-04",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "issue": "#24",
+  "baseline_commit": "39e1b40218cde2f6be2ce94aec8cc3f6e2fcd677",
+  "approval_basis": "Explicit owner approval of the immediately named semantic revision ReconciliationRecordUsesIdempotencyKey: candidate -> approved for SLICE-P01.",
+  "kernel_revision": {
+    "from": "0.14.0",
+    "to": "0.15.0"
+  },
+  "relationship": {
+    "id": "ReconciliationRecordUsesIdempotencyKey",
+    "from_status": "candidate",
+    "to_status": "approved",
+    "from": "ReconciliationRecord",
+    "to": "IdempotencyKey",
+    "cardinality": "many-to-zero-or-one",
+    "owning_domain": "TransactionControl",
+    "authority_contracts": [
+      "C22"
+    ],
+    "enables": [
+      "idempotent_reconciliation_lookup"
+    ],
+    "does_not_grant": [
+      "key_reuse_across_operations",
+      "scope_broadening"
+    ]
+  },
+  "unchanged_authority": {
+    "c01": "1.8.0",
+    "c22": "1.2.0",
+    "domain_ownership_map": "1.6.0"
+  },
+  "other_semantic_status_changes": 0,
+  "physical_schema_authorized": false,
+  "next_gate": "Rerun SLICE-P01 physical-schema admission against K00 0.15.0"
+}

@@ -63,11 +63,11 @@ test(
     replaceOrThrow(
       dir,
       'scripts/persistence/validate-persistence-authority.mjs',
+      "m?.version!=='0.15.0'",
       "m?.version!=='0.14.0'",
-      "m?.version!=='0.13.0'",
     );
   },
-  { pattern: /stale K00 manifest version pin '0\.13\.0'/ },
+  { pattern: /stale K00 manifest version pin '0\.14\.0'/ },
 );
 
 test(
@@ -80,7 +80,7 @@ test(
     ].join('\n');
     writeFileSync(p, fixture + '\n');
   },
-  { pattern: /stale K00 manifest version pin '0\.13\.0'/ },
+  { pattern: /stale K00 manifest version pin '0\.14\.0'/ },
 );
 
 test(
@@ -102,7 +102,7 @@ test(
     replaceOrThrow(
       dir,
       'scripts/persistence/validate-persistence-authority.mjs',
-      ".filter(x=>x.status==='approved').length!==10",
+      ".filter(x=>x.status==='approved').length!==11",
       ".filter(x=>x.status==='approved').length!==0",
     );
   },
@@ -128,8 +128,8 @@ test(
     replaceOrThrow(
       dir,
       'scripts/kernel/validate-semantic-kernel.mjs',
+      "if (manifest.version !== '0.15.0')",
       "if (manifest.version !== '0.14.0')",
-      "if (manifest.version !== '0.13.0')",
     );
   },
   { pattern: /stale K00 manifest version pin '0\.13\.0'/ },
@@ -154,11 +154,11 @@ test(
     replaceOrThrow(
       dir,
       'scripts/governance/validate-strict-nine-ratification.mjs',
+      "!index.includes('\"version\": \"0.12.1\"') || !index.includes('- Package version: `0.12.1`')",
       "!index.includes('\"version\": \"0.12.0\"') || !index.includes('- Package version: `0.12.0`')",
-      "!index.includes('\"version\": \"0.11.3\"') || !index.includes('- Package version: `0.11.3`')",
     );
   },
-  { pattern: /stale contract package version pin '0\.11\.3'/ },
+  { pattern: /stale contract package version pin '0\.12\.0'/ },
 );
 
 test(

@@ -15,8 +15,8 @@ const manifest=load('kernel/manifest.json');
 const entities=load('kernel/entities.json');
 const rec=load('governance/2026-10-04-strict-nine-ratification.json');
 
-if (!index.includes('"version": "0.12.0"') || !index.includes('- Package version: `0.12.0`')) errors.push('governance ratification: contract index must be 0.12.0');
-if (!approvals.includes('"version": "0.12.0"') || !approvals.includes('- Contract package version: `0.12.0`')) errors.push('governance ratification: approval record must be 0.12.0');
+if (!index.includes('"version": "0.12.1"') || !index.includes('- Package version: `0.12.1`')) errors.push('governance ratification: contract index must be 0.12.1');
+if (!approvals.includes('"version": "0.12.1"') || !approvals.includes('- Contract package version: `0.12.1`')) errors.push('governance ratification: approval record must be 0.12.1');
 if (!index.match(/\| C01 \|.*\| 1\.8\.0\s+\| `SEM`\s+\| 36\s+\| 25\s+\| 0\s+\| 0\s+\| `active` \|/)) errors.push('governance ratification: C01 index row not synchronized');
 if (!index.includes('|     | **Total**') || !index.includes('**386**') || !index.includes('**262**') || !index.includes('**76**') || !index.includes('**24**')) errors.push('governance ratification: contract totals not synchronized');
 if (!approvals.includes('## Part 18 — Strict-nine semantic promotion ratification')) errors.push('governance ratification: Part 18 missing');

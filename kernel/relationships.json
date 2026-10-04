@@ -406,7 +406,7 @@
     {
       "id": "ReconciliationRecordUsesIdempotencyKey",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "ReconciliationRecord",
       "to": "IdempotencyKey",
       "cardinality": "many-to-zero-or-one",
@@ -420,7 +420,12 @@
       "does_not_grant": [
         "key_reuse_across_operations",
         "scope_broadening"
-      ]
+      ],
+      "promotion_evidence": [
+        "C22"
+      ],
+      "promotion_issue": "#24",
+      "promoted_on": "2026-10-04"
     }
   ]
 }

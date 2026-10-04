@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -34,7 +34,7 @@
 
 # Teach v2 Contracts
 
-- Package version: `0.12.0`
+- Package version: `0.12.1`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
@@ -304,3 +304,8 @@ Package `0.11.3` records the owner-approved K00 `0.14.0` persistence semantic cl
 ## TransactionControl first-slice owner decisions
 
 Package `0.12.0` records the owner-approved TransactionControl first-slice decisions under GitHub issue #20. C22 advances to `1.2.0` and resolves OQ-TXN-1 with explicit per-operation idempotency-key source policy and operation-declared retention minimums. The approved `ReconciliationRecordUsesIdempotencyKey` cardinality and ReconciliationRecord scope decisions are recorded for the next registration gate; K00 remains `0.14.0`, the relationship is not registered in this package, and physical schema admission remains blocked.
+
+
+## SLICE-P01 relationship semantic promotion
+
+Package `0.12.1` records the explicit owner-approved SEM-30 promotion in GitHub issue #24. K00 advances from `0.14.0` to `0.15.0` and promotes exactly `ReconciliationRecordUsesIdempotencyKey` from `candidate` to `approved`. C01 remains `1.8.0`; C22 remains `1.2.0`; Domain Ownership Map remains `1.6.0`. No table, migration, repository, transport, runtime, or production database change is authorized by this package. The SLICE-P01 physical-schema admission gate must be rerun against K00 `0.15.0` before implementation.
