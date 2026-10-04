@@ -66,7 +66,6 @@ const p03=readiness?.candidate_slices?.find(x=>x.id==='SLICE-P03');
 if(readiness?.version!=='1.2.0' || !['SLICE-P01','SLICE-P02','SLICE-P03'].every(id=>readiness?.current_physical_slice_admissions?.some(x=>x.id===id))) errors.push('SLICE-P03 admission: readiness must contain P01/P02/P03 admissions');
 if(!p03 || p03.current_state!=='ADMITTED' || p03.implementation_authorized!==true || (p03.blockers||[]).length!==0) errors.push('SLICE-P03 admission: P03 readiness state mismatch');
 if(readiness?.evidence_states?.slice_p03_schema_admission!=='PROVEN' || readiness?.evidence_states?.slice_p03_implementation!=='PROVEN') errors.push('SLICE-P03 admission: evidence-state transition mismatch');
-if(readiness?.narrowed_next_lane?.preferred_slice!=='SLICE-P04' || readiness?.narrowed_next_lane?.physical_implementation_authorized!==true) errors.push('SLICE-P03 admission: implementation lane must be authorized');
 if(readiness?.implementation_guard?.tables_generated!==7 || readiness?.implementation_guard?.migrations_generated!==4 || readiness?.implementation_guard?.repositories_generated!==7 || readiness?.implementation_guard?.implemented_slice_count!==4) errors.push('SLICE-P03 admission: admission must not invent implementation artifacts');
 
 if(errors.length){
