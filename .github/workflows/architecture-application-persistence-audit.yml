@@ -1,0 +1,32 @@
+name: Architecture Application Persistence Audit
+
+on:
+  pull_request:
+    paths:
+      - 'architecture/**'
+      - 'application-interfaces/**'
+      - 'persistence/**'
+      - 'kernel/**'
+      - 'domains/discovery-gaps.json'
+      - 'scripts/persistence/**'
+  push:
+    branches: [main]
+    paths:
+      - 'architecture/**'
+      - 'application-interfaces/**'
+      - 'persistence/**'
+      - 'kernel/**'
+      - 'domains/discovery-gaps.json'
+      - 'scripts/persistence/**'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/persistence/validate-persistence-discovery.mjs
+      - run: node scripts/persistence/validate-persistence-proposal.mjs
+      - run: node scripts/persistence/audit-architecture-application-persistence.mjs

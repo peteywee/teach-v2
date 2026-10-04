@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-PERSISTENCE-MODEL",
   "class": "specification",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "claims_truth_state": "declared",
   "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -25,3 +25,9 @@ Status: **recorded; Persistence Model not yet approved**.
 This stage discovers what the current semantic and application authority can safely support at the persistence boundary. It does not create tables or migrations.
 
 A concept being an approved entity is not enough by itself: required identifiers, lifecycle state sets, relationships, ownership/scope semantics, and applicable open-question holds must also be dependency-closed before they may become physical schema authority.
+
+## Decision-ready proposal
+
+`proposed.json` and `DECISION-PACKET.md` define the recommended Persistence authority model.
+
+Status remains `proposed`. Full relational schema, migrations, and Transport Interfaces remain blocked until explicit owner approval plus the semantic dependency closure identified by discovery.

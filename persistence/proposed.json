@@ -1,0 +1,315 @@
+{
+  "proposal_id": "TEACH-PERSISTENCE-MODEL-PROPOSAL",
+  "version": "0.1.0",
+  "status": "proposed",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-04",
+  "updated_on": "2026-10-04",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "commit": "5d438829eeeca095f7c802e2b98564700fc78687",
+    "kernel_version": "0.13.0",
+    "architecture_version": "1.0.0",
+    "application_interface_version": "1.0.0",
+    "persistence_discovery_version": "0.1.0"
+  },
+  "approval_required": true,
+  "scope": "logical persistence authority and schema-admission policy; not full relational schema",
+  "technology_posture": {
+    "current_schema_authority": "Drizzle migration history",
+    "current_database": "PostgreSQL",
+    "canonical_semantics": false,
+    "replaceability_rule": "Technology choices may be replaced only through the governing contract/architecture revision process; semantic meaning remains above persistence."
+  },
+  "principles": [
+    {
+      "id": "PER-1",
+      "rule": "Every persisted mutable fact belongs to exactly one owning runtime module; only that module may write it."
+    },
+    {
+      "id": "PER-2",
+      "rule": "Cross-domain repository imports, foreign-table writes, and persistence-layer ownership bypasses are forbidden."
+    },
+    {
+      "id": "PER-3",
+      "rule": "Application code depends on owner-defined persistence ports; Infrastructure implements those ports and contains Drizzle/PostgreSQL details."
+    },
+    {
+      "id": "PER-4",
+      "rule": "A physical schema object may be introduced only when every semantic dependency it encodes is approved: entity, identifier, required lifecycle state set, required relationship/cardinality, and any shape-affecting owner decision."
+    },
+    {
+      "id": "PER-5",
+      "rule": "Candidate K00 semantics may be preserved in discovery metadata but may not become columns, enums, foreign keys, indexes, checks, or repository API assumptions."
+    },
+    {
+      "id": "PER-6",
+      "rule": "Protected records require authoritative organization ownership/scope where applicable, and protected queries require scope predicates in the data-access implementation."
+    },
+    {
+      "id": "PER-7",
+      "rule": "Browser-reachable database roles have no read/write access to backend-owned application tables; privilege/RLS posture is tested when such roles exist."
+    },
+    {
+      "id": "PER-8",
+      "rule": "Required audit records commit atomically with security-sensitive mutations and are append-only at the persistence privilege boundary."
+    },
+    {
+      "id": "PER-9",
+      "rule": "Idempotency identity is durably bound to operation/payload semantics when the owning contract requires idempotency; duplicate safe retry cannot create duplicate authoritative effects."
+    },
+    {
+      "id": "PER-10",
+      "rule": "Ambiguous external effects persist reconciliation state before retry; unreadable provider state remains unresolved and forbids automatic retry."
+    },
+    {
+      "id": "PER-11",
+      "rule": "Every shared/production schema change is represented by an immutable ordered migration; direct schema synchronization/manual DDL is forbidden outside governed migration paths."
+    },
+    {
+      "id": "PER-12",
+      "rule": "Destructive migrations require explicit owner approval and written rollback/recovery evidence; release must reconcile migration-defined schema with deployed database state."
+    },
+    {
+      "id": "PER-13",
+      "rule": "Retention/deletion/anonymization implementation remains blocked where C15 policy questions are unresolved; persistence must not encode a guessed purge policy."
+    },
+    {
+      "id": "PER-14",
+      "rule": "Persistence Model approval does not authorize Transport routes, UI data contracts, physical package paths, microservices, or candidate event integration."
+    }
+  ],
+  "logical_store_ownership": [
+    {
+      "module": "Identity",
+      "owns": [
+        "Identity",
+        "Credential",
+        "ApplicationSession",
+        "Invitation",
+        "SetupToken",
+        "PasswordResetToken"
+      ],
+      "status": "MIXED",
+      "note": "Only Invitation, SetupToken, PasswordResetToken currently have approved identifier + approved lifecycle semantics; other approved Identity entities still carry candidate identifiers and/or state semantics."
+    },
+    {
+      "module": "Organization",
+      "owns": [
+        "Organization",
+        "Membership",
+        "Location",
+        "Entitlement"
+      ],
+      "status": "BLOCKED",
+      "note": "Organization is approved, but OrganizationId is candidate; Membership/Location/Entitlement remain candidate and OQ-TEN-1 holds Membership shape."
+    },
+    {
+      "module": "Content",
+      "owns": [
+        "ContentPack",
+        "ContentBlock"
+      ],
+      "status": "BLOCKED",
+      "note": "ContentPack approved but ContentPackId candidate; ContentBlock remains candidate; ContentPack relationships remain candidate."
+    },
+    {
+      "module": "Learning",
+      "owns": [
+        "Assignment",
+        "LearningSession",
+        "ProgressEvent",
+        "LearnerState"
+      ],
+      "status": "BLOCKED",
+      "note": "Approved entities still use candidate identifiers and candidate relationships/state sets; LearnerState remains candidate."
+    },
+    {
+      "module": "Certification",
+      "owns": [
+        "Certification"
+      ],
+      "status": "BLOCKED",
+      "note": "Certification approved but CertificationId and relationships remain candidate; criteria/revocation semantic gaps remain."
+    },
+    {
+      "module": "AuditLifecycle",
+      "owns": [
+        "AuditEvent",
+        "LifecycleEvent"
+      ],
+      "status": "BLOCKED",
+      "note": "Both entities and identifiers remain candidate; C23 append-only requirements are binding but do not authorize record schema."
+    },
+    {
+      "module": "TransactionControl",
+      "owns": [
+        "ReconciliationRecord"
+      ],
+      "status": "LOGICAL_RECORD_READY",
+      "note": "Entity, identifier, lifecycle state, and outcome vocabulary are approved; physical provider-specific detail remains data, not new semantics."
+    },
+    {
+      "module": "Authorization",
+      "owns": [],
+      "status": "POLICY_ONLY",
+      "note": "Capabilities remain unregistered; Authorization consumes authoritative read models and does not acquire foreign persistence ownership."
+    }
+  ],
+  "schema_admission_gate": {
+    "decision_states": [
+      "ADMIT",
+      "BLOCK"
+    ],
+    "default": "BLOCK",
+    "criteria": [
+      "entity is approved",
+      "canonical identifier is approved",
+      "every persisted lifecycle state set is approved",
+      "every relationship/cardinality encoded by the schema is approved",
+      "no blocking open question changes the record shape",
+      "owning module is explicit",
+      "protected ownership/scope fields are derivable from approved semantics",
+      "migration and acceptance evidence plan exists"
+    ],
+    "rule": "All criteria must be satisfied for ADMIT; UNKNOWN, candidate, missing, or contradictory evidence resolves to BLOCK."
+  },
+  "currently_admissible_logical_records": [
+    {
+      "entity": "Invitation",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved": [
+        "Invitation",
+        "InvitationId",
+        "InvitationStatus"
+      ],
+      "blocked_physical_relations": "No approved relationship currently authorizes target/identity foreign-key shape.",
+      "persistence_requirements": [
+        "store only hashed acceptance secret, never raw token",
+        "enforce expiry/consumption/revocation semantics transactionally",
+        "terminal status transitions are closed-world"
+      ]
+    },
+    {
+      "entity": "SetupToken",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved": [
+        "SetupToken",
+        "SetupTokenId",
+        "SingleUseTokenStatus"
+      ],
+      "blocked_physical_relations": "Identity linkage/cardinality must not be invented from candidate or missing relationship authority.",
+      "persistence_requirements": [
+        "store only cryptographic hash",
+        "15-minute expiry is authoritative",
+        "ACTIVE -> CONSUMED/EXPIRED/REVOKED only"
+      ]
+    },
+    {
+      "entity": "PasswordResetToken",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved": [
+        "PasswordResetToken",
+        "PasswordResetTokenId",
+        "SingleUseTokenStatus"
+      ],
+      "blocked_physical_relations": "Identity linkage/cardinality must not be invented from candidate or missing relationship authority.",
+      "persistence_requirements": [
+        "store only cryptographic hash",
+        "1-hour expiry is authoritative",
+        "ACTIVE -> CONSUMED/EXPIRED/REVOKED only"
+      ]
+    },
+    {
+      "entity": "ReconciliationRecord",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved": [
+        "ReconciliationRecord",
+        "ReconciliationRecordId",
+        "ReconciliationRecordStatus",
+        "ExternalEffectOutcome"
+      ],
+      "blocked_physical_relations": "Provider-specific detail/cardinality is not a new semantic subtype and exact field schema remains implementation design.",
+      "persistence_requirements": [
+        "OPEN remains unresolved until canonical provider readback",
+        "RESOLVED only with CONFIRMED_SUCCESS or CONFIRMED_NO_EFFECT",
+        "unreadable provider state does not authorize retry"
+      ]
+    }
+  ],
+  "blocked_schema_groups": [
+    {
+      "id": "PER-B01",
+      "state": "BLOCKED",
+      "group": "strict-nine identifier closure",
+      "details": "Nine approved entities still use candidate identifiers."
+    },
+    {
+      "id": "PER-B02",
+      "state": "BLOCKED",
+      "group": "relationship closure",
+      "details": "All 18 registered relationships remain candidate; no FK/cardinality may be treated as authoritative."
+    },
+    {
+      "id": "PER-B03",
+      "state": "BLOCKED",
+      "group": "organization model",
+      "details": "Membership, Location, and Entitlement remain candidate; Membership shape is held on OQ-TEN-1."
+    },
+    {
+      "id": "PER-B04",
+      "state": "BLOCKED",
+      "group": "state closure",
+      "details": "IdentityStatus, ApplicationSessionStatus, LearningSessionStatus, and MembershipStatus remain candidate."
+    },
+    {
+      "id": "PER-B05",
+      "state": "BLOCKED",
+      "group": "authorization persistence",
+      "details": "Capability registry is empty and C14 capability-list decision remains unresolved."
+    },
+    {
+      "id": "PER-B06",
+      "state": "BLOCKED",
+      "group": "privacy/retention",
+      "details": "C15 deletion/anonymization/retention questions remain unresolved."
+    },
+    {
+      "id": "PER-B07",
+      "state": "BLOCKED",
+      "group": "production migration recovery",
+      "details": "C21 backup mechanism and restore-proof policy remain unresolved for production migration execution."
+    }
+  ],
+  "acceptance_targets": [
+    "Static architecture test rejects Infrastructure/Repository imports across owning modules.",
+    "Static persistence-admission test rejects schema definitions that encode candidate identifiers, states, relationships, or entities.",
+    "Migration test rejects schema changes without a migration and rejects edits to already-applied migrations.",
+    "Empty-database migration replay produces deterministic schema.",
+    "Protected-query test proves authoritative scope predicate at data-access boundary.",
+    "Browser-role test denies access to every backend-owned table if a browser-reachable DB role exists.",
+    "Audit privilege test rejects UPDATE/DELETE and forced audit-write failure rolls back owning mutation.",
+    "Reconciliation persistence test proves unresolved provider readback cannot be converted into retryable success."
+  ],
+  "explicitly_not_approved_by_this_proposal": [
+    "table names",
+    "column names",
+    "foreign keys",
+    "indexes",
+    "database enum names",
+    "migration files",
+    "physical repository method names",
+    "transport routes",
+    "candidate semantic promotion",
+    "retention periods",
+    "production backup/restore mechanism"
+  ],
+  "readiness": {
+    "persistence_policy_proposal": "PROVEN",
+    "owner_approval": "BLOCKED",
+    "full_relational_schema": "BLOCKED",
+    "migration_implementation": "BLOCKED",
+    "transport_interfaces": "BLOCKED pending Persistence Model approval and required semantic closure"
+  }
+}
