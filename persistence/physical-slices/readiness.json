@@ -27,7 +27,10 @@
     "slice_p03_owner_decision_issue": "#40",
     "slice_p03_registration_version": "1.0.0",
     "slice_p03_schema_admission_issue": "#42",
-    "slice_p03_admission_version": "1.0.0"
+    "slice_p03_admission_version": "1.0.0",
+    "p04_repair_issue": "#52",
+    "p04_retrospective_validation_issue": "#48",
+    "p04_repair_verification_commit": "ff2287b7d4818151803d8db38a91951f42b22742"
   },
   "admission_rule": "ADMIT only when every semantic dependency and every shape-affecting owner decision required by the physical schema is approved. Missing, candidate, UNKNOWN, BLOCKED, or contradictory evidence fails closed.",
   "current_physical_slice_admissions": [
@@ -79,10 +82,11 @@
     },
     {
       "id": "SLICE-P04",
-      "admission": "persistence/physical-slices/identity-credentials/admission.json@1.0.0",
+      "admission": "persistence/physical-slices/identity-credentials/admission.json@1.1.0",
       "decision": "ADMIT",
       "admitted_on": "2026-10-04",
-      "implementation_state": "IMPLEMENTED"
+      "implementation_state": "PROVEN",
+      "implementation": "persistence/physical-slices/identity-credentials/implementation.json@1.1.0"
     },
     {
       "id": "SLICE-P05",
@@ -226,12 +230,24 @@
         "Credential entity, identifier, Identity ownership relationship, protected IdentityId scope, and evidence plan recorded"
       ],
       "admission_issue": "#46",
-      "admission_version": "1.0.0",
+      "admission_version": "1.1.0",
       "admitted_on": "2026-10-04",
       "implementation_authorized": true,
       "shared_or_production_migration_execution_authorized": false,
-      "implementation_version": "1.0.0",
-      "implementation_evidence": "PROVEN"
+      "implementation_version": "1.1.0",
+      "implementation_evidence": "PROVEN",
+      "blockers_removed_by_migration_repair": [
+        "authoritative Drizzle journal now includes 0003_slice_p04_credential at idx 3",
+        "generated 0003 snapshot chains from the P03 snapshot",
+        "Credential foreign key corrected to public.identity_identities(id)",
+        "two-empty-database P04 replay is deterministic",
+        "P03 -> P04 upgrade replay matches the empty-database fingerprint",
+        "Credential PostgreSQL integration tests pass 6/6",
+        "P03 and P04 historical replay tools are prefix-scoped"
+      ],
+      "schema_fingerprint": "25476adcb4a8dc59ce397da63fcf1239343a93ab9985fb21e6a415efcfc7fe77",
+      "repair_issue": "#52",
+      "retrospective_validation_issue": "#48"
     },
     {
       "id": "SLICE-P05",
@@ -317,6 +333,11 @@
     "slice_p05_relationship_nullability": "PROVEN",
     "slice_p05_module_foundation": "PROVEN",
     "slice_p05_implementation": "PENDING",
-    "slice_p05_owner_decision": "PROVEN"
+    "slice_p05_owner_decision": "PROVEN",
+    "slice_p04_migration_history": "PROVEN",
+    "slice_p04_migration_determinism": "PROVEN",
+    "slice_p04_p03_upgrade_replay": "PROVEN",
+    "slice_p04_postgres_integration": "PROVEN",
+    "slice_p04_review_findings": "PROVEN"
   }
 }
