@@ -1,0 +1,374 @@
+{
+  "proposal_id": "TEACH-PERSISTENCE-SEMANTIC-CLOSURE-PROPOSAL",
+  "version": "0.1.0",
+  "status": "proposed",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-04",
+  "updated_on": "2026-10-04",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "commit": "659bfa23c134ff2a98e5a87c5c97c98271ac0014",
+    "kernel_version": "0.13.0",
+    "persistence_authority_version": "1.0.0",
+    "discovery_version": "0.1.0"
+  },
+  "approval_required": true,
+  "proposed_approval_token": "APPROVE-K00-0.14.0-PERSISTENCE-SEMANTIC-CLOSURE",
+  "target_revision": {
+    "kernel_version": "0.14.0",
+    "c01_contract_change": "none expected; uses existing SEM-30 promotion authority",
+    "ownership_map_change": "none expected for already-owned registered entries",
+    "command_status_changes": 0,
+    "event_status_changes": 0
+  },
+  "promote": {
+    "identifiers": [
+      {
+        "id": "IdentityId",
+        "from": "candidate",
+        "to": "approved",
+        "evidence": [
+          "C01 canonical identifiers",
+          "C11 Identity authority"
+        ]
+      },
+      {
+        "id": "OrganizationId",
+        "from": "candidate",
+        "to": "approved",
+        "evidence": [
+          "C01 canonical identifiers",
+          "C13 Organization authority"
+        ]
+      },
+      {
+        "id": "ApplicationSessionId",
+        "from": "candidate",
+        "to": "approved",
+        "evidence": [
+          "C01 canonical identifiers",
+          "C12 session authority"
+        ]
+      },
+      {
+        "id": "ContentPackId",
+        "from": "candidate",
+        "to": "approved",
+        "evidence": [
+          "C01 canonical identifiers",
+          "C31 content authority"
+        ]
+      },
+      {
+        "id": "LearningSessionId",
+        "from": "candidate",
+        "to": "approved",
+        "evidence": [
+          "C01 canonical identifiers",
+          "C32 learning authority"
+        ]
+      },
+      {
+        "id": "CertificationId",
+        "from": "candidate",
+        "to": "approved",
+        "evidence": [
+          "C01 canonical identifiers",
+          "C34 certification authority"
+        ]
+      },
+      {
+        "id": "IdempotencyKey",
+        "from": "candidate",
+        "to": "approved",
+        "evidence": [
+          "C01 canonical identifiers",
+          "C22 TXN-2/TXN-4"
+        ]
+      },
+      {
+        "id": "RequestId",
+        "from": "candidate",
+        "to": "approved",
+        "evidence": [
+          "C01 canonical identifiers",
+          "C23 AUD-3 / observability correlation"
+        ]
+      }
+    ],
+    "state_sets": [
+      {
+        "id": "IdentityStatus",
+        "from": "candidate",
+        "to": "approved",
+        "evidence": [
+          "C01 canonical values",
+          "C11 IDN-21"
+        ]
+      },
+      {
+        "id": "ApplicationSessionStatus",
+        "from": "candidate",
+        "to": "approved",
+        "evidence": [
+          "C01 canonical values",
+          "C12 SES-20"
+        ]
+      },
+      {
+        "id": "LearningSessionStatus",
+        "from": "candidate",
+        "to": "approved",
+        "evidence": [
+          "C32 LRN-3",
+          "OQ-LRN-1 resolved"
+        ]
+      }
+    ],
+    "state_machines": [
+      {
+        "id": "IdentityStateMachine",
+        "from": "candidate",
+        "to": "approved",
+        "evidence": [
+          "C01 canonical values",
+          "C11 IDN-21"
+        ]
+      },
+      {
+        "id": "ApplicationSessionStateMachine",
+        "from": "candidate",
+        "to": "approved",
+        "evidence": [
+          "C01 canonical values",
+          "C12 SES-20"
+        ]
+      },
+      {
+        "id": "LearningSessionStateMachine",
+        "from": "candidate",
+        "to": "approved",
+        "evidence": [
+          "C32 LRN-3",
+          "OQ-LRN-1 resolved"
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "id": "CredentialBelongsToIdentity",
+        "from": "candidate",
+        "to": "approved",
+        "endpoints": [
+          "Credential",
+          "Identity"
+        ],
+        "cardinality": "many-to-one",
+        "owning_domain": "Identity",
+        "authority_contracts": [
+          "C11"
+        ]
+      },
+      {
+        "id": "IdentityHasApplicationSession",
+        "from": "candidate",
+        "to": "approved",
+        "endpoints": [
+          "Identity",
+          "ApplicationSession"
+        ],
+        "cardinality": "one-to-many",
+        "owning_domain": "Identity",
+        "authority_contracts": [
+          "C11",
+          "C12"
+        ]
+      },
+      {
+        "id": "AssignmentTargetsIdentity",
+        "from": "candidate",
+        "to": "approved",
+        "endpoints": [
+          "Assignment",
+          "Identity"
+        ],
+        "cardinality": "many-to-one",
+        "owning_domain": "Learning",
+        "authority_contracts": [
+          "C32",
+          "C33"
+        ]
+      },
+      {
+        "id": "AssignmentReferencesContentPack",
+        "from": "candidate",
+        "to": "approved",
+        "endpoints": [
+          "Assignment",
+          "ContentPack"
+        ],
+        "cardinality": "many-to-one",
+        "owning_domain": "Learning",
+        "authority_contracts": [
+          "C31",
+          "C32",
+          "C33"
+        ]
+      },
+      {
+        "id": "IdentityHasLearningSession",
+        "from": "candidate",
+        "to": "approved",
+        "endpoints": [
+          "Identity",
+          "LearningSession"
+        ],
+        "cardinality": "one-to-many",
+        "owning_domain": "Learning",
+        "authority_contracts": [
+          "C32"
+        ]
+      },
+      {
+        "id": "LearningSessionUsesAssignment",
+        "from": "candidate",
+        "to": "approved",
+        "endpoints": [
+          "LearningSession",
+          "Assignment"
+        ],
+        "cardinality": "many-to-one",
+        "owning_domain": "Learning",
+        "authority_contracts": [
+          "C32"
+        ]
+      },
+      {
+        "id": "ProgressEventBelongsToLearningSession",
+        "from": "candidate",
+        "to": "approved",
+        "endpoints": [
+          "ProgressEvent",
+          "LearningSession"
+        ],
+        "cardinality": "many-to-one",
+        "owning_domain": "Learning",
+        "authority_contracts": [
+          "C32"
+        ]
+      },
+      {
+        "id": "CertificationBelongsToIdentity",
+        "from": "candidate",
+        "to": "approved",
+        "endpoints": [
+          "Certification",
+          "Identity"
+        ],
+        "cardinality": "many-to-one",
+        "owning_domain": "Certification",
+        "authority_contracts": [
+          "C34"
+        ]
+      },
+      {
+        "id": "CertificationReferencesContentPack",
+        "from": "candidate",
+        "to": "approved",
+        "endpoints": [
+          "Certification",
+          "ContentPack"
+        ],
+        "cardinality": "many-to-one",
+        "owning_domain": "Certification",
+        "authority_contracts": [
+          "C31",
+          "C34"
+        ]
+      },
+      {
+        "id": "CertificationObservedByIdentity",
+        "from": "candidate",
+        "to": "approved",
+        "endpoints": [
+          "Certification",
+          "Identity"
+        ],
+        "cardinality": "many-to-one-observer",
+        "owning_domain": "Certification",
+        "authority_contracts": [
+          "C14",
+          "C34"
+        ]
+      }
+    ]
+  },
+  "promotion_counts": {
+    "identifiers": 8,
+    "state_sets": 3,
+    "state_machines": 3,
+    "relationships": 10,
+    "total": 24
+  },
+  "explicitly_not_promoted": [
+    {
+      "id": "CredentialId",
+      "reason": "not named in current C01 canonical identifier set"
+    },
+    {
+      "id": "AssignmentId",
+      "reason": "not named in current C01 canonical identifier set"
+    },
+    {
+      "id": "ProgressEventId",
+      "reason": "not named in current C01 canonical identifier set"
+    },
+    {
+      "id": "CapabilityId",
+      "reason": "C14 capability vocabulary decision unresolved"
+    },
+    {
+      "id": "MembershipId",
+      "reason": "Membership held candidate under OQ-TEN-1"
+    },
+    {
+      "id": "LocationId",
+      "reason": "Location/organization persistence shape unresolved"
+    },
+    {
+      "id": "MembershipStatus",
+      "reason": "Membership entity held candidate under OQ-TEN-1"
+    },
+    {
+      "id": "MembershipStateMachine",
+      "reason": "Membership entity held candidate under OQ-TEN-1"
+    },
+    {
+      "id": "InvitationForIdentity",
+      "reason": "requires relationship rediscovery/cardinality decision"
+    },
+    {
+      "id": "ReconciliationRecordUsesIdempotencyKey",
+      "reason": "requires relationship rediscovery after IdempotencyKey approval"
+    }
+  ],
+  "post_promotion_guards": [
+    "Every promoted relationship endpoint must still be approved at execution time.",
+    "Every promoted state machine entity and state set must be approved in the same resulting semantic revision.",
+    "No command or event status may change.",
+    "No blocked identifier/entity/relationship may be silently included.",
+    "All live K00 validator pins must move atomically to 0.14.0; frozen historical registration versions remain unchanged.",
+    "Discovery and proposal artifacts remain historical records and must not be rewritten to pretend they were generated on 0.14.0."
+  ],
+  "expected_effect": {
+    "physical_schema_still_not_automatically_approved": true,
+    "reason": "Semantic closure improves admission readiness but does not resolve missing relationships, tenant/privacy/session/certification decisions, or physical field design."
+  },
+  "readiness": {
+    "semantic_closure_proposal": "PROVEN",
+    "owner_approval": "BLOCKED",
+    "registration": "BLOCKED until explicit token",
+    "physical_schema": "BLOCKED"
+  }
+}

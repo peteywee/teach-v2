@@ -1,0 +1,22 @@
+name: Persistence Semantic Closure Proposal
+
+on:
+  pull_request:
+    paths:
+      - 'persistence/semantic-closure/**'
+      - 'scripts/persistence/validate-persistence-semantic-closure-proposal.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'persistence/semantic-closure/**'
+      - 'scripts/persistence/validate-persistence-semantic-closure-proposal.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/persistence/validate-persistence-semantic-closure-proposal.mjs
