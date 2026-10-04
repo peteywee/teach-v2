@@ -8,6 +8,7 @@ export default defineConfig({
   schema: [
     './src/modules/transaction-control/infrastructure/persistence/schema.ts',
     './src/modules/identity/infrastructure/persistence/schema.ts',
+    './src/modules/identity/infrastructure/persistence/token-schema.ts',
   ],
   out: './drizzle',
   dialect: 'postgresql',

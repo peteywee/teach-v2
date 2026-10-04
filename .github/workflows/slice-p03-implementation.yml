@@ -5,7 +5,8 @@ on:
     paths:
       - 'package.json'
       - 'pnpm-lock.yaml'
-      - 'drizzle.p03.config.ts'
+      - 'drizzle.config.ts'
+      - 'drizzle/**'
       - 'src/modules/identity/**'
       - 'tests/integration/identity/**'
       - 'scripts/db/**'
@@ -61,23 +62,8 @@ jobs:
           corepack prepare pnpm@12.8.1 --activate
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Generate P03 migration from P02 snapshot
-        run: |
-          rm -rf .tmp-drizzle-p03
-          cp -R drizzle .tmp-drizzle-p03
-          pnpm exec drizzle-kit generate --config=drizzle.p03.config.ts
-          migration="$(ls .tmp-drizzle-p03/0002_*.sql)"
-          printf '\n--> statement-breakpoint\n' >> "$migration"
-          cat scripts/db/slice-p03-guards.sql >> "$migration"
-          echo '---BEGIN-P03-MIGRATION---'
-          cat "$migration"
-          echo '---END-P03-MIGRATION---'
-          echo '---BEGIN-P03-JOURNAL---'
-          cat .tmp-drizzle-p03/meta/_journal.json
-          echo '---END-P03-JOURNAL---'
-          echo '---BEGIN-P03-SNAPSHOT---'
-          cat .tmp-drizzle-p03/meta/0002_snapshot.json
-          echo '---END-P03-SNAPSHOT---'
+      - name: Check Drizzle migration history
+        run: pnpm exec drizzle-kit check
       - name: Typecheck
         run: pnpm typecheck
       - name: P03 domain tests
@@ -87,8 +73,8 @@ jobs:
           node scripts/persistence/validate-slice-p03-schema-admission.mjs
           pnpm validate:slice-p03
       - name: Verify empty and P02-to-P03 migration replay
-        run: MIGRATIONS_FOLDER=.tmp-drizzle-p03 pnpm db:verify-p03-replay
-      - name: Apply generated history to isolated CI database
-        run: MIGRATIONS_FOLDER=.tmp-drizzle-p03 pnpm db:migrate
+        run: pnpm db:verify-p03-replay
+      - name: Apply committed history to isolated CI database
+        run: pnpm db:migrate
       - name: PostgreSQL integration tests
         run: pnpm test:p03:integration
