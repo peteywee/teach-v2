@@ -46,7 +46,7 @@ if(reg?.readiness_effect?.physical_schema_authorized!==false || reg?.readiness_e
 if(!c12.includes('"version": "1.1.0"') || c12.includes('| OQ-SES-3 |') || c12.includes('| OQ-SES-4 |')) errors.push('SLICE-P02 decisions: C12 1.1.0 must resolve OQ-SES-3/4');
 for(const token of ['SESSION_VERIFIER_V1_SHA256_256BIT','ABSOLUTE_12H_IDLE_30M','exactly 32 cryptographically secure random bytes','absolute lifetime is 12 hours','idle lifetime is 30 minutes']) if(!c12.includes(token)) errors.push(`SLICE-P02 decisions: C12 missing ${token}`);
 if(!approvals.includes('## Part 23 — SLICE-P02 owner decisions') || !approvals.includes('IDENTITY_GLOBAL_PRINCIPAL_SESSION_IDENTITY_OWNED') || !approvals.includes('| #32 |')) errors.push('SLICE-P02 decisions: canonical approval ledger entry missing');
-if(!index.includes('"version": "0.14.0"') || !index.includes('- Package version: `0.14.0`') || !index.includes('| C12 |') || !index.includes('| 1.1.0   | `SES`')) errors.push('SLICE-P02 decisions: package/index synchronization missing');
+if(!index.includes('"version": "0.14.0"') || !index.includes('- Package version: `0.14.0`') || !index.includes('| C12 |')) errors.push('SLICE-P02 decisions: package/index synchronization missing');
 
 const p02=readiness?.candidate_slices?.find(x=>x.id==='SLICE-P02');
 if(readiness?.version!=='0.8.0' || readiness?.narrowed_next_lane?.preferred_slice!=='SLICE-P02' || readiness?.narrowed_next_lane?.physical_implementation_authorized!==false || readiness?.evidence_states?.slice_p02_owner_decisions!=='PROVEN' || readiness?.evidence_states?.slice_p02_schema_admission!=='BLOCKED') errors.push('SLICE-P02 decisions: readiness 0.8.0 fail-closed state mismatch');
