@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.12.1",
+  "version": "0.13.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-04
-- Contract package version: `0.12.1`
+- Contract package version: `0.13.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -37,9 +37,7 @@ not Claude's (SYS-18). The owner's initial contract-spine commit to `peteywee/te
 
 ## Part 1 — Open question decisions
 
-28 questions that block implementation (SYS-34). The contracts were activated with these open.
-Record each decision in plain words; it then gets written into the contract through the revision
-procedure (SYS-21).
+Open-question decisions are recorded here under SYS-34. The contracts were activated with blocking questions still open; each resolved value is written into its governing contract through SYS-21. Blank Decision cells remain unresolved.
 
 | Contract | OQ         | Question                                                                                                                                                                                                                      | Decision | Date | Owner |
 | -------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ---- | ----- |
@@ -63,8 +61,8 @@ procedure (SYS-21).
 | C15      | OQ-PRIV-1  | What exactly do deleted, anonymized, retained, and offboarded mean in Teach?                                                                                                                                                  |          |      |       |
 | C15      | OQ-PRIV-2  | What retention periods apply to each record class?                                                                                                                                                                            |          |      |       |
 | C15      | OQ-PRIV-3  | Which record classes are exempt from deletion, and on what legal or audit basis?                                                                                                                                              |          |      |       |
-| C21      | OQ-MIG-1   | What backup mechanism and cadence are approved for production?                                                                                                                                                                |          |      |       |
-| C21      | OQ-MIG-2   | Where is restore proof performed (disposable environment, staging), and how recent must it be?                                                                                                                                |          |      |       |
+| C21      | OQ-MIG-1   | What backup mechanism and cadence are approved for production?                                                                                                                                                                | `MIGRATION_SCOPED_PLATFORM_NATIVE_BACKUP`: platform-native transactionally consistent backup/snapshot/PITR; automated at least daily for non-reconstructable production data; fresh named restorable point after candidate freeze and before each schema/data migration | 2026-10-04 | Patrick Craven |
+| C21      | OQ-MIG-2   | Where is restore proof performed (disposable environment, staging), and how recent must it be?                                                                                                                                | `ISOLATED_RESTORE_MAX_30D`: disposable isolated target; same database-engine major as production; proof <=30 days at promotion and immediately stale after backup mechanism/configuration change | 2026-10-04 | Patrick Craven |
 | C22      | OQ-TXN-1   | Are idempotency keys client-supplied (header), server-derived, or both, and how long are they retained? | Both by operation: each retryable operation explicitly declares client-supplied or server-derived key policy with no implicit fallback; retention is operation-declared and not shorter than the complete retry/reconciliation horizon | 2026-10-04 | Patrick Craven |
 | C23      | OQ-AUD-1   | How long are audit records retained, and is retention per tenant configurable?                                                                                                                                                |          |      |       |
 | C32      | OQ-LRN-1   | What is the learning-session state machine (states and allowed transitions)?                                                                                                                                                  | ACTIVE -> COMPLETED; COMPLETED terminal; progress recording allowed only while ACTIVE | 2026-10-03 | Patrick Craven |
@@ -73,7 +71,7 @@ procedure (SYS-21).
 | C34      | OQ-CERT-2  | Who approves certification criteria versions, and where is approval recorded?                                                                                                                                                 |          |      |       |
 | C41      | OQ-API-1   | Which routes are boundary exceptions outside `/api/v1`?                                                                                                                                                                       |          |      |       |
 | C42      | OQ-WEB-1   | Which accessibility standard and level is approved (for example WCAG 2.2 AA)?                                                                                                                                                 |          |      |       |
-| C52      | OQ-REL-2   | How is configuration identity computed and recorded without exposing secret values?                                                                                                                                           |          |      |       |
+| C52      | OQ-REL-2   | How is configuration identity computed and recorded without exposing secret values?                                                                                                                                           | `CANONICAL_CONFIG_MANIFEST_SHA256`: SHA-256 of deterministic sorted manifest; non-secret runtime values direct; secrets represented only by stable deployment-bound revision IDs; no raw secret values or secret-derived hashes | 2026-10-04 | Patrick Craven |
 
 ## Part 2 — Contract approvals
 
@@ -388,3 +386,13 @@ Physical persistence remains governed by the Persistence Model admission gate. T
 | ReconciliationRecordUsesIdempotencyKey | candidate | approved | Approve the named SLICE-P01 semantic revision required by PER-4/PER-5; promotion grants semantic implementation authority for this relationship only and does not itself admit physical schema | 2026-10-04 | Patrick Craven | #24 |
 
 This SEM-30 approval does not create or authorize a table, column, index, migration, repository, transport route, runtime implementation, or production database change. SLICE-P01 admission must be rerun after the K00 `0.15.0` promotion.
+
+## Part 22 — Production-proof owner decisions
+
+| Contract | From | To | Decision | Date | Owner | GitHub issue |
+| --- | --- | --- | --- | --- | --- | --- |
+| C21 Database & Migration | 1.0.3 | 1.1.0 | Resolve OQ-MIG-1 as `MIGRATION_SCOPED_PLATFORM_NATIVE_BACKUP`: provider-neutral platform-native transactionally consistent backup/restore capability, automated at least daily where production data is non-reconstructable, plus a fresh named restorable point after candidate freeze and before every schema/data migration | 2026-10-04 | Patrick Craven | #30 |
+| C21 Database & Migration | 1.0.3 | 1.1.0 | Resolve OQ-MIG-2 as `ISOLATED_RESTORE_MAX_30D`: disposable isolated restore target, same database-engine major version, proof no older than 30 days, and immediate invalidation when backup mechanism/configuration changes | 2026-10-04 | Patrick Craven | #30 |
+| C52 Deployment, Release & Recovery | 1.0.3 | 1.1.0 | Resolve OQ-REL-2 as `CANONICAL_CONFIG_MANIFEST_SHA256`: deterministic sorted config manifest, direct non-secret runtime values, stable secret revision IDs only, SHA-256 candidate identity, missing stable revision fails closed | 2026-10-04 | Patrick Craven | #30 |
+
+These decisions define policy and authorize provider-neutral validation machinery. They do **not** select a hosting/database provider, prove a real backup or restore, authorize shared/production migration execution, establish a deployable production candidate, or satisfy C52 explicit owner production-promotion approval.

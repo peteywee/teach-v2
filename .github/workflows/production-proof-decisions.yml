@@ -1,0 +1,37 @@
+name: Production Proof Decisions
+
+on:
+  pull_request:
+    paths:
+      - 'contracts/**'
+      - 'production-proof/**'
+      - 'scripts/release/**'
+      - 'scripts/tests/validate-production-proof.mjs'
+      - 'scripts/governance/validate-strict-nine-ratification.mjs'
+      - 'scripts/persistence/validate-slice-p01-relationship-promotion.mjs'
+      - 'scripts/tests/validate-apply-guard-regressions.mjs'
+      - '.github/workflows/production-proof-decisions.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'contracts/**'
+      - 'production-proof/**'
+      - 'scripts/release/**'
+      - 'scripts/tests/validate-production-proof.mjs'
+      - 'scripts/governance/validate-strict-nine-ratification.mjs'
+      - 'scripts/persistence/validate-slice-p01-relationship-promotion.mjs'
+      - 'scripts/tests/validate-apply-guard-regressions.mjs'
+      - '.github/workflows/production-proof-decisions.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate owner decisions
+        run: node scripts/release/validate-production-proof-contract-decisions.mjs
+      - name: Test production-proof gates
+        run: node scripts/tests/validate-production-proof.mjs

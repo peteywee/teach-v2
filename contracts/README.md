@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.12.1",
+  "version": "0.13.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -34,7 +34,7 @@
 
 # Teach v2 Contracts
 
-- Package version: `0.12.1`
+- Package version: `0.13.0`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
@@ -110,7 +110,7 @@ the requirement that keeps the feature off applies.
 | C13 | [Tenancy & Membership](c13-tenancy-membership-contract.md)                                          | 1.3.0   | `TEN`   | 19           | 13               | 3              | 2                       | `active` |
 | C14 | [Authorization & Capabilities](c14-authorization-capabilities-contract.md)                          | 1.1.0   | `AUTHZ` | 21           | 13               | 2              | 1                       | `active` |
 | C15 | [Data Isolation & Privacy](c15-data-isolation-privacy-contract.md)                                  | 1.0.3   | `PRIV`  | 17           | 10               | 6              | 3                       | `active` |
-| C21 | [Database & Migration](c21-database-migration-contract.md)                                          | 1.0.3   | `MIG`   | 14           | 9                | 5              | 2                       | `active` |
+| C21 | [Database & Migration](c21-database-migration-contract.md)                                          | 1.1.0   | `MIG`   | 14           | 9                | 3              | 0                       | `active` |
 | C22 | [Transaction, Idempotency & Reconciliation](c22-transaction-idempotency-reconciliation-contract.md) | 1.2.0   | `TXN`   | 16           | 12               | 1              | 0                       | `active` |
 | C23 | [Audit & Lifecycle Events](c23-audit-lifecycle-events-contract.md)                                  | 1.0.3   | `AUD`   | 10           | 8                | 3              | 1                       | `active` |
 | C31 | [Content & Teaching Engine](c31-content-teaching-engine-contract.md)                                | 1.0.3   | `CNT`   | 12           | 9                | 3              | 0                       | `active` |
@@ -120,12 +120,12 @@ the requirement that keeps the feature off applies.
 | C41 | [Application / Command / API Boundary](c41-api-boundary-contract.md)                                | 1.0.3   | `API`   | 15           | 11               | 3              | 1                       | `active` |
 | C42 | [Web Client Boundary](c42-web-client-boundary-contract.md)                                          | 1.0.3   | `WEB`   | 15           | 10               | 2              | 1                       | `active` |
 | C51 | [Verification & Evidence](c51-verification-evidence-contract.md)                                    | 1.0.3   | `EVD`   | 16           | 7                | 3              | 0                       | `active` |
-| C52 | [Deployment, Release & Recovery](c52-deployment-release-recovery-contract.md)                       | 1.0.3   | `REL`   | 16           | 9                | 4              | 1                       | `active` |
+| C52 | [Deployment, Release & Recovery](c52-deployment-release-recovery-contract.md)                       | 1.1.0   | `REL`   | 16           | 9                | 3              | 0                       | `active` |
 | C53 | [Observability](c53-observability-contract.md)                                                      | 1.0.3   | `OBS`   | 10           | 8                | 3              | 0                       | `active` |
 | C61 | [Analytics](c61-analytics-contract.md)                                                              | 1.0.3   | `ANL`   | 8            | 7                | 2              | 0                       | `active` |
 | C62 | [PWA / Offline](c62-pwa-offline-contract.md)                                                        | 1.0.3   | `PWA`   | 9            | 4                | 1              | 0                       | `active` |
 | C63 | [Self-Service Billing](c63-billing-contract.md)                                                     | 1.1.0   | `BIL`   | 14           | 12               | 3              | 0                       | `active` |
-|     | **Total**                                                                                           |         |         | **386**      | **262**          | **76**         | **24**                  |          |
+|     | **Total**                                                                                           |         |         | **386**      | **262**          | **73**         | **21**                  |          |
 
 ## K00 semantic-kernel bootstrap
 
@@ -274,9 +274,8 @@ bump, Change Log entry, acceptance cases updated before code, and evidence regen
 
 ## What this package does not claim
 
-- It does not claim any part of Teach currently conforms to these contracts. Implementation
-  conformance is `Not yet verified` in every contract.
-- It does not claim any acceptance case exists as a test yet.
+- It does not claim whole-system conformance. Implementation conformance is only `PROVEN` where a contract or evidence artifact names exact supporting evidence; all other claims remain UNKNOWN/BLOCKED as recorded.
+- It does not claim every acceptance case exists as a test; only explicitly mapped cases are proven.
 - It does not claim all open questions are decided. Values not explicitly resolved by an owner-approved revision remain `Not yet verified` and point to an `OQ-` entry.
 - Owner approval is not independent review. The contracts were drafted and checked by Claude against
   the contract-authoring checklist only.
@@ -309,3 +308,7 @@ Package `0.12.0` records the owner-approved TransactionControl first-slice decis
 ## SLICE-P01 relationship semantic promotion
 
 Package `0.12.1` records the explicit owner-approved SEM-30 promotion in GitHub issue #24. K00 advances from `0.14.0` to `0.15.0` and promotes exactly `ReconciliationRecordUsesIdempotencyKey` from `candidate` to `approved`. C01 remains `1.8.0`; C22 remains `1.2.0`; Domain Ownership Map remains `1.6.0`. No table, migration, repository, transport, runtime, or production database change is authorized by this package. The SLICE-P01 physical-schema admission gate must be rerun against K00 `0.15.0` before implementation.
+
+## Production-proof owner decisions
+
+Package `0.13.0` records the owner-approved production-proof policy decisions from GitHub issue #30. C21 advances from `1.0.3` to `1.1.0`, resolving OQ-MIG-1 as `MIGRATION_SCOPED_PLATFORM_NATIVE_BACKUP` and OQ-MIG-2 as `ISOLATED_RESTORE_MAX_30D`. C52 advances from `1.0.3` to `1.1.0`, resolving OQ-REL-2 as `CANONICAL_CONFIG_MANIFEST_SHA256`. This package does not choose a hosting provider, does not establish actual backup/restore evidence, does not create a releasable production candidate, and does not authorize shared/production migration execution or production promotion.

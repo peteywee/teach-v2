@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C52",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.0.3",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-04",
+  "updated_on": "2026-10-03",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.1.0",
-    "approved_on": "2026-10-04",
+    "approved_version": "1.0.0",
+    "approved_on": "2026-10-03",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner approved canonical configuration identity policy; GitHub issue #30"
+    "inheritance": "1.0.1, 1.0.2, and 1.0.3 are non-normative governance/truth-state cleanup patches; 1.0.0 owner approval remains controlling"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,8 +28,8 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C52@1.0.3"],
-  "superseded_by": null,
+  "supersedes": [],
+  "superseded_by": "TEACH-CON-C52@1.1.0",
   "depends_on": [
     "contracts/"
   ]
@@ -43,15 +43,15 @@
 | Contract ID        | C52                                                                                                                                                             |
 | Group              | C50 Production Proof                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.1.0                                                                                                                                                           |
-| Status             | `active`                                                                                                                                                        |
+| Version            | 1.0.3                                                                                                                                                           |
+| Status             | `superseded`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-04 — canonical configuration-identity decision approved through GitHub issue #30; see `APPROVAL-RECORD.md` |
+| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
 | Requirement prefix | `REL`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New.                                                                                                                                                            |
-| Supersedes         | C52 1.0.3                                                                                                                                                            |
-| Superseded by      | None                                                                                                                                                            |
+| Supersedes         | None                                                                                                                                                            |
+| Superseded by      | C52 1.1.0                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
 | Last updated       | 2026-10-03                                                                                                                                                      |
 
@@ -92,7 +92,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **REL-3** — Required CI MUST be green on the exact candidate SHA.
 - **REL-4** — A required gate MUST NOT be skipped.
 - **REL-5** — Migration state MUST be reconciled per C21.
-- **REL-6** — Production configuration MUST be represented by a deterministic canonical manifest. Runtime-affecting non-secret values MUST be represented directly; secrets MUST be represented only by stable deployment-bound provider secret-version/revision identifiers or equivalent opaque revision identifiers, never raw secret values or secret-derived hashes. The candidate configuration identity MUST be the SHA-256 of the sorted canonical manifest. A required config/secret without a stable revision identity MUST block release.
+- **REL-6** — Production configuration MUST be validated for the candidate (see OQ-REL-2; value Not yet verified).
 - **REL-7** — Health and readiness MUST pass on the deployed candidate.
 - **REL-8** — A deployed smoke test MUST pass on the candidate (see OQ-REL-3; value Not yet verified).
 - **REL-9** — Canonical runtime readback MUST confirm the deployed identity equals the candidate.
@@ -111,7 +111,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | REL-AC-1 | REL-1, REL-2, REL-14 | Change configuration after gates pass                                                   | Candidate invalidated; gates must re-run                            |
 | REL-AC-2 | REL-3, REL-4         | Candidate with one skipped required check                                               | Promotion blocked                                                   |
 | REL-AC-3 | REL-5, REL-11        | Candidate with pending migration and no backup proof                                    | Promotion blocked                                                   |
-| REL-AC-4 | REL-6                | Build configuration identity twice with reordered keys, then change a non-secret value or secret revision; omit one required secret revision | Reordering preserves identity; any effective config/revision change changes identity; missing stable revision blocks promotion |
+| REL-AC-4 | REL-6                | Candidate with missing required production config value                                 | Promotion blocked                                                   |
 | REL-AC-5 | REL-7, REL-8, REL-9  | Deploy candidate; deployed SHA reported by runtime differs from candidate (test double) | Promotion blocked                                                   |
 | REL-AC-6 | REL-10, REL-15       | Release record without named rollback binding                                           | Promotion blocked                                                   |
 | REL-AC-7 | REL-12               | Promotion attempted without owner approval record                                       | Blocked                                                             |
@@ -123,23 +123,20 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | ID       | Question                                                                            | Blocks implementation | Affects |
 | -------- | ----------------------------------------------------------------------------------- | --------------------- | ------- |
 | OQ-REL-1 | Which hosting platform(s) are approved for v2 web and API?                          | No                    | —       |
+| OQ-REL-2 | How is configuration identity computed and recorded without exposing secret values? | Yes                   | REL-6   |
 | OQ-REL-3 | What does the deployed smoke test cover?                                            | No                    | REL-8   |
 | OQ-REL-4 | How long after promotion is rollback to the prior candidate supported?              | No                    | —       |
-
-### Resolved owner decision in 1.1.0
-
-- **OQ-REL-2 — `CANONICAL_CONFIG_MANIFEST_SHA256`:** every candidate uses a deterministic sorted configuration manifest; runtime-affecting non-secret values are represented directly; secrets are represented only by stable deployment-bound revision identifiers; raw secret values and secret-derived hashes are excluded; SHA-256 of the canonical manifest is the candidate configuration identity. Missing stable revision identity fails closed.
 
 ## 7. Verification Status
 
 | Item                         | State                    | Detail                                                                                                                                                                                                                                                |
 | ---------------------------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Target codebase              | verified (limited scope) | `peteywee/teach-v2` default branch `main`; SLICE-P01 is implemented through exact-main commit `dbec8199a240c41c32f01c09b0a5b8ee1c5381ec`. Issue #30 adds provider-neutral configuration-identity/release evidence machinery; no production deployment is claimed. |
+| Target codebase              | verified (limited scope) | `peteywee/teach-v2` default branch `main`, verified through governance baseline commit `292e8da9123987e9d94f09669c7bc6b6d43c4320` on 2026-10-03. The repository contains the contract/governance foundation; application implementation remains not yet built.                                |
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
-| Implementation conformance   | partial                  | Configuration identity and production-migration evidence gates are implemented provider-neutrally by issue #30; deployment/runtime/rollback/provider proof remains UNKNOWN until an actual release candidate exists. |
-| Acceptance cases implemented | partial PROVEN           | REL-AC-4 is covered by deterministic configuration-identity tests in the issue #30 package. Other release acceptance cases remain unproven until deployment/release infrastructure exists. |
-| Blocking open questions      | 0 open                   | OQ-REL-2 is resolved in 1.1.0. OQ-REL-1/3/4 remain open and non-blocking; actual production promotion still requires every applicable REL gate and explicit owner approval. |
-| Owner approval               | declared                 | 1.1.0 configuration-identity policy approved by Patrick Craven on 2026-10-04 through GitHub issue #30 and recorded in `APPROVAL-RECORD.md`. |
+| Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
+| Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
+| Blocking open questions      | 1 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
+| Owner approval               | declared                 | Approved by the owner on 2026-10-03; recorded in `APPROVAL-RECORD.md`. Initial owner-approval baseline is commit `2c9b1c849a520ba817efc91150be9a37797f4238`; this 1.0.3 revision is tracked by Git history.                                                                     |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
@@ -154,4 +151,3 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.1   | 2026-10-03 | Non-normative document-governance metadata/provenance normalization; 1.0.0 owner approval remained controlling. | ChatGPT (governance) |
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
-| 1.1.0   | 2026-10-04 | Normative production-proof revision: resolve OQ-REL-2 with `CANONICAL_CONFIG_MANIFEST_SHA256`; refine REL-6 and REL-AC-4; GitHub issue #30. | Patrick Craven (owner approval) |
