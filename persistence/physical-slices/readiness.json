@@ -1,6 +1,6 @@
 {
   "readiness_id": "TEACH-FIRST-PHYSICAL-SLICE-READINESS",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-04",
@@ -8,7 +8,7 @@
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "cf425980c5f411144a37e1c1d3e259254d3e6e9b",
+    "commit": "127378efc9c42a5cf615a0adc323640507b52119",
     "kernel_version": "0.15.0",
     "persistence_authority_version": "1.0.0",
     "semantic_closure_registration_version": "1.0.0",
@@ -21,7 +21,9 @@
     "slice_p02_owner_decision_issue": "#32",
     "slice_p02_decision_registration_version": "1.0.0",
     "slice_p02_schema_admission_issue": "#34",
-    "slice_p02_admission_version": "1.0.0"
+    "slice_p02_admission_version": "1.0.0",
+    "slice_p02_implementation_version": "1.0.0",
+    "slice_p02_implementation_issue": "#36"
   },
   "admission_rule": "ADMIT only when every semantic dependency and every shape-affecting owner decision required by the physical schema is approved. Missing, candidate, UNKNOWN, BLOCKED, or contradictory evidence fails closed.",
   "current_physical_slice_admissions": [
@@ -51,7 +53,8 @@
       "implementation_authorized": true,
       "migration_authoring_authorized": true,
       "shared_or_production_migration_execution_authorized": false,
-      "implementation_state": "PENDING"
+      "implementation_state": "IMPLEMENTED",
+      "implementation": "persistence/physical-slices/identity-session/implementation.json@1.0.0"
     }
   ],
   "current_admitted_slice_count": 2,
@@ -211,13 +214,13 @@
     "semantic_promotions_required": []
   },
   "implementation_guard": {
-    "tables_generated": 1,
-    "migrations_generated": 1,
-    "repositories_generated": 1,
+    "tables_generated": 3,
+    "migrations_generated": 2,
+    "repositories_generated": 3,
     "physical_schema_authorized": true,
     "shared_or_production_migration_execution_authorized": false,
     "full_relational_schema_authorized": false,
-    "implemented_slice_count": 1
+    "implemented_slice_count": 2
   },
   "evidence_states": {
     "persistence_authority": "PROVEN",
@@ -239,6 +242,6 @@
     "shared_or_production_migration_execution": "BLOCKED",
     "slice_p02_owner_decisions": "PROVEN",
     "slice_p02_schema_admission": "PROVEN",
-    "slice_p02_implementation": "PENDING"
+    "slice_p02_implementation": "PROVEN"
   }
 }
