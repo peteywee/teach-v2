@@ -61,3 +61,4 @@ jobs:
             .tmp-drizzle-p04-repair/meta/0003_snapshot.json
             .tmp-drizzle-p04-repair/meta/_journal.json
           if-no-files-found: error
+          include-hidden-files: true
