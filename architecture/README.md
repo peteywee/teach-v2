@@ -2,9 +2,9 @@
 {
   "doc_id": "TEACH-ARCHITECTURE",
   "class": "specification",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "claims_truth_state": "declared",
-  "status": "recorded",
+  "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-04",
   "updated_on": "2026-10-04",
@@ -22,7 +22,7 @@
 
 This directory records architecture discovery and later owner-approved architecture decisions.
 
-Current status: **discovery recorded; architecture not yet approved**.
+Current status: **logical architecture active — owner approved**.
 
 The discovery preserves four separate facts:
 
@@ -38,3 +38,11 @@ No file in this stage authorizes application implementation, package layout, per
 `proposed.json` and `DECISION-PACKET.md` contain the recommended logical architecture.
 
 The proposal is not implementation authority. It remains `proposed` until an explicit owner-approval package records the decision. Application Interfaces remain blocked until that approval.
+
+## Active logical architecture
+
+Owner approval: GitHub issue #13.
+
+The active authority is `architecture/authority.json` version `1.0.0`.
+
+Application Interfaces is the next build-sequence stage. Persistence schemas, transport route inventory, physical package names, and unresolved candidate semantics remain outside this approval.

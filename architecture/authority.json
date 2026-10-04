@@ -1,0 +1,114 @@
+{
+  "architecture_id": "TEACH-ARCHITECTURE",
+  "version": "1.0.0",
+  "status": "active",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "approved_on": "2026-10-04",
+  "approval_issue": "#13",
+  "baseline_commit": "8cc705404f931e5c851ea3172edff173ac9d6885",
+  "source_proposal": "architecture/proposed.json@0.1.0",
+  "topology": {
+    "style": "modular monolith",
+    "initial_backend_deployments": 1,
+    "runtime_domain_modules": [
+      "Identity",
+      "Organization",
+      "Authorization",
+      "Content",
+      "Learning",
+      "Certification",
+      "AuditLifecycle",
+      "TransactionControl"
+    ],
+    "support_planes": [
+      {
+        "semantic_domain": "Observability",
+        "placement": "runtime infrastructure support"
+      },
+      {
+        "semantic_domain": "VerificationEvidence",
+        "placement": "verification/release plane"
+      },
+      {
+        "semantic_domain": "Governance",
+        "placement": "build-time/governance plane"
+      }
+    ]
+  },
+  "layer_model": {
+    "governance_precedence": [
+      "Constitution",
+      "Semantic Kernel",
+      "Contracts"
+    ],
+    "runtime_layers": [
+      "Domain",
+      "Application",
+      "Infrastructure",
+      "Interfaces"
+    ]
+  },
+  "rules": [
+    {
+      "id": "ARC-1",
+      "rule": "Teach is a modular monolith by default; initial backend business modules share one deployment boundary."
+    },
+    {
+      "id": "ARC-2",
+      "rule": "Every mutable fact has one owning runtime component and one write path."
+    },
+    {
+      "id": "ARC-3",
+      "rule": "Cross-domain mutation occurs only through the owning module's registered command/application boundary."
+    },
+    {
+      "id": "ARC-4",
+      "rule": "Cross-domain repository imports and foreign-table writes are forbidden."
+    },
+    {
+      "id": "ARC-5",
+      "rule": "Domain code is transport-agnostic and infrastructure-agnostic."
+    },
+    {
+      "id": "ARC-6",
+      "rule": "Application orchestrates use cases; Interfaces adapt HTTP/UI/jobs/CLI/agents into Application."
+    },
+    {
+      "id": "ARC-7",
+      "rule": "Infrastructure implements persistence/provider ports; it does not own business semantics."
+    },
+    {
+      "id": "ARC-8",
+      "rule": "Authorization, transaction, audit, and reconciliation rules remain deterministic and agent-independent."
+    },
+    {
+      "id": "ARC-9",
+      "rule": "Observability is side-effect-neutral with respect to authorization and request outcomes."
+    },
+    {
+      "id": "ARC-10",
+      "rule": "Candidate K00 semantics are not architecture authority and cannot be consumed by implementation."
+    },
+    {
+      "id": "ARC-11",
+      "rule": "Persistence schema design is deferred until the Persistence Model stage; architecture defines ownership/boundaries, not tables."
+    },
+    {
+      "id": "ARC-12",
+      "rule": "Transport route/schema design is deferred until the Transport Interfaces stage; /api/v1 and C41 constraints remain controlling."
+    },
+    {
+      "id": "ARC-13",
+      "rule": "Microservices and broker infrastructure are deferred until evidence justifies extraction and an approved revision authorizes it."
+    }
+  ],
+  "explicitly_excluded": {
+    "candidate_events": 10,
+    "blocked_command_proposals": 8,
+    "remaining_core_missing_kernel_candidates": 9,
+    "candidate_relationships": 18,
+    "candidate_invariants": 22,
+    "candidate_decision_tables": 8
+  },
+  "next_stage": "Application Interfaces"
+}

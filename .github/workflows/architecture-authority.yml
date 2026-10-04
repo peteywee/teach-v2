@@ -1,0 +1,23 @@
+name: Architecture Authority
+
+on:
+  pull_request:
+    paths:
+      - 'architecture/**'
+      - 'scripts/architecture/validate-architecture-authority.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'architecture/**'
+      - 'scripts/architecture/validate-architecture-authority.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-architecture-authority:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate architecture authority
+        run: node scripts/architecture/validate-architecture-authority.mjs
