@@ -31,7 +31,8 @@
     "p04_repair_issue": "#52",
     "p04_retrospective_validation_issue": "#48",
     "p04_repair_verification_commit": "ff2287b7d4818151803d8db38a91951f42b22742",
-    "slice_p05_implementation_issue": "#51"
+    "slice_p05_implementation_issue": "#51",
+    "slice_p05_verification_source_commit": "923bb733069dbe610f04577a49bd9dc0c386a8f2"
   },
   "admission_rule": "ADMIT only when every semantic dependency and every shape-affecting owner decision required by the physical schema is approved. Missing, candidate, UNKNOWN, BLOCKED, or contradictory evidence fails closed.",
   "current_physical_slice_admissions": [
@@ -285,16 +286,18 @@
       ],
       "admitted_on": "2026-10-04",
       "implementation_version": "1.0.0",
-      "implementation_evidence": "PENDING",
-      "runtime_activation": "BLOCKED"
+      "implementation_evidence": "PROVEN",
+      "runtime_activation": "BLOCKED",
+      "implementation_verification_commit": "923bb733069dbe610f04577a49bd9dc0c386a8f2",
+      "schema_fingerprint": "26b0bd492ffb498e90594a9c560b187764b8f5f604cada0de2f9a133825c06a0"
     }
   ],
   "narrowed_next_lane": {
     "preferred_slice": "SLICE-P05",
-    "reason": "P05 physical storage is implemented; runtime activation awaits authoritative Assignment authorization and atomicity proof.",
+    "reason": "P05 physical storage is proven at its verification source; runtime activation awaits authoritative Assignment authorization and atomicity proof.",
     "owner_decisions_required": [],
     "physical_implementation_authorized": true,
-    "next_required_gate": "Verify P05 physical acceptance evidence; then prove Assignment authorization-plus-insert atomicity before runtime activation",
+    "next_required_gate": "Prove authoritative Assignment authorization and atomic authorization-plus-insert before runtime activation",
     "semantic_promotions_required": [],
     "runtime_activation": "BLOCKED"
   },
@@ -338,7 +341,7 @@
     "slice_p05_schema_admission": "PROVEN",
     "slice_p05_relationship_nullability": "PROVEN",
     "slice_p05_module_foundation": "PROVEN",
-    "slice_p05_implementation": "PENDING",
+    "slice_p05_implementation": "PROVEN",
     "slice_p05_owner_decision": "PROVEN",
     "slice_p04_migration_history": "PROVEN",
     "slice_p04_migration_determinism": "PROVEN",
@@ -347,6 +350,12 @@
     "slice_p04_review_findings": "PROVEN",
     "slice_p05_runtime_activation": "BLOCKED",
     "slice_p05_assignment_authorization": "UNKNOWN",
-    "slice_p05_atomic_authorization_insert": "PENDING"
+    "slice_p05_atomic_authorization_insert": "PENDING",
+    "slice_p05_pinned_drizzle_generation": "PROVEN",
+    "slice_p05_postgres_integration": "PROVEN",
+    "slice_p05_migration_determinism": "PROVEN",
+    "slice_p05_p04_upgrade_replay": "PROVEN",
+    "slice_p05_concurrent_completion": "PROVEN",
+    "slice_p05_assignment_existence": "UNKNOWN"
   }
 }

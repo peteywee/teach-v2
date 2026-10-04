@@ -17,7 +17,7 @@ This directory establishes the source boundary for the **Learning** runtime doma
 
 The Domain and Application foundation now defines required learner/Assignment references, the closed ACTIVE -> COMPLETED lifecycle, Identity-scoped repository operations, and the separate LRN-2 Assignment-authorization port. Missing, mismatched, denied, or unavailable authorization rejects start before a repository write.
 
-A Learning-owned PostgreSQL storage adapter and immutable migration 0004 now define `learning_sessions`. PostgreSQL acceptance, pinned generation, and migration replay are recorded separately in `persistence/physical-slices/learning-session/implementation.json`; pending evidence remains pending until exact-source CI proves it. Domain/Application tests use explicit in-memory doubles.
+A Learning-owned PostgreSQL storage adapter and immutable migration 0004 now define `learning_sessions`. PostgreSQL acceptance, pinned generation, and migration replay are PROVEN at the exact verification source recorded in `persistence/physical-slices/learning-session/implementation.json`: 11 PostgreSQL cases and 38 foundation cases pass, with identical empty/P04-upgrade fingerprints and one winner among 16 overlapping completion contenders. Recorded source proof does not replace CI for a later head. Domain/Application tests use explicit in-memory doubles.
 
 There is no Assignment table or authoritative Assignment-authorization adapter and no transport route. The non-null `assignment_id` proves requiredness, not existence, learner assignment, or LRN-2 authorization. Runtime activation remains blocked until authoritative Assignment authorization and authorization-plus-insert atomicity are proven.
 

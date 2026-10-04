@@ -1,7 +1,7 @@
 {
   "implementation_id": "TEACH-SLICE-P05-PHYSICAL-IMPLEMENTATION",
   "version": "1.0.0",
-  "status": "implemented",
+  "status": "proven",
   "issue": "#51",
   "baseline_commit": "9e3a0961633599f422e8b63dda74695d803d8146",
   "admission": "persistence/physical-slices/learning-session/admission.json@1.2.0",
@@ -18,15 +18,15 @@
     "implemented_slices": 5
   },
   "verification": {
-    "pinned_drizzle_generation": "PENDING",
-    "domain_application_tests": "PENDING",
-    "postgres_integration": "PENDING",
-    "empty_database_replay": "PENDING",
-    "p04_upgrade_replay": "PENDING",
-    "concurrent_completion": "PENDING",
-    "exact_head_ci": "PENDING"
+    "pinned_drizzle_generation": "PASS",
+    "domain_application_tests": "PASS",
+    "postgres_integration": "PASS",
+    "empty_database_replay": "PASS",
+    "p04_upgrade_replay": "PASS",
+    "concurrent_completion": "PASS",
+    "exact_head_ci": "PASS"
   },
-  "verification_source_commit": null,
+  "verification_source_commit": "923bb733069dbe610f04577a49bd9dc0c386a8f2",
   "integration_test_count": 11,
   "foundation_test_count": 38,
   "assignment_reference": {
@@ -41,10 +41,20 @@
     "authoritative Assignment authorization adapter",
     "atomic authorization-plus-insert proof"
   ],
-  "schema_fingerprint": null,
+  "schema_fingerprint": "26b0bd492ffb498e90594a9c560b187764b8f5f604cada0de2f9a133825c06a0",
   "physical_artifacts": [
     "src/modules/learning/infrastructure/persistence/schema.ts",
     "src/modules/learning/infrastructure/persistence/postgres-learning-session-repository.ts"
   ],
-  "scope_limit": "Physical persistence only; no Assignment storage, ProgressEvent, transport, runtime activation, or production migration execution"
+  "scope_limit": "Physical persistence only; no Assignment storage, ProgressEvent, transport, runtime activation, or production migration execution",
+  "exact_head_check_count": 22,
+  "ci_run_url": "https://github.com/peteywee/teach-v2/actions/runs/37232904372",
+  "ci_environment": {
+    "node": "20.20.2",
+    "pnpm": "12.8.1",
+    "tsx": "4.23.15",
+    "drizzle_orm": "0.45.3",
+    "drizzle_kit": "0.31.11",
+    "postgres": "17 (isolated CI service)"
+  }
 }
