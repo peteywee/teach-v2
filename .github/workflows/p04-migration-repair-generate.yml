@@ -5,18 +5,18 @@ on:
     paths:
       - 'drizzle.p04-repair.config.ts'
       - '.github/workflows/p04-migration-repair-generate.yml'
-      - 'drizzle/**'
-      - 'src/modules/identity/infrastructure/persistence/**'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -51,6 +51,20 @@ jobs:
           grep -q 'identity_identities' "$generated"
           ! grep -q 'REFERENCES "identities"' "$generated"
           node -e "const j=require('./.tmp-drizzle-p04-repair/meta/_journal.json'); if(j.entries.length!==4 || j.entries[3].idx!==3 || j.entries[3].tag!=='0003_slice_p04_credential') process.exit(1)"
+      - name: Freeze generated P04 history into repair branch
+        run: |
+          cp .tmp-drizzle-p04-repair/0003_slice_p04_credential.sql drizzle/0003_slice_p04_credential.sql
+          cp .tmp-drizzle-p04-repair/meta/0003_snapshot.json drizzle/meta/0003_snapshot.json
+          cp .tmp-drizzle-p04-repair/meta/_journal.json drizzle/meta/_journal.json
+          git config user.name "teach-v2-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add drizzle/0003_slice_p04_credential.sql drizzle/meta/0003_snapshot.json drizzle/meta/_journal.json
+          if git diff --cached --quiet; then
+            echo "Generated P04 history already frozen"
+          else
+            git commit -m "fix(p04): freeze generated migration history"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
       - name: Upload generated P04 history
         if: always()
         uses: actions/upload-artifact@v4
