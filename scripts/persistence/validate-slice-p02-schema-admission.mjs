@@ -28,7 +28,29 @@ if(manifest?.version!=='0.15.0') errors.push('SLICE-P02 admission: K00 0.15.0 re
 if(admission?.admission_id!=='TEACH-SLICE-P02-PHYSICAL-SCHEMA-ADMISSION' || admission?.version!=='1.0.0' || admission?.status!=='recorded' || admission?.issue!=='#34') errors.push('SLICE-P02 admission: admission identity/state mismatch');
 if(admission?.semantic_baseline_commit!=='cf425980c5f411144a37e1c1d3e259254d3e6e9b') errors.push('SLICE-P02 admission: exact post-owner-decision baseline required');
 if(plan?.plan_id!=='TEACH-SLICE-P02-MIGRATION-ACCEPTANCE-EVIDENCE-PLAN' || plan?.version!=='1.0.0' || plan?.status!=='recorded' || plan?.physical_schema_authorized!==false) errors.push('SLICE-P02 admission: evidence plan missing or over-authorizing');
-if(reg?.registration_id!=='TEACH-SLICE-P02-OWNER-DECISION-REGISTRATION' || reg?.version!=='1.0.0' || reg?.status!=='recorded') errors.push('SLICE-P02 admission: owner-decision registration missing');
+if(reg?.registration_id!=='TEACH-SLICE-P02-OWNER-DECISION-REGISTRATION' || reg?.version!=='1.0.0' || reg?.status!=='recorded' || reg?.issue!=='#32') errors.push('SLICE-P02 admission: owner-decision registration missing');
+
+const expectedSelections=new Map([
+  ['P02-D01','SESSION_VERIFIER_V1_SHA256_256BIT'],
+  ['P02-D02','ABSOLUTE_12H_IDLE_30M'],
+  ['P02-D03','IDENTITY_GLOBAL_PRINCIPAL_SESSION_IDENTITY_OWNED'],
+]);
+const actualSelections=new Map((reg?.decisions||[]).map(x=>[x.id,x.selection]));
+for(const [id,selection] of expectedSelections) {
+  if(actualSelections.get(id)!==selection) errors.push(`SLICE-P02 admission: ${id} must be ${selection}`);
+}
+const ownership=reg?.ownership_scope_decision;
+if(
+  ownership?.identity_organization_owned!==false ||
+  ownership?.identity_explicit_ownership_key!=='IdentityId' ||
+  ownership?.application_session_owner!=='Identity' ||
+  ownership?.relationship!=='IdentityHasApplicationSession' ||
+  ownership?.relationship_cardinality!=='one-to-many' ||
+  ownership?.application_session_identity_fk_required!==true ||
+  ownership?.tenant_authority_columns_forbidden!==true ||
+  ownership?.protected_session_queries_require_authoritative_identity_id!==true ||
+  ownership?.cross_identity_admin_access_requires_external_authorization!==true
+) errors.push('SLICE-P02 admission: exact owner-approved ownership/scope decision required');
 
 for(const id of ['Identity','ApplicationSession']) if(find(entities,id)?.status!=='approved') errors.push(`SLICE-P02 admission: ${id} must be approved`);
 for(const id of ['IdentityId','ApplicationSessionId']) if(find(ids,id)?.status!=='approved') errors.push(`SLICE-P02 admission: ${id} must be approved`);
