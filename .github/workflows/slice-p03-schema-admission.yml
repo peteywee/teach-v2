@@ -3,6 +3,8 @@ name: SLICE-P03 Schema Admission
 on:
   pull_request:
     paths:
+      - 'scripts/persistence/admission-criteria.mjs'
+      - 'persistence/authority.json'
       - 'persistence/physical-slices/identity-tokens/**'
       - 'persistence/physical-slices/readiness.json'
       - 'scripts/persistence/validate-slice-p03-schema-admission.mjs'
@@ -13,6 +15,8 @@ on:
   push:
     branches: [main]
     paths:
+      - 'scripts/persistence/admission-criteria.mjs'
+      - 'persistence/authority.json'
       - 'persistence/physical-slices/identity-tokens/**'
       - 'persistence/physical-slices/readiness.json'
       - 'scripts/persistence/validate-slice-p03-schema-admission.mjs'
@@ -31,3 +35,4 @@ jobs:
           node-version: '20'
       - name: Validate SLICE-P03 schema admission
         run: node scripts/persistence/validate-slice-p03-schema-admission.mjs
+

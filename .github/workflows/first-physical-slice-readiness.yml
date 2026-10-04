@@ -3,6 +3,8 @@ name: First Physical Slice Readiness
 on:
   pull_request:
     paths:
+      - 'scripts/persistence/admission-criteria.mjs'
+      - 'persistence/authority.json'
       - 'persistence/physical-slices/**'
       - 'scripts/persistence/validate-first-physical-slice-readiness.mjs'
       - 'scripts/persistence/audit-first-physical-slice-readiness.mjs'
@@ -10,6 +12,8 @@ on:
   push:
     branches: [main]
     paths:
+      - 'scripts/persistence/admission-criteria.mjs'
+      - 'persistence/authority.json'
       - 'persistence/physical-slices/**'
       - 'scripts/persistence/validate-first-physical-slice-readiness.mjs'
       - 'scripts/persistence/audit-first-physical-slice-readiness.mjs'
@@ -26,3 +30,4 @@ jobs:
       - run: node scripts/persistence/validate-first-physical-slice-readiness.mjs
       - run: node scripts/persistence/audit-first-physical-slice-readiness.mjs
       - run: node scripts/persistence/validate-slice-p01-schema-admission.mjs
+

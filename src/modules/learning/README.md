@@ -21,4 +21,8 @@ There is no concrete LearningSession persistence adapter, authoritative Assignme
 
 The port requires a future adapter to complete only ACTIVE sessions in authoritative Identity scope atomically. This change does not persist ProgressEvent or Assignment, implement XP/mastery rules, or resolve the remaining C32 open questions.
 
+Read and completion services capture a frozen copy of validated Identity scope before awaiting an adapter. Caller mutation cannot change the queried scope or the scope used to validate a returned record.
+
+`scripts/persistence/validate-slice-p05-foundation.mjs` reconciles the foundation checkpoint with admission, pending runtime prerequisites, migration history, physical artifact totals, and readiness. The APPLY pins guard also runs that check and verifies the exact eight distinct admission criteria across P01–P05. Recorded CI evidence refers to its verification source commit; it does not establish proof for a later commit.
+
 Runtime/persistence implementation may begin only from the separately recorded P05 admission authority; shared or production migration execution remains blocked.

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { inspectAdmissionCriteria } from './admission-criteria.mjs';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
@@ -34,8 +35,7 @@ if(!ownerRel || ownerRel.decision_state!=='approved' || ownerRel.proposed_owner!
 for(const req of ['IDN-4','IDN-5','IDN-6','IDN-13']) if(!c11.includes(`**${req}**`)) errors.push(`SLICE-P04 admission: C11 missing ${req}`);
 for(const oq of ['OQ-IDN-1','OQ-IDN-3']) if(!c11.includes(`| ${oq} |`)) errors.push(`SLICE-P04 admission: ${oq} must remain explicitly open rather than silently resolved`);
 
-const criteria=admission?.criteria||[];
-if(criteria.length!==8 || criteria.some(x=>x.state!=='PROVEN')) errors.push('SLICE-P04 admission: all eight Persistence Model criteria must be PROVEN');
+errors.push(...inspectAdmissionCriteria(authority, admission, 'SLICE-P04'));
 if((admission?.blockers||[]).length!==0) errors.push('SLICE-P04 admission: blockers must be empty');
 if(admission?.decision!=='ADMIT' || admission?.physical_schema_authorized!==true || admission?.implementation_authorized!==true || admission?.migration_authoring_authorized!==true) errors.push('SLICE-P04 admission: ADMIT authorization mismatch');
 if(admission?.shared_or_production_migration_execution_authorized!==false || admission?.full_relational_schema_authorized!==false) errors.push('SLICE-P04 admission: production/full-schema authority must remain blocked');

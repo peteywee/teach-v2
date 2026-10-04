@@ -1,6 +1,6 @@
 {
   "foundation_id": "TEACH-SLICE-P05-DOMAIN-APPLICATION-FOUNDATION",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "status": "recorded",
   "issue": "#51",
   "baseline_commit": "9fa6f0eaae6132d0ff4a675f118ef2d4763839d7",
@@ -14,7 +14,7 @@
     "authoritative_assignment_authorization_adapter": "UNKNOWN",
     "atomic_authorization_and_insert": "PENDING",
     "postgresql_concurrent_completion": "PENDING",
-    "local_domain_and_application_tests": "PASS (34/34; cached tsx 4.23.13 on Node 24; repository-pinned Node 20 CI remains pending)"
+    "local_domain_and_application_tests": "PASS (34/34 at the initial local run; cached tsx 4.23.13 on Node 24; pinned Node 20 CI proof is recorded separately above)"
   },
   "runtime_activation": "BLOCKED",
   "physical_schema_authoring_authorized_by_existing_admission": true,

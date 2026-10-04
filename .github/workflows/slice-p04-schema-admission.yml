@@ -3,6 +3,8 @@ name: SLICE-P04 Schema Admission
 on:
   pull_request:
     paths:
+      - 'scripts/persistence/admission-criteria.mjs'
+      - 'persistence/authority.json'
       - 'persistence/physical-slices/identity-credentials/**'
       - 'kernel/entities.json'
       - 'kernel/identifiers.json'
@@ -15,6 +17,8 @@ on:
   push:
     branches: [main]
     paths:
+      - 'scripts/persistence/admission-criteria.mjs'
+      - 'persistence/authority.json'
       - 'persistence/physical-slices/identity-credentials/**'
       - 'kernel/entities.json'
       - 'kernel/identifiers.json'

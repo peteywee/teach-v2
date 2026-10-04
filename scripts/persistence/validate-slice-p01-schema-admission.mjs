@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
+import { inspectAdmissionCriteria } from './admission-criteria.mjs';
 const ROOT=resolve(process.cwd());
 const errors=[];
 const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
@@ -31,8 +32,7 @@ if(find(states,'ReconciliationRecordStatus')?.status!=='approved') errors.push('
 if(find(states,'ExternalEffectOutcome')?.status!=='approved') errors.push('SLICE-P01 admission: ExternalEffectOutcome must be approved');
 const rr=find(rel,'ReconciliationRecordUsesIdempotencyKey');
 if(!rr || rr.status!=='approved' || rr.cardinality!=='many-to-zero-or-one' || rr.owning_domain!=='TransactionControl') errors.push('SLICE-P01 admission: approved TransactionControl relationship/cardinality required');
-const unproven=(admission?.criteria||[]).filter(x=>x.state!=='PROVEN');
-if(unproven.length!==0) errors.push('SLICE-P01 admission: every admission criterion must be PROVEN');
+errors.push(...inspectAdmissionCriteria(authority, admission, 'SLICE-P01'));
 if((admission?.blockers||[]).length!==0) errors.push('SLICE-P01 admission: blockers must be empty');
 if(admission?.decision!=='ADMIT' || admission?.physical_schema_authorized!==true || admission?.implementation_authorized!==true || admission?.migration_authoring_authorized!==true || admission?.admitted_physical_slices!==1) errors.push('SLICE-P01 admission: ADMIT authorization mismatch');
 if(admission?.shared_or_production_migration_execution_authorized!==false || admission?.full_relational_schema_authorized!==false) errors.push('SLICE-P01 admission: admission must not authorize full schema or shared/production migration execution');

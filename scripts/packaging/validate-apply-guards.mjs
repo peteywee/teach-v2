@@ -28,6 +28,8 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { join, resolve } from 'node:path';
 import { inspectMigrationHistory } from './migration-history-guards.mjs';
+import { inspectAllAdmissionCriteria } from '../persistence/admission-criteria.mjs';
+import { inspectLearningFoundation } from '../persistence/learning-foundation-evidence.mjs';
 
 const ROOT = resolve(process.cwd());
 const errors = [];
@@ -211,6 +213,8 @@ if (!['pins', 'staging', 'all'].includes(mode)) {
 if (mode === 'pins' || mode === 'all') {
   checkPins();
   errors.push(...inspectMigrationHistory(ROOT));
+  errors.push(...inspectAllAdmissionCriteria(ROOT));
+  errors.push(...inspectLearningFoundation(ROOT));
 }
 if (mode === 'staging' || mode === 'all') checkStaging();
 
@@ -227,6 +231,7 @@ if (mode !== 'staging') {
   const contractIndex = readFileSync(join(ROOT, 'contracts/README.md'), 'utf8');
   console.log(`Contract package pins agree: ${contractIndex.match(/^- Package version: `(\d+\.\d+\.\d+)`/m)?.[1]}`);
   console.log('Migration journal, snapshot chain, FK targets, and readiness counts agree');
+  console.log('Exact admission criteria and P05 foundation evidence agree');
   console.log('Structural migration checks do not replace PostgreSQL replay evidence');
 }
 if (mode !== 'pins') {

@@ -3,18 +3,36 @@ name: SLICE-P05 Domain Application Foundation
 on:
   pull_request:
     paths:
+      - 'scripts/persistence/admission-criteria.mjs'
+      - 'persistence/authority.json'
       - 'src/modules/learning/**'
       - 'kernel/**'
       - 'persistence/physical-slices/learning-session/**'
+      - 'scripts/persistence/validate-slice-p05-foundation.mjs'
+      - 'scripts/persistence/learning-foundation-evidence.mjs'
+      - 'scripts/packaging/migration-history-guards.mjs'
+      - 'scripts/packaging/validate-apply-guards.mjs'
+      - 'scripts/tests/validate-validators.mjs'
+      - 'persistence/physical-slices/readiness.json'
+      - 'drizzle/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - '.github/workflows/slice-p05-foundation.yml'
   push:
     branches: [main]
     paths:
+      - 'scripts/persistence/admission-criteria.mjs'
+      - 'persistence/authority.json'
       - 'src/modules/learning/**'
       - 'kernel/**'
       - 'persistence/physical-slices/learning-session/**'
+      - 'scripts/persistence/validate-slice-p05-foundation.mjs'
+      - 'scripts/persistence/learning-foundation-evidence.mjs'
+      - 'scripts/packaging/migration-history-guards.mjs'
+      - 'scripts/packaging/validate-apply-guards.mjs'
+      - 'scripts/tests/validate-validators.mjs'
+      - 'persistence/physical-slices/readiness.json'
+      - 'drizzle/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - '.github/workflows/slice-p05-foundation.yml'
@@ -42,6 +60,7 @@ jobs:
         run: pnpm test:p05:foundation
       - name: Verify P05 admission and preserved physical totals
         run: |
+          node scripts/persistence/validate-slice-p05-foundation.mjs
           node scripts/persistence/validate-slice-p05-owner-decisions.mjs
           node scripts/persistence/validate-slice-p05-schema-admission.mjs
           node scripts/persistence/validate-first-physical-slice-readiness.mjs

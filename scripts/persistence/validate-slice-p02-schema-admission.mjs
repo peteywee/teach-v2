@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { inspectAdmissionCriteria } from './admission-criteria.mjs';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
@@ -63,8 +64,7 @@ if(!c12.includes('"version": "1.1.0"') || c12.includes('| OQ-SES-3 |') || c12.in
 for(const unresolved of ['OQ-SES-1','OQ-SES-2','OQ-SES-5','OQ-SES-6']) if(!c12.includes(`| ${unresolved} |`)) errors.push(`SLICE-P02 admission: non-decision ${unresolved} must remain open`);
 for(const unresolved of ['OQ-PRIV-1','OQ-PRIV-2','OQ-PRIV-3']) if(!c15.includes(`| ${unresolved} |`)) errors.push(`SLICE-P02 admission: C15 non-decision ${unresolved} must remain open`);
 
-const criteria=admission?.criteria||[];
-if(criteria.length!==8 || criteria.some(x=>x.state!=='PROVEN')) errors.push('SLICE-P02 admission: all eight criteria must be PROVEN');
+errors.push(...inspectAdmissionCriteria(authority, admission, 'SLICE-P02'));
 if((admission?.blockers||[]).length!==0) errors.push('SLICE-P02 admission: blockers must be empty');
 if(admission?.decision!=='ADMIT' || admission?.physical_schema_authorized!==true || admission?.implementation_authorized!==true || admission?.migration_authoring_authorized!==true || admission?.admitted_physical_slices!==2) errors.push('SLICE-P02 admission: ADMIT authorization mismatch');
 if(admission?.shared_or_production_migration_execution_authorized!==false || admission?.full_relational_schema_authorized!==false) errors.push('SLICE-P02 admission: full schema or production execution over-authorized');
@@ -88,3 +88,4 @@ console.log('Physical slices admitted: 2 (SLICE-P01, SLICE-P02)');
 console.log('P02 implementation/migration authoring authorized: true');
 console.log('P02 implementation evidence: PENDING');
 console.log('Shared/production migration execution authorized: false');
+
