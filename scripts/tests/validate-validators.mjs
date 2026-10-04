@@ -527,6 +527,35 @@ test(
 );
 
 // ---------------------------------------------------------------------------
+// SLICE-P02 implementation boundary
+// ---------------------------------------------------------------------------
+
+test(
+  "slice-p02 implementation: unauthorized admission fails",
+  "scripts/persistence/validate-slice-p02-implementation-boundary.mjs",
+  (dir) => {
+    const d = readJson(
+      dir,
+      "persistence/physical-slices/identity-session/admission.json",
+    );
+    d.decision = "BLOCK";
+    writeJson(
+      dir,
+      "persistence/physical-slices/identity-session/admission.json",
+      d,
+    );
+  },
+  { pattern: /active ADMIT authority missing/ }
+);
+
+test(
+  "slice-p02 implementation: clean repo passes (positive control)",
+  "scripts/persistence/validate-slice-p02-implementation-boundary.mjs",
+  () => {},
+  { pass: true }
+);
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 

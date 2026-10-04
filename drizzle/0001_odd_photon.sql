@@ -44,6 +44,13 @@ RETURNS trigger
 LANGUAGE plpgsql
 AS $$
 BEGIN
+  IF TG_OP = 'INSERT' THEN
+    IF NEW."status" = 'DELETED' THEN
+      RAISE EXCEPTION 'Identity DELETED ingress is not authorized';
+    END IF;
+    RETURN NEW;
+  END IF;
+
   IF NEW."id" IS DISTINCT FROM OLD."id"
      OR NEW."created_at" IS DISTINCT FROM OLD."created_at"
   THEN
@@ -78,7 +85,7 @@ END;
 $$;
 --> statement-breakpoint
 CREATE TRIGGER "identity_guard_identity_update_trigger"
-BEFORE UPDATE ON "identity_identities"
+BEFORE INSERT OR UPDATE ON "identity_identities"
 FOR EACH ROW
 EXECUTE FUNCTION "identity_guard_identity_update"();
 --> statement-breakpoint

@@ -1,9 +1,8 @@
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import {
   ApplicationSessionNotFoundError,
   type ApplicationSessionRepository,
-  type SessionAuthenticationLookup,
 } from '../../application/ports/application-session-repository.js';
 import {
   absoluteExpiryFromIssuedAt,
@@ -34,33 +33,33 @@ export class PostgresApplicationSessionRepository
       throw new RangeError('ApplicationSessionId must be non-blank');
     }
 
-    const [identity] = await this.db
-      .select({ status: identities.status })
-      .from(identities)
-      .where(eq(identities.id, input.identityId))
-      .limit(1);
-    if (!identity || identity.status !== 'ACTIVE') {
-      throw new ApplicationSessionNotFoundError();
-    }
+    return this.db.transaction(async (tx) => {
+      const lock = await tx.execute(
+        sql`select "status" from "identity_identities" where "id" = ${input.identityId} for update`,
+      );
+      if (lock.rows[0]?.status !== 'ACTIVE') {
+        throw new ApplicationSessionNotFoundError();
+      }
 
-    const [created] = await this.db
-      .insert(applicationSessions)
-      .values({
-        id: input.id,
-        identityId: input.identityId,
-        status: 'ACTIVE',
-        verifierVersion: input.credential.verifierVersion,
-        credentialVerifier: input.credential.verifier,
-        issuedAt: input.now,
-        absoluteExpiresAt: absoluteExpiryFromIssuedAt(input.now),
-        lastUsedAt: input.now,
-        createdAt: input.now,
-        updatedAt: input.now,
-      })
-      .returning();
+      const [created] = await tx
+        .insert(applicationSessions)
+        .values({
+          id: input.id,
+          identityId: input.identityId,
+          status: 'ACTIVE',
+          verifierVersion: input.credential.verifierVersion,
+          credentialVerifier: input.credential.verifier,
+          issuedAt: input.now,
+          absoluteExpiresAt: absoluteExpiryFromIssuedAt(input.now),
+          lastUsedAt: input.now,
+          createdAt: input.now,
+          updatedAt: input.now,
+        })
+        .returning();
 
-    if (!created) throw new Error('ApplicationSession insert returned no row');
-    return mapSession(created);
+      if (!created) throw new Error('ApplicationSession insert returned no row');
+      return mapSession(created);
+    });
   }
 
   async getById(input: {
@@ -107,70 +106,75 @@ export class PostgresApplicationSessionRepository
     return existing;
   }
 
-  async findForAuthenticationByVerifier(input: {
+  async authenticateByVerifier(input: {
     readonly verifierVersion: 'v1';
     readonly verifier: Buffer;
-  }): Promise<SessionAuthenticationLookup | null> {
-    const [row] = await this.db
-      .select({
-        session: applicationSessions,
-        identityStatus: identities.status,
-      })
-      .from(applicationSessions)
-      .innerJoin(identities, eq(applicationSessions.identityId, identities.id))
-      .where(
-        and(
-          eq(applicationSessions.verifierVersion, input.verifierVersion),
-          eq(applicationSessions.credentialVerifier, input.verifier),
-        ),
-      )
-      .limit(1);
-
-    if (!row) return null;
-    return {
-      session: mapSession(row.session),
-      identityStatus: row.identityStatus,
-    };
-  }
-
-  async touchLastUsed(input: {
-    readonly id: string;
-    readonly identityId: string;
     readonly now: Date;
   }): Promise<ApplicationSessionRecord | null> {
-    const [row] = await this.db
-      .update(applicationSessions)
-      .set({ lastUsedAt: input.now, updatedAt: input.now })
-      .where(
-        and(
-          eq(applicationSessions.id, input.id),
-          eq(applicationSessions.identityId, input.identityId),
-          eq(applicationSessions.status, 'ACTIVE'),
-        ),
-      )
-      .returning();
-    return row ? mapSession(row) : null;
-  }
+    const authenticated = await this.db.transaction(async (tx) => {
+      const [candidate] = await tx
+        .select({
+          id: applicationSessions.id,
+          identityId: applicationSessions.identityId,
+        })
+        .from(applicationSessions)
+        .where(
+          and(
+            eq(applicationSessions.verifierVersion, input.verifierVersion),
+            eq(applicationSessions.credentialVerifier, input.verifier),
+          ),
+        )
+        .limit(1);
+      if (!candidate) return null;
 
-  async markExpired(input: {
-    readonly id: string;
-    readonly identityId: string;
-    readonly now: Date;
-  }): Promise<void> {
-    await this.db
-      .update(applicationSessions)
-      .set({
-        status: 'EXPIRED',
-        expiredAt: input.now,
-        updatedAt: input.now,
-      })
-      .where(
-        and(
-          eq(applicationSessions.id, input.id),
-          eq(applicationSessions.identityId, input.identityId),
-          eq(applicationSessions.status, 'ACTIVE'),
-        ),
+      const identityLock = await tx.execute(
+        sql`select "status" from "identity_identities" where "id" = ${candidate.identityId} for update`,
       );
+      if (identityLock.rows[0]?.status !== 'ACTIVE') return null;
+
+      const [updated] = await tx
+        .update(applicationSessions)
+        .set({ lastUsedAt: input.now, updatedAt: input.now })
+        .where(
+          and(
+            eq(applicationSessions.id, candidate.id),
+            eq(applicationSessions.identityId, candidate.identityId),
+            eq(applicationSessions.status, 'ACTIVE'),
+            sql`${input.now} < ${applicationSessions.absoluteExpiresAt}`,
+            sql`${input.now} < ${applicationSessions.lastUsedAt} + interval '30 minutes'`,
+          ),
+        )
+        .returning();
+
+      return updated ? mapSession(updated) : null;
+    });
+
+    if (authenticated) return authenticated;
+
+    try {
+      await this.db
+        .update(applicationSessions)
+        .set({
+          status: 'EXPIRED',
+          expiredAt: input.now,
+          updatedAt: input.now,
+        })
+        .where(
+          and(
+            eq(applicationSessions.verifierVersion, input.verifierVersion),
+            eq(applicationSessions.credentialVerifier, input.verifier),
+            eq(applicationSessions.status, 'ACTIVE'),
+            sql`(
+              ${input.now} >= ${applicationSessions.absoluteExpiresAt}
+              OR ${input.now} >= ${applicationSessions.lastUsedAt} + interval '30 minutes'
+            )`,
+          ),
+        );
+    } catch {
+      // Denial is authoritative even when lazy EXPIRED persistence fails.
+    }
+
+    return null;
   }
 }
 

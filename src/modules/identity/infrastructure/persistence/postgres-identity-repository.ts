@@ -1,4 +1,4 @@
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import {
   IdentityNotFoundError,
@@ -8,9 +8,14 @@ import {
 import {
   assertAllowedIdentityTransition,
   type IdentityRecord,
+  type IdentityStatus,
 } from '../../domain/identity.js';
 import * as schema from './schema.js';
-import { identities, type IdentityRow } from './schema.js';
+import {
+  applicationSessions,
+  identities,
+  type IdentityRow,
+} from './schema.js';
 
 export class PostgresIdentityRepository implements IdentityRepository {
   constructor(private readonly db: NodePgDatabase<typeof schema>) {}
@@ -39,34 +44,84 @@ export class PostgresIdentityRepository implements IdentityRepository {
   }
 
   async deactivate(input: { readonly id: string; readonly now: Date }): Promise<IdentityRecord> {
-    return this.transition(input.id, 'ACTIVE', 'INACTIVE', input.now);
+    return this.db.transaction(async (tx) => {
+      const status = await lockIdentityStatus(tx, input.id);
+      if (status === null) throw new IdentityNotFoundError();
+      if (status !== 'ACTIVE' && status !== 'INACTIVE') {
+        throw new IdentityTransitionConflictError(
+          `Identity transition ${status} -> INACTIVE is not permitted`,
+        );
+      }
+
+      let current: IdentityRow;
+      if (status === 'ACTIVE') {
+        assertAllowedIdentityTransition('ACTIVE', 'INACTIVE');
+        const [updated] = await tx
+          .update(identities)
+          .set({ status: 'INACTIVE', updatedAt: input.now })
+          .where(and(eq(identities.id, input.id), eq(identities.status, 'ACTIVE')))
+          .returning();
+        if (!updated) throw new IdentityTransitionConflictError('Identity deactivation lost its locked row');
+        current = updated;
+      } else {
+        const [row] = await tx.select().from(identities).where(eq(identities.id, input.id)).limit(1);
+        if (!row) throw new IdentityNotFoundError();
+        current = row;
+      }
+
+      await tx
+        .update(applicationSessions)
+        .set({
+          status: 'REVOKED',
+          revokedAt: input.now,
+          updatedAt: input.now,
+        })
+        .where(
+          and(
+            eq(applicationSessions.identityId, input.id),
+            eq(applicationSessions.status, 'ACTIVE'),
+          ),
+        );
+
+      return mapIdentity(current);
+    });
   }
 
   async reactivate(input: { readonly id: string; readonly now: Date }): Promise<IdentityRecord> {
-    return this.transition(input.id, 'INACTIVE', 'ACTIVE', input.now);
+    return this.db.transaction(async (tx) => {
+      const status = await lockIdentityStatus(tx, input.id);
+      if (status === null) throw new IdentityNotFoundError();
+      if (status === 'ACTIVE') {
+        const [row] = await tx.select().from(identities).where(eq(identities.id, input.id)).limit(1);
+        if (!row) throw new IdentityNotFoundError();
+        return mapIdentity(row);
+      }
+      if (status !== 'INACTIVE') {
+        throw new IdentityTransitionConflictError(
+          `Identity transition ${status} -> ACTIVE is not permitted`,
+        );
+      }
+      assertAllowedIdentityTransition('INACTIVE', 'ACTIVE');
+      const [updated] = await tx
+        .update(identities)
+        .set({ status: 'ACTIVE', updatedAt: input.now })
+        .where(and(eq(identities.id, input.id), eq(identities.status, 'INACTIVE')))
+        .returning();
+      if (!updated) throw new IdentityTransitionConflictError('Identity reactivation lost its locked row');
+      return mapIdentity(updated);
+    });
   }
+}
 
-  private async transition(
-    id: string,
-    from: 'ACTIVE' | 'INACTIVE',
-    to: 'ACTIVE' | 'INACTIVE',
-    now: Date,
-  ): Promise<IdentityRecord> {
-    assertAllowedIdentityTransition(from, to);
-    const [updated] = await this.db
-      .update(identities)
-      .set({ status: to, updatedAt: now })
-      .where(and(eq(identities.id, id), eq(identities.status, from)))
-      .returning();
-    if (updated) return mapIdentity(updated);
-
-    const current = await this.getById(id);
-    if (!current) throw new IdentityNotFoundError();
-    if (current.status === to) return current;
-    throw new IdentityTransitionConflictError(
-      `Identity transition ${current.status} -> ${to} is not permitted`,
-    );
-  }
+async function lockIdentityStatus(
+  tx: Parameters<Parameters<NodePgDatabase<typeof schema>['transaction']>[0]>[0],
+  id: string,
+): Promise<IdentityStatus | null> {
+  const result = await tx.execute(
+    sql`select "status" from "identity_identities" where "id" = ${id} for update`,
+  );
+  const status = result.rows[0]?.status;
+  return typeof status === 'string' ? (status as IdentityStatus) : null;
 }
 
 function mapIdentity(row: IdentityRow): IdentityRecord {

@@ -1,6 +1,5 @@
 import {
   deriveSessionVerifier,
-  evaluateSessionAuthentication,
   issueSessionCredential,
   SESSION_VERIFIER_VERSION,
   type ApplicationSessionRecord,
@@ -34,46 +33,9 @@ export async function authenticateApplicationSession(
     return null;
   }
 
-  const lookup = await repository.findForAuthenticationByVerifier({
+  return repository.authenticateByVerifier({
     verifierVersion: SESSION_VERIFIER_VERSION,
     verifier,
-  });
-  if (!lookup) return null;
-
-  const decision = evaluateSessionAuthentication(
-    {
-      identityActive: lookup.identityStatus === 'ACTIVE',
-      status: lookup.session.status,
-      issuedAt: lookup.session.issuedAt,
-      absoluteExpiresAt: lookup.session.absoluteExpiresAt,
-      lastUsedAt: lookup.session.lastUsedAt,
-    },
     now,
-  );
-
-  if (!decision.allowed) {
-    if (
-      decision.reason === 'ABSOLUTE_EXPIRED' ||
-      decision.reason === 'IDLE_EXPIRED'
-    ) {
-      try {
-        await repository.markExpired({
-          id: lookup.session.id,
-          identityId: lookup.session.identityId,
-          now,
-        });
-      } catch {
-        // Authentication denial is authoritative even if lazy expiry persistence fails.
-      }
-    }
-    return null;
-  }
-
-  return (
-    (await repository.touchLastUsed({
-      id: lookup.session.id,
-      identityId: lookup.session.identityId,
-      now,
-    })) ?? null
-  );
+  });
 }

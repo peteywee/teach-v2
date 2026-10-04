@@ -4,39 +4,20 @@ import {
   authenticateApplicationSession,
   issueApplicationSession,
 } from './session-service.js';
-import {
-  issueSessionCredential,
-  type ApplicationSessionRecord,
-} from '../domain/application-session.js';
-import type {
-  ApplicationSessionRepository,
-  SessionAuthenticationLookup,
-} from './ports/application-session-repository.js';
+import { issueSessionCredential, type ApplicationSessionRecord } from '../domain/application-session.js';
+import type { ApplicationSessionRepository } from './ports/application-session-repository.js';
 
-test('expiry denial does not depend on lazy EXPIRED persistence succeeding', async () => {
-  const issued = issueSessionCredential();
-  const session = record({
-    verifier: issued.verifier,
-    lastUsedAt: new Date('2026-10-04T11:00:00Z'),
-  });
-  const repository = fakeRepository({
-    lookup: { session, identityStatus: 'ACTIVE' },
-    markExpiredError: new Error('write unavailable'),
-  });
-
-  const result = await authenticateApplicationSession(
-    repository,
-    issued.credential,
-    new Date('2026-10-04T12:00:00Z'),
+test('malformed credentials fail closed without entering the persistence lookup', async () => {
+  const repository = fakeRepository();
+  assert.equal(
+    await authenticateApplicationSession(repository, 'not-a-session', new Date()),
+    null,
   );
-
-  assert.equal(result, null);
-  assert.equal(repository.markExpiredCalls, 1);
-  assert.equal(repository.touchCalls, 0);
+  assert.equal(repository.authenticateCalls, 0);
 });
 
-test('issuance returns the raw credential once while repository receives only verifier material', async () => {
-  const repository = fakeRepository({ lookup: null });
+test('issuance returns the raw credential once while persistence receives verifier material only', async () => {
+  const repository = fakeRepository();
   const result = await issueApplicationSession(repository, {
     id: 'session-1',
     identityId: 'identity-1',
@@ -67,46 +48,35 @@ function record(overrides: Partial<ApplicationSessionRecord> = {}): ApplicationS
   };
 }
 
-function fakeRepository(input: {
-  lookup: SessionAuthenticationLookup | null;
-  markExpiredError?: Error;
-}): ApplicationSessionRepository & {
-  markExpiredCalls: number;
-  touchCalls: number;
+function fakeRepository(): ApplicationSessionRepository & {
+  authenticateCalls: number;
   createCalls: number;
   lastCreateCredential: { verifierVersion: 'v1'; verifier: Buffer } | null;
 } {
   const repo = {
-    markExpiredCalls: 0,
-    touchCalls: 0,
+    authenticateCalls: 0,
     createCalls: 0,
     lastCreateCredential: null as { verifierVersion: 'v1'; verifier: Buffer } | null,
-    async create(createInput) {
+    async create(input) {
       repo.createCalls++;
-      repo.lastCreateCredential = createInput.credential;
+      repo.lastCreateCredential = input.credential;
       return record({
-        id: createInput.id,
-        identityId: createInput.identityId,
-        verifier: createInput.credential.verifier,
-        issuedAt: createInput.now,
-        absoluteExpiresAt: new Date(createInput.now.getTime() + 12 * 60 * 60 * 1000),
-        lastUsedAt: createInput.now,
+        id: input.id,
+        identityId: input.identityId,
+        verifier: input.credential.verifier,
+        issuedAt: input.now,
+        absoluteExpiresAt: new Date(input.now.getTime() + 12 * 60 * 60 * 1000),
+        lastUsedAt: input.now,
       });
     },
     async getById() { return null; },
     async revoke() { return record(); },
-    async findForAuthenticationByVerifier() { return input.lookup; },
-    async touchLastUsed() {
-      repo.touchCalls++;
-      return input.lookup?.session ?? null;
-    },
-    async markExpired() {
-      repo.markExpiredCalls++;
-      if (input.markExpiredError) throw input.markExpiredError;
+    async authenticateByVerifier() {
+      repo.authenticateCalls++;
+      return null;
     },
   } satisfies ApplicationSessionRepository & {
-    markExpiredCalls: number;
-    touchCalls: number;
+    authenticateCalls: number;
     createCalls: number;
     lastCreateCredential: { verifierVersion: 'v1'; verifier: Buffer } | null;
   };

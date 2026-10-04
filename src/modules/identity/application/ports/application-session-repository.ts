@@ -1,10 +1,4 @@
 import type { ApplicationSessionRecord } from '../../domain/application-session.js';
-import type { IdentityStatus } from '../../domain/identity.js';
-
-export interface SessionAuthenticationLookup {
-  readonly session: ApplicationSessionRecord;
-  readonly identityStatus: IdentityStatus;
-}
 
 export interface ApplicationSessionRepository {
   create(input: {
@@ -28,22 +22,11 @@ export interface ApplicationSessionRepository {
     readonly now: Date;
   }): Promise<ApplicationSessionRecord>;
 
-  findForAuthenticationByVerifier(input: {
+  authenticateByVerifier(input: {
     readonly verifierVersion: 'v1';
     readonly verifier: Buffer;
-  }): Promise<SessionAuthenticationLookup | null>;
-
-  touchLastUsed(input: {
-    readonly id: string;
-    readonly identityId: string;
     readonly now: Date;
   }): Promise<ApplicationSessionRecord | null>;
-
-  markExpired(input: {
-    readonly id: string;
-    readonly identityId: string;
-    readonly now: Date;
-  }): Promise<void>;
 }
 
 export class ApplicationSessionNotFoundError extends Error {

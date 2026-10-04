@@ -73,9 +73,12 @@ test('stored verifier bytes encoded as base64url do not authenticate', async () 
     identityId: 'identity-1',
     now,
   });
-  const verifierCredential = issued.session.verifier.toString('base64url');
   assert.equal(
-    await authenticateApplicationSession(sessions, verifierCredential, now),
+    await authenticateApplicationSession(
+      sessions,
+      issued.session.verifier.toString('base64url'),
+      now,
+    ),
     null,
   );
 });
@@ -89,7 +92,6 @@ test('protected session reads and revocation require authoritative IdentityId', 
     identityId: 'identity-1',
     now,
   });
-
   assert.equal(
     await sessions.getById({ id: 'session-1', identityId: 'identity-2' }),
     null,
@@ -104,7 +106,7 @@ test('protected session reads and revocation require authoritative IdentityId', 
   );
 });
 
-test('inactive Identity and revoked session both fail authentication', async () => {
+test('deactivation revokes sessions and reactivation cannot revive old credentials', async () => {
   const now = new Date('2026-10-04T12:00:00Z');
   await identities.create({ id: 'identity-1', now });
   const first = await issueApplicationSession(sessions, {
@@ -116,6 +118,10 @@ test('inactive Identity and revoked session both fail authentication', async () 
     id: 'identity-1',
     now: new Date('2026-10-04T12:01:00Z'),
   });
+  assert.equal(
+    (await sessions.getById({ id: 'session-1', identityId: 'identity-1' }))?.status,
+    'REVOKED',
+  );
   assert.equal(
     await authenticateApplicationSession(
       sessions,
@@ -129,69 +135,138 @@ test('inactive Identity and revoked session both fail authentication', async () 
     id: 'identity-1',
     now: new Date('2026-10-04T12:03:00Z'),
   });
-  const second = await issueApplicationSession(sessions, {
-    id: 'session-2',
-    identityId: 'identity-1',
-    now: new Date('2026-10-04T12:04:00Z'),
-  });
-  await sessions.revoke({
-    id: 'session-2',
-    identityId: 'identity-1',
-    now: new Date('2026-10-04T12:05:00Z'),
-  });
   assert.equal(
     await authenticateApplicationSession(
       sessions,
-      second.credential,
-      new Date('2026-10-04T12:06:00Z'),
+      first.credential,
+      new Date('2026-10-04T12:04:00Z'),
     ),
     null,
   );
 });
 
-test('idle and absolute expiry fail closed and persist EXPIRED best-effort', async () => {
+test('deactivation and session issuance serialize on the Identity row', async () => {
+  const now = new Date('2026-10-04T12:00:00Z');
+  await identities.create({ id: 'identity-race', now });
+
+  const lockHolder = await pool.connect();
+  let settled = 0;
+  let issuance: Promise<unknown> | undefined;
+  let deactivation: Promise<unknown> | undefined;
+  try {
+    await lockHolder.query('begin');
+    await lockHolder.query(
+      "select id from identity_identities where id = 'identity-race' for update",
+    );
+
+    issuance = issueApplicationSession(sessions, {
+      id: 'session-race',
+      identityId: 'identity-race',
+      now: new Date('2026-10-04T12:01:00Z'),
+    }).finally(() => { settled++; });
+
+    deactivation = identities.deactivate({
+      id: 'identity-race',
+      now: new Date('2026-10-04T12:02:00Z'),
+    }).finally(() => { settled++; });
+
+    await new Promise((resolve) => setTimeout(resolve, 75));
+    assert.equal(settled, 0, 'both operations must wait behind the Identity row lock');
+    await lockHolder.query('commit');
+  } finally {
+    try { await lockHolder.query('rollback'); } catch {}
+    lockHolder.release();
+  }
+
+  await Promise.allSettled([issuance!, deactivation!]);
+  assert.equal((await identities.getById('identity-race'))?.status, 'INACTIVE');
+  const active = await pool.query<{ count: string }>(
+    "select count(*)::text as count from identity_application_sessions where identity_id = 'identity-race' and status = 'ACTIVE'",
+  );
+  assert.equal(active.rows[0]?.count, '0');
+});
+
+test('idle expiry denies authentication even when EXPIRED persistence fails', async () => {
   const issuedAt = new Date('2026-10-04T00:00:00Z');
   await identities.create({ id: 'identity-1', now: issuedAt });
-
-  const idle = await issueApplicationSession(sessions, {
-    id: 'session-idle',
+  const issued = await issueApplicationSession(sessions, {
+    id: 'session-idle-fail',
     identityId: 'identity-1',
     now: issuedAt,
+  });
+
+  await pool.query(`
+    create function test_fail_session_expire() returns trigger language plpgsql as $$
+    begin
+      if new.status = 'EXPIRED' then
+        raise exception 'forced expiry persistence failure';
+      end if;
+      return new;
+    end;
+    $$
+  `);
+  await pool.query(`
+    create trigger test_fail_session_expire_trigger
+    before update on identity_application_sessions
+    for each row execute function test_fail_session_expire()
+  `);
+
+  try {
+    assert.equal(
+      await authenticateApplicationSession(
+        sessions,
+        issued.credential,
+        new Date(issuedAt.getTime() + 30 * 60 * 1000),
+      ),
+      null,
+    );
+    assert.equal(
+      (await sessions.getById({
+        id: 'session-idle-fail',
+        identityId: 'identity-1',
+      }))?.status,
+      'ACTIVE',
+    );
+  } finally {
+    await pool.query('drop trigger if exists test_fail_session_expire_trigger on identity_application_sessions');
+    await pool.query('drop function if exists test_fail_session_expire()');
+  }
+});
+
+test('absolute expiry fails closed and normal lazy expiry persists', async () => {
+  const start = new Date('2026-10-05T00:00:00Z');
+  await identities.create({ id: 'identity-1', now: start });
+  const issued = await issueApplicationSession(sessions, {
+    id: 'session-absolute',
+    identityId: 'identity-1',
+    now: start,
   });
   assert.equal(
     await authenticateApplicationSession(
       sessions,
-      idle.credential,
-      new Date(issuedAt.getTime() + 30 * 60 * 1000),
+      issued.credential,
+      new Date(start.getTime() + 12 * 60 * 60 * 1000),
     ),
     null,
   );
   assert.equal(
     (await sessions.getById({
-      id: 'session-idle',
+      id: 'session-absolute',
       identityId: 'identity-1',
     }))?.status,
     'EXPIRED',
   );
-
-  const absoluteStart = new Date('2026-10-05T00:00:00Z');
-  const absolute = await issueApplicationSession(sessions, {
-    id: 'session-absolute',
-    identityId: 'identity-1',
-    now: absoluteStart,
-  });
-  assert.equal(
-    await authenticateApplicationSession(
-      sessions,
-      absolute.credential,
-      new Date(absoluteStart.getTime() + 12 * 60 * 60 * 1000),
-    ),
-    null,
-  );
 });
 
-test('database guards reject DELETED ingress and terminal session reactivation', async () => {
+test('database guards reject DELETED insertion/update and terminal session reactivation', async () => {
   const now = new Date('2026-10-04T12:00:00Z');
+  await assert.rejects(
+    pool.query(
+      "insert into identity_identities(id,status,created_at,updated_at) values ('deleted-direct','DELETED',now(),now())",
+    ),
+    /DELETED ingress is not authorized/,
+  );
+
   await identities.create({ id: 'identity-1', now });
   const issued = await issueApplicationSession(sessions, {
     id: 'session-1',
@@ -233,12 +308,6 @@ test('P02 schema contains no copied tenant or authorization authority columns', 
       order by table_name, ordinal_position`,
   );
   const forbidden = /organization|location|role|capability/i;
-  assert.equal(
-    rows.rows.some((row) => forbidden.test(row.column_name)),
-    false,
-  );
-  assert.equal(
-    rows.rows.some((row) => row.column_name === 'credential'),
-    false,
-  );
+  assert.equal(rows.rows.some((row) => forbidden.test(row.column_name)), false);
+  assert.equal(rows.rows.some((row) => row.column_name === 'credential'), false);
 });
