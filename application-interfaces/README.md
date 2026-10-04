@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-APPLICATION-INTERFACES",
   "class": "specification",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "claims_truth_state": "declared",
   "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -25,3 +25,9 @@ Status: **recorded; interface design not yet approved**.
 This stage maps the complete approved command inventory and the cross-domain/cross-cutting interface needs implied by active contracts and Architecture 1.0.0.
 
 It does not choose persistence schemas, HTTP route inventory, physical package paths, or use candidate K00 semantics as implementation authority.
+
+## Decision-ready proposal
+
+`proposed.json` and `DECISION-PACKET.md` define the recommended logical Application Interface boundary.
+
+Status remains `proposed`. Persistence Model remains blocked until explicit owner approval of this layer.

@@ -1,0 +1,30 @@
+name: Architecture Application Cross-Layer Audit
+
+on:
+  pull_request:
+    paths:
+      - 'architecture/**'
+      - 'application-interfaces/**'
+      - 'kernel/**'
+      - 'domains/discovery-gaps.json'
+      - 'domains/commands-events/**'
+      - 'scripts/application-interfaces/audit-architecture-application.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'architecture/**'
+      - 'application-interfaces/**'
+      - 'kernel/**'
+      - 'domains/discovery-gaps.json'
+      - 'domains/commands-events/**'
+      - 'scripts/application-interfaces/audit-architecture-application.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/application-interfaces/audit-architecture-application.mjs

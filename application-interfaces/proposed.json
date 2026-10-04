@@ -1,0 +1,323 @@
+{
+  "proposal_id": "TEACH-APPLICATION-INTERFACE-PROPOSAL",
+  "version": "0.1.0",
+  "status": "proposed",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-04",
+  "updated_on": "2026-10-04",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "commit": "d422c72d75951279d8fb69faae5af624ff9c0ca4",
+    "architecture_version": "1.0.0",
+    "kernel_version": "0.13.0"
+  },
+  "approval_required": true,
+  "principles": [
+    {
+      "id": "APP-1",
+      "rule": "Every approved K00 command maps to exactly one logical application command entry point owned by the command owning module."
+    },
+    {
+      "id": "APP-2",
+      "rule": "HTTP, UI, jobs, CLI, agents, and automation invoke application command entry points; none owns business-rule semantics."
+    },
+    {
+      "id": "APP-3",
+      "rule": "Caller-supplied identity, tenant, location, capability, or scope data is never authoritative; authoritative current facts are resolved server-side."
+    },
+    {
+      "id": "APP-4",
+      "rule": "Authorization/target checks complete before any command side effect."
+    },
+    {
+      "id": "APP-5",
+      "rule": "Cross-domain mutation invokes the owning module application command boundary; foreign repositories and foreign-table writes are forbidden."
+    },
+    {
+      "id": "APP-6",
+      "rule": "Cross-domain reads use owner-defined read/query interfaces with explicit authoritative scope."
+    },
+    {
+      "id": "APP-7",
+      "rule": "Required audit append participates in the same transaction as the mutation; audit failure rolls back the mutation."
+    },
+    {
+      "id": "APP-8",
+      "rule": "Application orchestration may coordinate multiple owning modules in one transaction context without transferring write ownership."
+    },
+    {
+      "id": "APP-9",
+      "rule": "External effects are invoked through infrastructure/provider ports; ambiguous outcomes enter TransactionControl reconciliation before retry."
+    },
+    {
+      "id": "APP-10",
+      "rule": "Observability receives side-effect-neutral operation/request facts and cannot change authorization or command outcome."
+    },
+    {
+      "id": "APP-11",
+      "rule": "Application results are transport-neutral; HTTP status/error-envelope mapping remains a Transport Interfaces decision."
+    },
+    {
+      "id": "APP-12",
+      "rule": "Application Interfaces define logical use-case/read/port boundaries only; persistence tables, HTTP routes, and physical package paths remain deferred."
+    }
+  ],
+  "command_interfaces": [
+    {
+      "module": "Certification",
+      "interface_kind": "application-command-boundary",
+      "commands": [
+        "IssueCertification",
+        "RevokeCertification"
+      ],
+      "command_count": 2
+    },
+    {
+      "module": "Content",
+      "interface_kind": "application-command-boundary",
+      "commands": [
+        "PublishContentPack"
+      ],
+      "command_count": 1
+    },
+    {
+      "module": "Identity",
+      "interface_kind": "application-command-boundary",
+      "commands": [
+        "AcceptInvitation",
+        "AuthenticateIdentity",
+        "ChangeCredential",
+        "CreateApplicationSession",
+        "CreateIdentity",
+        "DeactivateIdentity",
+        "InviteIdentity",
+        "OffboardIdentity",
+        "ReactivateIdentity",
+        "RevokeApplicationSession",
+        "RevokeInvitation",
+        "RevokeSingleUseToken"
+      ],
+      "command_count": 12
+    },
+    {
+      "module": "Learning",
+      "interface_kind": "application-command-boundary",
+      "commands": [
+        "AssignContent",
+        "CompleteLearningSession",
+        "RecordProgressEvent",
+        "StartLearningSession"
+      ],
+      "command_count": 4
+    },
+    {
+      "module": "Organization",
+      "interface_kind": "application-command-boundary",
+      "commands": [
+        "CreateMembership",
+        "DeactivateMembership",
+        "RevokeMembership"
+      ],
+      "command_count": 3
+    },
+    {
+      "module": "TransactionControl",
+      "interface_kind": "application-command-boundary",
+      "commands": [
+        "ReconcileExternalEffect"
+      ],
+      "command_count": 1
+    }
+  ],
+  "policy_and_cross_cutting_interfaces": [
+    {
+      "id": "AuthorizationDecisionInterface",
+      "owner": "Authorization",
+      "consumers": [
+        "Interfaces",
+        "Application"
+      ],
+      "direction": "consumer -> Authorization",
+      "purpose": "Evaluate database-current actor scope, capability, target scope, and non-disclosing denial before protected work.",
+      "authority": [
+        "AUTHZ-9",
+        "AUTHZ-10",
+        "AUTHZ-11",
+        "AUTHZ-17",
+        "ARC-8"
+      ]
+    },
+    {
+      "id": "AuditAppendInterface",
+      "owner": "AuditLifecycle",
+      "consumers": [
+        "Identity",
+        "Organization",
+        "Content",
+        "Learning",
+        "Certification",
+        "TransactionControl"
+      ],
+      "direction": "owning command transaction -> AuditLifecycle",
+      "purpose": "Append immutable required audit facts in the same transaction as the mutation.",
+      "authority": [
+        "AUD-1",
+        "AUD-2",
+        "AUD-3"
+      ]
+    },
+    {
+      "id": "ObservabilitySinkInterface",
+      "owner": "Observability",
+      "consumers": [
+        "Interfaces",
+        "Application",
+        "Infrastructure"
+      ],
+      "direction": "runtime -> Observability",
+      "purpose": "Record request/operation observability without affecting request, authorization, or mutation result.",
+      "authority": [
+        "OBS-10",
+        "ARC-9"
+      ]
+    },
+    {
+      "id": "ExternalProviderReadbackInterface",
+      "owner": "TransactionControl",
+      "implemented_by": "Infrastructure",
+      "consumers": [
+        "TransactionControl"
+      ],
+      "direction": "TransactionControl -> provider adapter",
+      "purpose": "Read canonical provider state during reconciliation; no retry is implied by the interface.",
+      "authority": [
+        "TXN-6",
+        "TXN-7",
+        "TXN-8",
+        "TXN-14",
+        "TXN-16"
+      ]
+    }
+  ],
+  "owner_read_interfaces": [
+    {
+      "id": "IdentityAuthorityReadInterface",
+      "owner": "Identity",
+      "consumers": [
+        "Organization",
+        "Learning",
+        "Certification",
+        "Authorization"
+      ],
+      "facts": [
+        "Identity existence/status and other owner-approved identity facts required by the consuming operation"
+      ],
+      "rules": [
+        "Read-only to consumers",
+        "No caller-supplied authority",
+        "Scope constraints remain applicable"
+      ]
+    },
+    {
+      "id": "OrganizationAuthorityReadInterface",
+      "owner": "Organization",
+      "consumers": [
+        "Identity",
+        "Authorization"
+      ],
+      "facts": [
+        "Membership, organization/location scope, entitlement and other owner-approved organization facts"
+      ],
+      "rules": [
+        "Read-only to consumers",
+        "Database-current state for protected authorization",
+        "No foreign mutation"
+      ]
+    },
+    {
+      "id": "ContentReadInterface",
+      "owner": "Content",
+      "consumers": [
+        "Learning"
+      ],
+      "facts": [
+        "ContentPack existence/version/publication facts required by assignment/learning operations"
+      ],
+      "rules": [
+        "Read-only to Learning",
+        "Candidate content lifecycle semantics remain non-authoritative"
+      ]
+    }
+  ],
+  "explicit_cross_domain_orchestrations": [
+    {
+      "use_case": "AcceptInvitation",
+      "coordinator": "Identity application layer",
+      "steps": [
+        "validate Invitation and actor inputs",
+        "authorize/resolve authoritative scope as required",
+        "within governed transaction transition Invitation through Identity owner logic",
+        "invoke Organization CreateMembership through the Organization application command boundary",
+        "append required audit records",
+        "commit or roll back atomically"
+      ],
+      "forbidden": [
+        "direct Identity write to Membership persistence"
+      ]
+    },
+    {
+      "use_case": "OffboardIdentity",
+      "coordinator": "Identity application layer",
+      "steps": [
+        "resolve current Identity-owned sessions/tokens and Organization-owned effective memberships",
+        "within governed transaction invoke Identity-owned revocations/transitions",
+        "invoke Organization RevokeMembership through its application command boundary for applicable memberships",
+        "append required lifecycle/audit records",
+        "commit or roll back atomically"
+      ],
+      "forbidden": [
+        "direct Identity write to Membership persistence"
+      ]
+    }
+  ],
+  "command_context": {
+    "required_logical_fields": [
+      "actor reference/class derived from authenticated or trusted system context",
+      "request ID",
+      "validated command input",
+      "target identifiers required by the command"
+    ],
+    "conditionally_required": [
+      "idempotency identity when the owning contract requires it"
+    ],
+    "explicitly_not_trusted": [
+      "client-supplied tenant authority",
+      "client-supplied location authority",
+      "client-supplied capability claims",
+      "UI visibility state"
+    ],
+    "note": "Authoritative scope/capability is resolved by server-side owning/Authorization interfaces rather than accepted as a caller assertion."
+  },
+  "result_boundary": {
+    "transport_neutral": true,
+    "exact_http_error_envelope": "deferred: OQ-API-2 / Transport Interfaces",
+    "exact_http_status_mapping": "deferred: Transport Interfaces",
+    "response_schema": "deferred: Transport Interfaces"
+  },
+  "deferred": [
+    "physical package/directory layout",
+    "repository interfaces tied to tables",
+    "database schema/indexes/migrations",
+    "HTTP method/path inventory",
+    "frontend hooks/components",
+    "provider SDK choice",
+    "candidate event integration",
+    "message broker/event bus"
+  ],
+  "readiness": {
+    "proposal": "PROVEN",
+    "owner_approval": "BLOCKED",
+    "persistence_model": "BLOCKED until Application Interface approval"
+  }
+}
