@@ -1,0 +1,479 @@
+{
+  "discovery_id": "TEACH-PERSISTENCE-MODEL-DISCOVERY",
+  "version": "0.1.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-04",
+  "updated_on": "2026-10-04",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "commit": "56b11c39bd8cca5f87ae49a64535b9a2b5acf9d2",
+    "kernel_version": "0.13.0",
+    "architecture_version": "1.0.0",
+    "application_interface_version": "1.0.0"
+  },
+  "governing_constraints": [
+    {
+      "id": "PERS-F01",
+      "state": "PROVEN",
+      "authority": [
+        "MIG-1",
+        "MIG-4",
+        "MIG-5",
+        "MIG-8"
+      ],
+      "finding": "Drizzle migration history is the current schema authority; shared/production schema changes occur only through immutable ordered migrations."
+    },
+    {
+      "id": "PERS-F02",
+      "state": "PROVEN",
+      "authority": [
+        "ARC-2",
+        "ARC-4",
+        "APP-5"
+      ],
+      "finding": "Each mutable record has one owning runtime module and foreign-domain repository/table writes are forbidden."
+    },
+    {
+      "id": "PERS-F03",
+      "state": "PROVEN",
+      "authority": [
+        "PRIV-1",
+        "PRIV-3"
+      ],
+      "finding": "Protected records require explicit ownership/scope and data-access-layer scope predicates."
+    },
+    {
+      "id": "PERS-F04",
+      "state": "PROVEN",
+      "authority": [
+        "AUD-2",
+        "AUD-4",
+        "AUD-6"
+      ],
+      "finding": "Required audit writes share the mutation transaction and audit/lifecycle records are append-only at the persistence boundary."
+    },
+    {
+      "id": "PERS-F05",
+      "state": "PROVEN",
+      "authority": [
+        "MIG-11",
+        "MIG-12"
+      ],
+      "finding": "Backend-owned tables must not be readable/writable by browser-reachable database roles; applicable privilege/RLS posture is testable."
+    },
+    {
+      "id": "PERS-F06",
+      "state": "PROVEN",
+      "authority": [
+        "SEM-2",
+        "SEM-36",
+        "ARC-10"
+      ],
+      "finding": "Candidate semantic identifiers, relationships, state sets, and entities are not implementation authority for physical schema."
+    }
+  ],
+  "inventory": {
+    "approved_entities": [
+      "ApplicationSession",
+      "Assignment",
+      "Certification",
+      "ContentPack",
+      "Credential",
+      "Identity",
+      "Invitation",
+      "LearningSession",
+      "Organization",
+      "PasswordResetToken",
+      "ProgressEvent",
+      "ReconciliationRecord",
+      "SetupToken"
+    ],
+    "candidate_entities": [
+      "AuditEvent",
+      "ContentBlock",
+      "Entitlement",
+      "LearnerState",
+      "LifecycleEvent",
+      "Location",
+      "Membership"
+    ],
+    "approved_identifiers": [
+      "InvitationId",
+      "PasswordResetTokenId",
+      "ReconciliationRecordId",
+      "SetupTokenId"
+    ],
+    "candidate_identifiers": [
+      "ApplicationSessionId",
+      "AssignmentId",
+      "AuditEventId",
+      "CapabilityId",
+      "CertificationId",
+      "ContentBlockId",
+      "ContentPackId",
+      "CredentialId",
+      "EntitlementId",
+      "IdempotencyKey",
+      "IdentityId",
+      "LearnerStateId",
+      "LearningSessionId",
+      "LifecycleEventId",
+      "LocationId",
+      "MembershipId",
+      "OrganizationId",
+      "ProgressEventId",
+      "RequestId"
+    ],
+    "approved_state_sets": [
+      "ExternalEffectOutcome",
+      "InvitationStatus",
+      "ReconciliationRecordStatus",
+      "SingleUseTokenStatus"
+    ],
+    "candidate_state_sets": [
+      "ApplicationSessionStatus",
+      "EvidenceState",
+      "IdentityStatus",
+      "LearningSessionStatus",
+      "MembershipStatus"
+    ],
+    "candidate_relationships": [
+      "AssignmentReferencesContentPack",
+      "AssignmentTargetsIdentity",
+      "CertificationBelongsToIdentity",
+      "CertificationObservedByIdentity",
+      "CertificationReferencesContentPack",
+      "ContentPackContainsContentBlock",
+      "CredentialBelongsToIdentity",
+      "EntitlementBelongsToOrganization",
+      "IdentityHasApplicationSession",
+      "IdentityHasLearningSession",
+      "LearnerStateBelongsToIdentity",
+      "LearnerStateTracksContentPack",
+      "LearningSessionUsesAssignment",
+      "LifecycleEventReferencesIdentity",
+      "LocationBelongsToOrganization",
+      "MembershipLinksIdentityOrganization",
+      "MembershipMayScopeLocation",
+      "ProgressEventBelongsToLearningSession"
+    ],
+    "candidate_invariants": [
+      "INV-001",
+      "INV-002",
+      "INV-003",
+      "INV-004",
+      "INV-005",
+      "INV-006",
+      "INV-007",
+      "INV-008",
+      "INV-009",
+      "INV-010",
+      "INV-011",
+      "INV-012",
+      "INV-013",
+      "INV-014",
+      "INV-015",
+      "INV-016",
+      "INV-017",
+      "INV-018",
+      "INV-019",
+      "INV-020",
+      "INV-021",
+      "INV-022"
+    ],
+    "remaining_core_gaps": [
+      "OAuthIdentityLink",
+      "ReportingRelationship",
+      "ProtectedOperation",
+      "Role",
+      "DataExportRequest",
+      "DataDeletionRequest",
+      "CertificationCriteriaVersion",
+      "CertificationRevocation",
+      "EvidenceRecord"
+    ]
+  },
+  "entity_readiness": [
+    {
+      "entity": "ApplicationSession",
+      "owner": "Identity",
+      "identifier": "ApplicationSessionId",
+      "identifier_status": "candidate",
+      "lifecycle_state_set": null,
+      "lifecycle_state_set_status": null,
+      "persistence_readiness": "BLOCKED",
+      "blockers": [
+        "candidate-identifier:ApplicationSessionId",
+        "candidate-relationship:IdentityHasApplicationSession"
+      ]
+    },
+    {
+      "entity": "Assignment",
+      "owner": "Learning",
+      "identifier": "AssignmentId",
+      "identifier_status": "candidate",
+      "lifecycle_state_set": null,
+      "lifecycle_state_set_status": null,
+      "persistence_readiness": "BLOCKED",
+      "blockers": [
+        "candidate-identifier:AssignmentId",
+        "candidate-relationships:Assignment"
+      ]
+    },
+    {
+      "entity": "Certification",
+      "owner": "Certification",
+      "identifier": "CertificationId",
+      "identifier_status": "candidate",
+      "lifecycle_state_set": null,
+      "lifecycle_state_set_status": null,
+      "persistence_readiness": "BLOCKED",
+      "blockers": [
+        "candidate-identifier:CertificationId",
+        "candidate-relationships:Certification"
+      ]
+    },
+    {
+      "entity": "ContentPack",
+      "owner": "Content",
+      "identifier": "ContentPackId",
+      "identifier_status": "candidate",
+      "lifecycle_state_set": null,
+      "lifecycle_state_set_status": null,
+      "persistence_readiness": "BLOCKED",
+      "blockers": [
+        "candidate-identifier:ContentPackId",
+        "candidate-relationships:ContentPack"
+      ]
+    },
+    {
+      "entity": "Credential",
+      "owner": "Identity",
+      "identifier": "CredentialId",
+      "identifier_status": "candidate",
+      "lifecycle_state_set": null,
+      "lifecycle_state_set_status": null,
+      "persistence_readiness": "BLOCKED",
+      "blockers": [
+        "candidate-identifier:CredentialId",
+        "candidate-relationship:CredentialBelongsToIdentity"
+      ]
+    },
+    {
+      "entity": "Identity",
+      "owner": "Identity",
+      "identifier": "IdentityId",
+      "identifier_status": "candidate",
+      "lifecycle_state_set": null,
+      "lifecycle_state_set_status": null,
+      "persistence_readiness": "BLOCKED",
+      "blockers": [
+        "candidate-identifier:IdentityId"
+      ]
+    },
+    {
+      "entity": "Invitation",
+      "owner": "Identity",
+      "identifier": "InvitationId",
+      "identifier_status": "approved",
+      "lifecycle_state_set": "InvitationStatus",
+      "lifecycle_state_set_status": "approved",
+      "persistence_readiness": "DEPENDENCY_READY",
+      "blockers": []
+    },
+    {
+      "entity": "LearningSession",
+      "owner": "Learning",
+      "identifier": "LearningSessionId",
+      "identifier_status": "candidate",
+      "lifecycle_state_set": null,
+      "lifecycle_state_set_status": null,
+      "persistence_readiness": "BLOCKED",
+      "blockers": [
+        "candidate-identifier:LearningSessionId",
+        "candidate-relationships:LearningSession"
+      ]
+    },
+    {
+      "entity": "Organization",
+      "owner": "Organization",
+      "identifier": "OrganizationId",
+      "identifier_status": "candidate",
+      "lifecycle_state_set": null,
+      "lifecycle_state_set_status": null,
+      "persistence_readiness": "BLOCKED",
+      "blockers": [
+        "candidate-identifier:OrganizationId",
+        "candidate-relationships:Organization"
+      ]
+    },
+    {
+      "entity": "PasswordResetToken",
+      "owner": "Identity",
+      "identifier": "PasswordResetTokenId",
+      "identifier_status": "approved",
+      "lifecycle_state_set": "SingleUseTokenStatus",
+      "lifecycle_state_set_status": "approved",
+      "persistence_readiness": "DEPENDENCY_READY",
+      "blockers": []
+    },
+    {
+      "entity": "ProgressEvent",
+      "owner": "Learning",
+      "identifier": "ProgressEventId",
+      "identifier_status": "candidate",
+      "lifecycle_state_set": null,
+      "lifecycle_state_set_status": null,
+      "persistence_readiness": "BLOCKED",
+      "blockers": [
+        "candidate-identifier:ProgressEventId",
+        "candidate-relationships:ProgressEvent"
+      ]
+    },
+    {
+      "entity": "ReconciliationRecord",
+      "owner": "TransactionControl",
+      "identifier": "ReconciliationRecordId",
+      "identifier_status": "approved",
+      "lifecycle_state_set": "ReconciliationRecordStatus",
+      "lifecycle_state_set_status": "approved",
+      "persistence_readiness": "DEPENDENCY_READY",
+      "blockers": []
+    },
+    {
+      "entity": "SetupToken",
+      "owner": "Identity",
+      "identifier": "SetupTokenId",
+      "identifier_status": "approved",
+      "lifecycle_state_set": "SingleUseTokenStatus",
+      "lifecycle_state_set_status": "approved",
+      "persistence_readiness": "DEPENDENCY_READY",
+      "blockers": []
+    }
+  ],
+  "dependency_ready_entities": [
+    "Invitation",
+    "PasswordResetToken",
+    "ReconciliationRecord",
+    "SetupToken"
+  ],
+  "blocked_approved_entities": [
+    {
+      "entity": "ApplicationSession",
+      "blockers": [
+        "candidate-identifier:ApplicationSessionId",
+        "candidate-relationship:IdentityHasApplicationSession"
+      ]
+    },
+    {
+      "entity": "Assignment",
+      "blockers": [
+        "candidate-identifier:AssignmentId",
+        "candidate-relationships:Assignment"
+      ]
+    },
+    {
+      "entity": "Certification",
+      "blockers": [
+        "candidate-identifier:CertificationId",
+        "candidate-relationships:Certification"
+      ]
+    },
+    {
+      "entity": "ContentPack",
+      "blockers": [
+        "candidate-identifier:ContentPackId",
+        "candidate-relationships:ContentPack"
+      ]
+    },
+    {
+      "entity": "Credential",
+      "blockers": [
+        "candidate-identifier:CredentialId",
+        "candidate-relationship:CredentialBelongsToIdentity"
+      ]
+    },
+    {
+      "entity": "Identity",
+      "blockers": [
+        "candidate-identifier:IdentityId"
+      ]
+    },
+    {
+      "entity": "LearningSession",
+      "blockers": [
+        "candidate-identifier:LearningSessionId",
+        "candidate-relationships:LearningSession"
+      ]
+    },
+    {
+      "entity": "Organization",
+      "blockers": [
+        "candidate-identifier:OrganizationId",
+        "candidate-relationships:Organization"
+      ]
+    },
+    {
+      "entity": "ProgressEvent",
+      "blockers": [
+        "candidate-identifier:ProgressEventId",
+        "candidate-relationships:ProgressEvent"
+      ]
+    }
+  ],
+  "hard_blockers": [
+    {
+      "id": "PERS-B01",
+      "state": "BLOCKED",
+      "reason": "Nine approved entities still reference candidate identifier types.",
+      "release": "Promote their identifier semantics with owning-contract evidence or revise the entity model."
+    },
+    {
+      "id": "PERS-B02",
+      "state": "BLOCKED",
+      "reason": "All 18 registered relationships remain candidate.",
+      "release": "Relationship promotion/closure is required before foreign-key/cardinality choices can be implementation authority."
+    },
+    {
+      "id": "PERS-B03",
+      "state": "BLOCKED",
+      "reason": "Membership remains candidate under OQ-TEN-1, while Location and Entitlement also remain candidate.",
+      "release": "Resolve Organization shape decisions before tenant/membership/location relational schema is approved."
+    },
+    {
+      "id": "PERS-B04",
+      "state": "BLOCKED",
+      "reason": "IdentityStatus, ApplicationSessionStatus, and LearningSessionStatus remain candidate.",
+      "release": "Promote relevant state sets before persisting them as authoritative enum/check constraints."
+    },
+    {
+      "id": "PERS-B05",
+      "state": "BLOCKED",
+      "reason": "C15 deletion/retention semantics and C21 production backup/restore decisions remain open.",
+      "release": "These do not prevent logical model discovery, but they block complete retention/destructive-migration production policy."
+    }
+  ],
+  "safe_now": [
+    "Approve persistence ownership boundaries and migration discipline.",
+    "Define record classes as READY/BLOCKED without creating tables for blocked semantics.",
+    "Define database-role and data-access isolation requirements.",
+    "Define audit append-only/atomic persistence rules.",
+    "Design a proposal for the four dependency-ready entities only as logical records, not migrations."
+  ],
+  "forbidden_now": [
+    "Create a production schema for an entity whose identifier or required state semantics are candidate.",
+    "Turn candidate relationships into foreign keys or cardinalities.",
+    "Choose the Membership/Location/Entitlement schema while OQ-TEN-1 or related semantic holds remain.",
+    "Encode candidate invariants as if they were active semantic authority.",
+    "Run migrations or implement tables in this discovery/proposal batch."
+  ],
+  "readiness": {
+    "persistence_discovery": "PROVEN",
+    "persistence_policy_proposal": "READY",
+    "full_relational_schema": "BLOCKED",
+    "migration_implementation": "BLOCKED",
+    "transport_interfaces": "BLOCKED until Persistence Model owner approval"
+  }
+}

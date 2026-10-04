@@ -1,0 +1,22 @@
+name: Persistence Discovery
+
+on:
+  pull_request:
+    paths:
+      - 'persistence/**'
+      - 'scripts/persistence/validate-persistence-discovery.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'persistence/**'
+      - 'scripts/persistence/validate-persistence-discovery.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/persistence/validate-persistence-discovery.mjs
