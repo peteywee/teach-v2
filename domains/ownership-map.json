@@ -1,15 +1,15 @@
 {
   "map_id": "TEACH-DOMAIN-OWNERSHIP",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-03",
+  "updated_on": "2026-10-04",
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "f8e51057d341d74090cba43698e00f406fdcd8ea",
-    "purpose": "pre-decision-table-registration baseline"
+    "commit": "c29ab3dc1bbcfd57e4dc3960d81e80b20e734b24",
+    "purpose": "pre-command-registration baseline"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -118,6 +118,16 @@
   "entries": [
     {
       "kind": "command",
+      "id": "AcceptInvitation",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C41"
+      ]
+    },
+    {
+      "kind": "command",
       "id": "AssignContent",
       "decision_state": "approved",
       "proposed_owner": "Learning",
@@ -138,6 +148,17 @@
     },
     {
       "kind": "command",
+      "id": "ChangeCredential",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12",
+        "C41"
+      ]
+    },
+    {
+      "kind": "command",
       "id": "CompleteLearningSession",
       "decision_state": "approved",
       "proposed_owner": "Learning",
@@ -154,6 +175,16 @@
       "authority_contracts": [
         "C11",
         "C12"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "CreateIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C41"
       ]
     },
     {
@@ -185,6 +216,16 @@
     },
     {
       "kind": "command",
+      "id": "InviteIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C41"
+      ]
+    },
+    {
+      "kind": "command",
       "id": "IssueCertification",
       "decision_state": "approved",
       "proposed_owner": "Certification",
@@ -204,11 +245,31 @@
     },
     {
       "kind": "command",
+      "id": "PublishContentPack",
+      "decision_state": "approved",
+      "proposed_owner": "Content",
+      "authority_contracts": [
+        "C31",
+        "C41"
+      ]
+    },
+    {
+      "kind": "command",
       "id": "ReactivateIdentity",
       "decision_state": "approved",
       "proposed_owner": "Identity",
       "authority_contracts": [
         "C11"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "ReconcileExternalEffect",
+      "decision_state": "approved",
+      "proposed_owner": "TransactionControl",
+      "authority_contracts": [
+        "C22",
+        "C41"
       ]
     },
     {
@@ -247,6 +308,16 @@
       "proposed_owner": "Organization",
       "authority_contracts": [
         "C13"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "RevokeSingleUseToken",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C41"
       ]
     },
     {
@@ -1354,9 +1425,9 @@
   ],
   "approval": {
     "state": "approved",
-    "approved_on": "2026-10-03",
+    "approved_on": "2026-10-04",
     "owner": "Patrick Craven, Top Shelf Service LLC",
-    "issue": "#6",
-    "basis": "Explicit decision-table approval token"
+    "issue": "#7",
+    "basis": "Explicit command-registration approval token"
   }
 }

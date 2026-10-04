@@ -1,0 +1,81 @@
+{
+  "registration_id": "TEACH-COMMAND-REGISTRATION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "approved_on": "2026-10-04",
+  "issue": "#7",
+  "baseline_commit": "c29ab3dc1bbcfd57e4dc3960d81e80b20e734b24",
+  "kernel_version": "0.7.0",
+  "ownership_map_version": "1.4.0",
+  "registered_candidate_commands": [
+    "CreateIdentity",
+    "InviteIdentity",
+    "AcceptInvitation",
+    "ChangeCredential",
+    "RevokeSingleUseToken",
+    "PublishContentPack",
+    "ReconcileExternalEffect"
+  ],
+  "blocked_commands": [
+    {
+      "id": "LinkOAuthIdentity",
+      "blocked_by": [
+        "OQ-IDN-4",
+        "missing-k00:OAuthIdentityLink"
+      ]
+    },
+    {
+      "id": "SetEntitlement",
+      "blocked_by": [
+        "canonical Organization entitlement-mutation command name/shape not yet approved"
+      ]
+    },
+    {
+      "id": "SubmitDataExportRequest",
+      "blocked_by": [
+        "missing-k00:DataExportRequest",
+        "privacy request lifecycle not yet modeled"
+      ]
+    },
+    {
+      "id": "SubmitDataDeletionRequest",
+      "blocked_by": [
+        "missing-k00:DataDeletionRequest",
+        "OQ-PRIV-1",
+        "OQ-PRIV-2",
+        "OQ-PRIV-3"
+      ]
+    },
+    {
+      "id": "GrantRole",
+      "blocked_by": [
+        "missing-k00:Role",
+        "OQ-AUTHZ-1"
+      ]
+    },
+    {
+      "id": "RevokeRole",
+      "blocked_by": [
+        "missing-k00:Role",
+        "OQ-AUTHZ-1"
+      ]
+    },
+    {
+      "id": "GrantCapability",
+      "blocked_by": [
+        "capability-vocabulary-not-yet-populated",
+        "OQ-AUTHZ-1"
+      ]
+    },
+    {
+      "id": "RevokeCapability",
+      "blocked_by": [
+        "capability-vocabulary-not-yet-populated",
+        "OQ-AUTHZ-1"
+      ]
+    }
+  ],
+  "events_added": 0,
+  "candidate_to_approved_promotions": 0
+}

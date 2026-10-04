@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-K00",
   "class": "semantic-kernel",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -11,16 +11,16 @@
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_on": "2026-10-03",
+    "approved_on": "2026-10-04",
     "record": "contracts/APPROVAL-RECORD.md",
-    "issue": "#6",
-    "basis": "Explicit decision-table approval token"
+    "issue": "#7",
+    "basis": "Explicit command-registration approval token"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "f8e51057d341d74090cba43698e00f406fdcd8ea",
-    "purpose": "pre-decision-table-registration baseline"
+    "commit": "c29ab3dc1bbcfd57e4dc3960d81e80b20e734b24",
+    "purpose": "pre-command-registration baseline"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -33,7 +33,7 @@
 
 Canonical machine-readable source format: JSON.
 
-K00 version: `0.6.0`.
+K00 version: `0.7.0`.
 
 Active domain ownership authority: `domains/ownership-map.json`.
 
@@ -48,3 +48,5 @@ State-machine registration: 4 lifecycle machines are registered as `candidate`; 
 Invariant registration: 22 contract-proven invariants are registered as `candidate`; 5 blocked invariant proposals remain outside K00. Cross-cutting governance invariants are owned by the Governance semantic domain.
 
 Decision-table registration: 8 deterministic decision tables are registered as `candidate`; 3 blocked decision-table proposals remain outside K00.
+
+Command registration: 22 commands are registered as `candidate` (15 retained + 7 newly registered); 8 blocked command proposals remain outside K00. Events remain at 14.

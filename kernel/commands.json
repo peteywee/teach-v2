@@ -2,6 +2,11 @@
   "schema_version": "0.1.0",
   "entries": [
     {
+      "id": "AcceptInvitation",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
       "id": "AssignContent",
       "kind": "command",
       "status": "candidate"
@@ -12,12 +17,22 @@
       "status": "candidate"
     },
     {
+      "id": "ChangeCredential",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
       "id": "CompleteLearningSession",
       "kind": "command",
       "status": "candidate"
     },
     {
       "id": "CreateApplicationSession",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "CreateIdentity",
       "kind": "command",
       "status": "candidate"
     },
@@ -37,6 +52,11 @@
       "status": "candidate"
     },
     {
+      "id": "InviteIdentity",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
       "id": "IssueCertification",
       "kind": "command",
       "status": "candidate"
@@ -47,7 +67,17 @@
       "status": "candidate"
     },
     {
+      "id": "PublishContentPack",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
       "id": "ReactivateIdentity",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "ReconcileExternalEffect",
       "kind": "command",
       "status": "candidate"
     },
@@ -68,6 +98,11 @@
     },
     {
       "id": "RevokeMembership",
+      "kind": "command",
+      "status": "candidate"
+    },
+    {
+      "id": "RevokeSingleUseToken",
       "kind": "command",
       "status": "candidate"
     },

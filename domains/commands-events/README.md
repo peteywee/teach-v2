@@ -2,9 +2,9 @@
 {
   "doc_id": "TEACH-COMMAND-EVENT-DISCOVERY",
   "class": "specification",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "claims_truth_state": "declared",
-  "status": "proposed",
+  "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-03",
@@ -24,7 +24,7 @@
 
 # Teach v2 Command / Event Discovery
 
-Status: `proposed`.
+Status: `recorded`.
 
 This package records command and event gaps after deterministic decision-table registration.
 
@@ -40,3 +40,14 @@ Discovery result:
 - 9 event candidates explicitly blocked because active contracts do not yet distinguish the required audit record from a canonical C01 domain event, or do not require event emission.
 
 Next gate: owner-approved registration of the 7 ready commands. Event expansion stays blocked until its semantics are explicit.
+
+## Command registration disposition
+
+GitHub issue #7 registers the 7 dependency-ready commands as K00 `candidate` entries.
+
+- Registered commands: 7
+- Blocked commands retained outside K00: 8
+- New events registered: 0
+- Candidate-to-approved promotions: 0
+
+The Events gate remains open only for the audit-record/domain-event admission rule.

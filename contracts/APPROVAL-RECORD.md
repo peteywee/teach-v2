@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -274,3 +274,11 @@ PATCH revisions preserve the controlling owner approval when they do not change 
 | TEACH-K00 | 0.5.0 | 0.6.0 | Register 8 ready decision tables as `candidate`; keep 3 blocked tables outside K00; no semantic promotion | 2026-10-03 | Patrick Craven | #6 |
 | TEACH-DOMAIN-OWNERSHIP | 1.2.0 | 1.3.0 | Add ownership assignments for registered decision tables | 2026-10-03 | Patrick Craven | #6 |
 | TEACH-DECISION-TABLE-DISCOVERY | 0.1.0 | 0.2.0 | Record discovery disposition and registration evidence | 2026-10-03 | Patrick Craven | #6 |
+
+## Part 11 — Command registration approval
+
+| Artifact | From | To | Decision | Date | Owner | GitHub issue |
+| --- | --- | --- | --- | --- | --- | --- |
+| TEACH-K00 | 0.6.0 | 0.7.0 | Register 7 dependency-ready commands as `candidate`; keep 8 blocked commands outside K00; add no events; no semantic promotion | 2026-10-04 | Patrick Craven | #7 |
+| TEACH-DOMAIN-OWNERSHIP | 1.3.0 | 1.4.0 | Add ownership assignments for the seven registered commands | 2026-10-04 | Patrick Craven | #7 |
+| TEACH-COMMAND-EVENT-DISCOVERY | 0.1.0 | 0.2.0 | Record command registration disposition; Events admission semantics remain the next gate | 2026-10-04 | Patrick Craven | #7 |

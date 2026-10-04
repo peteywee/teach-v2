@@ -26,7 +26,7 @@ const files = {
 
 if (map) {
   if (map.map_id !== 'TEACH-DOMAIN-OWNERSHIP') errors.push('ownership map: map_id must be TEACH-DOMAIN-OWNERSHIP');
-  if (map.version !== '1.3.0') errors.push('ownership map: version must be 1.3.0');
+  if (map.version !== '1.4.0') errors.push('ownership map: version must be 1.4.0');
   if (map.status !== 'active') errors.push('ownership map: approved map must be active');
 }
 
