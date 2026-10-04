@@ -39,15 +39,20 @@ jobs:
           cp drizzle/meta/_journal.json .tmp-drizzle-p04-repair/meta/
       - name: Generate authoritative P04 migration artifacts
         run: pnpm exec drizzle-kit generate --config=drizzle.p04-repair.config.ts --name slice_p04_credential
-      - name: Verify generated P04 target
+      - name: Inspect and verify generated P04 target
         run: |
           generated="$(find .tmp-drizzle-p04-repair -maxdepth 1 -type f -name '0003_*.sql' -print -quit)"
           test -n "$generated"
+          echo '--- generated SQL ---'
+          cat "$generated"
+          echo '--- generated journal ---'
+          cat .tmp-drizzle-p04-repair/meta/_journal.json
           grep -q 'CREATE TABLE "identity_credentials"' "$generated"
-          grep -q 'REFERENCES "identity_identities"("id")' "$generated"
-          ! grep -q 'REFERENCES "identities"("id")' "$generated"
-          node -e "const j=require('./.tmp-drizzle-p04-repair/meta/_journal.json'); if(j.entries.length!==4 || j.entries[3].idx!==3) process.exit(1)"
+          grep -q 'identity_identities' "$generated"
+          ! grep -q 'REFERENCES "identities"' "$generated"
+          node -e "const j=require('./.tmp-drizzle-p04-repair/meta/_journal.json'); if(j.entries.length!==4 || j.entries[3].idx!==3 || j.entries[3].tag!=='0003_slice_p04_credential') process.exit(1)"
       - name: Upload generated P04 history
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: p04-generated-history
