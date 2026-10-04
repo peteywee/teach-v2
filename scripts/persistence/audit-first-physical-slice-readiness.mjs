@@ -47,7 +47,7 @@ for(const id of ['SLICE-P01','SLICE-P02','SLICE-P03','SLICE-P04']){
 
 const p05=r?.candidate_slices?.find(x=>x.id==='SLICE-P05');
 if(!p05 || !['ADMITTED','IMPLEMENTED'].includes(p05.current_state) || p05.name!=='LearningSession persistence' || p05.implementation_authorized!==true || (p05.blockers||[]).length!==0) errors.push('whole-stack audit: P05 must be LearningSession ADMITTED/IMPLEMENTED');
-if(p04Implementation?.version!=='1.0.0' || p04Implementation?.status!=='proven' || p04Implementation?.verification?.exact_head_ci!=='PASS') errors.push('whole-stack audit: P04 implementation evidence must remain PROVEN');
+if(p04Implementation?.version!=='1.1.0' || p04Implementation?.status!=='proven' || p04Implementation?.verification?.exact_head_ci!=='PASS') errors.push('whole-stack audit: P04 implementation evidence must remain PROVEN');
 if(p05Registration?.version!=='1.0.0' || p05Registration?.decisions?.[0]?.selection!=='REQUIRED_ONE_ASSIGNMENT') errors.push('whole-stack audit: P05 owner decision missing');
 if(p05Admission?.version!=='1.2.0' || p05Admission?.decision!=='ADMIT' || p05Admission?.implementation_authorized!==true) errors.push('whole-stack audit: P05 admission must be ADMIT');
 

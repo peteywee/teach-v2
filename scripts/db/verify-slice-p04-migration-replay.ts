@@ -15,16 +15,16 @@ const adminUrl = new URL(connectionString);
 adminUrl.pathname = '/postgres';
 const suffix = String(process.pid);
 const names = {
-  first: `teach_v2_p03_a_${suffix}`,
-  second: `teach_v2_p03_b_${suffix}`,
-  upgrade: `teach_v2_p03_upgrade_${suffix}`,
+  first: `teach_v2_p04_a_${suffix}`,
+  second: `teach_v2_p04_b_${suffix}`,
+  upgrade: `teach_v2_p04_upgrade_${suffix}`,
 };
 const admin = new Pool({ connectionString: adminUrl.toString() });
-const p02Folder = resolve(`/tmp/teach-v2-p02-${suffix}`);
 const p03Folder = resolve(`/tmp/teach-v2-p03-${suffix}`);
+const p04Folder = resolve(`/tmp/teach-v2-p04-${suffix}`);
 
 try {
-  prepareP03Folder(p03Folder);
+  prepareP04Folder(p04Folder);
 
   for (const name of Object.values(names)) {
     await dropDatabase(name);
@@ -32,46 +32,64 @@ try {
   }
 
   const [first, second] = await Promise.all([
-    migrateAndFingerprint(names.first, p03Folder),
-    migrateAndFingerprint(names.second, p03Folder),
+    migrateAndFingerprint(names.first, p04Folder),
+    migrateAndFingerprint(names.second, p04Folder),
   ]);
   if (first !== second) {
     throw new Error(`two-empty-database replay diverged: ${first} != ${second}`);
   }
 
-  prepareP02Folder(p02Folder);
+  prepareP03Folder(p03Folder);
   const pool = new Pool({ connectionString: databaseUrl(names.upgrade) });
   try {
-    await migrate(drizzle(pool), { migrationsFolder: p02Folder });
-    const p02 = await publicTables(pool);
+    await migrate(drizzle(pool), { migrationsFolder: p03Folder });
     assertTables(
-      p02,
+      await publicTables(pool),
       [
         'identity_application_sessions',
         'identity_identities',
+        'identity_invitations',
+        'identity_password_reset_tokens',
+        'identity_setup_tokens',
         'transaction_control_reconciliation_records',
       ],
-      'P02 baseline',
+      'P03 baseline',
     );
-    await migrate(drizzle(pool), { migrationsFolder: p03Folder });
+
+    await migrate(drizzle(pool), { migrationsFolder: p04Folder });
     const upgraded = await fingerprint(pool);
     if (upgraded !== first) {
-      throw new Error(`P02 -> P03 upgrade fingerprint diverged: ${upgraded} != ${first}`);
+      throw new Error(`P03 -> P04 upgrade fingerprint diverged: ${upgraded} != ${first}`);
     }
   } finally {
     await pool.end();
   }
 
-  console.log('SLICE-P03 MIGRATION REPLAY PASS');
-  console.log('P03 migration prefix pinned through 0002_quick_venus');
+  console.log('SLICE-P04 MIGRATION REPLAY PASS');
+  console.log('P04 migration prefix pinned through 0003_slice_p04_credential');
   console.log('two independent empty databases: identical');
-  console.log('P02 -> P03 migration: identical');
+  console.log('P03 -> P04 migration: identical');
   console.log(`schema fingerprint: ${first}`);
 } finally {
-  rmSync(p02Folder, { recursive: true, force: true });
   rmSync(p03Folder, { recursive: true, force: true });
+  rmSync(p04Folder, { recursive: true, force: true });
   for (const name of Object.values(names)) await dropDatabase(name);
   await admin.end();
+}
+
+function prepareP04Folder(target: string): void {
+  mkdirSync(join(target, 'meta'), { recursive: true });
+  for (const name of [
+    '0000_slice_p01_reconciliation.sql',
+    '0001_odd_photon.sql',
+    '0002_quick_venus.sql',
+    '0003_slice_p04_credential.sql',
+  ]) {
+    cpSync(resolve('drizzle', name), join(target, name));
+  }
+  const journal = JSON.parse(readFileSync(resolve('drizzle/meta/_journal.json'), 'utf8'));
+  journal.entries = journal.entries.filter((entry: { idx: number }) => entry.idx <= 3);
+  writeFileSync(join(target, 'meta', '_journal.json'), JSON.stringify(journal, null, 2) + '\n');
 }
 
 function prepareP03Folder(target: string): void {
@@ -83,17 +101,11 @@ function prepareP03Folder(target: string): void {
   ]) {
     cpSync(resolve('drizzle', name), join(target, name));
   }
+  for (const name of ['0000_snapshot.json', '0001_snapshot.json', '0002_snapshot.json']) {
+    cpSync(resolve('drizzle/meta', name), join(target, 'meta', name));
+  }
   const journal = JSON.parse(readFileSync(resolve('drizzle/meta/_journal.json'), 'utf8'));
   journal.entries = journal.entries.filter((entry: { idx: number }) => entry.idx <= 2);
-  writeFileSync(join(target, 'meta', '_journal.json'), JSON.stringify(journal, null, 2) + '\n');
-}
-
-function prepareP02Folder(target: string): void {
-  mkdirSync(join(target, 'meta'), { recursive: true });
-  cpSync(resolve('drizzle/0000_slice_p01_reconciliation.sql'), join(target, '0000_slice_p01_reconciliation.sql'));
-  cpSync(resolve('drizzle/0001_odd_photon.sql'), join(target, '0001_odd_photon.sql'));
-  const journal = JSON.parse(readFileSync(resolve('drizzle/meta/_journal.json'), 'utf8'));
-  journal.entries = journal.entries.filter((entry: { idx: number }) => entry.idx <= 1);
   writeFileSync(join(target, 'meta', '_journal.json'), JSON.stringify(journal, null, 2) + '\n');
 }
 
@@ -145,6 +157,7 @@ async function fingerprint(pool: pg.Pool): Promise<string> {
     tables,
     [
       'identity_application_sessions',
+      'identity_credentials',
       'identity_identities',
       'identity_invitations',
       'identity_password_reset_tokens',
@@ -194,6 +207,13 @@ async function fingerprint(pool: pg.Pool): Promise<string> {
   );
 
   return createHash('sha256')
-    .update(JSON.stringify({tables,columns:columns.rows,constraints:constraints.rows,indexes:indexes.rows,triggers:triggers.rows,functions:functions.rows}))
+    .update(JSON.stringify({
+      tables,
+      columns: columns.rows,
+      constraints: constraints.rows,
+      indexes: indexes.rows,
+      triggers: triggers.rows,
+      functions: functions.rows,
+    }))
     .digest('hex');
 }

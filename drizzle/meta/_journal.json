@@ -22,6 +22,13 @@
       "when": 1791132491926,
       "tag": "0002_quick_venus",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1791140554656,
+      "tag": "0003_slice_p04_credential",
+      "breakpoints": true
     }
   ]
 }

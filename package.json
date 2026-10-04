@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@12.8.1",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "tsx --test src/modules/transaction-control/domain/reconciliation-record.test.ts",
@@ -22,7 +24,12 @@
     "validate:slice-p03": "node scripts/persistence/validate-slice-p03-implementation-boundary.mjs",
     "check:slice-p01": "pnpm typecheck && pnpm test && pnpm validate:slice-p01",
     "check:slice-p02": "pnpm typecheck && pnpm test:p02 && pnpm validate:slice-p02",
-    "check:slice-p03": "pnpm typecheck && pnpm test:p03 && pnpm validate:slice-p03"
+    "check:slice-p03": "pnpm typecheck && pnpm test:p03 && pnpm validate:slice-p03",
+    "test:p04": "tsx --test src/modules/identity/domain/credential.test.ts",
+    "test:p04:integration": "tsx --test tests/integration/identity/credential-repository.test.ts",
+    "db:verify-p04-replay": "tsx scripts/db/verify-slice-p04-migration-replay.ts",
+    "validate:slice-p04": "node scripts/persistence/validate-slice-p04-implementation-boundary.mjs",
+    "check:slice-p04": "pnpm typecheck && pnpm test:p04 && node scripts/persistence/validate-slice-p04-schema-admission.mjs && pnpm validate:slice-p04"
   },
   "dependencies": {
     "drizzle-orm": "0.45.3",

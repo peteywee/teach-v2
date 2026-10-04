@@ -1,0 +1,86 @@
+name: SLICE-P04 Implementation
+
+on:
+  pull_request:
+    paths:
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'drizzle.config.ts'
+      - 'drizzle/**'
+      - 'src/modules/identity/domain/credential.ts'
+      - 'src/modules/identity/domain/credential.test.ts'
+      - 'src/modules/identity/infrastructure/persistence/credential-schema.ts'
+      - 'src/modules/identity/infrastructure/persistence/postgres-credential-repository.ts'
+      - 'tests/integration/identity/credential-repository.test.ts'
+      - 'scripts/db/verify-slice-p04-migration-replay.ts'
+      - 'scripts/persistence/validate-slice-p04-*.mjs'
+      - 'scripts/tests/validate-validators.mjs'
+      - 'persistence/physical-slices/identity-credentials/**'
+      - '.github/workflows/slice-p04-implementation.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'drizzle.config.ts'
+      - 'drizzle/**'
+      - 'src/modules/identity/domain/credential.ts'
+      - 'src/modules/identity/domain/credential.test.ts'
+      - 'src/modules/identity/infrastructure/persistence/credential-schema.ts'
+      - 'src/modules/identity/infrastructure/persistence/postgres-credential-repository.ts'
+      - 'tests/integration/identity/credential-repository.test.ts'
+      - 'scripts/db/verify-slice-p04-migration-replay.ts'
+      - 'scripts/persistence/validate-slice-p04-*.mjs'
+      - 'scripts/tests/validate-validators.mjs'
+      - 'persistence/physical-slices/identity-credentials/**'
+      - '.github/workflows/slice-p04-implementation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: teach_v2
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d teach_v2"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/teach_v2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Enable pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@12.8.1 --activate
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Check Drizzle migration history
+        run: pnpm exec drizzle-kit check
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: P04 domain tests
+        run: pnpm test:p04
+      - name: Validate P04 admission and implementation boundaries
+        run: |
+          node scripts/persistence/validate-slice-p04-schema-admission.mjs
+          pnpm validate:slice-p04
+      - name: Verify empty and P03-to-P04 migration replay
+        run: pnpm db:verify-p04-replay
+      - name: Apply committed history to isolated CI database
+        run: pnpm db:migrate
+      - name: PostgreSQL integration tests
+        run: pnpm test:p04:integration
