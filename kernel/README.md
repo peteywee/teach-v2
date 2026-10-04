@@ -63,3 +63,8 @@ Persistence semantic closure: K00 `0.14.0` promotes exactly 24 entries under Git
 
 
 SLICE-P01 relationship promotion: K00 `0.15.0` promotes exactly `ReconciliationRecordUsesIdempotencyKey` from `candidate` to `approved` under explicit owner approval in GitHub issue #24. Its `many-to-zero-or-one` cardinality, TransactionControl ownership, C22 authority, `idempotent_reconciliation_lookup` enablement, and non-grants (`key_reuse_across_operations`, `scope_broadening`) are unchanged. No other semantic entry changes status, and this promotion does not itself authorize physical schema implementation.
+
+
+## K00 0.16.0 — SLICE-P03 owner-approved relationships
+
+Issue #40 registers four approved Identity-domain relationships required for SLICE-P03: `InvitationForIdentity` (many-to-zero-or-one), `SetupTokenBelongsToIdentity` (many-to-one), `PasswordResetTokenBelongsToIdentity` (many-to-one), and `InvitationOwnedByIdentity` (many-to-one protected owner scope). No other semantic status changes are made.

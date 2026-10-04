@@ -406,3 +406,15 @@ These decisions define policy and authorize provider-neutral validation machiner
 | TEACH-SLICE-P02-OWNER-DECISION-REGISTRATION | proposed | recorded 1.0.0 | Approve `IDENTITY_GLOBAL_PRINCIPAL_SESSION_IDENTITY_OWNED`: Identity is a global application principal with IdentityId as its explicit identity ownership key; ApplicationSession belongs to exactly one Identity; tenant/role/capability authority remains database-current and is not copied into P02 records | 2026-10-04 | Patrick Craven | #32 |
 
 These decisions close only the three shape-affecting P02 blockers. SameSite, cookie Domain/Path, CSRF, session-rotation events, concurrent-session policy, C15 deletion/retention semantics, and Membership topology/scope remain unresolved as explicitly recorded. Physical schema remains unauthorized until a fresh Persistence Model admission result says ADMIT.
+
+
+## Part 24 — SLICE-P03 owner decisions
+
+| Artifact | Decision | Date | Owner | GitHub issue |
+| --- | --- | --- | --- | --- |
+| InvitationForIdentity | `INVITATION_OPTIONAL_ONE_IDENTITY`: Invitation references zero-or-one invited Identity; many Invitations may reference one Identity | 2026-10-04 | Patrick Craven | #40 |
+| SetupTokenBelongsToIdentity | `SETUPTOKEN_IDENTITY_OWNED`: each SetupToken belongs to exactly one Identity; many tokens per Identity over time | 2026-10-04 | Patrick Craven | #40 |
+| PasswordResetTokenBelongsToIdentity | `PASSWORDRESETTOKEN_IDENTITY_OWNED`: each PasswordResetToken belongs to exactly one Identity; many tokens per Identity over time | 2026-10-04 | Patrick Craven | #40 |
+| InvitationOwnedByIdentity / P03 scope | `P03_IDENTITY_SCOPED_TOKENS`: Invitation has authoritative Identity ownership distinct from optional invited-Identity linkage; protected P03 reads/writes require authoritative IdentityId; token verifier/secret read exposure is forbidden | 2026-10-04 | Patrick Craven | #40 |
+
+These decisions authorize relationship registration and a fresh P03 schema-admission evaluation. They do not authorize physical schema, migration, repository implementation, cross-tenant invitation behavior, Membership changes, or shared/production migration execution.

@@ -426,6 +426,115 @@
       ],
       "promotion_issue": "#24",
       "promoted_on": "2026-10-04"
+    },
+    {
+      "id": "InvitationForIdentity",
+      "kind": "relationship",
+      "status": "approved",
+      "from": "Invitation",
+      "to": "Identity",
+      "cardinality": "many-to-zero-or-one",
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C15"
+      ],
+      "enables": [
+        "invited_identity_linkage"
+      ],
+      "does_not_grant": [
+        "membership",
+        "tenant_scope",
+        "authorization"
+      ],
+      "promotion_evidence": [
+        "C11",
+        "#40"
+      ],
+      "promotion_issue": "#40",
+      "promoted_on": "2026-10-04"
+    },
+    {
+      "id": "SetupTokenBelongsToIdentity",
+      "kind": "relationship",
+      "status": "approved",
+      "from": "SetupToken",
+      "to": "Identity",
+      "cardinality": "many-to-one",
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C15"
+      ],
+      "enables": [
+        "setup_token_identity_ownership"
+      ],
+      "does_not_grant": [
+        "membership",
+        "tenant_scope",
+        "authorization"
+      ],
+      "promotion_evidence": [
+        "C11",
+        "#40"
+      ],
+      "promotion_issue": "#40",
+      "promoted_on": "2026-10-04"
+    },
+    {
+      "id": "PasswordResetTokenBelongsToIdentity",
+      "kind": "relationship",
+      "status": "approved",
+      "from": "PasswordResetToken",
+      "to": "Identity",
+      "cardinality": "many-to-one",
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C15"
+      ],
+      "enables": [
+        "password_reset_token_identity_ownership"
+      ],
+      "does_not_grant": [
+        "membership",
+        "tenant_scope",
+        "authorization"
+      ],
+      "promotion_evidence": [
+        "C11",
+        "#40"
+      ],
+      "promotion_issue": "#40",
+      "promoted_on": "2026-10-04"
+    },
+    {
+      "id": "InvitationOwnedByIdentity",
+      "kind": "relationship",
+      "status": "approved",
+      "from": "Invitation",
+      "to": "Identity",
+      "cardinality": "many-to-one",
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C15"
+      ],
+      "enables": [
+        "invitation_protected_owner_scope"
+      ],
+      "does_not_grant": [
+        "invited_identity_equivalence",
+        "membership",
+        "tenant_scope",
+        "authorization"
+      ],
+      "promotion_evidence": [
+        "#40"
+      ],
+      "promotion_issue": "#40",
+      "promoted_on": "2026-10-04"
     }
-  ]
+  ],
+  "version": "0.16.0",
+  "updated_on": "2026-10-04"
 }
