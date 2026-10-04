@@ -1,0 +1,63 @@
+{
+  "registration_id": "TEACH-SLICE-P03-OWNER-RELATIONSHIP-REGISTRATION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "approved_on": "2026-10-04",
+  "issue": "#40",
+  "baseline_commit": "ee9dd542e18106c39c8c7fb1987d8c9d4780e44a",
+  "target_slice": "SLICE-P03",
+  "target_records": [
+    "Invitation",
+    "SetupToken",
+    "PasswordResetToken"
+  ],
+  "authority": {
+    "kernel_from": "0.15.0",
+    "kernel_to": "0.16.0",
+    "c11_version": "1.3.0",
+    "c15_version": "1.0.3"
+  },
+  "decisions": [
+    {
+      "id": "P03-D01",
+      "selection": "INVITATION_OPTIONAL_ONE_IDENTITY",
+      "relationship": "InvitationForIdentity",
+      "cardinality": "many-to-zero-or-one"
+    },
+    {
+      "id": "P03-D02",
+      "selection": "SETUPTOKEN_IDENTITY_OWNED",
+      "relationship": "SetupTokenBelongsToIdentity",
+      "cardinality": "many-to-one"
+    },
+    {
+      "id": "P03-D03",
+      "selection": "PASSWORDRESETTOKEN_IDENTITY_OWNED",
+      "relationship": "PasswordResetTokenBelongsToIdentity",
+      "cardinality": "many-to-one"
+    },
+    {
+      "id": "P03-D04",
+      "selection": "P03_IDENTITY_SCOPED_TOKENS",
+      "relationship": "InvitationOwnedByIdentity",
+      "cardinality": "many-to-one"
+    }
+  ],
+  "scope_rules": {
+    "invitation_invited_identity_optional": true,
+    "invitation_owner_identity_required": true,
+    "setup_token_identity_required": true,
+    "password_reset_token_identity_required": true,
+    "protected_reads_writes_require_authoritative_identity_id": true,
+    "token_verifier_secret_read_exposure_forbidden": true,
+    "tenant_role_capability_authority_columns_forbidden": true
+  },
+  "effects": {
+    "relationship_authority_registered": true,
+    "migration_acceptance_evidence_plan_authorized": true,
+    "schema_admission_rerun_authorized": true,
+    "physical_schema_authorized": false,
+    "shared_or_production_migration_execution_authorized": false
+  }
+}

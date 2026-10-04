@@ -1,6 +1,6 @@
 {
   "map_id": "TEACH-DOMAIN-OWNERSHIP",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
@@ -8,8 +8,8 @@
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "168ff001ee6d8cb6b42d26a9602dba7f4c419092",
-    "purpose": "pre-lifecycle-registration baseline"
+    "commit": "ee9dd542e18106c39c8c7fb1987d8c9d4780e44a",
+    "purpose": "pre-SLICE-P03 relationship ownership registration baseline"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -1591,13 +1591,53 @@
       "authority_contracts": [
         "C22"
       ]
+    },
+    {
+      "kind": "relationship",
+      "id": "InvitationForIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C15"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "SetupTokenBelongsToIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C15"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "PasswordResetTokenBelongsToIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C15"
+      ]
+    },
+    {
+      "kind": "relationship",
+      "id": "InvitationOwnedByIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C15"
+      ]
     }
   ],
   "approval": {
     "state": "approved",
     "approved_on": "2026-10-04",
     "owner": "Patrick Craven, Top Shelf Service LLC",
-    "issue": "#12",
-    "basis": "Explicit owner approval for lifecycle registration and final command promotion"
+    "issue": "#40",
+    "basis": "Owner-approved SLICE-P03 relationship ownership/scope decisions",
+    "record": "persistence/physical-slices/identity-tokens/registration.json"
   }
 }

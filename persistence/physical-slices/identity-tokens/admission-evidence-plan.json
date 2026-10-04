@@ -1,0 +1,35 @@
+{
+  "plan_id": "TEACH-SLICE-P03-ADMISSION-EVIDENCE-PLAN",
+  "version": "1.0.0",
+  "status": "recorded",
+  "issue": "#40",
+  "baseline_commit": "ee9dd542e18106c39c8c7fb1987d8c9d4780e44a",
+  "slice": "SLICE-P03",
+  "owning_module": "Identity",
+  "records": [
+    "Invitation",
+    "SetupToken",
+    "PasswordResetToken"
+  ],
+  "physical_schema_authorized": false,
+  "required_evidence": [
+    "empty-database migration replay is deterministic",
+    "P02-to-P03 upgrade replay is deterministic",
+    "Invitation acceptance secret, SetupToken, and PasswordResetToken persist only verifier/hash material and never raw reusable secrets",
+    "Invitation expires at 7 days, SetupToken at 15 minutes, PasswordResetToken at 1 hour",
+    "single-use consumption is atomic and second consumption has no authoritative side effect",
+    "revoked or expired token/Invitation secret is rejected",
+    "InvitationForIdentity is optional and distinct from required Invitation owner Identity",
+    "SetupToken and PasswordResetToken require authoritative Identity ownership",
+    "protected reads/writes are predicated by authoritative IdentityId",
+    "tenant/location/role/capability authority is not copied into P03 records",
+    "foreign modules cannot directly write Identity-owned P03 persistence"
+  ],
+  "constraints": [
+    "no Credential physical slice",
+    "no Membership/Organization persistence",
+    "no cross-tenant invitation semantics",
+    "no raw invitation/token secret storage",
+    "no shared or production migration execution"
+  ]
+}

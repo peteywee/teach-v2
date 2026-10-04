@@ -19,7 +19,7 @@ const rel=load('kernel/relationships.json');
 
 const find=(doc,id)=>(doc?.entries||[]).find(x=>x.id===id);
 if(authority?.version!=='1.0.0' || authority?.status!=='active') errors.push('SLICE-P01 admission: active Persistence Model 1.0.0 required');
-if(manifest?.version!=='0.15.0') errors.push('SLICE-P01 admission: K00 0.15.0 required');
+if(manifest?.version!=='0.16.0') errors.push('SLICE-P01 admission: K00 0.16.0 required');
 if(admission?.admission_id!=='TEACH-SLICE-P01-PHYSICAL-SCHEMA-ADMISSION' || admission?.version!=='2.0.0' || admission?.status!=='recorded' || admission?.issue!=='#26') errors.push('SLICE-P01 admission: current admission identity/state mismatch');
 if(admission?.semantic_baseline_commit!=='d6a6e33db95752174445806ef81d51147f265f9c') errors.push('SLICE-P01 admission: exact post-promotion baseline required');
 if(historical?.version!=='1.0.0' || historical?.decision!=='BLOCK' || historical?.issue!=='#22' || historical?.historical!==true) errors.push('SLICE-P01 admission: historical BLOCK evidence not preserved');
@@ -36,7 +36,7 @@ if(unproven.length!==0) errors.push('SLICE-P01 admission: every admission criter
 if((admission?.blockers||[]).length!==0) errors.push('SLICE-P01 admission: blockers must be empty');
 if(admission?.decision!=='ADMIT' || admission?.physical_schema_authorized!==true || admission?.implementation_authorized!==true || admission?.migration_authoring_authorized!==true || admission?.admitted_physical_slices!==1) errors.push('SLICE-P01 admission: ADMIT authorization mismatch');
 if(admission?.shared_or_production_migration_execution_authorized!==false || admission?.full_relational_schema_authorized!==false) errors.push('SLICE-P01 admission: admission must not authorize full schema or shared/production migration execution');
-if(readiness?.version!=='1.0.0' || readiness?.current_admitted_slice_count!==2 || !readiness?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P01')) errors.push('SLICE-P01 admission: readiness must preserve P01 admission while P02 is subsequently admitted');
+if(readiness?.version!=='1.1.0' || readiness?.current_admitted_slice_count!==2 || !readiness?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P01')) errors.push('SLICE-P01 admission: readiness must preserve P01 admission while P02 is subsequently admitted');
 if(readiness?.candidate_slices?.find(x=>x.id==='SLICE-P01')?.implementation_authorized!==true || readiness?.implementation_guard?.physical_schema_authorized!==true) errors.push('SLICE-P01 admission: implementation authorization missing from preserved P01 readiness');
 if(implementation?.version!=='1.0.0' || implementation?.status!=='recorded' || readiness?.implementation_guard?.tables_generated!==3 || readiness?.implementation_guard?.migrations_generated!==2 || readiness?.implementation_guard?.repositories_generated!==3) errors.push('SLICE-P01 admission: subsequent admitted implementation evidence mismatch');
 if(readiness?.implementation_guard?.shared_or_production_migration_execution_authorized!==false) errors.push('SLICE-P01 admission: production migration execution must remain blocked');
@@ -48,7 +48,7 @@ if(errors.length){
 }
 console.log('SLICE-P01 PHYSICAL-SCHEMA ADMISSION PASS');
 console.log('Decision: ADMIT');
-console.log('K00: 0.15.0');
+console.log('K00: 0.16.0');
 console.log('All 8 admission criteria: PROVEN');
 console.log('SLICE-P01 admission remains PROVEN; current total admissions: 2');
 console.log('Implementation/migration authoring authorized: true');

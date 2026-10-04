@@ -18,7 +18,7 @@ const promotedStates=['IdentityStatus','ApplicationSessionStatus','LearningSessi
 const promotedMachines=['IdentityStateMachine','ApplicationSessionStateMachine','LearningSessionStateMachine'];
 const promotedRelationships=['CredentialBelongsToIdentity','IdentityHasApplicationSession','AssignmentTargetsIdentity','AssignmentReferencesContentPack','IdentityHasLearningSession','LearningSessionUsesAssignment','ProgressEventBelongsToLearningSession','CertificationBelongsToIdentity','CertificationReferencesContentPack','CertificationObservedByIdentity'];
 
-if (m?.version!=='0.15.0') errors.push(`semantic closure registration: expected K00 0.15.0, found ${m?.version}`);
+if (m?.version!=='0.16.0') errors.push(`semantic closure registration: expected K00 0.16.0, found ${m?.version}`);
 for (const id of promotedIds) if ((ids?.entries||[]).find(x=>x.id===id)?.status!=='approved') errors.push(`semantic closure registration: ${id} must be approved`);
 for (const id of promotedStates) if ((states?.entries||[]).find(x=>x.id===id)?.status!=='approved') errors.push(`semantic closure registration: ${id} must be approved`);
 for (const id of promotedMachines) if ((machines?.entries||[]).find(x=>x.id===id)?.status!=='approved') errors.push(`semantic closure registration: ${id} must be approved`);
@@ -30,7 +30,7 @@ for (const id of ['CredentialId','AssignmentId','ProgressEventId','CapabilityId'
 for (const id of ['MembershipStatus','EvidenceState']) {
   if ((states?.entries||[]).find(x=>x.id===id)?.status!=='candidate') errors.push(`semantic closure registration: excluded ${id} must remain candidate`);
 }
-if ((rel?.entries||[]).filter(x=>x.status==='approved').length!==11) errors.push('semantic closure registration: expected exactly 11 approved relationships');
+if ((rel?.entries||[]).filter(x=>x.status==='approved').length!==15) errors.push('semantic closure registration: expected exactly 15 approved relationships');
 if ((rel?.entries||[]).filter(x=>x.status==='candidate').length!==8) errors.push('semantic closure registration: expected exactly 8 candidate relationships');
 if (reg?.version!=='1.0.0' || reg?.status!=='recorded') errors.push('semantic closure registration: registration record missing');
 if (reg?.promotion_counts?.total!==24) errors.push('semantic closure registration: promotion total must be 24');

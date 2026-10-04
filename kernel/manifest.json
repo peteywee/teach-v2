@@ -1,6 +1,6 @@
 {
   "kernel_id": "TEACH-K00",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "status": "active",
   "canonical_format": "json",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -131,6 +131,19 @@
     "owning_domain": "TransactionControl",
     "c01_version": "1.8.0",
     "c22_version": "1.2.0",
+    "other_status_changes": 0
+  },
+  "slice_p03_relationship_registration": {
+    "issue": "#40",
+    "baseline_commit": "ee9dd542e18106c39c8c7fb1987d8c9d4780e44a",
+    "approved_on": "2026-10-04",
+    "relationships": [
+      "InvitationForIdentity",
+      "SetupTokenBelongsToIdentity",
+      "PasswordResetTokenBelongsToIdentity",
+      "InvitationOwnedByIdentity"
+    ],
+    "approved_relationship_count": 4,
     "other_status_changes": 0
   }
 }

@@ -24,7 +24,7 @@ if (arch?.version!=='1.0.0' || arch?.status!=='active') errors.push('persistence
 if (app?.version!=='1.0.0' || app?.status!=='active') errors.push('persistence audit: Application Interfaces 1.0.0 missing');
 if (per?.version!=='1.0.0' || per?.status!=='active') errors.push('persistence audit: Persistence Model 1.0.0 missing');
 if (proposal?.version!=='0.1.0' || proposal?.status!=='proposed') errors.push('persistence audit: historical proposal must remain proposed');
-if (m?.version!=='0.15.0') errors.push(`persistence audit: K00 drifted to ${m?.version}`);
+if (m?.version!=='0.16.0') errors.push(`persistence audit: K00 drifted to ${m?.version}`);
 
 const counts={
   approvedEntities:(entities?.entries||[]).filter(x=>x.status==='approved').length,

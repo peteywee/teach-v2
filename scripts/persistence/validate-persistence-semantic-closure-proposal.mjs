@@ -17,7 +17,7 @@ if (p) {
   if (p.promotion_counts?.total!==24) errors.push('semantic closure proposal: expected 24 proposed promotions');
   if ((p.explicitly_not_promoted||[]).length!==10) errors.push('semantic closure proposal: expected 10 explicit exclusions');
 }
-if (m?.version!=='0.15.0') errors.push(`semantic closure proposal: current K00 must be 0.15.0, found ${m?.version}`);
+if (m?.version!=='0.16.0') errors.push(`semantic closure proposal: current K00 must be 0.16.0, found ${m?.version}`);
 if (reg?.status!=='recorded' || reg?.kernel_to!=='0.14.0') errors.push('semantic closure proposal: registration evidence missing');
 
 if (errors.length) {

@@ -176,7 +176,7 @@ test(
   (dir) => {
     const p = join(dir, "scripts/domains/validate-invariant-discovery.mjs");
     let t = readFileSync(p, "utf8");
-    t = t.replace("0.15.0", "0.14.0");
+    t = t.replace("0.16.0", "0.15.0");
     writeFileSync(p, t);
   },
   { pattern: /stale K00 manifest version pin/ }

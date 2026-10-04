@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-K00",
   "class": "semantic-kernel",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -12,15 +12,15 @@
   "approval": {
     "state": "approved",
     "approved_on": "2026-10-04",
-    "record": "contracts/APPROVAL-RECORD.md",
-    "issue": "#24",
-    "basis": "Explicit owner approval of ReconciliationRecordUsesIdempotencyKey candidate-to-approved promotion for SLICE-P01; GitHub issue #24; C01 1.8.0 / K00 0.15.0"
+    "record": "persistence/physical-slices/identity-tokens/registration.json",
+    "issue": "#40",
+    "basis": "Owner-approved SLICE-P03 relationship registration; GitHub issue #40; K00 0.16.0"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "39e1b40218cde2f6be2ce94aec8cc3f6e2fcd677",
-    "purpose": "pre-SLICE-P01 relationship promotion baseline"
+    "commit": "ee9dd542e18106c39c8c7fb1987d8c9d4780e44a",
+    "purpose": "pre-SLICE-P03 relationship registration baseline"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -33,11 +33,11 @@
 
 Canonical machine-readable source format: JSON.
 
-K00 version: `0.15.0`.
+K00 version: `0.16.0`.
 
 Active domain ownership authority: `domains/ownership-map.json`.
 
-Current relationship authority: 19 relationships are registered in K00 — 11 `approved` and 8 `candidate`; 10 blocked relationship proposals remain outside K00.
+Current relationship authority: 23 relationships are registered in K00 — 15 `approved` and 8 `candidate`; 9 historical discovery-blocked relationship proposals remain outside K00.
 
 Registry entries remain `candidate` unless explicitly promoted through SEM-30 owner approval; approved entries are implementation authority only within their still-applicable contract constraints.
 
@@ -63,3 +63,8 @@ Persistence semantic closure: K00 `0.14.0` promotes exactly 24 entries under Git
 
 
 SLICE-P01 relationship promotion: K00 `0.15.0` promotes exactly `ReconciliationRecordUsesIdempotencyKey` from `candidate` to `approved` under explicit owner approval in GitHub issue #24. Its `many-to-zero-or-one` cardinality, TransactionControl ownership, C22 authority, `idempotent_reconciliation_lookup` enablement, and non-grants (`key_reuse_across_operations`, `scope_broadening`) are unchanged. No other semantic entry changes status, and this promotion does not itself authorize physical schema implementation.
+
+
+## K00 0.16.0 — SLICE-P03 owner-approved relationships
+
+Issue #40 registers four approved Identity-domain relationships required for SLICE-P03: `InvitationForIdentity` (many-to-zero-or-one), `SetupTokenBelongsToIdentity` (many-to-one), `PasswordResetTokenBelongsToIdentity` (many-to-one), and `InvitationOwnedByIdentity` (many-to-one protected owner scope). No other semantic status changes are made.

@@ -10,8 +10,8 @@ const r=load('persistence/physical-slices/readiness.json');
 const m=load('kernel/manifest.json');
 const ids=load('kernel/identifiers.json');
 
-if(m?.version!=='0.15.0') errors.push(`transaction slice: expected K00 0.15.0, found ${m?.version}`);
-if(!['0.9.0','1.0.0'].includes(r?.version) || r?.current_physical_slice_admissions?.find(x=>x.id==='SLICE-P01')?.implementation_state!=='PROVEN' || r?.evidence_states?.slice_p01_implementation!=='PROVEN') errors.push('transaction slice: readiness must preserve SLICE-P01 as implemented/proven');
+if(m?.version!=='0.16.0') errors.push(`transaction slice: expected K00 0.16.0, found ${m?.version}`);
+if(!['0.9.0','1.1.0'].includes(r?.version) || r?.current_physical_slice_admissions?.find(x=>x.id==='SLICE-P01')?.implementation_state!=='PROVEN' || r?.evidence_states?.slice_p01_implementation!=='PROVEN') errors.push('transaction slice: readiness must preserve SLICE-P01 as implemented/proven');
 if((ids?.entries||[]).find(x=>x.id==='IdempotencyKey')?.status!=='approved') errors.push('transaction slice: IdempotencyKey must be approved');
 if(p){
  if(p.proposal_id!=='TEACH-TRANSACTIONCONTROL-FIRST-SLICE-DECISION-PACKET' || p.version!=='0.1.0' || p.status!=='proposed') errors.push('transaction slice: proposal identity/state mismatch');
