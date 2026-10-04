@@ -1,0 +1,49 @@
+name: SLICE-P05 Domain Application Foundation
+
+on:
+  pull_request:
+    paths:
+      - 'src/modules/learning/**'
+      - 'kernel/**'
+      - 'persistence/physical-slices/learning-session/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/slice-p05-foundation.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/modules/learning/**'
+      - 'kernel/**'
+      - 'persistence/physical-slices/learning-session/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/slice-p05-foundation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Enable repository-pinned pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@12.8.1 --activate
+      - name: Install exact dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Verify lifecycle, authorization denial, and scope behavior
+        run: pnpm test:p05:foundation
+      - name: Verify P05 admission and preserved physical totals
+        run: |
+          node scripts/persistence/validate-slice-p05-owner-decisions.mjs
+          node scripts/persistence/validate-slice-p05-schema-admission.mjs
+          node scripts/persistence/validate-first-physical-slice-readiness.mjs
+          node scripts/persistence/audit-first-physical-slice-readiness.mjs
+          node scripts/packaging/validate-apply-guards.mjs pins

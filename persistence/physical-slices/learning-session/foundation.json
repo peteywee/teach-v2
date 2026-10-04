@@ -1,0 +1,36 @@
+{
+  "foundation_id": "TEACH-SLICE-P05-DOMAIN-APPLICATION-FOUNDATION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "issue": "#51",
+  "baseline_commit": "9fa6f0eaae6132d0ff4a675f118ef2d4763839d7",
+  "admission": "persistence/physical-slices/learning-session/admission.json@1.2.0",
+  "scope": "Domain model and Application ports/service; no physical persistence implementation",
+  "owner_decision": "P05-D01 REQUIRED_ONE_ASSIGNMENT",
+  "verification": {
+    "domain_and_application_tests": "PROVEN (34/34 on repository-pinned Node 20 CI)",
+    "exact_head_ci": "PROVEN_AT_VERIFICATION_SOURCE (11/11 checks)",
+    "physical_persistence": "PENDING",
+    "authoritative_assignment_authorization_adapter": "UNKNOWN",
+    "atomic_authorization_and_insert": "PENDING",
+    "postgresql_concurrent_completion": "PENDING",
+    "local_domain_and_application_tests": "PASS (34/34; cached tsx 4.23.13 on Node 24; repository-pinned Node 20 CI remains pending)"
+  },
+  "runtime_activation": "BLOCKED",
+  "physical_schema_authoring_authorized_by_existing_admission": true,
+  "implemented_physical_slices": 4,
+  "physical_artifact_totals": {
+    "tables": 7,
+    "migration_files": 4,
+    "repositories": 7
+  },
+  "next_required_evidence": [
+    "Learning-owned concrete persistence adapter and admitted immutable migration",
+    "required/non-null Assignment-reference and authoritative Identity scope PostgreSQL tests",
+    "deterministic empty and P04-to-P05 migration replay",
+    "authoritative Assignment authorization adapter with atomic authorization-plus-insert proof before runtime activation",
+    "concurrent completion proves one successful ACTIVE-to-COMPLETED mutation"
+  ],
+  "shared_or_production_migration_execution_authorized": false,
+  "verification_source_commit": "933708354f1f01dfa7221dbfcfe3c58af2066def"
+}

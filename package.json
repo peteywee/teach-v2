@@ -29,7 +29,8 @@
     "test:p04:integration": "tsx --test tests/integration/identity/credential-repository.test.ts",
     "db:verify-p04-replay": "tsx scripts/db/verify-slice-p04-migration-replay.ts",
     "validate:slice-p04": "node scripts/persistence/validate-slice-p04-implementation-boundary.mjs",
-    "check:slice-p04": "pnpm typecheck && pnpm test:p04 && node scripts/persistence/validate-slice-p04-schema-admission.mjs && pnpm validate:slice-p04"
+    "check:slice-p04": "pnpm typecheck && pnpm test:p04 && node scripts/persistence/validate-slice-p04-schema-admission.mjs && pnpm validate:slice-p04",
+    "test:p05:foundation": "tsx --test src/modules/learning/domain/learning-session.test.ts src/modules/learning/application/learning-session-service.test.ts"
   },
   "dependencies": {
     "drizzle-orm": "0.45.3",
