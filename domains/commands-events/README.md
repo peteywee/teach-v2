@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-COMMAND-EVENT-DISCOVERY",
   "class": "specification",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "claims_truth_state": "declared",
   "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -51,3 +51,15 @@ GitHub issue #7 registers the 7 dependency-ready commands as K00 `candidate` ent
 - Candidate-to-approved promotions: 0
 
 The Events gate remains open only for the audit-record/domain-event admission rule.
+
+## Events gate closure
+
+GitHub issue #8 makes event admission explicit under C01 1.6.0.
+
+- Existing K00 events retained: 14
+- New events registered: 0
+- Discovery event names not admitted: 9
+- Events gate: closed for the current semantic baseline
+- Future event additions: require an approved semantic change with explicit owning-domain contract support
+
+Architecture is the next dependency-ready build-sequence stage.

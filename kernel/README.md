@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-K00",
   "class": "semantic-kernel",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -13,14 +13,14 @@
     "state": "approved",
     "approved_on": "2026-10-04",
     "record": "contracts/APPROVAL-RECORD.md",
-    "issue": "#7",
-    "basis": "Explicit command-registration approval token"
+    "issue": "#8",
+    "basis": "Explicit event-admission approval token"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "c29ab3dc1bbcfd57e4dc3960d81e80b20e734b24",
-    "purpose": "pre-command-registration baseline"
+    "commit": "5b3d0ba12c11cb6b6f3d3d53b7241803e7fa8c63",
+    "purpose": "pre-event-admission baseline"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -33,7 +33,7 @@
 
 Canonical machine-readable source format: JSON.
 
-K00 version: `0.7.0`.
+K00 version: `0.8.0`.
 
 Active domain ownership authority: `domains/ownership-map.json`.
 
@@ -50,3 +50,5 @@ Invariant registration: 22 contract-proven invariants are registered as `candida
 Decision-table registration: 8 deterministic decision tables are registered as `candidate`; 3 blocked decision-table proposals remain outside K00.
 
 Command registration: 22 commands are registered as `candidate` (15 retained + 7 newly registered); 8 blocked command proposals remain outside K00. Events remain at 14.
+
+Event admission: the 14 existing canonical events remain unchanged. Audit-record obligations and state transitions do not implicitly create business events; 9 discovered names were not admitted because no active owning-domain contract explicitly requires them.

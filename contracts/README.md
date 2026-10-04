@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -34,7 +34,7 @@
 
 # Teach v2 Contracts
 
-- Package version: `0.9.0`
+- Package version: `0.10.0`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
@@ -103,7 +103,7 @@ the requirement that keeps the feature off applies.
 | ID  | Contract                                                                                            | Version | Prefix  | Requirements | Acceptance cases | Open questions | Blocking implementation | Status   |
 | --- | --------------------------------------------------------------------------------------------------- | ------- | ------- | ------------ | ---------------- | -------------- | ----------------------- | -------- |
 | C00 | [System Authority](c00-system-authority-contract.md)                                                | 1.0.3   | `SYS`   | 34           | 20               | 6              | 0                       | `active` |
-| C01 | [Canonical Semantics](c01-canonical-semantics-contract.md)                                          | 1.5.0   | `SEM`   | 34           | 23               | 0              | 0                       | `active` |
+| C01 | [Canonical Semantics](c01-canonical-semantics-contract.md)                                          | 1.6.0   | `SEM`   | 35           | 24               | 0              | 0                       | `active` |
 | C02 | [Automation & Agent Authority](c02-automation-agent-authority-contract.md)                          | 1.0.3   | `AGT`   | 17           | 13               | 3              | 0                       | `active` |
 | C11 | [Identity & Credentials](c11-identity-credentials-contract.md)                                      | 1.1.0   | `IDN`   | 21           | 17               | 7              | 5                       | `active` |
 | C12 | [Application Sessions](c12-application-sessions-contract.md)                                        | 1.0.3   | `SES`   | 20           | 14               | 7              | 6                       | `active` |
@@ -125,7 +125,7 @@ the requirement that keeps the feature off applies.
 | C61 | [Analytics](c61-analytics-contract.md)                                                              | 1.0.3   | `ANL`   | 8            | 7                | 2              | 0                       | `active` |
 | C62 | [PWA / Offline](c62-pwa-offline-contract.md)                                                        | 1.0.3   | `PWA`   | 9            | 4                | 1              | 0                       | `active` |
 | C63 | [Self-Service Billing](c63-billing-contract.md)                                                     | 1.1.0   | `BIL`   | 14           | 12               | 3              | 0                       | `active` |
-|     | **Total**                                                                                           |         |         | **372**      | **253**          | **77**         | **27**                  |          |
+|     | **Total**                                                                                           |         |         | **373**      | **254**          | **77**         | **27**                  |          |
 
 ## K00 semantic-kernel bootstrap
 
@@ -146,6 +146,10 @@ Package `0.8.0` establishes `kernel/invariants.json` under C01 1.4.0, registers 
 ## Decision-table registration
 
 Package `0.9.0` establishes `kernel/decision-tables.json` under C01 1.5.0, registers 8 deterministic decision-table candidates, and leaves 3 blocked decision tables outside K00. K00 advances to `0.6.0`; Domain Ownership Map advances to `1.3.0`. GitHub issue: #6.
+
+## Event admission closure
+
+Package `0.10.0` establishes C01 1.6.0 event-admission semantics: audit records and state transitions do not implicitly create canonical business events. K00 advances to `0.8.0` with the existing 14-event registry unchanged; 9 discovered names are not admitted at this baseline. GitHub issue: #8.
 
 ## Contract activation order
 

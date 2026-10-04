@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-03
-- Contract package version: `0.9.0`
+- Contract package version: `0.10.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -282,3 +282,11 @@ PATCH revisions preserve the controlling owner approval when they do not change 
 | TEACH-K00 | 0.6.0 | 0.7.0 | Register 7 dependency-ready commands as `candidate`; keep 8 blocked commands outside K00; add no events; no semantic promotion | 2026-10-04 | Patrick Craven | #7 |
 | TEACH-DOMAIN-OWNERSHIP | 1.3.0 | 1.4.0 | Add ownership assignments for the seven registered commands | 2026-10-04 | Patrick Craven | #7 |
 | TEACH-COMMAND-EVENT-DISCOVERY | 0.1.0 | 0.2.0 | Record command registration disposition; Events admission semantics remain the next gate | 2026-10-04 | Patrick Craven | #7 |
+
+## Part 12 — Event admission approval
+
+| Artifact / Contract | From | To | Decision | Date | Owner | GitHub issue |
+| --- | --- | --- | --- | --- | --- | --- |
+| C01 Canonical Semantics | 1.5.0 | 1.6.0 | Audit records and state transitions do not implicitly create canonical business events; explicit owning-domain event semantics are required | 2026-10-04 | Patrick Craven | #8 |
+| TEACH-K00 | 0.7.0 | 0.8.0 | Record event-admission rule; retain 14 events; admit 0 new events; no semantic promotion | 2026-10-04 | Patrick Craven | #8 |
+| TEACH-COMMAND-EVENT-DISCOVERY | 0.2.0 | 0.3.0 | Close Events gate for current baseline; 9 discovered names are not admitted without explicit contract support | 2026-10-04 | Patrick Craven | #8 |

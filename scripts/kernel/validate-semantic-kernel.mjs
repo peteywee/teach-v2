@@ -15,7 +15,7 @@ const names = ['entities.json','values.json','identifiers.json','relationships.j
 const docs = Object.fromEntries(names.map(n => [n, load(n)]));
 if (manifest) {
   if (manifest.kernel_id !== 'TEACH-K00') errors.push('manifest.json: kernel_id must be TEACH-K00');
-  if (manifest.version !== '0.7.0') errors.push('manifest.json: version must be 0.7.0');
+  if (manifest.version !== '0.8.0') errors.push('manifest.json: version must be 0.8.0');
   if (manifest.canonical_format !== 'json') errors.push('manifest.json: canonical_format must be json');
   for (const n of ['entities','values','identifiers','relationships','states','state_machines','invariants','decision_tables','capabilities','commands','events','evidence','schema']) {
     if (!manifest.files?.[n]) errors.push(`manifest.json: missing file mapping ${n}`);
@@ -182,6 +182,9 @@ const expectedCommandIds = new Set(['AcceptInvitation','AssignContent','Authenti
 for (const id of expectedCommandIds) if (!commandSet.has(id)) errors.push(`commands.json: missing registered command ${id}`);
 if (commandSet.size !== expectedCommandIds.size) errors.push(`commands.json: expected ${expectedCommandIds.size} commands, found ${commandSet.size}`);
 if (eventSet.size !== 14) errors.push(`events.json: expected 14 events after command registration, found ${eventSet.size}`);
+if (manifest?.rules?.audit_record_implies_domain_event !== false) errors.push('manifest.json: audit_record_implies_domain_event must be false');
+if (manifest?.rules?.state_transition_implies_event !== false) errors.push('manifest.json: state_transition_implies_event must be false');
+if (manifest?.rules?.event_registration_requires_explicit_contract_semantics !== true) errors.push('manifest.json: explicit contract semantics must be required for event registration');
 
 
 
@@ -191,7 +194,7 @@ if (errors.length) {
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
-console.log('Semantic kernel PASS: TEACH-K00 0.7.0');
+console.log('Semantic kernel PASS: TEACH-K00 0.8.0');
 console.log(`Entities: ${(docs['entities.json']?.entries || []).length}`);
 console.log(`Identifiers: ${(docs['identifiers.json']?.entries || []).length}`);
 console.log(`Relationships: ${(docs['relationships.json']?.entries || []).length}`);

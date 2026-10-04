@@ -1,0 +1,77 @@
+{
+  "admission_id": "TEACH-EVENT-ADMISSION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "approved_on": "2026-10-04",
+  "issue": "#8",
+  "baseline_commit": "5b3d0ba12c11cb6b6f3d3d53b7241803e7fa8c63",
+  "kernel_version": "0.8.0",
+  "rule": "audit-record and state-transition obligations do not imply canonical event emission; explicit owning-domain event semantics are required",
+  "existing_registered_events": [
+    "ApplicationSessionCreated",
+    "ApplicationSessionRevoked",
+    "CertificationIssued",
+    "CertificationRevoked",
+    "ContentAssigned",
+    "IdentityDeactivated",
+    "IdentityOffboarded",
+    "IdentityReactivated",
+    "LearningSessionCompleted",
+    "LearningSessionStarted",
+    "MembershipCreated",
+    "MembershipDeactivated",
+    "MembershipRevoked",
+    "ProgressRecorded"
+  ],
+  "new_events_registered": [],
+  "discovery_event_disposition": [
+    {
+      "id": "IdentityCreated",
+      "disposition": "NOT_ADMITTED",
+      "reason": "No active owning-domain contract explicitly requires this canonical event emission at the current semantic baseline."
+    },
+    {
+      "id": "IdentityInvited",
+      "disposition": "NOT_ADMITTED",
+      "reason": "No active owning-domain contract explicitly requires this canonical event emission at the current semantic baseline."
+    },
+    {
+      "id": "InvitationAccepted",
+      "disposition": "NOT_ADMITTED",
+      "reason": "No active owning-domain contract explicitly requires this canonical event emission at the current semantic baseline."
+    },
+    {
+      "id": "CredentialChanged",
+      "disposition": "NOT_ADMITTED",
+      "reason": "No active owning-domain contract explicitly requires this canonical event emission at the current semantic baseline."
+    },
+    {
+      "id": "SingleUseTokenRevoked",
+      "disposition": "NOT_ADMITTED",
+      "reason": "No active owning-domain contract explicitly requires this canonical event emission at the current semantic baseline."
+    },
+    {
+      "id": "ApplicationSessionExpired",
+      "disposition": "NOT_ADMITTED",
+      "reason": "No active owning-domain contract explicitly requires this canonical event emission at the current semantic baseline."
+    },
+    {
+      "id": "ContentPackPublished",
+      "disposition": "NOT_ADMITTED",
+      "reason": "No active owning-domain contract explicitly requires this canonical event emission at the current semantic baseline."
+    },
+    {
+      "id": "ExternalEffectReconciled",
+      "disposition": "NOT_ADMITTED",
+      "reason": "No active owning-domain contract explicitly requires this canonical event emission at the current semantic baseline."
+    },
+    {
+      "id": "EntitlementChanged",
+      "disposition": "NOT_ADMITTED",
+      "reason": "No active owning-domain contract explicitly requires this canonical event emission at the current semantic baseline."
+    }
+  ],
+  "events_gate": "closed-for-current-baseline",
+  "candidate_to_approved_promotions": 0
+}
