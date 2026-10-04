@@ -12,6 +12,15 @@ const repository = new PostgresLearningSessionRepository(drizzle(pool, { schema:
 const references = { id: 'session-1', identityId: 'learner-1', assignmentId: 'assignment-1' };
 const scope = { id: references.id, identityId: references.identityId };
 
+function postgresError(code: string) {
+  return (error: unknown): boolean => {
+    if (!(error instanceof Error)) return false;
+    const wrapped = error as Error & { code?: string; cause?: unknown };
+    const cause = (wrapped.cause ?? wrapped) as { code?: string };
+    return cause.code === code;
+  };
+}
+
 beforeEach(async () => {
   await pool.query('truncate table identity_identities cascade');
   await pool.query("insert into identity_identities (id) values ('learner-1'),('learner-2')");
@@ -29,7 +38,7 @@ test('persists ACTIVE with one required Assignment reference and canonical Ident
   // No Assignment table exists in this slice; this proves requiredness only.
 });
 test('missing Identity is rejected by the physical FK', async () => {
-  await assert.rejects(repository.createAuthorizedStart(newLearningSession({ ...references, identityId: 'missing' })), /foreign key constraint/);
+  await assert.rejects(repository.createAuthorizedStart(newLearningSession({ ...references, identityId: 'missing' })), postgresError('23503'));
   assert.equal((await pool.query('select count(*)::int as n from learning_sessions')).rows[0].n, 0);
 });
 for (const assignment of [null, '', '  ']) {
@@ -54,7 +63,7 @@ test('completion is terminal; duplicate start cannot overwrite or reopen', async
   await repository.createAuthorizedStart(newLearningSession(references));
   assert.equal((await repository.completeActive(scope))?.status, 'COMPLETED');
   assert.equal(await repository.completeActive(scope), null);
-  await assert.rejects(repository.createAuthorizedStart(newLearningSession(references)), /duplicate key/);
+  await assert.rejects(repository.createAuthorizedStart(newLearningSession(references)), postgresError('23505'));
   await assert.rejects(pool.query("update learning_sessions set status='ACTIVE' where id=$1", [references.id]), /only ACTIVE to COMPLETED/);
   assert.equal((await repository.getById(scope))?.status, 'COMPLETED');
 });
