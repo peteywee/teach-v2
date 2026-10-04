@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-04
-- Contract package version: `0.11.0`
+- Contract package version: `0.11.1`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -332,3 +332,14 @@ The four unpromoted commands are not implementation authority under SEM-2. Their
 ### Reference evidence used for the owner decision
 
 Legacy `peteywee/teach` was consulted only as non-authoritative reference evidence. It contained invitation states `pending/accepted/revoked/expired`, a 7-day default invitation lifetime, 15-minute frontline setup tokens, and 1-hour password reset tokens. The v2 values above are authoritative only because the owner approved this package.
+
+## Part 17 — Dependency lifecycle registration and final command promotion
+
+| Artifact | From | To | Decision | Date | Owner | GitHub issue |
+| --- | --- | --- | --- | --- | --- | --- |
+| TEACH-K00 | 0.11.0 | 0.12.0 | Approve 4 dependency entities + IDs, 4 lifecycle state sets, 4 lifecycle state machines; add/approve RevokeInvitation; promote InviteIdentity, AcceptInvitation, RevokeSingleUseToken, ReconcileExternalEffect; no event status changes | 2026-10-04 | Patrick Craven | #12 |
+| TEACH-DOMAIN-OWNERSHIP | 1.5.0 | 1.6.0 | Add ownership assignments for 4 state sets, 4 state machines, and RevokeInvitation | 2026-10-04 | Patrick Craven | #12 |
+| TEACH-DEPENDENCY-CONCEPTS | 0.3.0 | 0.4.0 | Close lifecycle blockers and record approved registration | 2026-10-04 | Patrick Craven | #12 |
+| TEACH-COMMAND-EVENT-DISCOVERY | 0.5.0 | 0.6.0 | Record final command promotion; 23 commands approved / 0 candidate | 2026-10-04 | Patrick Craven | #12 |
+
+Events remain unchanged at 4 approved / 10 candidate. This approval does not manufacture domain events from lifecycle transitions.

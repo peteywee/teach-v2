@@ -2,9 +2,9 @@
 {
   "doc_id": "TEACH-DEPENDENCY-LIFECYCLE-DISCOVERY",
   "class": "specification",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "claims_truth_state": "declared",
-  "status": "proposed",
+  "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-04",
   "updated_on": "2026-10-04",
@@ -23,7 +23,7 @@
 
 # Dependency Lifecycle Closure Discovery
 
-Status: `proposed`.
+Status: `recorded`.
 
 This discovery does not alter K00 semantics or promote commands.
 
@@ -34,3 +34,7 @@ It records three unresolved lifecycle decision groups:
 3. ReconciliationRecord lifecycle.
 
 All four dependent commands remain `BLOCKED` for promotion until the required lifecycle vocabulary is owner-approved and registered.
+
+## Disposition
+
+Closed by owner-approved C11 1.3.0 / C22 1.1.0 decisions and K00 0.12.0 registration under GitHub issue #12. The original discovery evidence remains preserved in `lifecycle-closure.proposed.json`.

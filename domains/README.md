@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-DOMAIN-DISCOVERY",
   "class": "specification",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -11,15 +11,15 @@
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "75258f30e0301f6ca733176b7a8c8beb99a2cb4a",
-    "purpose": "pre-dependency-concept-registration baseline"
+    "commit": "168ff001ee6d8cb6b42d26a9602dba7f4c419092",
+    "purpose": "pre-lifecycle-registration baseline"
   },
   "approval": {
     "state": "approved",
     "approved_on": "2026-10-04",
     "owner": "Patrick Craven, Top Shelf Service LLC",
     "record": "contracts/APPROVAL-RECORD.md",
-    "issue": "#11"
+    "issue": "#12"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -56,3 +56,5 @@ Domain Ownership Map `1.3.0` adds owner assignments for eight registered decisio
 Domain Ownership Map `1.4.0` adds owner assignments for seven registered command candidates; GitHub issue #7.
 
 Domain Ownership Map `1.5.0` adds ownership for four dependency entities and their four identifier types; GitHub issue #11.
+
+Domain Ownership Map `1.6.0` adds the four lifecycle state sets, four lifecycle state machines, and `RevokeInvitation`; existing ownership assignments are unchanged. GitHub issue #12.

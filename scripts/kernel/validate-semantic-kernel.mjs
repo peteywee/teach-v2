@@ -15,7 +15,7 @@ const names = ['entities.json','values.json','identifiers.json','relationships.j
 const docs = Object.fromEntries(names.map(n => [n, load(n)]));
 if (manifest) {
   if (manifest.kernel_id !== 'TEACH-K00') errors.push('manifest.json: kernel_id must be TEACH-K00');
-  if (manifest.version !== '0.11.0') errors.push('manifest.json: version must be 0.11.0');
+  if (manifest.version !== '0.12.0') errors.push('manifest.json: version must be 0.12.0');
   if (manifest.canonical_format !== 'json') errors.push('manifest.json: canonical_format must be json');
   for (const n of ['entities','values','identifiers','relationships','states','state_machines','invariants','decision_tables','capabilities','commands','events','evidence','schema']) {
     if (!manifest.files?.[n]) errors.push(`manifest.json: missing file mapping ${n}`);
@@ -120,10 +120,14 @@ const stateSetMap = new Map((docs['states.json']?.entries || []).map(x => [x.id,
 const commandSet = new Set((docs['commands.json']?.entries || []).map(x => x.id));
 const eventSet = new Set((docs['events.json']?.entries || []).map(x => x.id));
 const machineIds = new Set();
+const historicalCandidateMachines = new Set(['ApplicationSessionStateMachine','IdentityStateMachine','LearningSessionStateMachine','MembershipStateMachine']);
+const approvedLifecycleMachines = new Set(['InvitationStateMachine','SetupTokenStateMachine','PasswordResetTokenStateMachine','ReconciliationRecordStateMachine']);
 for (const m of docs['state-machines.json']?.entries || []) {
   if (machineIds.has(m.id)) errors.push(`state-machines.json: duplicate ${m.id}`);
   machineIds.add(m.id);
-  if (m.status !== 'candidate') errors.push(`state-machines.json: ${m.id} must remain candidate in K00 0.4.0`);
+  if (historicalCandidateMachines.has(m.id) && m.status !== 'candidate') errors.push(`state-machines.json: historical ${m.id} must remain candidate`);
+  if (approvedLifecycleMachines.has(m.id) && m.status !== 'approved') errors.push(`state-machines.json: ${m.id} must be approved`);
+  if (!historicalCandidateMachines.has(m.id) && !approvedLifecycleMachines.has(m.id)) errors.push(`state-machines.json: unexpected ${m.id}`);
   if (!entityIds.has(m.entity)) errors.push(`state-machines.json: ${m.id} unknown entity ${m.entity}`);
   const ss = stateSetMap.get(m.state_set);
   if (!ss) errors.push(`state-machines.json: ${m.id} unknown state_set ${m.state_set}`);
@@ -138,9 +142,24 @@ for (const m of docs['state-machines.json']?.entries || []) {
   }
   for (const terminal of m.terminal_states || []) if (!values.has(terminal)) errors.push(`state-machines.json: ${m.id} invalid terminal ${terminal}`);
 }
-const requiredMachines = new Set(['ApplicationSessionStateMachine','IdentityStateMachine','LearningSessionStateMachine','MembershipStateMachine']);
+const requiredMachines = new Set([...historicalCandidateMachines, ...approvedLifecycleMachines]);
 for (const id of requiredMachines) if (!machineIds.has(id)) errors.push(`state-machines.json: missing ${id}`);
 for (const id of machineIds) if (!requiredMachines.has(id)) errors.push(`state-machines.json: unexpected ${id}`);
+
+const requiredLifecycleStateSets = new Map([
+  ['InvitationStatus',['PENDING','ACCEPTED','REVOKED','EXPIRED']],
+  ['SingleUseTokenStatus',['ACTIVE','CONSUMED','EXPIRED','REVOKED']],
+  ['ReconciliationRecordStatus',['OPEN','RESOLVED']],
+  ['ExternalEffectOutcome',['AMBIGUOUS','PARTIAL_FAILURE','CONFIRMED_SUCCESS','CONFIRMED_NO_EFFECT']],
+]);
+for (const [id,expected] of requiredLifecycleStateSets) {
+  const s=stateSetMap.get(id);
+  if (!s) errors.push(`states.json: missing ${id}`);
+  else {
+    if (s.status !== 'approved') errors.push(`states.json: ${id} must be approved`);
+    if (JSON.stringify(s.values)!==JSON.stringify(expected)) errors.push(`states.json: ${id} values drifted`);
+  }
+}
 
 const learningStatus = stateSetMap.get('LearningSessionStatus');
 if (!learningStatus || JSON.stringify(learningStatus.values) !== JSON.stringify(['ACTIVE','COMPLETED'])) errors.push('states.json: LearningSessionStatus must be ACTIVE,COMPLETED');
@@ -158,31 +177,31 @@ for (const c of docs['commands.json']?.entries || []) {
 }
 
 const expectedApprovedCommandEvidence = new Map([
+  ['AcceptInvitation',['IDN-24','IDN-27']],
   ['AssignContent',['MGR-7','LRN-2']],
   ['AuthenticateIdentity',['IDN-14','SES-17']],
-  ['ChangeCredential',['IDN-15','IDN-16']],
+  ['ChangeCredential',['IDN-15','IDN-16','IDN-26']],
   ['CompleteLearningSession',['LRN-3']],
   ['CreateApplicationSession',['SES-1','SES-3','SES-10']],
   ['CreateIdentity',['IDN-1','IDN-16']],
   ['CreateMembership',['TEN-3','TEN-18']],
   ['DeactivateIdentity',['IDN-21','IDN-22']],
   ['DeactivateMembership',['TEN-10','TEN-18']],
+  ['InviteIdentity',['IDN-20','IDN-24','IDN-25']],
   ['IssueCertification',['CERT-1','CERT-8','CERT-9','CERT-10']],
   ['OffboardIdentity',['IDN-17','IDN-18','IDN-19','IDN-21']],
   ['PublishContentPack',['CNT-3','CNT-6']],
   ['ReactivateIdentity',['IDN-21','IDN-23']],
+  ['ReconcileExternalEffect',['TXN-6','TXN-7','TXN-8','TXN-14','TXN-16']],
   ['RecordProgressEvent',['LRN-3','LRN-4','LRN-7','LRN-10']],
   ['RevokeApplicationSession',['SES-12','SES-14','SES-20']],
   ['RevokeCertification',['CERT-11','CERT-12']],
+  ['RevokeInvitation',['IDN-24','IDN-28']],
   ['RevokeMembership',['TEN-18','TEN-19']],
+  ['RevokeSingleUseToken',['IDN-11','IDN-26']],
   ['StartLearningSession',['LRN-2','LRN-3']],
 ]);
-const expectedBlockedCommandBlockers = new Map([
-  ['AcceptInvitation',['candidate-dependency:Invitation','lifecycle-unresolved:Invitation']],
-  ['InviteIdentity',['candidate-dependency:Invitation','lifecycle-unresolved:Invitation']],
-  ['ReconcileExternalEffect',['candidate-dependency:ReconciliationRecord','lifecycle-unresolved:ReconciliationRecord']],
-  ['RevokeSingleUseToken',['candidate-dependency:SetupToken','candidate-dependency:PasswordResetToken','lifecycle-unresolved:SetupToken','lifecycle-unresolved:PasswordResetToken']],
-]);
+const expectedBlockedCommandBlockers = new Map([]);
 const requirementFiles = new Map([
   ['IDN','contracts/c11-identity-credentials-contract.md'],
   ['SES','contracts/c12-application-sessions-contract.md'],
@@ -191,6 +210,7 @@ const requirementFiles = new Map([
   ['LRN','contracts/c32-learning-sessions-progress-contract.md'],
   ['MGR','contracts/c33-manager-operations-contract.md'],
   ['CERT','contracts/c34-certification-credentials-contract.md'],
+  ['TXN','contracts/c22-transaction-idempotency-reconciliation-contract.md'],
 ]);
 const ownerPrefixes = new Map([
   ['Identity',new Set(['IDN','SES'])],
@@ -198,6 +218,7 @@ const ownerPrefixes = new Map([
   ['Content',new Set(['CNT'])],
   ['Learning',new Set(['LRN','MGR'])],
   ['Certification',new Set(['CERT'])],
+  ['TransactionControl',new Set(['TXN'])],
 ]);
 const semanticDependencyIds = new Set();
 for (const f of ['entities.json','identifiers.json','values.json','states.json','relationships.json']) {
@@ -229,8 +250,8 @@ for (const c of docs['commands.json']?.entries || []) {
     errors.push(`commands.json: ${c.id} missing command-promotion disposition`);
   }
 }
-if ([...(docs['commands.json']?.entries || [])].filter(c => c.status === 'approved').length !== 18) errors.push('commands.json: expected 18 approved commands');
-if ([...(docs['commands.json']?.entries || [])].filter(c => c.status === 'candidate').length !== 4) errors.push('commands.json: expected 4 candidate commands');
+if ([...(docs['commands.json']?.entries || [])].filter(c => c.status === 'approved').length !== 23) errors.push('commands.json: expected 23 approved commands');
+if ([...(docs['commands.json']?.entries || [])].filter(c => c.status === 'candidate').length !== 0) errors.push('commands.json: expected 0 candidate commands');
 const expectedDependencyEntities = new Map([
   ['Invitation',{identifier:'InvitationId',owner:'Identity'}],
   ['SetupToken',{identifier:'SetupTokenId',owner:'Identity'}],
@@ -240,15 +261,15 @@ const expectedDependencyEntities = new Map([
 for (const [id,meta] of expectedDependencyEntities) {
   const e=(docs['entities.json']?.entries||[]).find(x=>x.id===id);
   if (!e) { errors.push(`entities.json: missing dependency entity ${id}`); continue; }
-  if (e.status!=='candidate') errors.push(`entities.json: ${id} must remain candidate pending lifecycle closure`);
+  if (e.status!=='approved') errors.push(`entities.json: ${id} must be approved`);
   if (e.identifier!==meta.identifier) errors.push(`entities.json: ${id} identifier must be ${meta.identifier}`);
   if (e.owning_domain!==meta.owner) errors.push(`entities.json: ${id} owner must be ${meta.owner}`);
-  if (e.lifecycle?.state!=='blocked') errors.push(`entities.json: ${id} lifecycle must remain blocked`);
-  if (!Array.isArray(e.lifecycle?.blocked_by) || !e.lifecycle.blocked_by.length) errors.push(`entities.json: ${id} lifecycle blockers required`);
+  if (e.lifecycle?.state!=='approved') errors.push(`entities.json: ${id} lifecycle must be approved`);
+  if (!e.lifecycle?.state_set || !e.lifecycle?.state_machine) errors.push(`entities.json: ${id} lifecycle references required`);
   const i=(docs['identifiers.json']?.entries||[]).find(x=>x.id===meta.identifier);
   if (!i) errors.push(`identifiers.json: missing ${meta.identifier}`);
   else {
-    if (i.status!=='candidate') errors.push(`identifiers.json: ${meta.identifier} must remain candidate`);
+    if (i.status!=='approved') errors.push(`identifiers.json: ${meta.identifier} must be approved`);
     if (i.represents!==id) errors.push(`identifiers.json: ${meta.identifier} must represent ${id}`);
     if (i.owning_domain!==meta.owner) errors.push(`identifiers.json: ${meta.identifier} owner must be ${meta.owner}`);
   }
@@ -296,7 +317,7 @@ for (const dt of docs['decision-tables.json']?.entries || []) {
   if (!dt.failure_behavior) errors.push(`decision-tables.json: ${dt.id} missing failure_behavior`);
 }
 if (decisionIds.size !== 8) errors.push(`decision-tables.json: expected 8 registered candidates, found ${decisionIds.size}`);
-const expectedCommandIds = new Set(['AcceptInvitation','AssignContent','AuthenticateIdentity','ChangeCredential','CompleteLearningSession','CreateApplicationSession','CreateIdentity','CreateMembership','DeactivateIdentity','DeactivateMembership','InviteIdentity','IssueCertification','OffboardIdentity','PublishContentPack','ReactivateIdentity','ReconcileExternalEffect','RecordProgressEvent','RevokeApplicationSession','RevokeCertification','RevokeMembership','RevokeSingleUseToken','StartLearningSession']);
+const expectedCommandIds = new Set(['AcceptInvitation','AssignContent','AuthenticateIdentity','ChangeCredential','CompleteLearningSession','CreateApplicationSession','CreateIdentity','CreateMembership','DeactivateIdentity','DeactivateMembership','InviteIdentity','IssueCertification','OffboardIdentity','PublishContentPack','ReactivateIdentity','ReconcileExternalEffect','RecordProgressEvent','RevokeApplicationSession','RevokeCertification','RevokeInvitation','RevokeMembership','RevokeSingleUseToken','StartLearningSession']);
 for (const id of expectedCommandIds) if (!commandSet.has(id)) errors.push(`commands.json: missing registered command ${id}`);
 if (commandSet.size !== expectedCommandIds.size) errors.push(`commands.json: expected ${expectedCommandIds.size} commands, found ${commandSet.size}`);
 if (eventSet.size !== 14) errors.push(`events.json: expected 14 events after command registration, found ${eventSet.size}`);
@@ -312,7 +333,7 @@ if (errors.length) {
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
-console.log('Semantic kernel PASS: TEACH-K00 0.11.0');
+console.log('Semantic kernel PASS: TEACH-K00 0.12.0');
 console.log(`Entities: ${(docs['entities.json']?.entries || []).length}`);
 console.log(`Identifiers: ${(docs['identifiers.json']?.entries || []).length}`);
 console.log(`Relationships: ${(docs['relationships.json']?.entries || []).length}`);

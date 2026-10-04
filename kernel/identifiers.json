@@ -92,10 +92,14 @@
     {
       "id": "InvitationId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "Invitation",
-      "owning_domain": "Identity"
+      "owning_domain": "Identity",
+      "promotion_evidence": [
+        "IDN-24",
+        "IDN-25"
+      ]
     },
     {
       "id": "LearnerStateId",
@@ -148,10 +152,13 @@
     {
       "id": "PasswordResetTokenId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "PasswordResetToken",
-      "owning_domain": "Identity"
+      "owning_domain": "Identity",
+      "promotion_evidence": [
+        "IDN-26"
+      ]
     },
     {
       "id": "ProgressEventId",
@@ -164,10 +171,14 @@
     {
       "id": "ReconciliationRecordId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "ReconciliationRecord",
-      "owning_domain": "TransactionControl"
+      "owning_domain": "TransactionControl",
+      "promotion_evidence": [
+        "TXN-14",
+        "TXN-15"
+      ]
     },
     {
       "id": "RequestId",
@@ -180,10 +191,13 @@
     {
       "id": "SetupTokenId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "SetupToken",
-      "owning_domain": "Identity"
+      "owning_domain": "Identity",
+      "promotion_evidence": [
+        "IDN-26"
+      ]
     }
   ]
 }

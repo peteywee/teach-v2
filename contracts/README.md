@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -34,7 +34,7 @@
 
 # Teach v2 Contracts
 
-- Package version: `0.11.0`
+- Package version: `0.11.1`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
@@ -166,6 +166,10 @@ Package `0.10.3` records K00 `0.11.0` candidate registration for Invitation, Set
 ## Dependency lifecycle owner decisions
 
 Package `0.11.0` resolves the lifecycle semantics needed for Invitation, SetupToken, PasswordResetToken, and ReconciliationRecord. C11 advances to `1.3.0`; C22 advances to `1.1.0`. OQ-IDN-2 and OQ-IDN-5 are resolved. The legacy repository is reference evidence only; the owner-approved v2 contract revisions are authoritative. GitHub issue: #12.
+
+## Lifecycle semantic registration
+
+Package `0.11.1` records K00 `0.12.0` registration of the C11 1.3.0 / C22 1.1.0 lifecycle decisions. Four dependency entities and IDs are approved, four state sets and four state machines are approved, `RevokeInvitation` is added and approved, and the four previously blocked commands are promoted. No C-series behavior changes in this stage. GitHub issue: #12.
 
 ## Contract activation order
 

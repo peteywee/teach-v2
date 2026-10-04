@@ -83,6 +83,47 @@
       ]
     },
     {
+      "id": "InvitationStateMachine",
+      "kind": "state_machine",
+      "status": "approved",
+      "entity": "Invitation",
+      "state_set": "InvitationStatus",
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C11"
+      ],
+      "initial_state": "PENDING",
+      "transitions": [
+        {
+          "from": "PENDING",
+          "to": "ACCEPTED",
+          "command": "AcceptInvitation"
+        },
+        {
+          "from": "PENDING",
+          "to": "REVOKED",
+          "command": "RevokeInvitation"
+        },
+        {
+          "from": "PENDING",
+          "to": "EXPIRED",
+          "trigger_kind": "system_condition",
+          "trigger": "expiry"
+        }
+      ],
+      "terminal_states": [
+        "ACCEPTED",
+        "REVOKED",
+        "EXPIRED"
+      ],
+      "promotion_evidence": [
+        "IDN-24",
+        "IDN-27",
+        "IDN-28"
+      ]
+    },
+    {
       "id": "LearningSessionStateMachine",
       "kind": "state_machine",
       "status": "candidate",
@@ -145,6 +186,129 @@
       ],
       "terminal_states": [
         "REVOKED"
+      ]
+    },
+    {
+      "id": "PasswordResetTokenStateMachine",
+      "kind": "state_machine",
+      "status": "approved",
+      "entity": "PasswordResetToken",
+      "state_set": "SingleUseTokenStatus",
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C11"
+      ],
+      "initial_state": "ACTIVE",
+      "transitions": [
+        {
+          "from": "ACTIVE",
+          "to": "CONSUMED",
+          "command": "ChangeCredential",
+          "condition": "PasswordResetToken authorizes successful credential change"
+        },
+        {
+          "from": "ACTIVE",
+          "to": "REVOKED",
+          "command": "RevokeSingleUseToken"
+        },
+        {
+          "from": "ACTIVE",
+          "to": "EXPIRED",
+          "trigger_kind": "system_condition",
+          "trigger": "expiry"
+        }
+      ],
+      "terminal_states": [
+        "CONSUMED",
+        "EXPIRED",
+        "REVOKED"
+      ],
+      "promotion_evidence": [
+        "IDN-9",
+        "IDN-10",
+        "IDN-11",
+        "IDN-26"
+      ]
+    },
+    {
+      "id": "ReconciliationRecordStateMachine",
+      "kind": "state_machine",
+      "status": "approved",
+      "entity": "ReconciliationRecord",
+      "state_set": "ReconciliationRecordStatus",
+      "owning_domain": "TransactionControl",
+      "authority_contracts": [
+        "C01",
+        "C22"
+      ],
+      "initial_state": "OPEN",
+      "transitions": [
+        {
+          "from": "OPEN",
+          "to": "RESOLVED",
+          "command": "ReconcileExternalEffect",
+          "condition": "canonical provider readback establishes CONFIRMED_SUCCESS or CONFIRMED_NO_EFFECT"
+        }
+      ],
+      "terminal_states": [
+        "RESOLVED"
+      ],
+      "no_transition_conditions": [
+        {
+          "condition": "provider state unreadable",
+          "state_remains": "OPEN",
+          "outcome_remains": "AMBIGUOUS or PARTIAL_FAILURE",
+          "retry_allowed": false
+        }
+      ],
+      "promotion_evidence": [
+        "TXN-14",
+        "TXN-15",
+        "TXN-16"
+      ]
+    },
+    {
+      "id": "SetupTokenStateMachine",
+      "kind": "state_machine",
+      "status": "approved",
+      "entity": "SetupToken",
+      "state_set": "SingleUseTokenStatus",
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C11"
+      ],
+      "initial_state": "ACTIVE",
+      "transitions": [
+        {
+          "from": "ACTIVE",
+          "to": "CONSUMED",
+          "command": "ChangeCredential",
+          "condition": "SetupToken authorizes successful credential change"
+        },
+        {
+          "from": "ACTIVE",
+          "to": "REVOKED",
+          "command": "RevokeSingleUseToken"
+        },
+        {
+          "from": "ACTIVE",
+          "to": "EXPIRED",
+          "trigger_kind": "system_condition",
+          "trigger": "expiry"
+        }
+      ],
+      "terminal_states": [
+        "CONSUMED",
+        "EXPIRED",
+        "REVOKED"
+      ],
+      "promotion_evidence": [
+        "IDN-9",
+        "IDN-10",
+        "IDN-11",
+        "IDN-26"
       ]
     }
   ]

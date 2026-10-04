@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-DEPENDENCY-CONCEPTS",
   "class": "specification",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "claims_truth_state": "declared",
   "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -52,3 +52,18 @@ GitHub issue #12 approves the three lifecycle decision groups discovered after d
 - Required new state-changing command: `RevokeInvitation`.
 
 This stage changes owning contracts only. K00 registration and promotion remain a separate next stage.
+
+## Lifecycle registration complete
+
+GitHub issue #12 registers and approves the owner-decided lifecycle semantics.
+
+- Approved dependency entities: 4
+- Approved dependency identifiers: 4
+- Approved new state sets: 4
+- Approved new state machines: 4
+- New approved command: RevokeInvitation
+- Previously blocked commands promoted: 4
+- Total commands: 23 approved / 0 candidate
+- Event status changes: 0
+
+The three lifecycle decision groups are closed for the current semantic baseline.

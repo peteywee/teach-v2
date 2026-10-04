@@ -1,6 +1,6 @@
 {
   "map_id": "TEACH-DOMAIN-OWNERSHIP",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
@@ -8,8 +8,8 @@
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "75258f30e0301f6ca733176b7a8c8beb99a2cb4a",
-    "purpose": "pre-dependency-concept-registration baseline"
+    "commit": "168ff001ee6d8cb6b42d26a9602dba7f4c419092",
+    "purpose": "pre-lifecycle-registration baseline"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -299,6 +299,15 @@
       "proposed_owner": "Certification",
       "authority_contracts": [
         "C34"
+      ]
+    },
+    {
+      "kind": "command",
+      "id": "RevokeInvitation",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11"
       ]
     },
     {
@@ -1371,6 +1380,16 @@
     },
     {
       "kind": "state_machine",
+      "id": "InvitationStateMachine",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C11"
+      ]
+    },
+    {
+      "kind": "state_machine",
       "id": "LearningSessionStateMachine",
       "decision_state": "approved",
       "proposed_owner": "Learning",
@@ -1387,6 +1406,36 @@
       "authority_contracts": [
         "C01",
         "C13"
+      ]
+    },
+    {
+      "kind": "state_machine",
+      "id": "PasswordResetTokenStateMachine",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C11"
+      ]
+    },
+    {
+      "kind": "state_machine",
+      "id": "ReconciliationRecordStateMachine",
+      "decision_state": "approved",
+      "proposed_owner": "TransactionControl",
+      "authority_contracts": [
+        "C01",
+        "C22"
+      ]
+    },
+    {
+      "kind": "state_machine",
+      "id": "SetupTokenStateMachine",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C11"
       ]
     },
     {
@@ -1410,12 +1459,32 @@
     },
     {
       "kind": "state_set",
+      "id": "ExternalEffectOutcome",
+      "decision_state": "approved",
+      "proposed_owner": "TransactionControl",
+      "authority_contracts": [
+        "C01",
+        "C22"
+      ]
+    },
+    {
+      "kind": "state_set",
       "id": "IdentityStatus",
       "decision_state": "approved",
       "proposed_owner": "Identity",
       "authority_contracts": [
         "C11",
         "C12"
+      ]
+    },
+    {
+      "kind": "state_set",
+      "id": "InvitationStatus",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C11"
       ]
     },
     {
@@ -1438,6 +1507,26 @@
       ],
       "notes": [
         "Approved lifecycle: ACTIVE -> INACTIVE -> REVOKED; REVOKED terminal; DELETED is not MembershipStatus."
+      ]
+    },
+    {
+      "kind": "state_set",
+      "id": "ReconciliationRecordStatus",
+      "decision_state": "approved",
+      "proposed_owner": "TransactionControl",
+      "authority_contracts": [
+        "C01",
+        "C22"
+      ]
+    },
+    {
+      "kind": "state_set",
+      "id": "SingleUseTokenStatus",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C11"
       ]
     },
     {
@@ -1499,7 +1588,7 @@
     "state": "approved",
     "approved_on": "2026-10-04",
     "owner": "Patrick Craven, Top Shelf Service LLC",
-    "issue": "#11",
-    "basis": "Explicit dependency-concept candidate-registration approval"
+    "issue": "#12",
+    "basis": "Explicit owner approval for lifecycle registration and final command promotion"
   }
 }

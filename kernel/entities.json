@@ -103,7 +103,7 @@
     {
       "id": "Invitation",
       "kind": "entity",
-      "status": "candidate",
+      "status": "approved",
       "definition": "Identity-domain record representing an invitation into an identity/setup flow.",
       "identifier": "InvitationId",
       "owning_domain": "Identity",
@@ -113,23 +113,16 @@
         "Offboarded-email handling remains fail-closed under IDN-20 until OQ-IDN-5 is decided."
       ],
       "lifecycle": {
-        "state": "blocked",
-        "authority_contracts": [
-          "C11"
-        ],
-        "requirements": [
-          "IDN-9",
-          "IDN-10",
-          "IDN-11",
-          "IDN-16",
-          "IDN-20"
-        ],
-        "blocked_by": [
-          "OQ-IDN-2",
-          "OQ-IDN-5",
-          "semantic-decision:invitation-lifecycle-state-set"
-        ],
-        "notes": "The active contract requires expiry, one-time consumption, revocation behavior and fail-closed offboarded-email handling, but does not define a complete canonical Invitation lifecycle state vocabulary."
+        "state": "approved",
+        "state_set": "InvitationStatus",
+        "state_machine": "InvitationStateMachine",
+        "promotion_evidence": [
+          "IDN-20",
+          "IDN-24",
+          "IDN-25",
+          "IDN-27",
+          "IDN-28"
+        ]
       }
     },
     {
@@ -201,7 +194,7 @@
     {
       "id": "PasswordResetToken",
       "kind": "entity",
-      "status": "candidate",
+      "status": "approved",
       "definition": "Single-use identity credential used to authorize a password-reset flow.",
       "identifier": "PasswordResetTokenId",
       "owning_domain": "Identity",
@@ -212,24 +205,17 @@
         "A revoked, expired, consumed, or otherwise invalid token must not authenticate."
       ],
       "lifecycle": {
-        "state": "blocked",
-        "authority_contracts": [
-          "C11"
-        ],
-        "requirements": [
+        "state": "approved",
+        "state_set": "SingleUseTokenStatus",
+        "state_machine": "PasswordResetTokenStateMachine",
+        "promotion_evidence": [
           "IDN-7",
           "IDN-8",
           "IDN-9",
           "IDN-10",
           "IDN-11",
-          "IDN-14",
-          "IDN-18"
-        ],
-        "blocked_by": [
-          "OQ-IDN-2",
-          "semantic-decision:single-use-token-lifecycle-state-set"
-        ],
-        "notes": "General single-use token behavior is normative, but canonical lifecycle state names and the owner-approved reset-token lifetime are not yet defined."
+          "IDN-26"
+        ]
       }
     },
     {
@@ -246,7 +232,7 @@
     {
       "id": "ReconciliationRecord",
       "kind": "entity",
-      "status": "candidate",
+      "status": "approved",
       "definition": "Transaction-control record that captures an ambiguous external-effect outcome and the authoritative reconciliation readback used before any retry.",
       "identifier": "ReconciliationRecordId",
       "owning_domain": "TransactionControl",
@@ -256,26 +242,25 @@
         "Failure to read provider state preserves a non-success ambiguous condition."
       ],
       "lifecycle": {
-        "state": "blocked",
-        "authority_contracts": [
-          "C22"
-        ],
-        "requirements": [
+        "state": "approved",
+        "state_set": "ReconciliationRecordStatus",
+        "state_machine": "ReconciliationRecordStateMachine",
+        "promotion_evidence": [
           "TXN-6",
           "TXN-7",
           "TXN-8",
-          "TXN-9"
+          "TXN-9",
+          "TXN-14",
+          "TXN-15",
+          "TXN-16"
         ],
-        "blocked_by": [
-          "semantic-decision:reconciliation-lifecycle-state-set"
-        ],
-        "notes": "C22 requires explicit ambiguous and partial-failure states, but a complete canonical ReconciliationRecord state vocabulary has not yet been registered."
+        "outcome_set": "ExternalEffectOutcome"
       }
     },
     {
       "id": "SetupToken",
       "kind": "entity",
-      "status": "candidate",
+      "status": "approved",
       "definition": "Single-use identity credential used to complete frontline setup.",
       "identifier": "SetupTokenId",
       "owning_domain": "Identity",
@@ -286,25 +271,17 @@
         "A revoked, expired, consumed, or otherwise invalid token must not authenticate."
       ],
       "lifecycle": {
-        "state": "blocked",
-        "authority_contracts": [
-          "C11"
-        ],
-        "requirements": [
+        "state": "approved",
+        "state_set": "SingleUseTokenStatus",
+        "state_machine": "SetupTokenStateMachine",
+        "promotion_evidence": [
           "IDN-7",
           "IDN-8",
           "IDN-9",
           "IDN-10",
           "IDN-11",
-          "IDN-12",
-          "IDN-14",
-          "IDN-18"
-        ],
-        "blocked_by": [
-          "OQ-IDN-2",
-          "semantic-decision:single-use-token-lifecycle-state-set"
-        ],
-        "notes": "General single-use token behavior is normative, but canonical lifecycle state names and the owner-approved setup-token lifetime are not yet defined."
+          "IDN-26"
+        ]
       }
     }
   ]

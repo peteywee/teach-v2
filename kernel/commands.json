@@ -4,17 +4,17 @@
     {
       "id": "AcceptInvitation",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Identity",
       "definition": "Accepts an invitation, creating the identity's membership.",
-      "authority": "Consumes an Invitation; creates Identity-Membership linkage.",
+      "authority": "Transitions a valid PENDING Invitation to ACCEPTED, renders its acceptance secret unusable, and requests membership creation through the Organization-owned CreateMembership command boundary; performs no direct Membership write.",
       "requires": [
         "Invitation",
         "Identity"
       ],
-      "promotion_blockers": [
-        "candidate-dependency:Invitation",
-        "lifecycle-unresolved:Invitation"
+      "promotion_evidence": [
+        "IDN-24",
+        "IDN-27"
       ]
     },
     {
@@ -56,14 +56,15 @@
       "status": "approved",
       "owning_domain": "Identity",
       "definition": "Changes an identity's credential.",
-      "authority": "Mutates Credential; revokes sessions per the session-revocation policy.",
+      "authority": "Changes an identity credential; when authorized by an ACTIVE SetupToken or PasswordResetToken, consumes that token in the same transaction; revokes sessions per the session-revocation policy.",
       "requires": [
         "Identity",
         "Credential"
       ],
       "promotion_evidence": [
         "IDN-15",
-        "IDN-16"
+        "IDN-16",
+        "IDN-26"
       ]
     },
     {
@@ -162,17 +163,18 @@
     {
       "id": "InviteIdentity",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Identity",
       "definition": "Invites a prospective identity to join.",
-      "authority": "Creates Invitation.",
+      "authority": "Creates a PENDING Invitation with an Invitation-owned hashed acceptance secret and the canonical 7-day expiry; creates no membership.",
       "requires": [
         "Invitation",
         "Identity"
       ],
-      "promotion_blockers": [
-        "candidate-dependency:Invitation",
-        "lifecycle-unresolved:Invitation"
+      "promotion_evidence": [
+        "IDN-20",
+        "IDN-24",
+        "IDN-25"
       ]
     },
     {
@@ -243,16 +245,19 @@
     {
       "id": "ReconcileExternalEffect",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "TransactionControl",
       "definition": "Reconciles an ambiguous external effect before retry.",
-      "authority": "Records reconciliation; retries or compensates the external effect.",
+      "authority": "Reads canonical provider state for an OPEN ReconciliationRecord and resolves it only to CONFIRMED_SUCCESS or CONFIRMED_NO_EFFECT; never retries while unresolved.",
       "requires": [
         "ReconciliationRecord"
       ],
-      "promotion_blockers": [
-        "candidate-dependency:ReconciliationRecord",
-        "lifecycle-unresolved:ReconciliationRecord"
+      "promotion_evidence": [
+        "TXN-6",
+        "TXN-7",
+        "TXN-8",
+        "TXN-14",
+        "TXN-16"
       ]
     },
     {
@@ -305,6 +310,21 @@
       ]
     },
     {
+      "id": "RevokeInvitation",
+      "kind": "command",
+      "status": "approved",
+      "owning_domain": "Identity",
+      "definition": "Revokes a pending invitation and renders its acceptance secret unusable.",
+      "authority": "Transitions Invitation PENDING -> REVOKED and invalidates the Invitation-owned acceptance secret in the same transaction.",
+      "requires": [
+        "Invitation"
+      ],
+      "promotion_evidence": [
+        "IDN-24",
+        "IDN-28"
+      ]
+    },
+    {
       "id": "RevokeMembership",
       "kind": "command",
       "status": "approved",
@@ -322,19 +342,17 @@
     {
       "id": "RevokeSingleUseToken",
       "kind": "command",
-      "status": "candidate",
+      "status": "approved",
       "owning_domain": "Identity",
       "definition": "Revokes a single-use token before expiry.",
-      "authority": "Marks the token revoked; subsequent use is rejected.",
+      "authority": "Transitions an ACTIVE SetupToken or PasswordResetToken to REVOKED; subsequent use is rejected.",
       "requires": [
         "SetupToken",
         "PasswordResetToken"
       ],
-      "promotion_blockers": [
-        "candidate-dependency:SetupToken",
-        "candidate-dependency:PasswordResetToken",
-        "lifecycle-unresolved:SetupToken",
-        "lifecycle-unresolved:PasswordResetToken"
+      "promotion_evidence": [
+        "IDN-11",
+        "IDN-26"
       ]
     },
     {

@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-COMMAND-EVENT-DISCOVERY",
   "class": "specification",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "claims_truth_state": "declared",
   "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -86,3 +86,14 @@ GitHub issue #11 registers the four previously missing command dependencies as K
 - Event status changes: 0
 
 The commands remain candidate until their dependency lifecycle semantics are canonically closed and a separate SEM-30 promotion is approved.
+
+## Final command promotion
+
+GitHub issue #12 closes the lifecycle blockers for the four remaining registered commands and introduces `RevokeInvitation` as required by C01 SEM-22.
+
+- Registered commands: 23
+- Approved commands: 23
+- Candidate commands: 0
+- Event status changes: 0
+
+`InviteIdentity`, `AcceptInvitation`, `RevokeSingleUseToken`, and `ReconcileExternalEffect` are now approved only because their dependency entities and lifecycle semantics are approved in the same semantic revision.

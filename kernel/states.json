@@ -34,6 +34,28 @@
       "classification": "non-lifecycle"
     },
     {
+      "id": "ExternalEffectOutcome",
+      "kind": "state_set",
+      "status": "approved",
+      "values": [
+        "AMBIGUOUS",
+        "PARTIAL_FAILURE",
+        "CONFIRMED_SUCCESS",
+        "CONFIRMED_NO_EFFECT"
+      ],
+      "owning_domain": "TransactionControl",
+      "authority_contracts": [
+        "C01",
+        "C22"
+      ],
+      "classification": "non-lifecycle",
+      "promotion_evidence": [
+        "TXN-9",
+        "TXN-15",
+        "TXN-16"
+      ]
+    },
+    {
       "id": "IdentityStatus",
       "kind": "state_set",
       "status": "candidate",
@@ -49,6 +71,25 @@
       "authority_contracts": [
         "C01",
         "C11"
+      ]
+    },
+    {
+      "id": "InvitationStatus",
+      "kind": "state_set",
+      "status": "approved",
+      "values": [
+        "PENDING",
+        "ACCEPTED",
+        "REVOKED",
+        "EXPIRED"
+      ],
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C11"
+      ],
+      "promotion_evidence": [
+        "IDN-24"
       ]
     },
     {
@@ -84,6 +125,42 @@
       ],
       "notes": [
         "Approved bootstrap lifecycle: ACTIVE -> INACTIVE -> REVOKED; REVOKED is terminal."
+      ]
+    },
+    {
+      "id": "ReconciliationRecordStatus",
+      "kind": "state_set",
+      "status": "approved",
+      "values": [
+        "OPEN",
+        "RESOLVED"
+      ],
+      "owning_domain": "TransactionControl",
+      "authority_contracts": [
+        "C01",
+        "C22"
+      ],
+      "promotion_evidence": [
+        "TXN-14"
+      ]
+    },
+    {
+      "id": "SingleUseTokenStatus",
+      "kind": "state_set",
+      "status": "approved",
+      "values": [
+        "ACTIVE",
+        "CONSUMED",
+        "EXPIRED",
+        "REVOKED"
+      ],
+      "owning_domain": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C11"
+      ],
+      "promotion_evidence": [
+        "IDN-26"
       ]
     }
   ]

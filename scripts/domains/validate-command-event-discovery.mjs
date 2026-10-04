@@ -10,14 +10,15 @@ const proposal=load('domains/commands-events/proposed.json');
 const registration=load('domains/commands-events/command-registration.json');
 const eventAdmission=load('domains/commands-events/event-admission.json');
 const commandPromotion=load('domains/commands-events/command-promotion.json');
+const lifecycleRegistration=load('domains/dependencies/lifecycle-registration.json');
 const manifest=load('kernel/manifest.json');
 const ownership=load('domains/ownership-map.json');
 const commands=load('kernel/commands.json');
 const events=load('kernel/events.json');
 const decisions=load('kernel/decision-tables.json');
 
-if (manifest?.version !== '0.11.0') errors.push(`command/event discovery: expected K00 0.11.0, found ${manifest?.version}`);
-if (ownership?.version !== '1.5.0' || ownership?.status !== 'active') errors.push('command/event discovery: expected active Domain Ownership Map 1.5.0');
+if (manifest?.version !== '0.12.0') errors.push(`command/event discovery: expected K00 0.12.0, found ${manifest?.version}`);
+if (ownership?.version !== '1.6.0' || ownership?.status !== 'active') errors.push('command/event discovery: expected active Domain Ownership Map 1.6.0');
 if ((decisions?.entries || []).length !== 8) errors.push('command/event discovery: expected 8 registered decision tables');
 if (proposal?.version !== '0.1.0' || proposal?.status !== 'proposed') errors.push('command/event discovery: proposal must be proposed 0.1.0');
 if (!/^[0-9a-f]{40}$/.test(proposal?.baseline?.commit || '')) errors.push('command/event discovery: exact baseline SHA required');
@@ -31,7 +32,7 @@ const blockedCommands=proposal?.blocked_command_candidates||[];
 const readyEvents=proposal?.ready_event_candidates||[];
 const blockedEvents=proposal?.blocked_event_candidates||[];
 
-if (commandIds.size !== 22) errors.push(`command registration: expected 22 K00 commands, found ${commandIds.size}`);
+if (commandIds.size !== 23) errors.push(`command registration: expected 23 K00 commands, found ${commandIds.size}`);
 if (eventIds.size !== 14) errors.push(`command/event discovery: expected 14 K00 events, found ${eventIds.size}`);
 // current K00 contains retained commands plus registered ready commands
 for (const id of existingCommands) if (!commandIds.has(id)) errors.push(`command/event discovery: retained command ${id} not in K00`);
@@ -88,20 +89,23 @@ if (commandPromotion) {
   }
   for (const d of commandPromotion.blocked_candidate_commands || []) {
     const c = (commands?.entries || []).find(x => x.id === d.id);
-    if (c?.status !== 'candidate') errors.push(`command promotion: ${d.id} must remain candidate`);
+    if (!c) errors.push(`command promotion: historical blocked command ${d.id} missing from current K00`);
   }
 }
-const currentBlockedCommandExpectations = new Map([
-  ['InviteIdentity',['candidate-dependency:Invitation','lifecycle-unresolved:Invitation']],
-  ['AcceptInvitation',['candidate-dependency:Invitation','lifecycle-unresolved:Invitation']],
-  ['ReconcileExternalEffect',['candidate-dependency:ReconciliationRecord','lifecycle-unresolved:ReconciliationRecord']],
-  ['RevokeSingleUseToken',['candidate-dependency:SetupToken','candidate-dependency:PasswordResetToken','lifecycle-unresolved:SetupToken','lifecycle-unresolved:PasswordResetToken']],
-]);
-for (const [id,expected] of currentBlockedCommandExpectations) {
-  const c=(commands?.entries||[]).find(x=>x.id===id);
-  if (c?.status!=='candidate') errors.push(`dependency concepts: ${id} must remain candidate`);
-  if (JSON.stringify(c?.promotion_blockers)!==JSON.stringify(expected)) errors.push(`dependency concepts: ${id} blocker mismatch`);
+if (lifecycleRegistration) {
+  if (lifecycleRegistration.version !== '1.0.0') errors.push('lifecycle registration: version must be 1.0.0');
+  if (lifecycleRegistration.status !== 'recorded') errors.push('lifecycle registration: status must be recorded');
+  if (lifecycleRegistration.kernel_version !== '0.12.0') errors.push('lifecycle registration: kernel_version must be 0.12.0');
+  if (lifecycleRegistration.total_approved_commands !== 23) errors.push('lifecycle registration: total_approved_commands must be 23');
+  if (lifecycleRegistration.remaining_candidate_commands !== 0) errors.push('lifecycle registration: no candidate commands may remain');
+  if (lifecycleRegistration.event_status_changes !== 0) errors.push('lifecycle registration: event status changes must be 0');
+  for (const id of [...(lifecycleRegistration.promoted_existing_commands||[]), ...(lifecycleRegistration.new_approved_commands||[])]) {
+    const c=(commands?.entries||[]).find(x=>x.id===id);
+    if (c?.status!=='approved') errors.push(`lifecycle registration: ${id} must be approved`);
+  }
 }
+if ((commands?.entries||[]).filter(x=>x.status==='approved').length !== 23) errors.push('lifecycle registration: expected 23 approved commands');
+if ((commands?.entries||[]).filter(x=>x.status==='candidate').length !== 0) errors.push('lifecycle registration: expected 0 candidate commands');
 if (manifest?.rules?.audit_record_implies_domain_event !== false) errors.push('event admission: audit record must not imply domain event');
 if (manifest?.rules?.state_transition_implies_event !== false) errors.push('event admission: state transition must not imply event');
 if (manifest?.rules?.event_registration_requires_explicit_contract_semantics !== true) errors.push('event admission: explicit contract semantics rule missing');
@@ -114,10 +118,10 @@ if (errors.length) {
 console.log('Command registration + event admission PASS');
 console.log('Existing commands retained: 15');
 console.log('New command candidates registered: 7');
-console.log('Total K00 commands: 22');
+console.log('Total K00 commands: 23');
 console.log('Blocked command candidates excluded: 8');
 console.log('K00 events unchanged: 14');
 console.log('Events gate: closed for current semantic baseline');
 console.log('Blocked event candidates excluded: 9');
-console.log('Command promotions: 18 approved / 4 candidate');
+console.log('Command promotions: 23 approved / 0 candidate');
 console.log('Event status changes in command promotion: 0');

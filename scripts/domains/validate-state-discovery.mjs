@@ -18,6 +18,7 @@ const entities = load('kernel/entities.json');
 const commands = load('kernel/commands.json');
 const events = load('kernel/events.json');
 const ownership = load('domains/ownership-map.json');
+const lifecycleRegistration = load('domains/dependencies/lifecycle-registration.json');
 
 if (proposal) {
   if (proposal.state_discovery_id !== 'TEACH-STATE-DISCOVERY') errors.push('state discovery: wrong id');
@@ -26,8 +27,8 @@ if (proposal) {
   if (proposal.baseline?.commit !== 'd71fbf99b5ab2f554f89a6794a0ff9dc98e4f9da') errors.push('state discovery: baseline mismatch');
 }
 
-if (ownership?.status !== 'active' || ownership?.version !== '1.5.0') {
-  errors.push('state discovery: requires active Domain Ownership Map 1.5.0');
+if (ownership?.status !== 'active' || ownership?.version !== '1.6.0') {
+  errors.push('state discovery: requires active Domain Ownership Map 1.6.0');
 }
 
 const states = new Map((kernelStates?.entries || []).map(x => [x.id, x]));
@@ -99,18 +100,25 @@ if (registration) {
 }
 
 const machineSet = new Set((machines?.entries || []).map(x => x.id));
-for (const id of ['ApplicationSessionStateMachine','IdentityStateMachine','LearningSessionStateMachine','MembershipStateMachine']) {
+const historicalMachines = new Set(['ApplicationSessionStateMachine','IdentityStateMachine','LearningSessionStateMachine','MembershipStateMachine']);
+const lifecycleMachines = new Set(['InvitationStateMachine','SetupTokenStateMachine','PasswordResetTokenStateMachine','ReconciliationRecordStateMachine']);
+for (const id of [...historicalMachines,...lifecycleMachines]) {
   if (!machineSet.has(id)) errors.push(`state registration: missing registered machine ${id}`);
 }
 for (const m of machines?.entries || []) {
-  if (m.status !== 'candidate') errors.push(`state registration: ${m.id} must remain candidate`);
+  if (historicalMachines.has(m.id) && m.status !== 'candidate') errors.push(`state registration: historical ${m.id} must remain candidate`);
+  if (lifecycleMachines.has(m.id) && m.status !== 'approved') errors.push(`state registration: lifecycle ${m.id} must be approved`);
 }
 
 const remaining = new Set(registration?.remaining_blocked || []);
 for (const text of ['CertificationLifecycle','SingleUseCredentialLifecycle','ContentPackLifecycle']) {
-  if (!remaining.has(text)) errors.push(`state registration: remaining blocker ${text} missing`);
+  if (!remaining.has(text)) errors.push(`state registration: historical remaining blocker ${text} missing`);
 }
-
+if (lifecycleRegistration) {
+  if (lifecycleRegistration.kernel_version !== '0.12.0') errors.push('state registration: lifecycle kernel_version must be 0.12.0');
+  if (lifecycleRegistration.approved_state_machines?.length !== 4) errors.push('state registration: expected 4 approved dependency lifecycle machines');
+  if (lifecycleRegistration.approved_state_sets?.length !== 4) errors.push('state registration: expected 4 approved dependency lifecycle state sets');
+}
 
 if (errors.length) {
   console.error(`State discovery FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
@@ -119,7 +127,7 @@ if (errors.length) {
 }
 
 console.log('State-machine registration PASS');
-console.log(`Registered candidate state machines: ${(machines?.entries || []).length}`);
-console.log('Resolved owner decisions: Membership, LearningSession, Identity bootstrap graph');
+console.log('Historical state machines: 4 candidate');
+console.log('Dependency lifecycle state machines: 4 approved');
 console.log('Historical Membership discovery evidence preserved: CONTRADICTORY');
-console.log('Candidate-to-approved promotions: 0');
+console.log('SingleUseCredentialLifecycle historical blocker resolved by later owner-approved lifecycle closure');

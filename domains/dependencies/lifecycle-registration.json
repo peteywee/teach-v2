@@ -1,0 +1,47 @@
+{
+  "registration_id": "TEACH-DEPENDENCY-LIFECYCLE-REGISTRATION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "approved_on": "2026-10-04",
+  "issue": "#12",
+  "baseline_commit": "168ff001ee6d8cb6b42d26a9602dba7f4c419092",
+  "kernel_version": "0.12.0",
+  "ownership_map_version": "1.6.0",
+  "approved_entities": [
+    "Invitation",
+    "PasswordResetToken",
+    "ReconciliationRecord",
+    "SetupToken"
+  ],
+  "approved_identifiers": [
+    "InvitationId",
+    "PasswordResetTokenId",
+    "ReconciliationRecordId",
+    "SetupTokenId"
+  ],
+  "approved_state_sets": [
+    "ExternalEffectOutcome",
+    "InvitationStatus",
+    "ReconciliationRecordStatus",
+    "SingleUseTokenStatus"
+  ],
+  "approved_state_machines": [
+    "InvitationStateMachine",
+    "PasswordResetTokenStateMachine",
+    "ReconciliationRecordStateMachine",
+    "SetupTokenStateMachine"
+  ],
+  "new_approved_commands": [
+    "RevokeInvitation"
+  ],
+  "promoted_existing_commands": [
+    "AcceptInvitation",
+    "InviteIdentity",
+    "ReconcileExternalEffect",
+    "RevokeSingleUseToken"
+  ],
+  "total_approved_commands": 23,
+  "remaining_candidate_commands": 0,
+  "event_status_changes": 0
+}
