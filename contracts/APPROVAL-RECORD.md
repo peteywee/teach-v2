@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-04
-- Contract package version: `0.10.2`
+- Contract package version: `0.10.3`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -312,3 +312,11 @@ Prior versions are preserved during this reconciliation from their exact histori
 | TEACH-COMMAND-EVENT-DISCOVERY | 0.3.0 | 0.4.0 | Record promotion evidence and blockers for all 22 registered commands | 2026-10-04 | Patrick Craven | #10 |
 
 The four unpromoted commands are not implementation authority under SEM-2. Their blockers must be resolved by a later semantic change before promotion.
+
+## Part 15 — Dependency concept registration
+
+| Artifact | From | To | Decision | Date | Owner | GitHub issue |
+| --- | --- | --- | --- | --- | --- | --- |
+| TEACH-K00 | 0.10.0 | 0.11.0 | Register 4 missing dependency entities + 4 canonical IDs as `candidate`; promote no command/event | 2026-10-04 | Patrick Craven | #11 |
+| TEACH-DOMAIN-OWNERSHIP | 1.4.0 | 1.5.0 | Approve ownership assignments for the 8 newly registered concepts | 2026-10-04 | Patrick Craven | #11 |
+| TEACH-COMMAND-EVENT-DISCOVERY | 0.4.0 | 0.5.0 | Replace missing-K00 blockers with candidate/lifecycle blockers for the four remaining commands | 2026-10-04 | Patrick Craven | #11 |

@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -34,7 +34,7 @@
 
 # Teach v2 Contracts
 
-- Package version: `0.10.2`
+- Package version: `0.10.3`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
@@ -158,6 +158,10 @@ Package `0.10.1` reconciles the central ledger with already-live owner-directed 
 ## Command semantic promotion
 
 Package `0.10.2` records K00 `0.10.0` command promotion under existing C01 SEM-30. Eighteen commands are approved from direct owning-contract evidence; four remain candidate because required K00 concepts are absent. No C-series contract behavior changes in this package. GitHub issue: #10.
+
+## Dependency concept registration
+
+Package `0.10.3` records K00 `0.11.0` candidate registration for Invitation, SetupToken, PasswordResetToken, ReconciliationRecord, and their canonical identifiers. No C-series contract behavior changes. The four dependent commands remain candidate pending lifecycle closure. GitHub issue: #11.
 
 ## Contract activation order
 

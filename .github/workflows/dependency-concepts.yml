@@ -1,0 +1,28 @@
+name: Dependency Concepts
+
+on:
+  pull_request:
+    paths:
+      - 'kernel/**'
+      - 'domains/ownership-map.json'
+      - 'domains/dependencies/**'
+      - 'scripts/domains/validate-dependency-concepts.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'kernel/**'
+      - 'domains/ownership-map.json'
+      - 'domains/dependencies/**'
+      - 'scripts/domains/validate-dependency-concepts.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-dependency-concepts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate dependency concepts
+        run: node scripts/domains/validate-dependency-concepts.mjs

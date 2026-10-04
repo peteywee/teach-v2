@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-COMMAND-EVENT-DISCOVERY",
   "class": "specification",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "claims_truth_state": "declared",
   "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -75,3 +75,14 @@ GitHub issue #10 applies SEM-30 owner approval to the contract-proven command ba
 - K00 version: 0.10.0
 
 The four remaining registered command candidates are `InviteIdentity`, `AcceptInvitation`, `ReconcileExternalEffect`, and `RevokeSingleUseToken`. Architecture must not rely on those commands until their missing K00 concepts are registered and they receive a separate promotion.
+
+## Dependency registration disposition
+
+GitHub issue #11 registers the four previously missing command dependencies as K00 candidates.
+
+- Missing-K00 blockers removed: 4 commands
+- Remaining blockers: candidate dependency + unresolved lifecycle semantics
+- Command promotions: 0
+- Event status changes: 0
+
+The commands remain candidate until their dependency lifecycle semantics are canonically closed and a separate SEM-30 promotion is approved.

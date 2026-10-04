@@ -1,6 +1,6 @@
 {
   "map_id": "TEACH-DOMAIN-OWNERSHIP",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
@@ -8,8 +8,8 @@
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "c29ab3dc1bbcfd57e4dc3960d81e80b20e734b24",
-    "purpose": "pre-command-registration baseline"
+    "commit": "75258f30e0301f6ca733176b7a8c8beb99a2cb4a",
+    "purpose": "pre-dependency-concept-registration baseline"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -500,6 +500,15 @@
     },
     {
       "kind": "entity",
+      "id": "Invitation",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11"
+      ]
+    },
+    {
+      "kind": "entity",
       "id": "LearnerState",
       "decision_state": "approved",
       "proposed_owner": "Learning",
@@ -556,12 +565,39 @@
     },
     {
       "kind": "entity",
+      "id": "PasswordResetToken",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11"
+      ]
+    },
+    {
+      "kind": "entity",
       "id": "ProgressEvent",
       "decision_state": "approved",
       "proposed_owner": "Learning",
       "authority_contracts": [
         "C32",
         "C33"
+      ]
+    },
+    {
+      "kind": "entity",
+      "id": "ReconciliationRecord",
+      "decision_state": "approved",
+      "proposed_owner": "TransactionControl",
+      "authority_contracts": [
+        "C22"
+      ]
+    },
+    {
+      "kind": "entity",
+      "id": "SetupToken",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11"
       ]
     },
     {
@@ -814,6 +850,15 @@
     },
     {
       "kind": "identifier",
+      "id": "InvitationId",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11"
+      ]
+    },
+    {
+      "kind": "identifier",
       "id": "LearnerStateId",
       "decision_state": "approved",
       "proposed_owner": "Learning",
@@ -870,12 +915,30 @@
     },
     {
       "kind": "identifier",
+      "id": "PasswordResetTokenId",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11"
+      ]
+    },
+    {
+      "kind": "identifier",
       "id": "ProgressEventId",
       "decision_state": "approved",
       "proposed_owner": "Learning",
       "authority_contracts": [
         "C32",
         "C33"
+      ]
+    },
+    {
+      "kind": "identifier",
+      "id": "ReconciliationRecordId",
+      "decision_state": "approved",
+      "proposed_owner": "TransactionControl",
+      "authority_contracts": [
+        "C22"
       ]
     },
     {
@@ -888,6 +951,15 @@
       ],
       "notes": [
         "Current K00 owner AuditLifecycle conflicts with C53 scope."
+      ]
+    },
+    {
+      "kind": "identifier",
+      "id": "SetupTokenId",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11"
       ]
     },
     {
@@ -1427,7 +1499,7 @@
     "state": "approved",
     "approved_on": "2026-10-04",
     "owner": "Patrick Craven, Top Shelf Service LLC",
-    "issue": "#7",
-    "basis": "Explicit command-registration approval token"
+    "issue": "#11",
+    "basis": "Explicit dependency-concept candidate-registration approval"
   }
 }

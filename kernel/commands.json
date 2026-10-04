@@ -13,7 +13,8 @@
         "Identity"
       ],
       "promotion_blockers": [
-        "missing-k00:Invitation"
+        "candidate-dependency:Invitation",
+        "lifecycle-unresolved:Invitation"
       ]
     },
     {
@@ -170,7 +171,8 @@
         "Identity"
       ],
       "promotion_blockers": [
-        "missing-k00:Invitation"
+        "candidate-dependency:Invitation",
+        "lifecycle-unresolved:Invitation"
       ]
     },
     {
@@ -249,7 +251,8 @@
         "ReconciliationRecord"
       ],
       "promotion_blockers": [
-        "missing-k00:ReconciliationRecord"
+        "candidate-dependency:ReconciliationRecord",
+        "lifecycle-unresolved:ReconciliationRecord"
       ]
     },
     {
@@ -328,8 +331,10 @@
         "PasswordResetToken"
       ],
       "promotion_blockers": [
-        "missing-k00:SetupToken",
-        "missing-k00:PasswordResetToken"
+        "candidate-dependency:SetupToken",
+        "candidate-dependency:PasswordResetToken",
+        "lifecycle-unresolved:SetupToken",
+        "lifecycle-unresolved:PasswordResetToken"
       ]
     },
     {

@@ -2,12 +2,60 @@
   "schema_version": "0.1.0",
   "entries": [
     {
-      "id": "IdentityId",
+      "id": "ApplicationSessionId",
       "kind": "identifier",
       "status": "candidate",
       "value_type": "opaque-id",
-      "represents": "Identity",
+      "represents": "ApplicationSession",
       "owning_domain": "Identity"
+    },
+    {
+      "id": "AssignmentId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "Assignment",
+      "owning_domain": "Learning"
+    },
+    {
+      "id": "AuditEventId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "AuditEvent",
+      "owning_domain": "AuditLifecycle"
+    },
+    {
+      "id": "CapabilityId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "string",
+      "represents": "Capability",
+      "owning_domain": "Authorization"
+    },
+    {
+      "id": "CertificationId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "Certification",
+      "owning_domain": "Certification"
+    },
+    {
+      "id": "ContentBlockId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "ContentBlock",
+      "owning_domain": "Content"
+    },
+    {
+      "id": "ContentPackId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "ContentPack",
+      "owning_domain": "Content"
     },
     {
       "id": "CredentialId",
@@ -18,20 +66,60 @@
       "owning_domain": "Identity"
     },
     {
-      "id": "ApplicationSessionId",
+      "id": "EntitlementId",
       "kind": "identifier",
       "status": "candidate",
       "value_type": "opaque-id",
-      "represents": "ApplicationSession",
+      "represents": "Entitlement",
+      "owning_domain": "Organization"
+    },
+    {
+      "id": "IdempotencyKey",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "string",
+      "represents": "IdempotentOperation",
+      "owning_domain": "TransactionControl"
+    },
+    {
+      "id": "IdentityId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "Identity",
       "owning_domain": "Identity"
     },
     {
-      "id": "OrganizationId",
+      "id": "InvitationId",
       "kind": "identifier",
       "status": "candidate",
       "value_type": "opaque-id",
-      "represents": "Organization",
-      "owning_domain": "Organization"
+      "represents": "Invitation",
+      "owning_domain": "Identity"
+    },
+    {
+      "id": "LearnerStateId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "LearnerState",
+      "owning_domain": "Learning"
+    },
+    {
+      "id": "LearningSessionId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "LearningSession",
+      "owning_domain": "Learning"
+    },
+    {
+      "id": "LifecycleEventId",
+      "kind": "identifier",
+      "status": "candidate",
+      "value_type": "opaque-id",
+      "represents": "LifecycleEvent",
+      "owning_domain": "AuditLifecycle"
     },
     {
       "id": "LocationId",
@@ -50,44 +138,20 @@
       "owning_domain": "Organization"
     },
     {
-      "id": "EntitlementId",
+      "id": "OrganizationId",
       "kind": "identifier",
       "status": "candidate",
       "value_type": "opaque-id",
-      "represents": "Entitlement",
+      "represents": "Organization",
       "owning_domain": "Organization"
     },
     {
-      "id": "ContentPackId",
+      "id": "PasswordResetTokenId",
       "kind": "identifier",
       "status": "candidate",
       "value_type": "opaque-id",
-      "represents": "ContentPack",
-      "owning_domain": "Content"
-    },
-    {
-      "id": "ContentBlockId",
-      "kind": "identifier",
-      "status": "candidate",
-      "value_type": "opaque-id",
-      "represents": "ContentBlock",
-      "owning_domain": "Content"
-    },
-    {
-      "id": "AssignmentId",
-      "kind": "identifier",
-      "status": "candidate",
-      "value_type": "opaque-id",
-      "represents": "Assignment",
-      "owning_domain": "Learning"
-    },
-    {
-      "id": "LearningSessionId",
-      "kind": "identifier",
-      "status": "candidate",
-      "value_type": "opaque-id",
-      "represents": "LearningSession",
-      "owning_domain": "Learning"
+      "represents": "PasswordResetToken",
+      "owning_domain": "Identity"
     },
     {
       "id": "ProgressEventId",
@@ -98,44 +162,12 @@
       "owning_domain": "Learning"
     },
     {
-      "id": "LearnerStateId",
+      "id": "ReconciliationRecordId",
       "kind": "identifier",
       "status": "candidate",
       "value_type": "opaque-id",
-      "represents": "LearnerState",
-      "owning_domain": "Learning"
-    },
-    {
-      "id": "CertificationId",
-      "kind": "identifier",
-      "status": "candidate",
-      "value_type": "opaque-id",
-      "represents": "Certification",
-      "owning_domain": "Certification"
-    },
-    {
-      "id": "AuditEventId",
-      "kind": "identifier",
-      "status": "candidate",
-      "value_type": "opaque-id",
-      "represents": "AuditEvent",
-      "owning_domain": "AuditLifecycle"
-    },
-    {
-      "id": "LifecycleEventId",
-      "kind": "identifier",
-      "status": "candidate",
-      "value_type": "opaque-id",
-      "represents": "LifecycleEvent",
-      "owning_domain": "AuditLifecycle"
-    },
-    {
-      "id": "CapabilityId",
-      "kind": "identifier",
-      "status": "candidate",
-      "value_type": "string",
-      "represents": "Capability",
-      "owning_domain": "Authorization"
+      "represents": "ReconciliationRecord",
+      "owning_domain": "TransactionControl"
     },
     {
       "id": "RequestId",
@@ -146,12 +178,12 @@
       "owning_domain": "Observability"
     },
     {
-      "id": "IdempotencyKey",
+      "id": "SetupTokenId",
       "kind": "identifier",
       "status": "candidate",
-      "value_type": "string",
-      "represents": "IdempotentOperation",
-      "owning_domain": "TransactionControl"
+      "value_type": "opaque-id",
+      "represents": "SetupToken",
+      "owning_domain": "Identity"
     }
   ]
 }

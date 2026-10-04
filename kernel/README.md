@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-K00",
   "class": "semantic-kernel",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -13,14 +13,14 @@
     "state": "approved",
     "approved_on": "2026-10-04",
     "record": "contracts/APPROVAL-RECORD.md",
-    "issue": "#10",
-    "basis": "Explicit SEM-30 owner approval for the 18 contract-proven command promotions"
+    "issue": "#11",
+    "basis": "Explicit candidate registration approval for missing command dependencies"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "a35d845758af0dbf614282d409e19dc075023df7",
-    "purpose": "pre-command-promotion baseline"
+    "commit": "75258f30e0301f6ca733176b7a8c8beb99a2cb4a",
+    "purpose": "pre-dependency-concept-registration baseline"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -33,7 +33,7 @@
 
 Canonical machine-readable source format: JSON.
 
-K00 version: `0.10.0`.
+K00 version: `0.11.0`.
 
 Active domain ownership authority: `domains/ownership-map.json`.
 
@@ -52,3 +52,5 @@ Decision-table registration: 8 deterministic decision tables are registered as `
 Command promotion: 18 of the 22 registered commands are `approved` with owning-contract evidence; 4 remain `candidate` because required K00 concepts are absent. The separate 8 discovery-blocked command proposals remain outside K00. Events remain 4 approved / 10 candidate.
 
 Event admission: the 14 existing canonical events remain unchanged. Audit-record obligations and state transitions do not implicitly create business events; 9 discovered names were not admitted because no active owning-domain contract explicitly requires them.
+
+Dependency concept registration: four previously missing entities and four canonical identifier types are now registered as `candidate`. Their lifecycle vocabularies remain explicitly blocked; the four dependent commands remain `candidate`. GitHub issue #11.

@@ -15,7 +15,7 @@ const names = ['entities.json','values.json','identifiers.json','relationships.j
 const docs = Object.fromEntries(names.map(n => [n, load(n)]));
 if (manifest) {
   if (manifest.kernel_id !== 'TEACH-K00') errors.push('manifest.json: kernel_id must be TEACH-K00');
-  if (manifest.version !== '0.10.0') errors.push('manifest.json: version must be 0.10.0');
+  if (manifest.version !== '0.11.0') errors.push('manifest.json: version must be 0.11.0');
   if (manifest.canonical_format !== 'json') errors.push('manifest.json: canonical_format must be json');
   for (const n of ['entities','values','identifiers','relationships','states','state_machines','invariants','decision_tables','capabilities','commands','events','evidence','schema']) {
     if (!manifest.files?.[n]) errors.push(`manifest.json: missing file mapping ${n}`);
@@ -178,10 +178,10 @@ const expectedApprovedCommandEvidence = new Map([
   ['StartLearningSession',['LRN-2','LRN-3']],
 ]);
 const expectedBlockedCommandBlockers = new Map([
-  ['AcceptInvitation',['missing-k00:Invitation']],
-  ['InviteIdentity',['missing-k00:Invitation']],
-  ['ReconcileExternalEffect',['missing-k00:ReconciliationRecord']],
-  ['RevokeSingleUseToken',['missing-k00:SetupToken','missing-k00:PasswordResetToken']],
+  ['AcceptInvitation',['candidate-dependency:Invitation','lifecycle-unresolved:Invitation']],
+  ['InviteIdentity',['candidate-dependency:Invitation','lifecycle-unresolved:Invitation']],
+  ['ReconcileExternalEffect',['candidate-dependency:ReconciliationRecord','lifecycle-unresolved:ReconciliationRecord']],
+  ['RevokeSingleUseToken',['candidate-dependency:SetupToken','candidate-dependency:PasswordResetToken','lifecycle-unresolved:SetupToken','lifecycle-unresolved:PasswordResetToken']],
 ]);
 const requirementFiles = new Map([
   ['IDN','contracts/c11-identity-credentials-contract.md'],
@@ -231,6 +231,29 @@ for (const c of docs['commands.json']?.entries || []) {
 }
 if ([...(docs['commands.json']?.entries || [])].filter(c => c.status === 'approved').length !== 18) errors.push('commands.json: expected 18 approved commands');
 if ([...(docs['commands.json']?.entries || [])].filter(c => c.status === 'candidate').length !== 4) errors.push('commands.json: expected 4 candidate commands');
+const expectedDependencyEntities = new Map([
+  ['Invitation',{identifier:'InvitationId',owner:'Identity'}],
+  ['SetupToken',{identifier:'SetupTokenId',owner:'Identity'}],
+  ['PasswordResetToken',{identifier:'PasswordResetTokenId',owner:'Identity'}],
+  ['ReconciliationRecord',{identifier:'ReconciliationRecordId',owner:'TransactionControl'}],
+]);
+for (const [id,meta] of expectedDependencyEntities) {
+  const e=(docs['entities.json']?.entries||[]).find(x=>x.id===id);
+  if (!e) { errors.push(`entities.json: missing dependency entity ${id}`); continue; }
+  if (e.status!=='candidate') errors.push(`entities.json: ${id} must remain candidate pending lifecycle closure`);
+  if (e.identifier!==meta.identifier) errors.push(`entities.json: ${id} identifier must be ${meta.identifier}`);
+  if (e.owning_domain!==meta.owner) errors.push(`entities.json: ${id} owner must be ${meta.owner}`);
+  if (e.lifecycle?.state!=='blocked') errors.push(`entities.json: ${id} lifecycle must remain blocked`);
+  if (!Array.isArray(e.lifecycle?.blocked_by) || !e.lifecycle.blocked_by.length) errors.push(`entities.json: ${id} lifecycle blockers required`);
+  const i=(docs['identifiers.json']?.entries||[]).find(x=>x.id===meta.identifier);
+  if (!i) errors.push(`identifiers.json: missing ${meta.identifier}`);
+  else {
+    if (i.status!=='candidate') errors.push(`identifiers.json: ${meta.identifier} must remain candidate`);
+    if (i.represents!==id) errors.push(`identifiers.json: ${meta.identifier} must represent ${id}`);
+    if (i.owning_domain!==meta.owner) errors.push(`identifiers.json: ${meta.identifier} owner must be ${meta.owner}`);
+  }
+}
+
 for (const e of docs['events.json']?.entries || []) {
   if (!e.owning_domain) errors.push(`events.json: ${e.id} missing owning_domain`);
   if (!e.definition) errors.push(`events.json: ${e.id} missing definition`);
@@ -289,7 +312,7 @@ if (errors.length) {
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
-console.log('Semantic kernel PASS: TEACH-K00 0.10.0');
+console.log('Semantic kernel PASS: TEACH-K00 0.11.0');
 console.log(`Entities: ${(docs['entities.json']?.entries || []).length}`);
 console.log(`Identifiers: ${(docs['identifiers.json']?.entries || []).length}`);
 console.log(`Relationships: ${(docs['relationships.json']?.entries || []).length}`);

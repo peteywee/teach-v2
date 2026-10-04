@@ -2,12 +2,67 @@
   "schema_version": "0.1.0",
   "entries": [
     {
-      "id": "Identity",
+      "id": "ApplicationSession",
       "kind": "entity",
       "status": "candidate",
-      "definition": "Persistent application representation of a person.",
-      "identifier": "IdentityId",
+      "definition": "Revocable authenticated application session.",
+      "identifier": "ApplicationSessionId",
       "owning_domain": "Identity",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "Assignment",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Authoritative association making content available to a learner or governed scope.",
+      "identifier": "AssignmentId",
+      "owning_domain": "Learning",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "AuditEvent",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Immutable security or business audit fact.",
+      "identifier": "AuditEventId",
+      "owning_domain": "AuditLifecycle",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "Certification",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Evidence-backed credential issued under approved criteria.",
+      "identifier": "CertificationId",
+      "owning_domain": "Certification",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "ContentBlock",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Addressable unit within a ContentPack.",
+      "identifier": "ContentBlockId",
+      "owning_domain": "Content",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "ContentPack",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Versioned collection of teaching content.",
+      "identifier": "ContentPackId",
+      "owning_domain": "Content",
       "relationships": [],
       "authority_implications": [],
       "lifecycle": null
@@ -24,23 +79,88 @@
       "lifecycle": null
     },
     {
-      "id": "ApplicationSession",
+      "id": "Entitlement",
       "kind": "entity",
       "status": "candidate",
-      "definition": "Revocable authenticated application session.",
-      "identifier": "ApplicationSessionId",
+      "definition": "Right to consume a product or resource; does not itself grant an application capability.",
+      "identifier": "EntitlementId",
+      "owning_domain": "Organization",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "Identity",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Persistent application representation of a person.",
+      "identifier": "IdentityId",
       "owning_domain": "Identity",
       "relationships": [],
       "authority_implications": [],
       "lifecycle": null
     },
     {
-      "id": "Organization",
+      "id": "Invitation",
       "kind": "entity",
       "status": "candidate",
-      "definition": "Primary customer, tenant, and security boundary.",
-      "identifier": "OrganizationId",
-      "owning_domain": "Organization",
+      "definition": "Identity-domain record representing an invitation into an identity/setup flow.",
+      "identifier": "InvitationId",
+      "owning_domain": "Identity",
+      "relationships": [],
+      "authority_implications": [
+        "Does not grant membership, role, capability, or authentication authority by itself.",
+        "Offboarded-email handling remains fail-closed under IDN-20 until OQ-IDN-5 is decided."
+      ],
+      "lifecycle": {
+        "state": "blocked",
+        "authority_contracts": [
+          "C11"
+        ],
+        "requirements": [
+          "IDN-9",
+          "IDN-10",
+          "IDN-11",
+          "IDN-16",
+          "IDN-20"
+        ],
+        "blocked_by": [
+          "OQ-IDN-2",
+          "OQ-IDN-5",
+          "semantic-decision:invitation-lifecycle-state-set"
+        ],
+        "notes": "The active contract requires expiry, one-time consumption, revocation behavior and fail-closed offboarded-email handling, but does not define a complete canonical Invitation lifecycle state vocabulary."
+      }
+    },
+    {
+      "id": "LearnerState",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Authoritative derived/current learning state for a learner and governed content scope.",
+      "identifier": "LearnerStateId",
+      "owning_domain": "Learning",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "LearningSession",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Bounded learner attempt against assigned content.",
+      "identifier": "LearningSessionId",
+      "owning_domain": "Learning",
+      "relationships": [],
+      "authority_implications": [],
+      "lifecycle": null
+    },
+    {
+      "id": "LifecycleEvent",
+      "kind": "entity",
+      "status": "candidate",
+      "definition": "Canonical record of a governed lifecycle transition.",
+      "identifier": "LifecycleEventId",
+      "owning_domain": "AuditLifecycle",
       "relationships": [],
       "authority_implications": [],
       "lifecycle": null
@@ -68,59 +188,49 @@
       "lifecycle": null
     },
     {
-      "id": "Entitlement",
+      "id": "Organization",
       "kind": "entity",
       "status": "candidate",
-      "definition": "Right to consume a product or resource; does not itself grant an application capability.",
-      "identifier": "EntitlementId",
+      "definition": "Primary customer, tenant, and security boundary.",
+      "identifier": "OrganizationId",
       "owning_domain": "Organization",
       "relationships": [],
       "authority_implications": [],
       "lifecycle": null
     },
     {
-      "id": "ContentPack",
+      "id": "PasswordResetToken",
       "kind": "entity",
       "status": "candidate",
-      "definition": "Versioned collection of teaching content.",
-      "identifier": "ContentPackId",
-      "owning_domain": "Content",
+      "definition": "Single-use identity credential used to authorize a password-reset flow.",
+      "identifier": "PasswordResetTokenId",
+      "owning_domain": "Identity",
       "relationships": [],
-      "authority_implications": [],
-      "lifecycle": null
-    },
-    {
-      "id": "ContentBlock",
-      "kind": "entity",
-      "status": "candidate",
-      "definition": "Addressable unit within a ContentPack.",
-      "identifier": "ContentBlockId",
-      "owning_domain": "Content",
-      "relationships": [],
-      "authority_implications": [],
-      "lifecycle": null
-    },
-    {
-      "id": "Assignment",
-      "kind": "entity",
-      "status": "candidate",
-      "definition": "Authoritative association making content available to a learner or governed scope.",
-      "identifier": "AssignmentId",
-      "owning_domain": "Learning",
-      "relationships": [],
-      "authority_implications": [],
-      "lifecycle": null
-    },
-    {
-      "id": "LearningSession",
-      "kind": "entity",
-      "status": "candidate",
-      "definition": "Bounded learner attempt against assigned content.",
-      "identifier": "LearningSessionId",
-      "owning_domain": "Learning",
-      "relationships": [],
-      "authority_implications": [],
-      "lifecycle": null
+      "authority_implications": [
+        "Possession does not establish membership, role, or capability.",
+        "Only a cryptographic hash may be stored.",
+        "A revoked, expired, consumed, or otherwise invalid token must not authenticate."
+      ],
+      "lifecycle": {
+        "state": "blocked",
+        "authority_contracts": [
+          "C11"
+        ],
+        "requirements": [
+          "IDN-7",
+          "IDN-8",
+          "IDN-9",
+          "IDN-10",
+          "IDN-11",
+          "IDN-14",
+          "IDN-18"
+        ],
+        "blocked_by": [
+          "OQ-IDN-2",
+          "semantic-decision:single-use-token-lifecycle-state-set"
+        ],
+        "notes": "General single-use token behavior is normative, but canonical lifecycle state names and the owner-approved reset-token lifetime are not yet defined."
+      }
     },
     {
       "id": "ProgressEvent",
@@ -134,48 +244,68 @@
       "lifecycle": null
     },
     {
-      "id": "LearnerState",
+      "id": "ReconciliationRecord",
       "kind": "entity",
       "status": "candidate",
-      "definition": "Authoritative derived/current learning state for a learner and governed content scope.",
-      "identifier": "LearnerStateId",
-      "owning_domain": "Learning",
+      "definition": "Transaction-control record that captures an ambiguous external-effect outcome and the authoritative reconciliation readback used before any retry.",
+      "identifier": "ReconciliationRecordId",
+      "owning_domain": "TransactionControl",
       "relationships": [],
-      "authority_implications": [],
-      "lifecycle": null
+      "authority_implications": [
+        "An ambiguous external side effect may not be retried until canonical provider state is read.",
+        "Failure to read provider state preserves a non-success ambiguous condition."
+      ],
+      "lifecycle": {
+        "state": "blocked",
+        "authority_contracts": [
+          "C22"
+        ],
+        "requirements": [
+          "TXN-6",
+          "TXN-7",
+          "TXN-8",
+          "TXN-9"
+        ],
+        "blocked_by": [
+          "semantic-decision:reconciliation-lifecycle-state-set"
+        ],
+        "notes": "C22 requires explicit ambiguous and partial-failure states, but a complete canonical ReconciliationRecord state vocabulary has not yet been registered."
+      }
     },
     {
-      "id": "Certification",
+      "id": "SetupToken",
       "kind": "entity",
       "status": "candidate",
-      "definition": "Evidence-backed credential issued under approved criteria.",
-      "identifier": "CertificationId",
-      "owning_domain": "Certification",
+      "definition": "Single-use identity credential used to complete frontline setup.",
+      "identifier": "SetupTokenId",
+      "owning_domain": "Identity",
       "relationships": [],
-      "authority_implications": [],
-      "lifecycle": null
-    },
-    {
-      "id": "AuditEvent",
-      "kind": "entity",
-      "status": "candidate",
-      "definition": "Immutable security or business audit fact.",
-      "identifier": "AuditEventId",
-      "owning_domain": "AuditLifecycle",
-      "relationships": [],
-      "authority_implications": [],
-      "lifecycle": null
-    },
-    {
-      "id": "LifecycleEvent",
-      "kind": "entity",
-      "status": "candidate",
-      "definition": "Canonical record of a governed lifecycle transition.",
-      "identifier": "LifecycleEventId",
-      "owning_domain": "AuditLifecycle",
-      "relationships": [],
-      "authority_implications": [],
-      "lifecycle": null
+      "authority_implications": [
+        "Possession does not establish membership, role, or capability.",
+        "Only a cryptographic hash may be stored.",
+        "A revoked, expired, consumed, or otherwise invalid token must not authenticate."
+      ],
+      "lifecycle": {
+        "state": "blocked",
+        "authority_contracts": [
+          "C11"
+        ],
+        "requirements": [
+          "IDN-7",
+          "IDN-8",
+          "IDN-9",
+          "IDN-10",
+          "IDN-11",
+          "IDN-12",
+          "IDN-14",
+          "IDN-18"
+        ],
+        "blocked_by": [
+          "OQ-IDN-2",
+          "semantic-decision:single-use-token-lifecycle-state-set"
+        ],
+        "notes": "General single-use token behavior is normative, but canonical lifecycle state names and the owner-approved setup-token lifetime are not yet defined."
+      }
     }
   ]
 }

@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-DOMAIN-DISCOVERY",
   "class": "specification",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -11,15 +11,15 @@
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "c29ab3dc1bbcfd57e4dc3960d81e80b20e734b24",
-    "purpose": "pre-command-registration baseline"
+    "commit": "75258f30e0301f6ca733176b7a8c8beb99a2cb4a",
+    "purpose": "pre-dependency-concept-registration baseline"
   },
   "approval": {
     "state": "approved",
     "approved_on": "2026-10-04",
     "owner": "Patrick Craven, Top Shelf Service LLC",
     "record": "contracts/APPROVAL-RECORD.md",
-    "issue": "#7"
+    "issue": "#11"
   },
   "governed_by": [
     "TEACH-CON-C00",
@@ -54,3 +54,5 @@ Domain Ownership Map `1.2.0` adds the Governance semantic domain and owner assig
 Domain Ownership Map `1.3.0` adds owner assignments for eight registered decision tables; GitHub issue #6.
 
 Domain Ownership Map `1.4.0` adds owner assignments for seven registered command candidates; GitHub issue #7.
+
+Domain Ownership Map `1.5.0` adds ownership for four dependency entities and their four identifier types; GitHub issue #11.

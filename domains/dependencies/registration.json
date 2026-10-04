@@ -1,0 +1,30 @@
+{
+  "registration_id": "TEACH-DEPENDENCY-CONCEPT-REGISTRATION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "approved_on": "2026-10-04",
+  "issue": "#11",
+  "baseline_commit": "75258f30e0301f6ca733176b7a8c8beb99a2cb4a",
+  "kernel_version": "0.11.0",
+  "ownership_map_version": "1.5.0",
+  "registered_candidate_entities": [
+    "Invitation",
+    "SetupToken",
+    "PasswordResetToken",
+    "ReconciliationRecord"
+  ],
+  "registered_candidate_identifiers": [
+    "InvitationId",
+    "SetupTokenId",
+    "PasswordResetTokenId",
+    "ReconciliationRecordId"
+  ],
+  "command_promotions": 0,
+  "remaining_command_candidates": [
+    "AcceptInvitation",
+    "InviteIdentity",
+    "ReconcileExternalEffect",
+    "RevokeSingleUseToken"
+  ]
+}

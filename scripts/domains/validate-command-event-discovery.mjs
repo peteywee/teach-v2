@@ -16,8 +16,8 @@ const commands=load('kernel/commands.json');
 const events=load('kernel/events.json');
 const decisions=load('kernel/decision-tables.json');
 
-if (manifest?.version !== '0.10.0') errors.push(`command/event discovery: expected K00 0.10.0, found ${manifest?.version}`);
-if (ownership?.version !== '1.4.0' || ownership?.status !== 'active') errors.push('command/event discovery: expected active Domain Ownership Map 1.4.0');
+if (manifest?.version !== '0.11.0') errors.push(`command/event discovery: expected K00 0.11.0, found ${manifest?.version}`);
+if (ownership?.version !== '1.5.0' || ownership?.status !== 'active') errors.push('command/event discovery: expected active Domain Ownership Map 1.5.0');
 if ((decisions?.entries || []).length !== 8) errors.push('command/event discovery: expected 8 registered decision tables');
 if (proposal?.version !== '0.1.0' || proposal?.status !== 'proposed') errors.push('command/event discovery: proposal must be proposed 0.1.0');
 if (!/^[0-9a-f]{40}$/.test(proposal?.baseline?.commit || '')) errors.push('command/event discovery: exact baseline SHA required');
@@ -90,6 +90,17 @@ if (commandPromotion) {
     const c = (commands?.entries || []).find(x => x.id === d.id);
     if (c?.status !== 'candidate') errors.push(`command promotion: ${d.id} must remain candidate`);
   }
+}
+const currentBlockedCommandExpectations = new Map([
+  ['InviteIdentity',['candidate-dependency:Invitation','lifecycle-unresolved:Invitation']],
+  ['AcceptInvitation',['candidate-dependency:Invitation','lifecycle-unresolved:Invitation']],
+  ['ReconcileExternalEffect',['candidate-dependency:ReconciliationRecord','lifecycle-unresolved:ReconciliationRecord']],
+  ['RevokeSingleUseToken',['candidate-dependency:SetupToken','candidate-dependency:PasswordResetToken','lifecycle-unresolved:SetupToken','lifecycle-unresolved:PasswordResetToken']],
+]);
+for (const [id,expected] of currentBlockedCommandExpectations) {
+  const c=(commands?.entries||[]).find(x=>x.id===id);
+  if (c?.status!=='candidate') errors.push(`dependency concepts: ${id} must remain candidate`);
+  if (JSON.stringify(c?.promotion_blockers)!==JSON.stringify(expected)) errors.push(`dependency concepts: ${id} blocker mismatch`);
 }
 if (manifest?.rules?.audit_record_implies_domain_event !== false) errors.push('event admission: audit record must not imply domain event');
 if (manifest?.rules?.state_transition_implies_event !== false) errors.push('event admission: state transition must not imply event');

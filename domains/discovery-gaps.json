@@ -1,35 +1,11 @@
 {
   "report_id": "TEACH-DOMAIN-DISCOVERY-GAPS-2026-10-03",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "status": "recorded",
   "baseline_commit": "e567298c8c3916be0c98bdbe6bb715282be7e03e",
   "core_missing_kernel_candidates": [
     {
-      "id": "Invitation",
-      "kind": "entity",
-      "authority_contracts": [
-        "C11"
-      ],
-      "proposed_owner": "Identity"
-    },
-    {
       "id": "OAuthIdentityLink",
-      "kind": "entity",
-      "authority_contracts": [
-        "C11"
-      ],
-      "proposed_owner": "Identity"
-    },
-    {
-      "id": "SetupToken",
-      "kind": "entity",
-      "authority_contracts": [
-        "C11"
-      ],
-      "proposed_owner": "Identity"
-    },
-    {
-      "id": "PasswordResetToken",
       "kind": "entity",
       "authority_contracts": [
         "C11"
@@ -75,14 +51,6 @@
         "C15"
       ],
       "proposed_owner": null
-    },
-    {
-      "id": "ReconciliationRecord",
-      "kind": "entity",
-      "authority_contracts": [
-        "C22"
-      ],
-      "proposed_owner": "TransactionControl"
     },
     {
       "id": "CertificationCriteriaVersion",
@@ -181,5 +149,40 @@
         "C22 owns idempotency keys and semantics"
       ]
     }
-  ]
+  ],
+  "resolved_kernel_candidates": [
+    {
+      "id": "Invitation",
+      "kind": "entity",
+      "resolved_on": "2026-10-04",
+      "issue": "#11",
+      "kernel_version": "0.11.0",
+      "disposition": "registered as K00 candidate; lifecycle vocabulary remains blocked"
+    },
+    {
+      "id": "SetupToken",
+      "kind": "entity",
+      "resolved_on": "2026-10-04",
+      "issue": "#11",
+      "kernel_version": "0.11.0",
+      "disposition": "registered as K00 candidate; lifecycle vocabulary remains blocked"
+    },
+    {
+      "id": "PasswordResetToken",
+      "kind": "entity",
+      "resolved_on": "2026-10-04",
+      "issue": "#11",
+      "kernel_version": "0.11.0",
+      "disposition": "registered as K00 candidate; lifecycle vocabulary remains blocked"
+    },
+    {
+      "id": "ReconciliationRecord",
+      "kind": "entity",
+      "resolved_on": "2026-10-04",
+      "issue": "#11",
+      "kernel_version": "0.11.0",
+      "disposition": "registered as K00 candidate; lifecycle vocabulary remains blocked"
+    }
+  ],
+  "last_reconciled_commit": "75258f30e0301f6ca733176b7a8c8beb99a2cb4a"
 }

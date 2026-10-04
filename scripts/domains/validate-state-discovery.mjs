@@ -26,8 +26,8 @@ if (proposal) {
   if (proposal.baseline?.commit !== 'd71fbf99b5ab2f554f89a6794a0ff9dc98e4f9da') errors.push('state discovery: baseline mismatch');
 }
 
-if (ownership?.status !== 'active' || ownership?.version !== '1.4.0') {
-  errors.push('state discovery: requires active Domain Ownership Map 1.4.0');
+if (ownership?.status !== 'active' || ownership?.version !== '1.5.0') {
+  errors.push('state discovery: requires active Domain Ownership Map 1.5.0');
 }
 
 const states = new Map((kernelStates?.entries || []).map(x => [x.id, x]));

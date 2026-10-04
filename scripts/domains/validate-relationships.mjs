@@ -22,8 +22,8 @@ if (proposal) {
   if (proposal.baseline?.commit !== '1cb51b4b0a171866628886d5445277b4f6b21e15') errors.push('relationship proposal: baseline commit mismatch');
 }
 
-if (ownership?.status !== 'active' || ownership?.version !== '1.4.0') {
-  errors.push('relationship proposal: requires active Domain Ownership Map 1.4.0');
+if (ownership?.status !== 'active' || ownership?.version !== '1.5.0') {
+  errors.push('relationship proposal: requires active Domain Ownership Map 1.5.0');
 }
 
 const entityIds = new Set((entities?.entries || []).map(x => x.id));
