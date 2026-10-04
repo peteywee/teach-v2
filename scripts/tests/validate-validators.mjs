@@ -632,6 +632,73 @@ test(
 );
 
 // ---------------------------------------------------------------------------
+// SLICE-P05 schema admission
+// ---------------------------------------------------------------------------
+
+test(
+  "slice-p05 admission: premature ADMIT fails",
+  "scripts/persistence/validate-slice-p05-schema-admission.mjs",
+  (dir) => {
+    const d = readJson(
+      dir,
+      "persistence/physical-slices/learning-session/admission.json",
+    );
+    d.decision = "ADMIT";
+    writeJson(
+      dir,
+      "persistence/physical-slices/learning-session/admission.json",
+      d,
+    );
+  },
+  { pattern: /must remain BLOCKED/ }
+);
+
+test(
+  "slice-p05 admission: invented nullable Assignment reference fails",
+  "scripts/persistence/validate-slice-p05-schema-admission.mjs",
+  (dir) => {
+    const d = readJson(
+      dir,
+      "persistence/physical-slices/learning-session/admission-evidence-plan.json",
+    );
+    const i = d.required_evidence.findIndex((x) => x.includes("LearningSessionUsesAssignment"));
+    d.required_evidence[i] =
+      "LearningSession references Assignment via approved LearningSessionUsesAssignment (many-to-one, nullable)";
+    writeJson(
+      dir,
+      "persistence/physical-slices/learning-session/admission-evidence-plan.json",
+      d,
+    );
+  },
+  { pattern: /must preserve UNKNOWN Assignment-reference nullability\/requiredness/ }
+);
+
+test(
+  "slice-p05 admission: implementation authorization while blocked fails",
+  "scripts/persistence/validate-slice-p05-schema-admission.mjs",
+  (dir) => {
+    const d = readJson(
+      dir,
+      "persistence/physical-slices/learning-session/admission.json",
+    );
+    d.implementation_authorized = true;
+    writeJson(
+      dir,
+      "persistence/physical-slices/learning-session/admission.json",
+      d,
+    );
+  },
+  { pattern: /implementation and migration authoring unauthorized/ }
+);
+
+test(
+  "slice-p05 admission: clean blocked repo passes (positive control)",
+  "scripts/persistence/validate-slice-p05-schema-admission.mjs",
+  () => {},
+  { pass: true }
+);
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 
