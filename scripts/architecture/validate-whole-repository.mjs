@@ -23,4 +23,4 @@ for(const path of scripts) {
 if(errors.length){console.error(`WHOLE-REPOSITORY AUDIT FAILED (${errors.length})\n${errors.join('\n')}`);process.exit(1);}
 console.log(`WHOLE-REPOSITORY AUDIT PASS: ${scripts.length} standalone authority/admission validators`);
 console.log('PROVEN: module/layer dependency checks, Application-owned repository ports, isolated execution entry guards, future queue/admission reconciliation');
-console.log('BLOCK: P06 admission; UNKNOWN: full runtime authorization/audit/orchestration conformance; BLOCKED: shared/production execution');
+console.log('BLOCK: P06/P07/P08 admission; UNKNOWN: all-command runtime authorization/audit/orchestration conformance; BLOCKED: shared/production execution');

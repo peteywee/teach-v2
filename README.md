@@ -6,11 +6,11 @@ The controlling layers are [K00](kernel/manifest.json), [contracts](contracts/RE
 
 | Component | Current evidence | Remaining integration |
 | --- | --- | --- |
-| TransactionControl P01 | Reconciliation storage, terminal resolution, scope and idempotency contention | Provider readback/Application runtime wiring |
+| TransactionControl P01 | Reconciliation storage, terminal resolution, scope and idempotency contention | Provider-neutral Application reconciliation foundation; real provider adapter and protected runtime wiring |
 | Identity P02–P04 | Identity/session/token/Credential storage and scoped PostgreSQL proofs | Complete authorization, required audit, credential-change revocation, invitation membership orchestration, and offboarding orchestration |
 | Learning P05 | Required Assignment reference, Identity FK, closed lifecycle, one completion winner | Authoritative Assignment existence/authorization and atomic start, tracked in [#58](https://github.com/peteywee/teach-v2/issues/58) |
 | Assignment P06 | Evidence plan and automated **BLOCK** evaluation | Shape/content-version/scope decisions and admission gate [#60](https://github.com/peteywee/teach-v2/issues/60) |
-| Certification P07 / ProgressEvent P08 | Approved logical entities and audited relationship inventory | Separate evidence plans and physical admission |
+| Certification P07 / ProgressEvent P08 | Separate evidence plans and automated **BLOCK** evaluations | Owner shape/version/criteria/scope decisions and physical admission |
 | Transport / UI / production | **Not proven** | Transport authority, runtime acceptance and production backup/restore/release evidence |
 
 Run the dependency-free integration audit from the repository root:
@@ -22,8 +22,10 @@ node --test scripts/tests/validate-isolated-database-target.mjs
 node scripts/packaging/validate-apply-guards.mjs pins
 ```
 
-`Whole Repository Integration Audit` runs on every PR and every main update, without path filters. It executes every standalone authority/admission validator and checks module dependencies, Application-owned ports, isolated database entry guards, and future-slice gates. Structural checks supplement exact-source PostgreSQL evidence; they cannot prove runtime authorization or deployed behavior.
+`Whole Repository Integration Audit` runs on every PR and every main update, without path filters. It executes every standalone authority/admission validator and checks module dependencies, Application-owned ports, isolated database entry guards, and future-slice gates. All five physical-slice workflows also run on every PR/main tree. The [command coverage ledger](verification/whole-repository/command-coverage.json) traces all 23 approved commands to partial artifacts or explicit blockers. Structural checks supplement exact-source PostgreSQL evidence; they cannot prove runtime authorization or deployed behavior.
 
 Database migration, replay, and integration entry points currently require `TEACH_ISOLATED_DB=1` and a loopback PostgreSQL URL naming a disposable `teach_v2` test database. Remote targets, target-changing query parameters, and shared/production names are rejected before a Pool is created. The isolation declaration is an operator assertion; it is not production authorization or a backup/restore proof. Shared/production execution remains **BLOCKED**.
 
 See the [whole-repository audit findings and dependency diagram](verification/whole-repository/2026-10-04-audit.md).
+
+The [super-batch coverage report](verification/whole-repository/2026-10-04-super-batch.md) records input-validation repairs, expanded failure/contention coverage and the next dependency gates.

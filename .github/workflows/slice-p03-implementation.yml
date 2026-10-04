@@ -2,32 +2,10 @@ name: SLICE-P03 Implementation
 
 on:
   pull_request:
-    paths:
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'drizzle.config.ts'
-      - 'drizzle/**'
-      - 'src/modules/identity/**'
-      - 'tests/integration/identity/**'
-      - 'scripts/db/**'
-      - 'scripts/persistence/validate-slice-p03-*.mjs'
-      - 'scripts/tests/validate-validators.mjs'
-      - 'persistence/physical-slices/identity-tokens/**'
-      - '.github/workflows/slice-p03-implementation.yml'
+    branches: [main]
   push:
     branches: [main]
-    paths:
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'drizzle.config.ts'
-      - 'drizzle/**'
-      - 'src/modules/identity/**'
-      - 'tests/integration/identity/**'
-      - 'scripts/db/**'
-      - 'scripts/persistence/validate-slice-p03-*.mjs'
-      - 'scripts/tests/validate-validators.mjs'
-      - 'persistence/physical-slices/identity-tokens/**'
-      - '.github/workflows/slice-p03-implementation.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read

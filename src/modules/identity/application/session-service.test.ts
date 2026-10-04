@@ -82,3 +82,9 @@ function fakeRepository(): ApplicationSessionRepository & {
   };
   return repo;
 }
+
+test('invalid clock denies authentication before persistence lookup', async () => {
+  const repository = fakeRepository();
+  assert.equal(await authenticateApplicationSession(repository, issueSessionCredential().credential, new Date(NaN)), null);
+  assert.equal(repository.authenticateCalls, 0);
+});

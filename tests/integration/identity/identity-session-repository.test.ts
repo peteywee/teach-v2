@@ -1,4 +1,5 @@
 import { assertIsolatedDatabaseTarget } from '../../../scripts/db/isolated-database-target.mjs';
+import { observeLockWait } from '../../helpers/observe-lock-wait.js';
 import assert from 'node:assert/strict';
 import { after, before, beforeEach, test } from 'node:test';
 import { drizzle } from 'drizzle-orm/node-postgres';
@@ -151,6 +152,7 @@ test('deactivation and session issuance serialize on the Identity row', async ()
   await identities.create({ id: 'identity-race', now });
 
   const lockHolder = await pool.connect();
+  const blockerPid = (await lockHolder.query<{ pid: number }>('select pg_backend_pid() as pid')).rows[0]!.pid;
   let settled = 0;
   let issuance: Promise<unknown> | undefined;
   let deactivation: Promise<unknown> | undefined;
@@ -171,12 +173,15 @@ test('deactivation and session issuance serialize on the Identity row', async ()
       now: new Date('2026-10-04T12:02:00Z'),
     }).finally(() => { settled++; });
 
-    await new Promise((resolve) => setTimeout(resolve, 75));
+    await observeLockWait(pool, blockerPid, 2);
     assert.equal(settled, 0, 'both operations must wait behind the Identity row lock');
     await lockHolder.query('commit');
   } finally {
     try { await lockHolder.query('rollback'); } catch {}
     lockHolder.release();
+    // Drain both commands even if observing the lock fails. Otherwise a later
+    // fixture TRUNCATE can overlap unfinished transactions from this test.
+    await Promise.allSettled([issuance, deactivation].filter(value => value !== undefined));
   }
 
   await Promise.allSettled([issuance!, deactivation!]);
@@ -311,4 +316,29 @@ test('P02 schema contains no copied tenant or authorization authority columns', 
   const forbidden = /organization|location|role|capability/i;
   assert.equal(rows.rows.some((row) => forbidden.test(row.column_name)), false);
   assert.equal(rows.rows.some((row) => row.column_name === 'credential'), false);
+});
+
+test('session issuance captures Identity, verifier Buffer and Date before lock wait', async () => {
+  const now = new Date('2026-10-04T12:00:00Z');
+  await identities.create({ id: 'original', now });
+  await identities.create({ id: 'inactive', now });
+  await identities.deactivate({ id: 'inactive', now });
+  const verifier = Buffer.alloc(32, 7);
+  const mutable = { id: 'captured', identityId: 'original', credential: { verifierVersion: 'v1' as const, verifier }, now: new Date(now) };
+  const holder = await pool.connect();
+  let pending: ReturnType<typeof sessions.create> | undefined;
+  try {
+    await holder.query('begin');
+    const pid = (await holder.query<{ pid: number }>('select pg_backend_pid() as pid')).rows[0]!.pid;
+    await holder.query('select id from identity_identities where id=$1 for update', ['original']);
+    pending = sessions.create(mutable); void pending.catch(() => {});
+    await observeLockWait(pool, pid);
+    mutable.id = 'redirect'; mutable.identityId = 'inactive'; mutable.credential.verifier.fill(9); mutable.now.setTime(0);
+  } finally {
+    await holder.query('rollback'); holder.release();
+  }
+  const row = await pending!;
+  assert.equal(row.id, 'captured'); assert.equal(row.identityId, 'original');
+  assert.deepEqual(row.verifier, Buffer.alloc(32, 7)); assert.equal(row.issuedAt.getTime(), now.getTime());
+  assert.equal(await sessions.getById({ id: 'redirect', identityId: 'inactive' }), null);
 });

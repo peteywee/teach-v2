@@ -1021,6 +1021,33 @@ test('whole audit: an otherwise untriggered historical validator fails', 'script
   writeFileSync(join(dir,path),readFileSync(join(dir,path),'utf8')+'\nprocess.exit(1);\n');
 },{pattern:/validate-persistence-semantic-closure-registration/});
 
+// Super-batch coverage and future admission negative proofs.
+for(const [slice,lane] of [['p07','certification'],['p08','progress-event']]) {
+  const script=`scripts/persistence/validate-slice-${slice}-schema-admission.mjs`;
+  test(`${slice}: complete BLOCK evaluation passes`,script,()=>{},{pass:true});
+  test(`${slice}: premature ADMIT fails`,script,(dir)=>{const path=`persistence/physical-slices/${lane}/admission.json`;const d=readJson(dir,path);d.decision='ADMIT';writeJson(dir,path,d);},{pattern:/current admission decision must be BLOCK/});
+  test(`${slice}: invented lifecycle fails`,script,(dir)=>{const path=`persistence/physical-slices/${lane}/admission-evidence-plan.json`;const d=readJson(dir,path);d.lifecycle_decision='ACTIVE_REVOKED';writeJson(dir,path,d);},{pattern:/lifecycle_decision remains UNKNOWN/});
+  test(`${slice}: unknown criteria cannot be PROVEN`,script,(dir)=>{const path=`persistence/physical-slices/${lane}/admission.json`;const d=readJson(dir,path);d.criteria.forEach(x=>x.state='PROVEN');writeJson(dir,path,d);},{pattern:/four PROVEN and four UNKNOWN/});
+  test(`${slice}: migration authoring forbidden while blocked`,script,(dir)=>{const path=`persistence/physical-slices/${lane}/admission-evidence-plan.json`;const d=readJson(dir,path);d.migration_authoring_authorized=true;writeJson(dir,path,d);},{pattern:/migration_authoring_authorized must remain false/});
+  test(`${slice}: required evidence cannot be omitted`,script,(dir)=>{const path=`persistence/physical-slices/${lane}/admission-evidence-plan.json`;const d=readJson(dir,path);d.required_evidence=[];writeJson(dir,path,d);},{pattern:/complete replay, scope, version, audit and contention/});
+  test(`${slice}: exact logical relationships required`,script,(dir)=>{const path=`persistence/physical-slices/${lane}/admission-evidence-plan.json`;const d=readJson(dir,path);d.registered_relationships=[];writeJson(dir,path,d);},{pattern:/exact approved relationship inventory/});
+}
+const coverageScript='scripts/architecture/validate-command-coverage.mjs';
+const coveragePath='verification/whole-repository/command-coverage.json';
+test('coverage: exact complete ledger passes',coverageScript,()=>{},{pass:true});
+test('coverage: omitted command fails',coverageScript,(dir)=>{const d=readJson(dir,coveragePath);d.commands.pop();writeJson(dir,coveragePath,d);},{pattern:/exact approved command inventory/});
+test('coverage: wrong command owner fails',coverageScript,(dir)=>{const d=readJson(dir,coveragePath);d.commands[0].owner='Learning';writeJson(dir,coveragePath,d);},{pattern:/owner\/authority drift/});
+test('coverage: partial foundation cannot claim runtime conformance',coverageScript,(dir)=>{const d=readJson(dir,coveragePath);d.commands[0].runtime_conformance='PROVEN';writeJson(dir,coveragePath,d);},{pattern:/full runtime conformance cannot be claimed/});
+test('coverage: missing source symbol fails',coverageScript,(dir)=>{const d=readJson(dir,coveragePath);d.commands[0].artifacts[0].symbol='inventedCommand';writeJson(dir,coveragePath,d);},{pattern:/source symbol missing/});
+test('coverage: missing test reference fails',coverageScript,(dir)=>{const d=readJson(dir,coveragePath);d.commands[0].tests[0]='src/missing.test.ts';writeJson(dir,coveragePath,d);},{pattern:/referenced test missing/});
+test('coverage: unresolved obligations cannot disappear',coverageScript,(dir)=>{const d=readJson(dir,coveragePath);d.commands[0].missing_obligations=[];writeJson(dir,coveragePath,d);},{pattern:/missing obligations must remain explicit/});
+test('coverage: duplicate row cannot conceal missing command',coverageScript,(dir)=>{const d=readJson(dir,coveragePath);d.commands[1]=d.commands[0];writeJson(dir,coveragePath,d);},{pattern:/exact approved command inventory/});
+test('integration: future table cannot hide in existing module',integrationScript,(dir)=>{const path='src/modules/identity/infrastructure/persistence/schema.ts';writeFileSync(join(dir,path),readFileSync(join(dir,path),'utf8')+'\nexport const futureTable = pgTable("learning_assignments", {});\n');},{pattern:/future physical table has no ADMIT authority/});
+test('integration: future table cannot enter existing migration',integrationScript,(dir)=>{const path='drizzle/0004_slice_p05_learning_session.sql';writeFileSync(join(dir,path),readFileSync(join(dir,path),'utf8')+'\nCREATE TABLE "certifications" (id text);\n');},{pattern:/future migration table has no ADMIT authority/});
+test('integration: future snapshot table cannot precede admission',integrationScript,(dir)=>{const path='drizzle/meta/0004_snapshot.json';const d=readJson(dir,path);d.tables['public.progress_events']={};writeJson(dir,path,d);},{pattern:/future snapshot table has no ADMIT authority/});
+test('integration: path-filtered physical proof workflow fails',integrationScript,(dir)=>{const path='.github/workflows/slice-p01-implementation.yml';writeFileSync(join(dir,path),readFileSync(join(dir,path),'utf8').replace('pull_request:',"pull_request:\n    paths: ['src/**']"));},{pattern:/physical proofs must run on every PR and main tree/});
+test('integration: missing future evidence plan fails',integrationScript,(dir)=>{const path='persistence/physical-slices/queue-post-p05.json';const d=readJson(dir,path);d.slices[1].evidence_plan=null;writeJson(dir,path,d);},{pattern:/evidence plan is required/});
+
 // Report
 // ---------------------------------------------------------------------------
 

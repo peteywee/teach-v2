@@ -1,4 +1,5 @@
 import { assertIsolatedDatabaseTarget } from '../../../scripts/db/isolated-database-target.mjs';
+import { observeLockWait } from '../../helpers/observe-lock-wait.js';
 import assert from 'node:assert/strict';
 import { after,before,beforeEach,test } from 'node:test';
 import { drizzle } from 'drizzle-orm/node-postgres';
@@ -73,10 +74,7 @@ test('concurrent Invitation acceptance is single-use: exactly one success',async
   await active('owner',now);
   const issued=await issueInvitation(invitations,{id:'inv-1',ownerIdentityId:'owner',invitedIdentityId:null,now});
   const at=new Date('2026-10-04T12:01:00Z');
-  const results=await Promise.all([
-    acceptInvitation(invitations,{ownerIdentityId:'owner',secret:issued.secret,now:at}),
-    acceptInvitation(invitations,{ownerIdentityId:'owner',secret:issued.secret,now:at}),
-  ]);
+  const results=await Promise.all(Array.from({length:16},()=>acceptInvitation(invitations,{ownerIdentityId:'owner',secret:issued.secret,now:at})));
   assert.equal(results.filter(Boolean).length,1);
   assert.equal((await invitations.getById({id:'inv-1',ownerIdentityId:'owner'}))?.status,'ACCEPTED');
 });
@@ -103,10 +101,7 @@ for(const [label,repository,lifetime] of [
     const issued=await issueIdentityToken(repository,{id:`${label}-1`,identityId:'owner',now});
     assert.equal(issued.token.expiresAt.getTime()-now.getTime(),lifetime);
     const at=new Date(now.getTime()+1000);
-    const results=await Promise.all([
-      consumeIdentityToken(repository,{identityId:'owner',secret:issued.secret,now:at}),
-      consumeIdentityToken(repository,{identityId:'owner',secret:issued.secret,now:at}),
-    ]);
+    const results=await Promise.all(Array.from({length:16},()=>consumeIdentityToken(repository,{identityId:'owner',secret:issued.secret,now:at})));
     assert.equal(results.filter(Boolean).length,1);
     assert.equal(results.find(Boolean)?.status,'CONSUMED');
   });
@@ -133,3 +128,44 @@ test('P03 tables copy no tenant/location/role/capability authority and contain n
   assert.equal(rows.rows.some(r=>/organization|location|role|capability/i.test(r.column_name)),false);
   assert.equal(rows.rows.some(r=>['secret','token','credential'].includes(r.column_name)),false);
 });
+
+for (const [label, repository] of [['SetupToken', setupTokens], ['PasswordResetToken', resetTokens], ['Invitation', invitations]] as const) {
+  test(`${label} captures owner, verifier Buffer and Date while Identity lock blocks insertion`, async () => {
+    const now = new Date('2026-10-04T12:00:00Z');
+    await active('original', now); await active('inactive', now); await identities.deactivate({id:'inactive',now});
+    const common = { id: 'captured', secret: { verifierVersion: 'v1' as const, verifier: Buffer.alloc(32, 7) }, now: new Date(now) };
+    const tokenInput = { ...common, identityId: 'original' };
+    const invitationInput = { ...common, ownerIdentityId: 'original', invitedIdentityId: null as string | null };
+    const holder = await pool.connect();
+    let pending: Promise<unknown> | undefined;
+    try {
+      await holder.query('begin');
+      const pid = (await holder.query<{pid:number}>('select pg_backend_pid() as pid')).rows[0]!.pid;
+      await holder.query('select id from identity_identities where id=$1 for update', ['original']);
+      pending = label === 'Invitation' ? invitations.create(invitationInput) : (repository as typeof setupTokens).create(tokenInput);
+      void pending.catch(() => {}); await observeLockWait(pool, pid);
+      tokenInput.id = invitationInput.id = 'redirect'; tokenInput.identityId = invitationInput.ownerIdentityId = 'inactive';
+      invitationInput.invitedIdentityId = 'inactive'; common.secret.verifier.fill(9); common.now.setTime(0);
+    } finally { await holder.query('rollback'); holder.release(); }
+    const row = await pending as {id:string;identityId?:string;ownerIdentityId?:string;secretVerifier:Buffer;issuedAt:Date};
+    assert.equal(row.id, 'captured'); assert.equal(row.identityId ?? row.ownerIdentityId, 'original');
+    assert.deepEqual(row.secretVerifier, Buffer.alloc(32,7)); assert.equal(row.issuedAt.getTime(), now.getTime());
+  });
+}
+for (const [label, repository, table, lifetime] of [
+  ['SetupToken',setupTokens,'identity_setup_tokens',15*60*1000],
+  ['PasswordResetToken',resetTokens,'identity_password_reset_tokens',60*60*1000],
+] as const) {
+  test(`${label} expiry denial survives failed lazy EXPIRED persistence`, async () => {
+    const now = new Date('2026-10-04T12:00:00Z'); await active('owner',now);
+    const issued = await issueIdentityToken(repository,{id:'expire-fault',identityId:'owner',now});
+    await pool.query(`create function test_fail_token_expire() returns trigger language plpgsql as $$ begin if new.status='EXPIRED' then raise exception 'forced expiry failure'; end if; return new; end $$`);
+    await pool.query(`create trigger test_fail_token_expire before update on ${table} for each row execute function test_fail_token_expire()`);
+    try {
+      assert.equal(await consumeIdentityToken(repository,{identityId:'owner',secret:issued.secret,now:new Date(now.getTime()+lifetime)}),null);
+      assert.equal((await pool.query(`select status from ${table} where id='expire-fault'`)).rows[0]?.status,'ACTIVE');
+    } finally {
+      await pool.query(`drop trigger if exists test_fail_token_expire on ${table}`); await pool.query('drop function if exists test_fail_token_expire()');
+    }
+  });
+}

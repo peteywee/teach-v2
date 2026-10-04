@@ -1,4 +1,5 @@
 import { assertIsolatedDatabaseTarget } from '../../../scripts/db/isolated-database-target.mjs';
+import { observeLockWait } from '../../helpers/observe-lock-wait.js';
 import assert from 'node:assert/strict';
 import { after, beforeEach, test } from 'node:test';
 import { drizzle } from 'drizzle-orm/node-postgres';
@@ -110,4 +111,35 @@ test('16 concurrent completions produce exactly one successful mutation', async 
     await lock.query('rollback');
     lock.release();
   }
+});
+
+test('failed LearningSession completion preserves ACTIVE and immutable references', async () => {
+  await repository.createAuthorizedStart(newLearningSession(references));
+  await pool.query(`create function test_fail_learning_complete() returns trigger language plpgsql as $$ begin raise exception 'forced completion failure'; end $$`);
+  await pool.query('create trigger test_fail_learning_complete before update on learning_sessions for each row execute function test_fail_learning_complete()');
+  try {
+    await assert.rejects(repository.completeActive(scope), (error: unknown) => {
+      const cause = error instanceof Error ? (error as Error & { cause?: unknown }).cause ?? error : error;
+      return cause instanceof Error && cause.message === 'forced completion failure';
+    });
+    assert.deepEqual(await repository.getById(scope),newLearningSession(references));
+  } finally {
+    await pool.query('drop trigger if exists test_fail_learning_complete on learning_sessions'); await pool.query('drop function if exists test_fail_learning_complete()');
+  }
+});
+test('completion captures scope before a row-lock wait and cannot redirect to another learner', async () => {
+  await repository.createAuthorizedStart(newLearningSession(references));
+  const other = {id:'other',identityId:'learner-2',assignmentId:'assignment-other'};
+  await repository.createAuthorizedStart(newLearningSession(other));
+  const mutable = {...scope}; const holder = await pool.connect();
+  let pending: ReturnType<typeof repository.completeActive> | undefined;
+  try {
+    await holder.query('begin');
+    const pid = (await holder.query<{pid:number}>('select pg_backend_pid() as pid')).rows[0]!.pid;
+    await holder.query('select id from learning_sessions where id=$1 for update',[scope.id]);
+    pending=repository.completeActive(mutable); void pending.catch(()=>{}); await observeLockWait(pool,pid);
+    mutable.id=other.id;mutable.identityId=other.identityId;
+  } finally {await holder.query('rollback');holder.release();}
+  assert.equal((await pending!)?.id,scope.id);
+  assert.equal((await repository.getById(other))?.status,'ACTIVE');
 });

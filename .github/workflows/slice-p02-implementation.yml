@@ -2,32 +2,10 @@ name: SLICE-P02 Implementation
 
 on:
   pull_request:
-    paths:
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'drizzle.config.ts'
-      - 'drizzle/**'
-      - 'src/modules/identity/**'
-      - 'tests/integration/identity/**'
-      - 'scripts/db/**'
-      - 'scripts/persistence/validate-slice-p02-*.mjs'
-      - 'scripts/tests/validate-validators.mjs'
-      - 'persistence/physical-slices/identity-session/**'
-      - '.github/workflows/slice-p02-implementation.yml'
+    branches: [main]
   push:
     branches: [main]
-    paths:
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'drizzle.config.ts'
-      - 'drizzle/**'
-      - 'src/modules/identity/**'
-      - 'tests/integration/identity/**'
-      - 'scripts/db/**'
-      - 'scripts/persistence/validate-slice-p02-*.mjs'
-      - 'scripts/tests/validate-validators.mjs'
-      - 'persistence/physical-slices/identity-session/**'
-      - '.github/workflows/slice-p02-implementation.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read

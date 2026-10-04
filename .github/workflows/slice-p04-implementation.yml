@@ -2,38 +2,10 @@ name: SLICE-P04 Implementation
 
 on:
   pull_request:
-    paths:
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'drizzle.config.ts'
-      - 'drizzle/**'
-      - 'src/modules/identity/domain/credential.ts'
-      - 'src/modules/identity/domain/credential.test.ts'
-      - 'src/modules/identity/infrastructure/persistence/credential-schema.ts'
-      - 'src/modules/identity/infrastructure/persistence/postgres-credential-repository.ts'
-      - 'tests/integration/identity/credential-repository.test.ts'
-      - 'scripts/db/**'
-      - 'scripts/persistence/validate-slice-p04-*.mjs'
-      - 'scripts/tests/validate-validators.mjs'
-      - 'persistence/physical-slices/identity-credentials/**'
-      - '.github/workflows/slice-p04-implementation.yml'
+    branches: [main]
   push:
     branches: [main]
-    paths:
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'drizzle.config.ts'
-      - 'drizzle/**'
-      - 'src/modules/identity/domain/credential.ts'
-      - 'src/modules/identity/domain/credential.test.ts'
-      - 'src/modules/identity/infrastructure/persistence/credential-schema.ts'
-      - 'src/modules/identity/infrastructure/persistence/postgres-credential-repository.ts'
-      - 'tests/integration/identity/credential-repository.test.ts'
-      - 'scripts/db/**'
-      - 'scripts/persistence/validate-slice-p04-*.mjs'
-      - 'scripts/tests/validate-validators.mjs'
-      - 'persistence/physical-slices/identity-credentials/**'
-      - '.github/workflows/slice-p04-implementation.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read

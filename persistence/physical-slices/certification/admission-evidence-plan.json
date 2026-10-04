@@ -1,0 +1,43 @@
+{
+  "plan_id": "TEACH-SLICE-P07-ADMISSION-EVIDENCE-PLAN",
+  "version": "0.1.0",
+  "status": "recorded",
+  "baseline_commit": "1c6065e1af5292abc2c8fdc75ee5a6e611b820bd",
+  "slice": "SLICE-P07",
+  "owning_module": "Certification",
+  "records": [
+    "Certification"
+  ],
+  "registered_relationships": [
+    "CertificationBelongsToIdentity",
+    "CertificationReferencesContentPack",
+    "CertificationObservedByIdentity"
+  ],
+  "runtime_activation": "BLOCKED",
+  "shape_decision": "UNKNOWN",
+  "lifecycle_decision": "UNKNOWN",
+  "protected_scope_decision": "UNKNOWN",
+  "content_version_decision": "UNKNOWN",
+  "required_evidence": [
+    "two independent empty-database replays yield the same full-schema fingerprint",
+    "P06-to-P07 upgrade matches the empty-database fingerprint",
+    "active learner membership, exact assigned content-version and approved criteria version are authoritative",
+    "observer capability and organization/location scope are resolved before issuance; unauthorized or self-observation requests deny without inserting",
+    "audit append participates atomically; audit failure rolls back issuance and revocation",
+    "duplicate and concurrent issuance obeys explicit idempotency key source, payload binding and retention horizon",
+    "revocation retains actor, reason, time and immutable issuance history; no application delete",
+    "public/private read policy and exact fields are owner-approved with non-disclosing denials",
+    "foreign-module direct persistence access is rejected"
+  ],
+  "unresolved_gates": [
+    "C34 OQ-CERT-1: public/private certification boundary is blocking",
+    "C34 OQ-CERT-2: criteria approval authority and record location are blocking",
+    "ContentVersion remains candidate; C31 OQ-CNT-1 representation is unselected",
+    "C13 membership shape/scope and C14 capability vocabulary remain unresolved",
+    "Assignment storage/authorization and same-transaction audit append are absent"
+  ],
+  "physical_schema_authorized": false,
+  "implementation_authorized": false,
+  "migration_authoring_authorized": false,
+  "shared_or_production_migration_execution_authorized": false
+}

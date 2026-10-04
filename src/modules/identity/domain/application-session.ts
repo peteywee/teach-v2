@@ -40,6 +40,7 @@ export type SessionAuthenticationDecision =
       readonly reason:
         | 'IDENTITY_INACTIVE'
         | 'SESSION_NOT_ACTIVE'
+        | 'INVALID_TIME'
         | 'ABSOLUTE_EXPIRED'
         | 'IDLE_EXPIRED';
     };
@@ -83,6 +84,9 @@ export function evaluateSessionAuthentication(
 ): SessionAuthenticationDecision {
   if (!input.identityActive) return { allowed: false, reason: 'IDENTITY_INACTIVE' };
   if (input.status !== 'ACTIVE') return { allowed: false, reason: 'SESSION_NOT_ACTIVE' };
+  if ([now, input.issuedAt, input.absoluteExpiresAt, input.lastUsedAt].some(
+    value => !(value instanceof Date) || !Number.isFinite(value.getTime()),
+  )) return { allowed: false, reason: 'INVALID_TIME' };
   if (now.getTime() >= input.absoluteExpiresAt.getTime()) {
     return { allowed: false, reason: 'ABSOLUTE_EXPIRED' };
   }

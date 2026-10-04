@@ -1,0 +1,525 @@
+{
+  "version": "0.1.0",
+  "baseline_commit": "1c6065e1af5292abc2c8fdc75ee5a6e611b820bd",
+  "scope": "all approved K00 commands; partial source/test traceability, not runtime conformance",
+  "full_runtime_conformance": "UNKNOWN",
+  "shared_or_production_execution_authorized": false,
+  "commands": [
+    {
+      "command": "AcceptInvitation",
+      "owner": "Identity",
+      "authority_requirements": [
+        "IDN-24",
+        "IDN-27"
+      ],
+      "state": "PARTIAL",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/application/identity-token-service.ts",
+          "symbol": "acceptInvitation",
+          "kind": "application-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/application/identity-token-service.test.ts",
+        "tests/integration/identity/identity-token-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Membership creation and acceptance must commit atomically; Organization dependency is unresolved",
+        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+      ]
+    },
+    {
+      "command": "AssignContent",
+      "owner": "Learning",
+      "authority_requirements": [
+        "MGR-7",
+        "LRN-2"
+      ],
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "P06 admission #60",
+        "Content version and ContentReadInterface",
+        "Membership/capability scope",
+        "atomic audit"
+      ]
+    },
+    {
+      "command": "AuthenticateIdentity",
+      "owner": "Identity",
+      "authority_requirements": [
+        "IDN-14",
+        "SES-17"
+      ],
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "Credential verification/hash policy and authoritative login orchestration",
+        "atomic session creation and required audit"
+      ]
+    },
+    {
+      "command": "ChangeCredential",
+      "owner": "Identity",
+      "authority_requirements": [
+        "IDN-15",
+        "IDN-16",
+        "IDN-26"
+      ],
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "atomic token consumption, credential change and all-session revocation",
+        "authoritative scope/capability and audit"
+      ]
+    },
+    {
+      "command": "CompleteLearningSession",
+      "owner": "Learning",
+      "authority_requirements": [
+        "LRN-3"
+      ],
+      "state": "PARTIAL",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [
+        {
+          "path": "src/modules/learning/application/learning-session-service.ts",
+          "symbol": "finishLearningSession",
+          "kind": "application-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/learning/application/learning-session-service.test.ts",
+        "tests/integration/learning/learning-session-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Atomic authoritative Assignment authorization and session mutation (#58), dependent on P06 #60",
+        "Required runtime event/audit and protected operation registry are absent"
+      ]
+    },
+    {
+      "command": "CreateApplicationSession",
+      "owner": "Identity",
+      "authority_requirements": [
+        "SES-1",
+        "SES-3",
+        "SES-10"
+      ],
+      "state": "PARTIAL",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/application/session-service.ts",
+          "symbol": "issueApplicationSession",
+          "kind": "application-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/application/session-service.test.ts",
+        "tests/integration/identity/identity-session-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Credential authentication, required audit and authoritative actor are not composed",
+        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+      ]
+    },
+    {
+      "command": "CreateIdentity",
+      "owner": "Identity",
+      "authority_requirements": [
+        "IDN-1",
+        "IDN-16"
+      ],
+      "state": "PARTIAL",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/infrastructure/persistence/postgres-identity-repository.ts",
+          "symbol": "create",
+          "kind": "repository-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/domain/identity.test.ts",
+        "tests/integration/identity/identity-session-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Identity plus primary Credential must commit atomically; Application command and audit absent",
+        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+      ]
+    },
+    {
+      "command": "CreateMembership",
+      "owner": "Organization",
+      "authority_requirements": [
+        "TEN-3",
+        "TEN-18"
+      ],
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "C13 OQ-TEN-1/2 Membership shape and scope selection",
+        "C14 capability vocabulary",
+        "Organization storage admission and audit"
+      ]
+    },
+    {
+      "command": "DeactivateIdentity",
+      "owner": "Identity",
+      "authority_requirements": [
+        "IDN-21",
+        "IDN-22"
+      ],
+      "state": "PARTIAL",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/infrastructure/persistence/postgres-identity-repository.ts",
+          "symbol": "deactivate",
+          "kind": "repository-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/domain/identity.test.ts",
+        "tests/integration/identity/identity-session-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Required event/audit and protected Application command are not composed",
+        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+      ]
+    },
+    {
+      "command": "DeactivateMembership",
+      "owner": "Organization",
+      "authority_requirements": [
+        "TEN-10",
+        "TEN-18"
+      ],
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "Membership shape/lifecycle admission",
+        "authoritative scope/capability and audit"
+      ]
+    },
+    {
+      "command": "InviteIdentity",
+      "owner": "Identity",
+      "authority_requirements": [
+        "IDN-20",
+        "IDN-24",
+        "IDN-25"
+      ],
+      "state": "PARTIAL",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/application/identity-token-service.ts",
+          "symbol": "issueInvitation",
+          "kind": "application-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/application/identity-token-service.test.ts",
+        "tests/integration/identity/identity-token-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Manager scope/capability, idempotency and required audit are not composed",
+        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+      ]
+    },
+    {
+      "command": "IssueCertification",
+      "owner": "Certification",
+      "authority_requirements": [
+        "CERT-1",
+        "CERT-8",
+        "CERT-9",
+        "CERT-10"
+      ],
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "P07 admission and C34 OQ-CERT-1/2",
+        "Assignment/content/version/criteria authority",
+        "Membership/observer capability and atomic audit"
+      ]
+    },
+    {
+      "command": "OffboardIdentity",
+      "owner": "Identity",
+      "authority_requirements": [
+        "IDN-17",
+        "IDN-18",
+        "IDN-19",
+        "IDN-21"
+      ],
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "Organization-owned Membership revocation in shared transaction",
+        "credential/session/token policy and lifecycle audit"
+      ]
+    },
+    {
+      "command": "PublishContentPack",
+      "owner": "Content",
+      "authority_requirements": [
+        "CNT-3",
+        "CNT-6"
+      ],
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "Content schema/version admission C31 OQ-CNT-1",
+        "deterministic engine, canonical validation and required audit"
+      ]
+    },
+    {
+      "command": "ReactivateIdentity",
+      "owner": "Identity",
+      "authority_requirements": [
+        "IDN-21",
+        "IDN-23"
+      ],
+      "state": "PARTIAL",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/infrastructure/persistence/postgres-identity-repository.ts",
+          "symbol": "reactivate",
+          "kind": "repository-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/domain/identity.test.ts",
+        "tests/integration/identity/identity-session-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Required event/audit and protected Application command are not composed",
+        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+      ]
+    },
+    {
+      "command": "ReconcileExternalEffect",
+      "owner": "TransactionControl",
+      "authority_requirements": [
+        "TXN-6",
+        "TXN-7",
+        "TXN-8",
+        "TXN-14",
+        "TXN-16"
+      ],
+      "state": "PARTIAL",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [
+        {
+          "path": "src/modules/transaction-control/application/reconciliation-service.ts",
+          "symbol": "reconcileExternalEffect",
+          "kind": "application-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/transaction-control/application/reconciliation-service.test.ts",
+        "tests/integration/transaction-control/reconciliation-record-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "No real canonical provider adapter is composed; test doubles prove orchestration only",
+        "Protected server scope, audit, external-effect send/webhook/retry paths and operation strategy registry remain unproven"
+      ]
+    },
+    {
+      "command": "RecordProgressEvent",
+      "owner": "Learning",
+      "authority_requirements": [
+        "LRN-3",
+        "LRN-4",
+        "LRN-7",
+        "LRN-10"
+      ],
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "P08 admission",
+        "P05 authorized runtime #58",
+        "content-version payload and explicit replay/completion policy"
+      ]
+    },
+    {
+      "command": "RevokeApplicationSession",
+      "owner": "Identity",
+      "authority_requirements": [
+        "SES-12",
+        "SES-14",
+        "SES-20"
+      ],
+      "state": "PARTIAL",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/infrastructure/persistence/postgres-application-session-repository.ts",
+          "symbol": "revoke",
+          "kind": "repository-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/domain/application-session.test.ts",
+        "tests/integration/identity/identity-session-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Required event/audit and authoritative Application command are not composed",
+        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+      ]
+    },
+    {
+      "command": "RevokeCertification",
+      "owner": "Certification",
+      "authority_requirements": [
+        "CERT-11",
+        "CERT-12"
+      ],
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "P07 admission and registered lifecycle",
+        "protected actor/reason/history and atomic audit"
+      ]
+    },
+    {
+      "command": "RevokeInvitation",
+      "owner": "Identity",
+      "authority_requirements": [
+        "IDN-24",
+        "IDN-28"
+      ],
+      "state": "PARTIAL",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/infrastructure/persistence/postgres-invitation-repository.ts",
+          "symbol": "revoke",
+          "kind": "repository-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/domain/single-use-secret.test.ts",
+        "tests/integration/identity/identity-token-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Protected Application entry point and required audit are not composed",
+        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+      ]
+    },
+    {
+      "command": "RevokeMembership",
+      "owner": "Organization",
+      "authority_requirements": [
+        "TEN-18",
+        "TEN-19"
+      ],
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "Membership shape and terminal lifecycle admission",
+        "authoritative scope/capability and audit"
+      ]
+    },
+    {
+      "command": "RevokeSingleUseToken",
+      "owner": "Identity",
+      "authority_requirements": [
+        "IDN-11",
+        "IDN-26"
+      ],
+      "state": "PARTIAL",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/infrastructure/persistence/postgres-setup-token-repository.ts",
+          "symbol": "revoke",
+          "kind": "repository-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/domain/single-use-secret.test.ts",
+        "tests/integration/identity/identity-token-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Both token variants have storage revocation; protected Application entry point/audit absent",
+        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+      ]
+    },
+    {
+      "command": "StartLearningSession",
+      "owner": "Learning",
+      "authority_requirements": [
+        "LRN-2",
+        "LRN-3"
+      ],
+      "state": "PARTIAL",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [
+        {
+          "path": "src/modules/learning/application/learning-session-service.ts",
+          "symbol": "startLearningSession",
+          "kind": "application-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/learning/application/learning-session-service.test.ts",
+        "tests/integration/learning/learning-session-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Atomic authoritative Assignment authorization and session mutation (#58), dependent on P06 #60",
+        "Required runtime event/audit and protected operation registry are absent"
+      ]
+    }
+  ]
+}
