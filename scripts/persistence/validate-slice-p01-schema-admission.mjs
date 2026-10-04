@@ -10,6 +10,7 @@ const admission=load('persistence/physical-slices/transaction-control/admission.
 const historical=load('persistence/physical-slices/transaction-control/admission-history/issue-22-block.json');
 const plan=load('persistence/physical-slices/transaction-control/admission-evidence-plan.json');
 const readiness=load('persistence/physical-slices/readiness.json');
+const implementation=load('persistence/physical-slices/transaction-control/implementation.json');
 const manifest=load('kernel/manifest.json');
 const entities=load('kernel/entities.json');
 const ids=load('kernel/identifiers.json');
@@ -35,9 +36,9 @@ if(unproven.length!==0) errors.push('SLICE-P01 admission: every admission criter
 if((admission?.blockers||[]).length!==0) errors.push('SLICE-P01 admission: blockers must be empty');
 if(admission?.decision!=='ADMIT' || admission?.physical_schema_authorized!==true || admission?.implementation_authorized!==true || admission?.migration_authoring_authorized!==true || admission?.admitted_physical_slices!==1) errors.push('SLICE-P01 admission: ADMIT authorization mismatch');
 if(admission?.shared_or_production_migration_execution_authorized!==false || admission?.full_relational_schema_authorized!==false) errors.push('SLICE-P01 admission: admission must not authorize full schema or shared/production migration execution');
-if(readiness?.version!=='0.6.0' || readiness?.current_admitted_slice_count!==1 || readiness?.current_physical_slice_admissions?.[0]?.id!=='SLICE-P01') errors.push('SLICE-P01 admission: readiness must record exactly one admitted slice');
+if(readiness?.version!=='0.7.0' || readiness?.current_admitted_slice_count!==1 || readiness?.current_physical_slice_admissions?.[0]?.id!=='SLICE-P01') errors.push('SLICE-P01 admission: readiness must preserve exactly one admitted slice through implementation');
 if(readiness?.narrowed_next_lane?.physical_implementation_authorized!==true || readiness?.implementation_guard?.physical_schema_authorized!==true) errors.push('SLICE-P01 admission: implementation authorization missing from readiness');
-if(readiness?.implementation_guard?.tables_generated!==0 || readiness?.implementation_guard?.migrations_generated!==0 || readiness?.implementation_guard?.repositories_generated!==0) errors.push('SLICE-P01 admission: admission batch must not generate implementation artifacts');
+if(implementation?.version!=='1.0.0' || implementation?.status!=='recorded' || readiness?.implementation_guard?.tables_generated!==1 || readiness?.implementation_guard?.migrations_generated!==1 || readiness?.implementation_guard?.repositories_generated!==1) errors.push('SLICE-P01 admission: subsequent admitted implementation evidence mismatch');
 if(readiness?.implementation_guard?.shared_or_production_migration_execution_authorized!==false) errors.push('SLICE-P01 admission: production migration execution must remain blocked');
 
 if(errors.length){
@@ -53,4 +54,5 @@ console.log('Physical slices admitted: 1 (SLICE-P01)');
 console.log('Implementation/migration authoring authorized: true');
 console.log('Full relational schema authorized: false');
 console.log('Shared/production migration execution authorized: false');
-console.log('Next gate: implement SLICE-P01 and prove acceptance evidence');
+console.log('Subsequent implementation: PROVEN');
+console.log('Next gate: C21 recovery/release proof before shared/production migration execution');

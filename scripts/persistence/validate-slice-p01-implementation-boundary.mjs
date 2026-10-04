@@ -11,6 +11,9 @@ const admission = load(
   'persistence/physical-slices/transaction-control/admission.json',
 );
 const readiness = load('persistence/physical-slices/readiness.json');
+const implementation = load(
+  'persistence/physical-slices/transaction-control/implementation.json',
+);
 const identifiers = load('kernel/identifiers.json');
 const values = load('kernel/values.json');
 const schema = text(
@@ -34,10 +37,19 @@ if (
   errors.push('SLICE-P01 implementation: active ADMIT authority missing');
 }
 if (
+  readiness?.version !== '0.7.0' ||
   readiness?.current_admitted_slice_count !== 1 ||
-  readiness?.current_physical_slice_admissions?.[0]?.id !== 'SLICE-P01'
+  readiness?.current_physical_slice_admissions?.[0]?.id !== 'SLICE-P01' ||
+  readiness?.candidate_slices?.find((entry) => entry.id === 'SLICE-P01')?.current_state !== 'IMPLEMENTED'
 ) {
-  errors.push('SLICE-P01 implementation: readiness does not admit exactly SLICE-P01');
+  errors.push('SLICE-P01 implementation: readiness does not record exactly SLICE-P01 as implemented');
+}
+if (
+  implementation?.version !== '1.0.0' ||
+  implementation?.status !== 'recorded' ||
+  implementation?.verification_source_commit !== '8147efa69ce9c4c4bd93d4a1529e116edcf1776a'
+) {
+  errors.push('SLICE-P01 implementation: canonical verified implementation record missing');
 }
 if (
   readiness?.implementation_guard

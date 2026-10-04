@@ -1,7 +1,7 @@
 {
   "implementation_id": "TEACH-SLICE-P01-IMPLEMENTATION",
-  "version": "0.1.0",
-  "status": "candidate",
+  "version": "1.0.0",
+  "status": "recorded",
   "issue": "#28",
   "baseline_commit": "4ca5356779e8901b55811061c747b997acc4aae4",
   "admission": "persistence/physical-slices/transaction-control/admission.json@2.0.0",
@@ -27,21 +27,43 @@
     "scope_policy": "INHERIT_ORIGINATING_OPERATION_SCOPE"
   },
   "verification": {
-    "typecheck": "PENDING",
-    "domain_tests": "PENDING",
-    "implementation_boundary": "PENDING",
-    "empty_database_migration_replay": "PENDING",
-    "migration_determinism": "PENDING",
-    "postgres_integration_tests": "PENDING",
-    "exact_head_ci": "PENDING"
+    "dependency_lock": "PROVEN",
+    "drizzle_migration_history": "PROVEN",
+    "typecheck": "PROVEN",
+    "domain_tests": "PROVEN (3/3)",
+    "implementation_boundary": "PROVEN",
+    "empty_database_migration_replay": "PROVEN (two independently empty PostgreSQL databases)",
+    "migration_determinism": "PROVEN",
+    "postgres_integration_tests": "PROVEN (9/9)",
+    "validator_negative_paths": "PROVEN",
+    "exact_head_ci": "PROVEN at verification_source_commit"
   },
   "required_negative_proofs": [
-    "unreadable provider state remains OPEN",
-    "different-operation or different-payload IdempotencyKey reuse is rejected",
-    "authoritative scope cannot broaden",
-    "RESOLVED state is terminal",
-    "foreign modules cannot write TransactionControl persistence directly"
+    "unreadable provider state remains OPEN — PROVEN",
+    "different-operation, different-payload, or different-source IdempotencyKey reuse is rejected — PROVEN",
+    "authoritative scope is a single trusted object; fingerprint is derived and scope cannot broaden — PROVEN",
+    "RESOLVED state is terminal — PROVEN",
+    "foreign modules cannot write TransactionControl persistence directly — PROVEN",
+    "same-record immutable replay drift in scope/retry horizon/retention is rejected — PROVEN",
+    "overlapping conflicting IdempotencyKey bindings serialize under advisory lock and allow exactly one winner — PROVEN"
   ],
   "shared_or_production_migration_execution_authorized": false,
-  "full_relational_schema_authorized": false
+  "full_relational_schema_authorized": false,
+  "verified_on": "2026-10-04",
+  "verification_source_commit": "8147efa69ce9c4c4bd93d4a1529e116edcf1776a",
+  "verification_source": {
+    "pr": "#29",
+    "implementation_workflow_run": 37202728121,
+    "implementation_job": 111437537713,
+    "negative_path_workflow_run": 37202728122,
+    "negative_path_job": 111437537542,
+    "schema_fingerprint": "8c4a857098f1daf02eb2cda36389786cd3c7cccc8face4dfaa4a07782603f1b5"
+  },
+  "review": {
+    "state": "PROVEN",
+    "pull_request": "#29",
+    "findings_total": 8,
+    "findings_resolved": 8,
+    "unresolved_threads": 0
+  }
 }

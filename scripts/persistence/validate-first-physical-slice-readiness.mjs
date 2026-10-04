@@ -10,23 +10,25 @@ const reg=load('persistence/semantic-closure/registration.json');
 const rel=load('kernel/relationships.json');
 const admission=load('persistence/physical-slices/transaction-control/admission.json');
 const plan=load('persistence/physical-slices/transaction-control/admission-evidence-plan.json');
+const implementation=load('persistence/physical-slices/transaction-control/implementation.json');
 
 if (m?.version!=='0.15.0') errors.push(`slice readiness: expected K00 0.15.0, found ${m?.version}`);
 if (reg?.version!=='1.0.0' || reg?.status!=='recorded') errors.push('slice readiness: semantic closure registration missing');
 if (r) {
-  if (r.readiness_id!=='TEACH-FIRST-PHYSICAL-SLICE-READINESS' || r.version!=='0.6.0' || r.status!=='recorded') errors.push('slice readiness: identity/state mismatch');
+  if (r.readiness_id!=='TEACH-FIRST-PHYSICAL-SLICE-READINESS' || r.version!=='0.7.0' || r.status!=='recorded') errors.push('slice readiness: identity/state mismatch');
   if (r.current_admitted_slice_count!==1 || (r.current_physical_slice_admissions||[]).length!==1 || r.current_physical_slice_admissions?.[0]?.id!=='SLICE-P01') errors.push('slice readiness: exactly SLICE-P01 must be admitted');
   if ((r.candidate_slices||[]).length!==5) errors.push('slice readiness: expected 5 candidate slices');
-  const admitted=(r.candidate_slices||[]).filter(x=>x.current_state==='ADMITTED');
-  if (admitted.length!==1 || admitted[0]?.id!=='SLICE-P01' || (r.candidate_slices||[]).filter(x=>x.id!=='SLICE-P01').some(x=>x.current_state!=='BLOCKED')) errors.push('slice readiness: only SLICE-P01 may be ADMITTED');
+  const implemented=(r.candidate_slices||[]).filter(x=>x.current_state==='IMPLEMENTED');
+  if (implemented.length!==1 || implemented[0]?.id!=='SLICE-P01' || (r.candidate_slices||[]).filter(x=>x.id!=='SLICE-P01').some(x=>x.current_state!=='BLOCKED')) errors.push('slice readiness: only SLICE-P01 may be IMPLEMENTED');
   if (r.narrowed_next_lane?.preferred_slice!=='SLICE-P01') errors.push('slice readiness: next lane must be SLICE-P01');
   if ((r.narrowed_next_lane?.owner_decisions_required||[]).length!==0) errors.push('slice readiness: TransactionControl owner decisions must be closed');
-  if (r.narrowed_next_lane?.next_required_gate!=='Implement SLICE-P01 physical persistence slice and prove acceptance evidence') errors.push('slice readiness: implementation evidence must be next gate');
+  if (r.narrowed_next_lane?.next_required_gate!=='Do not execute SLICE-P01 migration in shared/production until C21 backup/restore proof and release gates are PROVEN') errors.push('slice readiness: shared/production execution gate must remain next');
   const rr=(rel?.entries||[]).find(x=>x.id==='ReconciliationRecordUsesIdempotencyKey');
   if (!rr || rr.status!=='approved' || rr.cardinality!=='many-to-zero-or-one') errors.push('slice readiness: relationship promotion must be approved many-to-zero-or-one');
   if (admission?.version!=='2.0.0' || admission?.issue!=='#26' || admission?.decision!=='ADMIT' || admission?.physical_schema_authorized!==true || admission?.implementation_authorized!==true || admission?.shared_or_production_migration_execution_authorized!==false) errors.push('slice readiness: current SLICE-P01 admission record mismatch');
   if (plan?.version!=='1.0.0' || plan?.status!=='recorded' || plan?.physical_schema_authorized!==false) errors.push('slice readiness: admission evidence plan missing or over-authorized');
-  if (r.implementation_guard?.tables_generated!==0 || r.implementation_guard?.migrations_generated!==0 || r.implementation_guard?.repositories_generated!==0 || r.implementation_guard?.physical_schema_authorized!==true || r.implementation_guard?.shared_or_production_migration_execution_authorized!==false) errors.push('slice readiness: admission implementation guard mismatch');
+  if (implementation?.version!=='1.0.0' || implementation?.status!=='recorded' || implementation?.verification_source_commit!=='8147efa69ce9c4c4bd93d4a1529e116edcf1776a' || implementation?.verification?.postgres_integration_tests!=='PROVEN (9/9)' || implementation?.review?.unresolved_threads!==0) errors.push('slice readiness: verified SLICE-P01 implementation evidence missing');
+  if (r.implementation_guard?.tables_generated!==1 || r.implementation_guard?.migrations_generated!==1 || r.implementation_guard?.repositories_generated!==1 || r.implementation_guard?.implemented_slice_count!==1 || r.implementation_guard?.physical_schema_authorized!==true || r.implementation_guard?.shared_or_production_migration_execution_authorized!==false) errors.push('slice readiness: implemented artifact counts/boundary mismatch');
 }
 if (errors.length) {
   console.error(`Post-closure physical slice readiness FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
@@ -36,9 +38,10 @@ if (errors.length) {
 console.log('Post-closure physical slice readiness PASS');
 console.log('K00: 0.15.0');
 console.log('Physical slices admitted: 1 (SLICE-P01)');
-console.log('Preferred next lane: SLICE-P01 TransactionControl');
+console.log('Implemented slice: SLICE-P01 TransactionControl');
 console.log('Owner decisions remaining for SLICE-P01: 0');
 console.log('Admission: ADMIT at K00 0.15.0');
 console.log('Relationship promotion: PROVEN');
 console.log('Shared/production migration execution: BLOCKED');
-console.log('Next gate: implement SLICE-P01 and prove acceptance evidence');
+console.log('Implementation evidence: PROVEN');
+console.log('Next gate: C21 recovery/release proof before any shared/production migration execution');
