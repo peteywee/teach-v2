@@ -26,7 +26,8 @@
     "CertificationBelongsToIdentity",
     "CertificationReferencesContentPack",
     "CertificationObservedByIdentity",
-    "LifecycleEventReferencesIdentity"
+    "LifecycleEventReferencesIdentity",
+    "ReconciliationRecordUsesIdempotencyKey"
   ],
   "blocked_relationships": [
     {
@@ -73,12 +74,6 @@
       "blocked_by": [
         "missing-k00:DataDeletionRequest",
         "domain-owner-not-yet-registered"
-      ]
-    },
-    {
-      "id": "ReconciliationRecordUsesIdempotencyKey",
-      "blocked_by": [
-        "missing-k00:ReconciliationRecord"
       ]
     },
     {

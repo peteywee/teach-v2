@@ -27,6 +27,7 @@ if (ownership?.status !== 'active' || ownership?.version !== '1.6.0') {
 }
 
 const entityIds = new Set((entities?.entries || []).map(x => x.id));
+const identifierIds = new Set((load('kernel/identifiers.json')?.entries || []).map(x => x.id));
 const ownerDomains = new Set((ownership?.domains || []).map(x => x.id));
 const existing = new Set((existingRelationships?.entries || []).map(x => x.id));
 const seen = new Set();
@@ -38,7 +39,7 @@ for (const r of proposal?.ready_relationships || []) {
   if (r.state !== 'proposed') errors.push(`${r.id}: state must be proposed`);
   if (!['add','retain-existing'].includes(r.action)) errors.push(`${r.id}: invalid action ${r.action}`);
   if (!entityIds.has(r.from)) errors.push(`${r.id}: unknown from entity ${r.from}`);
-  for (const ref of r.to || []) if (!entityIds.has(ref)) errors.push(`${r.id}: unknown to entity ${ref}`);
+  for (const ref of r.to || []) if (!entityIds.has(ref) && !identifierIds.has(ref)) errors.push(`${r.id}: unknown to entity or identifier ${ref}`);
   if (!ownerDomains.has(r.owning_domain)) errors.push(`${r.id}: unknown owner domain ${r.owning_domain}`);
   if (!Array.isArray(r.authority_contracts) || !r.authority_contracts.length) errors.push(`${r.id}: missing contract traceability`);
   if (!Array.isArray(r.does_not_grant) || !r.does_not_grant.length) errors.push(`${r.id}: missing does_not_grant`);

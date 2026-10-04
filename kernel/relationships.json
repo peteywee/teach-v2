@@ -402,6 +402,25 @@
       ],
       "promotion_issue": "#17",
       "promoted_on": "2026-10-04"
+    },
+    {
+      "id": "ReconciliationRecordUsesIdempotencyKey",
+      "kind": "relationship",
+      "status": "candidate",
+      "from": "ReconciliationRecord",
+      "to": "IdempotencyKey",
+      "cardinality": "many-to-zero-or-one",
+      "owning_domain": "TransactionControl",
+      "authority_contracts": [
+        "C22"
+      ],
+      "enables": [
+        "idempotent_reconciliation_lookup"
+      ],
+      "does_not_grant": [
+        "key_reuse_across_operations",
+        "scope_broadening"
+      ]
     }
   ]
 }

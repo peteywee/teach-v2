@@ -1582,6 +1582,15 @@
       "notes": [
         "Shared immutable time value; proposed semantic owner is AuditLifecycle while consumers may reference it."
       ]
+    },
+    {
+      "kind": "relationship",
+      "id": "ReconciliationRecordUsesIdempotencyKey",
+      "decision_state": "approved",
+      "proposed_owner": "TransactionControl",
+      "authority_contracts": [
+        "C22"
+      ]
     }
   ],
   "approval": {

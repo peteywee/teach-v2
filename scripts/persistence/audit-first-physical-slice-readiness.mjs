@@ -26,7 +26,7 @@ const checks=[
  ['machines-approved',(machines?.entries||[]).filter(x=>x.status==='approved').length,7],
  ['machines-candidate',(machines?.entries||[]).filter(x=>x.status==='candidate').length,1],
  ['relationships-approved',(rel?.entries||[]).filter(x=>x.status==='approved').length,10],
- ['relationships-candidate',(rel?.entries||[]).filter(x=>x.status==='candidate').length,8],
+ ['relationships-candidate',(rel?.entries||[]).filter(x=>x.status==='candidate').length,9],
  ['invariants-candidate',(inv?.entries||[]).filter(x=>x.status==='candidate').length,22],
  ['decision-tables-candidate',(dt?.entries||[]).filter(x=>x.status==='candidate').length,8],
 ];

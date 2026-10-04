@@ -31,7 +31,7 @@ for (const id of ['MembershipStatus','EvidenceState']) {
   if ((states?.entries||[]).find(x=>x.id===id)?.status!=='candidate') errors.push(`semantic closure registration: excluded ${id} must remain candidate`);
 }
 if ((rel?.entries||[]).filter(x=>x.status==='approved').length!==10) errors.push('semantic closure registration: expected exactly 10 approved relationships');
-if ((rel?.entries||[]).filter(x=>x.status==='candidate').length!==8) errors.push('semantic closure registration: expected exactly 8 candidate relationships');
+if ((rel?.entries||[]).filter(x=>x.status==='candidate').length!==9) errors.push('semantic closure registration: expected exactly 9 candidate relationships');
 if (reg?.version!=='1.0.0' || reg?.status!=='recorded') errors.push('semantic closure registration: registration record missing');
 if (reg?.promotion_counts?.total!==24) errors.push('semantic closure registration: promotion total must be 24');
 if (reg?.command_status_changes!==0 || reg?.event_status_changes!==0) errors.push('semantic closure registration: command/event status change forbidden');
@@ -44,5 +44,5 @@ if (errors.length) {
 console.log('Persistence semantic closure registration PASS');
 console.log('K00: 0.14.0');
 console.log('Promotions: 8 identifiers + 3 state sets + 3 state machines + 10 relationships = 24');
-console.log('Relationships: 10 approved / 8 candidate');
+console.log('Relationships: 10 approved / 9 candidate');
 console.log('Commands/events: unchanged');

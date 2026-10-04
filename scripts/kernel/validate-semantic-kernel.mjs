@@ -44,7 +44,7 @@ for (const e of docs['entities.json']?.entries || []) {
 }
 for (const r of docs['relationships.json']?.entries || []) {
   const refs = [r.from, ...(Array.isArray(r.to) ? r.to : [r.to])].filter(Boolean);
-  for (const ref of refs) if (!entityIds.has(ref)) errors.push(`relationships.json: ${r.id} references unknown entity ${ref}`);
+  for (const ref of refs) if (!entityIds.has(ref) && !ids.has(ref)) errors.push(`relationships.json: ${r.id} references unknown entity or identifier ${ref}`);
   if (!r.owning_domain) errors.push(`relationships.json: ${r.id} missing owning_domain`);
   if (!Array.isArray(r.authority_contracts) || !r.authority_contracts.length) errors.push(`relationships.json: ${r.id} missing authority_contracts`);
   if (!Array.isArray(r.does_not_grant) || !r.does_not_grant.length) errors.push(`relationships.json: ${r.id} missing does_not_grant`);
@@ -76,7 +76,8 @@ const expectedRelationshipIds = new Set([
   'LocationBelongsToOrganization',
   'MembershipLinksIdentityOrganization',
   'MembershipMayScopeLocation',
-  'ProgressEventBelongsToLearningSession'
+  'ProgressEventBelongsToLearningSession',
+  'ReconciliationRecordUsesIdempotencyKey'
 ]);
 const actualRelationshipIds = new Set((docs['relationships.json']?.entries || []).map(x => x.id));
 for (const id of expectedRelationshipIds) if (!actualRelationshipIds.has(id)) errors.push(`relationships.json: missing registered relationship ${id}`);
