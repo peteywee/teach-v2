@@ -16,19 +16,19 @@ if (m?.version!=='0.16.0') errors.push(`slice readiness: expected K00 0.16.0, fo
 if (reg?.version!=='1.0.0' || reg?.status!=='recorded') errors.push('slice readiness: semantic closure registration missing');
 if (r) {
   if (r.readiness_id!=='TEACH-FIRST-PHYSICAL-SLICE-READINESS' || r.version!=='1.2.0' || r.status!=='recorded') errors.push('slice readiness: identity/state mismatch');
-  if (r.current_admitted_slice_count!==3 || (r.current_physical_slice_admissions||[]).length!==3 || !['SLICE-P01','SLICE-P02','SLICE-P03'].every(id=>r.current_physical_slice_admissions?.some(x=>x.id===id))) errors.push('slice readiness: exactly SLICE-P01, SLICE-P02, and SLICE-P03 must be admitted');
+  if (r.current_admitted_slice_count!==4 || (r.current_physical_slice_admissions||[]).length!==4 || !['SLICE-P01','SLICE-P02','SLICE-P03','SLICE-P04'].every(id=>r.current_physical_slice_admissions?.some(x=>x.id===id))) errors.push('slice readiness: exactly SLICE-P01 through SLICE-P04 must be admitted');
   if ((r.candidate_slices||[]).length!==5) errors.push('slice readiness: expected 5 candidate slices');
   const implementedAdmissions=(r.current_physical_slice_admissions||[]).filter(x=>['PROVEN','IMPLEMENTED'].includes(x.implementation_state));
-  if (implementedAdmissions.length!==3 || !implementedAdmissions.some(x=>x.id==='SLICE-P01') || !implementedAdmissions.some(x=>x.id==='SLICE-P02') || !implementedAdmissions.some(x=>x.id==='SLICE-P03')) errors.push('slice readiness: SLICE-P01, SLICE-P02 and SLICE-P03 must all be implemented (PROVEN or IMPLEMENTED)');
+  if (implementedAdmissions.length!==4 || !implementedAdmissions.some(x=>x.id==='SLICE-P01') || !implementedAdmissions.some(x=>x.id==='SLICE-P02') || !implementedAdmissions.some(x=>x.id==='SLICE-P03') || !implementedAdmissions.some(x=>x.id==='SLICE-P04')) errors.push('slice readiness: SLICE-P01 through SLICE-P04 must all be implemented (PROVEN or IMPLEMENTED)');
   const p02=(r.candidate_slices||[]).find(x=>x.id==='SLICE-P02');
   if (!p02 || p02.current_state!=='ADMITTED' || (p02.blockers_removed_by_owner_decisions||[]).length!==3 || (p02.blockers||[]).length!==0 || r.current_physical_slice_admissions?.find(x=>x.id==='SLICE-P02')?.implementation_state!=='IMPLEMENTED') errors.push('slice readiness: P02 must remain admitted with IMPLEMENTED evidence preserved');
   const p03=(r.candidate_slices||[]).find(x=>x.id==='SLICE-P03');
   if (!p03 || p03.current_state!=='ADMITTED' || p03.implementation_authorized!==true || (p03.blockers||[]).length!==0) errors.push('slice readiness: P03 must be ADMITTED with implementation authorized');
-  if ((r.candidate_slices||[]).filter(x=>!['SLICE-P01','SLICE-P02','SLICE-P03'].includes(x.id)).some(x=>x.current_state!=='BLOCKED')) errors.push('slice readiness: P04-P05 must remain BLOCKED');
-  if (r.narrowed_next_lane?.preferred_slice!=='TBD-P04-audit') errors.push('slice readiness: next lane must be TBD-P04-audit');
+  if ((r.candidate_slices||[]).filter(x=>!['SLICE-P01','SLICE-P02','SLICE-P03','SLICE-P04'].includes(x.id)).some(x=>x.current_state!=='BLOCKED')) errors.push('slice readiness: P05 must remain BLOCKED');
+  if (r.narrowed_next_lane?.preferred_slice!=='SLICE-P04') errors.push('slice readiness: next lane must be SLICE-P04');
   if ((r.narrowed_next_lane?.owner_decisions_required||[]).length!==0) errors.push('slice readiness: P03 owner decisions must be closed');
-  if (r.narrowed_next_lane?.physical_implementation_authorized!==false) errors.push('slice readiness: no physical implementation authorized while P04 audit pending');
-  if (r.narrowed_next_lane?.next_required_gate!=='Audit P04 for next dependency-ready lane') errors.push('slice readiness: P04 audit must be next');
+  if (r.narrowed_next_lane?.physical_implementation_authorized!==true) errors.push('slice readiness: P04 physical implementation must be authorized');
+  if (r.narrowed_next_lane?.next_required_gate!=='Complete P04 implementation and prove acceptance evidence') errors.push('slice readiness: P04 implementation must be next');
   const rr=(rel?.entries||[]).find(x=>x.id==='ReconciliationRecordUsesIdempotencyKey');
   if (!rr || rr.status!=='approved' || rr.cardinality!=='many-to-zero-or-one') errors.push('slice readiness: relationship promotion must be approved many-to-zero-or-one');
   if (admission?.version!=='2.0.0' || admission?.issue!=='#26' || admission?.decision!=='ADMIT' || admission?.physical_schema_authorized!==true || admission?.implementation_authorized!==true || admission?.shared_or_production_migration_execution_authorized!==false) errors.push('slice readiness: current SLICE-P01 admission record mismatch');

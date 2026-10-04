@@ -81,7 +81,8 @@
       "id": "SLICE-P04",
       "admission": "persistence/physical-slices/identity-credentials/admission.json@1.0.0",
       "decision": "ADMIT",
-      "admitted_on": "2026-10-04"
+      "admitted_on": "2026-10-04",
+      "implementation_state": "IMPLEMENTED"
     }
   ],
   "current_admitted_slice_count": 4,
