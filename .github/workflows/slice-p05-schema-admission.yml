@@ -4,6 +4,8 @@ name: SLICE-P05 Schema Admission
 on:
   pull_request:
     paths:
+      - 'scripts/persistence/admission-criteria.mjs'
+      - 'persistence/authority.json'
       - 'persistence/physical-slices/learning-session/**'
       - 'persistence/physical-slices/readiness.json'
       - 'kernel/entities.json'
@@ -24,6 +26,8 @@ on:
   push:
     branches: [main]
     paths:
+      - 'scripts/persistence/admission-criteria.mjs'
+      - 'persistence/authority.json'
       - 'persistence/physical-slices/learning-session/**'
       - 'persistence/physical-slices/readiness.json'
       - 'kernel/entities.json'
@@ -58,3 +62,4 @@ jobs:
         run: node scripts/persistence/validate-first-physical-slice-readiness.mjs
       - name: Audit whole-stack persistence state
         run: node scripts/persistence/audit-first-physical-slice-readiness.mjs
+

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { inspectAdmissionCriteria } from './admission-criteria.mjs';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
@@ -59,8 +60,7 @@ if(!learningBoundary.includes('SLICE-P05 physical persistence is ADMITTED')) err
 const evidence=(plan?.required_evidence||[]).join('\n');
 if(!evidence.includes('REQUIRED_ONE_ASSIGNMENT') || !evidence.includes('non-null physical Assignment reference') || evidence.includes('UNKNOWN') || evidence.includes('many-to-one, nullable')) errors.push('SLICE-P05 admission: evidence plan must encode required/non-null Assignment reference without UNKNOWN/nullability drift');
 
-const criteria=admission?.criteria||[];
-if(criteria.length!==8 || criteria.some(x=>x.state!=='PROVEN')) errors.push('SLICE-P05 admission: all eight Persistence Model criteria must be PROVEN');
+errors.push(...inspectAdmissionCriteria(authority, admission, 'SLICE-P05'));
 if((admission?.blockers||[]).length!==0) errors.push('SLICE-P05 admission: blockers must be empty');
 if(admission?.decision!=='ADMIT' || admission?.physical_schema_authorized!==true || admission?.implementation_authorized!==true || admission?.migration_authoring_authorized!==true) errors.push('SLICE-P05 admission: ADMIT authorization mismatch');
 if(admission?.shared_or_production_migration_execution_authorized!==false || admission?.full_relational_schema_authorized!==false) errors.push('SLICE-P05 admission: production/full-schema authority must remain blocked');
@@ -85,3 +85,4 @@ console.log('Assignment physical reference required/non-null: true');
 console.log('All 8 admission criteria: PROVEN');
 console.log('P05 implementation/migration authoring authorized: true');
 console.log('Shared/production migration execution authorized: false');
+

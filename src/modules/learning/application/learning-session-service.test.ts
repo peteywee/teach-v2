@@ -93,3 +93,53 @@ test('wrong-scope create result is rejected without disclosure', async () => {
   f.repository.createAuthorizedStart = async () => newLearningSession({ ...references, identityId: 'other' });
   await assert.rejects(startLearningSession(f.repository, f.authorization, references), LearningSessionUnavailableError);
 });
+
+for (const operation of ['read', 'finish'] as const) {
+  test(`${operation}: caller mutation during repository await preserves original scope`, async () => {
+    const f = fixture();
+    f.rows.set(references.id, newLearningSession(references));
+    const other = { id: 'session-other', identityId: 'learner-other', assignmentId: 'assignment-other' };
+    f.rows.set(other.id, newLearningSession(other));
+    const scope = { id: references.id, identityId: references.identityId };
+    let release!: () => void;
+    const blocked = new Promise<void>((resolve) => { release = resolve; });
+    const original = operation === 'read' ? f.repository.getById : f.repository.completeActive;
+    const delayed: typeof original = async (requested) => {
+      assert.notEqual(requested, scope);
+      assert.ok(Object.isFrozen(requested));
+      assert.equal(Reflect.set(requested, 'identityId', other.identityId), false);
+      await blocked;
+      return original(requested);
+    };
+    if (operation === 'read') f.repository.getById = delayed;
+    else f.repository.completeActive = delayed;
+    const pending = (operation === 'read' ? readLearningSession : finishLearningSession)(f.repository, scope);
+    scope.id = other.id; scope.identityId = other.identityId;
+    release();
+    const record = await pending;
+    assert.equal(record.id, references.id);
+    assert.equal(record.identityId, references.identityId);
+    assert.equal(record.status, operation === 'read' ? 'ACTIVE' : 'COMPLETED');
+    assert.equal(f.writes(), operation === 'read' ? 0 : 1);
+    assert.equal(f.rows.get(other.id)?.status, 'ACTIVE');
+  });
+
+  test(`${operation}: caller mutation cannot legitimize a wrong-scope result`, async () => {
+    const f = fixture();
+    const scope = { id: references.id, identityId: references.identityId };
+    const other = newLearningSession({ ...references, id: 'session-other', identityId: 'learner-other' });
+    let release!: () => void;
+    const blocked = new Promise<void>((resolve) => { release = resolve; });
+    const delayed = async () => {
+      await blocked;
+      return operation === 'read' ? other : completeLearningSession(other);
+    };
+    if (operation === 'read') f.repository.getById = delayed;
+    else f.repository.completeActive = delayed;
+    const pending = (operation === 'read' ? readLearningSession : finishLearningSession)(f.repository, scope);
+    scope.id = other.id; scope.identityId = other.identityId;
+    release();
+    await assert.rejects(pending, LearningSessionUnavailableError);
+    assert.equal(f.writes(), 0);
+  });
+}

@@ -830,6 +830,84 @@ test(
   { pass: true }
 );
 
+// Exact criterion coverage: one copy of a proof cannot stand in for another.
+const admissionLanes = ['transaction-control', 'identity-session', 'identity-tokens', 'identity-credentials', 'learning-session'];
+const criterionMutations = [
+  ['empty criteria', (d) => { d.criteria = []; }, /exactly eight distinct/],
+  ['duplicate criteria', (d) => { d.criteria = Array.from({ length: 8 }, () => ({ ...d.criteria[0] })); }, /duplicate criterion/],
+  ['missing criterion', (d) => { d.criteria.pop(); }, /missing criterion/],
+  ['unknown criterion', (d) => { d.criteria[0].criterion = 'invented criterion'; }, /unknown criterion/],
+  ['blank evidence', (d) => { d.criteria[0].evidence = '  '; }, /non-blank evidence/],
+  ['missing evidence', (d) => { delete d.criteria[0].evidence; }, /non-blank evidence/],
+  ['malformed criterion', (d) => { d.criteria[0] = null; }, /criterion must be an object/],
+];
+for (const [index, lane] of admissionLanes.entries()) {
+  const script = `scripts/persistence/validate-slice-p0${index + 1}-schema-admission.mjs`;
+  const path = `persistence/physical-slices/${lane}/admission.json`;
+  for (const [name, mutate, pattern] of criterionMutations) {
+    test(`slice-p0${index + 1} admission: ${name} fails`, script, (dir) => {
+      const value = readJson(dir, path); mutate(value); writeJson(dir, path, value);
+    }, { pattern });
+  }
+  test(`slice-p0${index + 1} admission: reordered complete criteria pass`, script, (dir) => {
+    const value = readJson(dir, path); value.criteria.reverse(); writeJson(dir, path, value);
+  }, { pass: true });
+}
+test('admission: authority criterion omission fails closed', 'scripts/persistence/validate-slice-p05-schema-admission.mjs', (dir) => {
+  const path = 'persistence/authority.json'; const value = readJson(dir, path);
+  value.schema_admission_gate.criteria.pop(); writeJson(dir, path, value);
+}, { pattern: /Persistence Model must define the exact eight distinct/ });
+test('pins: duplicate admission criterion fails', 'scripts/packaging/validate-apply-guards.mjs pins', (dir) => {
+  const path = 'persistence/physical-slices/learning-session/admission.json'; const value = readJson(dir, path);
+  value.criteria[7] = { ...value.criteria[0] }; writeJson(dir, path, value);
+}, { pattern: /duplicate criterion/ });
+
+const foundationPath = 'persistence/physical-slices/learning-session/foundation.json';
+const foundationScript = 'scripts/persistence/validate-slice-p05-foundation.mjs';
+const foundationMutations = [
+  ['runtime activation', (d) => { d.runtime_activation = 'ACTIVE'; }, /runtime activation must remain BLOCKED/],
+  ['physical persistence proof', (d) => { d.verification.physical_persistence = 'PROVEN'; }, /physical_persistence must remain PENDING/],
+  ['Assignment adapter proof', (d) => { d.verification.authoritative_assignment_authorization_adapter = 'PROVEN'; }, /authoritative_assignment_authorization_adapter must remain UNKNOWN/],
+  ['atomic insert proof', (d) => { d.verification.atomic_authorization_and_insert = 'PROVEN'; }, /atomic_authorization_and_insert must remain PENDING/],
+  ['concurrent completion proof', (d) => { d.verification.postgresql_concurrent_completion = 'PROVEN'; }, /postgresql_concurrent_completion must remain PENDING/],
+  ['production authorization', (d) => { d.shared_or_production_migration_execution_authorized = true; }, /shared\/production migration execution must remain unauthorized/],
+  ['table totals', (d) => { d.physical_artifact_totals.tables = 999; }, /tables totals must match actual artifacts/],
+  ['migration totals', (d) => { d.physical_artifact_totals.migration_files = 999; }, /migration_files totals must match actual artifacts/],
+  ['repository totals', (d) => { d.physical_artifact_totals.repositories = 999; }, /repositories totals must match actual artifacts/],
+  ['slice totals', (d) => { d.implemented_physical_slices = 999; }, /implemented physical slice count/],
+  ['wrong owner decision', (d) => { d.owner_decision = 'OPTIONAL_ONE_ASSIGNMENT'; }, /Assignment owner decision mismatch/],
+  ['missing verification source', (d) => { delete d.verification_source_commit; }, /exact baseline and verification source/],
+  ['missing admission reference', (d) => { delete d.admission; }, /separate ADMIT admission/],
+];
+for (const [name, mutate, pattern] of foundationMutations) {
+  test(`foundation: ${name} fails`, foundationScript, (dir) => {
+    const value = readJson(dir, foundationPath); mutate(value); writeJson(dir, foundationPath, value);
+  }, { pattern });
+}
+test('foundation: clean recorded checkpoint passes', foundationScript, () => {}, { pass: true });
+test('foundation: missing checkpoint fails closed', foundationScript, (dir) => {
+  rmSync(join(dir, foundationPath));
+}, { pattern: /foundation.json:.*ENOENT/ });
+test('foundation: physical Learning implementation requires separate evidence', foundationScript, (dir) => {
+  writeFileSync(join(dir, 'src/modules/learning/domain/premature-table.ts'), "import { pgTable } from 'drizzle-orm/pg-core';\n");
+}, { pattern: /physical Learning implementation cannot be covered/ });
+test('foundation: contradictory P05 readiness fails', foundationScript, (dir) => {
+  const path = 'persistence/physical-slices/readiness.json'; const value = readJson(dir, path);
+  value.current_physical_slice_admissions.find((item) => item.id === 'SLICE-P05').implementation_state = 'IMPLEMENTED';
+  writeJson(dir, path, value);
+}, { pattern: /P05 readiness must remain admitted/ });
+test('foundation: matching invented repository counts still fail actual artifacts', foundationScript, (dir) => {
+  const value = readJson(dir, foundationPath); value.physical_artifact_totals.repositories = 999;
+  writeJson(dir, foundationPath, value);
+  const path = 'persistence/physical-slices/readiness.json'; const readiness = readJson(dir, path);
+  readiness.implementation_guard.repositories_generated = 999; writeJson(dir, path, readiness);
+}, { pattern: /repositories totals must match actual artifacts/ });
+test('pins: forged foundation authorization fails', 'scripts/packaging/validate-apply-guards.mjs pins', (dir) => {
+  const value = readJson(dir, foundationPath); value.runtime_activation = 'ACTIVE';
+  value.shared_or_production_migration_execution_authorized = true; value.physical_artifact_totals.tables = 999;
+  writeJson(dir, foundationPath, value);
+}, { pattern: /runtime activation must remain BLOCKED/ });
+
 // ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------

@@ -5,7 +5,8 @@ on:
     paths:
       - 'scripts/**'
       - 'drizzle/**'
-      - 'persistence/physical-slices/readiness.json'
+      - 'persistence/**'
+      - 'src/modules/**'
       - 'kernel/*.json'
       - 'domains/ownership-map.json'
       - 'contracts/README.md'
@@ -16,7 +17,8 @@ on:
     paths:
       - 'scripts/**'
       - 'drizzle/**'
-      - 'persistence/physical-slices/readiness.json'
+      - 'persistence/**'
+      - 'src/modules/**'
       - 'kernel/*.json'
       - 'domains/ownership-map.json'
       - 'contracts/README.md'

@@ -37,25 +37,27 @@ export async function startLearningSession(
 }
 
 export async function readLearningSession(repository: LearningSessionRepository, scope: LearningSessionScope): Promise<LearningSessionRecord> {
-  assertScope(scope);
-  const record = await repository.getById(scope);
-  if (!record || record.id !== scope.id || record.identityId !== scope.identityId) throw new LearningSessionUnavailableError();
+  const requested = snapshotScope(scope);
+  const record = await repository.getById(requested);
+  if (!record || record.id !== requested.id || record.identityId !== requested.identityId) throw new LearningSessionUnavailableError();
   assertValidLearningSession(record);
   return record;
 }
 
 export async function finishLearningSession(repository: LearningSessionRepository, scope: LearningSessionScope): Promise<LearningSessionRecord> {
-  assertScope(scope);
-  const record = await repository.completeActive(scope);
-  if (!record || record.id !== scope.id || record.identityId !== scope.identityId || record.status !== 'COMPLETED') {
+  const requested = snapshotScope(scope);
+  const record = await repository.completeActive(requested);
+  if (!record || record.id !== requested.id || record.identityId !== requested.identityId || record.status !== 'COMPLETED') {
     throw new LearningSessionUnavailableError();
   }
   assertValidLearningSession(record);
   return record;
 }
 
-function assertScope(scope: LearningSessionScope): void {
+function snapshotScope(scope: LearningSessionScope): LearningSessionScope {
+  const requested = Object.freeze({ id: scope?.id, identityId: scope?.identityId });
   for (const key of ['id', 'identityId'] as const) {
-    if (typeof scope[key] !== 'string' || scope[key].trim().length === 0) throw new LearningSessionUnavailableError();
+    if (typeof requested[key] !== 'string' || requested[key].trim().length === 0) throw new LearningSessionUnavailableError();
   }
+  return requested;
 }
