@@ -1,10 +1,12 @@
 {
   "implementation_id": "TEACH-SLICE-P04-IMPLEMENTATION",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "proven",
   "issue": "#46",
-  "baseline_commit": "013cb2a",
-  "admission": "persistence/physical-slices/identity-credentials/admission.json@1.0.0",
+  "repair_issue": "#52",
+  "retrospective_validation_issue": "#48",
+  "baseline_commit": "fcd3401a1f5e25166b939dcd12b599d661b897b0",
+  "admission": "persistence/physical-slices/identity-credentials/admission.json@1.1.0",
   "slice": "SLICE-P04",
   "owning_module": "Identity",
   "target_records": [
@@ -15,20 +17,48 @@
       "identity_credentials"
     ],
     "migration": "drizzle/0003_slice_p04_credential.sql",
+    "migration_snapshot": "drizzle/meta/0003_snapshot.json",
+    "migration_journal": "drizzle/meta/_journal.json#idx-3",
     "domain_model": "src/modules/identity/domain/credential.ts",
     "schema": "src/modules/identity/infrastructure/persistence/credential-schema.ts",
     "repositories": [
       "src/modules/identity/infrastructure/persistence/postgres-credential-repository.ts"
+    ],
+    "integration_tests": [
+      "tests/integration/identity/credential-repository.test.ts"
     ]
+  },
+  "verification_source_commit": "ff2287b7d4818151803d8db38a91951f42b22742",
+  "generated_history_source": {
+    "workflow_run": 37226519690,
+    "method": "drizzle-kit generate from exact committed P03 history through 0002",
+    "generated_tag": "0003_slice_p04_credential",
+    "journal_index": 3
   },
   "verification": {
     "typecheck": "PASS",
-    "domain_tests": "PASS (7/7: 3 positive, 4 negative)",
+    "domain_tests": "PASS (7/7)",
+    "schema_admission": "PASS (8/8 criteria PROVEN)",
     "implementation_boundary": "PASS",
-    "migration_generation": "MANUAL (drizzle-kit unavailable locally)",
-    "postgres_integration_tests": "PASS (via CI)",
+    "migration_history": "PROVEN (generated SQL + snapshot + journal idx 3)",
+    "migration_generation": "PROVEN (repository-pinned drizzle-kit in CI)",
+    "migration_determinism": "PROVEN (two independent empty databases identical)",
+    "upgrade_replay": "PROVEN (P03 -> P04 identical)",
+    "schema_fingerprint": "25476adcb4a8dc59ce397da63fcf1239343a93ab9985fb21e6a415efcfc7fe77",
+    "postgres_integration_tests": "PASS (6/6)",
     "validator_negative_paths": "PASS",
-    "exact_head_ci": "PASS"
+    "historical_p03_replay": "PASS after prefix scoping through 0002",
+    "exact_head_ci": "PASS (16/16 workflows on verification_source_commit)"
+  },
+  "corrected_defects": [
+    "P04 migration is now present in the authoritative Drizzle journal and snapshot chain",
+    "Credential migration foreign key now targets public.identity_identities(id)",
+    "P04 schema-admission and implementation boundaries are executable CI proofs",
+    "P03 and P04 historical migration replays are prefix-scoped so later migrations cannot invalidate historical evidence"
+  ],
+  "review": {
+    "unresolved_threads": 0,
+    "submitted_reviews": 0
   },
   "shared_or_production_migration_execution_authorized": false,
   "full_relational_schema_authorized": false
