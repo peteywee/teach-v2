@@ -1,0 +1,64 @@
+{
+  "admission_id": "TEACH-SLICE-P05-PHYSICAL-SCHEMA-ADMISSION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "evaluated_on": "2026-10-04",
+  "issue": "#46",
+  "semantic_baseline_commit": "4d52bf0",
+  "kernel_version": "0.16.0",
+  "slice": "SLICE-P05",
+  "records": [
+    "LearningSession"
+  ],
+  "owning_module": "Learning",
+  "decision": "ADMIT",
+  "governing_authority": "TEACH-PERSISTENCE-MODEL@1.0.0",
+  "criteria": [
+    {
+      "criterion": "entity is approved",
+      "state": "PROVEN",
+      "evidence": "LearningSession approved in K00 0.16.0"
+    },
+    {
+      "criterion": "canonical identifier is approved",
+      "state": "PROVEN",
+      "evidence": "LearningSessionId approved"
+    },
+    {
+      "criterion": "every persisted lifecycle state set is approved",
+      "state": "PROVEN",
+      "evidence": "LearningSessionStatus approved (ACTIVE, COMPLETED)"
+    },
+    {
+      "criterion": "every relationship/cardinality encoded by the schema is approved",
+      "state": "PROVEN",
+      "evidence": "IdentityHasLearningSession (1:N), LearningSessionUsesAssignment (N:1) approved"
+    },
+    {
+      "criterion": "no blocking open question changes the record shape",
+      "state": "PROVEN",
+      "evidence": "OQ-LRN-1 resolved (ACTIVE->COMPLETED only)"
+    },
+    {
+      "criterion": "owning module is explicit",
+      "state": "PROVEN",
+      "evidence": "Learning"
+    },
+    {
+      "criterion": "protected ownership/scope fields are derivable from approved semantics",
+      "state": "PROVEN",
+      "evidence": "IdentityHasLearningSession provides authoritative IdentityId FK"
+    },
+    {
+      "criterion": "migration and acceptance evidence plan exists",
+      "state": "PROVEN",
+      "evidence": "admission-evidence-plan.json@1.0.0"
+    }
+  ],
+  "blockers": [],
+  "physical_schema_authorized": true,
+  "implementation_authorized": true,
+  "migration_authoring_authorized": true,
+  "shared_or_production_migration_execution_authorized": false,
+  "next_required_gate": "Implement SLICE-P05 physical persistence (Learning module) and prove acceptance evidence"
+}

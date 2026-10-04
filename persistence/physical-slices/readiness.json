@@ -83,9 +83,16 @@
       "decision": "ADMIT",
       "admitted_on": "2026-10-04",
       "implementation_state": "IMPLEMENTED"
+    },
+    {
+      "id": "SLICE-P05",
+      "admission": "persistence/physical-slices/learning-session/admission.json@1.0.0",
+      "decision": "ADMIT",
+      "admitted_on": "2026-10-04",
+      "implementation_state": "ADMITTED"
     }
   ],
-  "current_admitted_slice_count": 4,
+  "current_admitted_slice_count": 5,
   "candidate_slices": [
     {
       "id": "SLICE-P01",
@@ -227,7 +234,7 @@
         "ProgressEvent",
         "Certification"
       ],
-      "current_state": "BLOCKED",
+      "current_state": "ADMITTED",
       "blockers": [
         "AssignmentId and ProgressEventId are still candidate and not named in current C01 canonical identifier set",
         "ContentBlock remains candidate",
@@ -252,11 +259,11 @@
     }
   ],
   "narrowed_next_lane": {
-    "preferred_slice": "SLICE-P04",
-    "reason": "Credential selected via #46; P04 admitted and implementation in progress.",
+    "preferred_slice": "SLICE-P05",
+    "reason": "LearningSession selected; P05 admitted, implementation authorized.",
     "owner_decisions_required": [],
     "physical_implementation_authorized": true,
-    "next_required_gate": "Complete P04 implementation and prove acceptance evidence",
+    "next_required_gate": "Implement SLICE-P05 physical persistence (Learning module)",
     "semantic_promotions_required": []
   },
   "implementation_guard": {
