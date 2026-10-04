@@ -1,0 +1,140 @@
+{
+  "readiness_id": "TEACH-FIRST-PHYSICAL-SLICE-READINESS",
+  "version": "0.1.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-04",
+  "updated_on": "2026-10-04",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "commit": "eb7a37cd4bad8209fb6619e64815b10600577d8b",
+    "kernel_version": "0.13.0",
+    "persistence_authority_version": "1.0.0",
+    "semantic_closure_proposal_version": "0.1.0"
+  },
+  "admission_rule": "A physical slice is ADMIT only when every semantic dependency and shape-affecting owner decision required by its schema is approved. Candidate, missing, UNKNOWN, BLOCKED, or contradictory evidence fails closed.",
+  "current_physical_slice_admissions": [],
+  "current_admitted_slice_count": 0,
+  "candidate_slices": [
+    {
+      "id": "SLICE-P01",
+      "name": "TransactionControl reconciliation persistence",
+      "owning_module": "TransactionControl",
+      "records": [
+        "ReconciliationRecord"
+      ],
+      "current_state": "BLOCKED",
+      "blockers": [
+        "IdempotencyKey is candidate until semantic closure approval",
+        "ReconciliationRecordUsesIdempotencyKey requires fresh relationship rediscovery/registration",
+        "OQ-TXN-1 remains open: key source and retention policy",
+        "protected-record ownership/scope classification must be explicit before physical schema admission"
+      ],
+      "after_proposed_semantic_closure": "STILL_BLOCKED"
+    },
+    {
+      "id": "SLICE-P02",
+      "name": "Identity and application-session persistence",
+      "owning_module": "Identity",
+      "records": [
+        "Identity",
+        "ApplicationSession"
+      ],
+      "current_state": "BLOCKED",
+      "blockers": [
+        "IdentityId/ApplicationSessionId, IdentityStatus/ApplicationSessionStatus and their machines remain candidate until semantic closure approval",
+        "IdentityHasApplicationSession remains candidate until semantic closure approval",
+        "OQ-SES-3 remains open: session credential hash/verifier construction",
+        "OQ-SES-4 remains open: absolute and idle session lifetimes",
+        "protected Identity ownership/scope must reconcile with tenancy/privacy rules before physical schema admission"
+      ],
+      "after_proposed_semantic_closure": "STILL_BLOCKED"
+    },
+    {
+      "id": "SLICE-P03",
+      "name": "Invitation and single-use token persistence",
+      "owning_module": "Identity",
+      "records": [
+        "Invitation",
+        "SetupToken",
+        "PasswordResetToken"
+      ],
+      "current_state": "BLOCKED",
+      "blockers": [
+        "InvitationForIdentity requires current rediscovery/cardinality decision",
+        "SetupToken-to-Identity relationship is not registered as approved semantic authority",
+        "PasswordResetToken-to-Identity relationship is not registered as approved semantic authority",
+        "physical ownership/scope fields cannot be invented from application intent"
+      ],
+      "after_proposed_semantic_closure": "STILL_BLOCKED"
+    },
+    {
+      "id": "SLICE-P04",
+      "name": "Organization/tenant persistence",
+      "owning_module": "Organization",
+      "records": [
+        "Organization",
+        "Membership",
+        "Location",
+        "Entitlement"
+      ],
+      "current_state": "BLOCKED",
+      "blockers": [
+        "OrganizationId is candidate until semantic closure approval",
+        "Membership, Location, and Entitlement remain candidate",
+        "OQ-TEN-1 remains open and directly affects Membership shape",
+        "OQ-TEN-2 remains open and affects multi-membership scope selection"
+      ],
+      "after_proposed_semantic_closure": "STILL_BLOCKED"
+    },
+    {
+      "id": "SLICE-P05",
+      "name": "Learning/content/certification persistence",
+      "owning_module": "multi-owner coordinated slice",
+      "records": [
+        "ContentPack",
+        "Assignment",
+        "LearningSession",
+        "ProgressEvent",
+        "Certification"
+      ],
+      "current_state": "BLOCKED",
+      "blockers": [
+        "AssignmentId and ProgressEventId lack current C01 canonical identifier approval basis",
+        "Content/Learning/Certification relationships are candidate until semantic closure approval",
+        "ContentBlock remains candidate",
+        "CertificationCriteriaVersion remains a missing core semantic candidate",
+        "Certification revocation classification remains unresolved"
+      ],
+      "after_proposed_semantic_closure": "STILL_BLOCKED"
+    }
+  ],
+  "after_recommended_semantic_closure": {
+    "target_kernel_version": "0.14.0",
+    "hypothetical_only": true,
+    "newly_approved_semantics_if_owner_approves": 24,
+    "admitted_physical_slices": [],
+    "admitted_slice_count": 0,
+    "reason": "The proposed semantic closure removes foundational registry blockers but does not close relationship rediscovery, session policy, tenancy, privacy, transaction-key policy, or certification/content shape decisions."
+  },
+  "smallest_dependency_ready_next_actions": [
+    "Owner may approve the exact K00 0.14.0 semantic closure proposal.",
+    "After that promotion, rerun relationship discovery for InvitationForIdentity and ReconciliationRecordUsesIdempotencyKey and discover token-to-Identity relationship authority instead of inventing it.",
+    "Resolve the owner decisions that directly shape the chosen first physical slice before generating its schema.",
+    "Only then run the Persistence schema-admission gate and generate a bounded migration slice."
+  ],
+  "implementation_guard": {
+    "tables_generated": 0,
+    "migrations_generated": 0,
+    "repositories_generated": 0,
+    "physical_schema_authorized": false
+  },
+  "evidence_states": {
+    "persistence_authority": "PROVEN",
+    "semantic_closure_proposal": "PROVEN",
+    "physical_slice_readiness": "BLOCKED",
+    "unknown": "none promoted to pass",
+    "contradictory": "none hidden"
+  }
+}

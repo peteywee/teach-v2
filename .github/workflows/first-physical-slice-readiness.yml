@@ -1,0 +1,25 @@
+name: First Physical Slice Readiness
+
+on:
+  pull_request:
+    paths:
+      - 'persistence/**'
+      - 'kernel/**'
+      - 'scripts/persistence/**'
+  push:
+    branches: [main]
+    paths:
+      - 'persistence/**'
+      - 'kernel/**'
+      - 'scripts/persistence/**'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/persistence/validate-first-physical-slice-readiness.mjs
+      - run: node scripts/persistence/audit-first-physical-slice-readiness.mjs
