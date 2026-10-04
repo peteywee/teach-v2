@@ -76,7 +76,7 @@ test(
     const p = join(dir, 'scripts/tests/pin-alias-regression-fixture.mjs');
     const fixture = [
       ['const j', "=load('kernel/manifest.json');"].join(''),
-      ["if(j?.version!==", "'0.13.0') throw new Error('stale');"].join(''),
+      ["if(j?.version!==", "'0.14.0') throw new Error('stale');"].join(''),
     ].join('\n');
     writeFileSync(p, fixture + '\n');
   },
@@ -132,7 +132,7 @@ test(
       "if (manifest.version !== '0.14.0')",
     );
   },
-  { pattern: /stale K00 manifest version pin '0\.13\.0'/ },
+  { pattern: /stale K00 manifest version pin '0\.14\.0'/ },
 );
 
 test(
