@@ -27,20 +27,21 @@ if(find(states,'ExternalEffectOutcome')?.status!=='approved') errors.push('SLICE
 const rr=find(rel,'ReconciliationRecordUsesIdempotencyKey');
 if(!rr) errors.push('SLICE-P01 admission: relationship registration missing');
 else {
- if(rr.status!=='candidate') errors.push(`SLICE-P01 admission: expected candidate relationship at this gate, found ${rr.status}`);
+ if(rr.status!=='approved') errors.push(`SLICE-P01 admission: owner-approved promotion expected approved relationship, found ${rr.status}`);
  if(rr.cardinality!=='many-to-zero-or-one') errors.push('SLICE-P01 admission: relationship cardinality drifted');
  if(rr.owning_domain!=='TransactionControl') errors.push('SLICE-P01 admission: relationship owner drifted');
 }
 const blocked=(admission?.criteria||[]).filter(x=>x.state==='BLOCKED');
 if(admission?.decision!=='BLOCK' || admission?.physical_schema_authorized!==false || admission?.admitted_physical_slices!==0) errors.push('SLICE-P01 admission: decision must remain BLOCK with zero admissions');
-if(blocked.length!==1 || !blocked[0]?.evidence?.includes('status is candidate')) errors.push('SLICE-P01 admission: candidate relationship must be the sole final blocker');
+if(blocked.length!==1 || !blocked[0]?.evidence?.includes('status is candidate')) errors.push('SLICE-P01 admission: historical issue #22 record must preserve the pre-promotion candidate blocker');
+if(readiness?.version!=='0.5.0' || readiness?.evidence_states?.relationship_promotion!=='PROVEN' || readiness?.evidence_states?.admission_rerun!=='PENDING') errors.push('SLICE-P01 admission: current readiness must require a fresh post-promotion admission rerun');
 if((readiness?.current_physical_slice_admissions||[]).length!==0 || readiness?.current_admitted_slice_count!==0) errors.push('SLICE-P01 admission: readiness admitted a physical slice prematurely');
 if(readiness?.implementation_guard?.tables_generated!==0 || readiness?.implementation_guard?.migrations_generated!==0 || readiness?.implementation_guard?.repositories_generated!==0 || readiness?.implementation_guard?.physical_schema_authorized!==false) errors.push('SLICE-P01 admission: implementation guard violated');
 if(errors.length){console.error(`SLICE-P01 PHYSICAL-SCHEMA ADMISSION FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);for(const e of errors) console.error(`- ${e}`);process.exit(1);}
-console.log('SLICE-P01 PHYSICAL-SCHEMA ADMISSION EVALUATION PASS');
-console.log('Decision: BLOCK');
+console.log('SLICE-P01 HISTORICAL ADMISSION EVIDENCE PASS');
+console.log('Historical decision: BLOCK at pre-promotion baseline');
 console.log('PROVEN: entity, identifier, lifecycle/outcome, ownership/scope decisions, migration/acceptance evidence plan');
-console.log('BLOCKED: ReconciliationRecordUsesIdempotencyKey is candidate, not approved');
+console.log('Relationship promotion: PROVEN in current K00');
 console.log('Physical slices admitted: 0');
 console.log('Physical implementation authorized: false');
-console.log('Next gate: explicit owner semantic-promotion approval');
+console.log('Next gate: fresh SLICE-P01 admission rerun');

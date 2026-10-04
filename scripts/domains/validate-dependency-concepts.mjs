@@ -17,7 +17,7 @@ const commands=load('kernel/commands.json');
 const registration=load('domains/dependencies/registration.json');
 const lifecycleRegistration=load('domains/dependencies/lifecycle-registration.json');
 
-if (manifest?.version!=='0.14.0') errors.push(`dependency concepts: expected K00 0.14.0, found ${manifest?.version}`);
+if (manifest?.version!=='0.15.0') errors.push(`dependency concepts: expected K00 0.15.0, found ${manifest?.version}`);
 if (ownership?.version!=='1.6.0' || ownership?.status!=='active') errors.push('dependency concepts: expected active Domain Ownership Map 1.6.0');
 
 const expected=new Map([

@@ -20,7 +20,7 @@ if (d) {
   if (d.proposed_revision_if_approved?.total_candidate_to_approved_promotions!==24) errors.push('semantic closure discovery: expected 24 historical proposed promotions');
   if (d.proposed_revision_if_approved?.k00_target_version!=='0.14.0') errors.push('semantic closure discovery: target must remain 0.14.0');
 }
-if (m?.version!=='0.14.0') errors.push(`semantic closure discovery: current K00 must be 0.14.0, found ${m?.version}`);
+if (m?.version!=='0.15.0') errors.push(`semantic closure discovery: current K00 must be 0.15.0, found ${m?.version}`);
 if (reg) {
   if (reg.kernel_to!=='0.14.0' || reg.promotion_counts?.total!==24) errors.push('semantic closure discovery: current registration mismatch');
 }
@@ -32,4 +32,4 @@ if (errors.length) {
 }
 console.log('Persistence semantic closure discovery PASS');
 console.log('Historical discovery preserved at K00 0.13.0');
-console.log('Current registration: K00 0.14.0 / 24 promotions');
+console.log('Historical registration: K00 0.14.0 / 24 promotions; current K00 0.15.0');

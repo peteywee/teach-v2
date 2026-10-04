@@ -82,7 +82,8 @@ const persistencePromoted = new Set([
   'AssignmentTargetsIdentity','AssignmentReferencesContentPack',
   'IdentityHasLearningSession','LearningSessionUsesAssignment',
   'ProgressEventBelongsToLearningSession','CertificationBelongsToIdentity',
-  'CertificationReferencesContentPack','CertificationObservedByIdentity'
+  'CertificationReferencesContentPack','CertificationObservedByIdentity',
+  'ReconciliationRecordUsesIdempotencyKey'
 ]);
 for (const r of existingRelationships?.entries || []) {
   const expected=persistencePromoted.has(r.id)?'approved':'candidate';
@@ -97,6 +98,6 @@ if (errors.length) {
 }
 
 console.log('Relationship registration PASS');
-console.log(`Registered relationships: ${existing.size} total / 10 approved / 8 candidate`);
+console.log(`Registered relationships: ${existing.size} total / 11 approved / 8 candidate`);
 console.log(`Blocked relationships excluded: ${(proposal?.blocked_relationships || []).length}`);
 console.log('Historical registration promotions: 0; later persistence closure promotions: 10');
