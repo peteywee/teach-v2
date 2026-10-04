@@ -21,16 +21,19 @@ const names = {
 };
 const admin = new Pool({ connectionString: adminUrl.toString() });
 const p02Folder = resolve(`/tmp/teach-v2-p02-${suffix}`);
+const p03Folder = resolve(`/tmp/teach-v2-p03-${suffix}`);
 
 try {
+  prepareP03Folder(p03Folder);
+
   for (const name of Object.values(names)) {
     await dropDatabase(name);
     await admin.query(`create database ${quoteIdent(name)}`);
   }
 
   const [first, second] = await Promise.all([
-    migrateAndFingerprint(names.first, migrationsFolder),
-    migrateAndFingerprint(names.second, migrationsFolder),
+    migrateAndFingerprint(names.first, p03Folder),
+    migrateAndFingerprint(names.second, p03Folder),
   ]);
   if (first !== second) {
     throw new Error(`two-empty-database replay diverged: ${first} != ${second}`);
@@ -50,7 +53,7 @@ try {
       ],
       'P02 baseline',
     );
-    await migrate(drizzle(pool), { migrationsFolder });
+    await migrate(drizzle(pool), { migrationsFolder: p03Folder });
     const upgraded = await fingerprint(pool);
     if (upgraded !== first) {
       throw new Error(`P02 -> P03 upgrade fingerprint diverged: ${upgraded} != ${first}`);
@@ -60,13 +63,29 @@ try {
   }
 
   console.log('SLICE-P03 MIGRATION REPLAY PASS');
+  console.log('P03 migration prefix pinned through 0002_quick_venus');
   console.log('two independent empty databases: identical');
   console.log('P02 -> P03 migration: identical');
   console.log(`schema fingerprint: ${first}`);
 } finally {
   rmSync(p02Folder, { recursive: true, force: true });
+  rmSync(p03Folder, { recursive: true, force: true });
   for (const name of Object.values(names)) await dropDatabase(name);
   await admin.end();
+}
+
+function prepareP03Folder(target: string): void {
+  mkdirSync(join(target, 'meta'), { recursive: true });
+  for (const name of [
+    '0000_slice_p01_reconciliation.sql',
+    '0001_odd_photon.sql',
+    '0002_quick_venus.sql',
+  ]) {
+    cpSync(resolve('drizzle', name), join(target, name));
+  }
+  const journal = JSON.parse(readFileSync(resolve('drizzle/meta/_journal.json'), 'utf8'));
+  journal.entries = journal.entries.filter((entry: { idx: number }) => entry.idx <= 2);
+  writeFileSync(join(target, 'meta', '_journal.json'), JSON.stringify(journal, null, 2) + '\n');
 }
 
 function prepareP02Folder(target: string): void {
