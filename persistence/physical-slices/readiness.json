@@ -1,6 +1,6 @@
 {
   "readiness_id": "TEACH-FIRST-PHYSICAL-SLICE-READINESS",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-04",
@@ -8,11 +8,12 @@
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "cfce4d28d8b2230b7a230d225c911557f2b34673",
+    "commit": "8b2acf2c8d121315641cd726528a7add926331cd",
     "kernel_version": "0.14.0",
     "persistence_authority_version": "1.0.0",
     "semantic_closure_registration_version": "1.0.0",
-    "transactioncontrol_decision_registration_version": "1.0.0"
+    "transactioncontrol_decision_registration_version": "1.0.0",
+    "relationship_registration_commit": "8b2acf2c8d121315641cd726528a7add926331cd"
   },
   "admission_rule": "ADMIT only when every semantic dependency and every shape-affecting owner decision required by the physical schema is approved. Missing, candidate, UNKNOWN, BLOCKED, or contradictory evidence fails closed.",
   "current_physical_slice_admissions": [],
@@ -27,8 +28,7 @@
       ],
       "current_state": "BLOCKED",
       "blockers": [
-        "ReconciliationRecordUsesIdempotencyKey has an owner-approved cardinality decision but is not yet registered as approved relationship authority",
-        "fresh Persistence schema-admission check is required after relationship registration"
+        "ReconciliationRecordUsesIdempotencyKey is registered in K00 but remains candidate; PER-4/PER-5 require approved relationship/cardinality before physical schema admission"
       ],
       "blockers_removed_by_k00_014": [
         "IdempotencyKey is now approved"
@@ -38,6 +38,12 @@
         "OQ-TXN-1 retention policy resolved as OPERATION_DECLARED_MINIMUM",
         "ReconciliationRecordUsesIdempotencyKey cardinality/optionality selected as OPTIONAL_ONE",
         "ReconciliationRecord protected scope selected as INHERIT_ORIGINATING_OPERATION_SCOPE"
+      ],
+      "blockers_removed_by_relationship_registration": [
+        "ReconciliationRecordUsesIdempotencyKey is now registered in K00 with many-to-zero-or-one cardinality and TransactionControl ownership"
+      ],
+      "blockers_removed_by_admission_evidence_plan": [
+        "SLICE-P01 migration and acceptance evidence plan recorded at persistence/physical-slices/transaction-control/admission-evidence-plan.json"
       ]
     },
     {
@@ -139,10 +145,12 @@
   ],
   "narrowed_next_lane": {
     "preferred_slice": "SLICE-P01",
-    "reason": "Owner decisions are closed; the remaining blocker surface is relationship registration followed by a fresh schema-admission check.",
-    "owner_decisions_required": [],
+    "reason": "Fresh admission evaluation after relationship registration is BLOCKED only because ReconciliationRecordUsesIdempotencyKey remains candidate.",
+    "owner_decisions_required": [
+      "Explicit owner approval naming the semantic promotion ReconciliationRecordUsesIdempotencyKey: candidate -> approved"
+    ],
     "physical_implementation_authorized": false,
-    "next_required_gate": "Register ReconciliationRecordUsesIdempotencyKey as relationship authority"
+    "next_required_gate": "Owner approve ReconciliationRecordUsesIdempotencyKey candidate -> approved semantic promotion"
   },
   "implementation_guard": {
     "tables_generated": 0,
@@ -157,6 +165,8 @@
     "unknown": "none promoted to pass",
     "contradictory": "none hidden",
     "transactioncontrol_owner_decisions": "PROVEN",
-    "relationship_registration": "BLOCKED"
+    "relationship_registration": "PROVEN",
+    "migration_acceptance_evidence_plan": "PROVEN",
+    "relationship_promotion": "BLOCKED"
   }
 }

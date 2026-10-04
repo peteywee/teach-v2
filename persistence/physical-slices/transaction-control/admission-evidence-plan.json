@@ -1,0 +1,38 @@
+{
+  "plan_id": "TEACH-SLICE-P01-MIGRATION-ACCEPTANCE-EVIDENCE-PLAN",
+  "version": "1.0.0",
+  "status": "recorded",
+  "created_on": "2026-10-04",
+  "issue": "#22",
+  "semantic_baseline_commit": "8b2acf2c8d121315641cd726528a7add926331cd",
+  "slice": "SLICE-P01",
+  "owning_module": "TransactionControl",
+  "target_record": "ReconciliationRecord",
+  "purpose": "Define the migration and acceptance evidence required before and during implementation without authorizing or inventing physical schema.",
+  "migration_evidence": [
+    "Every shared schema change must be represented by a new immutable ordered migration under the governed migration path.",
+    "Empty-database migration replay must deterministically produce the intended schema.",
+    "Already-applied migrations must remain immutable.",
+    "No direct schema synchronization or manual production DDL is permitted.",
+    "Production migration execution remains separately gated by unresolved C21 backup/restore policy; this plan does not authorize production execution."
+  ],
+  "acceptance_evidence": [
+    "Static persistence-admission test rejects schema definitions that encode candidate or unapproved semantic dependencies.",
+    "Reconciliation persistence test proves an OPEN record with unreadable provider state remains unresolved and cannot authorize retry.",
+    "Idempotency test proves same-key/same-payload retry does not create a duplicate authoritative effect.",
+    "Key-reuse negative test proves an idempotency key cannot be reused across operations or with a different payload.",
+    "Scope negative test proves ReconciliationRecord scope cannot broaden beyond the originating operation's authoritative scope.",
+    "Repository-boundary test proves TransactionControl owns writes to ReconciliationRecord persistence and foreign modules cannot write it directly.",
+    "Migration replay evidence and the relevant TransactionControl acceptance tests must be attached to the implementation PR before physical-slice completion."
+  ],
+  "deferred_until_admission": [
+    "table names",
+    "column names",
+    "database enum names",
+    "foreign-key names",
+    "index names",
+    "migration filename",
+    "repository method names"
+  ],
+  "physical_schema_authorized": false
+}
