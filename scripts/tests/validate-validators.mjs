@@ -632,6 +632,90 @@ test(
 );
 
 // ---------------------------------------------------------------------------
+// SLICE-P04 schema admission
+// ---------------------------------------------------------------------------
+
+test(
+  "slice-p04 admission: blocked decision fails",
+  "scripts/persistence/validate-slice-p04-schema-admission.mjs",
+  (dir) => {
+    const d = readJson(
+      dir,
+      "persistence/physical-slices/identity-credentials/admission.json",
+    );
+    d.decision = "BLOCK";
+    writeJson(
+      dir,
+      "persistence/physical-slices/identity-credentials/admission.json",
+      d,
+    );
+  },
+  { pattern: /ADMIT authorization mismatch/ }
+);
+
+test(
+  "slice-p04 admission: UNKNOWN criterion fails",
+  "scripts/persistence/validate-slice-p04-schema-admission.mjs",
+  (dir) => {
+    const d = readJson(
+      dir,
+      "persistence/physical-slices/identity-credentials/admission.json",
+    );
+    d.criteria[3].state = "UNKNOWN";
+    writeJson(
+      dir,
+      "persistence/physical-slices/identity-credentials/admission.json",
+      d,
+    );
+  },
+  { pattern: /all eight Persistence Model criteria must be PROVEN/ }
+);
+
+test(
+  "slice-p04 admission: clean repo passes (positive control)",
+  "scripts/persistence/validate-slice-p04-schema-admission.mjs",
+  () => {},
+  { pass: true }
+);
+
+// ---------------------------------------------------------------------------
+// SLICE-P04 implementation boundary
+// ---------------------------------------------------------------------------
+
+test(
+  "slice-p04 implementation: stale identities FK fails",
+  "scripts/persistence/validate-slice-p04-implementation-boundary.mjs",
+  (dir) => {
+    const p = join(dir, "drizzle/0003_slice_p04_credential.sql");
+    let t = readFileSync(p, "utf8");
+    t = t.replace(
+      'REFERENCES "public"."identity_identities"("id")',
+      'REFERENCES "identities"("id")',
+    );
+    writeFileSync(p, t);
+  },
+  { pattern: /Credential FK must target public\.identity_identities/ }
+);
+
+test(
+  "slice-p04 implementation: missing journal entry fails",
+  "scripts/persistence/validate-slice-p04-implementation-boundary.mjs",
+  (dir) => {
+    const d = readJson(dir, "drizzle/meta/_journal.json");
+    d.entries = d.entries.filter((entry) => entry.idx !== 3);
+    writeJson(dir, "drizzle/meta/_journal.json", d);
+  },
+  { pattern: /authoritative Drizzle journal must include idx 3/ }
+);
+
+test(
+  "slice-p04 implementation: clean repo passes (positive control)",
+  "scripts/persistence/validate-slice-p04-implementation-boundary.mjs",
+  () => {},
+  { pass: true }
+);
+
+// ---------------------------------------------------------------------------
 // SLICE-P05 owner decision registration
 // ---------------------------------------------------------------------------
 
