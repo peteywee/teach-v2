@@ -1,9 +1,9 @@
 {
   "plan_id": "TEACH-SLICE-P05-ADMISSION-EVIDENCE-PLAN",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "status": "recorded",
   "issue": "#47",
-  "baseline_commit": "626512771b1a66751428d7bd0b5ac5fe6ddb613b",
+  "baseline_commit": "971b77faad88c4be5119324b5c324b56d0a78055",
   "slice": "SLICE-P05",
   "owning_module": "Learning",
   "records": [
@@ -14,7 +14,7 @@
     "empty-database migration replay is deterministic",
     "P04-to-P05 upgrade replay is deterministic",
     "LearningSession belongs to exactly one Identity under C32 LRN-1 and approved IdentityHasLearningSession (one-to-many)",
-    "LearningSessionUsesAssignment is approved many-to-one, but physical Assignment-reference nullability/requiredness is UNKNOWN until issue #47 is owner-resolved; no column nullability may be encoded before that decision",
+    "LearningSession references exactly one Assignment via approved LearningSessionUsesAssignment (many-to-one); owner decision P05-D01 REQUIRED_ONE_ASSIGNMENT requires a non-null physical Assignment reference",
     "LearningSessionStatus is ACTIVE or COMPLETED (approved state set)",
     "ACTIVE to COMPLETED is the only allowed transition (OQ-LRN-1 resolved)",
     "protected reads/writes are predicated by authoritative IdentityId",
@@ -22,10 +22,10 @@
     "foreign modules cannot directly write Learning-owned LearningSession persistence"
   ],
   "constraints": [
-    "P05 remains BLOCKED until issue #47 resolves LearningSessionUsesAssignment physical nullability/requiredness and admission is rerun",
-    "no LearningSession physical table, migration, repository, adapter, or service while admission is BLOCKED",
+    "P05 physical implementation may begin only after automated schema admission proves ADMIT against registration.json@1.0.0",
+    "LearningSession assignment_id must be required/non-null; no absent-Assignment state is authorized",
     "no ProgressEvent persistence (separate slice)",
-    "no Assignment persistence (separate slice)",
+    "no Assignment persistence in P05 (Assignment is referenced, not owned/implemented by this slice)",
     "no shared or production migration execution"
   ]
 }
