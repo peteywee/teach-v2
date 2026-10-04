@@ -118,7 +118,10 @@ test('failed LearningSession completion preserves ACTIVE and immutable reference
   await pool.query(`create function test_fail_learning_complete() returns trigger language plpgsql as $$ begin raise exception 'forced completion failure'; end $$`);
   await pool.query('create trigger test_fail_learning_complete before update on learning_sessions for each row execute function test_fail_learning_complete()');
   try {
-    await assert.rejects(repository.completeActive(scope),/forced completion failure/);
+    await assert.rejects(repository.completeActive(scope), (error: unknown) => {
+      const cause = error instanceof Error ? (error as Error & { cause?: unknown }).cause ?? error : error;
+      return cause instanceof Error && cause.message === 'forced completion failure';
+    });
     assert.deepEqual(await repository.getById(scope),newLearningSession(references));
   } finally {
     await pool.query('drop trigger if exists test_fail_learning_complete on learning_sessions'); await pool.query('drop function if exists test_fail_learning_complete()');

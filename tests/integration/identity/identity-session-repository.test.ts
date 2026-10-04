@@ -179,6 +179,9 @@ test('deactivation and session issuance serialize on the Identity row', async ()
   } finally {
     try { await lockHolder.query('rollback'); } catch {}
     lockHolder.release();
+    // Drain both commands even if observing the lock fails. Otherwise a later
+    // fixture TRUNCATE can overlap unfinished transactions from this test.
+    await Promise.allSettled([issuance, deactivation].filter(value => value !== undefined));
   }
 
   await Promise.allSettled([issuance!, deactivation!]);
