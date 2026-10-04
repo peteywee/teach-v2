@@ -24,11 +24,11 @@
   "verification": {
     "typecheck": "PASS",
     "domain_tests": "PASS (7/7: 3 positive, 4 negative)",
-    "implementation_boundary": "PENDING_CI",
+    "implementation_boundary": "PASS",
     "migration_generation": "MANUAL (drizzle-kit unavailable locally)",
-    "postgres_integration_tests": "PENDING_CI",
-    "validator_negative_paths": "PENDING_CI",
-    "exact_head_ci": "PENDING"
+    "postgres_integration_tests": "PASS (via CI)",
+    "validator_negative_paths": "PASS",
+    "exact_head_ci": "PASS"
   },
   "shared_or_production_migration_execution_authorized": false,
   "full_relational_schema_authorized": false
