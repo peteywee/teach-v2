@@ -1,0 +1,407 @@
+{
+  "discovery_id": "TEACH-APPLICATION-INTERFACE-DISCOVERY",
+  "version": "0.1.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-04",
+  "updated_on": "2026-10-04",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "commit": "a756951703f11b5e5bcd02eef5eac3a56e3eb5c0",
+    "kernel_version": "0.13.0",
+    "architecture_version": "1.0.0",
+    "ownership_map_version": "1.6.0"
+  },
+  "rules": {
+    "command_coverage_required": true,
+    "candidate_semantics_are_not_authority": true,
+    "no_persistence_schema_decision": true,
+    "no_transport_route_decision": true,
+    "no_physical_package_layout_decision": true
+  },
+  "runtime_modules": [
+    "Identity",
+    "Organization",
+    "Authorization",
+    "Content",
+    "Learning",
+    "Certification",
+    "AuditLifecycle",
+    "TransactionControl"
+  ],
+  "support_planes": [
+    {
+      "semantic_domain": "Observability",
+      "placement": "runtime infrastructure support"
+    },
+    {
+      "semantic_domain": "VerificationEvidence",
+      "placement": "verification/release plane"
+    },
+    {
+      "semantic_domain": "Governance",
+      "placement": "build-time/governance plane"
+    }
+  ],
+  "command_inventory": {
+    "total": 23,
+    "by_module": {
+      "Certification": [
+        "IssueCertification",
+        "RevokeCertification"
+      ],
+      "Content": [
+        "PublishContentPack"
+      ],
+      "Identity": [
+        "AcceptInvitation",
+        "AuthenticateIdentity",
+        "ChangeCredential",
+        "CreateApplicationSession",
+        "CreateIdentity",
+        "DeactivateIdentity",
+        "InviteIdentity",
+        "OffboardIdentity",
+        "ReactivateIdentity",
+        "RevokeApplicationSession",
+        "RevokeInvitation",
+        "RevokeSingleUseToken"
+      ],
+      "Learning": [
+        "AssignContent",
+        "CompleteLearningSession",
+        "RecordProgressEvent",
+        "StartLearningSession"
+      ],
+      "Organization": [
+        "CreateMembership",
+        "DeactivateMembership",
+        "RevokeMembership"
+      ],
+      "TransactionControl": [
+        "ReconcileExternalEffect"
+      ]
+    },
+    "modules_without_owned_commands": [
+      "Authorization",
+      "AuditLifecycle"
+    ]
+  },
+  "command_coverage": [
+    {
+      "command": "AcceptInvitation",
+      "owning_domain": "Identity",
+      "required_semantics": [
+        "Invitation",
+        "Identity"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "AssignContent",
+      "owning_domain": "Learning",
+      "required_semantics": [
+        "ContentPack",
+        "Assignment",
+        "Identity"
+      ],
+      "cross_domain_reads": [
+        {
+          "semantic": "ContentPack",
+          "owner": "Content"
+        },
+        {
+          "semantic": "Identity",
+          "owner": "Identity"
+        }
+      ]
+    },
+    {
+      "command": "AuthenticateIdentity",
+      "owning_domain": "Identity",
+      "required_semantics": [
+        "Identity",
+        "Credential"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "ChangeCredential",
+      "owning_domain": "Identity",
+      "required_semantics": [
+        "Identity",
+        "Credential"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "CompleteLearningSession",
+      "owning_domain": "Learning",
+      "required_semantics": [
+        "LearningSession"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "CreateApplicationSession",
+      "owning_domain": "Identity",
+      "required_semantics": [
+        "Identity",
+        "ApplicationSession"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "CreateIdentity",
+      "owning_domain": "Identity",
+      "required_semantics": [
+        "Identity"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "CreateMembership",
+      "owning_domain": "Organization",
+      "required_semantics": [
+        "Membership",
+        "Identity",
+        "Organization"
+      ],
+      "cross_domain_reads": [
+        {
+          "semantic": "Identity",
+          "owner": "Identity"
+        }
+      ]
+    },
+    {
+      "command": "DeactivateIdentity",
+      "owning_domain": "Identity",
+      "required_semantics": [
+        "Identity"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "DeactivateMembership",
+      "owning_domain": "Organization",
+      "required_semantics": [
+        "Membership"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "InviteIdentity",
+      "owning_domain": "Identity",
+      "required_semantics": [
+        "Invitation",
+        "Identity"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "IssueCertification",
+      "owning_domain": "Certification",
+      "required_semantics": [
+        "Certification",
+        "Identity"
+      ],
+      "cross_domain_reads": [
+        {
+          "semantic": "Identity",
+          "owner": "Identity"
+        }
+      ]
+    },
+    {
+      "command": "OffboardIdentity",
+      "owning_domain": "Identity",
+      "required_semantics": [
+        "Identity"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "PublishContentPack",
+      "owning_domain": "Content",
+      "required_semantics": [
+        "ContentPack"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "ReactivateIdentity",
+      "owning_domain": "Identity",
+      "required_semantics": [
+        "Identity"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "ReconcileExternalEffect",
+      "owning_domain": "TransactionControl",
+      "required_semantics": [
+        "ReconciliationRecord"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "RecordProgressEvent",
+      "owning_domain": "Learning",
+      "required_semantics": [
+        "LearningSession",
+        "ProgressEvent"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "RevokeApplicationSession",
+      "owning_domain": "Identity",
+      "required_semantics": [
+        "ApplicationSession"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "RevokeCertification",
+      "owning_domain": "Certification",
+      "required_semantics": [
+        "Certification"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "RevokeInvitation",
+      "owning_domain": "Identity",
+      "required_semantics": [
+        "Invitation"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "RevokeMembership",
+      "owning_domain": "Organization",
+      "required_semantics": [
+        "Membership"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "RevokeSingleUseToken",
+      "owning_domain": "Identity",
+      "required_semantics": [
+        "SetupToken",
+        "PasswordResetToken"
+      ],
+      "cross_domain_reads": []
+    },
+    {
+      "command": "StartLearningSession",
+      "owning_domain": "Learning",
+      "required_semantics": [
+        "LearningSession",
+        "Assignment"
+      ],
+      "cross_domain_reads": []
+    }
+  ],
+  "contract_required_cross_domain_orchestration": [
+    {
+      "source_command": "AcceptInvitation",
+      "source_module": "Identity",
+      "target_command": "CreateMembership",
+      "target_module": "Organization",
+      "authority": [
+        "IDN-27",
+        "ARC-3"
+      ],
+      "rule": "Identity requests membership creation only through the Organization-owned command boundary."
+    },
+    {
+      "source_command": "OffboardIdentity",
+      "source_module": "Identity",
+      "target_command": "RevokeMembership",
+      "target_module": "Organization",
+      "authority": [
+        "IDN-17",
+        "IDN-18",
+        "ARC-3"
+      ],
+      "rule": "Identity offboarding removes effective memberships through the Organization-owned membership command boundary; no foreign repository write."
+    }
+  ],
+  "cross_cutting_interfaces_required": [
+    {
+      "owner": "Authorization",
+      "purpose": "Resolve current capability/scope/target authorization before protected application work.",
+      "authority": [
+        "AUTHZ-9",
+        "AUTHZ-10",
+        "AUTHZ-11",
+        "AUTHZ-17",
+        "ARC-8"
+      ]
+    },
+    {
+      "owner": "AuditLifecycle",
+      "purpose": "Append required immutable audit records in the same transaction as security-sensitive mutations.",
+      "authority": [
+        "AUD-1",
+        "AUD-2",
+        "AUD-3",
+        "ARC-2"
+      ]
+    },
+    {
+      "owner": "TransactionControl",
+      "purpose": "Apply idempotency and reconcile ambiguous external effects before retry.",
+      "authority": [
+        "TXN-1",
+        "TXN-6",
+        "TXN-7",
+        "ARC-8"
+      ]
+    },
+    {
+      "owner": "Observability",
+      "purpose": "Receive request/operation observations without altering authorization or command outcome.",
+      "authority": [
+        "OBS-10",
+        "ARC-9"
+      ]
+    }
+  ],
+  "discovered_boundary_needs": [
+    {
+      "id": "APP-D01",
+      "state": "PROVEN",
+      "finding": "Every approved command requires exactly one owning application command entry point."
+    },
+    {
+      "id": "APP-D02",
+      "state": "PROVEN",
+      "finding": "Cross-domain entity reads exist and must use owner-defined read/query boundaries rather than foreign repositories."
+    },
+    {
+      "id": "APP-D03",
+      "state": "PROVEN",
+      "finding": "AcceptInvitation and OffboardIdentity require cross-domain command orchestration into Organization."
+    },
+    {
+      "id": "APP-D04",
+      "state": "PROVEN",
+      "finding": "Authorization and AuditLifecycle are runtime modules with no owned K00 command but require application-facing policy/audit interfaces."
+    },
+    {
+      "id": "APP-D05",
+      "state": "BLOCKED",
+      "finding": "Exact application interface names, method signatures, request/result DTOs, and physical package paths require owner-approved Application Interface design."
+    }
+  ],
+  "readiness": {
+    "application_interface_discovery": "PROVEN",
+    "application_interface_approval": "BLOCKED",
+    "persistence_model": "BLOCKED until Application Interfaces are approved"
+  }
+}

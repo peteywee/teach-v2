@@ -1,0 +1,22 @@
+name: Application Interface Discovery
+
+on:
+  pull_request:
+    paths:
+      - 'application-interfaces/**'
+      - 'scripts/application-interfaces/validate-application-interface-discovery.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'application-interfaces/**'
+      - 'scripts/application-interfaces/validate-application-interface-discovery.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/application-interfaces/validate-application-interface-discovery.mjs
