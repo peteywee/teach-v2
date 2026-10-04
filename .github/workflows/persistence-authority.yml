@@ -1,0 +1,23 @@
+name: Persistence Authority
+
+on:
+  pull_request:
+    paths:
+      - 'persistence/**'
+      - 'scripts/persistence/**'
+  push:
+    branches: [main]
+    paths:
+      - 'persistence/**'
+      - 'scripts/persistence/**'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/persistence/validate-persistence-authority.mjs
+      - run: node scripts/persistence/audit-architecture-application-persistence.mjs

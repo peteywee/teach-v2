@@ -2,9 +2,9 @@
 {
   "doc_id": "TEACH-PERSISTENCE-MODEL",
   "class": "specification",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "claims_truth_state": "declared",
-  "status": "recorded",
+  "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-04",
   "updated_on": "2026-10-04",
@@ -20,7 +20,7 @@
 
 # Persistence Model Discovery
 
-Status: **recorded; Persistence Model not yet approved**.
+Status: **active — owner-approved logical Persistence Model authority**.
 
 This stage discovers what the current semantic and application authority can safely support at the persistence boundary. It does not create tables or migrations.
 
@@ -31,3 +31,11 @@ A concept being an approved entity is not enough by itself: required identifiers
 `proposed.json` and `DECISION-PACKET.md` define the recommended Persistence authority model.
 
 Status remains `proposed`. Full relational schema, migrations, and Transport Interfaces remain blocked until explicit owner approval plus the semantic dependency closure identified by discovery.
+
+## Active Persistence Model authority
+
+Owner approval: GitHub issue #16.
+
+The active authority is `persistence/authority.json` version `1.0.0`.
+
+This approval establishes persistence ownership/admission rules only. Full relational schema and migration implementation remain blocked until semantic dependencies pass the fail-closed admission gate.
