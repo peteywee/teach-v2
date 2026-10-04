@@ -33,7 +33,7 @@ if (a) {
   if (a.migration_implementation_status!=='BLOCKED') errors.push('persistence authority: migration implementation must remain BLOCKED');
 }
 
-if ((ids?.entries||[]).filter(x=>x.status==='approved').length!==12) errors.push('persistence authority: identifier promotions occurred unexpectedly');
+if ((ids?.entries||[]).filter(x=>x.status==='approved').length!==15) errors.push('persistence authority: identifier promotions occurred unexpectedly');
 if ((rel?.entries||[]).filter(x=>x.status==='approved').length!==15) errors.push('persistence authority: relationship promotions occurred unexpectedly');
 
 if (errors.length) {
