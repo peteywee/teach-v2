@@ -1,0 +1,22 @@
+name: TransactionControl First Slice Decision Packet
+
+on:
+  pull_request:
+    paths:
+      - 'persistence/physical-slices/transaction-control/**'
+      - 'scripts/persistence/validate-transactioncontrol-first-slice-decision-packet.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'persistence/physical-slices/transaction-control/**'
+      - 'scripts/persistence/validate-transactioncontrol-first-slice-decision-packet.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node scripts/persistence/validate-transactioncontrol-first-slice-decision-packet.mjs

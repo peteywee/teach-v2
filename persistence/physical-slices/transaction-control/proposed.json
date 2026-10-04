@@ -1,0 +1,143 @@
+{
+  "proposal_id": "TEACH-TRANSACTIONCONTROL-FIRST-SLICE-DECISION-PACKET",
+  "version": "0.1.0",
+  "status": "proposed",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-04",
+  "updated_on": "2026-10-04",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "commit": "cbd95b1d8b7304e4698c0d9ca4767049eaaed3af",
+    "kernel_version": "0.14.0",
+    "persistence_authority_version": "1.0.0",
+    "physical_slice_readiness_version": "0.2.0"
+  },
+  "target_slice": "SLICE-P01",
+  "target_record": "ReconciliationRecord",
+  "approval_required": true,
+  "decisions_required": [
+    {
+      "id": "TXN-SLICE-D01",
+      "maps_to": "OQ-TXN-1",
+      "question": "What sources may produce an idempotency key?",
+      "current_state": "BLOCKED",
+      "options": [
+        {
+          "id": "CLIENT_ONLY",
+          "meaning": "Only trusted client/request input supplies the key."
+        },
+        {
+          "id": "SERVER_ONLY",
+          "meaning": "The server derives every key from operation identity."
+        },
+        {
+          "id": "BOTH_BY_OPERATION",
+          "meaning": "Each retryable operation declares client-supplied or server-derived key policy; no implicit fallback."
+        }
+      ],
+      "recommended": "BOTH_BY_OPERATION",
+      "rationale": "Supports external request replay and internal/job orchestration without allowing the runtime to guess a missing key source; each operation must document one policy under TXN-2."
+    },
+    {
+      "id": "TXN-SLICE-D02",
+      "maps_to": "OQ-TXN-1",
+      "question": "How long is idempotency evidence retained?",
+      "current_state": "BLOCKED",
+      "options": [
+        {
+          "id": "FIXED_GLOBAL",
+          "meaning": "One owner-approved duration applies to all retryable operations."
+        },
+        {
+          "id": "OPERATION_DECLARED_MINIMUM",
+          "meaning": "Each operation declares a retention duration not shorter than its complete retry/reconciliation horizon."
+        }
+      ],
+      "recommended": "OPERATION_DECLARED_MINIMUM",
+      "rationale": "The active contracts do not establish one universal duration. A per-operation minimum can be verified without inventing a universal number."
+    },
+    {
+      "id": "TXN-SLICE-D03",
+      "maps_to": "ReconciliationRecordUsesIdempotencyKey",
+      "question": "What is the canonical relationship/cardinality between ReconciliationRecord and IdempotencyKey?",
+      "current_state": "BLOCKED",
+      "options": [
+        {
+          "id": "REQUIRED_ONE",
+          "meaning": "Every ReconciliationRecord references exactly one IdempotencyKey."
+        },
+        {
+          "id": "OPTIONAL_ONE",
+          "meaning": "A ReconciliationRecord references zero or one IdempotencyKey; absence is permitted only when the external effect is not retryable or uses a documented non-key safe strategy."
+        }
+      ],
+      "recommended": "OPTIONAL_ONE",
+      "rationale": "C22 requires a documented idempotency strategy for retryable mutations but does not say every ambiguous external effect must be key-based. Optional-one preserves generic reconciliation without weakening retry gates."
+    },
+    {
+      "id": "TXN-SLICE-D04",
+      "maps_to": "Persistence PER-6 / C15 scope boundary",
+      "question": "How does a ReconciliationRecord acquire protected ownership/scope?",
+      "current_state": "BLOCKED",
+      "options": [
+        {
+          "id": "INHERIT_ORIGINATING_OPERATION_SCOPE",
+          "meaning": "The record inherits the authoritative scope of the originating operation and cannot broaden it."
+        },
+        {
+          "id": "SYSTEM_GLOBAL",
+          "meaning": "All reconciliation records are system-global and access is policy-controlled without tenant ownership."
+        }
+      ],
+      "recommended": "INHERIT_ORIGINATING_OPERATION_SCOPE",
+      "rationale": "Fail-closed scope inheritance preserves tenant/owner isolation for tenant-scoped effects while still allowing explicitly system-scoped originating operations."
+    }
+  ],
+  "proposed_relationship": {
+    "id": "ReconciliationRecordUsesIdempotencyKey",
+    "kind": "relationship",
+    "status_if_approved": "candidate then owner-promoted only after relationship registration gate",
+    "from": "ReconciliationRecord",
+    "to": [
+      "IdempotencyKey"
+    ],
+    "cardinality_if_recommended_option": "many-to-zero-or-one",
+    "owning_domain": "TransactionControl",
+    "authority_contracts": [
+      "C22"
+    ],
+    "does_not_grant": [
+      "retry_permission",
+      "authorization",
+      "provider_success"
+    ],
+    "notes": [
+      "A linked key does not make retry safe by itself.",
+      "OPEN or unreadable reconciliation state still forbids retry.",
+      "CONFIRMED_NO_EFFECT permits retry only when the mutation's documented idempotency strategy is safe."
+    ]
+  },
+  "physical_slice_effect_if_approved": {
+    "semantic_decisions_closed": 4,
+    "relationship_registration_still_required": true,
+    "schema_admission_rerun_required": true,
+    "physical_schema_automatically_authorized": false
+  },
+  "explicitly_not_decided": [
+    "table or column names",
+    "PostgreSQL types",
+    "indexes",
+    "migration filename/order",
+    "repository method names",
+    "provider-specific payload schema",
+    "a universal retention duration",
+    "Transport Interfaces"
+  ],
+  "readiness": {
+    "decision_packet": "PROVEN",
+    "owner_approval": "BLOCKED",
+    "relationship_registration": "BLOCKED until owner approval",
+    "physical_schema": "BLOCKED"
+  }
+}
