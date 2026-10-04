@@ -27,6 +27,7 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { join, resolve } from 'node:path';
+import { inspectMigrationHistory } from './migration-history-guards.mjs';
 
 const ROOT = resolve(process.cwd());
 const errors = [];
@@ -207,7 +208,10 @@ if (!['pins', 'staging', 'all'].includes(mode)) {
   console.error(`Unknown mode '${mode}'. Use: pins | staging | all`);
   process.exit(2);
 }
-if (mode === 'pins' || mode === 'all') checkPins();
+if (mode === 'pins' || mode === 'all') {
+  checkPins();
+  errors.push(...inspectMigrationHistory(ROOT));
+}
 if (mode === 'staging' || mode === 'all') checkStaging();
 
 if (errors.length) {
@@ -222,6 +226,8 @@ if (mode !== 'staging') {
   console.log(`K00 manifest pins agree: ${load('kernel/manifest.json')?.version}`);
   const contractIndex = readFileSync(join(ROOT, 'contracts/README.md'), 'utf8');
   console.log(`Contract package pins agree: ${contractIndex.match(/^- Package version: `(\d+\.\d+\.\d+)`/m)?.[1]}`);
+  console.log('Migration journal, snapshot chain, FK targets, and readiness counts agree');
+  console.log('Structural migration checks do not replace PostgreSQL replay evidence');
 }
 if (mode !== 'pins') {
   console.log('Stage list covers every modified path');
