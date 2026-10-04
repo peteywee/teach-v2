@@ -8,7 +8,7 @@
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "626512771b1a66751428d7bd0b5ac5fe6ddb613b",
+    "commit": "971b77faad88c4be5119324b5c324b56d0a78055",
     "kernel_version": "0.16.0",
     "persistence_authority_version": "1.0.0",
     "semantic_closure_registration_version": "1.0.0",
@@ -83,9 +83,23 @@
       "decision": "ADMIT",
       "admitted_on": "2026-10-04",
       "implementation_state": "IMPLEMENTED"
+    },
+    {
+      "id": "SLICE-P05",
+      "name": "LearningSession persistence",
+      "records": [
+        "LearningSession"
+      ],
+      "owning_module": "Learning",
+      "admission": "persistence/physical-slices/learning-session/admission.json@1.2.0",
+      "status": "ADMITTED",
+      "implementation_authorized": true,
+      "migration_authoring_authorized": true,
+      "shared_or_production_migration_execution_authorized": false,
+      "implementation_state": "ADMITTED"
     }
   ],
-  "current_admitted_slice_count": 4,
+  "current_admitted_slice_count": 5,
   "candidate_slices": [
     {
       "id": "SLICE-P01",
@@ -226,10 +240,8 @@
       "records": [
         "LearningSession"
       ],
-      "current_state": "BLOCKED",
-      "blockers": [
-        "LearningSessionUsesAssignment physical nullability/requiredness is UNKNOWN pending owner decision #47"
-      ],
+      "current_state": "ADMITTED",
+      "blockers": [],
       "blockers_removed_by_semantic_promotion": [
         "LearningSessionId is approved",
         "LearningSessionStatus and LearningSessionStateMachine are approved",
@@ -241,20 +253,27 @@
         "src/modules/learning establishes the source boundary without physical persistence implementation"
       ],
       "admission_issue": "#47",
-      "admission_version": "1.1.0",
-      "implementation_authorized": false,
-      "migration_authoring_authorized": false,
-      "shared_or_production_migration_execution_authorized": false
+      "admission_version": "1.2.0",
+      "implementation_authorized": true,
+      "migration_authoring_authorized": true,
+      "shared_or_production_migration_execution_authorized": false,
+      "blockers_removed_by_owner_decisions": [
+        "Issue #47 owner-approved REQUIRED_ONE_ASSIGNMENT",
+        "LearningSessionUsesAssignment physical Assignment reference is required/non-null",
+        "Assignment presence does not grant authorization; C32 LRN-2 remains controlling"
+      ],
+      "blockers_removed_by_admission": [
+        "All eight Persistence Model 1.0.0 admission criteria are PROVEN against P05 registration 1.0.0 and exact pre-decision main"
+      ],
+      "admitted_on": "2026-10-04"
     }
   ],
   "narrowed_next_lane": {
     "preferred_slice": "SLICE-P05",
-    "reason": "LearningSession selected; P05 admission corrected to BLOCK because Assignment-reference nullability/requiredness is not authoritative.",
-    "owner_decisions_required": [
-      "#47 LearningSessionUsesAssignment physical nullability/requiredness"
-    ],
-    "physical_implementation_authorized": false,
-    "next_required_gate": "Resolve #47, register the decision, and rerun SLICE-P05 schema admission",
+    "reason": "LearningSession P05 owner decision is registered and schema admission is ADMIT.",
+    "owner_decisions_required": [],
+    "physical_implementation_authorized": true,
+    "next_required_gate": "Implement SLICE-P05 LearningSession physical persistence and prove acceptance evidence",
     "semantic_promotions_required": []
   },
   "implementation_guard": {
@@ -294,9 +313,10 @@
     "slice_p03_implementation": "PROVEN",
     "slice_p04_schema_admission": "PROVEN",
     "slice_p04_implementation": "PROVEN",
-    "slice_p05_schema_admission": "BLOCKED",
-    "slice_p05_relationship_nullability": "UNKNOWN",
+    "slice_p05_schema_admission": "PROVEN",
+    "slice_p05_relationship_nullability": "PROVEN",
     "slice_p05_module_foundation": "PROVEN",
-    "slice_p05_implementation": "BLOCKED"
+    "slice_p05_implementation": "PENDING",
+    "slice_p05_owner_decision": "PROVEN"
   }
 }
