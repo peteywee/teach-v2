@@ -50,7 +50,7 @@ if(!index.includes('"version": "0.14.0"') || !index.includes('- Package version:
 if(!index.includes('| C12 |')) errors.push('SLICE-P02 decisions: C12 index row missing');
 
 const p02=readiness?.candidate_slices?.find(x=>x.id==='SLICE-P02');
-if(readiness?.version!=='0.9.0' || readiness?.narrowed_next_lane?.preferred_slice!=='SLICE-P02' || readiness?.narrowed_next_lane?.physical_implementation_authorized!==true || readiness?.evidence_states?.slice_p02_owner_decisions!=='PROVEN' || readiness?.evidence_states?.slice_p02_schema_admission!=='PROVEN') errors.push('SLICE-P02 decisions: owner decisions must remain proven through readiness 0.9.0 admission');
+if(readiness?.version!=='1.0.0' || readiness?.narrowed_next_lane?.preferred_slice!=='SLICE-P02' || readiness?.narrowed_next_lane?.physical_implementation_authorized!==true || readiness?.evidence_states?.slice_p02_owner_decisions!=='PROVEN' || readiness?.evidence_states?.slice_p02_schema_admission!=='PROVEN') errors.push('SLICE-P02 decisions: owner decisions must remain proven through readiness 1.0.0');
 if(!p02 || p02.current_state!=='ADMITTED' || (p02.blockers_removed_by_owner_decisions||[]).length!==3 || (p02.blockers||[]).length!==0) errors.push('SLICE-P02 decisions: P02 admission must preserve the three owner decisions');
 if(readiness?.current_admitted_slice_count!==2 || !readiness?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P02')) errors.push('SLICE-P02 decisions: subsequent P02 admission evidence missing');
 
