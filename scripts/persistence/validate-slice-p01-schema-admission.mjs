@@ -38,7 +38,7 @@ if(admission?.decision!=='ADMIT' || admission?.physical_schema_authorized!==true
 if(admission?.shared_or_production_migration_execution_authorized!==false || admission?.full_relational_schema_authorized!==false) errors.push('SLICE-P01 admission: admission must not authorize full schema or shared/production migration execution');
 if(readiness?.version!=='1.2.0' || readiness?.current_admitted_slice_count!==3 || !readiness?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P01')) errors.push('SLICE-P01 admission: readiness must preserve P01 admission while P02 is subsequently admitted');
 if(readiness?.candidate_slices?.find(x=>x.id==='SLICE-P01')?.implementation_authorized!==true || readiness?.implementation_guard?.physical_schema_authorized!==true) errors.push('SLICE-P01 admission: implementation authorization missing from preserved P01 readiness');
-if(implementation?.version!=='1.0.0' || implementation?.status!=='recorded' || readiness?.implementation_guard?.tables_generated!==3 || readiness?.implementation_guard?.migrations_generated!==2 || readiness?.implementation_guard?.repositories_generated!==3) errors.push('SLICE-P01 admission: subsequent admitted implementation evidence mismatch');
+if(implementation?.version!=='1.0.0' || implementation?.status!=='recorded' || readiness?.implementation_guard?.tables_generated!==7 || readiness?.implementation_guard?.migrations_generated!==4 || readiness?.implementation_guard?.repositories_generated!==7) errors.push('SLICE-P01 admission: subsequent admitted implementation evidence mismatch');
 if(readiness?.implementation_guard?.shared_or_production_migration_execution_authorized!==false) errors.push('SLICE-P01 admission: production migration execution must remain blocked');
 
 if(errors.length){

@@ -76,9 +76,15 @@
       "shared_or_production_migration_execution_authorized": false,
       "implementation_state": "IMPLEMENTED",
       "implementation": "persistence/physical-slices/identity-tokens/implementation.json@1.0.0"
+    },
+    {
+      "id": "SLICE-P04",
+      "admission": "persistence/physical-slices/identity-credentials/admission.json@1.0.0",
+      "decision": "ADMIT",
+      "admitted_on": "2026-10-04"
     }
   ],
-  "current_admitted_slice_count": 3,
+  "current_admitted_slice_count": 4,
   "candidate_slices": [
     {
       "id": "SLICE-P01",
@@ -245,21 +251,21 @@
     }
   ],
   "narrowed_next_lane": {
-    "preferred_slice": "TBD-P04-audit",
-    "reason": "P03 complete; next dependency-ready lane to be determined by audit.",
+    "preferred_slice": "SLICE-P04",
+    "reason": "Credential selected via #46; P04 admitted and implementation in progress.",
     "owner_decisions_required": [],
-    "physical_implementation_authorized": false,
-    "next_required_gate": "Audit P04 for next dependency-ready lane",
+    "physical_implementation_authorized": true,
+    "next_required_gate": "Complete P04 implementation and prove acceptance evidence",
     "semantic_promotions_required": []
   },
   "implementation_guard": {
-    "tables_generated": 6,
-    "migrations_generated": 3,
-    "repositories_generated": 6,
+    "tables_generated": 7,
+    "migrations_generated": 4,
+    "repositories_generated": 7,
     "physical_schema_authorized": true,
     "shared_or_production_migration_execution_authorized": false,
     "full_relational_schema_authorized": false,
-    "implemented_slice_count": 3
+    "implemented_slice_count": 4
   },
   "evidence_states": {
     "persistence_authority": "PROVEN",
@@ -286,6 +292,8 @@
     "slice_p03_relationship_registration": "PROVEN",
     "slice_p03_admission_evidence_plan": "PROVEN",
     "slice_p03_schema_admission": "PROVEN",
-    "slice_p03_implementation": "PROVEN"
+    "slice_p03_implementation": "PROVEN",
+    "slice_p04_schema_admission": "PROVEN",
+    "slice_p04_implementation": "IN_PROGRESS"
   }
 }
