@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C11",
   "class": "contract",
-  "version": "1.3.0",
+  "version": "1.2.0",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-04",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.3.0",
+    "approved_version": "1.2.0",
     "approved_on": "2026-10-04",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner explicitly approved dependency lifecycle closure decisions through approval token; GitHub issue #12"
+    "basis": "Owner explicitly approved C11 1.2.0 canonical lifecycle event definitions (IdentityDeactivated, IdentityReactivated) by direct owner direction on 2026-10-04"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,8 +28,8 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C11@1.2.0"],
-  "superseded_by": null,
+  "supersedes": ["TEACH-CON-C11@1.1.0"],
+  "superseded_by": "TEACH-CON-C11@1.3.0",
   "depends_on": [
     "contracts/"
   ]
@@ -38,20 +38,22 @@
 
 # C11 — Identity & Credentials Contract
 
+> Superseded by C11 version 1.3.0 on 2026-10-04. Preserved under SYS-21 through GitHub issue #12.
+
 | Field              | Value                                                                                                                                                           |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Contract ID        | C11                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.3.0                                                                                                                                                           |
-| Status             | `active`                                                                                                                                                        |
+| Version            | 1.2.0                                                                                                                                                           |
+| Status             | `superseded`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-04 — C11 1.3.0 dependency lifecycle closure; GitHub issue #12 |
+| Approved by        | Patrick Craven (owner), 2026-10-04 — C11 1.2.0 canonical lifecycle event definitions by direct owner direction |
 | Requirement prefix | `IDN`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/identity-access.json` (identity half); session half moves to C12.                                   |
-| Supersedes         | C11 1.2.0 |
-| Superseded by      | None                                                                                                                                                            |
+| Supersedes         | C11 1.1.0 |
+| Superseded by      | C11 1.3.0 |
 | Created            | 2026-10-03                                                                                                                                                      |
 | Last updated       | 2026-10-04                                                                                                                                                      |
 
@@ -88,9 +90,6 @@ Related contracts: C00, C01, C12, C13, C14, C23.
 | Credential       | Anything that proves identity: a password, a PIN, an OAuth link, or a single-use token.                                                                                                                                                                                          |
 | Single-use token | An invitation, frontline setup, or password-reset token.                                                                                                                                                                                                                         |
 | Offboarded       | The result of the `OffboardIdentity` lifecycle operation: `IdentityOffboarded` is emitted, IdentityStatus is `INACTIVE`, authentication is disabled, sessions/tokens are revoked, and effective membership/grants are removed. It is distinct from `DELETED`. |
-| InvitationStatus | Canonical Invitation lifecycle state: `PENDING`, `ACCEPTED`, `REVOKED`, or `EXPIRED`. |
-| SingleUseTokenStatus | Shared canonical lifecycle state for SetupToken and PasswordResetToken: `ACTIVE`, `CONSUMED`, `EXPIRED`, or `REVOKED`. |
-| Invitation acceptance secret | The cryptographically random, hashed, single-use secret owned by an Invitation. It is not a SetupToken or PasswordResetToken. |
 
 ## 4. Requirements
 
@@ -104,7 +103,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **IDN-6** — Plaintext passwords and PINs MUST NOT be persisted, logged, returned in any response, or sent to any component other than the hashing step.
 - **IDN-7** — Single-use tokens MUST be generated from a cryptographically secure random source.
 - **IDN-8** — Single-use tokens MUST be stored only as hashes.
-- **IDN-9** — Every single-use token MUST carry an expiry, and an expired token MUST be rejected. Invitation acceptance secrets expire after 7 days; SetupToken expires after 15 minutes; PasswordResetToken expires after 1 hour.
+- **IDN-9** — Every single-use token MUST carry an expiry, and an expired token MUST be rejected (lifetimes: see OQ-IDN-2; value Not yet verified).
 - **IDN-10** — A single-use token MUST be consumable at most once; a second consumption MUST fail with no side effect.
 - **IDN-11** — A single-use token MUST be revocable before expiry, and a revoked token MUST be rejected.
 - **IDN-12** — A manager with the setup capability MAY initiate frontline setup for a learner in scope.
@@ -115,17 +114,10 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **IDN-17** — Offboarding MUST execute only through one shared identity lifecycle service.
 - **IDN-18** — Offboarding MUST, in one transaction: set IdentityStatus to `INACTIVE`, emit `IdentityOffboarded`, revoke all its sessions, revoke its frontline credentials and pending single-use tokens, and remove its effective membership and grants.
 - **IDN-19** — Repeating an offboarding request with the same idempotency key MUST return the same final state, preserve the original offboarding timestamp, and append no duplicate lifecycle or audit event.
-- **IDN-20** — An invitation to an email that belongs to an offboarded identity MUST be rejected until that identity is explicitly reactivated through `ReactivateIdentity`; rejection MUST create no Invitation and no acceptance token.
+- **IDN-20** — An invitation to an email that belongs to an offboarded identity MUST follow exactly one owner-chosen rule (see OQ-IDN-5; value Not yet verified); until chosen, such invitations MUST be rejected.
 - **IDN-21** — IdentityStatus lifecycle MUST permit only `ACTIVE -> INACTIVE` and `INACTIVE -> ACTIVE` for current application behavior. `OffboardIdentity` MUST result in `INACTIVE`; repeating offboarding while already `INACTIVE` MAY preserve `INACTIVE` while applying idempotent offboarding guarantees. `DELETED` MUST be terminal, and no application transition into `DELETED` is authorized until C15 deletion semantics are owner-approved.
 - **IDN-22** — Deactivating an identity for any reason other than offboarding MUST emit `IdentityDeactivated` as the canonical lifecycle event for the `ACTIVE -> INACTIVE` transition. Offboarding emits `IdentityOffboarded`, not `IdentityDeactivated` (see IDN-18).
 - **IDN-23** — Reactivating an identity MUST emit `IdentityReactivated` as the canonical lifecycle event for the `INACTIVE -> ACTIVE` transition.
-- **IDN-24** — InvitationStatus MUST be `PENDING`, `ACCEPTED`, `REVOKED`, or `EXPIRED`. A new Invitation starts `PENDING`; only `PENDING -> ACCEPTED`, `PENDING -> REVOKED`, and `PENDING -> EXPIRED` are permitted; `ACCEPTED`, `REVOKED`, and `EXPIRED` are terminal.
-- **IDN-25** — Every Invitation MUST own its own cryptographically random, hashed, single-use acceptance secret. That secret MUST follow IDN-7 through IDN-11 and MUST NOT be represented as SetupToken or PasswordResetToken.
-- **IDN-26** — SetupToken and PasswordResetToken MUST share `SingleUseTokenStatus` with values `ACTIVE`, `CONSUMED`, `EXPIRED`, and `REVOKED`. New tokens start `ACTIVE`; successful credential change authorized by the token transitions `ACTIVE -> CONSUMED`; `RevokeSingleUseToken` transitions `ACTIVE -> REVOKED`; expiry transitions `ACTIVE -> EXPIRED`; all three target states are terminal.
-- **IDN-27** — `AcceptInvitation` MUST accept only a `PENDING`, unexpired Invitation; in the same governed operation it MUST transition the Invitation to `ACCEPTED`, render its acceptance secret unusable, and request membership creation only through the Organization-owned `CreateMembership` command boundary. Identity code MUST NOT directly mutate Membership.
-- **IDN-28** — `RevokeInvitation` MUST be the canonical state-changing operation for `PENDING -> REVOKED` and MUST render the Invitation acceptance secret unusable in the same transaction. This requirement creates a canonical command but does not create a canonical domain event.
-- **IDN-29** — SetupToken and PasswordResetToken lifecycle transitions MUST NOT emit a canonical business event unless a later active owning-domain contract explicitly defines one under C01 SEM-35; required audit records remain governed by C23.
-
 
 ## 5. Acceptance Cases
 
@@ -148,22 +140,16 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | IDN-AC-15 | IDN-19         | Send the same offboarding request three times with one idempotency key                                             | Same final state; original timestamp preserved; exactly one lifecycle and one audit event                                     |
 | IDN-AC-16 | IDN-20         | Invite an email belonging to an offboarded identity before the OQ is decided                                       | Invitation rejected; no token issued                                                                                          |
 | IDN-AC-17 | IDN-18, IDN-21 | Exercise deactivate, reactivate, offboard, invalid reactivation-from-DELETED, and attempted deletion before C15 approval | Only ACTIVE→INACTIVE and INACTIVE→ACTIVE succeed; offboarding ends INACTIVE; DELETED has no authorized ingress and is terminal |
-| IDN-AC-18 | IDN-9 | Issue Invitation acceptance secret, SetupToken, and PasswordResetToken at a fixed clock | Expiries are exactly 7 days, 15 minutes, and 1 hour after issuance respectively |
-| IDN-AC-19 | IDN-24, IDN-25, IDN-28 | Exercise Invitation accept, revoke, expiry, replay, and invalid transitions | Only PENDING→ACCEPTED/REVOKED/EXPIRED succeed; terminal states reject further transitions; acceptance secret is hashed and unusable after terminal transition |
-| IDN-AC-20 | IDN-26 | Consume, revoke, and expire SetupToken and PasswordResetToken; then replay each terminal token | Only ACTIVE→CONSUMED/REVOKED/EXPIRED succeeds; every replay fails with no side effect |
-| IDN-AC-21 | IDN-20 | Attempt InviteIdentity for an offboarded identity email before ReactivateIdentity, then after explicit reactivation | First attempt rejects with no Invitation/token; after explicit reactivation normal invitation rules apply |
-| IDN-AC-22 | IDN-27 | Accept an Invitation while instrumenting all Membership writes | Invitation becomes ACCEPTED; membership change occurs only through CreateMembership; no Identity-owned direct Membership write occurs |
-
 
 ## 6. Open Questions
 
 | ID       | Question                                                                                                                                              | Blocks implementation | Affects |
 | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ------- |
 | OQ-IDN-1 | Which password hashing algorithm and parameters are approved?                                                                                         | Yes                   | IDN-5   |
-| OQ-IDN-2 | Resolved: Invitation acceptance secret = 7 days; SetupToken = 15 minutes; PasswordResetToken = 1 hour. Legacy values were reference only; this decision is v2 authority through the owner approval package. | No | IDN-9, IDN-25, IDN-26 |
+| OQ-IDN-2 | What are the lifetimes of invitation, frontline setup, and password-reset tokens?                                                                     | Yes                   | IDN-9   |
 | OQ-IDN-3 | Which sessions does a credential change revoke: all sessions, all other sessions, or another policy?                                                  | Yes                   | IDN-15  |
 | OQ-IDN-4 | What is the OAuth linking rule: verified-email match, explicit user-initiated linking only, or another rule?                                          | Yes                   | IDN-2   |
-| OQ-IDN-5 | Resolved: controlled rejection. An offboarded identity must be explicitly reactivated through ReactivateIdentity before a new invitation may be created. | No | IDN-20, IDN-27 |
+| OQ-IDN-5 | For an offboarded identity's email, is a new invitation a controlled reactivation or a controlled rejection? (Required decision carried from Gate A.) | Yes                   | IDN-20  |
 | OQ-IDN-6 | Are PINs an approved frontline credential type in v2, and if so what are their length and lockout rules?                                              | No                    | —       |
 | OQ-IDN-7 | Must password-reset and invitation responses be indistinguishable for registered and unregistered emails?                                             | No                    | —       |
 
@@ -175,7 +161,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
-| Blocking open questions      | 3 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
+| Blocking open questions      | 5 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
 | Owner approval               | declared                 | C11 1.2.0 approved by Patrick Craven on 2026-10-04 by direct owner direction (canonical lifecycle event definitions). |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
@@ -194,4 +180,3 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.1.0   | 2026-10-03 | Approved bootstrap IdentityStatus transition graph; offboarding now explicitly results in INACTIVE; DELETED ingress remains fail-closed pending C15 privacy semantics. GitHub issue #4. | Patrick Craven (owner approval) |
 | 1.2.0   | 2026-10-04 | Defined canonical lifecycle events for deactivation and reactivation: IDN-22 requires `IdentityDeactivated` on non-offboarding `ACTIVE -> INACTIVE`; IDN-23 requires `IdentityReactivated` on `INACTIVE -> ACTIVE`. | Patrick Craven (owner direction) |
-| 1.3.0   | 2026-10-04 | Resolved invitation/single-use-token lifecycle semantics, token lifetimes, offboarded-email invitation rule, and cross-domain invitation acceptance boundary. GitHub issue #12. | Patrick Craven (owner approval) |

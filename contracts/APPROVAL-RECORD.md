@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.10.3",
+  "version": "0.11.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-04
-- Contract package version: `0.10.3`
+- Contract package version: `0.11.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -320,3 +320,15 @@ The four unpromoted commands are not implementation authority under SEM-2. Their
 | TEACH-K00 | 0.10.0 | 0.11.0 | Register 4 missing dependency entities + 4 canonical IDs as `candidate`; promote no command/event | 2026-10-04 | Patrick Craven | #11 |
 | TEACH-DOMAIN-OWNERSHIP | 1.4.0 | 1.5.0 | Approve ownership assignments for the 8 newly registered concepts | 2026-10-04 | Patrick Craven | #11 |
 | TEACH-COMMAND-EVENT-DISCOVERY | 0.4.0 | 0.5.0 | Replace missing-K00 blockers with candidate/lifecycle blockers for the four remaining commands | 2026-10-04 | Patrick Craven | #11 |
+
+## Part 16 — Dependency lifecycle owner decisions
+
+| Artifact / Contract | From | To | Decision | Date | Owner | GitHub issue |
+| --- | --- | --- | --- | --- | --- | --- |
+| C11 Identity & Credentials | 1.2.0 | 1.3.0 | Approve InvitationStatus; Invitation-owned acceptance secret; 7-day Invitation lifetime; shared SingleUseTokenStatus; 15-minute SetupToken; 1-hour PasswordResetToken; controlled rejection for offboarded-email invitations; CreateMembership cross-domain boundary; canonical RevokeInvitation operation | 2026-10-04 | Patrick Craven | #12 |
+| C22 Transaction, Idempotency & Reconciliation | 1.0.3 | 1.1.0 | Approve OPEN/RESOLVED ReconciliationRecord lifecycle; explicit ExternalEffectOutcome vocabulary; provider-neutral record detail; safe retry disposition | 2026-10-04 | Patrick Craven | #12 |
+| TEACH-DEPENDENCY-LIFECYCLE-DISCOVERY | proposed | owner-decided | Record approved choices for all three DLC groups; K00 mutation remains deferred to registration stage | 2026-10-04 | Patrick Craven | #12 |
+
+### Reference evidence used for the owner decision
+
+Legacy `peteywee/teach` was consulted only as non-authoritative reference evidence. It contained invitation states `pending/accepted/revoked/expired`, a 7-day default invitation lifetime, 15-minute frontline setup tokens, and 1-hour password reset tokens. The v2 values above are authoritative only because the owner approved this package.

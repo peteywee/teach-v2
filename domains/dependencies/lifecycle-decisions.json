@@ -1,0 +1,138 @@
+{
+  "decision_id": "TEACH-DEPENDENCY-LIFECYCLE-DECISIONS",
+  "version": "1.0.0",
+  "status": "approved",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "approved_on": "2026-10-04",
+  "issue": "#12",
+  "baseline_commit": "8ec35865dc9edec710ce3d85658809e739f35452",
+  "authority_contract_versions": {
+    "C11": "1.3.0",
+    "C22": "1.1.0"
+  },
+  "legacy_reference": {
+    "repo": "peteywee/teach",
+    "role": "reference only",
+    "observed_precedent": {
+      "invitation_statuses": [
+        "pending",
+        "accepted",
+        "revoked",
+        "expired"
+      ],
+      "invitation_ttl": "7 days",
+      "frontline_setup_ttl": "15 minutes",
+      "password_reset_ttl": "1 hour"
+    }
+  },
+  "decisions": {
+    "InvitationLifecycle": {
+      "state_set": "InvitationStatus",
+      "values": [
+        "PENDING",
+        "ACCEPTED",
+        "REVOKED",
+        "EXPIRED"
+      ],
+      "initial": "PENDING",
+      "terminal": [
+        "ACCEPTED",
+        "REVOKED",
+        "EXPIRED"
+      ],
+      "transitions": [
+        {
+          "from": "PENDING",
+          "to": "ACCEPTED",
+          "command": "AcceptInvitation"
+        },
+        {
+          "from": "PENDING",
+          "to": "REVOKED",
+          "command": "RevokeInvitation"
+        },
+        {
+          "from": "PENDING",
+          "to": "EXPIRED",
+          "trigger_kind": "system_condition",
+          "trigger": "expiry"
+        }
+      ],
+      "acceptance_secret": "Invitation-owned hashed single-use secret; not SetupToken or PasswordResetToken",
+      "lifetime": "7 days",
+      "offboarded_email_rule": "reject until explicit ReactivateIdentity; create no Invitation/token",
+      "membership_boundary": "AcceptInvitation requests CreateMembership; Identity does not directly write Membership"
+    },
+    "SingleUseTokenLifecycle": {
+      "state_set": "SingleUseTokenStatus",
+      "values": [
+        "ACTIVE",
+        "CONSUMED",
+        "EXPIRED",
+        "REVOKED"
+      ],
+      "initial": "ACTIVE",
+      "terminal": [
+        "CONSUMED",
+        "EXPIRED",
+        "REVOKED"
+      ],
+      "entities": [
+        "SetupToken",
+        "PasswordResetToken"
+      ],
+      "transitions": [
+        {
+          "from": "ACTIVE",
+          "to": "CONSUMED",
+          "command": "ChangeCredential",
+          "condition": "token authorizes successful credential change"
+        },
+        {
+          "from": "ACTIVE",
+          "to": "REVOKED",
+          "command": "RevokeSingleUseToken"
+        },
+        {
+          "from": "ACTIVE",
+          "to": "EXPIRED",
+          "trigger_kind": "system_condition",
+          "trigger": "expiry"
+        }
+      ],
+      "lifetimes": {
+        "SetupToken": "15 minutes",
+        "PasswordResetToken": "1 hour"
+      }
+    },
+    "ReconciliationRecordLifecycle": {
+      "state_set": "ReconciliationRecordStatus",
+      "values": [
+        "OPEN",
+        "RESOLVED"
+      ],
+      "initial": "OPEN",
+      "terminal": [
+        "RESOLVED"
+      ],
+      "outcome_set": "ExternalEffectOutcome",
+      "outcomes": [
+        "AMBIGUOUS",
+        "PARTIAL_FAILURE",
+        "CONFIRMED_SUCCESS",
+        "CONFIRMED_NO_EFFECT"
+      ],
+      "transition": {
+        "from": "OPEN",
+        "to": "RESOLVED",
+        "command": "ReconcileExternalEffect",
+        "condition": "canonical provider readback confirms success or no effect"
+      },
+      "unreadable_provider_state": "remain OPEN; unresolved outcome unchanged; retry forbidden",
+      "retry_rule": "CONFIRMED_NO_EFFECT permits retry only with documented safe idempotency strategy; CONFIRMED_SUCCESS forbids resend",
+      "provider_specific_semantics": "provider-specific details are data, not semantic subtypes"
+    }
+  },
+  "required_new_command": "RevokeInvitation",
+  "k00_mutation_in_this_stage": false
+}

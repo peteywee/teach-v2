@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-DEPENDENCY-CONCEPTS",
   "class": "specification",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "claims_truth_state": "declared",
   "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -40,3 +40,15 @@ Three lifecycle decision groups are now recorded as proposed:
 - ReconciliationRecord lifecycle.
 
 No new state set or state machine is registered by this discovery. All four dependent commands remain candidate until an owner-approved semantic closure package resolves the required lifecycle vocabulary.
+
+## Owner-approved lifecycle decisions
+
+GitHub issue #12 approves the three lifecycle decision groups discovered after dependency registration.
+
+- InvitationStatus: `PENDING`, `ACCEPTED`, `REVOKED`, `EXPIRED`; Invitation lifetime 7 days.
+- SingleUseTokenStatus: `ACTIVE`, `CONSUMED`, `EXPIRED`, `REVOKED`; SetupToken 15 minutes; PasswordResetToken 1 hour.
+- ReconciliationRecordStatus: `OPEN`, `RESOLVED`; ExternalEffectOutcome explicitly distinguishes ambiguous/partial/confirmed outcomes.
+- Offboarded-email invitation rule: reject until explicit ReactivateIdentity.
+- Required new state-changing command: `RevokeInvitation`.
+
+This stage changes owning contracts only. K00 registration and promotion remain a separate next stage.

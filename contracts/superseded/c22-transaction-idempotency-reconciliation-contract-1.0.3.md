@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C22",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.0.3",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-04",
+  "updated_on": "2026-10-03",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.1.0",
-    "approved_on": "2026-10-04",
+    "approved_version": "1.0.0",
+    "approved_on": "2026-10-03",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner explicitly approved reconciliation lifecycle closure through approval token; GitHub issue #12"
+    "inheritance": "1.0.1, 1.0.2, and 1.0.3 are non-normative governance/truth-state cleanup patches; 1.0.0 owner approval remains controlling"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,8 +28,8 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C22@1.0.3"],
-  "superseded_by": null,
+  "supersedes": [],
+  "superseded_by": "TEACH-CON-C22@1.1.0",
   "depends_on": [
     "contracts/"
   ]
@@ -38,20 +38,22 @@
 
 # C22 — Transaction, Idempotency & Reconciliation Contract
 
+> Superseded by C22 version 1.1.0 on 2026-10-04. Preserved under SYS-21 through GitHub issue #12.
+
 | Field              | Value                                                                                                                                                           |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Contract ID        | C22                                                                                                                                                             |
 | Group              | C20 Data Correctness                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.1.0                                                                                                                                                           |
-| Status             | `active`                                                                                                                                                        |
+| Version            | 1.0.3                                                                                                                                                           |
+| Status             | `superseded`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-04 — C22 1.1.0 reconciliation lifecycle closure; GitHub issue #12 |
+| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
 | Requirement prefix | `TXN`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New. Carries the ambiguous-outcome lessons from xqueue into Teach.                                                                                              |
-| Supersedes         | C22 1.0.3 |
-| Superseded by      | None                                                                                                                                                            |
+| Supersedes         | None                                                                                                                                                            |
+| Superseded by      | C22 1.1.0 |
 | Created            | 2026-10-03                                                                                                                                                      |
 | Last updated       | 2026-10-03                                                                                                                                                      |
 
@@ -83,8 +85,6 @@ Related contracts: C00, C23, C63.
 | Idempotent request | A request that, repeated with the same idempotency key and payload, yields the same final state and the same response. |
 | Ambiguous outcome  | An external call whose success or failure cannot be determined (timeout, dropped connection, 5xx after send).          |
 | Reconciliation     | Reading canonical provider state to determine what actually happened.                                                  |
-| ReconciliationRecordStatus | Canonical lifecycle state of a ReconciliationRecord: `OPEN` or `RESOLVED`. |
-| ExternalEffectOutcome | Canonical explicit outcome state: `AMBIGUOUS`, `PARTIAL_FAILURE`, `CONFIRMED_SUCCESS`, or `CONFIRMED_NO_EFFECT`. |
 
 ## 4. Requirements
 
@@ -103,10 +103,6 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **TXN-11** — Webhook processing MUST durably record provider event identity and enough ordering state to reject duplicates and stale events.
 - **TXN-12** — A stale webhook event MUST NOT overwrite newer local state.
 - **TXN-13** — Cleanup operations MUST be bounded to an exact owner, run, and tenant; unscoped deletes MUST NOT exist.
-- **TXN-14** — A ReconciliationRecord MUST start `OPEN` when an external-effect outcome requires reconciliation and MUST transition `OPEN -> RESOLVED` only through `ReconcileExternalEffect` after canonical provider readback establishes either `CONFIRMED_SUCCESS` or `CONFIRMED_NO_EFFECT`. If provider state is unreadable, the record MUST remain `OPEN`.
-- **TXN-15** — ExternalEffectOutcome MUST be one of `AMBIGUOUS`, `PARTIAL_FAILURE`, `CONFIRMED_SUCCESS`, or `CONFIRMED_NO_EFFECT`. A newly opened ReconciliationRecord MUST record `AMBIGUOUS` or `PARTIAL_FAILURE`; provider-specific identifiers and payload details are data on the generic record and MUST NOT create provider-specific semantic subtypes.
-- **TXN-16** — A `CONFIRMED_NO_EFFECT` reconciliation MAY permit retry only when the mutation has a documented safe idempotency strategy. `CONFIRMED_SUCCESS` MUST prohibit resending the external effect. Any unresolved `OPEN` record MUST prohibit retry.
-
 
 ## 5. Acceptance Cases
 
@@ -122,9 +118,6 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | TXN-AC-8  | TXN-10, TXN-11 | Deliver the same webhook twice                                                                   | Processed once; second recorded as duplicate                                  |
 | TXN-AC-9  | TXN-12         | Deliver newer event, then older event                                                            | Final state reflects newer event                                              |
 | TXN-AC-10 | TXN-13         | Static check for DELETE without owner/run/tenant predicates; run cleanup in a two-tenant fixture | No unscoped deletes; other tenant untouched                                   |
-| TXN-AC-11 | TXN-14, TXN-15 | Create reconciliation records for ambiguous and partial-failure outcomes; exercise success, no-effect, and unreadable readback | Records start OPEN; success/no-effect become RESOLVED with canonical confirmed outcomes; unreadable readback remains OPEN with unresolved outcome |
-| TXN-AC-12 | TXN-16 | Reconcile one external effect to CONFIRMED_SUCCESS and another to CONFIRMED_NO_EFFECT with/without safe idempotency strategy | Success is never resent; no-effect retries only when safe strategy exists; otherwise retry remains forbidden |
-
 
 ## 6. Open Questions
 
@@ -158,4 +151,3 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.1   | 2026-10-03 | Non-normative document-governance metadata/provenance normalization; 1.0.0 owner approval remained controlling. | ChatGPT (governance) |
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
-| 1.1.0   | 2026-10-04 | Established canonical ReconciliationRecord lifecycle, external-effect outcome vocabulary, provider-neutral detail rule, and safe retry disposition. GitHub issue #12. | Patrick Craven (owner approval) |
