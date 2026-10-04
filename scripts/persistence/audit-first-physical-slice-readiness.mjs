@@ -21,7 +21,7 @@ if (m?.version!=='0.16.0') errors.push('whole-stack audit: K00 must be 0.16.0');
 const checks=[
  ['commands-approved',(commands?.entries||[]).filter(x=>x.status==='approved').length,23],
  ['events-candidate',(events?.entries||[]).filter(x=>x.status==='candidate').length,10],
- ['ids-approved',(ids?.entries||[]).filter(x=>x.status==='approved').length,12],
+ ['ids-approved',(ids?.entries||[]).filter(x=>x.status==='approved').length,15],
  ['states-approved',(states?.entries||[]).filter(x=>x.status==='approved').length,7],
  ['states-candidate',(states?.entries||[]).filter(x=>x.status==='candidate').length,2],
  ['machines-approved',(machines?.entries||[]).filter(x=>x.status==='approved').length,7],
