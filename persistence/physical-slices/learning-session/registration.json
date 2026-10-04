@@ -1,0 +1,55 @@
+{
+  "registration_id": "TEACH-SLICE-P05-OWNER-DECISION-REGISTRATION",
+  "version": "1.0.0",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "approved_on": "2026-10-04",
+  "issue": "#47",
+  "baseline_commit": "971b77faad88c4be5119324b5c324b56d0a78055",
+  "target_slice": "SLICE-P05",
+  "target_records": [
+    "LearningSession"
+  ],
+  "authority": {
+    "kernel_version": "0.16.0",
+    "persistence_authority_version": "1.0.0",
+    "architecture_version": "1.0.0",
+    "c32_version": "1.1.0"
+  },
+  "decisions": [
+    {
+      "id": "P05-D01",
+      "selection": "REQUIRED_ONE_ASSIGNMENT",
+      "relationship": "LearningSessionUsesAssignment",
+      "cardinality": "many-to-one",
+      "physical_reference_required": true,
+      "physical_reference_nullable": false,
+      "effect": "Every persisted LearningSession references exactly one Assignment. The future physical assignment_id is required/non-null. No absent-Assignment LearningSession state is authorized."
+    }
+  ],
+  "scope_rules": {
+    "learning_session_identity_required": true,
+    "learning_session_assignment_required": true,
+    "assignment_reference_nullable": false,
+    "protected_reads_writes_require_authoritative_identity_id": true,
+    "assignment_presence_does_not_grant_authorization": true,
+    "start_authorization_still_requires_c32_lrn2": true
+  },
+  "effects": {
+    "owner_shape_decision_closed": true,
+    "schema_admission_rerun_authorized": true,
+    "physical_schema_authorized": false,
+    "implementation_authorized": false,
+    "migration_authoring_authorized": false,
+    "shared_or_production_migration_execution_authorized": false
+  },
+  "explicit_non_effects": [
+    "no K00 relationship status or cardinality change",
+    "no LearningSession table or column definition",
+    "no migration",
+    "no repository implementation",
+    "no transport route",
+    "no runtime LearningSession implementation",
+    "no production database change"
+  ]
+}
