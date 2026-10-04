@@ -1,3 +1,4 @@
+import { assertIsolatedDatabaseTarget } from '../../../scripts/db/isolated-database-target.mjs';
 import assert from 'node:assert/strict';
 import { after, before, beforeEach, test } from 'node:test';
 import { drizzle } from 'drizzle-orm/node-postgres';
@@ -12,7 +13,7 @@ import { PostgresReconciliationRecordRepository } from '../../../src/modules/tra
 import * as schema from '../../../src/modules/transaction-control/infrastructure/persistence/schema.js';
 
 const { Pool } = pg;
-const connectionString = process.env.DATABASE_URL;
+const connectionString = assertIsolatedDatabaseTarget(process.env.DATABASE_URL);
 if (!connectionString) throw new Error('DATABASE_URL is required');
 
 const pool = new Pool({ connectionString });
@@ -257,6 +258,46 @@ test('authoritative scope is required on reads and cannot be broadened after ins
     ),
     /immutable reconciliation identity\/scope fields cannot change/,
   );
+});
+
+test('caller mutation during advisory-lock wait cannot change captured scope or key binding', async () => {
+  const base = input({ id: 'recon-captured' });
+  const mutable = { ...base, authoritativeScope: { organizationId: 'acme' }, idempotency: { ...base.idempotency! } };
+  const holder = await pool.connect();
+  let pending: ReturnType<typeof repository.createOpen> | undefined;
+  try {
+    await holder.query('begin');
+    await holder.query('select pg_advisory_xact_lock(hashtextextended($1, 0))', ['idem-1']);
+    pending = repository.createOpen(mutable);
+    void pending.catch(() => {});
+    const deadline = Date.now() + 3000;
+    let waiting = false;
+    while (Date.now() < deadline) {
+      await pool.query('select pg_stat_clear_snapshot()');
+      const state = await pool.query<{ count: string }>(`select count(*)::text as count from pg_stat_activity
+        where datname=current_database() and wait_event_type='Lock' and query like '%pg_advisory_xact_lock%'`);
+      if (Number(state.rows[0]?.count) >= 1) { waiting = true; break; }
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
+    assert.equal(waiting, true, 'repository must be waiting on the original key before mutation');
+    mutable.id = 'recon-shifted';
+    mutable.authoritativeScope.organizationId = 'other';
+    mutable.idempotency.key = 'idem-shifted';
+    mutable.idempotency.payloadHash = 'payload-shifted';
+    mutable.idempotency.retentionUntil.setUTCFullYear(2030);
+    await holder.query('commit');
+  } finally {
+    await holder.query('rollback');
+    holder.release();
+  }
+  const record = await pending!;
+  assert.equal(record.id, 'recon-captured');
+  assert.deepEqual(record.authoritativeScope, { organizationId: 'acme' });
+  assert.equal(record.idempotencyKey, 'idem-1');
+  assert.equal(record.payloadHash, 'payload-a');
+  assert.equal(record.idempotencyRetentionUntil?.toISOString(), '2026-10-06T00:00:00.000Z');
+  assert.equal(await repository.getById('recon-captured', { organizationId: 'other' }), null);
+  assert.ok(await repository.getById('recon-captured', { organizationId: 'acme' }));
 });
 
 function input(

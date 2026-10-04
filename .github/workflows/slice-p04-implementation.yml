@@ -12,7 +12,7 @@ on:
       - 'src/modules/identity/infrastructure/persistence/credential-schema.ts'
       - 'src/modules/identity/infrastructure/persistence/postgres-credential-repository.ts'
       - 'tests/integration/identity/credential-repository.test.ts'
-      - 'scripts/db/verify-slice-p04-migration-replay.ts'
+      - 'scripts/db/**'
       - 'scripts/persistence/validate-slice-p04-*.mjs'
       - 'scripts/tests/validate-validators.mjs'
       - 'persistence/physical-slices/identity-credentials/**'
@@ -29,7 +29,7 @@ on:
       - 'src/modules/identity/infrastructure/persistence/credential-schema.ts'
       - 'src/modules/identity/infrastructure/persistence/postgres-credential-repository.ts'
       - 'tests/integration/identity/credential-repository.test.ts'
-      - 'scripts/db/verify-slice-p04-migration-replay.ts'
+      - 'scripts/db/**'
       - 'scripts/persistence/validate-slice-p04-*.mjs'
       - 'scripts/tests/validate-validators.mjs'
       - 'persistence/physical-slices/identity-credentials/**'
@@ -57,6 +57,7 @@ jobs:
           --health-retries 10
     env:
       DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/teach_v2
+      TEACH_ISOLATED_DB: '1'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

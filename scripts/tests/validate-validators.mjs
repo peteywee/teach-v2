@@ -25,7 +25,7 @@ function scratch() {
   const dir = mkdtempSync(join(tmpdir(), "negtest-"));
   cpSync(ROOT, dir, {
     recursive: true,
-    filter: (src) => !src.includes("/.git"),
+    filter: (src) => !/(^|\/)\.git(?:\/|$)/.test(src) && !/(^|\/)node_modules(?:\/|$)/.test(src),
   });
   return dir;
 }
@@ -947,6 +947,80 @@ test('P01 decision packet: missing preserved implementation fails', 'scripts/per
 }, { pattern: /readiness must preserve SLICE-P01/ });
 
 // ---------------------------------------------------------------------------
+// Repository-wide integration regressions; full runner exercises every gate.
+const closureScript='scripts/persistence/validate-persistence-semantic-closure-registration.mjs';
+test('closure: preserved historical exclusions and later approvals pass',closureScript,()=>{},{pass:true});
+test('closure: later approval without provenance fails',closureScript,(dir)=>{
+  const path='kernel/identifiers.json';const value=readJson(dir,path);
+  delete value.entries.find(x=>x.id==='AssignmentId').promotion_issue;writeJson(dir,path,value);
+},{pattern:/later AssignmentId approval requires issue #46/});
+test('closure: historical promotion set drift fails',closureScript,(dir)=>{
+  const path='persistence/semantic-closure/registration.json';const value=readJson(dir,path);
+  value.promotions.identifiers[0].id='AssignmentId';writeJson(dir,path,value);
+},{pattern:/exact historical identifiers promotion set/});
+test('closure: excluded capability cannot become approved',closureScript,(dir)=>{
+  const path='kernel/identifiers.json';const value=readJson(dir,path);
+  value.entries.find(x=>x.id==='CapabilityId').status='approved';writeJson(dir,path,value);
+},{pattern:/excluded CapabilityId must remain candidate/});
+
+const integrationScript='scripts/architecture/validate-repository-integration.mjs';
+test('integration: clean complete source/authority inventory passes',integrationScript,()=>{},{pass:true});
+test('integration: Application cannot import Infrastructure',integrationScript,(dir)=>{
+  writeFileSync(join(dir,'src/modules/identity/application/foreign-dependency.ts'),"import '../infrastructure/persistence/schema.js';\n");
+},{pattern:/Application imports Infrastructure/});
+test('integration: Domain cannot import database driver',integrationScript,(dir)=>{
+  writeFileSync(join(dir,'src/modules/identity/domain/database-dependency.ts'),"import { sql } from 'drizzle-orm';\n");
+},{pattern:/Domain imports a non-Domain/});
+test('integration: foreign Infrastructure import fails',integrationScript,(dir)=>{
+  writeFileSync(join(dir,'src/modules/learning/application/foreign-dependency.ts'),"import '../../identity/infrastructure/persistence/schema.js';\n");
+},{pattern:/foreign Infrastructure import forbidden/});
+test('integration: repository port cannot move to Infrastructure',integrationScript,(dir)=>{
+  const path='src/modules/identity/infrastructure/persistence/postgres-credential-repository.ts';
+  writeFileSync(join(dir,path),readFileSync(join(dir,path),'utf8')+'\nexport interface MisplacedRepository {}\n');
+},{pattern:/repository port must be Application-owned/});
+test('integration: missing repository input snapshot fails',integrationScript,(dir)=>{
+  const path='src/modules/identity/infrastructure/persistence/postgres-credential-repository.ts';
+  writeFileSync(join(dir,path),readFileSync(join(dir,path),'utf8').replace('input = snapshotPersistenceInput(input);',''));
+},{pattern:/capture every mutable repository input before await/});
+test('integration: queue READY without admission fails',integrationScript,(dir)=>{
+  const path='persistence/physical-slices/queue-post-p05.json';const value=readJson(dir,path);
+  value.slices[0].status='READY';value.slices[0].blockers=[];writeJson(dir,path,value);
+},{pattern:/queue must preserve admission BLOCK/});
+test('integration: invented relationship count fails',integrationScript,(dir)=>{
+  const path='persistence/physical-slices/queue-post-p05.json';const value=readJson(dir,path);
+  value.slices[0].relationships.push('LearningSessionUsesAssignment');writeJson(dir,path,value);
+},{pattern:/queue relationship set must match/});
+test('integration: unguarded migration entry point fails',integrationScript,(dir)=>{
+  const path='scripts/db/migrate.ts';writeFileSync(join(dir,path),readFileSync(join(dir,path),'utf8').replace('assertIsolatedDatabaseTarget(process.env.DATABASE_URL)','process.env.DATABASE_URL'));
+},{pattern:/isolated target guard must run before any Pool/});
+test('integration: runtime activation in build-time composition fails',integrationScript,(dir)=>{
+  const path='src/bootstrap/learning-persistence-schema.ts';writeFileSync(join(dir,path),readFileSync(join(dir,path),'utf8')+'\ndb.insert(table);\n');
+},{pattern:/build-time schema composition cannot activate runtime/});
+
+const p06Script='scripts/persistence/validate-slice-p06-schema-admission.mjs';
+test('P06: complete BLOCK evidence evaluation passes',p06Script,()=>{},{pass:true});
+test('P06: premature ADMIT fails',p06Script,(dir)=>{
+  const path='persistence/physical-slices/assignment/admission.json';const value=readJson(dir,path);
+  value.decision='ADMIT';writeJson(dir,path,value);
+},{pattern:/current P06 decision must be BLOCK/});
+test('P06: unknown criteria cannot become PROVEN',p06Script,(dir)=>{
+  const path='persistence/physical-slices/assignment/admission.json';const value=readJson(dir,path);
+  for(const item of value.criteria)item.state='PROVEN';writeJson(dir,path,value);
+},{pattern:/four PROVEN and four UNKNOWN/});
+test('P06: authoring while BLOCKED fails',p06Script,(dir)=>{
+  const path='persistence/physical-slices/assignment/admission-evidence-plan.json';const value=readJson(dir,path);
+  value.implementation_authorized=true;writeJson(dir,path,value);
+},{pattern:/implementation_authorized must remain false/});
+test('P06: incomplete acceptance evidence fails',p06Script,(dir)=>{
+  const path='persistence/physical-slices/assignment/admission-evidence-plan.json';const value=readJson(dir,path);
+  value.required_evidence=[];writeJson(dir,path,value);
+},{pattern:/complete migration\/version\/scope\/audit\/atomicity evidence/});
+test('whole audit: every standalone gate passes', 'scripts/architecture/validate-whole-repository.mjs',()=>{},{pass:true});
+test('whole audit: an otherwise untriggered historical validator fails', 'scripts/architecture/validate-whole-repository.mjs',(dir)=>{
+  const path='scripts/persistence/validate-persistence-semantic-closure-registration.mjs';
+  writeFileSync(join(dir,path),readFileSync(join(dir,path),'utf8')+'\nprocess.exit(1);\n');
+},{pattern:/validate-persistence-semantic-closure-registration/});
+
 // Report
 // ---------------------------------------------------------------------------
 

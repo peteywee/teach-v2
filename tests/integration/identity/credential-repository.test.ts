@@ -1,3 +1,4 @@
+import { assertIsolatedDatabaseTarget } from '../../../scripts/db/isolated-database-target.mjs';
 import assert from 'node:assert/strict';
 import { after, before, beforeEach, test } from 'node:test';
 import { drizzle } from 'drizzle-orm/node-postgres';
@@ -8,7 +9,7 @@ import * as identitySchema from '../../../src/modules/identity/infrastructure/pe
 import * as credentialSchema from '../../../src/modules/identity/infrastructure/persistence/credential-schema.js';
 
 const { Pool } = pg;
-const connectionString = process.env.DATABASE_URL;
+const connectionString = assertIsolatedDatabaseTarget(process.env.DATABASE_URL);
 if (!connectionString) throw new Error('DATABASE_URL is required');
 
 const pool = new Pool({ connectionString });
@@ -80,6 +81,46 @@ test('Credential creation rejects an INACTIVE Identity', async () => {
     }),
     /authoritative Identity must be ACTIVE/,
   );
+});
+
+test('caller mutation during Identity lock wait cannot redirect Credential ownership', async () => {
+  const now = new Date('2026-10-04T12:00:00Z');
+  await identities.create({ id: 'identity-active', now });
+  await identities.create({ id: 'identity-inactive', now });
+  await identities.deactivate({ id: 'identity-inactive', now });
+  const mutable = { id: 'cred-captured', identityId: 'identity-active', credentialType: 'PASSWORD' as const, passwordHash: '$hash', now: new Date(now) };
+  const holder = await pool.connect();
+  let pending: ReturnType<typeof credentials.create> | undefined;
+  try {
+    await holder.query('begin');
+    await holder.query('select status from identity_identities where id=$1 for update', ['identity-active']);
+    pending = credentials.create(mutable);
+    void pending.catch(() => {});
+    const deadline = Date.now() + 3000;
+    let waiting = false;
+    while (Date.now() < deadline) {
+      await pool.query('select pg_stat_clear_snapshot()');
+      const state = await pool.query<{ count: string }>(`select count(*)::text as count from pg_stat_activity
+        where datname=current_database() and wait_event_type='Lock' and query like '%identity_identities%' and query like '%for update%'`);
+      if (Number(state.rows[0]?.count) >= 1) { waiting = true; break; }
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
+    assert.equal(waiting, true, 'creation must wait behind the original Identity lock');
+    mutable.id = 'cred-shifted';
+    mutable.identityId = 'identity-inactive';
+    mutable.passwordHash = '$changed';
+    mutable.now.setUTCFullYear(2030);
+    await holder.query('commit');
+  } finally {
+    await holder.query('rollback');
+    holder.release();
+  }
+  const record = await pending!;
+  assert.equal(record.id, 'cred-captured');
+  assert.equal(record.identityId, 'identity-active');
+  assert.equal(record.passwordHash, '$hash');
+  assert.equal(record.createdAt.toISOString(), '2026-10-04T12:00:00.000Z');
+  assert.equal((await credentials.listByIdentity({ identityId: 'identity-inactive' })).length, 0);
 });
 
 test('Credential foreign key targets the canonical identity_identities table', async () => {

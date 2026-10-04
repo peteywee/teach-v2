@@ -1,0 +1,29 @@
+# Teach v2
+
+Teach v2 is an approved modular-monolith foundation with five physical persistence slices. The current storage inventory is **8 tables / 5 immutable migrations / 8 PostgreSQL repositories / 5 implemented slices**. That inventory proves storage; it does not establish complete runtime command or contract conformance.
+
+The controlling layers are [K00](kernel/manifest.json), [contracts](contracts/README.md), [ownership](domains/ownership-map.json), [architecture](architecture/authority.json), [Application Interfaces](application-interfaces/authority.json), and [Persistence Model](persistence/authority.json). Historical proposal and approval baselines remain historical. [Physical readiness](persistence/physical-slices/readiness.json) records the current admitted slices.
+
+| Component | Current evidence | Remaining integration |
+| --- | --- | --- |
+| TransactionControl P01 | Reconciliation storage, terminal resolution, scope and idempotency contention | Provider readback/Application runtime wiring |
+| Identity P02–P04 | Identity/session/token/Credential storage and scoped PostgreSQL proofs | Complete authorization, required audit, credential-change revocation, invitation membership orchestration, and offboarding orchestration |
+| Learning P05 | Required Assignment reference, Identity FK, closed lifecycle, one completion winner | Authoritative Assignment existence/authorization and atomic start, tracked in [#58](https://github.com/peteywee/teach-v2/issues/58) |
+| Assignment P06 | Evidence plan and automated **BLOCK** evaluation | Shape/content-version/scope decisions and admission gate [#60](https://github.com/peteywee/teach-v2/issues/60) |
+| Certification P07 / ProgressEvent P08 | Approved logical entities and audited relationship inventory | Separate evidence plans and physical admission |
+| Transport / UI / production | **Not proven** | Transport authority, runtime acceptance and production backup/restore/release evidence |
+
+Run the dependency-free integration audit from the repository root:
+
+```bash
+node scripts/architecture/validate-whole-repository.mjs
+node scripts/tests/validate-validators.mjs
+node --test scripts/tests/validate-isolated-database-target.mjs
+node scripts/packaging/validate-apply-guards.mjs pins
+```
+
+`Whole Repository Integration Audit` runs on every PR and every main update, without path filters. It executes every standalone authority/admission validator and checks module dependencies, Application-owned ports, isolated database entry guards, and future-slice gates. Structural checks supplement exact-source PostgreSQL evidence; they cannot prove runtime authorization or deployed behavior.
+
+Database migration, replay, and integration entry points currently require `TEACH_ISOLATED_DB=1` and a loopback PostgreSQL URL naming a disposable `teach_v2` test database. Remote targets, target-changing query parameters, and shared/production names are rejected before a Pool is created. The isolation declaration is an operator assertion; it is not production authorization or a backup/restore proof. Shared/production execution remains **BLOCKED**.
+
+See the [whole-repository audit findings and dependency diagram](verification/whole-repository/2026-10-04-audit.md).

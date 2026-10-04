@@ -1,0 +1,27 @@
+name: Whole Repository Integration Audit
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Reconcile every authority, admission, source boundary, and next gate
+        run: node scripts/architecture/validate-whole-repository.mjs
+      - name: Test isolated database execution denials
+        run: node --test scripts/tests/validate-isolated-database-target.mjs
+      - name: Test detached trusted-input representations
+        run: node --test scripts/tests/validate-persistence-input-snapshots.mjs
+      - name: Verify APPLY pins and structural migration history
+        run: node scripts/packaging/validate-apply-guards.mjs pins
+      - name: Verify production evidence remains fail-closed
+        run: node scripts/tests/validate-production-proof.mjs
