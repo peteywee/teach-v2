@@ -91,8 +91,11 @@ if (!repository.includes('pg_advisory_xact_lock')) {
     'SLICE-P01 implementation: concurrency-safe idempotency binding guard missing',
   );
 }
+const openInputBody =
+  domain.match(/export interface OpenReconciliationRecordInput \\{([\\s\\S]*?)\\n\\}/)?.[1] ?? '';
 if (
-  domain.includes('readonly scopeFingerprint: string;') ||
+  openInputBody.includes('scopeFingerprint') ||
+  !openInputBody.includes('authoritativeScope') ||
   !repository.includes('deriveScopeFingerprint(input.authoritativeScope)') ||
   !repository.includes('deriveScopeFingerprint(authoritativeScope)')
 ) {
