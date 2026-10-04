@@ -9,5 +9,5 @@ if (errors.length) {
   process.exit(1);
 }
 console.log('SLICE-P05 FOUNDATION EVIDENCE PASS');
-console.log('Physical implementation: PENDING; runtime activation: BLOCKED');
+console.log('Historical foundation reconciled with separate physical evidence; runtime activation: BLOCKED');
 console.log('Shared/production migration execution authorized: false');

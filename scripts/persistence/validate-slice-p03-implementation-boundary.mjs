@@ -16,7 +16,7 @@ const setupRepo=text('src/modules/identity/infrastructure/persistence/postgres-s
 const resetRepo=text('src/modules/identity/infrastructure/persistence/postgres-password-reset-token-repository.ts');
 
 if(admission?.version!=='1.0.0' || admission?.decision!=='ADMIT' || admission?.implementation_authorized!==true) errors.push('SLICE-P03 implementation: active ADMIT authority missing');
-if(readiness?.version!=='1.2.0' || readiness?.candidate_slices?.find(x=>x.id==='SLICE-P03')?.current_state!=='ADMITTED') errors.push('SLICE-P03 implementation: readiness 1.2.0 ADMITTED state required');
+if(readiness?.version!=='1.3.0' || readiness?.candidate_slices?.find(x=>x.id==='SLICE-P03')?.current_state!=='ADMITTED') errors.push('SLICE-P03 implementation: readiness 1.3.0 ADMITTED state required');
 if(readiness?.implementation_guard?.shared_or_production_migration_execution_authorized!==false) errors.push('SLICE-P03 implementation: shared/production migration execution must remain blocked');
 
 const scope=registration?.scope_rules;
@@ -77,3 +77,4 @@ function walk(dir){
   }
   return out;
 }
+

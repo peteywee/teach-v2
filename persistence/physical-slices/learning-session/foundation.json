@@ -1,6 +1,6 @@
 {
   "foundation_id": "TEACH-SLICE-P05-DOMAIN-APPLICATION-FOUNDATION",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "status": "recorded",
   "issue": "#51",
   "baseline_commit": "9fa6f0eaae6132d0ff4a675f118ef2d4763839d7",
@@ -32,5 +32,7 @@
     "concurrent completion proves one successful ACTIVE-to-COMPLETED mutation"
   ],
   "shared_or_production_migration_execution_authorized": false,
-  "verification_source_commit": "933708354f1f01dfa7221dbfcfe3c58af2066def"
+  "verification_source_commit": "933708354f1f01dfa7221dbfcfe3c58af2066def",
+  "historical": true,
+  "superseded_current_state_by": "persistence/physical-slices/learning-session/implementation.json@1.0.0"
 }

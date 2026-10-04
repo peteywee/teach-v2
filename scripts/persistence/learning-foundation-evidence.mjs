@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { inspectMigrationHistory } from '../packaging/migration-history-guards.mjs';
+import { inspectLearningImplementation } from './learning-implementation-evidence.mjs';
 
 // This validates the current Domain/Application-only checkpoint. It does not
 // manufacture runtime or PostgreSQL proof from recorded claims or test doubles.
@@ -17,7 +18,7 @@ export function inspectLearningFoundation(root) {
   const readiness = load('persistence/physical-slices/readiness.json');
   const journal = load('drizzle/meta/_journal.json');
   if (foundation?.foundation_id !== 'TEACH-SLICE-P05-DOMAIN-APPLICATION-FOUNDATION' ||
-      foundation?.version !== '1.0.1' || foundation?.status !== 'recorded' || foundation?.issue !== '#51' ||
+      foundation?.version !== '1.1.0' || foundation?.historical !== true || foundation?.superseded_current_state_by !== 'persistence/physical-slices/learning-session/implementation.json@1.0.0' || foundation?.status !== 'recorded' || foundation?.issue !== '#51' ||
       foundation?.scope !== 'Domain model and Application ports/service; no physical persistence implementation') {
     fail('foundation identity/version/scope mismatch');
   }
@@ -52,43 +53,45 @@ export function inspectLearningFoundation(root) {
     fail('shared/production migration execution must remain unauthorized');
   }
   const p05 = readiness?.current_physical_slice_admissions?.find((item) => item?.id === 'SLICE-P05');
-  if (p05?.implementation_state !== 'ADMITTED') fail('P05 readiness must remain admitted with physical implementation pending');
+  if (p05?.implementation_state !== 'IMPLEMENTED') fail('P05 readiness must remain admitted with separate physical implementation evidence');
   const walk = (path) => readdirSync(join(root, path), { withFileTypes: true }).flatMap((entry) =>
     entry.isDirectory() ? walk(`${path}/${entry.name}`) : [`${path}/${entry.name}`]);
   try {
     const files = walk('src/modules');
-    const repositoryCount = files.filter((path) => path.endsWith('.ts') && !path.endsWith('.test.ts'))
+    const repositoryCount = files.filter((path) => !path.startsWith('src/modules/learning/') && path.endsWith('.ts') && !path.endsWith('.test.ts'))
       .reduce((count, path) => count + [...readFileSync(join(root, path), 'utf8')
         .matchAll(/\bexport\s+class\s+Postgres[A-Za-z0-9_]*Repository\b/g)].length, 0);
     const learning = files.filter((path) => path.startsWith('src/modules/learning/') && path.endsWith('.ts') && !path.endsWith('.test.ts'));
     for (const path of learning) {
       const source = readFileSync(join(root, path), 'utf8');
-      if (path.includes('/infrastructure/') || /\bpgTable\s*\(|from\s+['"](?:drizzle-orm(?:\/[^'"]*)?|pg)['"]|\bclass\s+Postgres\w*Repository\b/.test(source)) {
+      const admittedPhysicalPaths = ['src/modules/learning/infrastructure/persistence/schema.ts', 'src/modules/learning/infrastructure/persistence/postgres-learning-session-repository.ts'];
+      if (!admittedPhysicalPaths.includes(path) && (path.includes('/infrastructure/') || /\bpgTable\s*\(|from\s+['"](?:drizzle-orm(?:\/[^'"]*)?|pg)['"]|\bclass\s+Postgres\w*Repository\b/.test(source))) {
         fail(`physical Learning implementation cannot be covered by foundation-only evidence: ${path}`);
       }
     }
     const entries = journal?.entries;
     if (!Array.isArray(entries) || entries.length === 0) fail('nonempty migration journal required');
     else {
-      const latest = load(`drizzle/meta/${String(entries.length - 1).padStart(4, '0')}_snapshot.json`);
+      // Historical foundation totals refer to the immutable P04 prefix.
+      const latest = load('drizzle/meta/0003_snapshot.json');
       const tables = latest?.tables;
       if (!tables || typeof tables !== 'object' || Array.isArray(tables)) fail('final snapshot tables required');
       else {
         if (Object.keys(tables).some((name) => /learning/i.test(name))) fail('Learning physical tables require separate implementation evidence');
-        const actual = { tables: Object.keys(tables).length, migration_files: entries.length, repositories: repositoryCount };
-        const fields = { tables: 'tables_generated', migration_files: 'migrations_generated', repositories: 'repositories_generated' };
+        const actual = { tables: Object.keys(tables).length, migration_files: entries.filter((entry) => entry.idx <= 3).length, repositories: repositoryCount };
         for (const [key, value] of Object.entries(actual)) {
-          if (foundation?.physical_artifact_totals?.[key] !== value || readiness?.implementation_guard?.[fields[key]] !== value) {
-            fail(`${key} totals must match actual artifacts (${value}) and readiness`);
+          if (foundation?.physical_artifact_totals?.[key] !== value) {
+            fail(`${key} totals must match actual artifacts (${value}) in the P04 foundation prefix`);
           }
         }
       }
     }
-    const implemented = readiness?.current_physical_slice_admissions?.filter((item) => ['PROVEN', 'IMPLEMENTED'].includes(item?.implementation_state)).length;
-    if (foundation?.implemented_physical_slices !== implemented || readiness?.implementation_guard?.implemented_slice_count !== implemented) {
+    const implemented = readiness?.current_physical_slice_admissions?.filter((item) => item?.id !== 'SLICE-P05' && ['PROVEN', 'IMPLEMENTED'].includes(item?.implementation_state)).length;
+    if (foundation?.implemented_physical_slices !== implemented) {
       fail('implemented physical slice count must match readiness implementation states');
     }
   } catch (error) { fail(`physical artifact inspection failed: ${error.message}`); }
   errors.push(...inspectMigrationHistory(root));
+  errors.push(...inspectLearningImplementation(root));
   return errors;
 }

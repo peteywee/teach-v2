@@ -70,11 +70,11 @@ if(admission?.decision!=='ADMIT' || admission?.physical_schema_authorized!==true
 if(admission?.shared_or_production_migration_execution_authorized!==false || admission?.full_relational_schema_authorized!==false) errors.push('SLICE-P02 admission: full schema or production execution over-authorized');
 
 const p02=readiness?.candidate_slices?.find(x=>x.id==='SLICE-P02');
-if(readiness?.version!=='1.2.0' || !readiness?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P01') || !readiness?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P02')) errors.push('SLICE-P02 admission: readiness must preserve P01 + P02 admissions');
+if(readiness?.version!=='1.3.0' || !readiness?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P01') || !readiness?.current_physical_slice_admissions?.some(x=>x.id==='SLICE-P02')) errors.push('SLICE-P02 admission: readiness must preserve P01 + P02 admissions');
 if(!p02 || p02.current_state!=='ADMITTED' || p02.implementation_authorized!==true || (p02.blockers||[]).length!==0) errors.push('SLICE-P02 admission: P02 readiness state mismatch');
 if(readiness?.evidence_states?.slice_p02_schema_admission!=='PROVEN' || readiness?.evidence_states?.slice_p02_implementation!=='PROVEN') errors.push('SLICE-P02 admission: evidence-state transition mismatch');
 if(readiness?.current_physical_slice_admissions?.find(x=>x.id==='SLICE-P02')?.implementation_state!=='IMPLEMENTED') errors.push('SLICE-P02 admission: subsequent P02 implementation evidence must be preserved');
-if(readiness?.implementation_guard?.tables_generated!==7 || readiness?.implementation_guard?.migrations_generated!==4 || readiness?.implementation_guard?.repositories_generated!==7 || readiness?.implementation_guard?.implemented_slice_count!==4) errors.push('SLICE-P02 admission: implemented artifact counts mismatch');
+if(readiness?.implementation_guard?.tables_generated!==8 || readiness?.implementation_guard?.migrations_generated!==5 || readiness?.implementation_guard?.repositories_generated!==8 || readiness?.implementation_guard?.implemented_slice_count!==5) errors.push('SLICE-P02 admission: implemented artifact counts mismatch');
 
 if(errors.length){
  console.error(`SLICE-P02 PHYSICAL-SCHEMA ADMISSION FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);

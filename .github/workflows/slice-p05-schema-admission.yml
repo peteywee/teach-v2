@@ -4,6 +4,9 @@ name: SLICE-P05 Schema Admission
 on:
   pull_request:
     paths:
+      - 'scripts/persistence/learning-implementation-evidence.mjs'
+      - 'scripts/persistence/validate-slice-p05-implementation-boundary.mjs'
+      - 'src/bootstrap/learning-persistence-schema.ts'
       - 'scripts/persistence/admission-criteria.mjs'
       - 'persistence/authority.json'
       - 'persistence/physical-slices/learning-session/**'
@@ -26,6 +29,9 @@ on:
   push:
     branches: [main]
     paths:
+      - 'scripts/persistence/learning-implementation-evidence.mjs'
+      - 'scripts/persistence/validate-slice-p05-implementation-boundary.mjs'
+      - 'src/bootstrap/learning-persistence-schema.ts'
       - 'scripts/persistence/admission-criteria.mjs'
       - 'persistence/authority.json'
       - 'persistence/physical-slices/learning-session/**'
