@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { and, eq, sql } from 'drizzle-orm';
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import {
@@ -11,6 +12,7 @@ import {
 import {
   assertConfirmedOutcome,
   validateOpenReconciliationRecordInput,
+  type JsonObject,
   type OpenReconciliationRecordInput,
   type ReconciliationRecord,
 } from '../../domain/reconciliation-record.js';
@@ -29,6 +31,7 @@ export class PostgresReconciliationRecordRepository
     input: OpenReconciliationRecordInput,
   ): Promise<ReconciliationRecord> {
     validateOpenReconciliationRecordInput(input);
+    const scopeFingerprint = deriveScopeFingerprint(input.authoritativeScope);
 
     return this.db.transaction(async (tx) => {
       if (input.idempotency) {
@@ -66,7 +69,7 @@ export class PostgresReconciliationRecordRepository
           status: 'OPEN',
           outcome: input.outcome,
           operationName: input.operationName,
-          scopeFingerprint: input.scopeFingerprint,
+          scopeFingerprint,
           authoritativeScope: input.authoritativeScope,
           providerName: input.providerName,
           providerReference: input.providerReference ?? null,
@@ -103,8 +106,9 @@ export class PostgresReconciliationRecordRepository
 
   async getById(
     id: string,
-    scopeFingerprint: string,
+    authoritativeScope: JsonObject,
   ): Promise<ReconciliationRecord | null> {
+    const scopeFingerprint = deriveScopeFingerprint(authoritativeScope);
     const [row] = await this.db
       .select()
       .from(reconciliationRecords)
@@ -141,7 +145,7 @@ export class PostgresReconciliationRecordRepository
           eq(reconciliationRecords.id, input.id),
           eq(
             reconciliationRecords.scopeFingerprint,
-            input.scopeFingerprint,
+            deriveScopeFingerprint(input.authoritativeScope),
           ),
           eq(reconciliationRecords.status, 'OPEN'),
         ),
@@ -150,7 +154,7 @@ export class PostgresReconciliationRecordRepository
 
     if (updated) return mapRow(updated);
 
-    const existing = await this.getById(input.id, input.scopeFingerprint);
+    const existing = await this.getById(input.id, input.authoritativeScope);
     if (!existing) throw new ReconciliationRecordNotFoundError();
 
     throw new ReconciliationRecordConflictError(
@@ -181,7 +185,7 @@ export class PostgresReconciliationRecordRepository
           eq(reconciliationRecords.id, input.id),
           eq(
             reconciliationRecords.scopeFingerprint,
-            input.scopeFingerprint,
+            deriveScopeFingerprint(input.authoritativeScope),
           ),
           eq(reconciliationRecords.status, 'OPEN'),
         ),
@@ -190,7 +194,7 @@ export class PostgresReconciliationRecordRepository
 
     if (updated) return mapRow(updated);
 
-    const existing = await this.getById(input.id, input.scopeFingerprint);
+    const existing = await this.getById(input.id, input.authoritativeScope);
     if (!existing) throw new ReconciliationRecordNotFoundError();
 
     if (
@@ -215,7 +219,7 @@ function assertEquivalentReplay(
   if (
     existing.outcome !== input.outcome ||
     existing.operationName !== input.operationName ||
-    existing.scopeFingerprint !== input.scopeFingerprint ||
+    existing.scopeFingerprint !== deriveScopeFingerprint(input.authoritativeScope) ||
     stableJson(existing.authoritativeScope) !== stableJson(input.authoritativeScope) ||
     existing.providerName !== input.providerName ||
     existing.providerReference !== (input.providerReference ?? null) ||
@@ -269,4 +273,8 @@ function stableJson(value: unknown): string {
       .join(',')}}`;
   }
   return JSON.stringify(value);
+}
+
+export function deriveScopeFingerprint(scope: JsonObject): string {
+  return createHash('sha256').update(stableJson(scope)).digest('hex');
 }

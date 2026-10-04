@@ -7,7 +7,7 @@ import type {
 
 export interface ReconciliationReadbackUnavailableInput {
   readonly id: string;
-  readonly scopeFingerprint: string;
+  readonly authoritativeScope: JsonObject;
   readonly readbackAt: Date;
   readonly error: string;
   readonly providerDetail?: JsonObject;
@@ -15,7 +15,7 @@ export interface ReconciliationReadbackUnavailableInput {
 
 export interface ResolveReconciliationRecordInput {
   readonly id: string;
-  readonly scopeFingerprint: string;
+  readonly authoritativeScope: JsonObject;
   readonly outcome: ConfirmedExternalEffectOutcome;
   readonly readbackAt: Date;
   readonly providerDetail?: JsonObject;
@@ -26,7 +26,7 @@ export interface ReconciliationRecordRepository {
 
   getById(
     id: string,
-    scopeFingerprint: string,
+    authoritativeScope: JsonObject,
   ): Promise<ReconciliationRecord | null>;
 
   recordReadbackUnavailable(
@@ -54,7 +54,7 @@ export class ReconciliationRecordConflictError extends Error {
 
 export class IdempotencyKeyBindingConflictError extends Error {
   constructor() {
-    super('idempotency key is already bound to a different operation or payload');
+    super('idempotency key is already bound to a different operation, payload, or key source');
     this.name = 'IdempotencyKeyBindingConflictError';
   }
 }

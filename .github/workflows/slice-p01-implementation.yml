@@ -69,6 +69,13 @@ jobs:
           echo '---BEGIN-PNPM-LOCK---'
           cat pnpm-lock.yaml
           echo '---END-PNPM-LOCK---'
+      - name: Emit generated Drizzle snapshot
+        run: |
+          rm -rf /tmp/drizzle-snapshot
+          pnpm exec drizzle-kit generate --dialect=postgresql --schema=./src/modules/transaction-control/infrastructure/persistence/schema.ts --out=/tmp/drizzle-snapshot --name=slice_p01
+          echo '---BEGIN-DRIZZLE-SNAPSHOT---'
+          cat /tmp/drizzle-snapshot/meta/0000_snapshot.json
+          echo '---END-DRIZZLE-SNAPSHOT---'
       - name: Typecheck
         run: pnpm typecheck
       - name: Domain tests

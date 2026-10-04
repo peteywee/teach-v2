@@ -40,7 +40,6 @@ export interface OpenReconciliationRecordInput {
   readonly id: string;
   readonly outcome: OpenExternalEffectOutcome;
   readonly operationName: string;
-  readonly scopeFingerprint: string;
   readonly authoritativeScope: JsonObject;
   readonly providerName: string;
   readonly providerReference?: string;
@@ -75,7 +74,6 @@ export function validateOpenReconciliationRecordInput(
 ): void {
   requireNonBlank(input.id, 'id');
   requireNonBlank(input.operationName, 'operationName');
-  requireNonBlank(input.scopeFingerprint, 'scopeFingerprint');
   requireNonBlank(input.providerName, 'providerName');
 
   if (input.providerReference !== undefined) {

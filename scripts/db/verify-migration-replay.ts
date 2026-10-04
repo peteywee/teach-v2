@@ -10,22 +10,38 @@ if (!connectionString) {
 }
 
 const tableName = 'transaction_control_reconciliation_records';
-const pool = new Pool({ connectionString });
+const baseUrl = new URL(connectionString);
+const adminUrl = new URL(connectionString);
+adminUrl.pathname = '/postgres';
+
+const suffix = String(process.pid);
+const dbNames = [
+  `teach_v2_replay_a_${suffix}`,
+  `teach_v2_replay_b_${suffix}`,
+] as const;
+
+const admin = new Pool({ connectionString: adminUrl.toString() });
 
 try {
-  const before = await pool.query<{ table_name: string | null }>(
-    "select to_regclass('public.transaction_control_reconciliation_records')::text as table_name",
-  );
-  if (before.rows[0]?.table_name !== null) {
-    throw new Error('migration replay requires an empty SLICE-P01 application schema');
+  for (const name of dbNames) {
+    await dropDatabase(name);
+    await admin.query(`create database ${quoteIdent(name)}`);
   }
 
-  const db = drizzle(pool);
-  await migrate(db, { migrationsFolder: 'drizzle' });
-  const first = await fingerprint(pool);
-
-  await migrate(db, { migrationsFolder: 'drizzle' });
-  const second = await fingerprint(pool);
+  const [first, second] = await Promise.all(
+    dbNames.map(async (name) => {
+      const url = new URL(baseUrl);
+      url.pathname = `/${name}`;
+      const pool = new Pool({ connectionString: url.toString() });
+      try {
+        const db = drizzle(pool);
+        await migrate(db, { migrationsFolder: 'drizzle' });
+        return await fingerprint(pool);
+      } finally {
+        await pool.end();
+      }
+    }),
+  );
 
   if (first !== second) {
     throw new Error(
@@ -33,10 +49,30 @@ try {
     );
   }
 
-  console.log('SLICE-P01 empty-database migration replay PASS');
+  console.log('SLICE-P01 independent empty-database migration replay PASS');
   console.log(`schema fingerprint: ${first}`);
 } finally {
-  await pool.end();
+  for (const name of dbNames) {
+    await dropDatabase(name);
+  }
+  await admin.end();
+}
+
+async function dropDatabase(name: string): Promise<void> {
+  await admin.query(
+    `select pg_terminate_backend(pid)
+       from pg_stat_activity
+      where datname = $1 and pid <> pg_backend_pid()`,
+    [name],
+  );
+  await admin.query(`drop database if exists ${quoteIdent(name)}`);
+}
+
+function quoteIdent(value: string): string {
+  if (!/^[a-z0-9_]+$/i.test(value)) {
+    throw new Error('unsafe database identifier');
+  }
+  return '"' + value.replaceAll('"', '""') + '"';
 }
 
 async function fingerprint(pool: pg.Pool): Promise<string> {
@@ -107,6 +143,15 @@ async function fingerprint(pool: pg.Pool): Promise<string> {
     [tableName],
   );
 
+  const functions = await pool.query(
+    `select p.proname, pg_get_functiondef(p.oid) as definition
+       from pg_proc p
+       join pg_namespace n on n.oid = p.pronamespace
+      where n.nspname = 'public'
+        and p.proname = 'transaction_control_guard_reconciliation_record_update'
+      order by p.proname`,
+  );
+
   for (const required of [
     'transaction_control_reconciliation_status_outcome_check',
     'transaction_control_reconciliation_idempotency_binding_check',
@@ -137,6 +182,10 @@ async function fingerprint(pool: pg.Pool): Promise<string> {
     throw new Error('missing reconciliation update guard trigger');
   }
 
+  if (functions.rows.length !== 1) {
+    throw new Error('missing reconciliation guard function definition');
+  }
+
   return createHash('sha256')
     .update(
       JSON.stringify({
@@ -144,6 +193,7 @@ async function fingerprint(pool: pg.Pool): Promise<string> {
         constraints: constraints.rows,
         indexes: indexes.rows,
         triggers: triggers.rows,
+        functions: functions.rows,
       }),
     )
     .digest('hex');

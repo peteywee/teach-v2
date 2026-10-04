@@ -19,6 +19,9 @@ const schema = text(
 const repository = text(
   'src/modules/transaction-control/infrastructure/persistence/postgres-reconciliation-record-repository.ts',
 );
+const domain = text(
+  'src/modules/transaction-control/domain/reconciliation-record.ts',
+);
 const migration = text('drizzle/0000_slice_p01_reconciliation.sql');
 
 if (
@@ -88,9 +91,13 @@ if (!repository.includes('pg_advisory_xact_lock')) {
     'SLICE-P01 implementation: concurrency-safe idempotency binding guard missing',
   );
 }
-if (!repository.includes('scopeFingerprint')) {
+if (
+  domain.includes('readonly scopeFingerprint: string;') ||
+  !repository.includes('deriveScopeFingerprint(input.authoritativeScope)') ||
+  !repository.includes('deriveScopeFingerprint(authoritativeScope)')
+) {
   errors.push(
-    'SLICE-P01 implementation: authoritative scope predicate missing from repository',
+    'SLICE-P01 implementation: scope fingerprint must be derived from one authoritative scope object',
   );
 }
 if (

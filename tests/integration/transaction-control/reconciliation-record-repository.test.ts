@@ -4,6 +4,7 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import pg from 'pg';
 import {
   IdempotencyKeyBindingConflictError,
+  ReconciliationRecordConflictError,
   ReconciliationRecordNotFoundError,
 } from '../../../src/modules/transaction-control/application/ports/reconciliation-record-repository.js';
 import type { OpenReconciliationRecordInput } from '../../../src/modules/transaction-control/domain/reconciliation-record.js';
@@ -36,7 +37,7 @@ test('unreadable provider state keeps the record OPEN and unresolved', async () 
 
   const row = await repository.recordReadbackUnavailable({
     id: 'recon-unreadable',
-    scopeFingerprint: 'org:acme',
+    authoritativeScope: { organizationId: 'acme' },
     readbackAt: new Date('2026-10-04T12:00:00Z'),
     error: 'provider unavailable',
   });
@@ -52,7 +53,7 @@ test('canonical readback resolves only to a confirmed outcome', async () => {
 
   const row = await repository.resolve({
     id: 'recon-success',
-    scopeFingerprint: 'org:acme',
+    authoritativeScope: { organizationId: 'acme' },
     outcome: 'CONFIRMED_SUCCESS',
     readbackAt: new Date('2026-10-04T12:05:00Z'),
     providerDetail: { messageId: 'provider-123' },
@@ -128,15 +129,51 @@ test('concurrent same-id replay produces one authoritative row', async () => {
   assert.equal(count.rows[0]?.count, '1');
 });
 
-test('concurrent conflicting IdempotencyKey bindings allow exactly one winner', async () => {
-  const settled = await Promise.allSettled([
-    repository.createOpen(
-      input({ id: 'recon-race-a', operationName: 'SendInvitationEmail' }),
-    ),
-    repository.createOpen(
-      input({ id: 'recon-race-b', operationName: 'IssueCertification' }),
-    ),
-  ]);
+test('overlapping conflicting IdempotencyKey bindings serialize and allow one winner', async () => {
+  const lockHolder = await pool.connect();
+  let settledCount = 0;
+  let first: Promise<unknown> | undefined;
+  let second: Promise<unknown> | undefined;
+  let blockedBeforeRelease = false;
+
+  try {
+    await lockHolder.query('begin');
+    await lockHolder.query(
+      'select pg_advisory_xact_lock(hashtextextended($1, 0))',
+      ['idem-1'],
+    );
+
+    first = repository
+      .createOpen(
+        input({ id: 'recon-race-a', operationName: 'SendInvitationEmail' }),
+      )
+      .finally(() => {
+        settledCount++;
+      });
+    second = repository
+      .createOpen(
+        input({ id: 'recon-race-b', operationName: 'IssueCertification' }),
+      )
+      .finally(() => {
+        settledCount++;
+      });
+
+    await new Promise((resolve) => setTimeout(resolve, 75));
+    blockedBeforeRelease = settledCount === 0;
+    await lockHolder.query('commit');
+  } finally {
+    try {
+      await lockHolder.query('rollback');
+    } catch {}
+    lockHolder.release();
+  }
+
+  const settled = await Promise.allSettled([first!, second!]);
+  assert.equal(
+    blockedBeforeRelease,
+    true,
+    'both repository writes must block behind the held IdempotencyKey advisory lock',
+  );
 
   const fulfilled = settled.filter((result) => result.status === 'fulfilled');
   const rejected = settled.filter((result) => result.status === 'rejected');
@@ -154,6 +191,41 @@ test('concurrent conflicting IdempotencyKey bindings allow exactly one winner', 
   assert.equal(count.rows[0]?.count, '1');
 });
 
+test('same record id rejects changed immutable scope and idempotency horizons', async () => {
+  const original = input({ id: 'recon-immutable-replay' });
+  await repository.createOpen(original);
+
+  await assert.rejects(
+    repository.createOpen({
+      ...original,
+      authoritativeScope: { organizationId: 'other' },
+    }),
+    ReconciliationRecordConflictError,
+  );
+
+  await assert.rejects(
+    repository.createOpen({
+      ...original,
+      idempotency: {
+        ...original.idempotency!,
+        retryHorizonEndsAt: new Date('2026-10-05T01:00:00Z'),
+      },
+    }),
+    ReconciliationRecordConflictError,
+  );
+
+  await assert.rejects(
+    repository.createOpen({
+      ...original,
+      idempotency: {
+        ...original.idempotency!,
+        retentionUntil: new Date('2026-10-06T01:00:00Z'),
+      },
+    }),
+    ReconciliationRecordConflictError,
+  );
+});
+
 test('many records may reference one key when operation and payload binding are identical', async () => {
   await repository.createOpen(input({ id: 'recon-many-1' }));
   await repository.createOpen(input({ id: 'recon-many-2' }));
@@ -167,12 +239,12 @@ test('many records may reference one key when operation and payload binding are 
 test('authoritative scope is required on reads and cannot be broadened after insert', async () => {
   await repository.createOpen(input({ id: 'recon-scope' }));
 
-  assert.equal(await repository.getById('recon-scope', 'org:other'), null);
+  assert.equal(await repository.getById('recon-scope', { organizationId: 'other' }), null);
 
   await assert.rejects(
     repository.resolve({
       id: 'recon-scope',
-      scopeFingerprint: 'org:other',
+      authoritativeScope: { organizationId: 'other' },
       outcome: 'CONFIRMED_NO_EFFECT',
       readbackAt: new Date('2026-10-04T12:10:00Z'),
     }),
@@ -198,7 +270,6 @@ function input(
     id: overrides.id ?? 'recon-1',
     outcome: 'AMBIGUOUS',
     operationName: overrides.operationName ?? 'SendInvitationEmail',
-    scopeFingerprint: 'org:acme',
     authoritativeScope: { organizationId: 'acme' },
     providerName: 'email-provider',
     providerReference: 'attempt-1',
