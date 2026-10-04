@@ -603,6 +603,35 @@ test(
 );
 
 // ---------------------------------------------------------------------------
+// SLICE-P03 implementation boundary
+// ---------------------------------------------------------------------------
+
+test(
+  "slice-p03 implementation: unauthorized admission fails",
+  "scripts/persistence/validate-slice-p03-implementation-boundary.mjs",
+  (dir) => {
+    const d = readJson(
+      dir,
+      "persistence/physical-slices/identity-tokens/admission.json",
+    );
+    d.decision = "BLOCK";
+    writeJson(
+      dir,
+      "persistence/physical-slices/identity-tokens/admission.json",
+      d,
+    );
+  },
+  { pattern: /active ADMIT authority missing/ }
+);
+
+test(
+  "slice-p03 implementation: clean repo passes (positive control)",
+  "scripts/persistence/validate-slice-p03-implementation-boundary.mjs",
+  () => {},
+  { pass: true }
+);
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 

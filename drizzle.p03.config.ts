@@ -10,7 +10,7 @@ export default defineConfig({
     './src/modules/identity/infrastructure/persistence/schema.ts',
     './src/modules/identity/infrastructure/persistence/token-schema.ts',
   ],
-  out: './drizzle',
+  out: './.tmp-drizzle-p03',
   dialect: 'postgresql',
   dbCredentials: { url },
   strict: true,
