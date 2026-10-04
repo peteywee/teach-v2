@@ -206,7 +206,7 @@
         "Location",
         "Entitlement"
       ],
-      "current_state": "BLOCKED",
+      "current_state": "IMPLEMENTED",
       "blockers": [
         "Membership, Location, and Entitlement remain candidate",
         "OQ-TEN-1 remains open and directly affects Membership shape",
