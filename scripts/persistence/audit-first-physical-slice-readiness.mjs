@@ -15,6 +15,7 @@ const rel=load('kernel/relationships.json');
 const inv=load('kernel/invariants.json');
 const dt=load('kernel/decision-tables.json');
 const r=load('persistence/physical-slices/readiness.json');
+const implementation=load('persistence/physical-slices/transaction-control/implementation.json');
 
 if (m?.version!=='0.15.0') errors.push('whole-stack audit: K00 must be 0.15.0');
 const checks=[
@@ -31,7 +32,10 @@ const checks=[
  ['decision-tables-candidate',(dt?.entries||[]).filter(x=>x.status==='candidate').length,8],
 ];
 for(const [name,a,e] of checks) if(a!==e) errors.push(`whole-stack audit: ${name} expected ${e}, found ${a}`);
-if (r?.current_admitted_slice_count!==1 || r?.current_physical_slice_admissions?.[0]?.id!=='SLICE-P01') errors.push('whole-stack audit: expected exactly SLICE-P01 admitted');
+if (r?.version!=='0.7.0' || r?.current_admitted_slice_count!==1 || r?.current_physical_slice_admissions?.[0]?.id!=='SLICE-P01') errors.push('whole-stack audit: expected exactly SLICE-P01 admitted/implemented at readiness 0.7.0');
+if (r?.candidate_slices?.find(x=>x.id==='SLICE-P01')?.current_state!=='IMPLEMENTED') errors.push('whole-stack audit: SLICE-P01 must be IMPLEMENTED');
+if (implementation?.version!=='1.0.0' || implementation?.status!=='recorded' || implementation?.verification?.migration_determinism!=='PROVEN') errors.push('whole-stack audit: verified implementation evidence missing');
+if (r?.implementation_guard?.tables_generated!==1 || r?.implementation_guard?.migrations_generated!==1 || r?.implementation_guard?.repositories_generated!==1) errors.push('whole-stack audit: implemented artifact counts must be 1/1/1');
 
 if(errors.length){
  console.error(`POST-CLOSURE WHOLE-STACK AUDIT FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
@@ -40,6 +44,6 @@ if(errors.length){
 }
 console.log('POST-CLOSURE WHOLE-STACK AUDIT PASS');
 console.log('PROVEN: K00 0.15.0 exact promotion counts');
-console.log('PROVEN: SLICE-P01 physical schema admitted');
+console.log('PROVEN: SLICE-P01 physical schema admitted and implementation verified');
 console.log('BLOCKED: full relational schema and shared/production migration execution');
-console.log('NEXT: implement SLICE-P01 and prove acceptance evidence');
+console.log('NEXT: C21 recovery/release proof before any shared/production migration execution');
