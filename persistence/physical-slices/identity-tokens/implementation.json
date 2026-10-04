@@ -1,7 +1,7 @@
 {
   "implementation_id": "TEACH-SLICE-P03-IMPLEMENTATION",
-  "version": "0.1.0",
-  "status": "candidate",
+  "version": "1.0.0",
+  "status": "proven",
   "issue": "#44",
   "baseline_commit": "d876ccb4727ef5a5106785e5882ca0d751c22f12",
   "admission": "persistence/physical-slices/identity-tokens/admission.json@1.0.0",
@@ -18,7 +18,7 @@
       "identity_setup_tokens",
       "identity_password_reset_tokens"
     ],
-    "migration": "PENDING CI-generated immutable 0002",
+    "migration": "drizzle/0002_quick_venus.sql (CI-generated immutable)",
     "repositories": [
       "src/modules/identity/infrastructure/persistence/postgres-invitation-repository.ts",
       "src/modules/identity/infrastructure/persistence/postgres-setup-token-repository.ts",
@@ -26,16 +26,24 @@
     ]
   },
   "verification": {
-    "typecheck": "PENDING",
-    "domain_tests": "PENDING",
-    "implementation_boundary": "PENDING",
-    "migration_generation": "PENDING",
-    "two_empty_database_replay": "PENDING",
-    "p02_to_p03_upgrade_replay": "PENDING",
-    "postgres_integration_tests": "PENDING",
-    "validator_negative_paths": "PENDING",
-    "exact_head_ci": "PENDING"
+    "typecheck": "PASS",
+    "domain_tests": "PASS",
+    "implementation_boundary": "PASS",
+    "migration_generation": "PASS (deterministic, immutable 0002)",
+    "two_empty_database_replay": "PASS",
+    "p02_to_p03_upgrade_replay": "PASS",
+    "postgres_integration_tests": "PASS",
+    "validator_negative_paths": "PASS",
+    "exact_head_ci": "12/12 PASS"
   },
   "shared_or_production_migration_execution_authorized": false,
-  "full_relational_schema_authorized": false
+  "full_relational_schema_authorized": false,
+  "evidence": {
+    "implementation_head": "a5637045",
+    "merge_commit": "8eaee310a0895e4467d1b9ab3d0c3adeb3251460",
+    "ci_checks": "12/12 green",
+    "p02_replay_fix": "pinned to admitted migration prefix (0000->0001)"
+  },
+  "proven_on": "2026-10-04",
+  "proven_issue": "#44"
 }

@@ -39,7 +39,7 @@ if (!p02 || p02.current_state!=='ADMITTED' || (p02.blockers_removed_by_owner_dec
 const p03=r?.candidate_slices?.find(x=>x.id==='SLICE-P03');
 if (!p03 || p03.current_state!=='ADMITTED' || p03.implementation_authorized!==true || (p03.blockers||[]).length!==0) errors.push('whole-stack audit: P03 must be admitted and implementation-authorized');
 if (implementation?.version!=='1.0.0' || implementation?.status!=='recorded' || implementation?.verification?.migration_determinism!=='PROVEN') errors.push('whole-stack audit: verified implementation evidence missing');
-if (r?.implementation_guard?.tables_generated!==3 || r?.implementation_guard?.migrations_generated!==2 || r?.implementation_guard?.repositories_generated!==3) errors.push('whole-stack audit: implemented artifact counts must be 3/2/3');
+if (r?.implementation_guard?.tables_generated!==6 || r?.implementation_guard?.migrations_generated!==3 || r?.implementation_guard?.repositories_generated!==6) errors.push('whole-stack audit: implemented artifact counts must be 6/3/6');
 
 if(errors.length){
  console.error(`POST-CLOSURE WHOLE-STACK AUDIT FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);

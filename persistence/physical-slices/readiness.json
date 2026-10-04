@@ -74,7 +74,8 @@
       "implementation_authorized": true,
       "migration_authoring_authorized": true,
       "shared_or_production_migration_execution_authorized": false,
-      "implementation_state": "PENDING"
+      "implementation_state": "IMPLEMENTED",
+      "implementation": "persistence/physical-slices/identity-tokens/implementation.json@1.0.0"
     }
   ],
   "current_admitted_slice_count": 3,
@@ -244,21 +245,21 @@
     }
   ],
   "narrowed_next_lane": {
-    "preferred_slice": "SLICE-P03",
-    "reason": "SLICE-P03 is admitted for bounded Identity-owned Invitation and single-use token persistence implementation.",
+    "preferred_slice": "TBD-P04-audit",
+    "reason": "P03 complete; next dependency-ready lane to be determined by audit.",
     "owner_decisions_required": [],
-    "physical_implementation_authorized": true,
-    "next_required_gate": "Implement SLICE-P03 physical persistence and prove acceptance evidence",
+    "physical_implementation_authorized": false,
+    "next_required_gate": "Audit P04 for next dependency-ready lane",
     "semantic_promotions_required": []
   },
   "implementation_guard": {
-    "tables_generated": 3,
-    "migrations_generated": 2,
-    "repositories_generated": 3,
+    "tables_generated": 6,
+    "migrations_generated": 3,
+    "repositories_generated": 6,
     "physical_schema_authorized": true,
     "shared_or_production_migration_execution_authorized": false,
     "full_relational_schema_authorized": false,
-    "implemented_slice_count": 2
+    "implemented_slice_count": 3
   },
   "evidence_states": {
     "persistence_authority": "PROVEN",
@@ -285,6 +286,6 @@
     "slice_p03_relationship_registration": "PROVEN",
     "slice_p03_admission_evidence_plan": "PROVEN",
     "slice_p03_schema_admission": "PROVEN",
-    "slice_p03_implementation": "BLOCKED"
+    "slice_p03_implementation": "PROVEN"
   }
 }
