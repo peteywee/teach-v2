@@ -1,6 +1,6 @@
 {
   "readiness_id": "TEACH-FIRST-PHYSICAL-SLICE-READINESS",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-04",
@@ -8,17 +8,30 @@
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "39e1b40218cde2f6be2ce94aec8cc3f6e2fcd677",
+    "commit": "d6a6e33db95752174445806ef81d51147f265f9c",
     "kernel_version": "0.15.0",
     "persistence_authority_version": "1.0.0",
     "semantic_closure_registration_version": "1.0.0",
     "transactioncontrol_decision_registration_version": "1.0.0",
     "relationship_registration_commit": "8b2acf2c8d121315641cd726528a7add926331cd",
-    "relationship_promotion_issue": "#24"
+    "relationship_promotion_issue": "#24",
+    "schema_admission_issue": "#26"
   },
   "admission_rule": "ADMIT only when every semantic dependency and every shape-affecting owner decision required by the physical schema is approved. Missing, candidate, UNKNOWN, BLOCKED, or contradictory evidence fails closed.",
-  "current_physical_slice_admissions": [],
-  "current_admitted_slice_count": 0,
+  "current_physical_slice_admissions": [
+    {
+      "id": "SLICE-P01",
+      "name": "TransactionControl reconciliation persistence",
+      "record": "ReconciliationRecord",
+      "owning_module": "TransactionControl",
+      "admission": "persistence/physical-slices/transaction-control/admission.json@2.0.0",
+      "status": "ADMITTED",
+      "implementation_authorized": true,
+      "migration_authoring_authorized": true,
+      "shared_or_production_migration_execution_authorized": false
+    }
+  ],
+  "current_admitted_slice_count": 1,
   "candidate_slices": [
     {
       "id": "SLICE-P01",
@@ -27,10 +40,8 @@
       "records": [
         "ReconciliationRecord"
       ],
-      "current_state": "BLOCKED",
-      "blockers": [
-        "fresh Persistence schema-admission rerun is required against K00 0.15.0 after the owner-approved relationship promotion"
-      ],
+      "current_state": "ADMITTED",
+      "blockers": [],
       "blockers_removed_by_k00_014": [
         "IdempotencyKey is now approved"
       ],
@@ -48,7 +59,12 @@
       ],
       "blockers_removed_by_relationship_promotion": [
         "ReconciliationRecordUsesIdempotencyKey is owner-approved for candidate -> approved under issue #24"
-      ]
+      ],
+      "admission_issue": "#26",
+      "admission_version": "2.0.0",
+      "admitted_on": "2026-10-04",
+      "implementation_authorized": true,
+      "shared_or_production_migration_execution_authorized": false
     },
     {
       "id": "SLICE-P02",
@@ -149,28 +165,31 @@
   ],
   "narrowed_next_lane": {
     "preferred_slice": "SLICE-P01",
-    "reason": "The sole semantic blocker is owner-approved for promotion; physical implementation remains fail-closed until the admission gate is rerun against K00 0.15.0.",
+    "reason": "SLICE-P01 passes every Persistence Model schema-admission criterion at K00 0.15.0 and is the first admitted physical persistence slice.",
     "owner_decisions_required": [],
-    "physical_implementation_authorized": false,
-    "next_required_gate": "Rerun SLICE-P01 physical-schema admission against K00 0.15.0",
+    "physical_implementation_authorized": true,
+    "next_required_gate": "Implement SLICE-P01 physical persistence slice and prove acceptance evidence",
     "semantic_promotions_required": []
   },
   "implementation_guard": {
     "tables_generated": 0,
     "migrations_generated": 0,
     "repositories_generated": 0,
-    "physical_schema_authorized": false
+    "physical_schema_authorized": true,
+    "shared_or_production_migration_execution_authorized": false,
+    "full_relational_schema_authorized": false
   },
   "evidence_states": {
     "persistence_authority": "PROVEN",
     "semantic_closure_registration": "PROVEN",
-    "physical_slice_readiness": "UNKNOWN",
+    "physical_slice_readiness": "PROVEN",
     "unknown": "none promoted to pass",
     "contradictory": "none hidden",
     "transactioncontrol_owner_decisions": "PROVEN",
     "relationship_registration": "PROVEN",
     "migration_acceptance_evidence_plan": "PROVEN",
     "relationship_promotion": "PROVEN",
-    "admission_rerun": "PENDING"
+    "admission_rerun": "PROVEN",
+    "slice_p01_admission": "PROVEN"
   }
 }

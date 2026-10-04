@@ -31,7 +31,7 @@ const checks=[
  ['decision-tables-candidate',(dt?.entries||[]).filter(x=>x.status==='candidate').length,8],
 ];
 for(const [name,a,e] of checks) if(a!==e) errors.push(`whole-stack audit: ${name} expected ${e}, found ${a}`);
-if (r?.current_admitted_slice_count!==0) errors.push('whole-stack audit: physical slice admitted prematurely');
+if (r?.current_admitted_slice_count!==1 || r?.current_physical_slice_admissions?.[0]?.id!=='SLICE-P01') errors.push('whole-stack audit: expected exactly SLICE-P01 admitted');
 
 if(errors.length){
  console.error(`POST-CLOSURE WHOLE-STACK AUDIT FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
@@ -40,5 +40,6 @@ if(errors.length){
 }
 console.log('POST-CLOSURE WHOLE-STACK AUDIT PASS');
 console.log('PROVEN: K00 0.15.0 exact promotion counts');
-console.log('BLOCKED: physical schema — 0 admitted slices');
-console.log('NEXT: rerun SLICE-P01 physical-schema admission against K00 0.15.0');
+console.log('PROVEN: SLICE-P01 physical schema admitted');
+console.log('BLOCKED: full relational schema and shared/production migration execution');
+console.log('NEXT: implement SLICE-P01 and prove acceptance evidence');

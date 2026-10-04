@@ -11,7 +11,7 @@ const m=load('kernel/manifest.json');
 const ids=load('kernel/identifiers.json');
 
 if(m?.version!=='0.15.0') errors.push(`transaction slice: expected K00 0.15.0, found ${m?.version}`);
-if(r?.version!=='0.5.0' || r?.narrowed_next_lane?.preferred_slice!=='SLICE-P01') errors.push('transaction slice: readiness 0.4.0 must select SLICE-P01');
+if(r?.version!=='0.6.0' || r?.narrowed_next_lane?.preferred_slice!=='SLICE-P01') errors.push('transaction slice: readiness 0.6.0 must select SLICE-P01');
 if((ids?.entries||[]).find(x=>x.id==='IdempotencyKey')?.status!=='approved') errors.push('transaction slice: IdempotencyKey must be approved');
 if(p){
  if(p.proposal_id!=='TEACH-TRANSACTIONCONTROL-FIRST-SLICE-DECISION-PACKET' || p.version!=='0.1.0' || p.status!=='proposed') errors.push('transaction slice: proposal identity/state mismatch');
@@ -43,5 +43,5 @@ if(errors.length){
 console.log('TransactionControl first-slice decision packet PASS');
 console.log('Owner decisions approved: 4');
 console.log('Recommended relationship: many-to-zero-or-one');
-console.log('Relationship promotion: PROVEN; admission rerun pending');
-console.log('Physical schema: BLOCKED');
+console.log('Relationship promotion: PROVEN');
+console.log('Physical schema: SLICE-P01 ADMITTED; full relational schema remains BLOCKED');

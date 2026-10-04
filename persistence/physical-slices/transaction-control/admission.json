@@ -1,14 +1,22 @@
 {
   "admission_id": "TEACH-SLICE-P01-PHYSICAL-SCHEMA-ADMISSION",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "status": "recorded",
   "evaluated_on": "2026-10-04",
-  "issue": "#22",
-  "semantic_baseline_commit": "8b2acf2c8d121315641cd726528a7add926331cd",
+  "issue": "#26",
+  "semantic_baseline_commit": "d6a6e33db95752174445806ef81d51147f265f9c",
+  "kernel_version": "0.15.0",
   "slice": "SLICE-P01",
   "record": "ReconciliationRecord",
-  "decision": "BLOCK",
+  "owning_module": "TransactionControl",
+  "decision": "ADMIT",
   "governing_authority": "TEACH-PERSISTENCE-MODEL@1.0.0",
+  "prior_decision": {
+    "issue": "#22",
+    "version": "1.0.0",
+    "decision": "BLOCK",
+    "preserved_at": "persistence/physical-slices/transaction-control/admission-history/issue-22-block.json"
+  },
   "criteria": [
     {
       "criterion": "entity is approved",
@@ -27,18 +35,18 @@
     },
     {
       "criterion": "every relationship/cardinality encoded by the schema is approved",
-      "state": "BLOCKED",
-      "evidence": "ReconciliationRecordUsesIdempotencyKey is registered with many-to-zero-or-one cardinality but status is candidate"
+      "state": "PROVEN",
+      "evidence": "ReconciliationRecordUsesIdempotencyKey is approved in K00 0.15.0 with many-to-zero-or-one cardinality under issue #24"
     },
     {
       "criterion": "no blocking open question changes the record shape",
       "state": "PROVEN",
-      "evidence": "C22 OQ-TXN-1 resolved; TXN-SLICE-D01 through D04 owner-approved"
+      "evidence": "C22 OQ-TXN-1 resolved; TXN-SLICE-D01 through D04 owner-approved; OQ-TXN-2 is non-blocking"
     },
     {
       "criterion": "owning module is explicit",
       "state": "PROVEN",
-      "evidence": "TransactionControl owns ReconciliationRecord and the relationship"
+      "evidence": "TransactionControl owns ReconciliationRecord and ReconciliationRecordUsesIdempotencyKey"
     },
     {
       "criterion": "protected ownership/scope fields are derivable from approved semantics",
@@ -51,18 +59,33 @@
       "evidence": "persistence/physical-slices/transaction-control/admission-evidence-plan.json@1.0.0"
     }
   ],
-  "blockers": [
-    "ReconciliationRecordUsesIdempotencyKey must be explicitly owner-approved from candidate to approved before physical schema admission"
+  "blockers": [],
+  "admitted_physical_slices": 1,
+  "physical_schema_authorized": true,
+  "implementation_authorized": true,
+  "migration_authoring_authorized": true,
+  "shared_or_production_migration_execution_authorized": false,
+  "full_relational_schema_authorized": false,
+  "implementation_constraints": [
+    "Implement only SLICE-P01 TransactionControl ReconciliationRecord persistence.",
+    "Do not consume candidate K00 semantics.",
+    "Preserve ReconciliationRecordUsesIdempotencyKey many-to-zero-or-one cardinality.",
+    "Do not permit idempotency-key reuse across operations or scope broadening.",
+    "Protected scope must be inherited from the originating authoritative operation.",
+    "Every schema change must ship with an immutable ordered migration in the same change set.",
+    "Do not run db push or manual DDL against shared or production environments.",
+    "Do not apply the migration to shared or production environments until C21 backup/restore proof and release gates authorize execution.",
+    "Repository writes remain owned by TransactionControl; foreign modules may not write its persistence directly.",
+    "Transport routes and UI contracts remain outside this admission."
   ],
-  "next_required_gate": "Explicit owner semantic-promotion approval for ReconciliationRecordUsesIdempotencyKey candidate -> approved",
-  "admitted_physical_slices": 0,
-  "physical_schema_authorized": false,
-  "prohibited_effects": [
-    "no candidate-to-approved promotion",
-    "no table",
-    "no migration",
-    "no repository",
-    "no transport route",
-    "no runtime implementation"
-  ]
+  "required_implementation_evidence": [
+    "empty-database migration replay",
+    "schema/migration determinism",
+    "OPEN unresolved provider-state retry prohibition",
+    "same-key same-payload duplicate-effect prevention",
+    "cross-operation/different-payload key-reuse rejection",
+    "scope non-broadening",
+    "TransactionControl repository ownership boundary"
+  ],
+  "next_required_gate": "Implement SLICE-P01 physical persistence slice and prove its acceptance evidence before any shared/production migration execution"
 }

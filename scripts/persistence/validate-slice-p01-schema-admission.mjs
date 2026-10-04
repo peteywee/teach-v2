@@ -7,8 +7,10 @@ const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch
 
 const authority=load('persistence/authority.json');
 const admission=load('persistence/physical-slices/transaction-control/admission.json');
+const historical=load('persistence/physical-slices/transaction-control/admission-history/issue-22-block.json');
 const plan=load('persistence/physical-slices/transaction-control/admission-evidence-plan.json');
 const readiness=load('persistence/physical-slices/readiness.json');
+const manifest=load('kernel/manifest.json');
 const entities=load('kernel/entities.json');
 const ids=load('kernel/identifiers.json');
 const states=load('kernel/states.json');
@@ -16,32 +18,39 @@ const rel=load('kernel/relationships.json');
 
 const find=(doc,id)=>(doc?.entries||[]).find(x=>x.id===id);
 if(authority?.version!=='1.0.0' || authority?.status!=='active') errors.push('SLICE-P01 admission: active Persistence Model 1.0.0 required');
-if(admission?.admission_id!=='TEACH-SLICE-P01-PHYSICAL-SCHEMA-ADMISSION' || admission?.version!=='1.0.0' || admission?.status!=='recorded' || admission?.issue!=='#22') errors.push('SLICE-P01 admission: admission record identity/state mismatch');
-if(admission?.semantic_baseline_commit!=='8b2acf2c8d121315641cd726528a7add926331cd') errors.push('SLICE-P01 admission: semantic baseline must be exact relationship-registration main');
+if(manifest?.version!=='0.15.0') errors.push('SLICE-P01 admission: K00 0.15.0 required');
+if(admission?.admission_id!=='TEACH-SLICE-P01-PHYSICAL-SCHEMA-ADMISSION' || admission?.version!=='2.0.0' || admission?.status!=='recorded' || admission?.issue!=='#26') errors.push('SLICE-P01 admission: current admission identity/state mismatch');
+if(admission?.semantic_baseline_commit!=='d6a6e33db95752174445806ef81d51147f265f9c') errors.push('SLICE-P01 admission: exact post-promotion baseline required');
+if(historical?.version!=='1.0.0' || historical?.decision!=='BLOCK' || historical?.issue!=='#22' || historical?.historical!==true) errors.push('SLICE-P01 admission: historical BLOCK evidence not preserved');
 if(plan?.plan_id!=='TEACH-SLICE-P01-MIGRATION-ACCEPTANCE-EVIDENCE-PLAN' || plan?.version!=='1.0.0' || plan?.status!=='recorded') errors.push('SLICE-P01 admission: migration/acceptance evidence plan missing');
-if(plan?.physical_schema_authorized!==false) errors.push('SLICE-P01 admission: evidence plan must not authorize schema');
+if(plan?.physical_schema_authorized!==false) errors.push('SLICE-P01 admission: evidence plan must remain non-authorizing');
 if(find(entities,'ReconciliationRecord')?.status!=='approved') errors.push('SLICE-P01 admission: ReconciliationRecord must be approved');
 if(find(ids,'ReconciliationRecordId')?.status!=='approved') errors.push('SLICE-P01 admission: ReconciliationRecordId must be approved');
 if(find(states,'ReconciliationRecordStatus')?.status!=='approved') errors.push('SLICE-P01 admission: ReconciliationRecordStatus must be approved');
 if(find(states,'ExternalEffectOutcome')?.status!=='approved') errors.push('SLICE-P01 admission: ExternalEffectOutcome must be approved');
 const rr=find(rel,'ReconciliationRecordUsesIdempotencyKey');
-if(!rr) errors.push('SLICE-P01 admission: relationship registration missing');
-else {
- if(rr.status!=='approved') errors.push(`SLICE-P01 admission: owner-approved promotion expected approved relationship, found ${rr.status}`);
- if(rr.cardinality!=='many-to-zero-or-one') errors.push('SLICE-P01 admission: relationship cardinality drifted');
- if(rr.owning_domain!=='TransactionControl') errors.push('SLICE-P01 admission: relationship owner drifted');
+if(!rr || rr.status!=='approved' || rr.cardinality!=='many-to-zero-or-one' || rr.owning_domain!=='TransactionControl') errors.push('SLICE-P01 admission: approved TransactionControl relationship/cardinality required');
+const unproven=(admission?.criteria||[]).filter(x=>x.state!=='PROVEN');
+if(unproven.length!==0) errors.push('SLICE-P01 admission: every admission criterion must be PROVEN');
+if((admission?.blockers||[]).length!==0) errors.push('SLICE-P01 admission: blockers must be empty');
+if(admission?.decision!=='ADMIT' || admission?.physical_schema_authorized!==true || admission?.implementation_authorized!==true || admission?.migration_authoring_authorized!==true || admission?.admitted_physical_slices!==1) errors.push('SLICE-P01 admission: ADMIT authorization mismatch');
+if(admission?.shared_or_production_migration_execution_authorized!==false || admission?.full_relational_schema_authorized!==false) errors.push('SLICE-P01 admission: admission must not authorize full schema or shared/production migration execution');
+if(readiness?.version!=='0.6.0' || readiness?.current_admitted_slice_count!==1 || readiness?.current_physical_slice_admissions?.[0]?.id!=='SLICE-P01') errors.push('SLICE-P01 admission: readiness must record exactly one admitted slice');
+if(readiness?.narrowed_next_lane?.physical_implementation_authorized!==true || readiness?.implementation_guard?.physical_schema_authorized!==true) errors.push('SLICE-P01 admission: implementation authorization missing from readiness');
+if(readiness?.implementation_guard?.tables_generated!==0 || readiness?.implementation_guard?.migrations_generated!==0 || readiness?.implementation_guard?.repositories_generated!==0) errors.push('SLICE-P01 admission: admission batch must not generate implementation artifacts');
+if(readiness?.implementation_guard?.shared_or_production_migration_execution_authorized!==false) errors.push('SLICE-P01 admission: production migration execution must remain blocked');
+
+if(errors.length){
+ console.error(`SLICE-P01 PHYSICAL-SCHEMA ADMISSION FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
+ for(const e of errors) console.error(`- ${e}`);
+ process.exit(1);
 }
-const blocked=(admission?.criteria||[]).filter(x=>x.state==='BLOCKED');
-if(admission?.decision!=='BLOCK' || admission?.physical_schema_authorized!==false || admission?.admitted_physical_slices!==0) errors.push('SLICE-P01 admission: decision must remain BLOCK with zero admissions');
-if(blocked.length!==1 || !blocked[0]?.evidence?.includes('status is candidate')) errors.push('SLICE-P01 admission: historical issue #22 record must preserve the pre-promotion candidate blocker');
-if(readiness?.version!=='0.5.0' || readiness?.evidence_states?.relationship_promotion!=='PROVEN' || readiness?.evidence_states?.admission_rerun!=='PENDING') errors.push('SLICE-P01 admission: current readiness must require a fresh post-promotion admission rerun');
-if((readiness?.current_physical_slice_admissions||[]).length!==0 || readiness?.current_admitted_slice_count!==0) errors.push('SLICE-P01 admission: readiness admitted a physical slice prematurely');
-if(readiness?.implementation_guard?.tables_generated!==0 || readiness?.implementation_guard?.migrations_generated!==0 || readiness?.implementation_guard?.repositories_generated!==0 || readiness?.implementation_guard?.physical_schema_authorized!==false) errors.push('SLICE-P01 admission: implementation guard violated');
-if(errors.length){console.error(`SLICE-P01 PHYSICAL-SCHEMA ADMISSION FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);for(const e of errors) console.error(`- ${e}`);process.exit(1);}
-console.log('SLICE-P01 HISTORICAL ADMISSION EVIDENCE PASS');
-console.log('Historical decision: BLOCK at pre-promotion baseline');
-console.log('PROVEN: entity, identifier, lifecycle/outcome, ownership/scope decisions, migration/acceptance evidence plan');
-console.log('Relationship promotion: PROVEN in current K00');
-console.log('Physical slices admitted: 0');
-console.log('Physical implementation authorized: false');
-console.log('Next gate: fresh SLICE-P01 admission rerun');
+console.log('SLICE-P01 PHYSICAL-SCHEMA ADMISSION PASS');
+console.log('Decision: ADMIT');
+console.log('K00: 0.15.0');
+console.log('All 8 admission criteria: PROVEN');
+console.log('Physical slices admitted: 1 (SLICE-P01)');
+console.log('Implementation/migration authoring authorized: true');
+console.log('Full relational schema authorized: false');
+console.log('Shared/production migration execution authorized: false');
+console.log('Next gate: implement SLICE-P01 and prove acceptance evidence');
