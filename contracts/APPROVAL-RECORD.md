@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-04
-- Contract package version: `0.13.0`
+- Contract package version: `0.14.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -51,8 +51,8 @@ Open-question decisions are recorded here under SYS-34. The contracts were activ
 | C11      | OQ-IDN-5   | For an offboarded identity's email, is a new invitation a controlled reactivation or a controlled rejection? (Required decision carried from Gate A.)                                                                         | Controlled rejection until explicit ReactivateIdentity; no Invitation or token created before reactivation | 2026-10-04 | Patrick Craven |
 | C12      | OQ-SES-1   | Which `SameSite` value is approved: `Strict` or `Lax`?                                                                                                                                                                        |          |      |       |
 | C12      | OQ-SES-2   | Which cookie domain and path are approved given the web and API hostnames?                                                                                                                                                    |          |      |       |
-| C12      | OQ-SES-3   | Which hash or verifier construction is approved for session credentials at rest?                                                                                                                                              |          |      |       |
-| C12      | OQ-SES-4   | What are the absolute and idle session lifetimes?                                                                                                                                                                             |          |      |       |
+| C12      | OQ-SES-3   | Which hash or verifier construction is approved for session credentials at rest?                                                                                                                                              | `SESSION_VERIFIER_V1_SHA256_256BIT`: exactly 32 CSPRNG bytes, unpadded base64url credential, stored v1 verifier = SHA-256(`teach-session-v1\\0` || rawCredentialBytes), no per-session salt, stored verifier never authenticates | 2026-10-04 | Patrick Craven |
+| C12      | OQ-SES-4   | What are the absolute and idle session lifetimes?                                                                                                                                                                             | `ABSOLUTE_12H_IDLE_30M`: 12-hour immutable absolute lifetime; 30-minute authoritative server-side idle lifetime; expiry denies authentication even if lazy EXPIRED persistence fails | 2026-10-04 | Patrick Craven |
 | C12      | OQ-SES-5   | Is `SameSite` alone the approved CSRF control, or is an additional mechanism (token, origin check) required?                                                                                                                  |          |      |       |
 | C12      | OQ-SES-6   | On which events must the session credential rotate (sign-in, privilege change, other)?                                                                                                                                        |          |      |       |
 | C13      | OQ-TEN-1   | Does v2 start with the Gate A single-location compatibility membership or a normalized multi-organization, multi-location membership model?                                                                                   |          |      |       |
@@ -396,3 +396,13 @@ This SEM-30 approval does not create or authorize a table, column, index, migrat
 | C52 Deployment, Release & Recovery | 1.0.3 | 1.1.0 | Resolve OQ-REL-2 as `CANONICAL_CONFIG_MANIFEST_SHA256`: deterministic sorted config manifest, direct non-secret runtime values, stable secret revision IDs only, SHA-256 candidate identity, missing stable revision fails closed | 2026-10-04 | Patrick Craven | #30 |
 
 These decisions define policy and authorize provider-neutral validation machinery. They do **not** select a hosting/database provider, prove a real backup or restore, authorize shared/production migration execution, establish a deployable production candidate, or satisfy C52 explicit owner production-promotion approval.
+
+## Part 23 — SLICE-P02 owner decisions
+
+| Artifact / Contract | From | To | Decision | Date | Owner | GitHub issue |
+| --- | --- | --- | --- | --- | --- | --- |
+| C12 Application Sessions | 1.0.3 | 1.1.0 | Resolve OQ-SES-3 as `SESSION_VERIFIER_V1_SHA256_256BIT`: 32-byte CSPRNG credential, unpadded base64url representation, versioned domain-separated SHA-256 verifier, raw credential never persisted | 2026-10-04 | Patrick Craven | #32 |
+| C12 Application Sessions | 1.0.3 | 1.1.0 | Resolve OQ-SES-4 as `ABSOLUTE_12H_IDLE_30M`: 12-hour absolute lifetime and 30-minute authoritative idle lifetime with fail-closed expiry | 2026-10-04 | Patrick Craven | #32 |
+| TEACH-SLICE-P02-OWNER-DECISION-REGISTRATION | proposed | recorded 1.0.0 | Approve `IDENTITY_GLOBAL_PRINCIPAL_SESSION_IDENTITY_OWNED`: Identity is a global application principal with IdentityId as its explicit identity ownership key; ApplicationSession belongs to exactly one Identity; tenant/role/capability authority remains database-current and is not copied into P02 records | 2026-10-04 | Patrick Craven | #32 |
+
+These decisions close only the three shape-affecting P02 blockers. SameSite, cookie Domain/Path, CSRF, session-rotation events, concurrent-session policy, C15 deletion/retention semantics, and Membership topology/scope remain unresolved as explicitly recorded. Physical schema remains unauthorized until a fresh Persistence Model admission result says ADMIT.

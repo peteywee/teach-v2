@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C12",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.0.3",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-04",
+  "updated_on": "2026-10-03",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.1.0",
-    "approved_on": "2026-10-04",
+    "approved_version": "1.0.0",
+    "approved_on": "2026-10-03",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner approved SLICE-P02 session verifier and lifetime decisions; GitHub issue #32"
+    "inheritance": "1.0.1, 1.0.2, and 1.0.3 are non-normative governance/truth-state cleanup patches; 1.0.0 owner approval remains controlling"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,8 +28,8 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C12@1.0.3"],
-  "superseded_by": null,
+  "supersedes": [],
+  "superseded_by": "TEACH-CON-C12@1.1.0",
   "depends_on": [
     "contracts/"
   ]
@@ -43,15 +43,15 @@
 | Contract ID        | C12                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.1.0                                                                                                                                                           |
-| Status             | `active`                                                                                                                                                        |
+| Version            | 1.0.3                                                                                                                                                           |
+| Status             | `superseded`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-04 — SLICE-P02 verifier/lifetime decisions approved through GitHub issue #32; see `APPROVAL-RECORD.md` |
+| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
 | Requirement prefix | `SES`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/identity-access.json` (session half).                                                               |
-| Supersedes         | C12 1.0.3                                                                                                                                                            |
-| Superseded by      | None                                                                                                                                                            |
+| Supersedes         | None                                                                                                                                                            |
+| Superseded by      | C12 1.1.0                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
 | Last updated       | 2026-10-03                                                                                                                                                      |
 
@@ -90,15 +90,15 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 - **SES-1** — Teach MUST have exactly one application-session model; any other token or session mechanism MUST NOT authenticate application API requests.
 - **SES-2** — The session credential MUST be opaque: it MUST NOT encode identity, role, organization, location, or capability data.
-- **SES-3** — The session credential MUST be generated as exactly 32 cryptographically secure random bytes (256 bits) and serialized to the browser as unpadded base64url.
+- **SES-3** — The session credential MUST be generated from a cryptographically secure random source.
 - **SES-4** — The session credential MUST be delivered to the browser only in a cookie with the `Secure` and `HttpOnly` attributes set.
 - **SES-5** — The session cookie MUST set `SameSite` to the owner-approved value (see OQ-SES-1; value Not yet verified).
 - **SES-6** — The session cookie's domain and path MUST be the owner-approved scope (see OQ-SES-2; value Not yet verified).
 - **SES-7** — Authentication credentials MUST NOT be written to localStorage, sessionStorage, IndexedDB, Cache Storage, or service-worker storage.
-- **SES-8** — PostgreSQL MUST store only a versioned verifier of the session credential, never the credential itself. Verifier version `v1` MUST be the 32-byte SHA-256 digest of the byte sequence `teach-session-v1\\0` followed by the raw 32-byte session credential. No per-session salt is required for this uniformly random 256-bit credential because deterministic indexed lookup is required.
-- **SES-9** — Session lookup MUST decode the presented unpadded base64url credential to exactly 32 bytes, compute the stored verifier using the record's supported verifier version, and look up by that verifier. A stored verifier value MUST NOT itself authenticate as a session credential.
+- **SES-8** — PostgreSQL MUST store only a cryptographic hash or verifier of the session credential, never the credential itself (see OQ-SES-3; value Not yet verified).
+- **SES-9** — Session lookup MUST hash the presented credential and look up by the hash.
 - **SES-10** — Every session record MUST hold issuance time, absolute expiry, revocation state, and last-use time.
-- **SES-11** — Absolute and idle expiry MUST be enforced server-side on every request: absolute lifetime is 12 hours from immutable issuance time and idle lifetime is 30 minutes from authoritative server-side last-use time. A request authenticates only while status is ACTIVE and current time is before both limits. Crossing either limit MUST fail closed as 401 with no side effect; denial MUST NOT depend on a best-effort EXPIRED-state write succeeding.
+- **SES-11** — Absolute and idle expiry MUST be enforced server-side on every request (values: see OQ-SES-4; value Not yet verified).
 - **SES-12** — Logout MUST revoke the server-side session record; clearing browser state alone MUST NOT be treated as logout.
 - **SES-13** — The logout response MUST expire the session cookie.
 - **SES-14** — Credential change, identity deactivation, and offboarding MUST revoke affected sessions through one canonical revocation path.
@@ -114,12 +114,12 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Case      | Proves              | Setup                                                                                                | Expected                                                  |
 | --------- | ------------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | SES-AC-1  | SES-1, SES-17       | Send API requests authenticated only by a bearer JWT, a legacy token header, or a query-string token | All return 401                                            |
-| SES-AC-2  | SES-2, SES-3        | Issue 10,000 sessions; base64url-decode each credential                                               | Every credential decodes to exactly 32 random bytes; no duplicates or embedded authority structure |
+| SES-AC-2  | SES-2, SES-3        | Decode issued credentials; issue 10,000 sessions                                                     | No decodable structure; no duplicates                     |
 | SES-AC-3  | SES-4, SES-5, SES-6 | Sign in and inspect Set-Cookie                                                                       | Secure, HttpOnly, approved SameSite, approved Domain/Path |
 | SES-AC-4  | SES-7               | Browser E2E: sign in, use core paths, then enumerate all web storage and caches                      | No credential value in any storage                        |
-| SES-AC-5  | SES-8, SES-9        | Inspect session table after sign-in; recompute v1 verifier; present stored verifier text/bytes as a credential | Only versioned verifier stored; recomputation matches; stored verifier itself returns 401 |
+| SES-AC-5  | SES-8, SES-9        | Inspect session table after sign-in; present the stored hash value as a cookie                       | Only hash stored; presenting the hash itself returns 401  |
 | SES-AC-6  | SES-10              | Inspect session record across sign-in, request, logout                                               | All four fields populated and updated                     |
-| SES-AC-7  | SES-11              | Advance clock beyond 30 minutes since last use; separately beyond 12 hours since issuance; simulate expiry-write failure | All cases return 401 with no protected side effect; denial remains effective even if EXPIRED-state persistence fails |
+| SES-AC-7  | SES-11              | Advance clock past idle expiry; separately past absolute expiry                                      | Both return 401; no side effect                           |
 | SES-AC-8  | SES-12, SES-13      | Copy the cookie, log out, replay the copied cookie                                                   | Logout expires the cookie; replay returns 401             |
 | SES-AC-9  | SES-14              | Hold sessions open; perform credential change, deactivation, offboarding                             | Affected sessions return 401 on next request              |
 | SES-AC-10 | SES-15              | Present malformed, unknown, expired, and revoked credentials to a mutating endpoint                  | All 401; zero writes                                      |
@@ -134,14 +134,11 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | -------- | ------------------------------------------------------------------------------------------------------------ | --------------------- | ------- |
 | OQ-SES-1 | Which `SameSite` value is approved: `Strict` or `Lax`?                                                       | Yes                   | SES-5   |
 | OQ-SES-2 | Which cookie domain and path are approved given the web and API hostnames?                                   | Yes                   | SES-6   |
+| OQ-SES-3 | Which hash or verifier construction is approved for session credentials at rest?                             | Yes                   | SES-8   |
+| OQ-SES-4 | What are the absolute and idle session lifetimes?                                                            | Yes                   | SES-11  |
 | OQ-SES-5 | Is `SameSite` alone the approved CSRF control, or is an additional mechanism (token, origin check) required? | Yes                   | SES-18  |
 | OQ-SES-6 | On which events must the session credential rotate (sign-in, privilege change, other)?                       | Yes                   | SES-19  |
 | OQ-SES-7 | Is there a limit on concurrent sessions per identity?                                                        | No                    | —       |
-
-### Resolved owner decisions in 1.1.0
-
-- **OQ-SES-3 — `SESSION_VERIFIER_V1_SHA256_256BIT`:** session credentials are exactly 32 CSPRNG bytes serialized as unpadded base64url; PostgreSQL stores only verifier version metadata plus `SHA-256("teach-session-v1\\0" || rawCredentialBytes)`; no per-session salt is required; stored verifier material is never accepted as the credential.
-- **OQ-SES-4 — `ABSOLUTE_12H_IDLE_30M`:** absolute lifetime is 12 hours from immutable issuance and idle lifetime is 30 minutes from authoritative server-side last use; expiry fails closed independently of whether lazy EXPIRED-state persistence succeeds.
 
 ## 7. Verification Status
 
@@ -151,8 +148,8 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
-| Blocking open questions      | 4 open                   | OQ-SES-3 and OQ-SES-4 are resolved in 1.1.0. OQ-SES-1/2/5/6 remain blocking for cookie/transport/runtime authentication behavior; OQ-SES-7 remains non-blocking. The P02 physical persistence slice may be evaluated independently where those remaining questions do not alter persisted shape. |
-| Owner approval               | declared                 | 1.1.0 verifier/lifetime decisions approved by Patrick Craven on 2026-10-04 through GitHub issue #32 and recorded in `APPROVAL-RECORD.md`. |
+| Blocking open questions      | 6 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
+| Owner approval               | declared                 | Approved by the owner on 2026-10-03; recorded in `APPROVAL-RECORD.md`. Initial owner-approval baseline is commit `2c9b1c849a520ba817efc91150be9a37797f4238`; this 1.0.3 revision is tracked by Git history.                                                                     |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
@@ -168,4 +165,3 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.1   | 2026-10-03 | Non-normative document-governance metadata/provenance normalization; 1.0.0 owner approval remained controlling. | ChatGPT (governance) |
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
-| 1.1.0   | 2026-10-04 | Normative SLICE-P02 revision: resolve OQ-SES-3 with `SESSION_VERIFIER_V1_SHA256_256BIT` and OQ-SES-4 with `ABSOLUTE_12H_IDLE_30M`; refine SES-3/8/9/11 and acceptance cases 2/5/7; GitHub issue #32. | Patrick Craven (owner approval) |

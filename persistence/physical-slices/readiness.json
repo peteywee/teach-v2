@@ -1,6 +1,6 @@
 {
   "readiness_id": "TEACH-FIRST-PHYSICAL-SLICE-READINESS",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-04",
@@ -8,7 +8,7 @@
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
-    "commit": "8147efa69ce9c4c4bd93d4a1529e116edcf1776a",
+    "commit": "ee01f66b6bb6c7ccfa2cb7841cfa9e209e2a93d5",
     "kernel_version": "0.15.0",
     "persistence_authority_version": "1.0.0",
     "semantic_closure_registration_version": "1.0.0",
@@ -17,7 +17,9 @@
     "relationship_promotion_issue": "#24",
     "schema_admission_issue": "#26",
     "implementation_issue": "#28",
-    "implementation_verification_commit": "8147efa69ce9c4c4bd93d4a1529e116edcf1776a"
+    "implementation_verification_commit": "8147efa69ce9c4c4bd93d4a1529e116edcf1776a",
+    "slice_p02_owner_decision_issue": "#32",
+    "slice_p02_decision_registration_version": "1.0.0"
   },
   "admission_rule": "ADMIT only when every semantic dependency and every shape-affecting owner decision required by the physical schema is approved. Missing, candidate, UNKNOWN, BLOCKED, or contradictory evidence fails closed.",
   "current_physical_slice_admissions": [
@@ -84,9 +86,8 @@
       ],
       "current_state": "BLOCKED",
       "blockers": [
-        "OQ-SES-3 remains open: session credential hash/verifier construction",
-        "OQ-SES-4 remains open: absolute and idle session lifetimes",
-        "protected Identity ownership/scope still must reconcile with tenancy/privacy rules before physical schema admission"
+        "migration and acceptance evidence plan required before physical admission",
+        "fresh Persistence Model schema-admission evaluation required against C12 1.1.0 and recorded P02 ownership/scope decision"
       ],
       "blockers_removed_by_k00_014": [
         "IdentityId",
@@ -96,6 +97,11 @@
         "IdentityStateMachine",
         "ApplicationSessionStateMachine",
         "IdentityHasApplicationSession"
+      ],
+      "blockers_removed_by_owner_decisions": [
+        "OQ-SES-3 resolved as SESSION_VERIFIER_V1_SHA256_256BIT",
+        "OQ-SES-4 resolved as ABSOLUTE_12H_IDLE_30M",
+        "Identity/ApplicationSession protected ownership and scope selected as IDENTITY_GLOBAL_PRINCIPAL_SESSION_IDENTITY_OWNED"
       ]
     },
     {
@@ -172,11 +178,11 @@
     }
   ],
   "narrowed_next_lane": {
-    "preferred_slice": "SLICE-P01",
-    "reason": "SLICE-P01 is admitted, implemented, and verified on PostgreSQL 17; shared/production migration execution remains separately blocked.",
+    "preferred_slice": "SLICE-P02",
+    "reason": "SLICE-P02 semantic dependencies and shape-affecting owner decisions are closed; admission still fails closed until evidence plan + fresh schema-admission evaluation.",
     "owner_decisions_required": [],
-    "physical_implementation_authorized": true,
-    "next_required_gate": "Do not execute SLICE-P01 migration in shared/production until C21 backup/restore proof and release gates are PROVEN",
+    "physical_implementation_authorized": false,
+    "next_required_gate": "Record SLICE-P02 migration/acceptance evidence plan and rerun schema admission",
     "semantic_promotions_required": []
   },
   "implementation_guard": {
@@ -205,6 +211,9 @@
     "slice_p01_migration_determinism": "PROVEN",
     "slice_p01_postgres_integration": "PROVEN",
     "slice_p01_review_findings": "PROVEN",
-    "shared_or_production_migration_execution": "BLOCKED"
+    "shared_or_production_migration_execution": "BLOCKED",
+    "slice_p02_owner_decisions": "PROVEN",
+    "slice_p02_schema_admission": "BLOCKED",
+    "slice_p02_implementation": "BLOCKED"
   }
 }
