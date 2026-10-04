@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C22",
   "class": "contract",
-  "version": "1.2.0",
+  "version": "1.1.0",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-04",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.2.0",
+    "approved_version": "1.1.0",
     "approved_on": "2026-10-04",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner explicitly approved TransactionControl first-slice idempotency source/retention decisions; GitHub issue #20"
+    "basis": "Owner explicitly approved reconciliation lifecycle closure through approval token; GitHub issue #12"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,8 +28,8 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C22@1.1.0"],
-  "superseded_by": null,
+  "supersedes": ["TEACH-CON-C22@1.0.3"],
+  "superseded_by": "TEACH-CON-C22@1.2.0",
   "depends_on": [
     "contracts/"
   ]
@@ -43,17 +43,17 @@
 | Contract ID        | C22                                                                                                                                                             |
 | Group              | C20 Data Correctness                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.2.0                                                                                                                                                           |
-| Status             | `active`                                                                                                                                                        |
+| Version            | 1.1.0                                                                                                                                                           |
+| Status             | `superseded`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-04 — C22 1.2.0 idempotency source/retention closure; GitHub issue #20 |
+| Approved by        | Patrick Craven (owner), 2026-10-04 — C22 1.1.0 reconciliation lifecycle closure; GitHub issue #12 |
 | Requirement prefix | `TXN`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New. Carries the ambiguous-outcome lessons from xqueue into Teach.                                                                                              |
-| Supersedes         | C22 1.1.0 |
-| Superseded by      | None                                                                                                                                                            |
+| Supersedes         | C22 1.0.3 |
+| Superseded by      | C22 1.2.0                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-04                                                                                                                                                      |
+| Last updated       | 2026-10-03                                                                                                                                                      |
 
 ## 1. Purpose and Failure Prevented
 
@@ -91,7 +91,7 @@ Related contracts: C00, C23, C63.
 The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Requirement IDs are stable and MUST NOT be renumbered or reused.
 
 - **TXN-1** — Operations that a contract requires to succeed together MUST execute in one database transaction; a partial result MUST NOT be committed or observable.
-- **TXN-2** — Every retryable mutation MUST have a documented idempotency strategy that explicitly declares whether its idempotency key is client-supplied or server-derived; the runtime MUST NOT infer or fall back between key sources. Each retryable mutation MUST also declare an idempotency-evidence retention duration that is not shorter than its complete retry and reconciliation horizon.
+- **TXN-2** — Every retryable mutation MUST have a documented idempotency strategy (see OQ-TXN-1; value Not yet verified).
 - **TXN-3** — Repeating an idempotent request with the same key and payload MUST produce the same final state and response.
 - **TXN-4** — Reusing an idempotency key with a different payload MUST be rejected with no side effect.
 - **TXN-5** — Retries MUST NOT create duplicate certifications, assignments, payments, seats, invitations, or lifecycle events.
@@ -113,7 +113,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Case      | Proves         | Setup                                                                                            | Expected                                                                      |
 | --------- | -------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
 | TXN-AC-1  | TXN-1          | Inject failure after the first write of each multi-write operation                               | No partial rows committed                                                     |
-| TXN-AC-2  | TXN-2          | Registry/inventory of retryable mutations with declared retry/reconciliation horizons            | Each explicitly declares client-supplied or server-derived key policy with no implicit fallback, plus retention not shorter than its full retry/reconciliation horizon |
+| TXN-AC-2  | TXN-2          | Registry/inventory of retryable mutations                                                        | Each lists its idempotency strategy                                           |
 | TXN-AC-3  | TXN-3, TXN-5   | Replay each idempotent mutation 3× and concurrently                                              | One effect; identical responses                                               |
 | TXN-AC-4  | TXN-4          | Reuse a key with a changed payload                                                               | Rejected; no write                                                            |
 | TXN-AC-5  | TXN-6, TXN-9   | Provider double times out after send                                                             | State is ambiguous/needs-reconciliation; zero retries observed at every layer |
@@ -128,10 +128,9 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 ## 6. Open Questions
 
-OQ-TXN-1 was resolved in C22 1.2.0: each retryable operation explicitly selects a client-supplied or server-derived idempotency-key policy with no implicit fallback, and declares a retention duration not shorter than its complete retry/reconciliation horizon.
-
 | ID       | Question                                                                                                                       | Blocks implementation | Affects |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------- | ------- |
+| OQ-TXN-1 | Are idempotency keys client-supplied (header), server-derived, or both, and how long are they retained?                        | Yes                   | TXN-2   |
 | OQ-TXN-2 | Which external providers are in scope for v2 (email delivery, OAuth, payments, other), and which owns reconciliation for each? | No                    | —       |
 
 ## 7. Verification Status
@@ -142,8 +141,8 @@ OQ-TXN-1 was resolved in C22 1.2.0: each retryable operation explicitly selects 
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
-| Blocking open questions      | 0 open                   | OQ-TXN-1 is resolved by owner approval in GitHub issue #20. OQ-TXN-2 remains open and non-blocking.                                                                                                   |
-| Owner approval               | declared                 | C22 1.2.0 approved by Patrick Craven on 2026-10-04 for OQ-TXN-1 idempotency source/retention closure; recorded in `APPROVAL-RECORD.md` under GitHub issue #20.                                                                     |
+| Blocking open questions      | 1 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
+| Owner approval               | declared                 | Approved by the owner on 2026-10-03; recorded in `APPROVAL-RECORD.md`. Initial owner-approval baseline is commit `2c9b1c849a520ba817efc91150be9a37797f4238`; this 1.0.3 revision is tracked by Git history.                                                                     |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
@@ -160,4 +159,3 @@ OQ-TXN-1 was resolved in C22 1.2.0: each retryable operation explicitly selects 
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.1.0   | 2026-10-04 | Established canonical ReconciliationRecord lifecycle, external-effect outcome vocabulary, provider-neutral detail rule, and safe retry disposition. GitHub issue #12. | Patrick Craven (owner approval) |
-| 1.2.0   | 2026-10-04 | Resolved OQ-TXN-1: each retryable operation explicitly selects client-supplied or server-derived idempotency-key policy with no implicit fallback and declares retention at least as long as its complete retry/reconciliation horizon. GitHub issue #20. | Patrick Craven (owner approval) |

@@ -1,0 +1,34 @@
+#!/usr/bin/env node
+import { readFileSync } from 'node:fs';
+import { resolve, join } from 'node:path';
+const ROOT=resolve(process.cwd());
+const errors=[];
+const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
+const text=(p)=>{try{return readFileSync(join(ROOT,p),'utf8');}catch(e){errors.push(`${p}: ${e.message}`);return '';}};
+const reg=load('persistence/physical-slices/transaction-control/registration.json');
+const readiness=load('persistence/physical-slices/readiness.json');
+const manifest=load('kernel/manifest.json');
+const relationships=load('kernel/relationships.json');
+const c22=text('contracts/c22-transaction-idempotency-reconciliation-contract.md');
+const approvals=text('contracts/APPROVAL-RECORD.md');
+if(manifest?.version!=='0.14.0') errors.push('transaction decision registration: K00 must remain 0.14.0');
+if(reg?.registration_id!=='TEACH-TRANSACTIONCONTROL-FIRST-SLICE-DECISION-REGISTRATION' || reg?.version!=='1.0.0' || reg?.status!=='recorded' || reg?.issue!=='#20') errors.push('transaction decision registration: identity/state mismatch');
+const expected=new Map([['TXN-SLICE-D01','BOTH_BY_OPERATION'],['TXN-SLICE-D02','OPERATION_DECLARED_MINIMUM'],['TXN-SLICE-D03','OPTIONAL_ONE'],['TXN-SLICE-D04','INHERIT_ORIGINATING_OPERATION_SCOPE']]);
+const selected=new Map((reg?.decisions||[]).map(x=>[x.id,x.selection]));
+for(const [id,v] of expected) if(selected.get(id)!==v) errors.push(`transaction decision registration: ${id} must be ${v}`);
+if(reg?.relationship_decision?.cardinality!=='many-to-zero-or-one') errors.push('transaction decision registration: relationship cardinality drifted');
+if(reg?.relationship_decision?.kernel_registration!=='BLOCKED until separate relationship registration gate') errors.push('transaction decision registration: relationship registration must remain blocked');
+if(reg?.readiness_effect?.physical_schema_authorized!==false) errors.push('transaction decision registration: physical schema must remain unauthorized');
+if((relationships?.entries||[]).some(x=>x.id==='ReconciliationRecordUsesIdempotencyKey')) errors.push('transaction decision registration: relationship was registered prematurely');
+if(readiness?.version!=='0.3.0' || (readiness?.narrowed_next_lane?.owner_decisions_required||[]).length!==0) errors.push('transaction decision registration: readiness must close owner decisions at 0.3.0');
+if(readiness?.current_admitted_slice_count!==0 || readiness?.implementation_guard?.physical_schema_authorized!==false) errors.push('transaction decision registration: zero physical slices must remain admitted');
+if(!c22.includes('"version": "1.2.0"') || c22.includes('| OQ-TXN-1 |')) errors.push('transaction decision registration: C22 1.2.0 must resolve OQ-TXN-1');
+if(!c22.includes('client-supplied or server-derived') || !c22.includes('not shorter than its complete retry and reconciliation horizon')) errors.push('transaction decision registration: C22 TXN-2 decision text missing');
+if(!approvals.includes('| C22      | OQ-TXN-1') || !approvals.includes('2026-10-04 | Patrick Craven |')) errors.push('transaction decision registration: approval ledger decision missing');
+if(errors.length){console.error(`TransactionControl decision registration FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);for(const e of errors) console.error(`- ${e}`);process.exit(1);}
+console.log('TransactionControl decision registration PASS');
+console.log('Owner decisions: 4 approved');
+console.log('C22: 1.2.0 / OQ-TXN-1 resolved');
+console.log('K00: 0.14.0 unchanged');
+console.log('Relationship registration: BLOCKED');
+console.log('Physical slices admitted: 0');
