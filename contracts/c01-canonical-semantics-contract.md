@@ -7,7 +7,7 @@
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-03",
+  "updated_on": "2026-10-04",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
@@ -53,7 +53,7 @@
 | Supersedes         | C01 1.5.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-03                                                                                                                                                      |
+| Last updated       | 2026-10-04                                                                                                                                                      |
 
 ## 1. Purpose and Failure Prevented
 

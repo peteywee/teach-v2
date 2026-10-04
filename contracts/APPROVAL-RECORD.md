@@ -7,7 +7,7 @@
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-03",
+  "updated_on": "2026-10-04",
   "effective_on": "2026-10-03",
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -25,7 +25,7 @@
 
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
-- Last updated: 2026-10-03
+- Last updated: 2026-10-04
 - Contract package version: `0.10.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).

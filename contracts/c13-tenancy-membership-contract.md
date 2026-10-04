@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C13",
   "class": "contract",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-03",
+  "updated_on": "2026-10-04",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.2.0",
-    "approved_on": "2026-10-03",
+    "approved_version": "1.3.0",
+    "approved_on": "2026-10-04",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner explicitly approved C13 1.2.0 membership lifecycle through state-machine approval token; GitHub issue #4"
+    "basis": "Owner explicitly approved C13 1.3.0 canonical lifecycle event definition (MembershipRevoked) by direct owner direction on 2026-10-04"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,7 +28,7 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C13@1.1.0"],
+  "supersedes": ["TEACH-CON-C13@1.2.0"],
   "superseded_by": null,
   "depends_on": [
     "contracts/"
@@ -43,17 +43,17 @@
 | Contract ID        | C13                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.2.0                                                                                                                                                           |
+| Version            | 1.3.0                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-03 — C13 1.2.0 state-machine approval; see `APPROVAL-RECORD.md` and GitHub issue #4 |
+| Approved by        | Patrick Craven (owner), 2026-10-04 — C13 1.3.0 canonical lifecycle event definition by direct owner direction |
 | Requirement prefix | `TEN`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/tenancy.json` (tenancy half); capability resolution moves to C14.                                   |
-| Supersedes         | C13 1.1.0 |
+| Supersedes         | C13 1.2.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-03                                                                                                                                                      |
+| Last updated       | 2026-10-04                                                                                                                                                      |
 
 ## 1. Purpose and Failure Prevented
 
@@ -112,6 +112,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **TEN-16** — The Organization domain MUST own the canonical `Entitlement` entity and authoritative local entitlement state; billing/provider state MUST NOT be the application authority for entitlement.
 - **TEN-17** — A change to local entitlement state originating from billing/provider reconciliation MUST cross the Organization domain's registered command boundary; C63 MUST NOT directly mutate Organization-owned entitlement state.
 - **TEN-18** — A created membership MUST begin `ACTIVE`. The only permitted MembershipStatus transitions are `ACTIVE -> INACTIVE` and `INACTIVE -> REVOKED`; `REVOKED` is terminal. `DELETED` is not a MembershipStatus, and an unlisted transition MUST fail closed.
+- **TEN-19** — Revoking a membership MUST emit `MembershipRevoked` as the canonical lifecycle event for the `INACTIVE -> REVOKED` transition. `REVOKED` is terminal (see TEN-18); no membership lifecycle event is emitted for any transition out of `REVOKED` because none is permitted.
 
 ## 5. Acceptance Cases
 
@@ -148,7 +149,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
 | Blocking open questions      | 2 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
-| Owner approval               | declared                 | C13 1.2.0 approved by Patrick Craven on 2026-10-03 through explicit state-machine approval; GitHub issue #4. |
+| Owner approval               | declared                 | C13 1.3.0 approved by Patrick Craven on 2026-10-04 by direct owner direction (canonical lifecycle event definition). |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
@@ -165,3 +166,4 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.1.0   | 2026-10-03 | Organization owns Entitlement/local entitlement state; provider reconciliation must cross the Organization command boundary. GitHub issue #2. | Patrick Craven (owner approval) |
 | 1.2.0   | 2026-10-03 | Approved MembershipStatus state machine ACTIVE→INACTIVE→REVOKED and corrected TEN-10 `deleted` wording to `revoked`. GitHub issue #4. | Patrick Craven (owner approval) |
+| 1.3.0   | 2026-10-04 | Defined the canonical lifecycle event for membership revocation: TEN-19 requires `MembershipRevoked` on `INACTIVE -> REVOKED`; no event is emitted out of terminal `REVOKED`. | Patrick Craven (owner direction) |

@@ -7,7 +7,7 @@
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-03",
+  "updated_on": "2026-10-04",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
@@ -38,7 +38,7 @@
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
-- Last updated: 2026-10-03
+- Last updated: 2026-10-04
 
 These are the normative behavior contracts Teach v2 is built on. They state what the system MUST and
 MUST NOT do. Implementation is measured against them, not the other way round.

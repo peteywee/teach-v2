@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C11",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-03",
+  "updated_on": "2026-10-04",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.1.0",
-    "approved_on": "2026-10-03",
+    "approved_version": "1.2.0",
+    "approved_on": "2026-10-04",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner explicitly approved C11 1.1.0 identity lifecycle through state-machine approval token; GitHub issue #4"
+    "basis": "Owner explicitly approved C11 1.2.0 canonical lifecycle event definitions (IdentityDeactivated, IdentityReactivated) by direct owner direction on 2026-10-04"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,7 +28,7 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C11@1.0.3"],
+  "supersedes": ["TEACH-CON-C11@1.1.0"],
   "superseded_by": null,
   "depends_on": [
     "contracts/"
@@ -43,17 +43,17 @@
 | Contract ID        | C11                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.1.0                                                                                                                                                           |
+| Version            | 1.2.0                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-03 — C11 1.1.0 state-machine approval; see `APPROVAL-RECORD.md` and GitHub issue #4 |
+| Approved by        | Patrick Craven (owner), 2026-10-04 — C11 1.2.0 canonical lifecycle event definitions by direct owner direction |
 | Requirement prefix | `IDN`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/identity-access.json` (identity half); session half moves to C12.                                   |
-| Supersedes         | C11 1.0.3 |
+| Supersedes         | C11 1.1.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-03                                                                                                                                                      |
+| Last updated       | 2026-10-04                                                                                                                                                      |
 
 ## 1. Purpose and Failure Prevented
 
@@ -114,6 +114,8 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **IDN-19** — Repeating an offboarding request with the same idempotency key MUST return the same final state, preserve the original offboarding timestamp, and append no duplicate lifecycle or audit event.
 - **IDN-20** — An invitation to an email that belongs to an offboarded identity MUST follow exactly one owner-chosen rule (see OQ-IDN-5; value Not yet verified); until chosen, such invitations MUST be rejected.
 - **IDN-21** — IdentityStatus lifecycle MUST permit only `ACTIVE -> INACTIVE` and `INACTIVE -> ACTIVE` for current application behavior. `OffboardIdentity` MUST result in `INACTIVE`; repeating offboarding while already `INACTIVE` MAY preserve `INACTIVE` while applying idempotent offboarding guarantees. `DELETED` MUST be terminal, and no application transition into `DELETED` is authorized until C15 deletion semantics are owner-approved.
+- **IDN-22** — Deactivating an identity for any reason other than offboarding MUST emit `IdentityDeactivated` as the canonical lifecycle event for the `ACTIVE -> INACTIVE` transition. Offboarding emits `IdentityOffboarded`, not `IdentityDeactivated` (see IDN-18).
+- **IDN-23** — Reactivating an identity MUST emit `IdentityReactivated` as the canonical lifecycle event for the `INACTIVE -> ACTIVE` transition.
 
 ## 5. Acceptance Cases
 
@@ -158,7 +160,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
 | Blocking open questions      | 5 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
-| Owner approval               | declared                 | C11 1.1.0 approved by Patrick Craven on 2026-10-03 through explicit state-machine approval; GitHub issue #4. |
+| Owner approval               | declared                 | C11 1.2.0 approved by Patrick Craven on 2026-10-04 by direct owner direction (canonical lifecycle event definitions). |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
@@ -175,3 +177,4 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.1.0   | 2026-10-03 | Approved bootstrap IdentityStatus transition graph; offboarding now explicitly results in INACTIVE; DELETED ingress remains fail-closed pending C15 privacy semantics. GitHub issue #4. | Patrick Craven (owner approval) |
+| 1.2.0   | 2026-10-04 | Defined canonical lifecycle events for deactivation and reactivation: IDN-22 requires `IdentityDeactivated` on non-offboarding `ACTIVE -> INACTIVE`; IDN-23 requires `IdentityReactivated` on `INACTIVE -> ACTIVE`. | Patrick Craven (owner direction) |

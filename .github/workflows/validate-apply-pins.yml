@@ -1,0 +1,28 @@
+name: Validate Apply Pins
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/**'
+      - 'kernel/manifest.json'
+      - 'domains/ownership-map.json'
+      - '.github/workflows/validate-apply-pins.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - 'kernel/manifest.json'
+      - 'domains/ownership-map.json'
+      - '.github/workflows/validate-apply-pins.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-pins:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate live version pins
+        run: node scripts/packaging/validate-apply-guards.mjs pins
