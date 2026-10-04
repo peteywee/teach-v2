@@ -1,0 +1,35 @@
+{
+  "implementation_id": "TEACH-SLICE-P04-IMPLEMENTATION",
+  "version": "1.0.0",
+  "status": "proven",
+  "issue": "#46",
+  "baseline_commit": "013cb2a",
+  "admission": "persistence/physical-slices/identity-credentials/admission.json@1.0.0",
+  "slice": "SLICE-P04",
+  "owning_module": "Identity",
+  "target_records": [
+    "Credential"
+  ],
+  "implementation_scope": {
+    "physical_tables": [
+      "identity_credentials"
+    ],
+    "migration": "drizzle/0003_slice_p04_credential.sql",
+    "domain_model": "src/modules/identity/domain/credential.ts",
+    "schema": "src/modules/identity/infrastructure/persistence/credential-schema.ts",
+    "repositories": [
+      "src/modules/identity/infrastructure/persistence/postgres-credential-repository.ts"
+    ]
+  },
+  "verification": {
+    "typecheck": "PASS",
+    "domain_tests": "PASS (7/7: 3 positive, 4 negative)",
+    "implementation_boundary": "PENDING_CI",
+    "migration_generation": "MANUAL (drizzle-kit unavailable locally)",
+    "postgres_integration_tests": "PENDING_CI",
+    "validator_negative_paths": "PENDING_CI",
+    "exact_head_ci": "PENDING"
+  },
+  "shared_or_production_migration_execution_authorized": false,
+  "full_relational_schema_authorized": false
+}
