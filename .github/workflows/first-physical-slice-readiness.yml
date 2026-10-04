@@ -3,21 +3,21 @@ name: First Physical Slice Readiness
 on:
   pull_request:
     paths:
-      - 'persistence/**'
-      - 'kernel/**'
-      - 'scripts/persistence/**'
+      - 'persistence/physical-slices/**'
+      - 'scripts/persistence/validate-first-physical-slice-readiness.mjs'
+      - 'scripts/persistence/audit-first-physical-slice-readiness.mjs'
   push:
     branches: [main]
     paths:
-      - 'persistence/**'
-      - 'kernel/**'
-      - 'scripts/persistence/**'
+      - 'persistence/physical-slices/**'
+      - 'scripts/persistence/validate-first-physical-slice-readiness.mjs'
+      - 'scripts/persistence/audit-first-physical-slice-readiness.mjs'
 
 permissions:
   contents: read
 
 jobs:
-  audit:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
