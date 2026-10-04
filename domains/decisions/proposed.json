@@ -1,0 +1,405 @@
+{
+  "decision_table_discovery_id": "TEACH-DECISION-TABLE-DISCOVERY",
+  "version": "0.1.0",
+  "status": "proposed",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-03",
+  "updated_on": "2026-10-03",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "ref": "main",
+    "commit": "12857786cbbfc578be2857086067e2b44f44d217",
+    "required_kernel_version": "0.5.0",
+    "required_c01_version": "1.4.0",
+    "required_ownership_map_version": "1.2.0"
+  },
+  "rules": {
+    "decision_logic_is_deterministic": true,
+    "unknown_input_fails_closed": true,
+    "default_outcome_required": true,
+    "discovery_is_not_kernel_authority": true
+  },
+  "ready_decision_tables": [
+    {
+      "id": "DT-001",
+      "name": "PrivilegedCommandGate",
+      "status": "proposed",
+      "owning_domain": "Authorization",
+      "authority_contracts": [
+        "C02",
+        "C14",
+        "C41"
+      ],
+      "requirements": [
+        "AGT-8",
+        "AGT-10",
+        "API-14",
+        "AUTHZ-11",
+        "AUTHZ-15"
+      ],
+      "inputs": [
+        "identity_or_execution_identity",
+        "capability",
+        "scope",
+        "command_registration",
+        "domain_invariants",
+        "transaction_rule",
+        "audit_rule"
+      ],
+      "rules": [
+        {
+          "when": "any prerequisite is false/unknown",
+          "outcome": "DENY"
+        },
+        {
+          "when": "all prerequisites are true",
+          "outcome": "ALLOW_COMMAND"
+        }
+      ],
+      "default_outcome": "DENY",
+      "failure_behavior": "No protected handler/domain side effect executes before all gates pass."
+    },
+    {
+      "id": "DT-002",
+      "name": "AuthorizationOutcome",
+      "status": "proposed",
+      "owning_domain": "Authorization",
+      "authority_contracts": [
+        "C14"
+      ],
+      "requirements": [
+        "AUTHZ-10",
+        "AUTHZ-11",
+        "AUTHZ-12",
+        "AUTHZ-13",
+        "AUTHZ-14",
+        "AUTHZ-15",
+        "AUTHZ-16",
+        "AUTHZ-17"
+      ],
+      "inputs": [
+        "session_valid",
+        "membership_active",
+        "scope_valid",
+        "capability_present",
+        "target_visible",
+        "entitlement_allows"
+      ],
+      "rules": [
+        {
+          "when": "session_valid=false",
+          "outcome": "DENY_401"
+        },
+        {
+          "when": "session_valid=true and (membership_active=false or capability_present=false)",
+          "outcome": "DENY_403"
+        },
+        {
+          "when": "session_valid=true and membership_active=true and capability_present=true and (scope_valid=false or target_visible=false)",
+          "outcome": "DENY_404_NON_DISCLOSING"
+        },
+        {
+          "when": "all authority checks pass and entitlement_allows=false",
+          "outcome": "DENY_403"
+        },
+        {
+          "when": "all authority checks pass",
+          "outcome": "ALLOW"
+        }
+      ],
+      "default_outcome": "DENY_404_NON_DISCLOSING",
+      "failure_behavior": "Denied outcomes produce no mutation or external side effect except permitted audit."
+    },
+    {
+      "id": "DT-003",
+      "name": "AmbiguousExternalEffectRetry",
+      "status": "proposed",
+      "owning_domain": "TransactionControl",
+      "authority_contracts": [
+        "C22"
+      ],
+      "requirements": [
+        "TXN-2",
+        "TXN-6",
+        "TXN-7",
+        "TXN-8",
+        "TXN-9"
+      ],
+      "inputs": [
+        "external_outcome",
+        "provider_readback",
+        "documented_idempotency_strategy"
+      ],
+      "rules": [
+        {
+          "when": "external_outcome=AMBIGUOUS and provider_readback=UNREADABLE",
+          "outcome": "DEFER_NEEDS_RECONCILIATION"
+        },
+        {
+          "when": "external_outcome=AMBIGUOUS and provider_readback=SUCCESS",
+          "outcome": "RECONCILE_SUCCESS_NO_RETRY"
+        },
+        {
+          "when": "external_outcome=AMBIGUOUS and provider_readback=NO_EFFECT and documented_idempotency_strategy=true",
+          "outcome": "RETRY_ALLOWED"
+        },
+        {
+          "when": "external_outcome=AMBIGUOUS and provider_readback=NO_EFFECT and documented_idempotency_strategy!=true",
+          "outcome": "DEFER_NO_SAFE_RETRY"
+        }
+      ],
+      "default_outcome": "DEFER_NO_SAFE_RETRY",
+      "failure_behavior": "Never resend while external outcome remains ambiguous."
+    },
+    {
+      "id": "DT-004",
+      "name": "EvidenceGate",
+      "status": "proposed",
+      "owning_domain": "VerificationEvidence",
+      "authority_contracts": [
+        "C00",
+        "C51"
+      ],
+      "requirements": [
+        "SYS-13",
+        "SYS-14",
+        "SYS-25",
+        "EVD-1",
+        "EVD-2",
+        "EVD-10",
+        "EVD-11",
+        "EVD-12",
+        "EVD-13",
+        "EVD-14",
+        "EVD-15"
+      ],
+      "inputs": [
+        "required_evidence_states",
+        "source_sha_match",
+        "environment_match",
+        "runtime_evidence_required",
+        "runtime_evidence_present"
+      ],
+      "rules": [
+        {
+          "when": "any required evidence is UNKNOWN/BLOCKED/CONTRADICTORY/missing/stale/unreadable/skipped",
+          "outcome": "FAIL"
+        },
+        {
+          "when": "source_sha_match=false or environment_match=false",
+          "outcome": "FAIL"
+        },
+        {
+          "when": "runtime_evidence_required=true and runtime_evidence_present=false",
+          "outcome": "FAIL"
+        },
+        {
+          "when": "all required evidence is PROVEN and exact-candidate/environment conditions pass",
+          "outcome": "PASS"
+        }
+      ],
+      "default_outcome": "FAIL",
+      "failure_behavior": "No evidence gap can collapse to PASS."
+    },
+    {
+      "id": "DT-005",
+      "name": "SemanticAdmission",
+      "status": "proposed",
+      "owning_domain": "Governance",
+      "authority_contracts": [
+        "C01"
+      ],
+      "requirements": [
+        "SEM-2",
+        "SEM-3",
+        "SEM-12",
+        "SEM-13",
+        "SEM-15",
+        "SEM-30"
+      ],
+      "inputs": [
+        "term_registered",
+        "entry_status",
+        "owner_approval_present",
+        "usage_context"
+      ],
+      "rules": [
+        {
+          "when": "term_registered=false",
+          "outcome": "REJECT_OR_PROPOSE_SEMANTIC_CHANGE"
+        },
+        {
+          "when": "entry_status=candidate and usage_context in [active_contract,merged_implementation]",
+          "outcome": "REJECT"
+        },
+        {
+          "when": "promotion_requested=true and owner_approval_present=false",
+          "outcome": "REJECT_PROMOTION"
+        },
+        {
+          "when": "entry_status=approved",
+          "outcome": "ALLOW_REFERENCE"
+        }
+      ],
+      "default_outcome": "REJECT",
+      "failure_behavior": "Unknown or candidate semantics never silently become implementation authority."
+    },
+    {
+      "id": "DT-006",
+      "name": "LifecycleTransitionGate",
+      "status": "proposed",
+      "owning_domain": "Governance",
+      "authority_contracts": [
+        "C01"
+      ],
+      "requirements": [
+        "SEM-10",
+        "SEM-21",
+        "SEM-32"
+      ],
+      "inputs": [
+        "state_set_registered",
+        "current_state_registered",
+        "target_state_registered",
+        "transition_registered",
+        "operation_registered"
+      ],
+      "rules": [
+        {
+          "when": "any registration check is false/unknown",
+          "outcome": "REJECT"
+        },
+        {
+          "when": "all registration checks pass",
+          "outcome": "ALLOW_TRANSITION"
+        }
+      ],
+      "default_outcome": "REJECT",
+      "failure_behavior": "Unregistered state or transition cannot be persisted."
+    },
+    {
+      "id": "DT-007",
+      "name": "CrossDomainMutationGate",
+      "status": "proposed",
+      "owning_domain": "Governance",
+      "authority_contracts": [
+        "C00",
+        "C01"
+      ],
+      "requirements": [
+        "SYS-6",
+        "SYS-7",
+        "SEM-19",
+        "SEM-20"
+      ],
+      "inputs": [
+        "state_owner",
+        "requesting_domain",
+        "registered_owner_command_used"
+      ],
+      "rules": [
+        {
+          "when": "requesting_domain=state_owner",
+          "outcome": "OWNER_MUTATION_PATH"
+        },
+        {
+          "when": "requesting_domain!=state_owner and registered_owner_command_used=true",
+          "outcome": "REQUEST_OWNER_CHANGE"
+        },
+        {
+          "when": "requesting_domain!=state_owner and registered_owner_command_used!=true",
+          "outcome": "REJECT_DIRECT_WRITE"
+        }
+      ],
+      "default_outcome": "REJECT_DIRECT_WRITE",
+      "failure_behavior": "Foreign-domain direct mutation is forbidden."
+    },
+    {
+      "id": "DT-008",
+      "name": "ProtectedInputBoundary",
+      "status": "proposed",
+      "owning_domain": "Authorization",
+      "authority_contracts": [
+        "C13",
+        "C14",
+        "C41"
+      ],
+      "requirements": [
+        "TEN-5",
+        "AUTHZ-16",
+        "AUTHZ-17",
+        "API-2",
+        "API-3",
+        "API-4",
+        "API-9"
+      ],
+      "inputs": [
+        "input_schema_valid",
+        "client_scope_claim_present",
+        "server_scope_resolved",
+        "target_scope_resolved"
+      ],
+      "rules": [
+        {
+          "when": "input_schema_valid=false",
+          "outcome": "REJECT_INPUT_NO_SIDE_EFFECT"
+        },
+        {
+          "when": "server_scope_resolved=false or target_scope_resolved=false",
+          "outcome": "DENY"
+        },
+        {
+          "when": "client_scope_claim_present=true",
+          "outcome": "IGNORE_CLIENT_AUTHORITY_AND_USE_SERVER_SCOPE"
+        },
+        {
+          "when": "all server-side checks pass",
+          "outcome": "CONTINUE"
+        }
+      ],
+      "default_outcome": "DENY",
+      "failure_behavior": "Client-supplied authority claims never define tenant or target scope."
+    }
+  ],
+  "blocked_decision_tables": [
+    {
+      "id": "DT-B01",
+      "name": "ConcreteRoleCapabilityDecision",
+      "blocked_by": [
+        "OQ-AUTHZ-1",
+        "missing-k00:Role",
+        "capability-vocabulary-not-yet-populated"
+      ],
+      "authority_contracts": [
+        "C14"
+      ],
+      "evidence_state": "BLOCKED"
+    },
+    {
+      "id": "DT-B02",
+      "name": "DataDeletionDisposition",
+      "blocked_by": [
+        "OQ-PRIV-1",
+        "OQ-PRIV-2",
+        "OQ-PRIV-3"
+      ],
+      "authority_contracts": [
+        "C15"
+      ],
+      "evidence_state": "BLOCKED"
+    },
+    {
+      "id": "DT-B03",
+      "name": "CertificationEligibilityDetailed",
+      "blocked_by": [
+        "OQ-CERT-2",
+        "OQ-CERT-3",
+        "missing-k00:CertificationCriteriaVersion"
+      ],
+      "authority_contracts": [
+        "C34"
+      ],
+      "evidence_state": "BLOCKED"
+    }
+  ]
+}
