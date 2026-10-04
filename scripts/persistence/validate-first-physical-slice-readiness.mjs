@@ -1,53 +1,73 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
+
 const ROOT=resolve(process.cwd());
 const errors=[];
 const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
+const text=(p)=>{try{return readFileSync(join(ROOT,p),'utf8');}catch(e){errors.push(`${p}: ${e.message}`);return '';}};
+
 const r=load('persistence/physical-slices/readiness.json');
 const m=load('kernel/manifest.json');
 const reg=load('persistence/semantic-closure/registration.json');
-const rel=load('kernel/relationships.json');
-const admission=load('persistence/physical-slices/transaction-control/admission.json');
-const plan=load('persistence/physical-slices/transaction-control/admission-evidence-plan.json');
-const implementation=load('persistence/physical-slices/transaction-control/implementation.json');
+const p01Admission=load('persistence/physical-slices/transaction-control/admission.json');
+const p01Plan=load('persistence/physical-slices/transaction-control/admission-evidence-plan.json');
+const p01Implementation=load('persistence/physical-slices/transaction-control/implementation.json');
+const p04Implementation=load('persistence/physical-slices/identity-credentials/implementation.json');
+const p05Admission=load('persistence/physical-slices/learning-session/admission.json');
+const p05Plan=load('persistence/physical-slices/learning-session/admission-evidence-plan.json');
+const learningBoundary=text('src/modules/learning/README.md');
 
-if (m?.version!=='0.16.0') errors.push(`slice readiness: expected K00 0.16.0, found ${m?.version}`);
-if (reg?.version!=='1.0.0' || reg?.status!=='recorded') errors.push('slice readiness: semantic closure registration missing');
-if (r) {
-  if (r.readiness_id!=='TEACH-FIRST-PHYSICAL-SLICE-READINESS' || r.version!=='1.2.0' || r.status!=='recorded') errors.push('slice readiness: identity/state mismatch');
-  if (r.current_admitted_slice_count!==5 || (r.current_physical_slice_admissions||[]).length!==5 || !['SLICE-P01','SLICE-P02','SLICE-P03','SLICE-P04','SLICE-P05'].every(id=>r.current_physical_slice_admissions?.some(x=>x.id===id))) errors.push('slice readiness: exactly SLICE-P01 through SLICE-P05 must be admitted');
-  if ((r.candidate_slices||[]).length!==5) errors.push('slice readiness: expected 5 candidate slices');
-  const implementedAdmissions=(r.current_physical_slice_admissions||[]).filter(x=>['PROVEN','IMPLEMENTED'].includes(x.implementation_state));
-  if (implementedAdmissions.length!==4 || !implementedAdmissions.some(x=>x.id==='SLICE-P01') || !implementedAdmissions.some(x=>x.id==='SLICE-P02') || !implementedAdmissions.some(x=>x.id==='SLICE-P03') || !implementedAdmissions.some(x=>x.id==='SLICE-P04')) errors.push('slice readiness: SLICE-P01 through SLICE-P04 must all be implemented (PROVEN or IMPLEMENTED)');
-  const p02=(r.candidate_slices||[]).find(x=>x.id==='SLICE-P02');
-  if (!p02 || p02.current_state!=='ADMITTED' || (p02.blockers_removed_by_owner_decisions||[]).length!==3 || (p02.blockers||[]).length!==0 || r.current_physical_slice_admissions?.find(x=>x.id==='SLICE-P02')?.implementation_state!=='IMPLEMENTED') errors.push('slice readiness: P02 must remain admitted with IMPLEMENTED evidence preserved');
-  const p03=(r.candidate_slices||[]).find(x=>x.id==='SLICE-P03');
-  if (!p03 || p03.current_state!=='ADMITTED' || p03.implementation_authorized!==true || (p03.blockers||[]).length!==0) errors.push('slice readiness: P03 must be ADMITTED with implementation authorized');
-  if ((r.candidate_slices||[]).filter(x=>!['SLICE-P01','SLICE-P02','SLICE-P03','SLICE-P04','SLICE-P05'].includes(x.id)).some(x=>x.current_state!=='BLOCKED')) errors.push('slice readiness: P06+ must remain BLOCKED');
-  if (r.narrowed_next_lane?.preferred_slice!=='SLICE-P05') errors.push('slice readiness: next lane must be SLICE-P05');
-  if ((r.narrowed_next_lane?.owner_decisions_required||[]).length!==0) errors.push('slice readiness: P03 owner decisions must be closed');
-  if (r.narrowed_next_lane?.physical_implementation_authorized!==true) errors.push('slice readiness: P04 physical implementation must be authorized');
-  if (r.narrowed_next_lane?.next_required_gate!=='Implement SLICE-P05 physical persistence (Learning module)') errors.push('slice readiness: P05 implementation must be next');
-  const rr=(rel?.entries||[]).find(x=>x.id==='ReconciliationRecordUsesIdempotencyKey');
-  if (!rr || rr.status!=='approved' || rr.cardinality!=='many-to-zero-or-one') errors.push('slice readiness: relationship promotion must be approved many-to-zero-or-one');
-  if (admission?.version!=='2.0.0' || admission?.issue!=='#26' || admission?.decision!=='ADMIT' || admission?.physical_schema_authorized!==true || admission?.implementation_authorized!==true || admission?.shared_or_production_migration_execution_authorized!==false) errors.push('slice readiness: current SLICE-P01 admission record mismatch');
-  if (plan?.version!=='1.0.0' || plan?.status!=='recorded' || plan?.physical_schema_authorized!==false) errors.push('slice readiness: admission evidence plan missing or over-authorized');
-  if (implementation?.version!=='1.0.0' || implementation?.status!=='recorded' || implementation?.verification_source_commit!=='8147efa69ce9c4c4bd93d4a1529e116edcf1776a' || implementation?.verification?.postgres_integration_tests!=='PROVEN (9/9)' || implementation?.review?.unresolved_threads!==0) errors.push('slice readiness: verified SLICE-P01 implementation evidence missing');
-  if (r.implementation_guard?.tables_generated!==7 || r.implementation_guard?.migrations_generated!==4 || r.implementation_guard?.repositories_generated!==7 || r.implementation_guard?.physical_schema_authorized!==true || r.implementation_guard?.shared_or_production_migration_execution_authorized!==false) errors.push('slice readiness: implemented artifact counts/boundary mismatch');
+if(m?.version!=='0.16.0') errors.push(`slice readiness: expected K00 0.16.0, found ${m?.version}`);
+if(reg?.version!=='1.0.0' || reg?.status!=='recorded') errors.push('slice readiness: semantic closure registration missing');
+
+if(r){
+  if(r.readiness_id!=='TEACH-FIRST-PHYSICAL-SLICE-READINESS' || r.version!=='1.2.0' || r.status!=='recorded') errors.push('slice readiness: identity/state mismatch');
+
+  const admissions=r.current_physical_slice_admissions||[];
+  const admittedIds=admissions.map(x=>x.id).sort();
+  const expectedIds=['SLICE-P01','SLICE-P02','SLICE-P03','SLICE-P04'];
+  if(r.current_admitted_slice_count!==4 || JSON.stringify(admittedIds)!==JSON.stringify(expectedIds)) errors.push('slice readiness: exactly P01-P04 must be currently admitted; P05 must remain blocked');
+
+  for(const id of expectedIds){
+    const x=admissions.find(a=>a.id===id);
+    if(!x || !['PROVEN','IMPLEMENTED'].includes(x.implementation_state)) errors.push(`slice readiness: ${id} must preserve implemented/proven evidence`);
+  }
+  if(admissions.some(x=>x.id==='SLICE-P05')) errors.push('slice readiness: blocked P05 must not appear in current admitted slices');
+
+  const p04=(r.candidate_slices||[]).find(x=>x.id==='SLICE-P04');
+  if(!p04 || p04.name!=='Credential persistence' || p04.owning_module!=='Identity' || JSON.stringify(p04.records)!==JSON.stringify(['Credential']) || p04.current_state!=='IMPLEMENTED' || (p04.blockers||[]).length!==0) errors.push('slice readiness: P04 candidate alias must describe implemented Credential persistence');
+
+  const p05=(r.candidate_slices||[]).find(x=>x.id==='SLICE-P05');
+  if(!p05 || p05.name!=='LearningSession persistence' || p05.owning_module!=='Learning' || JSON.stringify(p05.records)!==JSON.stringify(['LearningSession']) || p05.current_state!=='BLOCKED' || p05.implementation_authorized!==false || p05.migration_authoring_authorized!==false || !(p05.blockers||[]).some(x=>x.includes('#47'))) errors.push('slice readiness: P05 must be BLOCKED on owner decision #47');
+
+  if(r.narrowed_next_lane?.preferred_slice!=='SLICE-P05' || r.narrowed_next_lane?.physical_implementation_authorized!==false || !(r.narrowed_next_lane?.owner_decisions_required||[]).some(x=>x.includes('#47')) || r.narrowed_next_lane?.next_required_gate!=='Resolve #47, register the decision, and rerun SLICE-P05 schema admission') errors.push('slice readiness: next lane must be blocked P05 owner-decision rerun');
+
+  if(r.evidence_states?.slice_p04_implementation!=='PROVEN' || r.evidence_states?.slice_p05_schema_admission!=='BLOCKED' || r.evidence_states?.slice_p05_relationship_nullability!=='UNKNOWN' || r.evidence_states?.slice_p05_module_foundation!=='PROVEN' || r.evidence_states?.slice_p05_implementation!=='BLOCKED') errors.push('slice readiness: P04/P05 evidence states are inconsistent');
+
+  if(p01Admission?.version!=='2.0.0' || p01Admission?.decision!=='ADMIT' || p01Admission?.shared_or_production_migration_execution_authorized!==false) errors.push('slice readiness: P01 admission evidence missing');
+  if(p01Plan?.version!=='1.0.0' || p01Plan?.physical_schema_authorized!==false) errors.push('slice readiness: P01 evidence plan missing');
+  if(p01Implementation?.version!=='1.0.0' || p01Implementation?.status!=='recorded') errors.push('slice readiness: P01 implementation evidence missing');
+  if(p04Implementation?.version!=='1.0.0' || p04Implementation?.status!=='proven') errors.push('slice readiness: P04 Credential implementation evidence missing');
+
+  if(p05Admission?.version!=='1.1.0' || p05Admission?.decision!=='BLOCK' || p05Admission?.physical_schema_authorized!==false || p05Admission?.implementation_authorized!==false || p05Admission?.migration_authoring_authorized!==false) errors.push('slice readiness: P05 fail-closed admission mismatch');
+  if(p05Plan?.version!=='1.1.0' || p05Plan?.physical_schema_authorized!==false || !(p05Plan?.required_evidence||[]).some(x=>x.includes('UNKNOWN'))) errors.push('slice readiness: P05 evidence plan must preserve UNKNOWN Assignment-reference shape');
+  if(!learningBoundary.includes('Foundation only') || !learningBoundary.includes('SLICE-P05 physical persistence is BLOCKED')) errors.push('slice readiness: Learning source-module foundation missing or over-authorizing');
+
+  if(r.implementation_guard?.shared_or_production_migration_execution_authorized!==false || r.implementation_guard?.full_relational_schema_authorized!==false) errors.push('slice readiness: production/full-schema execution must remain blocked');
 }
-if (errors.length) {
+
+if(errors.length){
   console.error(`Post-closure physical slice readiness FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
-  for (const e of errors) console.error(`- ${e}`);
+  for(const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
+
 console.log('Post-closure physical slice readiness PASS');
 console.log('K00: 0.16.0');
-console.log('Physical slices admitted: 3 (SLICE-P01, SLICE-P02, SLICE-P03)');
-console.log('Implemented slices: SLICE-P01 TransactionControl (PROVEN), SLICE-P02 Identity (IMPLEMENTED)');
-console.log('P01 implementation evidence: PROVEN');
-console.log('P02 owner decisions: PROVEN');
-console.log('P02 schema admission: ADMIT / PROVEN');
-console.log('P02 implementation evidence: IMPLEMENTED');
+console.log('Implemented/admitted slices: P01-P04');
+console.log('P04 Credential implementation: PROVEN');
+console.log('P05 LearningSession admission: BLOCKED');
+console.log('P05 Assignment-reference nullability/requiredness: UNKNOWN pending #47');
+console.log('P05 physical implementation/migration authoring: NOT AUTHORIZED');
 console.log('Shared/production migration execution: BLOCKED');
-console.log('Next gate: implement P03 and prove acceptance evidence');

@@ -1,17 +1,17 @@
 {
   "admission_id": "TEACH-SLICE-P05-PHYSICAL-SCHEMA-ADMISSION",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "recorded",
   "evaluated_on": "2026-10-04",
-  "issue": "#46",
-  "semantic_baseline_commit": "4d52bf0",
+  "issue": "#47",
+  "semantic_baseline_commit": "626512771b1a66751428d7bd0b5ac5fe6ddb613b",
   "kernel_version": "0.16.0",
   "slice": "SLICE-P05",
   "records": [
     "LearningSession"
   ],
   "owning_module": "Learning",
-  "decision": "ADMIT",
+  "decision": "BLOCK",
   "governing_authority": "TEACH-PERSISTENCE-MODEL@1.0.0",
   "criteria": [
     {
@@ -22,43 +22,46 @@
     {
       "criterion": "canonical identifier is approved",
       "state": "PROVEN",
-      "evidence": "LearningSessionId approved"
+      "evidence": "LearningSessionId approved in K00 0.16.0"
     },
     {
       "criterion": "every persisted lifecycle state set is approved",
       "state": "PROVEN",
-      "evidence": "LearningSessionStatus approved (ACTIVE, COMPLETED)"
+      "evidence": "LearningSessionStatus and LearningSessionStateMachine approved (ACTIVE -> COMPLETED only)"
     },
     {
       "criterion": "every relationship/cardinality encoded by the schema is approved",
-      "state": "PROVEN",
-      "evidence": "IdentityHasLearningSession (1:N), LearningSessionUsesAssignment (N:1) approved"
+      "state": "UNKNOWN",
+      "evidence": "IdentityHasLearningSession and LearningSessionUsesAssignment cardinalities are approved, but no authoritative artifact states whether the physical Assignment reference is required or nullable"
     },
     {
       "criterion": "no blocking open question changes the record shape",
-      "state": "PROVEN",
-      "evidence": "OQ-LRN-1 resolved (ACTIVE->COMPLETED only)"
+      "state": "BLOCKED",
+      "evidence": "Issue #47 must resolve LearningSessionUsesAssignment physical nullability/requiredness before schema shape can be selected"
     },
     {
       "criterion": "owning module is explicit",
       "state": "PROVEN",
-      "evidence": "Learning"
+      "evidence": "Architecture 1.0.0 names Learning as a runtime domain module; src/modules/learning establishes the source boundary without implementation"
     },
     {
       "criterion": "protected ownership/scope fields are derivable from approved semantics",
       "state": "PROVEN",
-      "evidence": "IdentityHasLearningSession provides authoritative IdentityId FK"
+      "evidence": "C32 LRN-1 plus IdentityHasLearningSession provide authoritative Identity ownership/scope"
     },
     {
       "criterion": "migration and acceptance evidence plan exists",
       "state": "PROVEN",
-      "evidence": "admission-evidence-plan.json@1.0.0"
+      "evidence": "admission-evidence-plan.json@1.1.0"
     }
   ],
-  "blockers": [],
-  "physical_schema_authorized": true,
-  "implementation_authorized": true,
-  "migration_authoring_authorized": true,
+  "blockers": [
+    "P05_ASSIGNMENT_REFERENCE_OPTIONALITY_UNKNOWN (#47)"
+  ],
+  "physical_schema_authorized": false,
+  "implementation_authorized": false,
+  "migration_authoring_authorized": false,
   "shared_or_production_migration_execution_authorized": false,
-  "next_required_gate": "Implement SLICE-P05 physical persistence (Learning module) and prove acceptance evidence"
+  "next_required_gate": "Resolve issue #47, register the owner decision, then rerun the automated SLICE-P05 schema-admission gate",
+  "full_relational_schema_authorized": false
 }
