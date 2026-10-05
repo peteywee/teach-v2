@@ -1253,7 +1253,7 @@
     "contracts/c11-identity-credentials-contract.md": "b9adc24cee57cf468256b4c35d5231145055200939e21e5250d6631734569d5d",
     "contracts/c12-application-sessions-contract.md": "6bfda46131be1c25d3aa71f5a771dcc1374033156b2467757c3dacdee527481d",
     "contracts/c13-tenancy-membership-contract.md": "cb2c36261c09045b026489fddb627ad57667bee544e7226a983a86d9e21e38be",
-    "contracts/c14-authorization-capabilities-contract.md": "096d74892a7f9ef440598364205372e0dc0d38422a93a765265489d3f2526308",
+    "contracts/c14-authorization-capabilities-contract.md": "67c3f8820c5f4bc6d3e74f4601f079ef9202750ce7e4b48e6338d3b60c4b6fd3",
     "contracts/c15-data-isolation-privacy-contract.md": "e14300a57e8bf75f39509efa5c11c6ae994dba9dd798336f01d23cce8c70e84e",
     "contracts/c21-database-migration-contract.md": "eb64b82349abda75370ab68961af92094e6840a3d02e18a1bfb2f4eaaac6a135",
     "contracts/c22-transaction-idempotency-reconciliation-contract.md": "41b6d408d3a90175119b6b47574a186564735d27721ea800e4bfc6c48d0a6f0e",
