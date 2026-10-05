@@ -43,7 +43,7 @@
 | Contract ID        | C14                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.1.0                                                                                                                                                           |
+| Version            | 1.2.0                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
 | Approved by        | Patrick Craven (owner), 2026-10-03 — C14 1.1.0 domain-ownership approval; see `APPROVAL-RECORD.md` and GitHub issue #2 |
