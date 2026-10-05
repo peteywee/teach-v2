@@ -1,10 +1,10 @@
 # Every unresolved owner decision
 
-Consulted V2 main: `b7a78ef73fdd45e5fb062e11c468d8cf10e27c65`. This is a live-source projection and a proposal packet, not an approval record.
+Consulted V2 main: `3fe92889aa55fa4a69d3b1e28c3a1211719b1b3f`. Live-source projection and proposal packet; recommendations are not approvals.
 
-**66 unresolved contract questions / 19 explicitly blocking rows / 12 physical-shape placeholders / 71 candidate entries.** These inventories overlap; do not add them into a count of distinct decisions.
+**61 unresolved contract questions / 18 explicitly blocking rows / 12 physical-shape placeholders / 71 candidate entries.** These inventories overlap. A nonblocking row can still block its dependent feature.
 
-A contract row marked non-blocking can still block the feature or shape that depends on it. All 23 contracts are active; implementation values remain gated. Resolved owner decisions are preserved and are not being reopened.
+Five selected policy questions were registered separately through [issue #66](https://github.com/peteywee/teach-v2/issues/66): OQ-IDN-6, OQ-AUD-1, OQ-REL-1, OQ-REL-4, OQ-OBS-3. See [registration and review](../owner-decisions/2026-10-04/review.md). Runtime, deletion, analytics, provisioning and production remain gated.
 
 ## First review-ready selections
 
@@ -23,7 +23,7 @@ A contract row marked non-blocking can still block the feature or shape that dep
 | OQ-CERT-1 | PRIVATE_AUTHENTICATED_SCOPED_VERIFICATION | CERT-13 |
 | OQ-CERT-4 | NO_SELF_OBSERVATION | CERT-15 |
 
-These twelve selections are independently reviewable. OQ-AUTHZ-1 still requires the exact capability/bundle matrix; OQ-AUD-1 and privacy questions need owner-supplied values. OQ-SES-2 needs actual transport/host topology. Approval of a direction is not approval of an omitted matrix or a physical schema.
+Exact capability matrix, privacy values and actual cookie/host selection remain unresolved. OQ-AUTHZ-1 records new V2 matrix direction only; no V1 grants are adopted. Sentry and Vercel Analytics remain recommendations; certification approvers remain UNKNOWN.
 
 ## Complete contract-question inventory
 
@@ -50,7 +50,6 @@ These twelve selections are independently reviewable. OQ-AUTHZ-1 still requires 
 | OQ-IDN-1 | Yes | Which password hashing algorithm and parameters are approved? | Argon2id minimum m=19456 KiB, t=2, p=1, unique random salts and versioned encoded hashes; benchmark the approved backend before implementation. V1 bcrypt is reference only, with its explicit 72-byte guard. |
 | OQ-IDN-3 | Yes | Which sessions does a credential change revoke: all sessions, all other sessions, or another policy? | Revoke every session for the Identity atomically with successful credential change and audit; require a new sign-in. This is a proposed owner choice, not current authority. |
 | OQ-IDN-4 | Yes | What is the OAuth linking rule: verified-email match, explicit user-initiated linking only, or another rule? | Use existing verified provider-subject links; matching email alone cannot link or create a duplicate Identity. Linking to an existing Identity requires explicit user initiation and reauthentication. |
-| OQ-IDN-6 | No | Are PINs an approved frontline credential type in v2, and if so what are their length and lockout rules? | Keep PIN authentication unavailable until owner supplies length, attempt limit, lock duration and reset authority; recover V1 tests before selecting values. |
 | OQ-IDN-7 | No | Must password-reset and invitation responses be indistinguishable for registered and unregistered emails? | Use indistinguishable accepted responses for known/unknown email, with bounded abuse controls and no existence disclosure. |
 
 ### C12
@@ -75,7 +74,7 @@ These twelve selections are independently reviewable. OQ-AUTHZ-1 still requires 
 
 | ID | Blocking row | Exact unresolved question | Proposed choice or required input |
 | --- | --- | --- | --- |
-| OQ-AUTHZ-1 | Yes | Is the Gate A capability vocabulary and bundle table (accepted 2026-07-22) adopted verbatim for v2, amended, or replaced? | Recover V1 ordered current-fact evaluation and deny tests; amend its vocabulary/bundles for V2. A full capability/command/bundle matrix must be proposed and owner-approved before this question can be resolved. A direction alone is insufficient. |
+| OQ-AUTHZ-1 | Yes | Is the Gate A capability vocabulary and bundle table (accepted 2026-07-22) adopted verbatim for v2, amended, or replaced? | Owner selected creation of a new V2 capability matrix, not recovery of V1 grants; issue #67 must propose the exact command/capability/bundle matrix before owner approval can resolve this question. |
 | OQ-AUTHZ-2 | No | Which cross-tenant platform capabilities, if any, exist in v2, and what audit do they require? | Approve no cross-tenant platform grants initially; do not import V1 platform_operator grants or role aliases. |
 
 ### C15
@@ -107,7 +106,6 @@ These twelve selections are independently reviewable. OQ-AUTHZ-1 still requires 
 
 | ID | Blocking row | Exact unresolved question | Proposed choice or required input |
 | --- | --- | --- | --- |
-| OQ-AUD-1 | Yes | How long are audit records retained, and is retention per tenant configurable? | Propose a fixed central record-class policy initially without tenant overrides; owner must supply exact duration and privacy/legal-hold treatment. Audit deletion stays blocked meanwhile. |
 | OQ-AUD-2 | No | For which entities must current state be reconstructable from lifecycle history? | Propose reconstructable lifecycle history for Identity, Membership, Assignment and Certification, with derived projections kept separate from canonical state. |
 | OQ-AUD-3 | No | Which denial types are operationally significant enough to record? | Propose scoped records for capability/tenant/target violations and invalid/revoked credential abuse, with rate limits and redaction; avoid turning every validation typo into permanent audit. |
 
@@ -170,9 +168,7 @@ These twelve selections are independently reviewable. OQ-AUTHZ-1 still requires 
 
 | ID | Blocking row | Exact unresolved question | Proposed choice or required input |
 | --- | --- | --- | --- |
-| OQ-REL-1 | No | Which hosting platform(s) are approved for v2 web and API? | Propose Vercel web/API with managed PostgreSQL using V1 experience; exact account/projects/environment/cookie topology still need explicit approval and validation. |
 | OQ-REL-3 | No | What does the deployed smoke test cover? | Propose exact deployment/config/schema identity, health/readiness, role/scope denials, assigned-content start/completion, atomic audit and logout replay plus recovery checks. URL 200 alone is insufficient. |
-| OQ-REL-4 | No | How long after promotion is rollback to the prior candidate supported? | Owner must choose the rollback observation window and data/migration compatibility requirements; no duration is inferred from V1 runbooks. |
 
 ### C53
 
@@ -180,7 +176,6 @@ These twelve selections are independently reviewable. OQ-AUTHZ-1 still requires 
 | --- | --- | --- | --- |
 | OQ-OBS-1 | No | Which error-capture and alerting providers are approved, and where do alerts go? | Owner must select error/alert providers and verified alert destinations; recover V1 redaction/correlation tests independently of provider choice. |
 | OQ-OBS-2 | No | Which learner fields, if any, may appear in logs? | Propose no credential or learner payload content in logs; permit only approved correlation and pseudonymous operational identifiers with scope-aware access. |
-| OQ-OBS-3 | No | How long are logs retained? | Owner must choose log retention and redacted archival policy separately from canonical audit retention. |
 
 ### C61
 
@@ -203,62 +198,129 @@ These twelve selections are independently reviewable. OQ-AUTHZ-1 still requires 
 | OQ-BIL-2 | No | Which payment provider is approved (the source proposal names Stripe)? | Do not select a payment provider or permit money movement in the foundation batch. |
 | OQ-BIL-3 | No | How does an Organization relate to its billing account (for example one-to-one, owned by the organization)? | Propose Organization-owned local billing-account relationship and read-only entitlement projection; exact cardinality/provider linkage requires owner-approved semantics. |
 
-## Physical shape gates outside named contract questions
+## Physical-shape placeholders
 
-| ID | Owning module | Current gate |
-| --- | --- | --- |
-| P06.shape_decision | Learning | UNKNOWN; #60 remains controlling |
-| P06.lifecycle_decision | Learning | UNKNOWN; #60 remains controlling |
-| P06.protected_scope_decision | Learning | UNKNOWN; #60 remains controlling |
-| P06.content_version_decision | Learning | UNKNOWN; #60 remains controlling |
-| P07.shape_decision | Certification | UNKNOWN; #63 remains controlling |
-| P07.lifecycle_decision | Certification | UNKNOWN; #63 remains controlling |
-| P07.protected_scope_decision | Certification | UNKNOWN; #63 remains controlling |
-| P07.content_version_decision | Certification | UNKNOWN; #63 remains controlling |
-| P08.shape_decision | Learning | UNKNOWN; #63 remains controlling |
-| P08.lifecycle_decision | Learning | UNKNOWN; #63 remains controlling |
-| P08.protected_scope_decision | Learning | UNKNOWN; #63 remains controlling |
-| P08.content_version_decision | Learning | UNKNOWN; #63 remains controlling |
+| ID | Owner | State | Gate |
+| --- | --- | --- | --- |
+| P06.shape_decision | Learning | UNKNOWN | #60 |
+| P06.lifecycle_decision | Learning | UNKNOWN | #60 |
+| P06.protected_scope_decision | Learning | UNKNOWN | #60 |
+| P06.content_version_decision | Learning | UNKNOWN | #60 |
+| P07.shape_decision | Certification | UNKNOWN | #63 |
+| P07.lifecycle_decision | Certification | UNKNOWN | #63 |
+| P07.protected_scope_decision | Certification | UNKNOWN | #63 |
+| P07.content_version_decision | Certification | UNKNOWN | #63 |
+| P08.shape_decision | Learning | UNKNOWN | #63 |
+| P08.lifecycle_decision | Learning | UNKNOWN | #63 |
+| P08.protected_scope_decision | Learning | UNKNOWN | #63 |
+| P08.content_version_decision | Learning | UNKNOWN | #63 |
 
-For each slice, choose exact required fields/cardinalities, lifecycle, protected scope and content-version binding. P06 also needs mutation/reassignment, duplicate/retry and immutability policy; P07 needs criteria/evidence/history; P08 needs payload schema/version, causality/order/replay horizon. Resolve dependent semantics first, then rerun all eight admission criteria. Only ADMIT may authorize physical authoring.
+## Semantic candidates
 
-## Candidate promotion inventory
+Candidate is not approval. Every promotion requires the existing strict-nine authority and dependency evidence.
 
-| Registry | Candidate IDs |
-| --- | --- |
-| kernel/decision-tables.json | DT-001, DT-002, DT-003, DT-004, DT-005, DT-006, DT-007, DT-008 |
-| kernel/entities.json | AuditEvent, ContentBlock, Entitlement, LearnerState, LifecycleEvent, Location, Membership |
-| kernel/events.json | ApplicationSessionCreated, ApplicationSessionRevoked, CertificationIssued, CertificationRevoked, ContentAssigned, LearningSessionCompleted, LearningSessionStarted, MembershipCreated, MembershipDeactivated, ProgressRecorded |
-| kernel/identifiers.json | AuditEventId, CapabilityId, ContentBlockId, EntitlementId, LearnerStateId, LifecycleEventId, LocationId, MembershipId |
-| kernel/invariants.json | INV-001, INV-002, INV-003, INV-004, INV-005, INV-006, INV-007, INV-008, INV-009, INV-010, INV-011, INV-012, INV-013, INV-014, INV-015, INV-016, INV-017, INV-018, INV-019, INV-020, INV-021, INV-022 |
-| kernel/relationships.json | ContentPackContainsContentBlock, EntitlementBelongsToOrganization, LearnerStateBelongsToIdentity, LearnerStateTracksContentPack, LifecycleEventReferencesIdentity, LocationBelongsToOrganization, MembershipLinksIdentityOrganization, MembershipMayScopeLocation |
-| kernel/state-machines.json | MembershipStateMachine |
-| kernel/states.json | EvidenceState, MembershipStatus |
-| kernel/values.json | EmailAddress, ContentVersion, Timestamp, RequestId, IdempotencyKey |
+### kernel/decision-tables.json
 
-These are candidates, not automatic promotions or a request to approve all of them. SEM-30/SEM-36 require explicit owner approval and dependency closure for each selected revision; Membership/Location/ContentVersion/AuditEvent and their identifiers/relationships are the next dependency clusters to prepare. Candidate invariants and decision tables remain candidate even when their contracts bind implementation.
+- DT-001
+- DT-002
+- DT-003
+- DT-004
+- DT-005
+- DT-006
+- DT-007
+- DT-008
 
-## Additional recovery reviews
+### kernel/entities.json
 
-- Global Identity lifecycle effects in a normalized multi-tenant model need an actor/scope review; an organization-local manager must not accidentally gain global deactivation authority.
-- The exact capability/command/role bundle proposal must distinguish sign-in bootstrap from already-authenticated protected operations, preventing a login-authorization cycle.
-- AuditLifecycle needs its own evidence plan and physical admission; the disposable probes and logical ports are not AuditEvent storage.
-- ContentPack/ContentVersion authoritative storage/read interface precede Assignment admission.
-- Transport Interfaces, demo applicability/reset/isolation and runtime acceptance remain separate approvals/evidence gates.
+- AuditEvent
+- ContentBlock
+- Entitlement
+- LearnerState
+- LifecycleEvent
+- Location
+- Membership
 
-## Already decided; preserve these
+### kernel/events.json
 
-- REQUIRED_ONE_ASSIGNMENT: every persisted LearningSession has exactly one non-null Assignment reference.
-- LearningSession ACTIVE → COMPLETED, terminal completion.
-- Session verifier v1 is domain-separated SHA-256 over a uniformly random 32-byte credential; 12-hour absolute / 30-minute idle expiry.
-- Token expiry/one-time use, owner scoping and controlled reinvitation decisions remain binding.
-- Organization owns local Entitlement; Authorization consumes it read-only.
-- C01 owns capability names; C14 owns authorization semantics.
-- P01–P05 storage admissions and immutable migration history remain binding.
-- Existing backup/restore/config-fingerprint policy decisions are resolved; actual production evidence remains absent.
+- ApplicationSessionCreated
+- ApplicationSessionRevoked
+- CertificationIssued
+- CertificationRevoked
+- ContentAssigned
+- LearningSessionCompleted
+- LearningSessionStarted
+- MembershipCreated
+- MembershipDeactivated
+- ProgressRecorded
 
-## Next execution order
+### kernel/identifiers.json
 
-Owner selections → SYS-21 impact/revision records → semantic promotions where dependency-ready → Content/Membership/Audit admission plans → P06 ADMIT/BLOCK → authoritative backend adapters and atomic Learning start → exact-source runtime/transport/demo evidence.
+- AuditEventId
+- CapabilityId
+- ContentBlockId
+- EntitlementId
+- LearnerStateId
+- LifecycleEventId
+- LocationId
+- MembershipId
 
-Legacy approval, a green test, or this packet cannot close a V2 decision. Shared/production execution and full runtime activation remain BLOCKED.
+### kernel/invariants.json
+
+- INV-001
+- INV-002
+- INV-003
+- INV-004
+- INV-005
+- INV-006
+- INV-007
+- INV-008
+- INV-009
+- INV-010
+- INV-011
+- INV-012
+- INV-013
+- INV-014
+- INV-015
+- INV-016
+- INV-017
+- INV-018
+- INV-019
+- INV-020
+- INV-021
+- INV-022
+
+### kernel/relationships.json
+
+- ContentPackContainsContentBlock
+- EntitlementBelongsToOrganization
+- LearnerStateBelongsToIdentity
+- LearnerStateTracksContentPack
+- LifecycleEventReferencesIdentity
+- LocationBelongsToOrganization
+- MembershipLinksIdentityOrganization
+- MembershipMayScopeLocation
+
+### kernel/state-machines.json
+
+- MembershipStateMachine
+
+### kernel/states.json
+
+- EvidenceState
+- MembershipStatus
+
+### kernel/values.json
+
+- EmailAddress
+- ContentVersion
+- Timestamp
+- RequestId
+- IdempotencyKey
+
+## Execution order and preserved authority
+
+Owner selections → SYS-21 revisions → dependency-ready semantic promotions and Membership/Content/Audit admission → P06 ADMIT/BLOCK → authoritative Assignment and atomic Learning start → exact-source transport/runtime/demo evidence. #60 remains the sole P06 shape gate; #58 remains the atomic Learning-start gate.
+
+P05 REQUIRED_ONE_ASSIGNMENT and ACTIVE→COMPLETED, verifier-only session storage, 12-hour absolute/30-minute idle expiry and 7-day/15-minute/1-hour Invitation/Setup/Reset validity remain binding. Organization owns Entitlement; C01 owns capability names and C14 their semantics. No draft/privacy/retention policy extends authentication validity. Existing immutable migrations, backend-only persistence and production-proof gates remain binding.
+
+Global Identity lifecycle effects across memberships require an explicit actor/scope review. Sign-in/bootstrap must not depend on an already authenticated protected-command grant. Required audit storage and real authorization adapters remain absent. Self-audit is not independent review.

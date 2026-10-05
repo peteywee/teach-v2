@@ -1,0 +1,56 @@
+{
+  "issue": "#66",
+  "owner_local_date": "2026-10-04",
+  "timezone": "America/Chicago",
+  "baseline": "3fe92889aa55fa4a69d3b1e28c3a1211719b1b3f",
+  "revisions": [
+    {
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "from": "1.3.0",
+      "to": "1.4.0",
+      "superseded_copy": "contracts/superseded/c11-identity-credentials-contract-1.3.0.md",
+      "original_sha256": "dc4d4a6b4d34d43aefb07a36a7fdca011686b007024cdfc0543ffeb9657d9921",
+      "historical_body_sha256": "1b73e8e7be3140c7130fa7cb3cce38336860eb47c5cab2473a2df3f514e1aa08",
+      "resolved_ids": [
+        "OQ-IDN-6"
+      ]
+    },
+    {
+      "contract": "contracts/c23-audit-lifecycle-events-contract.md",
+      "from": "1.0.3",
+      "to": "1.1.0",
+      "superseded_copy": "contracts/superseded/c23-audit-lifecycle-events-contract-1.0.3.md",
+      "original_sha256": "6bb49a0882531a2c8224df245e7a991aaac3cb97019dd2371cca57b83b38c00f",
+      "historical_body_sha256": "d1d3bf8e9499972233ef01ec46d2f79af30c4a5ef39e644699c3611bdd117dd1",
+      "resolved_ids": [
+        "OQ-AUD-1"
+      ]
+    },
+    {
+      "contract": "contracts/c52-deployment-release-recovery-contract.md",
+      "from": "1.1.0",
+      "to": "1.2.0",
+      "superseded_copy": "contracts/superseded/c52-deployment-release-recovery-contract-1.1.0.md",
+      "original_sha256": "d2b5c5356f015548b4720d8b073ce998543dfb0b72b35782d44adb2ceccfab2c",
+      "historical_body_sha256": "75bf5b529c2520d33920a0c80adc03ec2abedab8a173df67e26383290f2b6283",
+      "resolved_ids": [
+        "OQ-REL-1",
+        "OQ-REL-4"
+      ]
+    },
+    {
+      "contract": "contracts/c53-observability-contract.md",
+      "from": "1.0.3",
+      "to": "1.1.0",
+      "superseded_copy": "contracts/superseded/c53-observability-contract-1.0.3.md",
+      "original_sha256": "1fe87f05de5a35497e7da210591b989f261caf66efa1a3679deb8df8866a5ef9",
+      "historical_body_sha256": "1d999cd9c57cafaa348e7b23616838b92d97fb62781ba7706a365d40cb667ca4",
+      "resolved_ids": [
+        "OQ-OBS-3"
+      ]
+    }
+  ],
+  "implementation_conformance": "UNKNOWN",
+  "runtime_activation": "BLOCKED",
+  "production_execution_authorized": false
+}

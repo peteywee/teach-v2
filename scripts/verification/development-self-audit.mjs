@@ -28,10 +28,11 @@ export function currentFacts(root) {
   const ledger=load('verification/whole-repository/command-coverage.json');
   const ownerInventory=load('verification/legacy-recovery/owner-decisions.json');
   const liveOwnerInventory=deriveOwnerDecisionInventory(root,ownerInventory.consulted_v2_baseline);
+  const ownerRegistration=load('verification/owner-decisions/2026-10-04/registration.json');
   if(JSON.stringify(ownerInventory)!==JSON.stringify(liveOwnerInventory))throw new Error('owner decision inventory drift');
   return { kernel_version:load('kernel/manifest.json').version,ownership_version:load('domains/ownership-map.json').version,
     policy_baselines:{architecture:load('architecture/authority.json').baseline_commit,application:load('application-interfaces/authority.json').baseline_commit,persistence:load('persistence/authority.json').baseline_commit},
-    registries,owner_decisions:{...liveOwnerInventory.totals,owner_approval_recorded:false},commands:{total:ledger.commands.length,partial:ledger.commands.filter(x=>x.state==='PARTIAL').length,blocked:ledger.commands.filter(x=>x.state==='BLOCKED').length},
+    registries,owner_decisions:{...liveOwnerInventory.totals,unresolved_recommendations_approved:false,registered_policy_selections:ownerRegistration.records.filter(x=>x.state==='CONFIRMED').length,policy_implementation_conformance:'UNKNOWN'},commands:{total:ledger.commands.length,partial:ledger.commands.filter(x=>x.state==='PARTIAL').length,blocked:ledger.commands.filter(x=>x.state==='BLOCKED').length},
     physical_readiness:load('persistence/physical-slices/readiness.json').current_physical_slice_admissions,
     future_admissions:Object.fromEntries(['assignment','certification','progress-event'].map(lane=>{const a=load(`persistence/physical-slices/${lane}/admission.json`);return [lane,{decision:a.decision,proven:a.criteria.filter(x=>x.state==='PROVEN').length,unknown:a.criteria.filter(x=>x.state==='UNKNOWN').length}];})),
     full_runtime_conformance:'UNKNOWN',runtime_activation:'BLOCKED',shared_or_production_execution_authorized:false };

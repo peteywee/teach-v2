@@ -23,7 +23,6 @@
   ],
   "not_selection_ready_without_more_detail": [
     "OQ-AUTHZ-1",
-    "OQ-AUD-1",
     "OQ-PRIV-1",
     "OQ-PRIV-2",
     "OQ-PRIV-3",
@@ -92,7 +91,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c02-automation-agent-authority-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-IDN-1",
@@ -125,16 +124,6 @@
       "affects": "IDN-2"
     },
     {
-      "id": "OQ-IDN-6",
-      "group": "Frontline",
-      "recommended_option": "DEFER_PIN_UNTIL_EXACT_POLICY",
-      "recommendation": "Keep PIN authentication unavailable until owner supplies length, attempt limit, lock duration and reset authority; recover V1 tests before selecting values.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c11-identity-credentials-contract.md",
-      "affects": "\u2014"
-    },
-    {
       "id": "OQ-IDN-7",
       "group": "Identity",
       "recommended_option": "INDISTINGUISHABLE_ACCEPTED_RESPONSE",
@@ -142,7 +131,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c11-identity-credentials-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-SES-1",
@@ -192,7 +181,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c12-application-sessions-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-TEN-1",
@@ -222,13 +211,13 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c13-tenancy-membership-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-AUTHZ-1",
       "group": "Foundation",
-      "recommended_option": "AMEND_GATE_A_THEN_APPROVE_EXACT_SET",
-      "recommendation": "Recover V1 ordered current-fact evaluation and deny tests; amend its vocabulary/bundles for V2. A full capability/command/bundle matrix must be proposed and owner-approved before this question can be resolved. A direction alone is insufficient.",
+      "recommended_option": "NEW_V2_MATRIX_PENDING_EXACT_APPROVAL",
+      "recommendation": "Owner selected creation of a new V2 capability matrix, not recovery of V1 grants; issue #67 must propose the exact command/capability/bundle matrix before owner approval can resolve this question.",
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c14-authorization-capabilities-contract.md",
@@ -252,7 +241,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-PRIV-2",
@@ -282,7 +271,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-PRIV-5",
@@ -292,7 +281,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-PRIV-6",
@@ -302,7 +291,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-MIG-3",
@@ -322,7 +311,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c21-database-migration-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-MIG-5",
@@ -332,7 +321,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c21-database-migration-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-TXN-2",
@@ -342,17 +331,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c22-transaction-idempotency-reconciliation-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-AUD-1",
-      "group": "Foundation",
-      "recommended_option": "OWNER_RETENTION_MATRIX_REQUIRED",
-      "recommendation": "Propose a fixed central record-class policy initially without tenant overrides; owner must supply exact duration and privacy/legal-hold treatment. Audit deletion stays blocked meanwhile.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c23-audit-lifecycle-events-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-AUD-2",
@@ -402,7 +381,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c31-content-teaching-engine-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-LRN-2",
@@ -422,7 +401,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c32-learning-sessions-progress-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-MGR-1",
@@ -442,7 +421,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c33-manager-operations-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-CERT-1",
@@ -492,7 +471,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c34-certification-credentials-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-API-1",
@@ -502,7 +481,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c41-api-boundary-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-API-2",
@@ -542,7 +521,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c42-web-client-boundary-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-EVD-1",
@@ -562,7 +541,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c51-verification-evidence-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-EVD-3",
@@ -572,17 +551,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c51-verification-evidence-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-REL-1",
-      "group": "Release",
-      "recommended_option": "RECOVER_VERCEL_WEB_API_AND_MANAGED_POSTGRES",
-      "recommendation": "Propose Vercel web/API with managed PostgreSQL using V1 experience; exact account/projects/environment/cookie topology still need explicit approval and validation.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c52-deployment-release-recovery-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-REL-3",
@@ -593,16 +562,6 @@
       "owner_approval_recorded": false,
       "authority_source": "contracts/c52-deployment-release-recovery-contract.md",
       "affects": "REL-8"
-    },
-    {
-      "id": "OQ-REL-4",
-      "group": "Release",
-      "recommended_option": "OWNER_ROLLBACK_WINDOW_REQUIRED",
-      "recommendation": "Owner must choose the rollback observation window and data/migration compatibility requirements; no duration is inferred from V1 runbooks.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c52-deployment-release-recovery-contract.md",
-      "affects": "\u2014"
     },
     {
       "id": "OQ-OBS-1",
@@ -625,16 +584,6 @@
       "affects": "OBS-7"
     },
     {
-      "id": "OQ-OBS-3",
-      "group": "Observability",
-      "recommended_option": "OWNER_LOG_RETENTION_REQUIRED",
-      "recommendation": "Owner must choose log retention and redacted archival policy separately from canonical audit retention.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c53-observability-contract.md",
-      "affects": "\u2014"
-    },
-    {
       "id": "OQ-ANL-1",
       "group": "Optional",
       "recommended_option": "REMAIN_DISABLED",
@@ -642,7 +591,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c61-analytics-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-ANL-2",
@@ -672,7 +621,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c63-billing-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-BIL-2",

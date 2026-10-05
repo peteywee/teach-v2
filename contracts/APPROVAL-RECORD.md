@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-04
-- Contract package version: `0.14.0`
+- Contract package version: `0.15.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -64,7 +64,7 @@ Open-question decisions are recorded here under SYS-34. The contracts were activ
 | C21      | OQ-MIG-1   | What backup mechanism and cadence are approved for production?                                                                                                                                                                | `MIGRATION_SCOPED_PLATFORM_NATIVE_BACKUP`: platform-native transactionally consistent backup/snapshot/PITR; automated at least daily for non-reconstructable production data; fresh named restorable point after candidate freeze and before each schema/data migration | 2026-10-04 | Patrick Craven |
 | C21      | OQ-MIG-2   | Where is restore proof performed (disposable environment, staging), and how recent must it be?                                                                                                                                | `ISOLATED_RESTORE_MAX_30D`: disposable isolated target; same database-engine major as production; proof <=30 days at promotion and immediately stale after backup mechanism/configuration change | 2026-10-04 | Patrick Craven |
 | C22      | OQ-TXN-1   | Are idempotency keys client-supplied (header), server-derived, or both, and how long are they retained? | Both by operation: each retryable operation explicitly declares client-supplied or server-derived key policy with no implicit fallback; retention is operation-declared and not shorter than the complete retry/reconciliation horizon | 2026-10-04 | Patrick Craven |
-| C23      | OQ-AUD-1   | How long are audit records retained, and is retention per tenant configurable?                                                                                                                                                |          |      |       |
+| C23 | OQ-AUD-1 | How long are audit records retained, and is retention per tenant configurable? | One year; fixed central policy; no tenant overrides; audit deletion BLOCKED | 2026-10-04 | Patrick Craven |
 | C32      | OQ-LRN-1   | What is the learning-session state machine (states and allowed transitions)?                                                                                                                                                  | ACTIVE -> COMPLETED; COMPLETED terminal; progress recording allowed only while ACTIVE | 2026-10-03 | Patrick Craven |
 | C33      | OQ-MGR-1   | Is manager visibility limited to direct reports, the whole location, or configurable?                                                                                                                                         |          |      |       |
 | C34      | OQ-CERT-1  | Is credential verification public (anyone with the link) or private (authenticated, scoped)? (Deferred by Gate A.)                                                                                                            |          |      |       |
@@ -72,6 +72,11 @@ Open-question decisions are recorded here under SYS-34. The contracts were activ
 | C41      | OQ-API-1   | Which routes are boundary exceptions outside `/api/v1`?                                                                                                                                                                       |          |      |       |
 | C42      | OQ-WEB-1   | Which accessibility standard and level is approved (for example WCAG 2.2 AA)?                                                                                                                                                 |          |      |       |
 | C52      | OQ-REL-2   | How is configuration identity computed and recorded without exposing secret values?                                                                                                                                           | `CANONICAL_CONFIG_MANIFEST_SHA256`: SHA-256 of deterministic sorted manifest; non-secret runtime values direct; secrets represented only by stable deployment-bound revision IDs; no raw secret values or secret-derived hashes | 2026-10-04 | Patrick Craven |
+
+| C11 | OQ-IDN-6 | Owner-selected policy value | 6 digits; 5 attempts; 15-minute lock; PIN auth unavailable until implementation | 2026-10-04 | Patrick Craven |
+| C52 | OQ-REL-1 | Owner-selected policy value | Supabase PostgreSQL + Vercel; no provisioning/deployment permission | 2026-10-04 | Patrick Craven |
+| C52 | OQ-REL-4 | Owner-selected policy value | 24-hour rollback support; migrations backward-compatible for full window | 2026-10-04 | Patrick Craven |
+| C53 | OQ-OBS-3 | Owner-selected policy value | 90-day operational logs; separate canonical audit policy; mechanism UNKNOWN | 2026-10-04 | Patrick Craven |
 
 ## Part 2 — Contract approvals
 
@@ -406,3 +411,16 @@ These decisions define policy and authorize provider-neutral validation machiner
 | TEACH-SLICE-P02-OWNER-DECISION-REGISTRATION | proposed | recorded 1.0.0 | Approve `IDENTITY_GLOBAL_PRINCIPAL_SESSION_IDENTITY_OWNED`: Identity is a global application principal with IdentityId as its explicit identity ownership key; ApplicationSession belongs to exactly one Identity; tenant/role/capability authority remains database-current and is not copied into P02 records | 2026-10-04 | Patrick Craven | #32 |
 
 These decisions close only the three shape-affecting P02 blockers. SameSite, cookie Domain/Path, CSRF, session-rotation events, concurrent-session policy, C15 deletion/retention semantics, and Membership topology/scope remain unresolved as explicitly recorded. Physical schema remains unauthorized until a fresh Persistence Model admission result says ADMIT.
+
+## Part 24 — Owner policy selections and proposal reconciliation (#66)
+
+Explicit owner values selected on 2026-10-04 America/Chicago; recommendations/drafts remain unresolved. These policy records do not authorize runtime activation, schema authoring, deletion, provisioning or production execution.
+
+| Contract | From | To | Owner-selected question/value | Date | Owner | Issue |
+| --- | --- | --- | --- | --- | --- | --- |
+| C11 | 1.3.0 | 1.4.0 | OQ-IDN-6; see governing contract and verification/owner-decisions/2026-10-04/registration.json | 2026-10-04 | Patrick Craven | #66 |
+| C23 | 1.0.3 | 1.1.0 | OQ-AUD-1; see governing contract and verification/owner-decisions/2026-10-04/registration.json | 2026-10-04 | Patrick Craven | #66 |
+| C52 | 1.1.0 | 1.2.0 | OQ-REL-1, OQ-REL-4; see governing contract and verification/owner-decisions/2026-10-04/registration.json | 2026-10-04 | Patrick Craven | #66 |
+| C53 | 1.0.3 | 1.1.0 | OQ-OBS-3; see governing contract and verification/owner-decisions/2026-10-04/registration.json | 2026-10-04 | Patrick Craven | #66 |
+
+OQ-AUTHZ-1 records the direction to create a new V2 matrix (#67); exact names/semantics/bundles remain unapproved. OQ-PRIV-1/2/3 remain drafts (#68). OQ-OBS-1 and OQ-SES-2 remain recommendations, OQ-CERT-2 remains UNKNOWN, OQ-API-1 remains unselected after source scan. No other recommendation in the supplied attachment is an owner approval. Its 99% labels are not evidence.

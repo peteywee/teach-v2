@@ -1,0 +1,260 @@
+{
+  "registration_id": "TEACH-OWNER-DECISION-RECONCILIATION-66",
+  "version": "1.0.0",
+  "issue": "#66",
+  "status": "recorded",
+  "owner": "Patrick Craven",
+  "owner_local_date": "2026-10-04",
+  "timezone": "America/Chicago",
+  "consulted_v2_baseline": "3fe92889aa55fa4a69d3b1e28c3a1211719b1b3f",
+  "attachment": {
+    "name": "Pasted markdown.md",
+    "sha256": "ec67307c3eed4f59cc40b0577b73ddcd81cfc61265aba1a4187e3d544d5ac372",
+    "authority": "recommendations only; confidence percentages are not proof"
+  },
+  "records": [
+    {
+      "id": "OQ-AUTHZ-1",
+      "state": "DIRECTION_RECORDED",
+      "owner_selection_recorded": false,
+      "question_resolved": false,
+      "value": {
+        "matrix_source": "NEW_V2",
+        "legacy_grants_adopted": false,
+        "exact_matrix_approved": false
+      },
+      "implementation_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "issue": "#67"
+    },
+    {
+      "id": "OQ-PRIV-1",
+      "state": "DRAFT_FOR_REVIEW",
+      "owner_selection_recorded": false,
+      "question_resolved": false,
+      "value": {
+        "deletion": "hard delete from database",
+        "anonymization": "PII replaced with irreversible hash",
+        "retention": "keep as-is",
+        "offboarding": "revoke access, retain history"
+      },
+      "implementation_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "issue": "#68",
+      "findings": [
+        "HASHING_IS_NOT_SUFFICIENT_ANONYMIZATION",
+        "HARD_DELETE_IS_NOT_IDENTITY_STATUS_DELETED",
+        "DEPENDENT_AND_ARCHIVED_COPY_SCOPE_UNKNOWN"
+      ]
+    },
+    {
+      "id": "OQ-PRIV-2",
+      "state": "DRAFT_FOR_REVIEW",
+      "owner_selection_recorded": false,
+      "question_resolved": false,
+      "value": {
+        "duration": 1,
+        "unit": "year",
+        "record_classes": [
+          "Identity",
+          "Credential",
+          "session",
+          "token",
+          "membership",
+          "learning",
+          "certification",
+          "audit"
+        ],
+        "legal_hold": "suspends deletion"
+      },
+      "implementation_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "issue": "#68",
+      "credential_validity_extension_authorized": false
+    },
+    {
+      "id": "OQ-PRIV-3",
+      "state": "DRAFT_FOR_REVIEW",
+      "owner_selection_recorded": false,
+      "question_resolved": false,
+      "value": {
+        "exemptions": [
+          "audit"
+        ],
+        "legal_hold_is_exemption": false
+      },
+      "implementation_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "issue": "#68",
+      "exemption_basis_approved": false
+    },
+    {
+      "id": "OQ-AUD-1",
+      "state": "CONFIRMED",
+      "owner_selection_recorded": true,
+      "question_resolved": true,
+      "value": {
+        "duration": 1,
+        "unit": "year",
+        "policy": "fixed-central",
+        "tenant_overrides": false,
+        "deletion_authorized": false
+      },
+      "implementation_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "retention_clock": "UNKNOWN",
+      "retention_executor": "ABSENT",
+      "retention_conformance": "UNKNOWN"
+    },
+    {
+      "id": "OQ-REL-1",
+      "state": "CONFIRMED",
+      "owner_selection_recorded": true,
+      "question_resolved": true,
+      "value": {
+        "database": "Supabase PostgreSQL",
+        "web_api": "Vercel"
+      },
+      "implementation_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "actual_project_identity": "UNKNOWN",
+      "provider_capability_proven": false
+    },
+    {
+      "id": "OQ-REL-4",
+      "state": "CONFIRMED",
+      "owner_selection_recorded": true,
+      "question_resolved": true,
+      "value": {
+        "rollback_window_hours": 24,
+        "migration_backward_compatibility_hours": 24
+      },
+      "implementation_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "prior_candidate_rollback_proven": false
+    },
+    {
+      "id": "OQ-OBS-1",
+      "state": "RECOMMENDED",
+      "owner_selection_recorded": false,
+      "question_resolved": false,
+      "value": {
+        "errors": "Sentry",
+        "traffic": "Vercel Analytics",
+        "alert_destination": "UNKNOWN"
+      },
+      "implementation_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "provider_selected": false,
+      "analytics_activation_authorized": false,
+      "total_cost_claim": "NOT_VERIFIED",
+      "ninety_day_log_storage_proven": false
+    },
+    {
+      "id": "OQ-OBS-3",
+      "state": "CONFIRMED",
+      "owner_selection_recorded": true,
+      "question_resolved": true,
+      "value": {
+        "duration": 90,
+        "unit": "days",
+        "store_kind": "operational-log",
+        "canonical_audit_policy_separate": true
+      },
+      "implementation_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "retention_executor": "ABSENT",
+      "retention_conformance": "UNKNOWN"
+    },
+    {
+      "id": "OQ-CERT-2",
+      "state": "UNKNOWN",
+      "owner_selection_recorded": false,
+      "question_resolved": false,
+      "value": {
+        "approver_role": "UNKNOWN",
+        "approval_record_location": "UNKNOWN"
+      },
+      "implementation_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED"
+    },
+    {
+      "id": "OQ-IDN-6",
+      "state": "CONFIRMED",
+      "owner_selection_recorded": true,
+      "question_resolved": true,
+      "value": {
+        "pin_digits": 6,
+        "attempts": 5,
+        "lock_minutes": 15,
+        "authentication_available": false
+      },
+      "implementation_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "attempt_reset_semantics": "UNKNOWN",
+      "hashing_implementation": "ABSENT",
+      "reset_authority": "UNKNOWN"
+    },
+    {
+      "id": "OQ-API-1",
+      "state": "SOURCE_SCAN_PENDING_SELECTION",
+      "owner_selection_recorded": false,
+      "question_resolved": false,
+      "value": {
+        "implemented_http_route_count": 0,
+        "approved_exception_routes": []
+      },
+      "implementation_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "runtime_route_inventory": "UNKNOWN"
+    },
+    {
+      "id": "OQ-SES-2",
+      "state": "RECOMMENDED",
+      "owner_selection_recorded": false,
+      "question_resolved": false,
+      "value": {
+        "topology": "same-origin",
+        "web_origin": "https://t34ch.com",
+        "api_prefix": "/api/v1",
+        "cookie": {
+          "domain_attribute": null,
+          "path": "/",
+          "secure": true,
+          "httpOnly": true,
+          "sameSite": "Lax"
+        }
+      },
+      "implementation_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "actual_host_proof": "UNKNOWN",
+      "transport_implementation": "ABSENT"
+    },
+    {
+      "id": "OQ-SES-1",
+      "state": "RECOMMENDED",
+      "owner_selection_recorded": false,
+      "question_resolved": false,
+      "value": {
+        "sameSite": "Lax"
+      },
+      "implementation_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "source": "SameSite field embedded in proposed OQ-SES-2 topology; not an independent approval"
+    }
+  ],
+  "effects": {
+    "confirmed_policy_question_count": 5,
+    "privacy_resolution_authorized": false,
+    "capability_matrix_approved": false,
+    "api_exceptions_approved": false,
+    "cookie_topology_approved": false,
+    "error_provider_approved": false,
+    "analytics_activation_authorized": false,
+    "schema_authoring_authorized": false,
+    "audit_deletion_authorized": false,
+    "pin_authentication_authorized": false,
+    "runtime_activation": "BLOCKED",
+    "shared_or_production_execution_authorized": false
+  }
+}

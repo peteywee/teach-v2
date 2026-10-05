@@ -1,13 +1,13 @@
 {
   "version": "0.1.0",
   "scope": "all unresolved active-contract question rows, future physical-shape questions, and candidate promotion inventory; no owner approval",
-  "consulted_v2_baseline": "b7a78ef73fdd45e5fb062e11c468d8cf10e27c65",
+  "consulted_v2_baseline": "3fe92889aa55fa4a69d3b1e28c3a1211719b1b3f",
   "owner_approval_recorded": false,
   "runtime_activation": "BLOCKED",
   "shared_or_production_execution_authorized": false,
   "totals": {
-    "unresolved_contract_questions": 66,
-    "explicit_contract_blockers": 19,
+    "unresolved_contract_questions": 61,
+    "explicit_contract_blockers": 18,
     "physical_shape_questions": 12,
     "semantic_candidates": 71
   },
@@ -69,47 +69,38 @@
     {
       "id": "OQ-IDN-1",
       "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.3.0",
+      "contract_version": "1.4.0",
       "question": "Which password hashing algorithm and parameters are approved?",
       "explicitly_blocks_implementation": true,
       "affects": "IDN-5",
-      "source_line": 162
+      "source_line": 166
     },
     {
       "id": "OQ-IDN-3",
       "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.3.0",
+      "contract_version": "1.4.0",
       "question": "Which sessions does a credential change revoke: all sessions, all other sessions, or another policy?",
       "explicitly_blocks_implementation": true,
       "affects": "IDN-15",
-      "source_line": 164
+      "source_line": 168
     },
     {
       "id": "OQ-IDN-4",
       "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.3.0",
+      "contract_version": "1.4.0",
       "question": "What is the OAuth linking rule: verified-email match, explicit user-initiated linking only, or another rule?",
       "explicitly_blocks_implementation": true,
       "affects": "IDN-2",
-      "source_line": 165
-    },
-    {
-      "id": "OQ-IDN-6",
-      "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.3.0",
-      "question": "Are PINs an approved frontline credential type in v2, and if so what are their length and lockout rules?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 167
+      "source_line": 169
     },
     {
       "id": "OQ-IDN-7",
       "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.3.0",
+      "contract_version": "1.4.0",
       "question": "Must password-reset and invitation responses be indistinguishable for registered and unregistered emails?",
       "explicitly_blocks_implementation": false,
       "affects": "—",
-      "source_line": 168
+      "source_line": 172
     },
     {
       "id": "OQ-SES-1",
@@ -292,31 +283,22 @@
       "source_line": 135
     },
     {
-      "id": "OQ-AUD-1",
-      "contract": "contracts/c23-audit-lifecycle-events-contract.md",
-      "contract_version": "1.0.3",
-      "question": "How long are audit records retained, and is retention per tenant configurable?",
-      "explicitly_blocks_implementation": true,
-      "affects": "—",
-      "source_line": 116
-    },
-    {
       "id": "OQ-AUD-2",
       "contract": "contracts/c23-audit-lifecycle-events-contract.md",
-      "contract_version": "1.0.3",
+      "contract_version": "1.1.0",
       "question": "For which entities must current state be reconstructable from lifecycle history?",
       "explicitly_blocks_implementation": false,
       "affects": "AUD-7",
-      "source_line": 117
+      "source_line": 122
     },
     {
       "id": "OQ-AUD-3",
       "contract": "contracts/c23-audit-lifecycle-events-contract.md",
-      "contract_version": "1.0.3",
+      "contract_version": "1.1.0",
       "question": "Which denial types are operationally significant enough to record?",
       "explicitly_blocks_implementation": false,
       "affects": "AUD-8",
-      "source_line": 118
+      "source_line": 123
     },
     {
       "id": "OQ-CNT-1",
@@ -499,58 +481,31 @@
       "source_line": 127
     },
     {
-      "id": "OQ-REL-1",
-      "contract": "contracts/c52-deployment-release-recovery-contract.md",
-      "contract_version": "1.1.0",
-      "question": "Which hosting platform(s) are approved for v2 web and API?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 125
-    },
-    {
       "id": "OQ-REL-3",
       "contract": "contracts/c52-deployment-release-recovery-contract.md",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "question": "What does the deployed smoke test cover?",
       "explicitly_blocks_implementation": false,
       "affects": "REL-8",
-      "source_line": 126
-    },
-    {
-      "id": "OQ-REL-4",
-      "contract": "contracts/c52-deployment-release-recovery-contract.md",
-      "contract_version": "1.1.0",
-      "question": "How long after promotion is rollback to the prior candidate supported?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 127
+      "source_line": 133
     },
     {
       "id": "OQ-OBS-1",
       "contract": "contracts/c53-observability-contract.md",
-      "contract_version": "1.0.3",
+      "contract_version": "1.1.0",
       "question": "Which error-capture and alerting providers are approved, and where do alerts go?",
       "explicitly_blocks_implementation": false,
       "affects": "OBS-2",
-      "source_line": 118
+      "source_line": 123
     },
     {
       "id": "OQ-OBS-2",
       "contract": "contracts/c53-observability-contract.md",
-      "contract_version": "1.0.3",
+      "contract_version": "1.1.0",
       "question": "Which learner fields, if any, may appear in logs?",
       "explicitly_blocks_implementation": false,
       "affects": "OBS-7",
-      "source_line": 119
-    },
-    {
-      "id": "OQ-OBS-3",
-      "contract": "contracts/c53-observability-contract.md",
-      "contract_version": "1.0.3",
-      "question": "How long are logs retained?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 120
+      "source_line": 124
     },
     {
       "id": "OQ-ANL-1",
@@ -683,20 +638,38 @@
     {
       "id": "OQ-IDN-2",
       "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.3.0",
+      "contract_version": "1.4.0",
       "question": "Resolved: Invitation acceptance secret = 7 days; SetupToken = 15 minutes; PasswordResetToken = 1 hour. Legacy values were reference only; this decision is v2 authority through the owner approval package.",
       "explicitly_blocks_implementation": false,
       "affects": "IDN-9, IDN-25, IDN-26",
-      "source_line": 163
+      "source_line": 167
     },
     {
       "id": "OQ-IDN-5",
       "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.3.0",
+      "contract_version": "1.4.0",
       "question": "Resolved: controlled rejection. An offboarded identity must be explicitly reactivated through ReactivateIdentity before a new invitation may be created.",
       "explicitly_blocks_implementation": false,
       "affects": "IDN-20, IDN-27",
-      "source_line": 166
+      "source_line": 170
+    },
+    {
+      "id": "OQ-IDN-6",
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "contract_version": "1.4.0",
+      "question": "Resolved: PIN parameters selected as 6 digits, 5 attempts, 15-minute lock. PIN authentication remains unavailable until implementation and all applicable authentication gates pass.",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 171
+    },
+    {
+      "id": "OQ-AUD-1",
+      "contract": "contracts/c23-audit-lifecycle-events-contract.md",
+      "contract_version": "1.1.0",
+      "question": "Resolved: one-year audit retention; fixed central policy with no tenant overrides. Audit deletion remains BLOCKED.",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 121
     },
     {
       "id": "OQ-LRN-1",
@@ -706,6 +679,33 @@
       "explicitly_blocks_implementation": false,
       "affects": "LRN-3",
       "source_line": 124
+    },
+    {
+      "id": "OQ-REL-1",
+      "contract": "contracts/c52-deployment-release-recovery-contract.md",
+      "contract_version": "1.2.0",
+      "question": "Resolved: Supabase PostgreSQL for the database and Vercel for web/API hosting. This does not approve a project, hostname, plan, provider authorization model or deployment.",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 132
+    },
+    {
+      "id": "OQ-REL-4",
+      "contract": "contracts/c52-deployment-release-recovery-contract.md",
+      "contract_version": "1.2.0",
+      "question": "Resolved: rollback to the prior candidate is supported for 24 hours after deployment/promotion; migrations remain backward-compatible during that full window.",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 134
+    },
+    {
+      "id": "OQ-OBS-3",
+      "contract": "contracts/c53-observability-contract.md",
+      "contract_version": "1.1.0",
+      "question": "Resolved: operational logs retained for 90 days, separately from the one-year canonical audit-retention policy. Provider/archival mechanism proof remains UNKNOWN.",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 125
     }
   ],
   "physical_shape_questions": [
@@ -1250,14 +1250,14 @@
     "contracts/c00-system-authority-contract.md": "63500932db774880d5769f545887a21c2482961e405eee328aed2cc25fa4b661",
     "contracts/c01-canonical-semantics-contract.md": "e407a52b739756e84264a66ef0a824d02435e4ee15e938c405c4caf8dc1ebd40",
     "contracts/c02-automation-agent-authority-contract.md": "21202fef396b5179a718ded8fa2f28a4726497c393ce083fb7af5297f594de23",
-    "contracts/c11-identity-credentials-contract.md": "dc4d4a6b4d34d43aefb07a36a7fdca011686b007024cdfc0543ffeb9657d9921",
+    "contracts/c11-identity-credentials-contract.md": "ace746240e72a308ec25bab1954d4de6aaadf4e80af54892216e4ce7869cfd99",
     "contracts/c12-application-sessions-contract.md": "6bfda46131be1c25d3aa71f5a771dcc1374033156b2467757c3dacdee527481d",
     "contracts/c13-tenancy-membership-contract.md": "7603211b5316af6d6d56bc5441bc8db86b3e8981f8f4d0c9f6d35aee852db96c",
     "contracts/c14-authorization-capabilities-contract.md": "0e427c6a0fe62e6b2784e433d9185b755493a824e44c4330e0163c99b80ba917",
     "contracts/c15-data-isolation-privacy-contract.md": "e14300a57e8bf75f39509efa5c11c6ae994dba9dd798336f01d23cce8c70e84e",
     "contracts/c21-database-migration-contract.md": "eb64b82349abda75370ab68961af92094e6840a3d02e18a1bfb2f4eaaac6a135",
     "contracts/c22-transaction-idempotency-reconciliation-contract.md": "41b6d408d3a90175119b6b47574a186564735d27721ea800e4bfc6c48d0a6f0e",
-    "contracts/c23-audit-lifecycle-events-contract.md": "6bb49a0882531a2c8224df245e7a991aaac3cb97019dd2371cca57b83b38c00f",
+    "contracts/c23-audit-lifecycle-events-contract.md": "6e084232b221177d9399e02b8851e7096160773e0b054075c82f34cfc7d5029b",
     "contracts/c31-content-teaching-engine-contract.md": "1ef58fc330e70d4cd38aad5df8440ccba36549dd17414e777f50fce667eebc45",
     "contracts/c32-learning-sessions-progress-contract.md": "ea26f7e871ea95cef6fcfadbd8a25078c16342e031032c90ddd6104210f95bf2",
     "contracts/c33-manager-operations-contract.md": "22c0a55c03ce2fb5fb5072045b0518a727250918b8fcace2907554a5173e7ea7",
@@ -1265,8 +1265,8 @@
     "contracts/c41-api-boundary-contract.md": "59257d21573369827d0bed24919e7d6fedec5221c780ffeb404dcea68fb26e52",
     "contracts/c42-web-client-boundary-contract.md": "5655dc089faf29bc8db16fd81319fcad6a7b37b8c5833b1b5d0fdb8b97ce9e28",
     "contracts/c51-verification-evidence-contract.md": "7390163d21ef0d00a8c7190108fa2f1e5ab1dd28e0d18569dc8e823fe8cf0161",
-    "contracts/c52-deployment-release-recovery-contract.md": "d2b5c5356f015548b4720d8b073ce998543dfb0b72b35782d44adb2ceccfab2c",
-    "contracts/c53-observability-contract.md": "1fe87f05de5a35497e7da210591b989f261caf66efa1a3679deb8df8866a5ef9",
+    "contracts/c52-deployment-release-recovery-contract.md": "15ec8fd3fa2ddfb68bf6a50fa53a37543f89defc95f7e4096afc9a0d0af8fbb4",
+    "contracts/c53-observability-contract.md": "64ca06c459a87fe4f04d6418ab09d69e2b2799cdca7a358e5afa40a82764f4ad",
     "contracts/c61-analytics-contract.md": "aad01e1353076e78e3e5bc6e342919ef7f9e4c4dc2da20b5b0809ae1ecad9fe2",
     "contracts/c62-pwa-offline-contract.md": "891fb6513da8c8efb529f023f149153e8ed90e0d7ac9aa46af78f68f61ff8ce6",
     "contracts/c63-billing-contract.md": "b01c3bf281cc0883e50cf74b9c52677fee1cc5b3ede422e5e015c58c5cfa0b9c",

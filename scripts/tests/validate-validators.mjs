@@ -1087,6 +1087,25 @@ test('recovery: altered reference excerpt fails',recoveryScript,dir=>{const p=re
 test('recovery: global audit transaction binding fails',recoveryScript,dir=>mutateText(dir,'src/modules/identity/infrastructure/persistence/postgres-session-command-transaction.ts','auditFactory(transaction)','auditFactory(this.db)'),{pattern:/same transaction binding/});
 test('recovery: missing session PG CI evidence fails',recoveryScript,dir=>mutateText(dir,'.github/workflows/slice-p02-implementation.yml','run: pnpm test:session:commands:integration','run: echo skipped'),{pattern:/session transaction PG automation/});
 
+// Explicit owner choices never authorize the accompanying draft recommendations.
+const ownerPolicyScript='scripts/verification/validate-owner-policy-registration.mjs', ownerPolicyBase='verification/owner-decisions/2026-10-04/';
+const mutateOwnerRecord=(dir,id,change)=>{const p=ownerPolicyBase+'registration.json',d=readJson(dir,p);change(d.records.find(x=>x.id===id));writeJson(dir,p,d);};
+test('owner policy: exact selected policies and unresolved drafts pass',ownerPolicyScript,()=>{},{pass:true});
+test('owner policy: invented PIN attempt limit fails',ownerPolicyScript,dir=>mutateOwnerRecord(dir,'OQ-IDN-6',r=>{r.value.attempts=6;}),{pattern:/exact selected OQ-IDN-6/});
+test('owner policy: shortened rollback compatibility fails',ownerPolicyScript,dir=>mutateOwnerRecord(dir,'OQ-REL-4',r=>{r.value.migration_backward_compatibility_hours=12;}),{pattern:/exact selected OQ-REL-4/});
+test('owner policy: privacy draft cannot become approved',ownerPolicyScript,dir=>mutateOwnerRecord(dir,'OQ-PRIV-1',r=>{r.state='CONFIRMED';r.owner_selection_recorded=true;}),{pattern:/unselected OQ-PRIV-1/});
+test('owner policy: draft exemption cannot be approved',ownerPolicyScript,dir=>mutateOwnerRecord(dir,'OQ-PRIV-3',r=>{r.exemption_basis_approved=true;}),{pattern:/approve exemptions/});
+test('owner policy: retention cannot extend credential validity',ownerPolicyScript,dir=>mutateOwnerRecord(dir,'OQ-PRIV-2',r=>{r.credential_validity_extension_authorized=true;}),{pattern:/extend authentication validity/});
+test('owner policy: new matrix direction cannot import V1 grants',ownerPolicyScript,dir=>mutateOwnerRecord(dir,'OQ-AUTHZ-1',r=>{r.value.legacy_grants_adopted=true;}),{pattern:/new matrix direction/});
+test('owner policy: provider recommendation cannot activate analytics',ownerPolicyScript,dir=>mutateOwnerRecord(dir,'OQ-OBS-1',r=>{r.analytics_activation_authorized=true;}),{pattern:/recommended providers cannot approve/});
+test('owner policy: one-year audit duration cannot authorize deletion',ownerPolicyScript,dir=>{const p=ownerPolicyBase+'registration.json',d=readJson(dir,p);d.effects.audit_deletion_authorized=true;writeJson(dir,p,d);},{pattern:/policy effects must preserve/});
+test('owner policy: selected duration cannot claim retention enforcement',ownerPolicyScript,dir=>mutateOwnerRecord(dir,'OQ-OBS-3',r=>{r.retention_conformance='PROVEN';}),{pattern:/retention policy is not enforcement evidence/});
+test('owner policy: rewritten superseded contract fails',ownerPolicyScript,dir=>mutateText(dir,'contracts/superseded/c11-identity-credentials-contract-1.3.0.md','**IDN-1**','**IDN-999**'),{pattern:/historical contract body cannot be rewritten/});
+test('owner policy: existing audit deletion guard cannot weaken',ownerPolicyScript,dir=>mutateText(dir,'contracts/c23-audit-lifecycle-events-contract.md','MUST NOT be updated or deleted through application paths','MAY be deleted through application paths'),{pattern:/existing requirement meaning/});
+test('owner policy: new route source invalidates empty scan',ownerPolicyScript,dir=>{writeFileSync(join(dir,'src/bootstrap/new-router.ts'),"router.get('/health', handler);\n");},{pattern:/route scan must cover exact current src inventory/});
+test('recovery: generated owner view cannot misstate a recommendation',recoveryScript,dir=>mutateText(dir,recoveryBase+'owner-decisions.md','ARGON2ID_19M_T2_P1','UNAPPROVED_HASH'),{pattern:/exact generated decision view/});
+
+test('owner policy: malformed revision change-log header fails',ownerPolicyScript,dir=>mutateText(dir,'contracts/c23-audit-lifecycle-events-contract.md','| Version | Date | Change | By |','| Version | 1.1.0 |'),{pattern:/complete revision change-log table/});
 // Report
 // ---------------------------------------------------------------------------
 

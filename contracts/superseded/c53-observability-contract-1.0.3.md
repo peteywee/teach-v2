@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C53",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.0.3",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-04",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.1.0",
-    "approved_on": "2026-10-04",
+    "approved_version": "1.0.0",
+    "approved_on": "2026-10-03",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Explicit owner-selected policy values in chat; SYS-21 issue #66; implementation conformance remains separate"
+    "inheritance": "1.0.1, 1.0.2, and 1.0.3 are non-normative governance/truth-state cleanup patches; 1.0.0 owner approval remains controlling"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,15 +28,16 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": [
-    "TEACH-CON-C53@1.0.3"
-  ],
-  "superseded_by": null,
+  "supersedes": [],
+  "superseded_by": "TEACH-CON-C53@1.1.0",
   "depends_on": [
     "contracts/"
   ]
 }
 -->
+
+> Superseded by TEACH-CON-C53@1.1.0 through #66. The original body below is preserved, including its former current-status wording.
+
 
 # C53 — Observability Contract
 
@@ -45,17 +46,17 @@
 | Contract ID        | C53                                                                                                                                                             |
 | Group              | C50 Production Proof                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.1.0 |
+| Version            | 1.0.3                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by | Patrick Craven (owner), 2026-10-04 — selected policy values; SYS-21 issue #66 |
+| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
 | Requirement prefix | `OBS`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New.                                                                                                                                                            |
-| Supersedes | C53 1.0.3 |
+| Supersedes         | None                                                                                                                                                            |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated | 2026-10-04 |
+| Last updated       | 2026-10-03                                                                                                                                                      |
 
 ## 1. Purpose and Failure Prevented
 
@@ -100,8 +101,6 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **OBS-9** — Critical external integrations MUST expose failure and reconciliation state.
 - **OBS-10** — Observability failures MUST NOT alter authorization decisions or request outcomes.
 
-- **OBS-11** — The operational-log retention policy MUST be 90 days and MUST remain distinct from canonical audit retention. A provider default with a shorter horizon MUST NOT establish conformance; a selected sink/archive and executable retention mechanism require evidence. Provider selection, alert destination and analytics activation remain separate owner gates.
-
 ## 5. Acceptance Cases
 
 | Case     | Proves       | Setup                                                                 | Expected                                                      |
@@ -114,7 +113,6 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | OBS-AC-6 | OBS-8        | Trigger denials                                                       | Logs include ID, operation, reason class; no protected fields |
 | OBS-AC-7 | OBS-9        | Force provider failure                                                | Integration state exposed as failed/needs reconciliation      |
 | OBS-AC-8 | OBS-10       | Make the log/error sink unavailable; run the authorization matrix     | Identical outcomes                                            |
-| OBS-AC-9 | OBS-11 | Evaluate a sink with less than 90-day retention and inspect archive/enforcement evidence | Shorter provider defaults cannot establish conformance; missing 90-day mechanism is UNKNOWN and blocks the affected release claim; audit storage remains separate |
 
 ## 6. Open Questions
 
@@ -122,7 +120,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | -------- | -------------------------------------------------------------------------------- | --------------------- | ------- |
 | OQ-OBS-1 | Which error-capture and alerting providers are approved, and where do alerts go? | No                    | OBS-2   |
 | OQ-OBS-2 | Which learner fields, if any, may appear in logs?                                | No                    | OBS-7   |
-| OQ-OBS-3 | Resolved: operational logs retained for 90 days, separately from the one-year canonical audit-retention policy. Provider/archival mechanism proof remains UNKNOWN. | No (resolved) | — |
+| OQ-OBS-3 | How long are logs retained?                                                      | No                    | —       |
 
 ## 7. Verification Status
 
@@ -133,13 +131,13 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
 | Blocking open questions      | 0 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
-| Owner approval | declared | 1.1.0 approved policy selections recorded under #66; no runtime conformance, provisioning, deletion or production authority is inferred. |
+| Owner approval               | declared                 | Approved by the owner on 2026-10-03; recorded in `APPROVAL-RECORD.md`. Initial owner-approval baseline is commit `2c9b1c849a520ba817efc91150be9a37797f4238`; this 1.0.3 revision is tracked by Git history.                                                                     |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
 ## 8. Change Log
 
-| Version | Date | Change | By |
+| Version | Date       | Change                                                                                                                                                                                          | By               |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Retargeted to the Teach v2 codebase: legacy `peteywee/teach` is reference only; anchors and paths no longer point into the legacy repository.                                                   | Claude (drafter) |
@@ -148,4 +146,3 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.1   | 2026-10-03 | Non-normative document-governance metadata/provenance normalization; 1.0.0 owner approval remained controlling. | ChatGPT (governance) |
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
-| 1.1.0 | 2026-10-04 | Record owner-selected OQ-OBS-3 policy values, append requirement/acceptance cases and preserve prior version; SYS-21 #66. No runtime implementation or production permission. | Patrick Craven (owner selection) |

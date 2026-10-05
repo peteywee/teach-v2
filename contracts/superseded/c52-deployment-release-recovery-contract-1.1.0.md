@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C52",
   "class": "contract",
-  "version": "1.2.0",
+  "version": "1.1.0",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-04",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.2.0",
+    "approved_version": "1.1.0",
     "approved_on": "2026-10-04",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Explicit owner-selected policy values in chat; SYS-21 issue #66; implementation conformance remains separate"
+    "basis": "Owner approved canonical configuration identity policy; GitHub issue #30"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -29,14 +29,17 @@
     "use": "reference only; does not govern and is not governed by this contract"
   },
   "supersedes": [
-    "TEACH-CON-C52@1.1.0"
+    "TEACH-CON-C52@1.0.3"
   ],
-  "superseded_by": null,
+  "superseded_by": "TEACH-CON-C52@1.2.0",
   "depends_on": [
     "contracts/"
   ]
 }
 -->
+
+> Superseded by TEACH-CON-C52@1.2.0 through #66. The original body below is preserved, including its former current-status wording.
+
 
 # C52 — Deployment, Release & Recovery Contract
 
@@ -45,17 +48,17 @@
 | Contract ID        | C52                                                                                                                                                             |
 | Group              | C50 Production Proof                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.2.0 |
+| Version            | 1.1.0                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by | Patrick Craven (owner), 2026-10-04 — selected policy values; SYS-21 issue #66 |
+| Approved by        | Patrick Craven (owner), 2026-10-04 — canonical configuration-identity decision approved through GitHub issue #30; see `APPROVAL-RECORD.md` |
 | Requirement prefix | `REL`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New.                                                                                                                                                            |
-| Supersedes | C52 1.1.0 |
+| Supersedes         | C52 1.0.3                                                                                                                                                            |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated | 2026-10-04 |
+| Last updated       | 2026-10-03                                                                                                                                                      |
 
 ## 1. Purpose and Failure Prevented
 
@@ -74,7 +77,7 @@ This contract does not own:
 
 - Evidence semantics (C51)
 - Migration rules (C21)
-- Hosting platform provisioning (OQ-REL-1 now records the approved release targets only)
+- Hosting platform choice (see OQ-REL-1; value Not yet verified)
 
 Related contracts: C00, C21, C51.
 
@@ -106,9 +109,6 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **REL-15** — A rollback MUST identify exactly the candidate binding being restored.
 - **REL-16** — Deployment success alone MUST NOT be reported as product success.
 
-- **REL-17** — Rollback to the prior named candidate MUST remain supported for 24 hours after deployment/promotion. Data migrations MUST remain backward-compatible with the prior candidate throughout that window. Promotion MUST block when compatibility or the exact prior-candidate rollback path is UNKNOWN; selecting the window MUST NOT authorize migration execution or deployment.
-- **REL-18** — The owner-selected release hosting targets are Supabase PostgreSQL for the database and Vercel for web/API hosting. Target project/environment/configuration identities and concrete provider capabilities MUST be evidenced for an actual candidate; selecting platforms MUST NOT substitute for C21/C52 release gates or authorize provisioning, spending or production execution.
-
 ## 5. Acceptance Cases
 
 | Case     | Proves               | Setup                                                                                   | Expected                                                            |
@@ -122,16 +122,14 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | REL-AC-7 | REL-12               | Promotion attempted without owner approval record                                       | Blocked                                                             |
 | REL-AC-8 | REL-13               | Push commit to the production branch after acceptance                                   | New candidate created; production not updated until gates pass      |
 | REL-AC-9 | REL-16               | Review of release communications                                                        | Manual evidence: no product-success claim based on deployment alone |
-| REL-AC-10 | REL-10, REL-15, REL-17 | Evaluate rollback compatibility at deployment and throughout 24 hours; omit prior candidate or use an incompatible migration | Support covers the full 24-hour window; missing/UNKNOWN compatibility or rollback binding blocks promotion |
-| REL-AC-11 | REL-1, REL-18 | Inspect hosting selection and attempt release without concrete project/environment/config/provider evidence | Supabase PostgreSQL + Vercel selection recorded; missing actual target/capability proof blocks release |
 
 ## 6. Open Questions
 
 | ID       | Question                                                                            | Blocks implementation | Affects |
 | -------- | ----------------------------------------------------------------------------------- | --------------------- | ------- |
-| OQ-REL-1 | Resolved: Supabase PostgreSQL for the database and Vercel for web/API hosting. This does not approve a project, hostname, plan, provider authorization model or deployment. | No (resolved) | — |
+| OQ-REL-1 | Which hosting platform(s) are approved for v2 web and API?                          | No                    | —       |
 | OQ-REL-3 | What does the deployed smoke test cover?                                            | No                    | REL-8   |
-| OQ-REL-4 | Resolved: rollback to the prior candidate is supported for 24 hours after deployment/promotion; migrations remain backward-compatible during that full window. | No (resolved) | — |
+| OQ-REL-4 | How long after promotion is rollback to the prior candidate supported?              | No                    | —       |
 
 ### Resolved owner decision in 1.1.0
 
@@ -145,14 +143,14 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
 | Implementation conformance   | partial                  | Configuration identity and production-migration evidence gates are implemented provider-neutrally by issue #30; deployment/runtime/rollback/provider proof remains UNKNOWN until an actual release candidate exists. |
 | Acceptance cases implemented | partial PROVEN           | REL-AC-4 is covered by deterministic configuration-identity tests in the issue #30 package. Other release acceptance cases remain unproven until deployment/release infrastructure exists. |
-| Blocking open questions | 0 open | OQ-REL-1/2/4 resolved; OQ-REL-3 smoke coverage remains open. Actual production promotion still requires every applicable gate and explicit owner approval. |
-| Owner approval | declared | 1.2.0 approved policy selections recorded under #66; no runtime conformance, provisioning, deletion or production authority is inferred. |
+| Blocking open questions      | 0 open                   | OQ-REL-2 is resolved in 1.1.0. OQ-REL-1/3/4 remain open and non-blocking; actual production promotion still requires every applicable REL gate and explicit owner approval. |
+| Owner approval               | declared                 | 1.1.0 configuration-identity policy approved by Patrick Craven on 2026-10-04 through GitHub issue #30 and recorded in `APPROVAL-RECORD.md`. |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
 ## 8. Change Log
 
-| Version | Date | Change | By |
+| Version | Date       | Change                                                                                                                                                                                          | By               |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Retargeted to the Teach v2 codebase: legacy `peteywee/teach` is reference only; anchors and paths no longer point into the legacy repository.                                                   | Claude (drafter) |
@@ -162,4 +160,3 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.1.0   | 2026-10-04 | Normative production-proof revision: resolve OQ-REL-2 with `CANONICAL_CONFIG_MANIFEST_SHA256`; refine REL-6 and REL-AC-4; GitHub issue #30. | Patrick Craven (owner approval) |
-| 1.2.0 | 2026-10-04 | Record owner-selected OQ-REL-1, OQ-REL-4 policy values, append requirement/acceptance cases and preserve prior version; SYS-21 #66. No runtime implementation or production permission. | Patrick Craven (owner selection) |
