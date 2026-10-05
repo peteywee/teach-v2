@@ -15,7 +15,7 @@ const manifest=load('kernel/manifest.json');
 const entities=load('kernel/entities.json');
 const rec=load('governance/2026-10-04-strict-nine-ratification.json');
 
-if (!index.includes('"version": "0.17.0"') || !index.includes('- Package version: `0.17.0`')) errors.push('governance ratification: contract index must be 0.16.0');
+if (!index.includes('"version": "0.17.0"') || !index.includes('- Package version: `0.17.0`')) errors.push('governance ratification: contract index must be 0.17.0');
 if (!approvals.includes('"version": "0.17.0"') || !approvals.includes('- Contract package version: `0.17.0`')) errors.push('governance ratification: approval record must be 0.17.0');
 if (!index.match(/\| C01 \|.*\| 1\.8\.0\s+\| `SEM`\s+\| 36\s+\| 25\s+\| 0\s+\| 0\s+\| `active` \|/)) errors.push('governance ratification: C01 index row not synchronized');
 if (!index.includes('|     | **Total**') || !index.includes('**391**') || !index.includes('**267**') || !index.includes('**49**') || !index.includes('**11**')) errors.push('governance ratification: contract totals not synchronized');
