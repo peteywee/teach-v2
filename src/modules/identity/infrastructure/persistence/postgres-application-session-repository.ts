@@ -1,6 +1,6 @@
 import { snapshotPersistenceInput } from './input-snapshot.mjs';
 import { and, eq, sql } from 'drizzle-orm';
-import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import type { IdentityDatabase } from './identity-database.js';
 import {
   ApplicationSessionNotFoundError,
   type ApplicationSessionRepository,
@@ -9,7 +9,6 @@ import {
   absoluteExpiryFromIssuedAt,
   type ApplicationSessionRecord,
 } from '../../domain/application-session.js';
-import * as schema from './schema.js';
 import {
   applicationSessions,
   identities,
@@ -19,7 +18,7 @@ import {
 export class PostgresApplicationSessionRepository
   implements ApplicationSessionRepository
 {
-  constructor(private readonly db: NodePgDatabase<typeof schema>) {}
+  constructor(private readonly db: IdentityDatabase) {}
 
   async create(input: {
     readonly id: string;
@@ -88,26 +87,27 @@ export class PostgresApplicationSessionRepository
     readonly now: Date;
   }): Promise<ApplicationSessionRecord> {
     input = snapshotPersistenceInput(input);
-    const [updated] = await this.db
-      .update(applicationSessions)
-      .set({
-        status: 'REVOKED',
-        revokedAt: input.now,
-        updatedAt: input.now,
-      })
-      .where(
-        and(
-          eq(applicationSessions.id, input.id),
-          eq(applicationSessions.identityId, input.identityId),
-          eq(applicationSessions.status, 'ACTIVE'),
-        ),
-      )
-      .returning();
-    if (updated) return mapSession(updated);
+    return (await this.revokeWithOutcome(input)).session;
+  }
 
-    const existing = await this.getById(input);
-    if (!existing) throw new ApplicationSessionNotFoundError();
-    return existing;
+  async revokeWithOutcome(input: {
+    readonly id: string;
+    readonly identityId: string;
+    readonly now: Date;
+  }): Promise<{ session: ApplicationSessionRecord; transitioned: boolean }> {
+    input = snapshotPersistenceInput(input);
+    return this.db.transaction(async tx => {
+      const [current] = await tx.select().from(applicationSessions).where(and(
+        eq(applicationSessions.id, input.id), eq(applicationSessions.identityId, input.identityId),
+      )).limit(1).for('update');
+      if (!current) throw new ApplicationSessionNotFoundError();
+      if (current.status !== 'ACTIVE') return { session: mapSession(current), transitioned: false };
+      const [updated] = await tx.update(applicationSessions).set({
+        status: 'REVOKED', revokedAt: input.now, updatedAt: input.now,
+      }).where(and(eq(applicationSessions.id, input.id), eq(applicationSessions.identityId, input.identityId), eq(applicationSessions.status, 'ACTIVE'))).returning();
+      if (!updated) throw new Error('Locked ApplicationSession transition returned no row');
+      return { session: mapSession(updated), transitioned: true };
+    });
   }
 
   async authenticateByVerifier(input: {

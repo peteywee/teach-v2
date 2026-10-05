@@ -1,0 +1,349 @@
+{
+  "version": "0.1.0",
+  "scope": "pinned source inspection and recorded historical evidence, not fresh legacy execution or V2 authority",
+  "legacy_runtime_retested": false,
+  "legacy_authority_for_v2": false,
+  "copied_runtime_sources": [],
+  "sources": [
+    {
+      "label": "cutover",
+      "path": "AGENTS.md",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "b18976c2232ca0a9bbacd996e2229cd30c0235b5",
+      "sha256": "4ae0940af0bf0f2e3c3c8f4be5919c18c04785f5ec0a94ae56166a4472ff51fc",
+      "bytes": 13592
+    },
+    {
+      "label": "cutover",
+      "path": ".topshelf/evidence/TR-0004/review.md",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "dd0b979d2cf80d93bfd2cde5f8975246f03bc2a6",
+      "sha256": "59be42f473c3ccaf603133c49d07273ea58db03106bfefd79d98d5115922888b",
+      "bytes": 7224
+    },
+    {
+      "label": "cutover",
+      "path": ".topshelf/evidence/TR-0006/review.md",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "c80af08b294a0630c7a92237f159cc56ea0eed2c",
+      "sha256": "b8fefef07f4c20ff943d6343e06de325c2edc164f052586b6df33f011faf10fb",
+      "bytes": 8065
+    },
+    {
+      "label": "cutover",
+      "path": ".topshelf/evidence/TR-0009/review.md",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "2b997945645b7607f440efc4e17a07f24400b6e6",
+      "sha256": "8d8309017d32737d28baa4119d24e2e8cec1d53fcafd7b524059c93dc7209716",
+      "bytes": 6044
+    },
+    {
+      "label": "cutover",
+      "path": ".topshelf/work-orders/TR-0010.json",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "12a35cdfd6426f5a7b65931a18a78e7c066ea299",
+      "sha256": "2f3dccacf63a4ac01b8f790a27128fa5c24595223ef6bf7b4b0546e3efa0154a",
+      "bytes": 1924
+    },
+    {
+      "label": "cutover",
+      "path": "docs/decisions/gate-a-saas-foundation-contracts.md",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "8c5b3e8961b93d3497fe34572d8db044a489ff65",
+      "sha256": "6a8193bd4a95f52c04f3a824f563b3573fc2c3c048276ca37b630de66acf5b79",
+      "bytes": 26091
+    },
+    {
+      "label": "main",
+      "path": "docs/implementation/restaurant-pilot-rc-hardening-report.md",
+      "repo": "peteywee/teach",
+      "ref": "main",
+      "head_sha": "99162f17eace95238160f20c03e0b47af2c77fcd",
+      "git_blob_sha": "ec810273cefff542509d01ef0099db0ebfc84397",
+      "sha256": "b2e0af3ce388a494fac7ca569600f218cd69804542be37ad86d1265e140a7f4d",
+      "bytes": 46012
+    },
+    {
+      "label": "main",
+      "path": "docs/readiness/deployed-verification-log.md",
+      "repo": "peteywee/teach",
+      "ref": "main",
+      "head_sha": "99162f17eace95238160f20c03e0b47af2c77fcd",
+      "git_blob_sha": "51a4b436abd7201359c292cbc49fca2ec4731389",
+      "sha256": "8125af9a7469c7a42154866f2c812ebe91aa5565a64ca40cbf538ea28e07ae5e",
+      "bytes": 12223
+    },
+    {
+      "label": "cutover",
+      "path": "packages/api-server/src/middleware/application-session.ts",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "c27748c631ac0b094372649d65c187ba2791b983",
+      "sha256": "b7fa7de331f596e3b05a24d92ed876911735a5c48b14c0a3bce3098760f9389e",
+      "bytes": 9254
+    },
+    {
+      "label": "cutover",
+      "path": "packages/api-server/src/lib/effective-authority.ts",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "77170674887906333caf88e1102e9b01d60a4dcb",
+      "sha256": "8196610cf4c88d80e0a42578f00f5ffaf8247c2e64b52f8721aed85bf136bcfd",
+      "bytes": 4605
+    },
+    {
+      "label": "cutover",
+      "path": "packages/api-server/src/lib/authoritative-scope.ts",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "21e2d73594fc4aa1d85b4d248f2f917d229b7ab2",
+      "sha256": "561bec08fd210cb9bb8352fa1e876c26cdd7e08ec8cc5530f74eb368f5c70490",
+      "bytes": 8936
+    },
+    {
+      "label": "cutover",
+      "path": "packages/api-server/src/middleware/capability-authorization.ts",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "6db09e4c44542d8a11e4fe92bc88525137ed2806",
+      "sha256": "4bbecf3a294c0f933639960c2c29f409022be5712c7085aa0c9637549cd6d3a1",
+      "bytes": 15490
+    },
+    {
+      "label": "cutover",
+      "path": "packages/api-server/src/lib/audit.ts",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "bd69eb506094faff84358d97945b6e67fe170db8",
+      "sha256": "47d327ad6f6f5247d46449f67cbd84535e4458bc7cf6e3363ccea095e723fd4a",
+      "bytes": 4090
+    },
+    {
+      "label": "cutover",
+      "path": "packages/shared/src/constants/capability-values.ts",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "932dec1fbcc2a9027b78c35833bffca9b247b3b8",
+      "sha256": "784e3a50b98d740f433c471142cf3e22ea1085d7f952a3aeb5c19ee15412a231",
+      "bytes": 2814
+    },
+    {
+      "label": "cutover",
+      "path": "packages/shared/src/constants/capability.ts",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "ba5be631abe495f11cb8c329b07c81bc5c78a342",
+      "sha256": "02dce11996dd02004df1ab9f9f256bb2978b435bb9e645cb0db1ba5d194390e5",
+      "bytes": 63165
+    },
+    {
+      "label": "cutover",
+      "path": "packages/auth/src/index.ts",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "3ea09d98b3852156c10f839304457fde43a0b397",
+      "sha256": "037fdcf98b348169521c7f3dc3186305a715bdb19cd4540af82a3837291b4d38",
+      "bytes": 10036
+    },
+    {
+      "label": "cutover",
+      "path": "packages/api-server/src/routes/manager.ts",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "1a6e960f0b73e1f63d6e1e520d84b10a37f8213e",
+      "sha256": "95455227aad0eb4cdbc366f2bf7f58c9eb91f5110527285e11d00ff23ea3b737",
+      "bytes": 34581
+    },
+    {
+      "label": "cutover",
+      "path": "packages/api-server/src/routes/learner.ts",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "6a6989b9f4f96efb57601ccb69a840ff3d8aa793",
+      "sha256": "6d90eed1eceee2aba868506f8fbbfd7ed2e93019b49e6e6c9ef7930d45c75c4a",
+      "bytes": 42197
+    },
+    {
+      "label": "main",
+      "path": "packages/auth/src/index.ts",
+      "repo": "peteywee/teach",
+      "ref": "main",
+      "head_sha": "99162f17eace95238160f20c03e0b47af2c77fcd",
+      "git_blob_sha": "3ea09d98b3852156c10f839304457fde43a0b397",
+      "sha256": "037fdcf98b348169521c7f3dc3186305a715bdb19cd4540af82a3837291b4d38",
+      "bytes": 10036
+    },
+    {
+      "label": "main",
+      "path": "docs/decisions/gate-a-saas-foundation-contracts.md",
+      "repo": "peteywee/teach",
+      "ref": "main",
+      "head_sha": "99162f17eace95238160f20c03e0b47af2c77fcd",
+      "git_blob_sha": "8c5b3e8961b93d3497fe34572d8db044a489ff65",
+      "sha256": "6a8193bd4a95f52c04f3a824f563b3573fc2c3c048276ca37b630de66acf5b79",
+      "bytes": 26091
+    },
+    {
+      "label": "cutover",
+      "path": "packages/api-server/src/lib/audit.test.ts",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "8346941e51a1ef91fb74387c71639875efca7937",
+      "sha256": "3272fc42f01b31a4f4a2852d86df56b65a94df5a77a3b4f411d2a06ef5f62f78",
+      "bytes": 7358
+    },
+    {
+      "label": "cutover",
+      "path": "packages/api-server/src/middleware/application-session.test.ts",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "0ad0665040f107babbad5e167b9856d22e987467",
+      "sha256": "363b808b82f5b89d8fc82fe7adaa9f003a6110a4436181ac493fce32299406a5",
+      "bytes": 10292
+    },
+    {
+      "label": "cutover",
+      "path": ".topshelf/evidence/TR-0007/review.md",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "00dd9be57767505def976bac3587ada2d6658bd9",
+      "sha256": "37ced6fbd542f53133422eba70d4136c0409eaed5e8f1d3a0a989b104323c5a8",
+      "bytes": 3071
+    },
+    {
+      "label": "cutover",
+      "path": ".topshelf/evidence/TR-0008/review.md",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "d064b041c0b0f32ecab12bf31a14128d1b2f7eb0",
+      "sha256": "e3bf1d05c305c218b31b395f2a1cbc492f9409c2bc6638b9be28f1891db667ac",
+      "bytes": 2622
+    },
+    {
+      "label": "cutover",
+      "path": ".topshelf/evidence/TR-0003/review.md",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "e226bef50fceac9cc14d35207bf6bfdf7fd0d450",
+      "sha256": "3e9473940ce82d18e615cfe355845357e0b536abe3d869b9770dcd8deb07d7a5",
+      "bytes": 2210
+    },
+    {
+      "label": "cutover",
+      "path": ".topshelf/evidence/TR-0005/review.md",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "d7bed79384f821d37af007fd4a01e110fcb126e3",
+      "sha256": "f48dc47fc46f0c7cd92b6588085ef67a0911add67c7eb023d0dbaffe35b5e720",
+      "bytes": 3709
+    },
+    {
+      "label": "main",
+      "path": "apps/web/src/app/auth/callback/route.ts",
+      "repo": "peteywee/teach",
+      "ref": "main",
+      "head_sha": "99162f17eace95238160f20c03e0b47af2c77fcd",
+      "git_blob_sha": "19d831b153e61834573d508775987365436df5d7",
+      "sha256": "c13f4d564134854fe2a72cae8cf1c41802bf86676d3af2033d6c337d5bd4561f",
+      "bytes": 8039
+    },
+    {
+      "label": "cutover",
+      "path": "apps/web/src/lib/auth-session.ts",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "a2590e5b1e1eb55c6a46b4139941b94a653c4e69",
+      "sha256": "079029df4228b7452eaec988cb3f88da4ec90acca8328cb0b06e4a05dbc74097",
+      "bytes": 376
+    },
+    {
+      "label": "cutover",
+      "path": "packages/database/src/schema/index.ts",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "1a1150c82aae1a66b52a03fd9cbbfa13591f3b3d",
+      "sha256": "307ee69bda5c7062316e3b71d57051201abb4fe1c4a31e0f1e906bcab17c4ebd",
+      "bytes": 59436
+    },
+    {
+      "label": "cutover",
+      "path": "packages/shared/src/schemas/content/version-id.ts",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "e9542ab09dbeba771097652c3de3f5494874642d",
+      "sha256": "84ff1dd02c55c891d3dfbb24707c12a22af4058c60bfce834852bb50e86153ac",
+      "bytes": 4498
+    },
+    {
+      "label": "cutover",
+      "path": "packages/shared/src/schemas/content/content-pack.schema.ts",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "8e1c9b79500f7ea1c6e17f76e139dee672de2a27",
+      "sha256": "e29466d74c9b072a27a3996df360074db872dded313de7d3d5f7a7fc2c887204",
+      "bytes": 4322
+    },
+    {
+      "label": "cutover",
+      "path": "packages/database/src/assignment-uniqueness.test.ts",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "2c6c5de9dd75d5d38e5db364324ac7ee1f3eb572",
+      "sha256": "40c454378d09c1a2b669193cd9e9bc281e5204afaf29f7acdbf3a9cc905def63",
+      "bytes": 2550
+    },
+    {
+      "label": "cutover",
+      "path": "docs/runbooks/database-restore.md",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "e61f251dd34a123c3148e29793f12f5eb332ec89",
+      "sha256": "9155356cbc8e17abbb01d6a1a3cc7501d713d05ac3ca840f5f3bc02955d47134",
+      "bytes": 2078
+    },
+    {
+      "label": "cutover",
+      "path": "docs/runbooks/rollback-process.md",
+      "repo": "peteywee/teach",
+      "ref": "work/TR-0010-production-cutover",
+      "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+      "git_blob_sha": "a78e85b6a08271e8a8c1482af08378d7d01648dc",
+      "sha256": "2e5b3ae54769d014ef47e80e2f242fc8a9b949926427a5dfd8ca6f95db1c1a76",
+      "bytes": 3888
+    }
+  ]
+}

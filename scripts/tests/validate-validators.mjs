@@ -1073,6 +1073,20 @@ test('self-audit: missing failure finalizer fails',selfAuditScript,(dir)=>mutate
 test('self-audit: missing command PG evidence fails',selfAuditScript,(dir)=>mutateText(dir,'.github/workflows/slice-p02-implementation.yml','run: pnpm test:identity:commands:integration','run: echo skipped'),{pattern:/atomic Identity integration/});
 test('self-audit: missing transaction-bound audit connection fails',selfAuditScript,(dir)=>mutateText(dir,'src/modules/identity/infrastructure/persistence/postgres-identity-command-transaction.ts','bindings.audit(transaction)','bindings.audit(this.db)'),{pattern:/exact-transaction binding/});
 
+// Recovery proposals and legacy evidence remain separate from owner authority.
+const recoveryScript='scripts/verification/validate-legacy-foundation-recovery.mjs', recoveryBase='verification/legacy-recovery/';
+test('recovery: complete pinned proposal inventory passes',recoveryScript,()=>{},{pass:true});
+test('recovery: omitted owner question fails',recoveryScript,dir=>{const p=recoveryBase+'owner-decisions.json',d=readJson(dir,p);d.unresolved_contract_questions.pop();writeJson(dir,p,d);},{pattern:/live owner inventory drift/});
+test('recovery: newly added question cannot escape projection',recoveryScript,dir=>mutateText(dir,'contracts/c00-system-authority-contract.md','## 7.','| OQ-SYS-99 | Additional owner choice | Yes | SYS-4 |\n\n## 7.'),{pattern:/live owner inventory drift/});
+test('recovery: recommendation cannot record approval',recoveryScript,dir=>{const p=recoveryBase+'decision-packet.json',d=readJson(dir,p);d.owner_approval_recorded=true;writeJson(dir,p,d);},{pattern:/recommendations cannot grant authority/});
+test('recovery: missing recommendation fails',recoveryScript,dir=>{const p=recoveryBase+'decision-packet.json',d=readJson(dir,p);d.recommendations.pop();writeJson(dir,p,d);},{pattern:/exact complete recommendation/});
+test('recovery: incomplete capability bundle cannot be review ready',recoveryScript,dir=>{const p=recoveryBase+'decision-packet.json',d=readJson(dir,p);d.review_ready_selection_ids.push('OQ-AUTHZ-1');writeJson(dir,p,d);},{pattern:/detailed owner values/});
+test('recovery: legacy cannot authorize V2',recoveryScript,dir=>{const p=recoveryBase+'legacy-sources.json',d=readJson(dir,p);d.legacy_authority_for_v2=true;writeJson(dir,p,d);},{pattern:/legacy evidence cannot grant/});
+test('recovery: wrong pinned head fails',recoveryScript,dir=>{const p=recoveryBase+'legacy-sources.json',d=readJson(dir,p);d.sources[0].head_sha='0'.repeat(40);writeJson(dir,p,d);},{pattern:/exact pinned source/});
+test('recovery: altered reference excerpt fails',recoveryScript,dir=>{const p=recoveryBase+'legacy-excerpts.json',d=readJson(dir,p);d.excerpts[0].text+='invented';writeJson(dir,p,d);},{pattern:/excerpt source and digest/});
+test('recovery: global audit transaction binding fails',recoveryScript,dir=>mutateText(dir,'src/modules/identity/infrastructure/persistence/postgres-session-command-transaction.ts','auditFactory(transaction)','auditFactory(this.db)'),{pattern:/same transaction binding/});
+test('recovery: missing session PG CI evidence fails',recoveryScript,dir=>mutateText(dir,'.github/workflows/slice-p02-implementation.yml','run: pnpm test:session:commands:integration','run: echo skipped'),{pattern:/session transaction PG automation/});
+
 // Report
 // ---------------------------------------------------------------------------
 

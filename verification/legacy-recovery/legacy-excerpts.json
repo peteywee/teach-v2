@@ -1,0 +1,70 @@
+{
+  "version": "0.1.0",
+  "scope": "reference excerpts only; not imported or executed by V2 runtime",
+  "excerpts": [
+    {
+      "source": "main:apps/web/src/app/auth/callback/route.ts",
+      "start_line": 125,
+      "end_line": 168,
+      "purpose": "OAuth provider fallback",
+      "text": "\n  const session = data.session;\n  const skipBackendOAuthBridge =\n    process.env.NODE_ENV !== 'production' &&\n    process.env.NEXT_PUBLIC_SKIP_BACKEND_OAUTH_BRIDGE !== 'false';\n\n  const createSupabaseFallbackResponse = (reason: string): NextResponse | null => {\n    if (!session?.access_token || !session?.refresh_token) {\n      return null;\n    }\n\n    const successResponse = NextResponse.redirect(new URL(redirectPath, origin));\n    const cookieOpts = {\n      path: '/',\n      maxAge: 60,\n      httpOnly: false,\n      secure: process.env.NODE_ENV === 'production',\n      sameSite: 'lax' as const,\n    };\n\n    const payload = {\n      accessToken: session.access_token,\n      refreshToken: session.refresh_token ?? '',\n      user: {\n        id: supaUser.id,\n        email,\n        role: 'learner',\n        ...(firstName ? { firstName } : {}),\n        ...(lastName ? { lastName } : {}),\n      },\n    };\n\n    successResponse.cookies.set('oauth_payload', JSON.stringify(payload), cookieOpts);\n    successResponse.cookies.set('oauth_warning', reason, cookieOpts);\n    return successResponse;\n  };\n\n  if (skipBackendOAuthBridge) {\n    const fallbackResponse = createSupabaseFallbackResponse('backend_bridge_skipped');\n    if (fallbackResponse) {\n      console.warn('[auth/callback] skipping backend OAuth bridge by environment flag');\n      return fallbackResponse;\n    }\n  }\n",
+      "excerpt_sha256": "3635ca00877729670c3206cc28de784e8210ddf667e9fab1c8ac7787bf464583"
+    },
+    {
+      "source": "cutover:packages/api-server/src/middleware/application-session.ts",
+      "start_line": 185,
+      "end_line": 235,
+      "purpose": "Atomic revocation and conditional audit",
+      "text": " * Revokes a cookie application session and records the same transactional\n * security audit emitted by the legacy bearer logout path.\n */\nexport async function revokeApplicationSession(c: Context<Env>): Promise<void> {\n  const sessionToken = getApplicationSessionToken(c);\n  if (sessionToken === undefined || sessionToken.length === 0) {\n    deleteCookie(c, APPLICATION_SESSION_COOKIE, deleteCookieOptions(c));\n    return;\n  }\n\n  const db = getDatabase();\n  await db.transaction(async (tx) => {\n    const session = await tx.query.authSessions.findFirst({\n      where: and(eq(authSessions.token, sessionToken), isNull(authSessions.revokedAt)),\n      with: { user: true },\n    });\n    if (session === undefined) {\n      return;\n    }\n\n    const [revoked] = await tx\n      .update(authSessions)\n      .set({ revokedAt: new Date() })\n      .where(and(eq(authSessions.id, session.id), isNull(authSessions.revokedAt)))\n      .returning({ id: authSessions.id });\n    if (revoked === undefined) {\n      return;\n    }\n\n    await insertAuditLogInTransaction(tx, {\n      ...(session.user.organizationId !== null\n        ? { organizationId: session.user.organizationId }\n        : {}),\n      requestId: c.get('requestId'),\n      userId: session.user.id,\n      action: 'auth.logout',\n      resource: 'auth_session',\n      resourceId: revoked.id,\n      eventKind: 'transactional-audit',\n      ipAddress: clientIpAddress(c.req.header('x-vercel-forwarded-for')),\n      userAgent: c.req.header('user-agent') ?? undefined,\n    });\n  });\n\n  deleteCookie(c, APPLICATION_SESSION_COOKIE, deleteCookieOptions(c));\n}\n\nfunction isJsonResponse(response: Response): boolean {\n  return response.headers.get('content-type')?.toLowerCase().includes('application/json') === true;\n}\n\n",
+      "excerpt_sha256": "1a425a76c3991b4850f214fd9d584d9874e7a67888d096459efe9967084d0a83"
+    },
+    {
+      "source": "cutover:packages/api-server/src/lib/audit.ts",
+      "start_line": 45,
+      "end_line": 67,
+      "purpose": "Same transaction append and trusted context",
+      "text": "    ...(params.resourceId !== undefined ? { resourceId: params.resourceId } : {}),\n    ...(params.ipAddress !== undefined ? { ipAddress: params.ipAddress } : {}),\n    ...(params.userAgent !== undefined ? { userAgent: params.userAgent } : {}),\n    ...(params.metadata !== undefined ? { metadata: params.metadata } : {}),\n  });\n}\n\n/**\n * Append an audit row through the caller's transaction executor.\n *\n * This helper deliberately does not call getDatabase() or open its own transaction. Callers must\n * pass the same Drizzle transaction object used for the protected domain mutation so audit\n * failure rolls the domain mutation back instead of becoming a best-effort side effect.\n *\n * Domain events are always tenant scoped. Security and transactional-audit events may be scope\n * none when the operation genuinely occurs before or outside tenant context (for example sign-in\n * or a user changing their own password). When an organization ID is supplied it must be\n * non-empty. Every transactional event carries a version marker owned by this helper so callers\n * cannot forge or silently drift the event schema version through metadata.\n */\nexport async function insertAuditLogInTransaction(\n  tx: Database,\n  params: TransactionalAuditParams\n",
+      "excerpt_sha256": "75bc9455d9e3bbd5399f83362b279a1c587b820279f977eb4f7e361c67c625d4"
+    },
+    {
+      "source": "cutover:packages/api-server/src/middleware/capability-authorization.ts",
+      "start_line": 354,
+      "end_line": 382,
+      "purpose": "Database-current authority and unknown-operation denial",
+      "text": "/**\n * Enforce the shared operation registry after authentication. The authenticated subject is the\n * only JWT-derived input; current role, organization, membership, and location are reloaded from\n * PostgreSQL before the request may reach a protected handler.\n */\nexport async function authorizeRegisteredOperation(c: Context<Env>): Promise<void> {\n  const operationPath = canonicalOperationPath(c.req.path);\n  if (operationPath === null) {\n    throw new AuthorizationError('Protected operation is not registered');\n  }\n  const operation = findProtectedApiOperation(c.req.method, operationPath);\n  if (operation === undefined) {\n    throw new AuthorizationError('Protected operation is not registered');\n  }\n  const parameters = routeParameters(operation, operationPath);\n  if (\n    parameters === null ||\n    !scopedUuidParametersAreValid(operation, parameters) ||\n    !(await requestScopedUuidFieldsAreValid(c, operation))\n  ) {\n    throw notFound('Resource');\n  }\n\n  const db = getDatabase();\n  const actorId = c.get('userId');\n  const actor = await resolveAuthoritativeActor(actorId, db);\n  if (actor === null) {\n    throw new AuthenticationError('Invalid account');\n  }\n",
+      "excerpt_sha256": "a00b13edec09a075776da21a377b1d98d84a637c3156b6e77eaec0b9716dd8ff"
+    },
+    {
+      "source": "cutover:.topshelf/evidence/TR-0008/review.md",
+      "start_line": 25,
+      "end_line": 31,
+      "purpose": "Assignment and false-completion failures",
+      "text": "## Findings resolved\n\n1. **Assigned-content authorization gap** \u2014 learner state/progress reads and session creation could address a pack without rechecking active assignment. Fixed with `requireActiveContentAssignment` and denial tests.\n2. **Reconnect gap** \u2014 learner events were not using the existing deterministic offline queue. Fixed with a dedicated learner-event submission adapter and retry/terminal classification tests.\n3. **False-completion gap** \u2014 the page could swallow persistence failures and advance completion before the completed event was durable. Fixed so completion advances only after recorded-or-queued persistence; queue-full/no-session/4xx failures are surfaced.\n4. **Target-device negative gap** \u2014 added a Pixel-7 browser test proving a 403 completed-event write cannot advance the UI.\n5. **Governance drift** \u2014 TR-0008's planned command guards and stale allowed paths did not match the rebuilt repository. Reconciled without widening into billing or TR-0009.\n",
+      "excerpt_sha256": "d0fa35b5a3e74bc69f8fe672a77ff3e97992d7af80ac22d12fad400a424edd61"
+    },
+    {
+      "source": "cutover:docs/decisions/gate-a-saas-foundation-contracts.md",
+      "start_line": 67,
+      "end_line": 89,
+      "purpose": "Single-location compatibility limits",
+      "text": "\n## Single-Location Compatibility Membership\n\nPhase 1 may treat `users.organizationId` and the current persisted role as a temporary projected\nmembership only through one typed resolver. It is active only when all of the following are true:\n\n- the user is active and not deleted;\n- the organization exists and is not deleted;\n- the organization has exactly one active location; and\n- the applicable named capability exists in the user's compatibility bundle.\n\nThe resolver reloads current role, organization, account state, organization state, and effective\nlocation from PostgreSQL. JWT role, organization, tenant aliases, request bodies, query strings,\neditable user metadata, and frontend state are not authoritative scope. Zero or multiple active\nlocations fail closed. `users.managerId` is evaluated only after capability and tenant/location\nscope; it narrows coaching/reporting scope and never expands authority.\n\nThe compatibility projection ends before any pilot uses a second active location,\nlocation-specific role/grant, multiple organizations per identity, or concurrent memberships.\nThose changes require the normalized Phase 4 membership/grant slice first.\n\n## Capability Registry\n\n",
+      "excerpt_sha256": "3c8544166e0753f090273627af4485745ae36045b3d21e8470ace2c46d59cc63"
+    },
+    {
+      "source": "cutover:packages/shared/src/schemas/content/version-id.ts",
+      "start_line": 61,
+      "end_line": 76,
+      "purpose": "Incomplete SemVer checks",
+      "text": "    return false;\n  }\n\n  if (prerelease === undefined) {\n    return true;\n  }\n\n  return prerelease.split('.').every(isPrereleaseIdentifier);\n}\n\nexport function kindOf(token: string): VersionTokenKind | null {\n  if (SPEC_RE.test(token)) return 'spec';\n  if (token.startsWith('s') && isSemanticVersionToken(token.slice(1))) return 'schema';\n  if (token.startsWith('v') && isSemanticVersionToken(token.slice(1))) return 'pack';\n  return null;\n}\n",
+      "excerpt_sha256": "3b22b9b9d26d8a671e26f148972852f9925cfaec42aac37171076b28c7f2171c"
+    },
+    {
+      "source": "cutover:.topshelf/evidence/TR-0009/review.md",
+      "start_line": 26,
+      "end_line": 32,
+      "purpose": "Request correlation and audit trust findings",
+      "text": "\n## Findings resolved\n\n1. **Work-order architecture drift** \u2014 TR-0009 referenced packages/directories that do not own analytics/audit in the rebuilt repository. Scope was reconciled to the actual web/API/observability/shared/database/test ownership boundaries.\n2. **Planned validation stubs** \u2014 `test:analytics` and `test:audit` were deliberate guards. They are now real suites and a dedicated exact-branch CI workflow enforces them.\n3. **Unversioned audit event contract** \u2014 transactional domain/security/audit evidence now carries `topshelf.audit-event/v1`; caller metadata cannot forge the schema version or other trusted context fields.\n4. **Tenant-scope semantics** \u2014 tenant-bound domain events require a non-empty organization ID. Legitimate pre-tenant/outside-tenant security and self-service audit events remain scope-none rather than inventing organization identity. Blank supplied scope is rejected.\n",
+      "excerpt_sha256": "b3431501196e2f0730cd48415308e44be4290a913465939d6c1e866e7f97d52c"
+    }
+  ]
+}
