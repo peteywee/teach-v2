@@ -414,15 +414,23 @@
           "path": "src/modules/identity/infrastructure/persistence/postgres-application-session-repository.ts",
           "symbol": "revoke",
           "kind": "repository-foundation"
+        },
+        {
+          "path": "src/modules/identity/application/session-revocation-service.ts",
+          "symbol": "revokeApplicationSession",
+          "kind": "application-foundation"
         }
       ],
       "tests": [
         "src/modules/identity/domain/application-session.test.ts",
-        "tests/integration/identity/identity-session-repository.test.ts"
+        "tests/integration/identity/identity-session-repository.test.ts",
+        "src/modules/identity/application/session-revocation-service.test.ts",
+        "tests/integration/identity/session-command-transaction.test.ts"
       ],
       "missing_obligations": [
-        "Required event/audit and authoritative Application command are not composed",
-        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+        "Real C14 backend authorization and admitted audit storage/adapter remain absent; fixtures prove transaction mechanics only",
+        "Cookie expiry, approved SameSite/domain/CSRF/rotation policy, protected transport and full runtime acceptance remain gated",
+        "Canonical event publication remains unknown; requestId correlation is not a general idempotency-key policy"
       ]
     },
     {

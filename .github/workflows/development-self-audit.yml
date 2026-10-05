@@ -63,6 +63,8 @@ jobs:
         run: node scripts/verification/run-self-audit.mjs --stage validator-shard-3
       - name: Audit audit-regressions
         run: node scripts/verification/run-self-audit.mjs --stage audit-regressions
+      - name: Audit recovery-regressions
+        run: node scripts/verification/run-self-audit.mjs --stage recovery-regressions
       - name: Audit typecheck
         run: node scripts/verification/run-self-audit.mjs --stage typecheck
       - name: Audit foundation
@@ -79,6 +81,8 @@ jobs:
         run: node scripts/verification/run-self-audit.mjs --stage postgres-p02
       - name: Audit postgres-identity-commands
         run: node scripts/verification/run-self-audit.mjs --stage postgres-identity-commands
+      - name: Audit postgres-session-commands
+        run: node scripts/verification/run-self-audit.mjs --stage postgres-session-commands
       - name: Audit postgres-p03
         run: node scripts/verification/run-self-audit.mjs --stage postgres-p03
       - name: Audit postgres-p04

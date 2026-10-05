@@ -1,0 +1,114 @@
+{
+  "version": "0.1.0",
+  "scope": "named mechanism recovery, not legacy behavior/policy adoption",
+  "owner_policy_approval_recorded": false,
+  "legacy_authority_for_v2": false,
+  "runtime_activation": "BLOCKED",
+  "shared_or_production_execution_authorized": false,
+  "lessons": [
+    {
+      "id": "LEGACY-OAUTH-BOUNDARY",
+      "source": "main:apps/web/src/app/auth/callback/route.ts",
+      "worked_or_useful": "Provider fallback emits oauth_payload with provider tokens and can skip the Teach backend bridge.",
+      "failed_or_limited": "Cutover TR-0004/0005 remove readable payload and provider fallback; credentialless provider initiation is narrower than authenticated end-to-end OAuth proof.",
+      "reuse_disposition": "REJECT_BEHAVIOR",
+      "v2_requirement": "C11/C12: one authoritative session type; provider token never a Teach session or browser storage.",
+      "legacy_runtime_retested": false,
+      "v2_runtime_conformance": "UNKNOWN"
+    },
+    {
+      "id": "LEGACY-SESSION-TX",
+      "source": "cutover:packages/api-server/src/middleware/application-session.ts",
+      "worked_or_useful": "Conditional transition and same-transaction append avoid best-effort audit and duplicate logout effects.",
+      "failed_or_limited": "Current V2 had raw repository revocation without the connected Application audit boundary; this batch reimplements the mechanism with verifier-only storage and owner-private row locking.",
+      "reuse_disposition": "REIMPLEMENT_MECHANISM",
+      "v2_requirement": "C12 SES-12/14/20; C23 AUD-5; real authorizer/audit adapter still absent.",
+      "legacy_runtime_retested": false,
+      "v2_runtime_conformance": "UNKNOWN"
+    },
+    {
+      "id": "LEGACY-AUTHORITY",
+      "source": "cutover:packages/api-server/src/middleware/capability-authorization.ts",
+      "worked_or_useful": "Reload current actor/membership/scope; deny unknown operations before handler work.",
+      "failed_or_limited": "V1 normalized authorization remains constrained by a single-location compatibility projection and older role bundles; do not import either as V2 authority.",
+      "reuse_disposition": "RECOVER_TEST_DESIGN",
+      "v2_requirement": "C13/C14 ordered current-fact evaluation; vocabulary/membership decisions remain unresolved.",
+      "legacy_runtime_retested": false,
+      "v2_runtime_conformance": "UNKNOWN"
+    },
+    {
+      "id": "LEGACY-AUDIT-TRUST",
+      "source": "cutover:packages/api-server/src/lib/audit.ts",
+      "worked_or_useful": "Append through supplied transaction; prevent caller metadata from forging trusted event schema/context.",
+      "failed_or_limited": "TR-0009 records fixes for unversioned event metadata and generated request IDs lost across request context.",
+      "reuse_disposition": "RECOVER_TEST_DESIGN",
+      "v2_requirement": "C23 same-transaction append and canonical context; no AuditEvent physical admission here.",
+      "legacy_runtime_retested": false,
+      "v2_runtime_conformance": "UNKNOWN"
+    },
+    {
+      "id": "LEGACY-LEARNER-DURABILITY",
+      "source": "cutover:.topshelf/evidence/TR-0008/review.md",
+      "worked_or_useful": "Assignment must be rechecked and UI completion must follow accepted persistence.",
+      "failed_or_limited": "Earlier learner paths could address unassigned packs and advance UI after persistence failure. V1 queued completion cannot grant V2 offline-write permission.",
+      "reuse_disposition": "RECOVER_TEST_DESIGN",
+      "v2_requirement": "C32 assigned-version/current-authority/atomic-start; C62 offline writes stay disabled.",
+      "legacy_runtime_retested": false,
+      "v2_runtime_conformance": "UNKNOWN"
+    },
+    {
+      "id": "LEGACY-VERSION-VALIDATION",
+      "source": "cutover:packages/shared/src/schemas/content/version-id.ts",
+      "worked_or_useful": "Schema and pack versions are distinct; published content is immutable.",
+      "failed_or_limited": "Local isolated execution accepts 01.2.3 and 1.2.3-01; these violate SemVer 2.0. This finding concerns the helper, not the whole pack pipeline.",
+      "reuse_disposition": "REJECT_HELPER_COPY",
+      "v2_requirement": "C31 OQ-CNT-1 remains proposed; use strict conformance vectors after owner selection.",
+      "legacy_runtime_retested": false,
+      "v2_runtime_conformance": "UNKNOWN"
+    },
+    {
+      "id": "LEGACY-MIGRATION-PROOF",
+      "source": "cutover:.topshelf/evidence/TR-0003/review.md",
+      "worked_or_useful": "Fresh replay, live read-only fingerprints, all-table browser-role denial and independent cleanup are recorded.",
+      "failed_or_limited": "Do not transplant historical PASS into current V2 or assume only the directly changed tables need role isolation.",
+      "reuse_disposition": "RECOVER_TEST_DESIGN",
+      "v2_requirement": "C21 exact source/environment/schema/role evidence; production execution remains blocked.",
+      "legacy_runtime_retested": false,
+      "v2_runtime_conformance": "UNKNOWN"
+    },
+    {
+      "id": "LEGACY-RELEASE-PROOF",
+      "source": "main:docs/readiness/deployed-verification-log.md",
+      "worked_or_useful": "Public URL/browser checks are recorded with specific limits.",
+      "failed_or_limited": "A 200 public route does not prove deployed SHA or authenticated tenant flow; recorded rows explicitly retain those blockers. TR-0010 remains active in this pinned source and is not proof of completed cutover.",
+      "reuse_disposition": "RECOVER_EVIDENCE_DESIGN",
+      "v2_requirement": "C51/C52 exact candidate/deployment/config and authenticated negative matrix.",
+      "legacy_runtime_retested": false,
+      "v2_runtime_conformance": "UNKNOWN"
+    }
+  ],
+  "reimplemented_mechanisms": [
+    {
+      "id": "REUSE-SESSION-REVOCATION-TX-01",
+      "lesson": "LEGACY-SESSION-TX",
+      "source": "cutover:packages/api-server/src/middleware/application-session.ts",
+      "target": "src/modules/identity/application/session-revocation-service.ts",
+      "tests": [
+        "src/modules/identity/application/session-revocation-service.test.ts",
+        "tests/integration/identity/session-command-transaction.test.ts"
+      ],
+      "authority": [
+        "C12 SES-12",
+        "C12 SES-14",
+        "C12 SES-20",
+        "C23 AUD-5"
+      ],
+      "differences": [
+        "V2 versioned verifier-only persistence replaces legacy raw token storage",
+        "Owner-private row lock yields explicit transition outcome; terminal/duplicate calls append no additional success audit",
+        "No legacy cookies, bearer fallback, role bundles, provider settings, offline writes or retention values are adopted"
+      ],
+      "full_runtime_conformance": "UNKNOWN"
+    }
+  ]
+}

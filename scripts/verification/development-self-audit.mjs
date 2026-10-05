@@ -2,6 +2,7 @@ import { spawnSync, execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { deriveOwnerDecisionInventory } from './owner-decision-inventory.mjs';
 import { inspectAuditPlan } from './self-audit-catalog.mjs';
 
 const digest=value=>createHash('sha256').update(value).digest('hex');
@@ -25,9 +26,12 @@ export function currentFacts(root) {
     registries[name]={approved:entries.filter(x=>x.status==='approved').length,candidate:entries.filter(x=>x.status==='candidate').length};
   }
   const ledger=load('verification/whole-repository/command-coverage.json');
+  const ownerInventory=load('verification/legacy-recovery/owner-decisions.json');
+  const liveOwnerInventory=deriveOwnerDecisionInventory(root,ownerInventory.consulted_v2_baseline);
+  if(JSON.stringify(ownerInventory)!==JSON.stringify(liveOwnerInventory))throw new Error('owner decision inventory drift');
   return { kernel_version:load('kernel/manifest.json').version,ownership_version:load('domains/ownership-map.json').version,
     policy_baselines:{architecture:load('architecture/authority.json').baseline_commit,application:load('application-interfaces/authority.json').baseline_commit,persistence:load('persistence/authority.json').baseline_commit},
-    registries,commands:{total:ledger.commands.length,partial:ledger.commands.filter(x=>x.state==='PARTIAL').length,blocked:ledger.commands.filter(x=>x.state==='BLOCKED').length},
+    registries,owner_decisions:{...liveOwnerInventory.totals,owner_approval_recorded:false},commands:{total:ledger.commands.length,partial:ledger.commands.filter(x=>x.state==='PARTIAL').length,blocked:ledger.commands.filter(x=>x.state==='BLOCKED').length},
     physical_readiness:load('persistence/physical-slices/readiness.json').current_physical_slice_admissions,
     future_admissions:Object.fromEntries(['assignment','certification','progress-event'].map(lane=>{const a=load(`persistence/physical-slices/${lane}/admission.json`);return [lane,{decision:a.decision,proven:a.criteria.filter(x=>x.state==='PROVEN').length,unknown:a.criteria.filter(x=>x.state==='UNKNOWN').length}];})),
     full_runtime_conformance:'UNKNOWN',runtime_activation:'BLOCKED',shared_or_production_execution_authorized:false };

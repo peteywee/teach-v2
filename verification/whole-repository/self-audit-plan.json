@@ -95,6 +95,15 @@
       "timeout_ms": 25000
     },
     {
+      "id": "recovery-regressions",
+      "command": "node",
+      "args": [
+        "--test",
+        "scripts/tests/validate-owner-decision-inventory.test.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
       "id": "typecheck",
       "command": "pnpm",
       "args": [
@@ -158,6 +167,14 @@
       "command": "pnpm",
       "args": [
         "test:identity:commands:integration"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "postgres-session-commands",
+      "command": "pnpm",
+      "args": [
+        "test:session:commands:integration"
       ],
       "timeout_ms": 25000
     },

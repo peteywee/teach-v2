@@ -1,0 +1,1288 @@
+{
+  "version": "0.1.0",
+  "scope": "all unresolved active-contract question rows, future physical-shape questions, and candidate promotion inventory; no owner approval",
+  "consulted_v2_baseline": "b7a78ef73fdd45e5fb062e11c468d8cf10e27c65",
+  "owner_approval_recorded": false,
+  "runtime_activation": "BLOCKED",
+  "shared_or_production_execution_authorized": false,
+  "totals": {
+    "unresolved_contract_questions": 66,
+    "explicit_contract_blockers": 19,
+    "physical_shape_questions": 12,
+    "semantic_candidates": 71
+  },
+  "unresolved_contract_questions": [
+    {
+      "id": "OQ-SYS-1",
+      "contract": "contracts/c00-system-authority-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Does numeric order within a group (for example C11 before C12) define precedence, or are contracts within a group peers?",
+      "explicitly_blocks_implementation": false,
+      "affects": "SYS-4",
+      "source_line": 158
+    },
+    {
+      "id": "OQ-SYS-2",
+      "contract": "contracts/c00-system-authority-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Where does the compatibility register live, and in what format (Markdown table, machine-readable file checked in CI, or both)?",
+      "explicitly_blocks_implementation": false,
+      "affects": "SYS-11",
+      "source_line": 159
+    },
+    {
+      "id": "OQ-SYS-5",
+      "contract": "contracts/c00-system-authority-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Which parts of C11–C15 and C21–C23 are applicable to the learner demo?",
+      "explicitly_blocks_implementation": false,
+      "affects": "SYS-29",
+      "source_line": 162
+    },
+    {
+      "id": "OQ-AGT-1",
+      "contract": "contracts/c02-automation-agent-authority-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Where are AutomationActor execution identities and their capability sets registered?",
+      "explicitly_blocks_implementation": false,
+      "affects": "AGT-9",
+      "source_line": 135
+    },
+    {
+      "id": "OQ-AGT-2",
+      "contract": "contracts/c02-automation-agent-authority-contract.md",
+      "contract_version": "1.0.3",
+      "question": "What is the first runtime-agent use case, if any, that would trigger the revision of this contract?",
+      "explicitly_blocks_implementation": false,
+      "affects": "AGT-16",
+      "source_line": 136
+    },
+    {
+      "id": "OQ-AGT-3",
+      "contract": "contracts/c02-automation-agent-authority-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Which existing jobs, workers, and CLI commands (for example `pnpm cli`) carry forward as AutomationActors?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 137
+    },
+    {
+      "id": "OQ-IDN-1",
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "contract_version": "1.3.0",
+      "question": "Which password hashing algorithm and parameters are approved?",
+      "explicitly_blocks_implementation": true,
+      "affects": "IDN-5",
+      "source_line": 162
+    },
+    {
+      "id": "OQ-IDN-3",
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "contract_version": "1.3.0",
+      "question": "Which sessions does a credential change revoke: all sessions, all other sessions, or another policy?",
+      "explicitly_blocks_implementation": true,
+      "affects": "IDN-15",
+      "source_line": 164
+    },
+    {
+      "id": "OQ-IDN-4",
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "contract_version": "1.3.0",
+      "question": "What is the OAuth linking rule: verified-email match, explicit user-initiated linking only, or another rule?",
+      "explicitly_blocks_implementation": true,
+      "affects": "IDN-2",
+      "source_line": 165
+    },
+    {
+      "id": "OQ-IDN-6",
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "contract_version": "1.3.0",
+      "question": "Are PINs an approved frontline credential type in v2, and if so what are their length and lockout rules?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 167
+    },
+    {
+      "id": "OQ-IDN-7",
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "contract_version": "1.3.0",
+      "question": "Must password-reset and invitation responses be indistinguishable for registered and unregistered emails?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 168
+    },
+    {
+      "id": "OQ-SES-1",
+      "contract": "contracts/c12-application-sessions-contract.md",
+      "contract_version": "1.1.0",
+      "question": "Which `SameSite` value is approved: `Strict` or `Lax`?",
+      "explicitly_blocks_implementation": true,
+      "affects": "SES-5",
+      "source_line": 135
+    },
+    {
+      "id": "OQ-SES-2",
+      "contract": "contracts/c12-application-sessions-contract.md",
+      "contract_version": "1.1.0",
+      "question": "Which cookie domain and path are approved given the web and API hostnames?",
+      "explicitly_blocks_implementation": true,
+      "affects": "SES-6",
+      "source_line": 136
+    },
+    {
+      "id": "OQ-SES-5",
+      "contract": "contracts/c12-application-sessions-contract.md",
+      "contract_version": "1.1.0",
+      "question": "Is `SameSite` alone the approved CSRF control, or is an additional mechanism (token, origin check) required?",
+      "explicitly_blocks_implementation": true,
+      "affects": "SES-18",
+      "source_line": 137
+    },
+    {
+      "id": "OQ-SES-6",
+      "contract": "contracts/c12-application-sessions-contract.md",
+      "contract_version": "1.1.0",
+      "question": "On which events must the session credential rotate (sign-in, privilege change, other)?",
+      "explicitly_blocks_implementation": true,
+      "affects": "SES-19",
+      "source_line": 138
+    },
+    {
+      "id": "OQ-SES-7",
+      "contract": "contracts/c12-application-sessions-contract.md",
+      "contract_version": "1.1.0",
+      "question": "Is there a limit on concurrent sessions per identity?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 139
+    },
+    {
+      "id": "OQ-TEN-1",
+      "contract": "contracts/c13-tenancy-membership-contract.md",
+      "contract_version": "1.3.0",
+      "question": "Does v2 start with the Gate A single-location compatibility membership or a normalized multi-organization, multi-location membership model?",
+      "explicitly_blocks_implementation": true,
+      "affects": "TEN-15",
+      "source_line": 139
+    },
+    {
+      "id": "OQ-TEN-2",
+      "contract": "contracts/c13-tenancy-membership-contract.md",
+      "contract_version": "1.3.0",
+      "question": "How does a request select its scope when an identity holds more than one membership (explicit path segment, header validated against membership, other)?",
+      "explicitly_blocks_implementation": true,
+      "affects": "TEN-7",
+      "source_line": 140
+    },
+    {
+      "id": "OQ-TEN-3",
+      "contract": "contracts/c13-tenancy-membership-contract.md",
+      "contract_version": "1.3.0",
+      "question": "Does v2 keep platform-operator cross-tenant access? Until decided, no role holds cross-tenant capability.",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 141
+    },
+    {
+      "id": "OQ-AUTHZ-1",
+      "contract": "contracts/c14-authorization-capabilities-contract.md",
+      "contract_version": "1.1.0",
+      "question": "Is the Gate A capability vocabulary and bundle table (accepted 2026-07-22) adopted verbatim for v2, amended, or replaced?",
+      "explicitly_blocks_implementation": true,
+      "affects": "AUTHZ-19",
+      "source_line": 138
+    },
+    {
+      "id": "OQ-AUTHZ-2",
+      "contract": "contracts/c14-authorization-capabilities-contract.md",
+      "contract_version": "1.1.0",
+      "question": "Which cross-tenant platform capabilities, if any, exist in v2, and what audit do they require?",
+      "explicitly_blocks_implementation": false,
+      "affects": "AUTHZ-20",
+      "source_line": 139
+    },
+    {
+      "id": "OQ-PRIV-1",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version": "1.0.3",
+      "question": "What exactly do deleted, anonymized, retained, and offboarded mean in Teach?",
+      "explicitly_blocks_implementation": true,
+      "affects": "—",
+      "source_line": 129
+    },
+    {
+      "id": "OQ-PRIV-2",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version": "1.0.3",
+      "question": "What retention periods apply to each record class?",
+      "explicitly_blocks_implementation": true,
+      "affects": "PRIV-12",
+      "source_line": 130
+    },
+    {
+      "id": "OQ-PRIV-3",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Which record classes are exempt from deletion, and on what legal or audit basis?",
+      "explicitly_blocks_implementation": true,
+      "affects": "PRIV-15",
+      "source_line": 131
+    },
+    {
+      "id": "OQ-PRIV-4",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version": "1.0.3",
+      "question": "What export format and fulfillment deadline apply?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 132
+    },
+    {
+      "id": "OQ-PRIV-5",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version": "1.0.3",
+      "question": "What deletion fulfillment deadline applies?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 133
+    },
+    {
+      "id": "OQ-PRIV-6",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Can export and deletion be fulfilled by an operator procedure at first, rather than self-service?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 134
+    },
+    {
+      "id": "OQ-MIG-3",
+      "contract": "contracts/c21-database-migration-contract.md",
+      "contract_version": "1.1.0",
+      "question": "Will any browser-reachable database role exist in v2 (for example a hosted-auth client), making RLS tests applicable?",
+      "explicitly_blocks_implementation": false,
+      "affects": "MIG-12",
+      "source_line": 123
+    },
+    {
+      "id": "OQ-MIG-4",
+      "contract": "contracts/c21-database-migration-contract.md",
+      "contract_version": "1.1.0",
+      "question": "Are production migrations applied by the deployment pipeline or by a manual, owner-approved step?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 124
+    },
+    {
+      "id": "OQ-MIG-5",
+      "contract": "contracts/c21-database-migration-contract.md",
+      "contract_version": "1.1.0",
+      "question": "Will v2 import any data from the legacy Teach database, and if so through which governed, audited path? Until decided, MIG-7's production baseline is the v2 production schema only.",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 125
+    },
+    {
+      "id": "OQ-TXN-2",
+      "contract": "contracts/c22-transaction-idempotency-reconciliation-contract.md",
+      "contract_version": "1.2.0",
+      "question": "Which external providers are in scope for v2 (email delivery, OAuth, payments, other), and which owns reconciliation for each?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 135
+    },
+    {
+      "id": "OQ-AUD-1",
+      "contract": "contracts/c23-audit-lifecycle-events-contract.md",
+      "contract_version": "1.0.3",
+      "question": "How long are audit records retained, and is retention per tenant configurable?",
+      "explicitly_blocks_implementation": true,
+      "affects": "—",
+      "source_line": 116
+    },
+    {
+      "id": "OQ-AUD-2",
+      "contract": "contracts/c23-audit-lifecycle-events-contract.md",
+      "contract_version": "1.0.3",
+      "question": "For which entities must current state be reconstructable from lifecycle history?",
+      "explicitly_blocks_implementation": false,
+      "affects": "AUD-7",
+      "source_line": 117
+    },
+    {
+      "id": "OQ-AUD-3",
+      "contract": "contracts/c23-audit-lifecycle-events-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Which denial types are operationally significant enough to record?",
+      "explicitly_blocks_implementation": false,
+      "affects": "AUD-8",
+      "source_line": 118
+    },
+    {
+      "id": "OQ-CNT-1",
+      "contract": "contracts/c31-content-teaching-engine-contract.md",
+      "contract_version": "1.0.3",
+      "question": "What versioning scheme applies to the schema and to packs (semver, integer, other)?",
+      "explicitly_blocks_implementation": false,
+      "affects": "CNT-2",
+      "source_line": 122
+    },
+    {
+      "id": "OQ-CNT-2",
+      "contract": "contracts/c31-content-teaching-engine-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Where are customer content approvals recorded, and who may record one?",
+      "explicitly_blocks_implementation": false,
+      "affects": "CNT-11",
+      "source_line": 123
+    },
+    {
+      "id": "OQ-CNT-3",
+      "contract": "contracts/c31-content-teaching-engine-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Which legacy pack formats must v2 accept through adapters?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 124
+    },
+    {
+      "id": "OQ-LRN-2",
+      "contract": "contracts/c32-learning-sessions-progress-contract.md",
+      "contract_version": "1.1.0",
+      "question": "How are mastery, XP, streak, and rank derived from events?",
+      "explicitly_blocks_implementation": false,
+      "affects": "LRN-13",
+      "source_line": 125
+    },
+    {
+      "id": "OQ-LRN-3",
+      "contract": "contracts/c32-learning-sessions-progress-contract.md",
+      "contract_version": "1.1.0",
+      "question": "When a pack gets a new version, does in-progress learner history carry over, restart, or stay pinned?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 126
+    },
+    {
+      "id": "OQ-MGR-1",
+      "contract": "contracts/c33-manager-operations-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Is manager visibility limited to direct reports, the whole location, or configurable?",
+      "explicitly_blocks_implementation": true,
+      "affects": "MGR-3",
+      "source_line": 118
+    },
+    {
+      "id": "OQ-MGR-2",
+      "contract": "contracts/c33-manager-operations-contract.md",
+      "contract_version": "1.0.3",
+      "question": "May managers offboard directly, or only request offboarding for an operator to approve?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 119
+    },
+    {
+      "id": "OQ-CERT-1",
+      "contract": "contracts/c34-certification-credentials-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Is credential verification public (anyone with the link) or private (authenticated, scoped)? (Deferred by Gate A.)",
+      "explicitly_blocks_implementation": true,
+      "affects": "CERT-13",
+      "source_line": 123
+    },
+    {
+      "id": "OQ-CERT-2",
+      "contract": "contracts/c34-certification-credentials-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Who approves certification criteria versions, and where is approval recorded?",
+      "explicitly_blocks_implementation": true,
+      "affects": "CERT-4",
+      "source_line": 124
+    },
+    {
+      "id": "OQ-CERT-3",
+      "contract": "contracts/c34-certification-credentials-contract.md",
+      "contract_version": "1.0.3",
+      "question": "What evidence types are acceptable (observation notes, checklist, photo, other)?",
+      "explicitly_blocks_implementation": false,
+      "affects": "CERT-7",
+      "source_line": 125
+    },
+    {
+      "id": "OQ-CERT-4",
+      "contract": "contracts/c34-certification-credentials-contract.md",
+      "contract_version": "1.0.3",
+      "question": "May an actor ever be both learner and observer for the same certification?",
+      "explicitly_blocks_implementation": false,
+      "affects": "CERT-15",
+      "source_line": 126
+    },
+    {
+      "id": "OQ-CERT-5",
+      "contract": "contracts/c34-certification-credentials-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Do certifications expire, and if so how is expiry represented?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 127
+    },
+    {
+      "id": "OQ-API-1",
+      "contract": "contracts/c41-api-boundary-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Which routes are boundary exceptions outside `/api/v1`?",
+      "explicitly_blocks_implementation": true,
+      "affects": "—",
+      "source_line": 126
+    },
+    {
+      "id": "OQ-API-2",
+      "contract": "contracts/c41-api-boundary-contract.md",
+      "contract_version": "1.0.3",
+      "question": "What is the error envelope shape?",
+      "explicitly_blocks_implementation": false,
+      "affects": "API-10",
+      "source_line": 127
+    },
+    {
+      "id": "OQ-API-3",
+      "contract": "contracts/c41-api-boundary-contract.md",
+      "contract_version": "1.0.3",
+      "question": "What is the API versioning and deprecation policy?",
+      "explicitly_blocks_implementation": false,
+      "affects": "API-13",
+      "source_line": 128
+    },
+    {
+      "id": "OQ-WEB-1",
+      "contract": "contracts/c42-web-client-boundary-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Which accessibility standard and level is approved (for example WCAG 2.2 AA)?",
+      "explicitly_blocks_implementation": true,
+      "affects": "WEB-15",
+      "source_line": 125
+    },
+    {
+      "id": "OQ-WEB-2",
+      "contract": "contracts/c42-web-client-boundary-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Is the core-path list above complete for v2?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 126
+    },
+    {
+      "id": "OQ-EVD-1",
+      "contract": "contracts/c51-verification-evidence-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Which contracts are high-risk and require independent verification?",
+      "explicitly_blocks_implementation": false,
+      "affects": "EVD-16",
+      "source_line": 125
+    },
+    {
+      "id": "OQ-EVD-2",
+      "contract": "contracts/c51-verification-evidence-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Where are evidence records stored and for how long?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 126
+    },
+    {
+      "id": "OQ-EVD-3",
+      "contract": "contracts/c51-verification-evidence-contract.md",
+      "contract_version": "1.0.3",
+      "question": "How do these four evidence states map to the TOS truth states (verified, declared, inferred, unknown, conflicting, stale)?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 127
+    },
+    {
+      "id": "OQ-REL-1",
+      "contract": "contracts/c52-deployment-release-recovery-contract.md",
+      "contract_version": "1.1.0",
+      "question": "Which hosting platform(s) are approved for v2 web and API?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 125
+    },
+    {
+      "id": "OQ-REL-3",
+      "contract": "contracts/c52-deployment-release-recovery-contract.md",
+      "contract_version": "1.1.0",
+      "question": "What does the deployed smoke test cover?",
+      "explicitly_blocks_implementation": false,
+      "affects": "REL-8",
+      "source_line": 126
+    },
+    {
+      "id": "OQ-REL-4",
+      "contract": "contracts/c52-deployment-release-recovery-contract.md",
+      "contract_version": "1.1.0",
+      "question": "How long after promotion is rollback to the prior candidate supported?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 127
+    },
+    {
+      "id": "OQ-OBS-1",
+      "contract": "contracts/c53-observability-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Which error-capture and alerting providers are approved, and where do alerts go?",
+      "explicitly_blocks_implementation": false,
+      "affects": "OBS-2",
+      "source_line": 118
+    },
+    {
+      "id": "OQ-OBS-2",
+      "contract": "contracts/c53-observability-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Which learner fields, if any, may appear in logs?",
+      "explicitly_blocks_implementation": false,
+      "affects": "OBS-7",
+      "source_line": 119
+    },
+    {
+      "id": "OQ-OBS-3",
+      "contract": "contracts/c53-observability-contract.md",
+      "contract_version": "1.0.3",
+      "question": "How long are logs retained?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 120
+    },
+    {
+      "id": "OQ-ANL-1",
+      "contract": "contracts/c61-analytics-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Will analytics be enabled for v2, and with which provider?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 114
+    },
+    {
+      "id": "OQ-ANL-2",
+      "contract": "contracts/c61-analytics-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Which identifying fields, if any, may analytics events carry?",
+      "explicitly_blocks_implementation": false,
+      "affects": "ANL-7",
+      "source_line": 115
+    },
+    {
+      "id": "OQ-PWA-1",
+      "contract": "contracts/c62-pwa-offline-contract.md",
+      "contract_version": "1.0.3",
+      "question": "Will offline writes ever be authorized, and for which operations?",
+      "explicitly_blocks_implementation": false,
+      "affects": "PWA-5",
+      "source_line": 112
+    },
+    {
+      "id": "OQ-BIL-1",
+      "contract": "contracts/c63-billing-contract.md",
+      "contract_version": "1.1.0",
+      "question": "When, if ever, is self-service billing enabled for v2?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 128
+    },
+    {
+      "id": "OQ-BIL-2",
+      "contract": "contracts/c63-billing-contract.md",
+      "contract_version": "1.1.0",
+      "question": "Which payment provider is approved (the source proposal names Stripe)?",
+      "explicitly_blocks_implementation": false,
+      "affects": "BIL-12",
+      "source_line": 129
+    },
+    {
+      "id": "OQ-BIL-3",
+      "contract": "contracts/c63-billing-contract.md",
+      "contract_version": "1.1.0",
+      "question": "How does an Organization relate to its billing account (for example one-to-one, owned by the organization)?",
+      "explicitly_blocks_implementation": false,
+      "affects": "BIL-13",
+      "source_line": 130
+    }
+  ],
+  "resolved_question_rows": [
+    {
+      "id": "OQ-SYS-3",
+      "contract": "contracts/c00-system-authority-contract.md",
+      "contract_version": "1.0.3",
+      "question": "**Resolved.** Owner, 2026-10-03: v2 is a new build governed only by these contracts. Legacy `.topshelf/contracts/domain/*.json` does not govern v2 and is not superseded in place; it stays with the legacy repository as reference.",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 160
+    },
+    {
+      "id": "OQ-SYS-4",
+      "contract": "contracts/c00-system-authority-contract.md",
+      "contract_version": "1.0.3",
+      "question": "**Resolved.** Owner, 2026-10-03: these contracts govern the Teach v2 codebase, not the legacy repository or its branches.",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 161
+    },
+    {
+      "id": "OQ-SYS-6",
+      "contract": "contracts/c00-system-authority-contract.md",
+      "contract_version": "1.0.3",
+      "question": "**Resolved.** Owner, 2026-10-03: Teach v2 lives in `peteywee/teach-v2`; default branch `main`. The repository had no commits when cloned on 2026-10-03, so anchors carry no SHA yet.",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 163
+    },
+    {
+      "id": "OQ-SEM-1",
+      "contract": "contracts/c01-canonical-semantics-contract.md",
+      "contract_version": "1.8.0",
+      "question": "Canonical semantic registry lives under `kernel/`. Canonical source format is JSON. JSON Schema plus the dependency-free kernel validator enforce structure; Markdown views may be generated. Decision approved 2026-10-03; GitHub issue #1.",
+      "explicitly_blocks_implementation": false,
+      "affects": "SEM-27",
+      "source_line": 184
+    },
+    {
+      "id": "OQ-SEM-2",
+      "contract": "contracts/c01-canonical-semantics-contract.md",
+      "contract_version": "1.8.0",
+      "question": "`OFFBOARDED` is not an `IdentityStatus`. `IdentityStatus` remains `ACTIVE`, `INACTIVE`, `DELETED`; `IdentityOffboarded` is the canonical lifecycle event for the offboarding operation. Decision approved 2026-10-03; GitHub issue #1.",
+      "explicitly_blocks_implementation": false,
+      "affects": "SEM-11, SEM-29",
+      "source_line": 185
+    },
+    {
+      "id": "OQ-SEM-3",
+      "contract": "contracts/c01-canonical-semantics-contract.md",
+      "contract_version": "1.8.0",
+      "question": "C01 owns capability identifier registration and canonical naming. C14 owns authorization meaning, assignment, scope, evaluation, and denial semantics. Decision approved 2026-10-03; GitHub issue #1.",
+      "explicitly_blocks_implementation": false,
+      "affects": "SEM-28",
+      "source_line": 186
+    },
+    {
+      "id": "OQ-SEM-4",
+      "contract": "contracts/c01-canonical-semantics-contract.md",
+      "contract_version": "1.8.0",
+      "question": "Membership lifecycle is `ACTIVE -> INACTIVE -> REVOKED`; `REVOKED` is terminal and `DELETED` is not a MembershipStatus. Decision approved 2026-10-03; GitHub issue #4.",
+      "explicitly_blocks_implementation": false,
+      "affects": "SEM-21, SEM-32",
+      "source_line": 187
+    },
+    {
+      "id": "OQ-SEM-5",
+      "contract": "contracts/c01-canonical-semantics-contract.md",
+      "contract_version": "1.8.0",
+      "question": "Only Patrick Craven, as owner, may approve promotion of `candidate` entries to `approved`; an explicit approval token naming the revision/package is a valid approval record. Decision approved 2026-10-03; GitHub issue #2.",
+      "explicitly_blocks_implementation": false,
+      "affects": "SEM-30",
+      "source_line": 188
+    },
+    {
+      "id": "OQ-IDN-2",
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "contract_version": "1.3.0",
+      "question": "Resolved: Invitation acceptance secret = 7 days; SetupToken = 15 minutes; PasswordResetToken = 1 hour. Legacy values were reference only; this decision is v2 authority through the owner approval package.",
+      "explicitly_blocks_implementation": false,
+      "affects": "IDN-9, IDN-25, IDN-26",
+      "source_line": 163
+    },
+    {
+      "id": "OQ-IDN-5",
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "contract_version": "1.3.0",
+      "question": "Resolved: controlled rejection. An offboarded identity must be explicitly reactivated through ReactivateIdentity before a new invitation may be created.",
+      "explicitly_blocks_implementation": false,
+      "affects": "IDN-20, IDN-27",
+      "source_line": 166
+    },
+    {
+      "id": "OQ-LRN-1",
+      "contract": "contracts/c32-learning-sessions-progress-contract.md",
+      "contract_version": "1.1.0",
+      "question": "Resolved 2026-10-03: bootstrap lifecycle is `ACTIVE -> COMPLETED`; progress events are allowed only in ACTIVE and COMPLETED is terminal. GitHub issue #4.",
+      "explicitly_blocks_implementation": false,
+      "affects": "LRN-3",
+      "source_line": 124
+    }
+  ],
+  "physical_shape_questions": [
+    {
+      "id": "P06.shape_decision",
+      "slice": "P06",
+      "field": "shape_decision",
+      "owner": "Learning",
+      "source": "persistence/physical-slices/assignment/admission-evidence-plan.json",
+      "state": "UNKNOWN",
+      "issue": "#60"
+    },
+    {
+      "id": "P06.lifecycle_decision",
+      "slice": "P06",
+      "field": "lifecycle_decision",
+      "owner": "Learning",
+      "source": "persistence/physical-slices/assignment/admission-evidence-plan.json",
+      "state": "UNKNOWN",
+      "issue": "#60"
+    },
+    {
+      "id": "P06.protected_scope_decision",
+      "slice": "P06",
+      "field": "protected_scope_decision",
+      "owner": "Learning",
+      "source": "persistence/physical-slices/assignment/admission-evidence-plan.json",
+      "state": "UNKNOWN",
+      "issue": "#60"
+    },
+    {
+      "id": "P06.content_version_decision",
+      "slice": "P06",
+      "field": "content_version_decision",
+      "owner": "Learning",
+      "source": "persistence/physical-slices/assignment/admission-evidence-plan.json",
+      "state": "UNKNOWN",
+      "issue": "#60"
+    },
+    {
+      "id": "P07.shape_decision",
+      "slice": "P07",
+      "field": "shape_decision",
+      "owner": "Certification",
+      "source": "persistence/physical-slices/certification/admission-evidence-plan.json",
+      "state": "UNKNOWN",
+      "issue": "#63"
+    },
+    {
+      "id": "P07.lifecycle_decision",
+      "slice": "P07",
+      "field": "lifecycle_decision",
+      "owner": "Certification",
+      "source": "persistence/physical-slices/certification/admission-evidence-plan.json",
+      "state": "UNKNOWN",
+      "issue": "#63"
+    },
+    {
+      "id": "P07.protected_scope_decision",
+      "slice": "P07",
+      "field": "protected_scope_decision",
+      "owner": "Certification",
+      "source": "persistence/physical-slices/certification/admission-evidence-plan.json",
+      "state": "UNKNOWN",
+      "issue": "#63"
+    },
+    {
+      "id": "P07.content_version_decision",
+      "slice": "P07",
+      "field": "content_version_decision",
+      "owner": "Certification",
+      "source": "persistence/physical-slices/certification/admission-evidence-plan.json",
+      "state": "UNKNOWN",
+      "issue": "#63"
+    },
+    {
+      "id": "P08.shape_decision",
+      "slice": "P08",
+      "field": "shape_decision",
+      "owner": "Learning",
+      "source": "persistence/physical-slices/progress-event/admission-evidence-plan.json",
+      "state": "UNKNOWN",
+      "issue": "#63"
+    },
+    {
+      "id": "P08.lifecycle_decision",
+      "slice": "P08",
+      "field": "lifecycle_decision",
+      "owner": "Learning",
+      "source": "persistence/physical-slices/progress-event/admission-evidence-plan.json",
+      "state": "UNKNOWN",
+      "issue": "#63"
+    },
+    {
+      "id": "P08.protected_scope_decision",
+      "slice": "P08",
+      "field": "protected_scope_decision",
+      "owner": "Learning",
+      "source": "persistence/physical-slices/progress-event/admission-evidence-plan.json",
+      "state": "UNKNOWN",
+      "issue": "#63"
+    },
+    {
+      "id": "P08.content_version_decision",
+      "slice": "P08",
+      "field": "content_version_decision",
+      "owner": "Learning",
+      "source": "persistence/physical-slices/progress-event/admission-evidence-plan.json",
+      "state": "UNKNOWN",
+      "issue": "#63"
+    }
+  ],
+  "semantic_candidates": [
+    {
+      "registry": "kernel/decision-tables.json",
+      "id": "DT-001",
+      "owner": "Authorization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/decision-tables.json",
+      "id": "DT-002",
+      "owner": "Authorization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/decision-tables.json",
+      "id": "DT-003",
+      "owner": "TransactionControl",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/decision-tables.json",
+      "id": "DT-004",
+      "owner": "VerificationEvidence",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/decision-tables.json",
+      "id": "DT-005",
+      "owner": "Governance",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/decision-tables.json",
+      "id": "DT-006",
+      "owner": "Governance",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/decision-tables.json",
+      "id": "DT-007",
+      "owner": "Governance",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/decision-tables.json",
+      "id": "DT-008",
+      "owner": "Authorization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/entities.json",
+      "id": "AuditEvent",
+      "owner": "AuditLifecycle",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/entities.json",
+      "id": "ContentBlock",
+      "owner": "Content",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/entities.json",
+      "id": "Entitlement",
+      "owner": "Organization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/entities.json",
+      "id": "LearnerState",
+      "owner": "Learning",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/entities.json",
+      "id": "LifecycleEvent",
+      "owner": "AuditLifecycle",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/entities.json",
+      "id": "Location",
+      "owner": "Organization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/entities.json",
+      "id": "Membership",
+      "owner": "Organization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/events.json",
+      "id": "ApplicationSessionCreated",
+      "owner": "Identity",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/events.json",
+      "id": "ApplicationSessionRevoked",
+      "owner": "Identity",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/events.json",
+      "id": "CertificationIssued",
+      "owner": "Certification",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/events.json",
+      "id": "CertificationRevoked",
+      "owner": "Certification",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/events.json",
+      "id": "ContentAssigned",
+      "owner": "Learning",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/events.json",
+      "id": "LearningSessionCompleted",
+      "owner": "Learning",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/events.json",
+      "id": "LearningSessionStarted",
+      "owner": "Learning",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/events.json",
+      "id": "MembershipCreated",
+      "owner": "Organization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/events.json",
+      "id": "MembershipDeactivated",
+      "owner": "Organization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/events.json",
+      "id": "ProgressRecorded",
+      "owner": "Learning",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/identifiers.json",
+      "id": "AuditEventId",
+      "owner": "AuditLifecycle",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/identifiers.json",
+      "id": "CapabilityId",
+      "owner": "Authorization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/identifiers.json",
+      "id": "ContentBlockId",
+      "owner": "Content",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/identifiers.json",
+      "id": "EntitlementId",
+      "owner": "Organization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/identifiers.json",
+      "id": "LearnerStateId",
+      "owner": "Learning",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/identifiers.json",
+      "id": "LifecycleEventId",
+      "owner": "AuditLifecycle",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/identifiers.json",
+      "id": "LocationId",
+      "owner": "Organization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/identifiers.json",
+      "id": "MembershipId",
+      "owner": "Organization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-001",
+      "owner": "Governance",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-002",
+      "owner": "Authorization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-003",
+      "owner": "Governance",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-004",
+      "owner": "Governance",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-005",
+      "owner": "TransactionControl",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-006",
+      "owner": "TransactionControl",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-007",
+      "owner": "TransactionControl",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-008",
+      "owner": "TransactionControl",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-009",
+      "owner": "Organization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-010",
+      "owner": "Organization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-011",
+      "owner": "Authorization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-012",
+      "owner": "Authorization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-013",
+      "owner": "Authorization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-014",
+      "owner": "Authorization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-015",
+      "owner": "Content",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-016",
+      "owner": "Content",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-017",
+      "owner": "Learning",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-018",
+      "owner": "Learning",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-019",
+      "owner": "Certification",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-020",
+      "owner": "VerificationEvidence",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-021",
+      "owner": "VerificationEvidence",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/invariants.json",
+      "id": "INV-022",
+      "owner": "Identity",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/relationships.json",
+      "id": "ContentPackContainsContentBlock",
+      "owner": "Content",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/relationships.json",
+      "id": "EntitlementBelongsToOrganization",
+      "owner": "Organization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/relationships.json",
+      "id": "LearnerStateBelongsToIdentity",
+      "owner": "Learning",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/relationships.json",
+      "id": "LearnerStateTracksContentPack",
+      "owner": "Learning",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/relationships.json",
+      "id": "LifecycleEventReferencesIdentity",
+      "owner": "AuditLifecycle",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/relationships.json",
+      "id": "LocationBelongsToOrganization",
+      "owner": "Organization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/relationships.json",
+      "id": "MembershipLinksIdentityOrganization",
+      "owner": "Organization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/relationships.json",
+      "id": "MembershipMayScopeLocation",
+      "owner": "Organization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/state-machines.json",
+      "id": "MembershipStateMachine",
+      "owner": "Organization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/states.json",
+      "id": "EvidenceState",
+      "owner": "VerificationEvidence",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/states.json",
+      "id": "MembershipStatus",
+      "owner": "Organization",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/values.json",
+      "id": "EmailAddress",
+      "owner": "Identity",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/values.json",
+      "id": "ContentVersion",
+      "owner": "Content",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/values.json",
+      "id": "Timestamp",
+      "owner": "AuditLifecycle",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/values.json",
+      "id": "RequestId",
+      "owner": "Observability",
+      "status": "candidate"
+    },
+    {
+      "registry": "kernel/values.json",
+      "id": "IdempotencyKey",
+      "owner": "TransactionControl",
+      "status": "candidate"
+    }
+  ],
+  "source_sha256": {
+    "contracts/c00-system-authority-contract.md": "63500932db774880d5769f545887a21c2482961e405eee328aed2cc25fa4b661",
+    "contracts/c01-canonical-semantics-contract.md": "e407a52b739756e84264a66ef0a824d02435e4ee15e938c405c4caf8dc1ebd40",
+    "contracts/c02-automation-agent-authority-contract.md": "21202fef396b5179a718ded8fa2f28a4726497c393ce083fb7af5297f594de23",
+    "contracts/c11-identity-credentials-contract.md": "dc4d4a6b4d34d43aefb07a36a7fdca011686b007024cdfc0543ffeb9657d9921",
+    "contracts/c12-application-sessions-contract.md": "6bfda46131be1c25d3aa71f5a771dcc1374033156b2467757c3dacdee527481d",
+    "contracts/c13-tenancy-membership-contract.md": "7603211b5316af6d6d56bc5441bc8db86b3e8981f8f4d0c9f6d35aee852db96c",
+    "contracts/c14-authorization-capabilities-contract.md": "0e427c6a0fe62e6b2784e433d9185b755493a824e44c4330e0163c99b80ba917",
+    "contracts/c15-data-isolation-privacy-contract.md": "e14300a57e8bf75f39509efa5c11c6ae994dba9dd798336f01d23cce8c70e84e",
+    "contracts/c21-database-migration-contract.md": "eb64b82349abda75370ab68961af92094e6840a3d02e18a1bfb2f4eaaac6a135",
+    "contracts/c22-transaction-idempotency-reconciliation-contract.md": "41b6d408d3a90175119b6b47574a186564735d27721ea800e4bfc6c48d0a6f0e",
+    "contracts/c23-audit-lifecycle-events-contract.md": "6bb49a0882531a2c8224df245e7a991aaac3cb97019dd2371cca57b83b38c00f",
+    "contracts/c31-content-teaching-engine-contract.md": "1ef58fc330e70d4cd38aad5df8440ccba36549dd17414e777f50fce667eebc45",
+    "contracts/c32-learning-sessions-progress-contract.md": "ea26f7e871ea95cef6fcfadbd8a25078c16342e031032c90ddd6104210f95bf2",
+    "contracts/c33-manager-operations-contract.md": "22c0a55c03ce2fb5fb5072045b0518a727250918b8fcace2907554a5173e7ea7",
+    "contracts/c34-certification-credentials-contract.md": "aeffc9b249f050a72f77149df45e2dec379bbb75e5e3810780858210c0f221aa",
+    "contracts/c41-api-boundary-contract.md": "59257d21573369827d0bed24919e7d6fedec5221c780ffeb404dcea68fb26e52",
+    "contracts/c42-web-client-boundary-contract.md": "5655dc089faf29bc8db16fd81319fcad6a7b37b8c5833b1b5d0fdb8b97ce9e28",
+    "contracts/c51-verification-evidence-contract.md": "7390163d21ef0d00a8c7190108fa2f1e5ab1dd28e0d18569dc8e823fe8cf0161",
+    "contracts/c52-deployment-release-recovery-contract.md": "d2b5c5356f015548b4720d8b073ce998543dfb0b72b35782d44adb2ceccfab2c",
+    "contracts/c53-observability-contract.md": "1fe87f05de5a35497e7da210591b989f261caf66efa1a3679deb8df8866a5ef9",
+    "contracts/c61-analytics-contract.md": "aad01e1353076e78e3e5bc6e342919ef7f9e4c4dc2da20b5b0809ae1ecad9fe2",
+    "contracts/c62-pwa-offline-contract.md": "891fb6513da8c8efb529f023f149153e8ed90e0d7ac9aa46af78f68f61ff8ce6",
+    "contracts/c63-billing-contract.md": "b01c3bf281cc0883e50cf74b9c52677fee1cc5b3ede422e5e015c58c5cfa0b9c",
+    "persistence/physical-slices/assignment/admission-evidence-plan.json": "107750afb12c3e3412d72bb606aaa2770617ce0cc27373aa2a1a7ca5fa849aa9",
+    "persistence/physical-slices/certification/admission-evidence-plan.json": "be72e653d7a43bc62570674a27b39772ace6ca7d39526766ebe24d5e7a1f5c17",
+    "persistence/physical-slices/progress-event/admission-evidence-plan.json": "ce9f2714891d80563e80e7aca94937715a82fe1b17fc297a3cdd38bba934b8fc",
+    "kernel/capabilities.json": "c5ba8ca9de8e86ba51f78a59ce0406fd2c5137a931ed4ad83988f609eaeb3461",
+    "kernel/commands.json": "91ae49c8bffcf1e4be76188f18d8eb2b06eedd7a276e5c5a0970563ffdd92727",
+    "kernel/decision-tables.json": "bf4beb3da3ba76e2ba3466fe28934b78f39c83aff69b6dfd02cd5a196f93123b",
+    "kernel/entities.json": "b0ace040e3f639e2c73953c7935c445526d09e88f28c5e0cc7e68ca5fc11689e",
+    "kernel/events.json": "98eacc6f7c6ec73e42dc39e98c25b9124218572f0ec86f9b44aa6d87ae2e11a8",
+    "kernel/identifiers.json": "cb85ffc5927a8f29af15b3648d936862a52d302a763f86f1f34015cc97251bf4",
+    "kernel/invariants.json": "651b7331605f07756586cd43a7d8cb50cf5e48f56f85ea84ef30ce08165e69c0",
+    "kernel/relationships.json": "84fac8ade7f8df06f3d6a7444256469a18b1f399fcf45e564dddb895fbbb4713",
+    "kernel/state-machines.json": "6180ba1f6b1bfc9506736906cca4e47cc98d604a6cd7afd340f168c1462e13e2",
+    "kernel/states.json": "30237f294389d8c6d8f9621c4da30fd1357f07205e8a3091e8916bc210de06dc",
+    "kernel/values.json": "fda608c1d0b435528767150b97a938ca70c2a728b632bff57796089c708f3c6f"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "scope": "isolated execution of pinned V1 pure version helper only; no V1 app or production execution",
+  "source": "packages/shared/src/schemas/content/version-id.ts",
+  "source_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+  "cases": [
+    {
+      "version": "1.2.3",
+      "result": "C/s1.0.0/v1.2.3",
+      "accepted": true
+    },
+    {
+      "version": "01.2.3",
+      "result": "C/s1.0.0/v01.2.3",
+      "accepted": true
+    },
+    {
+      "version": "1.2.3-01",
+      "result": "C/s1.0.0/v1.2.3-01",
+      "accepted": true
+    }
+  ]
+}
