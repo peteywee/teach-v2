@@ -59,8 +59,8 @@ if (!c52.includes('SHA-256 of the sorted canonical manifest') || !c52.includes('
   errors.push('production proof decisions: C52 configuration-identity semantics drifted');
 }
 
-if (!index.includes('"version": "0.15.0"') || !index.includes('- Package version: `0.15.0`')) {
-  errors.push('production proof decisions: contract package must be 0.15.0');
+if (!index.includes('"version": "0.16.0"') || !index.includes('- Package version: `0.16.0`')) {
+  errors.push('production proof decisions: contract package must be 0.16.0');
 }
 if (!index.includes('| C21 |') || !index.includes('| 1.1.0 | `MIG`') || !index.includes('| 1.2.0 | `REL`')) {
   errors.push('production proof decisions: C21/C52 index versions not synchronized');
@@ -68,7 +68,7 @@ if (!index.includes('| C21 |') || !index.includes('| 1.1.0 | `MIG`') || !index.i
 if (!index.includes('**391**') || !index.includes('**267**') || !index.includes('**61**') || !index.includes('**18**')) {
   errors.push('production proof decisions: contract totals not synchronized');
 }
-if (!approvals.includes('- Contract package version: `0.15.0`') || !approvals.includes('## Part 22 — Production-proof owner decisions')) {
+if (!approvals.includes('- Contract package version: `0.16.0`') || !approvals.includes('## Part 22 — Production-proof owner decisions')) {
   errors.push('production proof decisions: canonical approval ledger missing');
 }
 for (const selection of [
@@ -96,5 +96,5 @@ if (errors.length) {
 console.log('PRODUCTION PROOF DECISIONS PASS');
 console.log('C21: 1.1.0 / blocking open questions: 0');
 console.log('C52: 1.2.0 / blocking open questions: 0');
-console.log('Package: 0.15.0');
+console.log('Package: 0.16.0');
 console.log('Shared/production migration execution: BLOCKED pending concrete provider/release evidence');
