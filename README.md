@@ -39,3 +39,7 @@ The [complete unresolved owner-decision packet](verification/legacy-recovery/own
 The current self-audit has 23 bounded stages, including decision-inventory regressions and PostgreSQL session-command rollback/contention evidence. Session revocation now authorizes, performs an owner-scoped conditional transition, and appends required audit in the same transaction. Terminal/repeated calls cannot append another success audit. Real C14 authorization and admitted AuditEvent adapters remain required before runtime activation.
 
 The [owner policy registration and review](verification/owner-decisions/2026-10-04/review.md) records five selected values through #66 and preserves draft/recommended/unknown states. Contract package 0.15.0 resolves PIN parameters, hosting, 24-hour rollback, one-year central audit retention and 90-day operational log retention. The live unresolved inventory is now 61 questions / 18 explicit blockers. New matrix #67 and privacy review #68 remain open; no runtime, deletion, analytics, schema or production execution is enabled.
+
+## Reuse recorded owner answers
+
+Before asking for policy input, read the [preserved owner answers](verification/owner-decisions/README.md). All 66 original question IDs are indexed with source text, receipt/registration states, remaining work and next actions. Blocked implementation does not require repeating an already supplied answer.

@@ -1,0 +1,2462 @@
+{
+  "version": "1.0.0",
+  "captured_on": "2026-10-05",
+  "timezone": "America/Chicago",
+  "baseline_main": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+  "purpose": "Preserve all supplied answers for reuse; answer receipt, authority registration, and implementation proof are independent states.",
+  "source_library_file_id": "libfile_c5d17dde72e88191a75ea8b977f6d9af",
+  "source_sha256": {
+    "sources/supplied-answer-sheet.md": "ec67307c3eed4f59cc40b0577b73ddcd81cfc61265aba1a4187e3d544d5ac372",
+    "sources/follow-up-answers.md": "00039814f461ddea9317b7b0f8be01c4757fc2c958627e2700f39ef0dbc71ced",
+    "sources/workflow-and-capture-instructions.md": "647f9862179ed7beb51b3ca9b39194309f6cfbd7d636e3cba563175114a4b7fb"
+  },
+  "totals": {
+    "original_questions": 66,
+    "packet_entries": 60,
+    "questions_with_supplied_response": 61,
+    "registered_policies": 5,
+    "received_not_registered": 56,
+    "without_supplied_entry": 5
+  },
+  "new_policy_approvals_created": false,
+  "runtime_activation": "BLOCKED",
+  "shared_or_production_execution_authorized": false,
+  "records": [
+    {
+      "id": "OQ-AGT-1",
+      "question": "Where are AutomationActor execution identities and their capability sets registered?",
+      "contract": "contracts/c02-automation-agent-authority-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "AGT-9",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 53,
+        "verbatim_answer": "Backend principals + explicit caps. 99%. CI jobs are not product actors; conflating them is a privilege-escalation risk."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-AGT-1",
+        "group": "Automation",
+        "recommended_option": "REGISTERED_EXECUTION_PRINCIPALS",
+        "recommendation": "Use backend execution-principal records plus explicit capability assignments; no product actor is registered merely because a CI job exists.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c02-automation-agent-authority-contract.md",
+        "affects": "AGT-9"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-AGT-2",
+      "question": "What is the first runtime-agent use case, if any, that would trigger the revision of this contract?",
+      "contract": "contracts/c02-automation-agent-authority-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "AGT-16",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 54,
+        "verbatim_answer": "Keep disabled. 99%. Runtime agents are a major attack surface. No enablement without specific use case + dedicated C02 revision."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-AGT-2",
+        "group": "Later",
+        "recommended_option": "DEFER_RUNTIME_AGENTS",
+        "recommendation": "Keep deterministic paths first and runtime agents disabled; select a use case only through a dedicated C02 revision.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c02-automation-agent-authority-contract.md",
+        "affects": "AGT-16"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-AGT-3",
+      "question": "Which existing jobs, workers, and CLI commands (for example `pnpm cli`) carry forward as AutomationActors?",
+      "contract": "contracts/c02-automation-agent-authority-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 55,
+        "verbatim_answer": "Inventory each separately. 99%. Blanket grandfathering violates least privilege."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-AGT-3",
+        "group": "Later",
+        "recommended_option": "NAMED_JOB_BY_JOB_ADOPTION",
+        "recommendation": "Inventory and approve each legacy job/worker/CLI separately, with capability, scope, transaction/reconciliation and audit ownership.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c02-automation-agent-authority-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-ANL-1",
+      "question": "Will analytics be enabled for v2, and with which provider?",
+      "contract": "contracts/c61-analytics-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 133,
+        "verbatim_answer": "Disabled initially. 99%. Adds privacy scope; enable later with explicit decision."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-ANL-1",
+        "group": "Optional",
+        "recommended_option": "REMAIN_DISABLED",
+        "recommendation": "Keep analytics disabled initially; provider/enablement is a later dedicated decision.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c61-analytics-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-ANL-2",
+      "question": "Which identifying fields, if any, may analytics events carry?",
+      "contract": "contracts/c61-analytics-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "ANL-7",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 134,
+        "verbatim_answer": "No identifying fields. 99%. If enabled later, start minimal."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-ANL-2",
+        "group": "Optional",
+        "recommended_option": "NO_IDENTIFYING_ANALYTICS_FIELDS",
+        "recommendation": "Keep identifying learner fields absent; approve a minimum schema before enabling analytics.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c61-analytics-contract.md",
+        "affects": "ANL-7"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-API-1",
+      "question": "Which routes are boundary exceptions outside `/api/v1`?",
+      "contract": "contracts/c41-api-boundary-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SOURCE_SCAN_PENDING_SELECTION",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 39,
+        "verbatim_answer": "Health/readiness + auth callbacks as exceptions; all product ops under /api/v1: 99% on principle. Exact list requires implementation knowledge I don't have. No routes authorized by principle alone."
+      },
+      "follow_up_response": {
+        "path": "sources/follow-up-answers.md",
+        "item": 10,
+        "verbatim_answer": "OQ-API-1 — I'll scan the codebase for routes now."
+      },
+      "registered_selection": null,
+      "registration_evidence": "verification/owner-decisions/2026-10-04/registration.json#OQ-API-1",
+      "recorded_proposed_value": {
+        "implemented_http_route_count": 0,
+        "approved_exception_routes": []
+      },
+      "existing_recommendation": {
+        "id": "OQ-API-1",
+        "group": "Transport",
+        "recommended_option": "EXPLICIT_PUBLIC_HEALTH_AND_AUTH_EXCEPTION_LIST",
+        "recommendation": "Prepare an exact exception list for health/readiness and necessary sign-in/provider-callback routes; all product operations use the approved versioned boundary. No routes are authorized by this proposal.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c41-api-boundary-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Exact path/method/owner/authentication exception list; zero implemented V2 routes at the registered scan."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-API-2",
+      "question": "What is the error envelope shape?",
+      "contract": "contracts/c41-api-boundary-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "API-10",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 107,
+        "verbatim_answer": "Uniform code/message/requestId; identical non-disclosing denials. 99%. Prevents information leakage via inconsistent errors; aids debugging."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-API-2",
+        "group": "Transport",
+        "recommended_option": "CODE_MESSAGE_REQUEST_ID_ERROR_ENVELOPE",
+        "recommendation": "Propose a uniform code/message/requestId envelope and identical non-disclosing target denials; publish the exact schema before handlers/client code.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c41-api-boundary-contract.md",
+        "affects": "API-10"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-API-3",
+      "question": "What is the API versioning and deprecation policy?",
+      "contract": "contracts/c41-api-boundary-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "API-13",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 108,
+        "verbatim_answer": "/api/v1 + deprecation manifest with your sunset periods. 99%. Industry standard."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-API-3",
+        "group": "Transport",
+        "recommended_option": "EXPLICIT_MAJOR_VERSION_AND_DEPRECATION_MANIFEST",
+        "recommendation": "Propose /api/v1 for core operations and an explicit major-version/deprecation manifest with owner-selected sunset periods.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c41-api-boundary-contract.md",
+        "affects": "API-13"
+      },
+      "remaining_work": [
+        "Exact sunset periods and deprecation manifest."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-AUD-1",
+      "question": "Resolved: one-year audit retention; fixed central policy with no tenant overrides. Audit deletion remains BLOCKED.",
+      "contract": "contracts/c23-audit-lifecycle-events-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "REGISTERED_POLICY",
+      "recorded_detail_state": "CONFIRMED",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 31,
+        "verbatim_answer": "Fixed central policy, no tenant overrides, deletion blocked: 99% on principle. Tenant-configurable retention lets a tenant delete evidence of their own misconduct. Duration requires your input (legal requirement dependent)."
+      },
+      "follow_up_response": {
+        "path": "sources/follow-up-answers.md",
+        "item": 3,
+        "verbatim_answer": "OQ-AUD-1 — 1 year retention. Fixed central policy, no tenant overrides. Audit deletion blocked."
+      },
+      "registered_selection": {
+        "duration": 1,
+        "unit": "year",
+        "policy": "fixed-central",
+        "tenant_overrides": false,
+        "deletion_authorized": false
+      },
+      "registration_evidence": "verification/owner-decisions/2026-10-04/registration.json#OQ-AUD-1",
+      "recorded_proposed_value": null,
+      "existing_recommendation": null,
+      "remaining_work": [
+        "Retention clock/executor and proof while audit deletion stays blocked."
+      ],
+      "next_action": "Reuse registered value; implement only when dependencies/admission authorize it and collect evidence.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-AUD-2",
+      "question": "For which entities must current state be reconstructable from lifecycle history?",
+      "contract": "contracts/c23-audit-lifecycle-events-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "AUD-7",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 84,
+        "verbatim_answer": "Identity, Membership, Assignment, Certification reconstructable. 99%. Lifecycle-significant entities; supports audit and debugging. Projections stay separate from canonical state."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-AUD-2",
+        "group": "Audit",
+        "recommended_option": "IDENTITY_MEMBERSHIP_ASSIGNMENT_CERTIFICATION_HISTORY",
+        "recommendation": "Propose reconstructable lifecycle history for Identity, Membership, Assignment and Certification, with derived projections kept separate from canonical state.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c23-audit-lifecycle-events-contract.md",
+        "affects": "AUD-7"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-AUD-3",
+      "question": "Which denial types are operationally significant enough to record?",
+      "contract": "contracts/c23-audit-lifecycle-events-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "AUD-8",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 85,
+        "verbatim_answer": "Scoped denials (capability/tenant/target/credential abuse) with rate limits. 99%. Auditing every validation typo creates noise and cost."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-AUD-3",
+        "group": "Audit",
+        "recommended_option": "SECURITY_SIGNIFICANT_DENIALS_ONLY",
+        "recommendation": "Propose scoped records for capability/tenant/target violations and invalid/revoked credential abuse, with rate limits and redaction; avoid turning every validation typo into permanent audit.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c23-audit-lifecycle-events-contract.md",
+        "affects": "AUD-8"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-AUTHZ-1",
+      "question": "Is the Gate A capability vocabulary and bundle table (accepted 2026-07-22) adopted verbatim for v2, amended, or replaced?",
+      "contract": "contracts/c14-authorization-capabilities-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "AUTHZ-19",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "DIRECTION_RECORDED",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 23,
+        "verbatim_answer": "Cannot answer at 99%. Requires the capability/command/bundle matrix to be proposed first. I do not have V1's Gate A vocabulary or the V2 amendments. Any answer I give would be invention. Blocked until the matrix exists."
+      },
+      "follow_up_response": {
+        "path": "sources/follow-up-answers.md",
+        "item": 1,
+        "verbatim_answer": "OQ-AUTHZ-1 — Create new capability matrix (not recover V1). I'll draft this as a separate work item."
+      },
+      "registered_selection": null,
+      "registration_evidence": "verification/owner-decisions/2026-10-04/registration.json#OQ-AUTHZ-1",
+      "recorded_proposed_value": {
+        "matrix_source": "NEW_V2",
+        "legacy_grants_adopted": false,
+        "exact_matrix_approved": false
+      },
+      "existing_recommendation": {
+        "id": "OQ-AUTHZ-1",
+        "group": "Foundation",
+        "recommended_option": "NEW_V2_MATRIX_PENDING_EXACT_APPROVAL",
+        "recommendation": "Owner selected creation of a new V2 capability matrix, not recovery of V1 grants; issue #67 must propose the exact command/capability/bundle matrix before owner approval can resolve this question.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c14-authorization-capabilities-contract.md",
+        "affects": "AUTHZ-19"
+      },
+      "remaining_work": [
+        "Exact V2 command/capability/bundle/read/bootstrap/scope matrix, including denial cases (#67)."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-AUTHZ-2",
+      "question": "Which cross-tenant platform capabilities, if any, exist in v2, and what audit do they require?",
+      "contract": "contracts/c14-authorization-capabilities-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "AUTHZ-20",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": false,
+      "capture_state": "NO_SUPPLIED_ENTRY",
+      "recorded_detail_state": "EXISTING_RECOMMENDATION_ONLY",
+      "original_packet_response": null,
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-AUTHZ-2",
+        "group": "Foundation",
+        "recommended_option": "NO_CROSS_TENANT_GRANTS",
+        "recommendation": "Approve no cross-tenant platform grants initially; do not import V1 platform_operator grants or role aliases.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c14-authorization-capabilities-contract.md",
+        "affects": "AUTHZ-20"
+      },
+      "remaining_work": [
+        "Original supplied sheet has no entry for this ID. Existing proposal is preserved below; it is not an owner answer."
+      ],
+      "next_action": "Prepare the preserved recommendation with its exact impact for an eventual targeted owner selection.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-BIL-1",
+      "question": "When, if ever, is self-service billing enabled for v2?",
+      "contract": "contracts/c63-billing-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 142,
+        "verbatim_answer": "Disabled. 99%. Out of foundation scope."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-BIL-1",
+        "group": "Optional",
+        "recommended_option": "REMAIN_DISABLED",
+        "recommendation": "Keep self-service billing disabled initially.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c63-billing-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-BIL-2",
+      "question": "Which payment provider is approved (the source proposal names Stripe)?",
+      "contract": "contracts/c63-billing-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "BIL-12",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 143,
+        "verbatim_answer": "No provider selection. 99%. Don't move money in foundation batch."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-BIL-2",
+        "group": "Optional",
+        "recommended_option": "DEFER_PAYMENT_PROVIDER",
+        "recommendation": "Do not select a payment provider or permit money movement in the foundation batch.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c63-billing-contract.md",
+        "affects": "BIL-12"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-BIL-3",
+      "question": "How does an Organization relate to its billing account (for example one-to-one, owned by the organization)?",
+      "contract": "contracts/c63-billing-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "BIL-13",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 144,
+        "verbatim_answer": "Org-owned, read-only entitlement projection: 99% on model. Cardinality requires your business input."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-BIL-3",
+        "group": "Optional",
+        "recommended_option": "ORGANIZATION_OWNED_BILLING_RELATION_PROPOSAL",
+        "recommendation": "Propose Organization-owned local billing-account relationship and read-only entitlement projection; exact cardinality/provider linkage requires owner-approved semantics.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c63-billing-contract.md",
+        "affects": "BIL-13"
+      },
+      "remaining_work": [
+        "Exact billing cardinality and business linkage; billing remains disabled."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-CERT-1",
+      "question": "Is credential verification public (anyone with the link) or private (authenticated, scoped)? (Deferred by Gate A.)",
+      "contract": "contracts/c34-certification-credentials-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "CERT-13",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 35,
+        "verbatim_answer": "Private, authenticated, scoped. 99%. Public links enable enumeration (sequential ID probing) and privacy violations. A public feature needs its own disclosure model later."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-CERT-1",
+        "group": "Certification",
+        "recommended_option": "PRIVATE_AUTHENTICATED_SCOPED_VERIFICATION",
+        "recommendation": "Propose private, authenticated and scoped certification verification initially. A public link feature requires a separate approved disclosure model.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c34-certification-credentials-contract.md",
+        "affects": "CERT-13"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-CERT-2",
+      "question": "Who approves certification criteria versions, and where is approval recorded?",
+      "contract": "contracts/c34-certification-credentials-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "CERT-4",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "UNKNOWN",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 37,
+        "verbatim_answer": "Version/digest-bound, designated approvers, audit: 99% on mechanism. Approver identity requires your input. I can specify how approval works, not who approves."
+      },
+      "follow_up_response": {
+        "path": "sources/follow-up-answers.md",
+        "item": 8,
+        "verbatim_answer": "OQ-CERT-2 — Unknown. Flagged for follow-up. When you know who approves certification criteria (role/title), I'll record it."
+      },
+      "registered_selection": null,
+      "registration_evidence": "verification/owner-decisions/2026-10-04/registration.json#OQ-CERT-2",
+      "recorded_proposed_value": {
+        "approver_role": "UNKNOWN",
+        "approval_record_location": "UNKNOWN"
+      },
+      "existing_recommendation": {
+        "id": "OQ-CERT-2",
+        "group": "Certification",
+        "recommended_option": "AUTHORIZED_APPROVER_VERSION_DIGEST_LEDGER",
+        "recommendation": "Propose version/digest-bound criteria approvals in Certification-owned records, with designated authorized customer approvers and audit.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c34-certification-credentials-contract.md",
+        "affects": "CERT-4"
+      },
+      "remaining_work": [
+        "Designated approver role/title and approval-record ownership."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-CERT-3",
+      "question": "What evidence types are acceptable (observation notes, checklist, photo, other)?",
+      "contract": "contracts/c34-certification-credentials-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "CERT-7",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 102,
+        "verbatim_answer": "Checklists + observation notes first. 99%. Photos add storage/privacy/retention complexity — separate decision."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-CERT-3",
+        "group": "Certification",
+        "recommended_option": "STRUCTURED_CHECKLIST_AND_OBSERVATION_NOTES_FIRST",
+        "recommendation": "Propose structured checklist results and scoped observation notes first; photo uploads require separate storage/privacy/retention decisions.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c34-certification-credentials-contract.md",
+        "affects": "CERT-7"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-CERT-4",
+      "question": "May an actor ever be both learner and observer for the same certification?",
+      "contract": "contracts/c34-certification-credentials-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "CERT-15",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": false,
+      "capture_state": "NO_SUPPLIED_ENTRY",
+      "recorded_detail_state": "EXISTING_RECOMMENDATION_ONLY",
+      "original_packet_response": null,
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-CERT-4",
+        "group": "Certification",
+        "recommended_option": "NO_SELF_OBSERVATION",
+        "recommendation": "Propose learner and observer must be distinct Identities for the same certification.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c34-certification-credentials-contract.md",
+        "affects": "CERT-15"
+      },
+      "remaining_work": [
+        "Original supplied sheet has no entry for this ID. Existing proposal is preserved below; it is not an owner answer."
+      ],
+      "next_action": "Prepare the preserved recommendation with its exact impact for an eventual targeted owner selection.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-CERT-5",
+      "question": "Do certifications expire, and if so how is expiry represented?",
+      "contract": "contracts/c34-certification-credentials-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 103,
+        "verbatim_answer": "No auto-expiry. 99%. Don't invent expiry semantics. If desired, you must define representation, effects, and history rules."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-CERT-5",
+        "group": "Certification",
+        "recommended_option": "NO_IMPLICIT_EXPIRY",
+        "recommendation": "Propose no automatic expiry initially; if expiry is desired, owner must approve its representation, effects and history/revocation rules.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c34-certification-credentials-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-CNT-1",
+      "question": "What versioning scheme applies to the schema and to packs (semver, integer, other)?",
+      "contract": "contracts/c31-content-teaching-engine-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "CNT-2",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": false,
+      "capture_state": "NO_SUPPLIED_ENTRY",
+      "recorded_detail_state": "EXISTING_RECOMMENDATION_ONLY",
+      "original_packet_response": null,
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-CNT-1",
+        "group": "Foundation",
+        "recommended_option": "SEMVER_SCHEMA_AND_PACK_IMMUTABLE_REFERENCES",
+        "recommendation": "Propose strict SemVer 2.0 for schema and pack versions, immutable published content and exact version/digest references. Do not copy V1 version helper leading-zero acceptance. Physical ContentVersion binding remains a separate shape gate.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c31-content-teaching-engine-contract.md",
+        "affects": "CNT-2"
+      },
+      "remaining_work": [
+        "Original supplied sheet has no entry for this ID. Existing proposal is preserved below; it is not an owner answer."
+      ],
+      "next_action": "Prepare the preserved recommendation with its exact impact for an eventual targeted owner selection.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-CNT-2",
+      "question": "Where are customer content approvals recorded, and who may record one?",
+      "contract": "contracts/c31-content-teaching-engine-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "CNT-11",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 89,
+        "verbatim_answer": "Version/digest-bound, authorized approver, actor/scope/time/audit: 99% on mechanism. Approver identity requires your input. Dependency: requires CNT-1 versioning defined first."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-CNT-2",
+        "group": "Content",
+        "recommended_option": "CONTENT_APPROVAL_LEDGER_WITH_CUSTOMER_AUTHORITY",
+        "recommendation": "Propose version/digest-bound approvals in Content-owned records, written only by an authorized customer approver; record actor/scope/time and required audit.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c31-content-teaching-engine-contract.md",
+        "affects": "CNT-11"
+      },
+      "remaining_work": [
+        "Content-criteria approver identity and CNT-1 versioning dependency."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-CNT-3",
+      "question": "Which legacy pack formats must v2 accept through adapters?",
+      "contract": "contracts/c31-content-teaching-engine-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 90,
+        "verbatim_answer": "Named formats only with fixtures. 99%. Permissive parsers risk billion-laughs, zip bombs, and encoding attacks."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-CNT-3",
+        "group": "Content",
+        "recommended_option": "ONE_NAMED_ADAPTER_PER_LEGACY_FORMAT",
+        "recommendation": "Recover only named legacy formats with fixtures, version validation, deterministic conversion and removal conditions; no permissive catch-all parser.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c31-content-teaching-engine-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Exact allowed import formats plus negative fixtures."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-EVD-1",
+      "question": "Which contracts are high-risk and require independent verification?",
+      "contract": "contracts/c51-verification-evidence-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "EVD-16",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 116,
+        "verbatim_answer": "C11–C15, C21–C23, C51–C52 + cross-domain mutations. 99%. Security-critical and foundation contracts warrant independent verification. Self-audit is never independent."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-EVD-1",
+        "group": "Evidence",
+        "recommended_option": "INDEPENDENT_SECURITY_DATA_RELEASE_VERIFICATION",
+        "recommendation": "Propose independent verification for C11-C15, C21-C23 and C51-C52 plus protected cross-domain mutations; self-audit is never the independent reviewer.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c51-verification-evidence-contract.md",
+        "affects": "EVD-16"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-EVD-2",
+      "question": "Where are evidence records stored and for how long?",
+      "contract": "contracts/c51-verification-evidence-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 117,
+        "verbatim_answer": "Repo + SHA-bound artifacts: 99% on principle. Duration requires your input. Critical gap: GitHub artifacts expire. Need durable content-addressed archival, not just \"you choose duration.\""
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-EVD-2",
+        "group": "Evidence",
+        "recommended_option": "REPO_METADATA_WITH_RETAINED_SHA_ARTIFACTS",
+        "recommendation": "Propose repo metadata plus SHA-bound CI artifacts; owner must choose artifact duration and durable archival. Current GitHub artifacts are not assumed permanent.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c51-verification-evidence-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Evidence retention duration and durable archival mechanism beyond expiring CI artifacts."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-EVD-3",
+      "question": "How do these four evidence states map to the TOS truth states (verified, declared, inferred, unknown, conflicting, stale)?",
+      "contract": "contracts/c51-verification-evidence-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 118,
+        "verbatim_answer": "PROVEN/BLOCKED/UNKNOWN/CONTRADICTORY mapping. 99%. Prevents \"declared\" being mistaken for \"proven.\" Declared/inferred never auto-promote."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-EVD-3",
+        "group": "Evidence",
+        "recommended_option": "EXPLICIT_NON_COLLAPSING_TRUTH_MAPPING",
+        "recommendation": "Propose PROVEN only with current verified evidence, BLOCKED for unmet gates, UNKNOWN for insufficient/stale evidence, CONTRADICTORY for conflicting facts; declared/inferred never auto-promote to PROVEN.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c51-verification-evidence-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-IDN-1",
+      "question": "Which password hashing algorithm and parameters are approved?",
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "contract_version_at_capture": "1.4.0",
+      "affects": "IDN-5",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 5,
+        "verbatim_answer": "Argon2id, m=19456, t=2, p=1. 99%. OWASP Password Storage Cheat Sheet recommendation. RFC 9106 parameters for interactive logins. V1 bcrypt's 72-byte limit is a known truncation vulnerability."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-IDN-1",
+        "group": "Foundation",
+        "recommended_option": "ARGON2ID_19M_T2_P1",
+        "recommendation": "Argon2id minimum m=19456 KiB, t=2, p=1, unique random salts and versioned encoded hashes; benchmark the approved backend before implementation. V1 bcrypt is reference only, with its explicit 72-byte guard.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c11-identity-credentials-contract.md",
+        "affects": "IDN-5"
+      },
+      "remaining_work": [
+        "Register supplied Argon2id parameters after authority review and backend performance/security validation."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-IDN-3",
+      "question": "Which sessions does a credential change revoke: all sessions, all other sessions, or another policy?",
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "contract_version_at_capture": "1.4.0",
+      "affects": "IDN-15",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 7,
+        "verbatim_answer": "Revoke ALL sessions. 99%. If the credential is compromised, the current session may be the attacker's. \"All other\" leaves the breach active. The re-login friction is the security property working."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-IDN-3",
+        "group": "Foundation",
+        "recommended_option": "ALL_SESSIONS_ON_CREDENTIAL_CHANGE",
+        "recommendation": "Revoke every session for the Identity atomically with successful credential change and audit; require a new sign-in. This is a proposed owner choice, not current authority.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c11-identity-credentials-contract.md",
+        "affects": "IDN-15"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-IDN-4",
+      "question": "What is the OAuth linking rule: verified-email match, explicit user-initiated linking only, or another rule?",
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "contract_version_at_capture": "1.4.0",
+      "affects": "IDN-2",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 9,
+        "verbatim_answer": "Explicit reauthenticated linking. 99%. Email-match linking enables account takeover via domain/plus-address control. Industry standard (Google, GitHub) requires explicit initiation + reauthentication."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-IDN-4",
+        "group": "Foundation",
+        "recommended_option": "EXPLICIT_REAUTHENTICATED_LINKING",
+        "recommendation": "Use existing verified provider-subject links; matching email alone cannot link or create a duplicate Identity. Linking to an existing Identity requires explicit user initiation and reauthentication.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c11-identity-credentials-contract.md",
+        "affects": "IDN-2"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-IDN-6",
+      "question": "Resolved: PIN parameters selected as 6 digits, 5 attempts, 15-minute lock. PIN authentication remains unavailable until implementation and all applicable authentication gates pass.",
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "contract_version_at_capture": "1.4.0",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "REGISTERED_POLICY",
+      "recorded_detail_state": "CONFIRMED",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 59,
+        "verbatim_answer": "Keep PIN unavailable. 99%. Cannot invent length/lockout/reset values — these are security parameters requiring your approval."
+      },
+      "follow_up_response": {
+        "path": "sources/follow-up-answers.md",
+        "item": 9,
+        "verbatim_answer": "OQ-IDN-6 — 6-digit PIN, 5 attempts, 15-minute lock. Recorded. PIN auth stays unavailable until implementation."
+      },
+      "registered_selection": {
+        "pin_digits": 6,
+        "attempts": 5,
+        "lock_minutes": 15,
+        "authentication_available": false
+      },
+      "registration_evidence": "verification/owner-decisions/2026-10-04/registration.json#OQ-IDN-6",
+      "recorded_proposed_value": null,
+      "existing_recommendation": null,
+      "remaining_work": [
+        "PIN hashing, attempt/reset semantics, reset authority and runtime proof; selected parameters already captured."
+      ],
+      "next_action": "Reuse registered value; implement only when dependencies/admission authorize it and collect evidence.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-IDN-7",
+      "question": "Must password-reset and invitation responses be indistinguishable for registered and unregistered emails?",
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "contract_version_at_capture": "1.4.0",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 60,
+        "verbatim_answer": "Indistinguishable responses. 99%. Existence disclosure enables user enumeration. Standard control."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-IDN-7",
+        "group": "Identity",
+        "recommended_option": "INDISTINGUISHABLE_ACCEPTED_RESPONSE",
+        "recommendation": "Use indistinguishable accepted responses for known/unknown email, with bounded abuse controls and no existence disclosure.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c11-identity-credentials-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-LRN-2",
+      "question": "How are mastery, XP, streak, and rank derived from events?",
+      "contract": "contracts/c32-learning-sessions-progress-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "LRN-13",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 94,
+        "verbatim_answer": "Keep unavailable. 99%. Cannot score without approved formulas. Flag: verify LearningSession field set before implementation — if it persists XP, this becomes blocking despite the \"non-blocking\" label."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-LRN-2",
+        "group": "Learning",
+        "recommended_option": "DEFER_SCORING_FORMULAS",
+        "recommendation": "Keep XP/mastery/streak/rank unavailable until exact versioned derivation formulas and replay evidence are owner-approved; persisted completion does not imply scoring.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c32-learning-sessions-progress-contract.md",
+        "affects": "LRN-13"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-LRN-3",
+      "question": "When a pack gets a new version, does in-progress learner history carry over, restart, or stay pinned?",
+      "contract": "contracts/c32-learning-sessions-progress-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": false,
+      "capture_state": "NO_SUPPLIED_ENTRY",
+      "recorded_detail_state": "EXISTING_RECOMMENDATION_ONLY",
+      "original_packet_response": null,
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-LRN-3",
+        "group": "Foundation",
+        "recommended_option": "PIN_EXISTING_HISTORY_TO_ASSIGNED_VERSION",
+        "recommendation": "Existing sessions/history stay pinned to their assigned content version; new assignments use an explicitly selected new version without rewriting past evidence.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c32-learning-sessions-progress-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Original supplied sheet has no entry for this ID. Existing proposal is preserved below; it is not an owner answer."
+      ],
+      "next_action": "Prepare the preserved recommendation with its exact impact for an eventual targeted owner selection.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-MGR-1",
+      "question": "Is manager visibility limited to direct reports, the whole location, or configurable?",
+      "contract": "contracts/c33-manager-operations-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "MGR-3",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 33,
+        "verbatim_answer": "Direct reports ∩ org/location scope. 99%. Least privilege. \"Whole location\" gives visibility into non-reports. \"Configurable\" adds complexity without a use case. Reporting narrows, never expands."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-MGR-1",
+        "group": "Foundation",
+        "recommended_option": "DIRECT_REPORTS_WITHIN_APPROVED_SCOPE",
+        "recommendation": "Propose direct reports intersected with current organization/location scope; reporting relationships narrow visibility and never create capabilities.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c33-manager-operations-contract.md",
+        "affects": "MGR-3"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-MGR-2",
+      "question": "May managers offboard directly, or only request offboarding for an operator to approve?",
+      "contract": "contracts/c33-manager-operations-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 98,
+        "verbatim_answer": "Dedicated capability + canonical Identity service. 99%. Offboarding is destructive; single path prevents inconsistencies. Global effects need separate policy."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-MGR-2",
+        "group": "Manager",
+        "recommended_option": "EXPLICIT_OFFBOARD_CAPABILITY_THROUGH_IDENTITY_SERVICE",
+        "recommendation": "Propose manager offboarding only with its dedicated capability and canonical Identity service; global/multi-tenant effects need explicit policy before grants.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c33-manager-operations-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-MIG-3",
+      "question": "Will any browser-reachable database role exist in v2 (for example a hosted-auth client), making RLS tests applicable?",
+      "contract": "contracts/c21-database-migration-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "MIG-12",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 74,
+        "verbatim_answer": "No browser tables. 99%. Browser-reachable DB is an attack surface; backend-only is the secure architecture."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-MIG-3",
+        "group": "Infrastructure",
+        "recommended_option": "BACKEND_ONLY_APPLICATION_DATABASE",
+        "recommendation": "Propose no browser-reachable application tables. If hosted-auth roles exist, prove every application table remains backend-only; no implicit RLS exemption.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c21-database-migration-contract.md",
+        "affects": "MIG-12"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-MIG-4",
+      "question": "Are production migrations applied by the deployment pipeline or by a manual, owner-approved step?",
+      "contract": "contracts/c21-database-migration-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 75,
+        "verbatim_answer": "Manual owner-approved apply. 99%. CI cannot grant production permission. Needs backup/restore verification by a human."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-MIG-4",
+        "group": "Release",
+        "recommended_option": "MANUAL_OWNER_APPROVED_PRODUCTION_APPLY",
+        "recommendation": "Propose a manual exact-candidate owner-approved production apply after existing backup/restore/recovery gates. Development CI cannot grant production permission.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c21-database-migration-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-MIG-5",
+      "question": "Will v2 import any data from the legacy Teach database, and if so through which governed, audited path? Until decided, MIG-7's production baseline is the v2 production schema only.",
+      "contract": "contracts/c21-database-migration-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 76,
+        "verbatim_answer": "Keep absent. 99%. Data import is a separate project with its own risks. Don't bundle with foundation."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-MIG-5",
+        "group": "Later",
+        "recommended_option": "NO_LEGACY_DATA_IMPORT_YET",
+        "recommendation": "Keep legacy data import absent; a later import needs its own source snapshot, transformation, reconciliation, audit and rollback plan. Code lessons are not data migration.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c21-database-migration-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-OBS-1",
+      "question": "Which error-capture and alerting providers are approved, and where do alerts go?",
+      "contract": "contracts/c53-observability-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "OBS-2",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "RECOMMENDED",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 127,
+        "verbatim_answer": "Requires your input. Provider depends on cost, features, existing contracts."
+      },
+      "follow_up_response": {
+        "path": "sources/follow-up-answers.md",
+        "item": 6,
+        "verbatim_answer": "OQ-OBS-1 — My recommendation: Sentry for error tracking (free tier 5k errors/month, excellent Vercel integration). Use Vercel's built-in Analytics for basic traffic. Datadog is overkill for foundation. Total cost: $0 to start."
+      },
+      "registered_selection": null,
+      "registration_evidence": "verification/owner-decisions/2026-10-04/registration.json#OQ-OBS-1",
+      "recorded_proposed_value": {
+        "errors": "Sentry",
+        "traffic": "Vercel Analytics",
+        "alert_destination": "UNKNOWN"
+      },
+      "existing_recommendation": {
+        "id": "OQ-OBS-1",
+        "group": "Observability",
+        "recommended_option": "OWNER_PROVIDER_AND_DESTINATION_REQUIRED",
+        "recommendation": "Owner must select error/alert providers and verified alert destinations; recover V1 redaction/correlation tests independently of provider choice.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c53-observability-contract.md",
+        "affects": "OBS-2"
+      },
+      "remaining_work": [
+        "Provider/alert-destination selection; reconcile recommended Analytics with ANL-1 disabled direction; cost and provider limits require current verification."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-OBS-2",
+      "question": "Which learner fields, if any, may appear in logs?",
+      "contract": "contracts/c53-observability-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "OBS-7",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 128,
+        "verbatim_answer": "No credential/payload in logs; only approved correlation/pseudonymous IDs. 99%. Logs are often less protected than DBs; leakage is a breach."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-OBS-2",
+        "group": "Observability",
+        "recommended_option": "NO_CREDENTIALS_OR_LEARNER_PAYLOAD_LOGGING",
+        "recommendation": "Propose no credential or learner payload content in logs; permit only approved correlation and pseudonymous operational identifiers with scope-aware access.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c53-observability-contract.md",
+        "affects": "OBS-7"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-OBS-3",
+      "question": "Resolved: operational logs retained for 90 days, separately from the one-year canonical audit-retention policy. Provider/archival mechanism proof remains UNKNOWN.",
+      "contract": "contracts/c53-observability-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "REGISTERED_POLICY",
+      "recorded_detail_state": "CONFIRMED",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 129,
+        "verbatim_answer": "Requires your input. Depends on compliance and cost, separate from audit retention."
+      },
+      "follow_up_response": {
+        "path": "sources/follow-up-answers.md",
+        "item": 7,
+        "verbatim_answer": "OQ-OBS-3 — 90 days log retention. Separate from audit retention (1 year)."
+      },
+      "registered_selection": {
+        "duration": 90,
+        "unit": "days",
+        "store_kind": "operational-log",
+        "canonical_audit_policy_separate": true
+      },
+      "registration_evidence": "verification/owner-decisions/2026-10-04/registration.json#OQ-OBS-3",
+      "recorded_proposed_value": null,
+      "existing_recommendation": null,
+      "remaining_work": [
+        "Redacted storage/archive mechanism and evidence for 90-day retention."
+      ],
+      "next_action": "Reuse registered value; implement only when dependencies/admission authorize it and collect evidence.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-PRIV-1",
+      "question": "What exactly do deleted, anonymized, retained, and offboarded mean in Teach?",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "DRAFT_FOR_REVIEW",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 25,
+        "verbatim_answer": "Cannot define at 99%. \"Deleted,\" \"anonymized,\" \"retained\" have legal meanings under GDPR/CCPA/Texas DPR. I propose offboarding = access revocation + retained history as a starting point, but deletion/anonymization field-actions require your explicit definitions (with legal counsel if applicable). I will not invent legal semantics."
+      },
+      "follow_up_response": {
+        "path": "sources/follow-up-answers.md",
+        "item": 2,
+        "verbatim_answer": "OQ-PRIV-1/2/3 — Conservative defaults (option b). Drafting below for your review:\n\n- Deletion = hard delete from database. Anonymization = PII replaced with irreversible hash. Retention = keep as-is. Offboarding = revoke access, retain history.\n- Retention: 1 year for all record classes (Identity, Credential, session, token, membership, learning, certification, audit). Legal hold suspends deletion.\n- Exemptions: Audit records only (per AUD-1). No blanket exemptions. Legal hold is a suspension, not an exemption."
+      },
+      "registered_selection": null,
+      "registration_evidence": "verification/owner-decisions/2026-10-04/registration.json#OQ-PRIV-1",
+      "recorded_proposed_value": {
+        "deletion": "hard delete from database",
+        "anonymization": "PII replaced with irreversible hash",
+        "retention": "keep as-is",
+        "offboarding": "revoke access, retain history"
+      },
+      "existing_recommendation": {
+        "id": "OQ-PRIV-1",
+        "group": "Privacy",
+        "recommended_option": "OWNER_ERASURE_AND_HISTORY_MATRIX_REQUIRED",
+        "recommendation": "Propose offboarding as access revocation with retained history; require exact owner-approved meanings and field actions for deletion, anonymization and retention before implementing erasure.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Per-field and dependent-copy deletion/anonymization actions; address the recorded hashing finding (#68)."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-PRIV-2",
+      "question": "What retention periods apply to each record class?",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "PRIV-12",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "DRAFT_FOR_REVIEW",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 27,
+        "verbatim_answer": "Cannot specify at 99%. Periods depend on legal requirements (vary by data type/jurisdiction), business needs, and risk tolerance. No universal duration is defensible. Requires your input."
+      },
+      "follow_up_response": {
+        "path": "sources/follow-up-answers.md",
+        "item": 2,
+        "verbatim_answer": "OQ-PRIV-1/2/3 — Conservative defaults (option b). Drafting below for your review:\n\n- Deletion = hard delete from database. Anonymization = PII replaced with irreversible hash. Retention = keep as-is. Offboarding = revoke access, retain history.\n- Retention: 1 year for all record classes (Identity, Credential, session, token, membership, learning, certification, audit). Legal hold suspends deletion.\n- Exemptions: Audit records only (per AUD-1). No blanket exemptions. Legal hold is a suspension, not an exemption."
+      },
+      "registered_selection": null,
+      "registration_evidence": "verification/owner-decisions/2026-10-04/registration.json#OQ-PRIV-2",
+      "recorded_proposed_value": {
+        "duration": 1,
+        "unit": "year",
+        "record_classes": [
+          "Identity",
+          "Credential",
+          "session",
+          "token",
+          "membership",
+          "learning",
+          "certification",
+          "audit"
+        ],
+        "legal_hold": "suspends deletion"
+      },
+      "existing_recommendation": {
+        "id": "OQ-PRIV-2",
+        "group": "Privacy",
+        "recommended_option": "OWNER_RETENTION_VALUES_REQUIRED",
+        "recommendation": "Owner must supply periods per Identity/Credential/session/token/membership/learning/certification/audit class and legal-hold handling. No unsupported universal duration is proposed.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
+        "affects": "PRIV-12"
+      },
+      "remaining_work": [
+        "Retention start clocks, legal-hold authority, executor and dependent/archive-copy behavior (#68)."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-PRIV-3",
+      "question": "Which record classes are exempt from deletion, and on what legal or audit basis?",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "PRIV-15",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "DRAFT_FOR_REVIEW",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 29,
+        "verbatim_answer": "Cannot name at 99%. Requires knowing applicable laws and audit requirements. I will not infer a blanket audit exemption — that's how indefinite retention happens by default."
+      },
+      "follow_up_response": {
+        "path": "sources/follow-up-answers.md",
+        "item": 2,
+        "verbatim_answer": "OQ-PRIV-1/2/3 — Conservative defaults (option b). Drafting below for your review:\n\n- Deletion = hard delete from database. Anonymization = PII replaced with irreversible hash. Retention = keep as-is. Offboarding = revoke access, retain history.\n- Retention: 1 year for all record classes (Identity, Credential, session, token, membership, learning, certification, audit). Legal hold suspends deletion.\n- Exemptions: Audit records only (per AUD-1). No blanket exemptions. Legal hold is a suspension, not an exemption."
+      },
+      "registered_selection": null,
+      "registration_evidence": "verification/owner-decisions/2026-10-04/registration.json#OQ-PRIV-3",
+      "recorded_proposed_value": {
+        "exemptions": [
+          "audit"
+        ],
+        "legal_hold_is_exemption": false
+      },
+      "existing_recommendation": {
+        "id": "OQ-PRIV-3",
+        "group": "Privacy",
+        "recommended_option": "OWNER_EXEMPTION_BASIS_REQUIRED",
+        "recommendation": "Owner must name each deletion-exempt class, retained fields and legal/audit basis. No blanket audit exemption is inferred.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
+        "affects": "PRIV-15"
+      },
+      "remaining_work": [
+        "Exact exemption basis and interaction with audit expiry and holds (#68)."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-PRIV-4",
+      "question": "What export format and fulfillment deadline apply?",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 68,
+        "verbatim_answer": "JSON + readable summary: 99% on format. Deadline requires your input (operational decision)."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-PRIV-4",
+        "group": "Privacy",
+        "recommended_option": "JSON_EXPORT_WITH_APPROVED_DEADLINE",
+        "recommendation": "Propose machine-readable JSON plus a readable summary; owner must supply fulfillment deadline and identity/scope verification requirements.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Export response deadline; format direction is already captured."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-PRIV-5",
+      "question": "What deletion fulfillment deadline applies?",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 69,
+        "verbatim_answer": "Requires your input. Deletion deadline has legal implications I cannot determine."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-PRIV-5",
+        "group": "Privacy",
+        "recommended_option": "OWNER_DELETION_DEADLINE_REQUIRED",
+        "recommendation": "Owner must supply a deletion deadline, verification standard and exception/hold response policy.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Deletion response/completion deadline."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-PRIV-6",
+      "question": "Can export and deletion be fulfilled by an operator procedure at first, rather than self-service?",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 70,
+        "verbatim_answer": "Operator procedure first. 99%. Self-service deletion needs verification, scope, and audit UI — complex. Operator procedure is simpler and more controllable."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-PRIV-6",
+        "group": "Privacy",
+        "recommended_option": "AUDITED_OPERATOR_PROCEDURE_FIRST",
+        "recommendation": "Propose a verified, scoped and audited operator procedure initially, before self-service export/deletion UI.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-PWA-1",
+      "question": "Will offline writes ever be authorized, and for which operations?",
+      "contract": "contracts/c62-pwa-offline-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "PWA-5",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 138,
+        "verbatim_answer": "No offline writes. 99%. Conflict resolution complexity; V1 queue is historical evidence, not V2 permission."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-PWA-1",
+        "group": "Optional",
+        "recommended_option": "NO_OFFLINE_WRITES",
+        "recommendation": "Keep offline writes unauthorized. V1 queued completion is useful historical evidence, but cannot establish V2 durable completion or offline permission.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c62-pwa-offline-contract.md",
+        "affects": "PWA-5"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-REL-1",
+      "question": "Resolved: Supabase PostgreSQL for the database and Vercel for web/API hosting. This does not approve a project, hostname, plan, provider authorization model or deployment.",
+      "contract": "contracts/c52-deployment-release-recovery-contract.md",
+      "contract_version_at_capture": "1.2.0",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "REGISTERED_POLICY",
+      "recorded_detail_state": "CONFIRMED",
+      "original_packet_response": null,
+      "follow_up_response": {
+        "path": "sources/follow-up-answers.md",
+        "item": 4,
+        "verbatim_answer": "OQ-REL-1 — Supabase (Postgres) + Vercel. Confirmed."
+      },
+      "registered_selection": {
+        "database": "Supabase PostgreSQL",
+        "web_api": "Vercel"
+      },
+      "registration_evidence": "verification/owner-decisions/2026-10-04/registration.json#OQ-REL-1",
+      "recorded_proposed_value": null,
+      "existing_recommendation": null,
+      "remaining_work": [
+        "Actual Supabase/Vercel project identities and deployment proof."
+      ],
+      "next_action": "Reuse registered value; implement only when dependencies/admission authorize it and collect evidence.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-REL-3",
+      "question": "What does the deployed smoke test cover?",
+      "contract": "contracts/c52-deployment-release-recovery-contract.md",
+      "contract_version_at_capture": "1.2.0",
+      "affects": "REL-8",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 122,
+        "verbatim_answer": "Comprehensive smoke (deployment/config/schema, health, denials, start/completion, audit, logout, recovery). 99%. URL 200 alone proves nothing."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-REL-3",
+        "group": "Release",
+        "recommended_option": "SOURCE_ENV_AUTHORIZATION_RECOVERY_SMOKE_MATRIX",
+        "recommendation": "Propose exact deployment/config/schema identity, health/readiness, role/scope denials, assigned-content start/completion, atomic audit and logout replay plus recovery checks. URL 200 alone is insufficient.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c52-deployment-release-recovery-contract.md",
+        "affects": "REL-8"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-REL-4",
+      "question": "Resolved: rollback to the prior candidate is supported for 24 hours after deployment/promotion; migrations remain backward-compatible during that full window.",
+      "contract": "contracts/c52-deployment-release-recovery-contract.md",
+      "contract_version_at_capture": "1.2.0",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "REGISTERED_POLICY",
+      "recorded_detail_state": "CONFIRMED",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 123,
+        "verbatim_answer": "Requires your input. Window depends on data compatibility and business risk tolerance."
+      },
+      "follow_up_response": {
+        "path": "sources/follow-up-answers.md",
+        "item": 5,
+        "verbatim_answer": "OQ-REL-4 — 24-hour rollback window. Migrations must be backward-compatible for 24h post-deploy."
+      },
+      "registered_selection": {
+        "rollback_window_hours": 24,
+        "migration_backward_compatibility_hours": 24
+      },
+      "registration_evidence": "verification/owner-decisions/2026-10-04/registration.json#OQ-REL-4",
+      "recorded_proposed_value": null,
+      "existing_recommendation": null,
+      "remaining_work": [
+        "Migration compatibility and previous-candidate rollback evidence for the selected 24-hour window."
+      ],
+      "next_action": "Reuse registered value; implement only when dependencies/admission authorize it and collect evidence.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-SES-1",
+      "question": "Which `SameSite` value is approved: `Strict` or `Lax`?",
+      "contract": "contracts/c12-application-sessions-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "SES-5",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "RECOMMENDED",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 11,
+        "verbatim_answer": "SameSite=Lax. 99%. Strict breaks OAuth redirect flows (IdP returns cross-site). Lax permits top-level GET redirects while blocking CSRF POSTs. SES-5's origin check closes the remaining gap."
+      },
+      "follow_up_response": {
+        "path": "sources/follow-up-answers.md",
+        "item": 11,
+        "verbatim_answer": "OQ-SES-2 — Derived from Vercel hosting:\n\n- Recommended: Same-origin. Web at `https://t34ch.com`, API at `https://t34ch.com/api/*`.\n- Cookie: Host-only (no `Domain` attribute), `Path=/`, `Secure`, `HttpOnly`, `SameSite=Lax`.\n- Rationale: Same-origin eliminates CORS complexity and cookie cross-domain issues. The API boundary is path-based (`/api/v1/*`), not subdomain-based. If you later need `api.t34ch.com`, that's a separate decision with CORS implications.\n\nScanning for API routes now."
+      },
+      "registered_selection": null,
+      "registration_evidence": "verification/owner-decisions/2026-10-04/registration.json#OQ-SES-1",
+      "recorded_proposed_value": {
+        "sameSite": "Lax"
+      },
+      "existing_recommendation": {
+        "id": "OQ-SES-1",
+        "group": "Transport",
+        "recommended_option": "LAX_WITH_EXPLICIT_CSRF",
+        "recommendation": "Propose SameSite=Lax to support provider redirects, with the separately approved Origin/CSRF control; Secure and HttpOnly remain mandatory.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c12-application-sessions-contract.md",
+        "affects": "SES-5"
+      },
+      "remaining_work": [
+        "Register supplied SameSite direction together with transport and CSRF proof."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-SES-2",
+      "question": "Which cookie domain and path are approved given the web and API hostnames?",
+      "contract": "contracts/c12-application-sessions-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "SES-6",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "RECOMMENDED",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 13,
+        "verbatim_answer": "Host-only, Path=/, same-origin. 99% on principle. Blocked on REL-1 for exact hosts — I cannot specify domains without the hosting topology. The principle is non-negotiable; the values await your REL-1 decision."
+      },
+      "follow_up_response": {
+        "path": "sources/follow-up-answers.md",
+        "item": 11,
+        "verbatim_answer": "OQ-SES-2 — Derived from Vercel hosting:\n\n- Recommended: Same-origin. Web at `https://t34ch.com`, API at `https://t34ch.com/api/*`.\n- Cookie: Host-only (no `Domain` attribute), `Path=/`, `Secure`, `HttpOnly`, `SameSite=Lax`.\n- Rationale: Same-origin eliminates CORS complexity and cookie cross-domain issues. The API boundary is path-based (`/api/v1/*`), not subdomain-based. If you later need `api.t34ch.com`, that's a separate decision with CORS implications.\n\nScanning for API routes now."
+      },
+      "registered_selection": null,
+      "registration_evidence": "verification/owner-decisions/2026-10-04/registration.json#OQ-SES-2",
+      "recorded_proposed_value": {
+        "topology": "same-origin",
+        "web_origin": "https://t34ch.com",
+        "api_prefix": "/api/v1",
+        "cookie": {
+          "domain_attribute": null,
+          "path": "/",
+          "secure": true,
+          "httpOnly": true,
+          "sameSite": "Lax"
+        }
+      },
+      "existing_recommendation": {
+        "id": "OQ-SES-2",
+        "group": "Transport",
+        "recommended_option": "SAME_ORIGIN_HOST_ONLY_COOKIE",
+        "recommendation": "Propose a same-origin web/API boundary with a host-only cookie and Path=/; exact hosts/proxy topology must be selected in Transport/hosting authority first. Do not silently reuse V1 .t34ch.com-wide trust.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c12-application-sessions-contract.md",
+        "affects": "SES-6"
+      },
+      "remaining_work": [
+        "Register exact supplied topology and cookie settings; prove host/transport behavior."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-SES-5",
+      "question": "Is `SameSite` alone the approved CSRF control, or is an additional mechanism (token, origin check) required?",
+      "contract": "contracts/c12-application-sessions-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "SES-18",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 15,
+        "verbatim_answer": "Require origin check, deny on missing/foreign/malformed/null. 99%. Lax alone doesn't stop all CSRF (top-level GET side effects, legacy browsers). Fail-closed is the only safe default."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-SES-5",
+        "group": "Transport",
+        "recommended_option": "EXACT_ALLOWED_ORIGIN_ON_UNSAFE_WRITES",
+        "recommendation": "Require a canonical allowed Origin for unsafe cookie-authenticated requests, including logout. Missing, foreign, malformed or null origins deny before writes.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c12-application-sessions-contract.md",
+        "affects": "SES-18"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-SES-6",
+      "question": "On which events must the session credential rotate (sign-in, privilege change, other)?",
+      "contract": "contracts/c12-application-sessions-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "SES-19",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 17,
+        "verbatim_answer": "Rotate at sign-in and privilege elevation; never upgrade pre-auth credential. 99%. Defeats session fixation (planted pre-auth ID) and privilege escalation via session upgrade. Atomic rotation/revocation prevents TOCTOU."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-SES-6",
+        "group": "Transport",
+        "recommended_option": "ROTATE_AT_SIGN_IN_AND_AUTHORITY_ELEVATION",
+        "recommendation": "Issue a fresh credential at successful sign-in and privilege elevation; never upgrade a pre-authentication credential. Implement rotation/revocation atomically.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c12-application-sessions-contract.md",
+        "affects": "SES-19"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-SES-7",
+      "question": "Is there a limit on concurrent sessions per identity?",
+      "contract": "contracts/c12-application-sessions-contract.md",
+      "contract_version_at_capture": "1.1.0",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 64,
+        "verbatim_answer": "No limit initially. 99%. With SES-6 rotation and IDN-3 revocation, unlimited sessions are mitigated. A limit needs eviction semantics — defer until needed."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-SES-7",
+        "group": "Identity",
+        "recommended_option": "NO_ARBITRARY_CONCURRENT_SESSION_LIMIT",
+        "recommendation": "Propose no count limit initially; preserve expiry/revocation controls. A later limit needs explicit selection and deterministic eviction semantics.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c12-application-sessions-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-SYS-1",
+      "question": "Does numeric order within a group (for example C11 before C12) define precedence, or are contracts within a group peers?",
+      "contract": "contracts/c00-system-authority-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "SYS-4",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 47,
+        "verbatim_answer": "Peers, more-restrictive wins on conflict. 99%. Numeric order implying precedence is fragile; explicit conflict resolution is robust."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-SYS-1",
+        "group": "Governance",
+        "recommended_option": "GROUP_PEERS_RESTRICTIVE_ON_CONFLICT",
+        "recommendation": "Keep contracts within each group as peers; record conflicts and apply the more restrictive requirement.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c00-system-authority-contract.md",
+        "affects": "SYS-4"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-SYS-2",
+      "question": "Where does the compatibility register live, and in what format (Markdown table, machine-readable file checked in CI, or both)?",
+      "contract": "contracts/c00-system-authority-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "SYS-11",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 48,
+        "verbatim_answer": "JSON canonical in CI + generated Markdown. 99% on format. Flag: does `governance/compatibility-register.json` exist? Who generates the Markdown? Needs implementation, not just agreement."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-SYS-2",
+        "group": "Governance",
+        "recommended_option": "JSON_CANONICAL_REGISTER_WITH_MARKDOWN_VIEW",
+        "recommendation": "Propose governance/compatibility-register.json as canonical, with a generated Markdown view and CI; the current recovery map is reference evidence, not that approved register.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c00-system-authority-contract.md",
+        "affects": "SYS-11"
+      },
+      "remaining_work": [
+        "Canonical register path and generator implementation; preserve source/evidence distinctions."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-SYS-5",
+      "question": "Which parts of C11–C15 and C21–C23 are applicable to the learner demo?",
+      "contract": "contracts/c00-system-authority-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "SYS-29",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 49,
+        "verbatim_answer": "Approve the applicability matrix. 99%. Reasonable scoping; no shared deployment without release proof."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-SYS-5",
+        "group": "Demo",
+        "recommended_option": "EXPLICIT_CORE_DEMO_APPLICABILITY",
+        "recommendation": "Approve a demo applicability matrix covering Identity/session/tenant/capability, isolation, database/transactions/audit, content/learning and API/web. Release proof remains required for any shared deployment.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c00-system-authority-contract.md",
+        "affects": "SYS-29"
+      },
+      "remaining_work": [
+        "Exact demo applicability matrix and its authority registration."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-TEN-1",
+      "question": "Does v2 start with the Gate A single-location compatibility membership or a normalized multi-organization, multi-location membership model?",
+      "contract": "contracts/c13-tenancy-membership-contract.md",
+      "contract_version_at_capture": "1.3.0",
+      "affects": "TEN-15",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 19,
+        "verbatim_answer": "Normalized multi-org multi-location. 99%. V1's single-location model is a compatibility shim. Greenfield v2 carrying that tech debt guarantees a painful migration later. Get it right now."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-TEN-1",
+        "group": "Foundation",
+        "recommended_option": "NORMALIZED_MULTI_ORGANIZATION_MULTI_LOCATION",
+        "recommendation": "Choose normalized multi-organization, multi-location membership rather than V1 single-location compatibility. Exact Membership/Location/grant shapes still require promotion and admission.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c13-tenancy-membership-contract.md",
+        "affects": "TEN-15"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-TEN-2",
+      "question": "How does a request select its scope when an identity holds more than one membership (explicit path segment, header validated against membership, other)?",
+      "contract": "contracts/c13-tenancy-membership-contract.md",
+      "contract_version_at_capture": "1.3.0",
+      "affects": "TEN-7",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 21,
+        "verbatim_answer": "Explicit validated scope tuple. 99%. Implicit scope (\"user's only membership\") creates confused-deputy vulnerabilities. With multiple memberships, ambiguity is exploitable. Validation against current membership prevents tampering."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-TEN-2",
+        "group": "Foundation",
+        "recommended_option": "EXPLICIT_VALIDATED_SCOPE_TUPLE",
+        "recommendation": "Require explicit organization/location scope in the typed request, validated against current membership; reject zero, multiple or ambiguous selections. Transport encoding follows separate authority.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c13-tenancy-membership-contract.md",
+        "affects": "TEN-7"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-TEN-3",
+      "question": "Does v2 keep platform-operator cross-tenant access? Until decided, no role holds cross-tenant capability.",
+      "contract": "contracts/c13-tenancy-membership-contract.md",
+      "contract_version_at_capture": "1.3.0",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": false,
+      "capture_state": "NO_SUPPLIED_ENTRY",
+      "recorded_detail_state": "EXISTING_RECOMMENDATION_ONLY",
+      "original_packet_response": null,
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-TEN-3",
+        "group": "Foundation",
+        "recommended_option": "NO_CROSS_TENANT_GRANTS",
+        "recommendation": "Keep platform cross-tenant access absent initially. Global Identity lifecycle authority in a multi-tenant model needs a separately reviewed scope/actor policy.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c13-tenancy-membership-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Original supplied sheet has no entry for this ID. Existing proposal is preserved below; it is not an owner answer."
+      ],
+      "next_action": "Prepare the preserved recommendation with its exact impact for an eventual targeted owner selection.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-TXN-2",
+      "question": "Which external providers are in scope for v2 (email delivery, OAuth, payments, other), and which owns reconciliation for each?",
+      "contract": "contracts/c22-transaction-idempotency-reconciliation-contract.md",
+      "contract_version_at_capture": "1.2.0",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 80,
+        "verbatim_answer": "Email + OAuth first; payments disabled. 99%. Essential for identity; payments add PCI scope. Note: provider selection constrains IDN-4 implementation — dependency I missed earlier."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-TXN-2",
+        "group": "Integration",
+        "recommended_option": "EMAIL_OAUTH_FIRST_PROVIDER_SCOPES",
+        "recommendation": "Propose email and OAuth first; select actual providers and per-effect reconciliation adapters explicitly. Payments stay disabled.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c22-transaction-idempotency-reconciliation-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Exact email/OAuth providers and operation-specific failure/reconciliation policy."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-WEB-1",
+      "question": "Which accessibility standard and level is approved (for example WCAG 2.2 AA)?",
+      "contract": "contracts/c42-web-client-boundary-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "WEB-15",
+      "explicit_contract_blocker_at_capture": true,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 41,
+        "verbatim_answer": "WCAG 2.2 AA. 99%. 2.2 is current W3C (2.1 superseded). AA is the legal standard (ADA case law, EU EAA). AAA is often impractical (contrast ratios break brand palettes)."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-WEB-1",
+        "group": "Web",
+        "recommended_option": "WCAG_2_2_AA",
+        "recommendation": "Propose WCAG 2.2 AA with keyboard/focus, screen-reader, contrast, touch-target and low-end-device evidence; automation supplements manual checks.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c42-web-client-boundary-contract.md",
+        "affects": "WEB-15"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    },
+    {
+      "id": "OQ-WEB-2",
+      "question": "Is the core-path list above complete for v2?",
+      "contract": "contracts/c42-web-client-boundary-contract.md",
+      "contract_version_at_capture": "1.0.3",
+      "affects": "—",
+      "explicit_contract_blocker_at_capture": false,
+      "answer_received": true,
+      "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+      "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+      "original_packet_response": {
+        "path": "sources/supplied-answer-sheet.md",
+        "line": 112,
+        "verbatim_answer": "Confirm list (login, start, completion, manager view, logout). 99%. Covers core journeys. Demo isolation correctly separate."
+      },
+      "follow_up_response": null,
+      "registered_selection": null,
+      "registration_evidence": null,
+      "recorded_proposed_value": null,
+      "existing_recommendation": {
+        "id": "OQ-WEB-2",
+        "group": "Demo",
+        "recommended_option": "EXPLICIT_LEARNER_MANAGER_DEMO_CORE_PATHS",
+        "recommendation": "Confirm the complete path list: login, assigned-content start, recorded completion, scoped manager view and logout; credentialless demo isolation/reset remains separately specified.",
+        "state": "PROPOSED",
+        "owner_approval_recorded": false,
+        "authority_source": "contracts/c42-web-client-boundary-contract.md",
+        "affects": "—"
+      },
+      "remaining_work": [
+        "Reconcile supplied direction with controlling contract, prepare registration, then implement and verify the dependent workflow. No repeated request for the same supplied choice."
+      ],
+      "next_action": "Reuse supplied answer; perform remaining reconciliation/proposal work before claiming contract closure.",
+      "runtime_conformance": "NOT_ASSESSED_BY_CAPTURE",
+      "repeat_existing_question": false
+    }
+  ]
+}

@@ -13,6 +13,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     services:
       postgres:
         image: postgres:17-alpine
@@ -32,35 +33,66 @@ jobs:
       TEACH_ISOLATED_DB: '1'
     steps:
       - uses: actions/checkout@v4
+        id: workflow_step_001
         with:
+          persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
+        id: workflow_step_002
         with:
           node-version: '20'
       - name: Enable pnpm
+        id: workflow_step_003
         run: |
           corepack enable
           corepack prepare pnpm@12.8.1 --activate
       - name: Install dependencies
+        id: workflow_step_004
         run: pnpm install --frozen-lockfile
       - name: Check Drizzle migration history
+        id: workflow_step_005
         run: pnpm exec drizzle-kit check
       - name: Typecheck
+        id: workflow_step_006
         run: pnpm typecheck
       - name: P02 domain and service tests
+        id: workflow_step_007
         run: pnpm test:p02
       - name: Validate P02 decision and implementation boundaries
+        id: workflow_step_008
         run: |
           node scripts/persistence/validate-slice-p02-owner-decisions.mjs
           node scripts/persistence/validate-slice-p02-schema-admission.mjs
           pnpm validate:slice-p02
       - name: Verify empty and P01-to-P02 migration replay
+        id: workflow_step_009
         run: pnpm db:verify-p02-replay
       - name: Apply committed history to isolated CI database
+        id: workflow_step_010
         run: pnpm db:migrate
       - name: PostgreSQL integration tests
+        id: workflow_step_011
         run: pnpm test:p02:integration
       - name: Atomic Identity command mechanisms
+        id: workflow_step_012
         run: pnpm test:identity:commands:integration
       - name: Atomic Session command mechanisms
+        id: workflow_step_013
         run: pnpm test:session:commands:integration
+      - name: Record workflow lifecycle checkpoint
+        id: lifecycle_record
+        if: always()
+        env:
+          LIFECYCLE_STEPS: ${{ toJson(steps) }}
+          LIFECYCLE_JOB_STATUS: ${{ job.status }}
+          LIFECYCLE_EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          LIFECYCLE_WORKFLOW_PATH: .github/workflows/slice-p02-implementation.yml
+        run: node scripts/verification/record-workflow-lifecycle.mjs
+      - name: Retain workflow lifecycle evidence
+        id: lifecycle_upload
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: workflow-lifecycle-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}
+          path: verification/generated/workflow-lifecycle/report.json
+          if-no-files-found: error

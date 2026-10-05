@@ -1,0 +1,2434 @@
+{
+  "version": "0.1.0",
+  "scope": "complete workflow lifecycle inventory; definitions and development evidence are separate from product implementation",
+  "adopted_by": "owner instruction, 2026-10-04 America/Chicago; issue #70",
+  "phases": [
+    "intake",
+    "authority",
+    "preflight",
+    "execution",
+    "verification",
+    "retention",
+    "recovery",
+    "closure",
+    "handoff"
+  ],
+  "ci_workflows": 44,
+  "ci_jobs": 44,
+  "product_command_ledger_sha256": "b1b76ea5e295491eff2fd74f70c6e10444a8b27b0cf87ac81a746f4f7300e3d0",
+  "ci": [
+    {
+      "workflow_path": ".github/workflows/application-interface-authority.yml",
+      "workflow_sha256": "effc192f2a12a6a7b0f9937d1183d811814e06d58baee7440cee4cbe31ba349f",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003",
+        "workflow_step_004"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/application-interface-discovery.yml",
+      "workflow_sha256": "e7bb08eb8d3b2fa829aceea9c2ffb79194c4493e49f5c43970eb3a24df4b7488",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/architecture-application-audit.yml",
+      "workflow_sha256": "474a42449d6e974f928dfac0eaca69091ee833d119c90d03f4a0c14105272438",
+      "job_id": "audit",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/architecture-application-persistence-audit.yml",
+      "workflow_sha256": "f02ad3f5adbe73a62ac1490370c692f6433272176b757231aaf562a0a6427a8e",
+      "job_id": "audit",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003",
+        "workflow_step_004",
+        "workflow_step_005"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/architecture-authority.yml",
+      "workflow_sha256": "712ae5ed77d3e1367ef467596cda648a67363d95fe1c8a061c7ef7a1fd4fa301",
+      "job_id": "validate-architecture-authority",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/architecture-discovery.yml",
+      "workflow_sha256": "1dc19ae1e2a33742a22c44cc5ec0dc9510c94fd4d58a3da11fa6c646fb29493a",
+      "job_id": "validate-architecture-discovery",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/architecture-proposal.yml",
+      "workflow_sha256": "ae578def59c572b9ba977f633c8069144d4b8f7e290089ea08b2a8ad34a6741d",
+      "job_id": "validate-architecture-proposal",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/command-event-discovery.yml",
+      "workflow_sha256": "1c84a86b406a72297001721e203c2e21f170384497fa03d090ebc27bd1e5fbc0",
+      "job_id": "validate-command-event-discovery",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/decision-table-discovery.yml",
+      "workflow_sha256": "caed43e97dddf96b879a86caaafa9291d25fe9f59cdbb3a6babb622afd1b2658",
+      "job_id": "validate-decision-table-discovery",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/dependency-concepts.yml",
+      "workflow_sha256": "dc6af89249c0dbd5b6eab959d6baa3b85ff2eec3858109c7ac2513a2c62164f1",
+      "job_id": "validate-dependency-concepts",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/dependency-lifecycle-discovery.yml",
+      "workflow_sha256": "9926e407526bff4772a194344b4896748db217e837e06bd23a21d2ab0f9eae8a",
+      "job_id": "validate-dependency-lifecycle-discovery",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/development-self-audit.yml",
+      "workflow_sha256": "715c7ff30d2af49f844f734e34e45de52e3630d0b8daa7f8e993cf4c057f2caa",
+      "job_id": "self-audit",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003",
+        "workflow_step_004",
+        "workflow_step_005",
+        "workflow_step_006",
+        "workflow_step_007",
+        "workflow_step_008",
+        "workflow_step_009",
+        "workflow_step_010",
+        "workflow_step_011",
+        "workflow_step_012",
+        "workflow_step_013",
+        "workflow_step_014",
+        "workflow_step_015",
+        "workflow_step_016",
+        "workflow_step_017",
+        "workflow_step_018",
+        "workflow_step_019",
+        "workflow_step_020",
+        "workflow_step_021",
+        "workflow_step_022",
+        "workflow_step_023",
+        "workflow_step_024",
+        "workflow_step_025",
+        "workflow_step_026",
+        "workflow_step_027",
+        "workflow_step_028",
+        "workflow_step_029",
+        "workflow_step_030"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/document-governance.yml",
+      "workflow_sha256": "7038ae2dc8e36c577be38dbfc621024014b3409f4bbccade9b3651289ff6021f",
+      "job_id": "validate-document-governance",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/domain-ownership.yml",
+      "workflow_sha256": "5af7fcc17773f1c26131cf2cccc52d1797f6d8d3189937a77f83b8438fe7b33a",
+      "job_id": "validate-domain-ownership",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/first-physical-slice-readiness.yml",
+      "workflow_sha256": "b0c3649555a8fdb330e189bcb277df23745ab6f773003120529c254c4f7955f6",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003",
+        "workflow_step_004",
+        "workflow_step_005"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/invariant-discovery.yml",
+      "workflow_sha256": "2eb80c47bae6610639d62008ba673e5f37b5a8b5fc785e001be7eb76d7684721",
+      "job_id": "validate-invariant-discovery",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/persistence-authority.yml",
+      "workflow_sha256": "39a9d389744f6e0845edee1084f2ccbc5bb8dc58694c50fdc352d3c439aa9bc1",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003",
+        "workflow_step_004"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/persistence-discovery.yml",
+      "workflow_sha256": "b9b8c3098c1715fdd91b18e33ca3692e483acfc9adda21d1866befc21a452102",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/persistence-semantic-closure-discovery.yml",
+      "workflow_sha256": "195af03c84e197f9b385e0defce95eb6023bfd20e67536732c8889f36546a660",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/persistence-semantic-closure-proposal.yml",
+      "workflow_sha256": "85d585fa0f75db7efe130abb6f9b28c779ee3582f03bed5ac1462454dab7e6e3",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/persistence-semantic-closure-registration.yml",
+      "workflow_sha256": "7bcb8d5ff48a01d220aec3ce18e80607f998b35a1cfbca115bdb38df478359eb",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/production-proof-decisions.yml",
+      "workflow_sha256": "9d3dc9fb3afe9de32892daf4d55abd7e91f29505db74c85d12d9bd96f6265605",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003",
+        "workflow_step_004"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/relationship-discovery.yml",
+      "workflow_sha256": "a6a249d5b3d19096cc5a8aad68f79a623fbe6b4048382f7493bbae8273554fbd",
+      "job_id": "validate-relationship-discovery",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/semantic-kernel.yml",
+      "workflow_sha256": "aa1d5d73af07c455ab185edf83ebdee7cab0feebb13185104d1e69428156f853",
+      "job_id": "validate-semantic-kernel",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/slice-p01-implementation.yml",
+      "workflow_sha256": "2d41a066328438a2ae187fa12fca853bfecece050e1f4ffb9f2f75fa7fd5651e",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003",
+        "workflow_step_004",
+        "workflow_step_005",
+        "workflow_step_006",
+        "workflow_step_007",
+        "workflow_step_008",
+        "workflow_step_009",
+        "workflow_step_010",
+        "workflow_step_011"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/slice-p01-relationship-promotion.yml",
+      "workflow_sha256": "ce3bc3e7be7ba0b7056fe64167d695b801d288b63f951f4e82b097ca25cc3101",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/slice-p02-implementation.yml",
+      "workflow_sha256": "f6b73d17d47b7bdf67f5814411b4a531da416381caafcca086a1c0a780aa0816",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003",
+        "workflow_step_004",
+        "workflow_step_005",
+        "workflow_step_006",
+        "workflow_step_007",
+        "workflow_step_008",
+        "workflow_step_009",
+        "workflow_step_010",
+        "workflow_step_011",
+        "workflow_step_012",
+        "workflow_step_013"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/slice-p02-owner-decisions.yml",
+      "workflow_sha256": "c5b618602326d4e0818490872825c0d7b7573ba1292932ba41d48addb621a60c",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/slice-p02-schema-admission.yml",
+      "workflow_sha256": "ae0abef3434ccf2a0522fa62fcf2d5ca91ad014c2415f7884300a9f2d503dd63",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/slice-p03-implementation.yml",
+      "workflow_sha256": "9f2c4430f2536401098a8e29e554258b5e3e29ae04d77ea4a7c520e63f821ea7",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003",
+        "workflow_step_004",
+        "workflow_step_005",
+        "workflow_step_006",
+        "workflow_step_007",
+        "workflow_step_008",
+        "workflow_step_009",
+        "workflow_step_010",
+        "workflow_step_011"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/slice-p03-schema-admission.yml",
+      "workflow_sha256": "520b45dd1f2e56478c74c44c171f2dfeb0ab990bdc19a62bade9d288c205bebe",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/slice-p04-implementation.yml",
+      "workflow_sha256": "e20fe81c2008350e663c1296394dbe17bf7acc51d40072fa20d800c23eeb0e59",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003",
+        "workflow_step_004",
+        "workflow_step_005",
+        "workflow_step_006",
+        "workflow_step_007",
+        "workflow_step_008",
+        "workflow_step_009",
+        "workflow_step_010",
+        "workflow_step_011"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/slice-p04-schema-admission.yml",
+      "workflow_sha256": "3adbcc824381867229ce28da324aca86e02495b1f744d42fd495f57272d5ca0c",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/slice-p05-foundation.yml",
+      "workflow_sha256": "469cb010ff84ba6359f098fbb36188cf71a17adc284bfccbe5a0173fa5871638",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003",
+        "workflow_step_004",
+        "workflow_step_005",
+        "workflow_step_006",
+        "workflow_step_007"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/slice-p05-implementation.yml",
+      "workflow_sha256": "8068491960ec61075e591a7ff18bd99fdc0855f5080378a394afc3f524a4c24a",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003",
+        "workflow_step_004",
+        "workflow_step_005",
+        "workflow_step_006",
+        "workflow_step_007",
+        "workflow_step_008",
+        "workflow_step_009",
+        "workflow_step_010"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/slice-p05-owner-decisions.yml",
+      "workflow_sha256": "288b146fbde23eeff5b0c237cb53272f678c25351877eff66973a76843d0bd36",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/slice-p05-schema-admission.yml",
+      "workflow_sha256": "ed82292946ec28ca2456e6998f0aca2b5489b43d3416b4acccef5666fcbec32e",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003",
+        "workflow_step_004",
+        "workflow_step_005",
+        "workflow_step_006"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/state-discovery.yml",
+      "workflow_sha256": "5ed6f23fd71d65bebb9d60e1db3aec85bc7b1f9860fbcd84c0c81276934cf67a",
+      "job_id": "validate-state-discovery",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/strict-nine-governance-ratification.yml",
+      "workflow_sha256": "79bbe839d81476230e31b1554664ee7618bc13afbd94d30752598e2477d203e3",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/transactioncontrol-first-slice-decision-packet.yml",
+      "workflow_sha256": "f3a0280e0ec255afc60fff98ee7bae65d3f31f74b5c7b82a09999944a010ac1b",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/transactioncontrol-first-slice-decision-registration.yml",
+      "workflow_sha256": "27125b3a281089136a529ac22ad29c283dd8e0d66fba80ffe0a0fc7740b19ec0",
+      "job_id": "validate",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/validate-apply-pins.yml",
+      "workflow_sha256": "f1f550085e0677bc21dfd8ea3e2f6522a57a52efc63274bb8da69b78b5f90c8f",
+      "job_id": "validate-pins",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003",
+        "workflow_step_004"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/validator-negative-paths.yml",
+      "workflow_sha256": "decf635dec1fb8336421d268284654d22b34793ee8b2956bf51a885df1febafe",
+      "job_id": "negative-paths",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003",
+        "workflow_step_004"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "workflow_path": ".github/workflows/whole-repository-audit.yml",
+      "workflow_sha256": "3485b168eb03c51e69765b7d0d6494569356606e0e83f6a4ce92c282e0e64049",
+      "job_id": "audit",
+      "required_steps": [
+        "workflow_step_001",
+        "workflow_step_002",
+        "workflow_step_003",
+        "workflow_step_004",
+        "workflow_step_005",
+        "workflow_step_006",
+        "workflow_step_007"
+      ],
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "owner": "VerificationEvidence",
+      "verification_scope": "DEVELOPMENT_ONLY",
+      "effect": "READ_ONLY_DEVELOPMENT_VERIFICATION",
+      "failure_policy": "retain failed attempt; diagnose; start a separate attempt",
+      "closure_policy": "exact-source outcomes plus independently observed successful unexpired artifact receipt",
+      "cleanup": "runner-managed isolated job/service teardown; no shared database cleanup",
+      "hard_interruption": "missing report or receipt is incomplete; rerun creates a separate attempt",
+      "full_runtime_conformance": "UNKNOWN",
+      "shared_or_production_execution_authorized": false
+    }
+  ],
+  "product": [
+    {
+      "id": "AcceptInvitation",
+      "owner": "Identity",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "IDN-24",
+        "IDN-27"
+      ],
+      "foundation_state": "PARTIAL",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/application/identity-token-service.ts",
+          "symbol": "acceptInvitation",
+          "kind": "application-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/application/identity-token-service.test.ts",
+        "tests/integration/identity/identity-token-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Membership creation and acceptance must commit atomically; Organization dependency is unresolved",
+        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "PARTIAL",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "AssignContent",
+      "owner": "Learning",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "MGR-7",
+        "LRN-2"
+      ],
+      "foundation_state": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "P06 admission #60",
+        "Content version and ContentReadInterface",
+        "Membership/capability scope",
+        "atomic audit"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "BLOCKED",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "AuthenticateIdentity",
+      "owner": "Identity",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "IDN-14",
+        "SES-17"
+      ],
+      "foundation_state": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "Credential verification/hash policy and authoritative login orchestration",
+        "atomic session creation and required audit"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "BLOCKED",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "ChangeCredential",
+      "owner": "Identity",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "IDN-15",
+        "IDN-16",
+        "IDN-26"
+      ],
+      "foundation_state": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "OQ-IDN-1 password hashing policy and OQ-IDN-3 session revocation decision remain owner gates",
+        "Atomic token consumption, credential mutation, owner-approved session revocation, authorization and required audit remain unimplemented"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "BLOCKED",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "CompleteLearningSession",
+      "owner": "Learning",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "LRN-3"
+      ],
+      "foundation_state": "PARTIAL",
+      "artifacts": [
+        {
+          "path": "src/modules/learning/application/learning-session-service.ts",
+          "symbol": "finishLearningSession",
+          "kind": "application-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/learning/application/learning-session-service.test.ts",
+        "tests/integration/learning/learning-session-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Atomic authoritative Assignment authorization and session mutation (#58), dependent on P06 #60",
+        "Required runtime event/audit and protected operation registry are absent"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "PARTIAL",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "CreateApplicationSession",
+      "owner": "Identity",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "SES-1",
+        "SES-3",
+        "SES-10"
+      ],
+      "foundation_state": "PARTIAL",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/application/session-service.ts",
+          "symbol": "issueApplicationSession",
+          "kind": "application-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/application/session-service.test.ts",
+        "tests/integration/identity/identity-session-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Credential authentication, required audit and authoritative actor are not composed",
+        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "PARTIAL",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "CreateIdentity",
+      "owner": "Identity",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "IDN-1",
+        "IDN-16"
+      ],
+      "foundation_state": "PARTIAL",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/infrastructure/persistence/postgres-identity-repository.ts",
+          "symbol": "create",
+          "kind": "repository-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/domain/identity.test.ts",
+        "tests/integration/identity/identity-session-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Identity plus primary Credential must commit atomically; Application command and audit absent",
+        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "PARTIAL",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "CreateMembership",
+      "owner": "Organization",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "TEN-3",
+        "TEN-18"
+      ],
+      "foundation_state": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "C13 OQ-TEN-1/2 Membership shape and scope selection",
+        "C14 capability vocabulary",
+        "Organization storage admission and audit"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "BLOCKED",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "DeactivateIdentity",
+      "owner": "Identity",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "IDN-21",
+        "IDN-22"
+      ],
+      "foundation_state": "PARTIAL",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/infrastructure/persistence/postgres-identity-repository.ts",
+          "symbol": "deactivate",
+          "kind": "repository-foundation"
+        },
+        {
+          "path": "src/modules/identity/application/identity-lifecycle-service.ts",
+          "symbol": "deactivateIdentity",
+          "kind": "application-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/domain/identity.test.ts",
+        "tests/integration/identity/identity-session-repository.test.ts",
+        "src/modules/identity/application/identity-lifecycle-service.test.ts",
+        "tests/integration/identity/identity-command-transaction.test.ts"
+      ],
+      "missing_obligations": [
+        "Authoritative C14 backend actor, capability and scope adapter remains absent; fixture authorization is not conformance",
+        "Admitted AuditEvent storage and a real transaction-bound audit adapter remain absent; disposable probe proves rollback mechanics only",
+        "Canonical DomainEvent publication, transport composition and replay/idempotency conformance remain unknown"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "PARTIAL",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "DeactivateMembership",
+      "owner": "Organization",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "TEN-10",
+        "TEN-18"
+      ],
+      "foundation_state": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "Membership shape/lifecycle admission",
+        "authoritative scope/capability and audit"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "BLOCKED",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "InviteIdentity",
+      "owner": "Identity",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "IDN-20",
+        "IDN-24",
+        "IDN-25"
+      ],
+      "foundation_state": "PARTIAL",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/application/identity-token-service.ts",
+          "symbol": "issueInvitation",
+          "kind": "application-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/application/identity-token-service.test.ts",
+        "tests/integration/identity/identity-token-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Manager scope/capability, idempotency and required audit are not composed",
+        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "PARTIAL",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "IssueCertification",
+      "owner": "Certification",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "CERT-1",
+        "CERT-8",
+        "CERT-9",
+        "CERT-10"
+      ],
+      "foundation_state": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "P07 admission and C34 OQ-CERT-1/2",
+        "Assignment/content/version/criteria authority",
+        "Membership/observer capability and atomic audit"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "BLOCKED",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "OffboardIdentity",
+      "owner": "Identity",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "IDN-17",
+        "IDN-18",
+        "IDN-19",
+        "IDN-21"
+      ],
+      "foundation_state": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "Organization-owned Membership revocation in shared transaction",
+        "credential/session/token policy and lifecycle audit"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "BLOCKED",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "PublishContentPack",
+      "owner": "Content",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "CNT-3",
+        "CNT-6"
+      ],
+      "foundation_state": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "Content schema/version admission C31 OQ-CNT-1",
+        "deterministic engine, canonical validation and required audit"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "BLOCKED",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "ReactivateIdentity",
+      "owner": "Identity",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "IDN-21",
+        "IDN-23"
+      ],
+      "foundation_state": "PARTIAL",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/infrastructure/persistence/postgres-identity-repository.ts",
+          "symbol": "reactivate",
+          "kind": "repository-foundation"
+        },
+        {
+          "path": "src/modules/identity/application/identity-lifecycle-service.ts",
+          "symbol": "reactivateIdentity",
+          "kind": "application-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/domain/identity.test.ts",
+        "tests/integration/identity/identity-session-repository.test.ts",
+        "src/modules/identity/application/identity-lifecycle-service.test.ts",
+        "tests/integration/identity/identity-command-transaction.test.ts"
+      ],
+      "missing_obligations": [
+        "Authoritative C14 backend actor, capability and scope adapter remains absent; fixture authorization is not conformance",
+        "Admitted AuditEvent storage and a real transaction-bound audit adapter remain absent; disposable probe proves rollback mechanics only",
+        "Canonical DomainEvent publication, transport composition and replay/idempotency conformance remain unknown"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "PARTIAL",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "ReconcileExternalEffect",
+      "owner": "TransactionControl",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "TXN-6",
+        "TXN-7",
+        "TXN-8",
+        "TXN-14",
+        "TXN-16"
+      ],
+      "foundation_state": "PARTIAL",
+      "artifacts": [
+        {
+          "path": "src/modules/transaction-control/application/reconciliation-service.ts",
+          "symbol": "reconcileExternalEffect",
+          "kind": "application-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/transaction-control/application/reconciliation-service.test.ts",
+        "tests/integration/transaction-control/reconciliation-record-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "No real canonical provider adapter is composed; test doubles prove orchestration only",
+        "Protected server scope, audit, external-effect send/webhook/retry paths and operation strategy registry remain unproven"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "PARTIAL",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "RecordProgressEvent",
+      "owner": "Learning",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "LRN-3",
+        "LRN-4",
+        "LRN-7",
+        "LRN-10"
+      ],
+      "foundation_state": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "P08 admission",
+        "P05 authorized runtime #58",
+        "content-version payload and explicit replay/completion policy"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "BLOCKED",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "RevokeApplicationSession",
+      "owner": "Identity",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "SES-12",
+        "SES-14",
+        "SES-20"
+      ],
+      "foundation_state": "PARTIAL",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/infrastructure/persistence/postgres-application-session-repository.ts",
+          "symbol": "revoke",
+          "kind": "repository-foundation"
+        },
+        {
+          "path": "src/modules/identity/application/session-revocation-service.ts",
+          "symbol": "revokeApplicationSession",
+          "kind": "application-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/domain/application-session.test.ts",
+        "tests/integration/identity/identity-session-repository.test.ts",
+        "src/modules/identity/application/session-revocation-service.test.ts",
+        "tests/integration/identity/session-command-transaction.test.ts"
+      ],
+      "missing_obligations": [
+        "Real C14 backend authorization and admitted audit storage/adapter remain absent; fixtures prove transaction mechanics only",
+        "Cookie expiry, approved SameSite/domain/CSRF/rotation policy, protected transport and full runtime acceptance remain gated",
+        "Canonical event publication remains unknown; requestId correlation is not a general idempotency-key policy"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "PARTIAL",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "RevokeCertification",
+      "owner": "Certification",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "CERT-11",
+        "CERT-12"
+      ],
+      "foundation_state": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "P07 admission and registered lifecycle",
+        "protected actor/reason/history and atomic audit"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "BLOCKED",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "RevokeInvitation",
+      "owner": "Identity",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "IDN-24",
+        "IDN-28"
+      ],
+      "foundation_state": "PARTIAL",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/infrastructure/persistence/postgres-invitation-repository.ts",
+          "symbol": "revoke",
+          "kind": "repository-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/domain/single-use-secret.test.ts",
+        "tests/integration/identity/identity-token-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Protected Application entry point and required audit are not composed",
+        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "PARTIAL",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "RevokeMembership",
+      "owner": "Organization",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "TEN-18",
+        "TEN-19"
+      ],
+      "foundation_state": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "Membership shape and terminal lifecycle admission",
+        "authoritative scope/capability and audit"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "BLOCKED",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "RevokeSingleUseToken",
+      "owner": "Identity",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "IDN-11",
+        "IDN-26"
+      ],
+      "foundation_state": "PARTIAL",
+      "artifacts": [
+        {
+          "path": "src/modules/identity/infrastructure/persistence/postgres-setup-token-repository.ts",
+          "symbol": "revoke",
+          "kind": "repository-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/identity/domain/single-use-secret.test.ts",
+        "tests/integration/identity/identity-token-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Both token variants have storage revocation; protected Application entry point/audit absent",
+        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "PARTIAL",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    },
+    {
+      "id": "StartLearningSession",
+      "owner": "Learning",
+      "phases": [
+        "intake",
+        "authority",
+        "preflight",
+        "execution",
+        "verification",
+        "retention",
+        "recovery",
+        "closure",
+        "handoff"
+      ],
+      "authority_requirements": [
+        "LRN-2",
+        "LRN-3"
+      ],
+      "foundation_state": "PARTIAL",
+      "artifacts": [
+        {
+          "path": "src/modules/learning/application/learning-session-service.ts",
+          "symbol": "startLearningSession",
+          "kind": "application-foundation"
+        }
+      ],
+      "tests": [
+        "src/modules/learning/application/learning-session-service.test.ts",
+        "tests/integration/learning/learning-session-repository.test.ts"
+      ],
+      "missing_obligations": [
+        "Atomic authoritative Assignment authorization and session mutation (#58), dependent on P06 #60",
+        "Required runtime event/audit and protected operation registry are absent"
+      ],
+      "ingress": "UNKNOWN",
+      "authorization": "UNKNOWN",
+      "execution": "PARTIAL",
+      "verification": "FOUNDATION_EVIDENCE_ONLY",
+      "retention": "UNKNOWN",
+      "recovery": "canonical readback before retry; operation-specific policy remains required",
+      "closure": "BLOCKED",
+      "handoff": "BLOCKED",
+      "full_runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "shared_or_production_execution_authorized": false
+    }
+  ],
+  "full_runtime_conformance": "UNKNOWN",
+  "runtime_activation": "BLOCKED",
+  "shared_or_production_execution_authorized": false
+}
