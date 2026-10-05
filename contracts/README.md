@@ -125,7 +125,7 @@ the requirement that keeps the feature off applies.
 | C61 | [Analytics](c61-analytics-contract.md) | 1.0.3 | `ANL` | 8 | 7 | 2 | 0 | `active` |
 | C62 | [PWA / Offline](c62-pwa-offline-contract.md) | 1.0.3 | `PWA` | 9 | 4 | 1 | 0 | `active` |
 | C63 | [Self-Service Billing](c63-billing-contract.md) | 1.1.0 | `BIL` | 14 | 12 | 3 | 0 | `active` |
-|     | **Total** | | | **391** | **267** | **61** | **18** | |
+|     | **Total** | | | **391** | **267** | **56** | **18** | |
 
 ## K00 semantic-kernel bootstrap
 
@@ -321,4 +321,4 @@ Package `0.14.0` records the owner-approved SLICE-P02 persistence-shape decision
 
 SYS-21 issue #66 registers five explicit policy selections: C11 1.4.0 PIN parameters; C23 1.1.0 one-year central audit retention with deletion BLOCKED; C52 1.2.0 Supabase PostgreSQL + Vercel and 24-hour rollback compatibility; C53 1.1.0 90-day operational logs. Prior versions are preserved. Privacy/cookies/error providers remain drafts or recommendations; exact capability matrix #67 and privacy review #68 remain open. No physical/runtime/production authority changes.
 
-The index now consistently counts unresolved question rows from active contracts, excluding resolved rows. Current totals are 391 requirements / 267 acceptance cases / 61 unresolved questions / 18 explicit blockers; prior index summaries remain historical. See the live decision packet and registration for implementation proof limits.
+The index now consistently counts unresolved question rows from active contracts, excluding resolved rows. Current totals are 391 requirements / 267 acceptance cases / 56 unresolved questions / 18 explicit blockers; prior index summaries remain historical. See the live decision packet and registration for implementation proof limits.
