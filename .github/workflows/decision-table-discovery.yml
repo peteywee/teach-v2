@@ -3,6 +3,10 @@ name: Decision Table Discovery
 on:
   pull_request:
     paths:
+      - 'scripts/verification/**'
+      - 'verification/workflow-lifecycle/**'
+      - 'scripts/tests/validate-workflow-lifecycle.test.mjs'
+      - '.github/workflows/decision-table-discovery.yml'
       - 'domains/decisions/**'
       - 'kernel/**'
       - 'contracts/**'
@@ -10,6 +14,10 @@ on:
   push:
     branches: [main]
     paths:
+      - 'scripts/verification/**'
+      - 'verification/workflow-lifecycle/**'
+      - 'scripts/tests/validate-workflow-lifecycle.test.mjs'
+      - '.github/workflows/decision-table-discovery.yml'
       - 'domains/decisions/**'
       - 'kernel/**'
       - 'contracts/**'
@@ -21,8 +29,36 @@ permissions:
 jobs:
   validate-decision-table-discovery:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
+        id: workflow_step_001
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Pin lifecycle Node runtime
+        id: workflow_step_002
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - name: Validate decision-table discovery
+        id: workflow_step_003
         run: node scripts/domains/validate-decision-table-discovery.mjs
+      - name: Record workflow lifecycle checkpoint
+        id: lifecycle_record
+        if: always()
+        env:
+          LIFECYCLE_STEPS: ${{ toJson(steps) }}
+          LIFECYCLE_JOB_STATUS: ${{ job.status }}
+          LIFECYCLE_EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          LIFECYCLE_WORKFLOW_PATH: .github/workflows/decision-table-discovery.yml
+        run: node scripts/verification/record-workflow-lifecycle.mjs
+      - name: Retain workflow lifecycle evidence
+        id: lifecycle_upload
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: workflow-lifecycle-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}
+          path: verification/generated/workflow-lifecycle/report.json
+          if-no-files-found: error

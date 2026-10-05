@@ -10,20 +10,46 @@ permissions:
 jobs:
   audit:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        id: workflow_step_001
         with:
+          persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
+        id: workflow_step_002
         with:
           node-version: '20'
       - name: Reconcile every authority, admission, source boundary, and next gate
+        id: workflow_step_003
         run: node scripts/architecture/validate-whole-repository.mjs
       - name: Test isolated database execution denials
+        id: workflow_step_004
         run: node --test scripts/tests/validate-isolated-database-target.mjs
       - name: Test detached trusted-input representations
+        id: workflow_step_005
         run: node --test scripts/tests/validate-persistence-input-snapshots.mjs
       - name: Verify APPLY pins and structural migration history
+        id: workflow_step_006
         run: node scripts/packaging/validate-apply-guards.mjs pins
       - name: Verify production evidence remains fail-closed
+        id: workflow_step_007
         run: node scripts/tests/validate-production-proof.mjs
+      - name: Record workflow lifecycle checkpoint
+        id: lifecycle_record
+        if: always()
+        env:
+          LIFECYCLE_STEPS: ${{ toJson(steps) }}
+          LIFECYCLE_JOB_STATUS: ${{ job.status }}
+          LIFECYCLE_EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          LIFECYCLE_WORKFLOW_PATH: .github/workflows/whole-repository-audit.yml
+        run: node scripts/verification/record-workflow-lifecycle.mjs
+      - name: Retain workflow lifecycle evidence
+        id: lifecycle_upload
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: workflow-lifecycle-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}
+          path: verification/generated/workflow-lifecycle/report.json
+          if-no-files-found: error

@@ -12,6 +12,7 @@ export const stageCatalog = Object.freeze([
   ['validator-shard-3', 'node', ['scripts/tests/validate-validators.mjs', '--shard=3/3']],
   ['audit-regressions', 'node', ['--test', 'scripts/tests/validate-development-self-audit.test.mjs']],
   ['recovery-regressions', 'node', ['--test', 'scripts/tests/validate-owner-decision-inventory.test.mjs']],
+  ['lifecycle-regressions', 'node', ['--test', 'scripts/tests/validate-workflow-lifecycle.test.mjs', 'scripts/tests/validate-workflow-lifecycle-wiring.test.mjs', 'scripts/tests/validate-workflow-lifecycle-readback.test.mjs']],
   ['typecheck', 'pnpm', ['typecheck']],
   ['foundation', 'pnpm', ['exec', 'tsx', '--test']],
   ['generation', 'pnpm', ['db:verify-p05-generation']],
