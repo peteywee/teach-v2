@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -34,7 +34,7 @@
 
 # Teach v2 Contracts
 
-- Package version: `0.15.0`
+- Package version: `0.16.0`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
