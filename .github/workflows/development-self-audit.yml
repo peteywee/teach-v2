@@ -1,0 +1,97 @@
+name: Development Self Audit
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  self-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: teach_v2
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d teach_v2"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/teach_v2
+      TEACH_ISOLATED_DB: '1'
+      AUDIT_EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Enable pinned pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@12.8.1 --activate
+      - name: Install frozen dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Audit authority
+        run: node scripts/verification/run-self-audit.mjs --stage authority
+      - name: Audit pins
+        run: node scripts/verification/run-self-audit.mjs --stage pins
+      - name: Audit target-snapshots
+        run: node scripts/verification/run-self-audit.mjs --stage target-snapshots
+      - name: Audit production-denials
+        run: node scripts/verification/run-self-audit.mjs --stage production-denials
+      - name: Audit migration-guards
+        run: node scripts/verification/run-self-audit.mjs --stage migration-guards
+      - name: Audit apply-regressions
+        run: node scripts/verification/run-self-audit.mjs --stage apply-regressions
+      - name: Audit validator-shard-1
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-1
+      - name: Audit validator-shard-2
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-2
+      - name: Audit validator-shard-3
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-3
+      - name: Audit audit-regressions
+        run: node scripts/verification/run-self-audit.mjs --stage audit-regressions
+      - name: Audit typecheck
+        run: node scripts/verification/run-self-audit.mjs --stage typecheck
+      - name: Audit foundation
+        run: node scripts/verification/run-self-audit.mjs --stage foundation
+      - name: Audit generation
+        run: node scripts/verification/run-self-audit.mjs --stage generation
+      - name: Audit replay
+        run: node scripts/verification/run-self-audit.mjs --stage replay
+      - name: Audit migrate-isolated
+        run: node scripts/verification/run-self-audit.mjs --stage migrate-isolated
+      - name: Audit postgres-p01
+        run: node scripts/verification/run-self-audit.mjs --stage postgres-p01
+      - name: Audit postgres-p02
+        run: node scripts/verification/run-self-audit.mjs --stage postgres-p02
+      - name: Audit postgres-identity-commands
+        run: node scripts/verification/run-self-audit.mjs --stage postgres-identity-commands
+      - name: Audit postgres-p03
+        run: node scripts/verification/run-self-audit.mjs --stage postgres-p03
+      - name: Audit postgres-p04
+        run: node scripts/verification/run-self-audit.mjs --stage postgres-p04
+      - name: Audit postgres-p05
+        run: node scripts/verification/run-self-audit.mjs --stage postgres-p05
+      - name: Reconcile exact-source evidence
+        if: always()
+        run: node scripts/verification/run-self-audit.mjs --finish
+      - name: Save audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: development-self-audit-${{ github.event.pull_request.head.sha || github.sha }}
+          path: verification/generated/self-audit/
+          if-no-files-found: error

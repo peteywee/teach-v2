@@ -32,6 +32,8 @@ jobs:
       TEACH_ISOLATED_DB: '1'
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -58,3 +60,5 @@ jobs:
         run: pnpm db:migrate
       - name: PostgreSQL integration tests
         run: pnpm test:p02:integration
+      - name: Atomic Identity command mechanisms
+        run: pnpm test:identity:commands:integration

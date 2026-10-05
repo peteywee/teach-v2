@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit",
     "test": "tsx --test src/modules/transaction-control/domain/reconciliation-record.test.ts src/modules/transaction-control/application/reconciliation-service.test.ts",
     "test:integration": "tsx --test tests/integration/transaction-control/reconciliation-record-repository.test.ts",
-    "test:p02": "tsx --test src/modules/identity/domain/identity.test.ts src/modules/identity/domain/application-session.test.ts src/modules/identity/application/session-service.test.ts",
+    "test:p02": "tsx --test src/modules/identity/domain/identity.test.ts src/modules/identity/domain/application-session.test.ts src/modules/identity/application/session-service.test.ts src/modules/identity/application/identity-lifecycle-service.test.ts",
     "test:p02:integration": "tsx --test tests/integration/identity/identity-session-repository.test.ts",
     "test:p03": "tsx --test src/modules/identity/domain/single-use-secret.test.ts src/modules/identity/application/identity-token-service.test.ts",
     "test:p03:integration": "tsx --test tests/integration/identity/identity-token-repository.test.ts",
@@ -37,7 +37,10 @@
     "validate:slice-p05": "node scripts/persistence/validate-slice-p05-implementation-boundary.mjs",
     "audit:whole": "node scripts/architecture/validate-whole-repository.mjs",
     "validate:slice-p06": "node scripts/persistence/validate-slice-p06-schema-admission.mjs",
-    "test:db-target": "node --test scripts/tests/validate-isolated-database-target.mjs"
+    "test:db-target": "node --test scripts/tests/validate-isolated-database-target.mjs",
+    "test:identity:commands:integration": "tsx --test tests/integration/identity/identity-command-transaction.test.ts",
+    "test:foundation": "tsx --test src/modules/identity/application/identity-lifecycle-service.test.ts src/modules/identity/application/identity-token-service.test.ts src/modules/identity/application/session-service.test.ts src/modules/identity/domain/application-session.test.ts src/modules/identity/domain/credential.test.ts src/modules/identity/domain/identity.test.ts src/modules/identity/domain/single-use-secret.test.ts src/modules/learning/application/learning-session-service.test.ts src/modules/learning/domain/learning-session.test.ts src/modules/transaction-control/application/reconciliation-service.test.ts src/modules/transaction-control/domain/reconciliation-record.test.ts",
+    "self-audit": "node scripts/verification/run-self-audit.mjs"
   },
   "dependencies": {
     "drizzle-orm": "0.45.3",

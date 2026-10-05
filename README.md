@@ -29,3 +29,7 @@ Database migration, replay, and integration entry points currently require `TEAC
 See the [whole-repository audit findings and dependency diagram](verification/whole-repository/2026-10-04-audit.md).
 
 The [super-batch coverage report](verification/whole-repository/2026-10-04-super-batch.md) records input-validation repairs, expanded failure/contention coverage and the next dependency gates.
+
+The [development self-audit and connected-mechanism report](verification/whole-repository/2026-10-05-connections-self-audit.md) describes the automatic 21-stage workflow. It runs on every PR/main change, records exact source/tree and output provenance, checks complete validator/test inventories, and retains failed evidence. During development, `pnpm self-audit` runs the next bounded checkpoint; `pnpm self-audit --finish` reconciles a clean committed source. Dirty or incomplete checkpoints cannot establish aggregate proof.
+
+Identity deactivation/reactivation now have Application orchestration and an exact PostgreSQL transaction binder for authorization, lifecycle writes, session revocation and required audit. Backend authorization/audit adapters remain mandatory. Disposable PostgreSQL probes prove rollback mechanics; full protected runtime conformance remains UNKNOWN. The self-audit supplements review and cannot represent independent review or production permission.
