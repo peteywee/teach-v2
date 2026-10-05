@@ -1,0 +1,306 @@
+{
+  "captured_at_utc": "2026-10-05T05:18:35.184Z",
+  "main": {
+    "sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+    "checks": [
+      {
+        "id": 111619563295,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918505/job/111619563295"
+      },
+      {
+        "id": 111619563272,
+        "name": "negative-paths",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918621/job/111619563272"
+      },
+      {
+        "id": 111619563271,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918460/job/111619563271"
+      },
+      {
+        "id": 111619563270,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918596/job/111619563270"
+      },
+      {
+        "id": 111619563181,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918510/job/111619563181"
+      },
+      {
+        "id": 111619563146,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918432/job/111619563146"
+      },
+      {
+        "id": 111619563118,
+        "name": "validate-invariant-discovery",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918576/job/111619563118"
+      },
+      {
+        "id": 111619563113,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918446/job/111619563113"
+      },
+      {
+        "id": 111619563099,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918515/job/111619563099"
+      },
+      {
+        "id": 111619563078,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918567/job/111619563078"
+      },
+      {
+        "id": 111619563038,
+        "name": "validate-command-event-discovery",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918558/job/111619563038"
+      },
+      {
+        "id": 111619563036,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918500/job/111619563036"
+      },
+      {
+        "id": 111619563028,
+        "name": "audit",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918561/job/111619563028"
+      },
+      {
+        "id": 111619562989,
+        "name": "validate-decision-table-discovery",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918537/job/111619562989"
+      },
+      {
+        "id": 111619562949,
+        "name": "validate-semantic-kernel",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918465/job/111619562949"
+      },
+      {
+        "id": 111619562931,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918530/job/111619562931"
+      },
+      {
+        "id": 111619562893,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918445/job/111619562893"
+      },
+      {
+        "id": 111619562770,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918420/job/111619562770"
+      },
+      {
+        "id": 111619562741,
+        "name": "validate-document-governance",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918480/job/111619562741"
+      },
+      {
+        "id": 111619562720,
+        "name": "audit",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918482/job/111619562720"
+      },
+      {
+        "id": 111619562671,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918425/job/111619562671"
+      },
+      {
+        "id": 111619562623,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918433/job/111619562623"
+      },
+      {
+        "id": 111619562616,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918466/job/111619562616"
+      },
+      {
+        "id": 111619562587,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918440/job/111619562587"
+      },
+      {
+        "id": 111619562573,
+        "name": "validate-pins",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918431/job/111619562573"
+      },
+      {
+        "id": 111619562522,
+        "name": "self-audit",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918421/job/111619562522"
+      },
+      {
+        "id": 111619562464,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37264918428/job/111619562464"
+      }
+    ]
+  },
+  "answer_documentation": {
+    "pr": 71,
+    "sha": "f511fd63210224daab0a726b60291205b6810b94",
+    "merged": false,
+    "checks": [
+      {
+        "id": 111625586076,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "f511fd63210224daab0a726b60291205b6810b94",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37266920602/job/111625586076"
+      },
+      {
+        "id": 111625585870,
+        "name": "audit",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "f511fd63210224daab0a726b60291205b6810b94",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37266920533/job/111625585870"
+      },
+      {
+        "id": 111625585735,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "f511fd63210224daab0a726b60291205b6810b94",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37266920503/job/111625585735"
+      },
+      {
+        "id": 111625585657,
+        "name": "negative-paths",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "f511fd63210224daab0a726b60291205b6810b94",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37266920400/job/111625585657"
+      },
+      {
+        "id": 111625585628,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "f511fd63210224daab0a726b60291205b6810b94",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37266920489/job/111625585628"
+      },
+      {
+        "id": 111625585610,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "f511fd63210224daab0a726b60291205b6810b94",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37266920417/job/111625585610"
+      },
+      {
+        "id": 111625585565,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "f511fd63210224daab0a726b60291205b6810b94",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37266920448/job/111625585565"
+      },
+      {
+        "id": 111625585405,
+        "name": "self-audit",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "f511fd63210224daab0a726b60291205b6810b94",
+        "html_url": "https://github.com/peteywee/teach-v2/actions/runs/37266920377/job/111625585405"
+      }
+    ]
+  },
+  "full_workspace": {
+    "source_commit": "726c7ed9faeb66d472f1403d4f5900d0e5ae9ec1",
+    "source_tree": "a6a591a46901ca2595be9f32d39cf0544ebdbaba",
+    "ci": "NOT_RUN_FOR_FROZEN_WORKSPACE",
+    "prior_local_evidence": {
+      "lifecycle_tests": 28,
+      "standalone_validators": 52,
+      "scope": "reported in preceding turn; not rerun during checkpoint"
+    },
+    "runtime_activation": "BLOCKED"
+  }
+}

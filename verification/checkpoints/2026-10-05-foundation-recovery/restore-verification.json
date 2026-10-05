@@ -1,0 +1,14 @@
+{
+  "verified_at_utc": "2026-10-05T05:21:55.797495+00:00",
+  "result": "PROVEN_SOURCE_RESTORE",
+  "source_commit": "726c7ed9faeb66d472f1403d4f5900d0e5ae9ec1",
+  "source_tree": "a6a591a46901ca2595be9f32d39cf0544ebdbaba",
+  "file_count": 417,
+  "file_sha256_and_modes": "ALL_MATCH",
+  "restored_git_status": "CLEAN",
+  "remote_tree_vs_local_capture": "EXACT_MATCH",
+  "method": "Separate Git directory; exact remote source commit reconstructed and SHA-verified; borrowed local Git objects for checkout; full source inventory/hash/mode verification.",
+  "network_fetch_exercised": false,
+  "database_or_production_restore_exercised": false,
+  "scope": "Source restoration only. No runtime, deployment, database or release conformance claim."
+}

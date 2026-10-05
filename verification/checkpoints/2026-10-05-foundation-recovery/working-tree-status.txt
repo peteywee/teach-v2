@@ -1,0 +1,56 @@
+ M .github/workflows/application-interface-authority.yml
+ M .github/workflows/application-interface-discovery.yml
+ M .github/workflows/architecture-application-audit.yml
+ M .github/workflows/architecture-application-persistence-audit.yml
+ M .github/workflows/architecture-authority.yml
+ M .github/workflows/architecture-discovery.yml
+ M .github/workflows/architecture-proposal.yml
+ M .github/workflows/command-event-discovery.yml
+ M .github/workflows/decision-table-discovery.yml
+ M .github/workflows/dependency-concepts.yml
+ M .github/workflows/dependency-lifecycle-discovery.yml
+ M .github/workflows/development-self-audit.yml
+ M .github/workflows/document-governance.yml
+ M .github/workflows/domain-ownership.yml
+ M .github/workflows/first-physical-slice-readiness.yml
+ M .github/workflows/invariant-discovery.yml
+ M .github/workflows/persistence-authority.yml
+ M .github/workflows/persistence-discovery.yml
+ M .github/workflows/persistence-semantic-closure-discovery.yml
+ M .github/workflows/persistence-semantic-closure-proposal.yml
+ M .github/workflows/persistence-semantic-closure-registration.yml
+ M .github/workflows/production-proof-decisions.yml
+ M .github/workflows/relationship-discovery.yml
+ M .github/workflows/semantic-kernel.yml
+ M .github/workflows/slice-p01-implementation.yml
+ M .github/workflows/slice-p01-relationship-promotion.yml
+ M .github/workflows/slice-p02-implementation.yml
+ M .github/workflows/slice-p02-owner-decisions.yml
+ M .github/workflows/slice-p02-schema-admission.yml
+ M .github/workflows/slice-p03-implementation.yml
+ M .github/workflows/slice-p03-schema-admission.yml
+ M .github/workflows/slice-p04-implementation.yml
+ M .github/workflows/slice-p04-schema-admission.yml
+ M .github/workflows/slice-p05-foundation.yml
+ M .github/workflows/slice-p05-implementation.yml
+ M .github/workflows/slice-p05-owner-decisions.yml
+ M .github/workflows/slice-p05-schema-admission.yml
+ M .github/workflows/state-discovery.yml
+ M .github/workflows/strict-nine-governance-ratification.yml
+ M .github/workflows/transactioncontrol-first-slice-decision-packet.yml
+ M .github/workflows/transactioncontrol-first-slice-decision-registration.yml
+ M .github/workflows/validate-apply-pins.yml
+ M .github/workflows/validator-negative-paths.yml
+ M .github/workflows/whole-repository-audit.yml
+ M README.md
+ M scripts/verification/self-audit-catalog.mjs
+ M verification/whole-repository/self-audit-plan.json
+?? scripts/tests/validate-workflow-lifecycle.test.mjs
+?? scripts/verification/close-workflow-lifecycle.mjs
+?? scripts/verification/record-workflow-lifecycle.mjs
+?? scripts/verification/validate-workflow-lifecycle.mjs
+?? scripts/verification/workflow-lifecycle-inventory.mjs
+?? scripts/verification/workflow-lifecycle.mjs
+?? verification/owner-decisions/2026-10-05/
+?? verification/owner-decisions/README.md
+?? verification/workflow-lifecycle/
