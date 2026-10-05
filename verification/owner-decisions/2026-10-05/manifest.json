@@ -1,0 +1,26 @@
+{
+  "version": "1.0.0",
+  "baseline_main": "b45cde5202ebf137e9cc5aaa0647b88a9faddf86",
+  "file_sha256": {
+    "verification/owner-decisions/README.md": "27207c7bf5c32360aab0f370c9f11d48646ad5e4dee8485ea6e7fe302bed8703",
+    "verification/owner-decisions/2026-10-05/answer-register.json": "996fa46fbc4e4891c349f4453e4f576868833a6d00e4aff645ee7cf6b83791f8",
+    "verification/owner-decisions/2026-10-05/answers.md": "fd4a3ae3158c0b52b2dc4b968ca821d9bea92cacfd6fe7cf789df830975d4313",
+    "verification/owner-decisions/2026-10-05/sources/follow-up-answers.md": "00039814f461ddea9317b7b0f8be01c4757fc2c958627e2700f39ef0dbc71ced",
+    "verification/owner-decisions/2026-10-05/sources/supplied-answer-sheet.md": "ec67307c3eed4f59cc40b0577b73ddcd81cfc61265aba1a4187e3d544d5ac372",
+    "verification/owner-decisions/2026-10-05/sources/workflow-and-capture-instructions.md": "647f9862179ed7beb51b3ca9b39194309f6cfbd7d636e3cba563175114a4b7fb"
+  },
+  "consulted_source_sha256": {
+    "verification/owner-decisions/2026-10-04/registration.json": "c5c479a5d3a1a14bd7a0e09a635ddd5b4306dd071daefeaa18575ffd258d2f51",
+    "verification/legacy-recovery/decision-packet.json": "589df95b534049c0b1f02a768660da533d4cc1ee1753fae7d5e2965c62635920",
+    "verification/legacy-recovery/owner-decisions.json": "8a5e538acbc4a9a584722f168abfe47f580f89ed03e5e1d026913d70c5fa475b"
+  },
+  "verification": [
+    "66 distinct expected OQ IDs",
+    "60 exact source entries and 61 supplied-response IDs",
+    "Original sheet bytes/hash match earlier registration",
+    "Five registered values match authoritative registration",
+    "Five missing entries explicitly distinguished",
+    "Every ID has a Markdown record and source hashes match"
+  ],
+  "policy_or_runtime_authority_changed": false
+}
