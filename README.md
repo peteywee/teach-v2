@@ -43,3 +43,7 @@ The [owner policy registration and review](verification/owner-decisions/2026-10-
 ## Reuse recorded owner answers
 
 Before asking for policy input, read the [preserved owner answers](verification/owner-decisions/README.md). All 66 original question IDs are indexed with source text, receipt/registration states, remaining work and next actions. Blocked implementation does not require repeating an already supplied answer.
+
+## Complete development workflow lifecycle
+
+The [workflow lifecycle policy and inventory](verification/workflow-lifecycle/README.md) covers 44 verification producers, one trusted closure observer and all 23 product commands. Each CI producer captures exact-source outcomes and retained evidence; the observer independently verifies actual jobs, artifacts and workflow provenance before development handoff. Product/runtime authority and durable retention policy remain separate gates.

@@ -3,6 +3,10 @@ name: SLICE-P05 Owner Decisions
 on:
   pull_request:
     paths:
+      - 'scripts/verification/**'
+      - 'verification/workflow-lifecycle/**'
+      - 'scripts/tests/validate-workflow-lifecycle.test.mjs'
+      - '.github/workflows/slice-p05-owner-decisions.yml'
       - 'persistence/physical-slices/learning-session/registration.json'
       - 'kernel/relationships.json'
       - 'domains/ownership-map.json'
@@ -14,6 +18,10 @@ on:
   push:
     branches: [main]
     paths:
+      - 'scripts/verification/**'
+      - 'verification/workflow-lifecycle/**'
+      - 'scripts/tests/validate-workflow-lifecycle.test.mjs'
+      - '.github/workflows/slice-p05-owner-decisions.yml'
       - 'persistence/physical-slices/learning-session/registration.json'
       - 'kernel/relationships.json'
       - 'domains/ownership-map.json'
@@ -23,13 +31,39 @@ on:
       - 'scripts/tests/validate-validators.mjs'
       - '.github/workflows/slice-p05-owner-decisions.yml'
 
+permissions:
+  contents: read
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        id: workflow_step_001
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
       - uses: actions/setup-node@v4
+        id: workflow_step_002
         with:
           node-version: '20'
       - name: Validate SLICE-P05 owner decision
+        id: workflow_step_003
         run: node scripts/persistence/validate-slice-p05-owner-decisions.mjs
+      - name: Record workflow lifecycle checkpoint
+        id: lifecycle_record
+        if: always()
+        env:
+          LIFECYCLE_STEPS: ${{ toJson(steps) }}
+          LIFECYCLE_JOB_STATUS: ${{ job.status }}
+          LIFECYCLE_EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          LIFECYCLE_WORKFLOW_PATH: .github/workflows/slice-p05-owner-decisions.yml
+        run: node scripts/verification/record-workflow-lifecycle.mjs
+      - name: Retain workflow lifecycle evidence
+        id: lifecycle_upload
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: workflow-lifecycle-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}
+          path: verification/generated/workflow-lifecycle/report.json
+          if-no-files-found: error

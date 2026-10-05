@@ -3,6 +3,10 @@ name: Document Governance
 on:
   pull_request:
     paths:
+      - 'scripts/verification/**'
+      - 'verification/workflow-lifecycle/**'
+      - 'scripts/tests/validate-workflow-lifecycle.test.mjs'
+      - '.github/workflows/document-governance.yml'
       - 'contracts/**'
       - 'governance/**'
       - 'kernel/**'
@@ -12,6 +16,10 @@ on:
   push:
     branches: [main]
     paths:
+      - 'scripts/verification/**'
+      - 'verification/workflow-lifecycle/**'
+      - 'scripts/tests/validate-workflow-lifecycle.test.mjs'
+      - '.github/workflows/document-governance.yml'
       - 'contracts/**'
       - 'governance/**'
       - 'kernel/**'
@@ -25,20 +33,46 @@ permissions:
 jobs:
   validate-document-governance:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
+        id: workflow_step_001
         uses: actions/checkout@v4
         with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
 
+      - name: Pin lifecycle Node runtime
+        id: workflow_step_002
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - name: Validate document metadata
+        id: workflow_step_003
         shell: bash
+        env:
+          DOCUMENT_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            git fetch origin "${{ github.base_ref }}" --depth=1
-            node scripts/docs/validate-document-metadata.mjs --base "origin/${{ github.base_ref }}"
-          elif [ -n "${{ github.event.before }}" ] && [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
-            node scripts/docs/validate-document-metadata.mjs --base "${{ github.event.before }}"
+          if [ -n "$DOCUMENT_BASE_SHA" ] && [ "$DOCUMENT_BASE_SHA" != "0000000000000000000000000000000000000000" ]; then
+            node scripts/docs/validate-document-metadata.mjs --base "$DOCUMENT_BASE_SHA"
           else
             node scripts/docs/validate-document-metadata.mjs
           fi
+      - name: Record workflow lifecycle checkpoint
+        id: lifecycle_record
+        if: always()
+        env:
+          LIFECYCLE_STEPS: ${{ toJson(steps) }}
+          LIFECYCLE_JOB_STATUS: ${{ job.status }}
+          LIFECYCLE_EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          LIFECYCLE_WORKFLOW_PATH: .github/workflows/document-governance.yml
+        run: node scripts/verification/record-workflow-lifecycle.mjs
+      - name: Retain workflow lifecycle evidence
+        id: lifecycle_upload
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: workflow-lifecycle-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}
+          path: verification/generated/workflow-lifecycle/report.json
+          if-no-files-found: error

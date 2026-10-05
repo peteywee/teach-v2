@@ -104,6 +104,17 @@
       "timeout_ms": 25000
     },
     {
+      "id": "lifecycle-regressions",
+      "command": "node",
+      "args": [
+        "--test",
+        "scripts/tests/validate-workflow-lifecycle.test.mjs",
+        "scripts/tests/validate-workflow-lifecycle-wiring.test.mjs",
+        "scripts/tests/validate-workflow-lifecycle-readback.test.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
       "id": "typecheck",
       "command": "pnpm",
       "args": [
