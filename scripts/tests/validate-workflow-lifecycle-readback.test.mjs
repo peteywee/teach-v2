@@ -5,6 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { buildWorkflowReport,reportDigest } from '../verification/workflow-lifecycle.mjs';
 import { inspectWorkflowText } from '../verification/workflow-lifecycle-inventory.mjs';
+import { declaredStepContext } from '../verification/workflow-lifecycle-step-context.mjs';
 import { collectRunLifecycle,createGitHubReadback,decodeCheckpointArchive } from '../verification/workflow-lifecycle-readback.mjs';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 function fixture(){
@@ -51,3 +52,8 @@ test('service initialization before user steps does not shift proof binding',asy
 test('matching API paths with @ref suffix use exact-source content',async()=>{const f=fixture();f.run.path+='@main';assert.equal((await collect(f)).state,'CLOSED');});
 test('unexpected extra user step prevents closure',async()=>{const f=fixture();f.job.steps.splice(2,0,{number:99,name:'Unexpected operation',status:'completed',conclusion:'success'});assert.equal((await collect(f)).state,'BLOCKED');});
 test('artifact deletion after download cannot establish retained closure',async()=>{const f=fixture(),get=f.api.getJson;f.api.getJson=async path=>{if(path==='actions/artifacts/200')throw Error('artifact no longer exists');return get(path);};assert.equal((await collect(f)).state,'BLOCKED');});
+
+const runnerId='0c5d2626c46b4d61bc2f6173763c50bf';
+test('successful generated service context is recognized only for a declared service job',()=>{const steps={declared:{outcome:'success',conclusion:'success'},[runnerId]:{outcome:'success',conclusion:'success'}};assert.deepEqual(Object.keys(declaredStepContext(steps,{required_steps:['declared'],has_service_setup:true})),['declared']);assert.equal(Object.keys(declaredStepContext(steps,{required_steps:['declared'],has_service_setup:false})).length,2);});
+test('failed generated service context and undeclared user IDs stay visible',()=>{const steps={[runnerId]:{outcome:'failure',conclusion:'failure'},unexpected:{outcome:'success',conclusion:'success'}};assert.deepEqual(declaredStepContext(steps,{required_steps:[],has_service_setup:true}),steps);});
+test('a declared 32-hex user step can never be filtered as service setup',()=>{const steps={[runnerId]:{outcome:'success',conclusion:'success'}};assert.deepEqual(declaredStepContext(steps,{required_steps:[runnerId],has_service_setup:true}),steps);});

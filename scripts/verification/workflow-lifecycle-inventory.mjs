@@ -113,7 +113,7 @@ export function inspectWorkflowText(path, text) {
     const jobNames=[...body.matchAll(/^    name: (.+)$/gm)];
     if(jobNames.length>1 || (jobNames.length && !/^[A-Za-z0-9][A-Za-z0-9 _-]*$/.test(jobNames[0][1])))throw new Error(`${path}: static distinct job name required`);
     const observer = path === closureObserverPath;
-    return {workflow_path:path,workflow_name:workflowName(path,text),workflow_sha256:digest(text),job_id:match[1],job_name:jobNames[0]?.[1]||match[1],all_step_ids:steps.map(x=>x.id),all_step_names:steps.map(x=>x.name),required_steps:required.map(x=>x.id),
+    return {workflow_path:path,workflow_name:workflowName(path,text),workflow_sha256:digest(text),job_id:match[1],job_name:jobNames[0]?.[1]||match[1],has_service_setup:/^    (?:services|container):(?:\s|$)/m.test(body),all_step_ids:steps.map(x=>x.id),all_step_names:steps.map(x=>x.name),required_steps:required.map(x=>x.id),
       kind:observer?'CLOSURE_OBSERVER':'VERIFICATION_PRODUCER',
       source_policy:observer?'TRUSTED_DEFAULT_BRANCH_SHA':'EXACT_VERIFICATION_SOURCE_SHA',
       closure_mode:observer?'INDEPENDENT_TERMINAL_READBACK_REQUIRED':'AUTOMATIC_WORKFLOW_RUN_OBSERVER',
