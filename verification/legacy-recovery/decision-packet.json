@@ -7,15 +7,7 @@
   "runtime_activation": "BLOCKED",
   "shared_or_production_execution_authorized": false,
   "scope": "recommendations for every unresolved question; selecting an option still requires SYS-21 revision, impact review and regenerated evidence",
-  "review_ready_selection_ids": [
-    "OQ-IDN-1",
-    "OQ-IDN-3",
-    "OQ-IDN-4",
-    "OQ-TEN-1",
-    "OQ-TEN-2",
-    "OQ-MGR-1",
-    "OQ-CERT-1"
-  ],
+  "review_ready_selection_ids": [],
   "not_selection_ready_without_more_detail": [
     "OQ-AUTHZ-1",
     "OQ-PRIV-1",
@@ -89,36 +81,6 @@
       "affects": "\u2014"
     },
     {
-      "id": "OQ-IDN-1",
-      "group": "Foundation",
-      "recommended_option": "ARGON2ID_19M_T2_P1",
-      "recommendation": "Argon2id minimum m=19456 KiB, t=2, p=1, unique random salts and versioned encoded hashes; benchmark the approved backend before implementation. V1 bcrypt is reference only, with its explicit 72-byte guard.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c11-identity-credentials-contract.md",
-      "affects": "IDN-5"
-    },
-    {
-      "id": "OQ-IDN-3",
-      "group": "Foundation",
-      "recommended_option": "ALL_SESSIONS_ON_CREDENTIAL_CHANGE",
-      "recommendation": "Revoke every session for the Identity atomically with successful credential change and audit; require a new sign-in. This is a proposed owner choice, not current authority.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c11-identity-credentials-contract.md",
-      "affects": "IDN-15"
-    },
-    {
-      "id": "OQ-IDN-4",
-      "group": "Foundation",
-      "recommended_option": "EXPLICIT_REAUTHENTICATED_LINKING",
-      "recommendation": "Use existing verified provider-subject links; matching email alone cannot link or create a duplicate Identity. Linking to an existing Identity requires explicit user initiation and reauthentication.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c11-identity-credentials-contract.md",
-      "affects": "IDN-2"
-    },
-    {
       "id": "OQ-IDN-7",
       "group": "Identity",
       "recommended_option": "INDISTINGUISHABLE_ACCEPTED_RESPONSE",
@@ -177,26 +139,6 @@
       "owner_approval_recorded": false,
       "authority_source": "contracts/c12-application-sessions-contract.md",
       "affects": "\u2014"
-    },
-    {
-      "id": "OQ-TEN-1",
-      "group": "Foundation",
-      "recommended_option": "NORMALIZED_MULTI_ORGANIZATION_MULTI_LOCATION",
-      "recommendation": "Choose normalized multi-organization, multi-location membership rather than V1 single-location compatibility. Exact Membership/Location/grant shapes still require promotion and admission.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c13-tenancy-membership-contract.md",
-      "affects": "TEN-15"
-    },
-    {
-      "id": "OQ-TEN-2",
-      "group": "Foundation",
-      "recommended_option": "EXPLICIT_VALIDATED_SCOPE_TUPLE",
-      "recommendation": "Require explicit organization/location scope in the typed request, validated against current membership; reject zero, multiple or ambiguous selections. Transport encoding follows separate authority.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c13-tenancy-membership-contract.md",
-      "affects": "TEN-7"
     },
     {
       "id": "OQ-AUTHZ-1",
@@ -359,16 +301,6 @@
       "affects": "LRN-13"
     },
     {
-      "id": "OQ-MGR-1",
-      "group": "Foundation",
-      "recommended_option": "DIRECT_REPORTS_WITHIN_APPROVED_SCOPE",
-      "recommendation": "Propose direct reports intersected with current organization/location scope; reporting relationships narrow visibility and never create capabilities.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c33-manager-operations-contract.md",
-      "affects": "MGR-3"
-    },
-    {
       "id": "OQ-MGR-2",
       "group": "Manager",
       "recommended_option": "EXPLICIT_OFFBOARD_CAPABILITY_THROUGH_IDENTITY_SERVICE",
@@ -377,16 +309,6 @@
       "owner_approval_recorded": false,
       "authority_source": "contracts/c33-manager-operations-contract.md",
       "affects": "\u2014"
-    },
-    {
-      "id": "OQ-CERT-1",
-      "group": "Certification",
-      "recommended_option": "PRIVATE_AUTHENTICATED_SCOPED_VERIFICATION",
-      "recommendation": "Propose private, authenticated and scoped certification verification initially. A public link feature requires a separate approved disclosure model.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c34-certification-credentials-contract.md",
-      "affects": "CERT-13"
     },
     {
       "id": "OQ-CERT-2",

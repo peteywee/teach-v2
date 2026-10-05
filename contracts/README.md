@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -34,7 +34,7 @@
 
 # Teach v2 Contracts
 
-- Package version: `0.16.0`
+- Package version: `0.17.0`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
@@ -125,7 +125,7 @@ the requirement that keeps the feature off applies.
 | C61 | [Analytics](c61-analytics-contract.md) | 1.0.3 | `ANL` | 8 | 7 | 2 | 0 | `active` |
 | C62 | [PWA / Offline](c62-pwa-offline-contract.md) | 1.0.3 | `PWA` | 9 | 4 | 1 | 0 | `active` |
 | C63 | [Self-Service Billing](c63-billing-contract.md) | 1.1.0 | `BIL` | 14 | 12 | 3 | 0 | `active` |
-|     | **Total** | | | **391** | **267** | **56** | **18** | |
+|     | **Total** | | | **391** | **267** | **49** | **11** | |
 
 ## K00 semantic-kernel bootstrap
 

@@ -2,16 +2,16 @@
 {
   "doc_id": "TEACH-CON-C11",
   "class": "contract",
-  "version": "1.5.0",
+  "version": "1.4.0",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-04",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.5.0",
+    "approved_version": "1.4.0",
     "approved_on": "2026-10-04",
     "record": "contracts/APPROVAL-RECORD.md",
     "basis": "Explicit owner-selected policy values in chat; SYS-21 issue #66; implementation conformance remains separate"
@@ -31,7 +31,7 @@
   "supersedes": [
     "TEACH-CON-C11@1.3.0"
   ],
-  "superseded_by": null,
+  "superseded_by": "TEACH-CON-C11@1.5.0",
   "depends_on": [
     "contracts/"
   ]
@@ -45,7 +45,7 @@
 | Contract ID        | C11                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.5.0 |
+| Version | 1.4.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
 | Approved by | Patrick Craven (owner), 2026-10-04 — selected policy values; SYS-21 issue #66 |
@@ -99,10 +99,10 @@ Related contracts: C00, C01, C12, C13, C14, C23.
 The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Requirement IDs are stable and MUST NOT be renumbered or reused.
 
 - **IDN-1** — Each human user MUST map to exactly one canonical application identity.
-- **IDN-2** — Linking or signing in with an OAuth identity MUST NOT create a second application identity for a person who already has one. The approved linking rule is `EXPLICIT_REAUTHENTICATED_LINKING`: an OAuth sign-in MUST resolve to an Identity only through an existing verified provider-subject link; a matching email address alone MUST NOT link the sign-in to an existing Identity and MUST NOT create a new Identity; and creating a new provider-subject link for an existing Identity MUST be explicitly initiated by that Identity's authenticated user and MUST require reauthentication within the same operation. Owner approved on 2026-10-05.
+- **IDN-2** — Linking or signing in with an OAuth identity MUST NOT create a second application identity for a person who already has one (linking rule: see OQ-IDN-4; value Not yet verified).
 - **IDN-3** — An OAuth sign-in that cannot be matched to exactly one identity under the linking rule MUST fail closed and create no identity.
 - **IDN-4** — Possession of a valid credential MUST NOT, by itself, establish any membership, role, or capability.
-- **IDN-5** — Passwords MUST be stored only as salted hashes produced by the approved password hashing implementation `ARGON2ID_19M_T2_P1`: Argon2id with memory cost of at least 19456 KiB, time cost of at least 2 iterations, parallelism of 1, a unique cryptographically random salt of at least 16 bytes per credential, and a versioned encoded hash as the only stored form. Verification MUST read parameters from the stored encoded hash, not from current configuration. The approved backend MUST be benchmarked on target infrastructure before implementation. V1 bcrypt is reference only and MUST NOT be used for new credentials. Owner approved on 2026-10-05.
+- **IDN-5** — Passwords MUST be stored only as salted hashes produced by the approved password hashing implementation (see OQ-IDN-1; value Not yet verified).
 - **IDN-6** — Plaintext passwords and PINs MUST NOT be persisted, logged, returned in any response, or sent to any component other than the hashing step.
 - **IDN-7** — Single-use tokens MUST be generated from a cryptographically secure random source.
 - **IDN-8** — Single-use tokens MUST be stored only as hashes.
@@ -112,7 +112,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **IDN-12** — A manager with the setup capability MAY initiate frontline setup for a learner in scope.
 - **IDN-13** — A manager MUST NOT be able to choose, submit, receive, view, or retrieve an employee's password, PIN, or any reusable credential, through any API, UI, log, export, or notification.
 - **IDN-14** — Inactive, deleted, and offboarded identities MUST NOT authenticate by any method: password, PIN, OAuth, setup token, or reset token.
-- **IDN-15** — A credential change MUST revoke sessions under `ALL_SESSIONS_ON_CREDENTIAL_CHANGE`: every ApplicationSession belonging to the Identity, including the session that performed the change, MUST be revoked through C12's canonical revocation path in the same transaction as the credential change and its C23 audit event; if any of the three fails, none commits. After a successful change the user MUST sign in again. Owner approved on 2026-10-05.
+- **IDN-15** — A credential change MUST revoke the sessions designated by the session-revocation policy (see OQ-IDN-3; value Not yet verified) through C12's canonical revocation path.
 - **IDN-16** — Every identity lifecycle change (create, invite, accept, credential change, deactivate, offboard, reactivate) MUST emit an audit event per C23 in the same transaction as the change.
 - **IDN-17** — Offboarding MUST execute only through one shared identity lifecycle service.
 - **IDN-18** — Offboarding MUST, in one transaction: set IdentityStatus to `INACTIVE`, emit `IdentityOffboarded`, revoke all its sessions, revoke its frontline credentials and pending single-use tokens, and remove its effective membership and grants.
@@ -163,10 +163,10 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 | ID       | Question                                                                                                                                              | Blocks implementation | Affects |
 | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ------- |
-| OQ-IDN-1 | **Resolved** Which password hashing algorithm and parameters are approved?                                                                                         | Yes                   | IDN-5   |
+| OQ-IDN-1 | Which password hashing algorithm and parameters are approved?                                                                                         | Yes                   | IDN-5   |
 | OQ-IDN-2 | Resolved: Invitation acceptance secret = 7 days; SetupToken = 15 minutes; PasswordResetToken = 1 hour. Legacy values were reference only; this decision is v2 authority through the owner approval package. | No | IDN-9, IDN-25, IDN-26 |
-| OQ-IDN-3 | **Resolved** Which sessions does a credential change revoke: all sessions, all other sessions, or another policy?                                                  | Yes                   | IDN-15  |
-| OQ-IDN-4 | **Resolved** What is the OAuth linking rule: verified-email match, explicit user-initiated linking only, or another rule?                                          | Yes                   | IDN-2   |
+| OQ-IDN-3 | Which sessions does a credential change revoke: all sessions, all other sessions, or another policy?                                                  | Yes                   | IDN-15  |
+| OQ-IDN-4 | What is the OAuth linking rule: verified-email match, explicit user-initiated linking only, or another rule?                                          | Yes                   | IDN-2   |
 | OQ-IDN-5 | Resolved: controlled rejection. An offboarded identity must be explicitly reactivated through ReactivateIdentity before a new invitation may be created. | No | IDN-20, IDN-27 |
 | OQ-IDN-6 | Resolved: PIN parameters selected as 6 digits, 5 attempts, 15-minute lock. PIN authentication remains unavailable until implementation and all applicable authentication gates pass. | No (resolved) | — |
 | OQ-IDN-7 | Must password-reset and invitation responses be indistinguishable for registered and unregistered emails?                                             | No                    | —       |

@@ -6,8 +6,8 @@
   "runtime_activation": "BLOCKED",
   "shared_or_production_execution_authorized": false,
   "totals": {
-    "unresolved_contract_questions": 56,
-    "explicit_contract_blockers": 18,
+    "unresolved_contract_questions": 49,
+    "explicit_contract_blockers": 11,
     "physical_shape_questions": 12,
     "semantic_candidates": 71
   },
@@ -67,36 +67,9 @@
       "source_line": 137
     },
     {
-      "id": "OQ-IDN-1",
-      "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.4.0",
-      "question": "Which password hashing algorithm and parameters are approved?",
-      "explicitly_blocks_implementation": true,
-      "affects": "IDN-5",
-      "source_line": 166
-    },
-    {
-      "id": "OQ-IDN-3",
-      "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.4.0",
-      "question": "Which sessions does a credential change revoke: all sessions, all other sessions, or another policy?",
-      "explicitly_blocks_implementation": true,
-      "affects": "IDN-15",
-      "source_line": 168
-    },
-    {
-      "id": "OQ-IDN-4",
-      "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.4.0",
-      "question": "What is the OAuth linking rule: verified-email match, explicit user-initiated linking only, or another rule?",
-      "explicitly_blocks_implementation": true,
-      "affects": "IDN-2",
-      "source_line": 169
-    },
-    {
       "id": "OQ-IDN-7",
       "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.4.0",
+      "contract_version": "1.5.0",
       "question": "Must password-reset and invitation responses be indistinguishable for registered and unregistered emails?",
       "explicitly_blocks_implementation": false,
       "affects": "—",
@@ -146,24 +119,6 @@
       "explicitly_blocks_implementation": false,
       "affects": "—",
       "source_line": 139
-    },
-    {
-      "id": "OQ-TEN-1",
-      "contract": "contracts/c13-tenancy-membership-contract.md",
-      "contract_version": "1.4.0",
-      "question": "Does v2 start with the Gate A single-location compatibility membership or a normalized multi-organization, multi-location membership model?",
-      "explicitly_blocks_implementation": true,
-      "affects": "TEN-15",
-      "source_line": 139
-    },
-    {
-      "id": "OQ-TEN-2",
-      "contract": "contracts/c13-tenancy-membership-contract.md",
-      "contract_version": "1.4.0",
-      "question": "How does a request select its scope when an identity holds more than one membership (explicit path segment, header validated against membership, other)?",
-      "explicitly_blocks_implementation": true,
-      "affects": "TEN-7",
-      "source_line": 140
     },
     {
       "id": "OQ-AUTHZ-1",
@@ -310,36 +265,18 @@
       "source_line": 125
     },
     {
-      "id": "OQ-MGR-1",
-      "contract": "contracts/c33-manager-operations-contract.md",
-      "contract_version": "1.0.3",
-      "question": "Is manager visibility limited to direct reports, the whole location, or configurable?",
-      "explicitly_blocks_implementation": true,
-      "affects": "MGR-3",
-      "source_line": 118
-    },
-    {
       "id": "OQ-MGR-2",
       "contract": "contracts/c33-manager-operations-contract.md",
-      "contract_version": "1.0.3",
+      "contract_version": "1.1.0",
       "question": "May managers offboard directly, or only request offboarding for an operator to approve?",
       "explicitly_blocks_implementation": false,
       "affects": "—",
       "source_line": 119
     },
     {
-      "id": "OQ-CERT-1",
-      "contract": "contracts/c34-certification-credentials-contract.md",
-      "contract_version": "1.1.0",
-      "question": "Is credential verification public (anyone with the link) or private (authenticated, scoped)? (Deferred by Gate A.)",
-      "explicitly_blocks_implementation": true,
-      "affects": "CERT-13",
-      "source_line": 123
-    },
-    {
       "id": "OQ-CERT-2",
       "contract": "contracts/c34-certification-credentials-contract.md",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "question": "Who approves certification criteria versions, and where is approval recorded?",
       "explicitly_blocks_implementation": true,
       "affects": "CERT-4",
@@ -348,7 +285,7 @@
     {
       "id": "OQ-CERT-3",
       "contract": "contracts/c34-certification-credentials-contract.md",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "question": "What evidence types are acceptable (observation notes, checklist, photo, other)?",
       "explicitly_blocks_implementation": false,
       "affects": "CERT-7",
@@ -357,7 +294,7 @@
     {
       "id": "OQ-CERT-5",
       "contract": "contracts/c34-certification-credentials-contract.md",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "question": "Do certifications expire, and if so how is expiry represented?",
       "explicitly_blocks_implementation": false,
       "affects": "—",
@@ -591,18 +528,45 @@
       "source_line": 188
     },
     {
+      "id": "OQ-IDN-1",
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "contract_version": "1.5.0",
+      "question": "**Resolved** Which password hashing algorithm and parameters are approved?",
+      "explicitly_blocks_implementation": true,
+      "affects": "IDN-5",
+      "source_line": 166
+    },
+    {
       "id": "OQ-IDN-2",
       "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.4.0",
+      "contract_version": "1.5.0",
       "question": "Resolved: Invitation acceptance secret = 7 days; SetupToken = 15 minutes; PasswordResetToken = 1 hour. Legacy values were reference only; this decision is v2 authority through the owner approval package.",
       "explicitly_blocks_implementation": false,
       "affects": "IDN-9, IDN-25, IDN-26",
       "source_line": 167
     },
     {
+      "id": "OQ-IDN-3",
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "contract_version": "1.5.0",
+      "question": "**Resolved** Which sessions does a credential change revoke: all sessions, all other sessions, or another policy?",
+      "explicitly_blocks_implementation": true,
+      "affects": "IDN-15",
+      "source_line": 168
+    },
+    {
+      "id": "OQ-IDN-4",
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "contract_version": "1.5.0",
+      "question": "**Resolved** What is the OAuth linking rule: verified-email match, explicit user-initiated linking only, or another rule?",
+      "explicitly_blocks_implementation": true,
+      "affects": "IDN-2",
+      "source_line": 169
+    },
+    {
       "id": "OQ-IDN-5",
       "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.4.0",
+      "contract_version": "1.5.0",
       "question": "Resolved: controlled rejection. An offboarded identity must be explicitly reactivated through ReactivateIdentity before a new invitation may be created.",
       "explicitly_blocks_implementation": false,
       "affects": "IDN-20, IDN-27",
@@ -611,16 +575,34 @@
     {
       "id": "OQ-IDN-6",
       "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.4.0",
+      "contract_version": "1.5.0",
       "question": "Resolved: PIN parameters selected as 6 digits, 5 attempts, 15-minute lock. PIN authentication remains unavailable until implementation and all applicable authentication gates pass.",
       "explicitly_blocks_implementation": false,
       "affects": "—",
       "source_line": 171
     },
     {
+      "id": "OQ-TEN-1",
+      "contract": "contracts/c13-tenancy-membership-contract.md",
+      "contract_version": "1.5.0",
+      "question": "**Resolved** Does v2 start with the Gate A single-location compatibility membership or a normalized multi-organization, multi-location membership model?",
+      "explicitly_blocks_implementation": true,
+      "affects": "TEN-15",
+      "source_line": 139
+    },
+    {
+      "id": "OQ-TEN-2",
+      "contract": "contracts/c13-tenancy-membership-contract.md",
+      "contract_version": "1.5.0",
+      "question": "**Resolved** How does a request select its scope when an identity holds more than one membership (explicit path segment, header validated against membership, other)?",
+      "explicitly_blocks_implementation": true,
+      "affects": "TEN-7",
+      "source_line": 140
+    },
+    {
       "id": "OQ-TEN-3",
       "contract": "contracts/c13-tenancy-membership-contract.md",
-      "contract_version": "1.4.0",
+      "contract_version": "1.5.0",
       "question": "**Resolved** Does v2 keep platform-operator cross-tenant access? Owner approved NO_CROSS_TENANT_GRANTS on 2026-10-05.",
       "explicitly_blocks_implementation": false,
       "affects": "NO_CROSS_TENANT_GRANTS",
@@ -672,9 +654,27 @@
       "source_line": 126
     },
     {
+      "id": "OQ-MGR-1",
+      "contract": "contracts/c33-manager-operations-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved** Is manager visibility limited to direct reports, the whole location, or configurable?",
+      "explicitly_blocks_implementation": true,
+      "affects": "MGR-3",
+      "source_line": 118
+    },
+    {
+      "id": "OQ-CERT-1",
+      "contract": "contracts/c34-certification-credentials-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved** Is credential verification public (anyone with the link) or private (authenticated, scoped)? (Deferred by Gate A.)",
+      "explicitly_blocks_implementation": true,
+      "affects": "CERT-13",
+      "source_line": 123
+    },
+    {
       "id": "OQ-CERT-4",
       "contract": "contracts/c34-certification-credentials-contract.md",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "question": "**Resolved** May an actor ever be both learner and observer for the same certification?",
       "explicitly_blocks_implementation": false,
       "affects": "CERT-15 (approved 2026-10-05)",
@@ -1250,9 +1250,9 @@
     "contracts/c00-system-authority-contract.md": "63500932db774880d5769f545887a21c2482961e405eee328aed2cc25fa4b661",
     "contracts/c01-canonical-semantics-contract.md": "e407a52b739756e84264a66ef0a824d02435e4ee15e938c405c4caf8dc1ebd40",
     "contracts/c02-automation-agent-authority-contract.md": "21202fef396b5179a718ded8fa2f28a4726497c393ce083fb7af5297f594de23",
-    "contracts/c11-identity-credentials-contract.md": "b9adc24cee57cf468256b4c35d5231145055200939e21e5250d6631734569d5d",
+    "contracts/c11-identity-credentials-contract.md": "3240ae5ccb81fe1233f74e52c8f7bb63caf55bd5958a87506948e09bec95a0c6",
     "contracts/c12-application-sessions-contract.md": "6bfda46131be1c25d3aa71f5a771dcc1374033156b2467757c3dacdee527481d",
-    "contracts/c13-tenancy-membership-contract.md": "cb2c36261c09045b026489fddb627ad57667bee544e7226a983a86d9e21e38be",
+    "contracts/c13-tenancy-membership-contract.md": "e52371e79cf0619eac158d58785b6d5005dbd9a3381e3e5037fb0016255dbf6e",
     "contracts/c14-authorization-capabilities-contract.md": "67c3f8820c5f4bc6d3e74f4601f079ef9202750ce7e4b48e6338d3b60c4b6fd3",
     "contracts/c15-data-isolation-privacy-contract.md": "e14300a57e8bf75f39509efa5c11c6ae994dba9dd798336f01d23cce8c70e84e",
     "contracts/c21-database-migration-contract.md": "eb64b82349abda75370ab68961af92094e6840a3d02e18a1bfb2f4eaaac6a135",
@@ -1260,8 +1260,8 @@
     "contracts/c23-audit-lifecycle-events-contract.md": "707651e689e57e779672cd88bf64fb76253801b1c468c5b1d171790c66415ebb",
     "contracts/c31-content-teaching-engine-contract.md": "d4fb182c07c50a56841f0c2b80d368bc3641f7df68ad8cc824b1141137819583",
     "contracts/c32-learning-sessions-progress-contract.md": "61ed20459d1e1ba0cac624e13227aac7c2915e71b8e4c0ed0b4f1fedda41821d",
-    "contracts/c33-manager-operations-contract.md": "22c0a55c03ce2fb5fb5072045b0518a727250918b8fcace2907554a5173e7ea7",
-    "contracts/c34-certification-credentials-contract.md": "cc67e5ade4ed652ec89dae93bbbd14fddaa7ae260ed0e90edb3481e831e6db76",
+    "contracts/c33-manager-operations-contract.md": "c52d29bd315d302cb3a9a749eabd354e1b741a3a4514e2c98aac30497fc363f9",
+    "contracts/c34-certification-credentials-contract.md": "ee6ce0685f0a47a0d050989ff43e969b78eddd6c08619dc8185ef7ea531e8c7d",
     "contracts/c41-api-boundary-contract.md": "59257d21573369827d0bed24919e7d6fedec5221c780ffeb404dcea68fb26e52",
     "contracts/c42-web-client-boundary-contract.md": "5655dc089faf29bc8db16fd81319fcad6a7b37b8c5833b1b5d0fdb8b97ce9e28",
     "contracts/c51-verification-evidence-contract.md": "7390163d21ef0d00a8c7190108fa2f1e5ab1dd28e0d18569dc8e823fe8cf0161",

@@ -46,7 +46,7 @@ if(reg?.readiness_effect?.physical_schema_authorized!==false || reg?.readiness_e
 if(!c12.includes('"version": "1.1.0"') || c12.includes('| OQ-SES-3 |') || c12.includes('| OQ-SES-4 |')) errors.push('SLICE-P02 decisions: C12 1.1.0 must resolve OQ-SES-3/4');
 for(const token of ['SESSION_VERIFIER_V1_SHA256_256BIT','ABSOLUTE_12H_IDLE_30M','exactly 32 cryptographically secure random bytes','absolute lifetime is 12 hours','idle lifetime is 30 minutes']) if(!c12.includes(token)) errors.push(`SLICE-P02 decisions: C12 missing ${token}`);
 if(!approvals.includes('## Part 23 — SLICE-P02 owner decisions') || !approvals.includes('IDENTITY_GLOBAL_PRINCIPAL_SESSION_IDENTITY_OWNED') || !approvals.includes('| #32 |')) errors.push('SLICE-P02 decisions: canonical approval ledger entry missing');
-if(!index.includes('"version": "0.16.0"') || !index.includes('- Package version: `0.16.0`')) errors.push('SLICE-P02 decisions: contract package synchronization missing');
+if(!index.includes('"version": "0.17.0"') || !index.includes('- Package version: `0.17.0`')) errors.push('SLICE-P02 decisions: contract package synchronization missing');
 if(!index.includes('| C12 |')) errors.push('SLICE-P02 decisions: C12 index row missing');
 
 const p02=readiness?.candidate_slices?.find(x=>x.id==='SLICE-P02');

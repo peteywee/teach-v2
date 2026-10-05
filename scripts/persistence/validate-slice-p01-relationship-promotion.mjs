@@ -40,7 +40,7 @@ if([...approvedExpected].some(x=>!approved.has(x))) errors.push('SLICE-P01 relat
 if(candidate.size!==candidateExpected.size || [...candidateExpected].some(x=>!candidate.has(x))) errors.push('SLICE-P01 relationship promotion: candidate relationship set drifted');
 if(readiness?.version!=='1.3.0' || readiness?.evidence_states?.relationship_promotion!=='PROVEN' || readiness?.evidence_states?.admission_rerun!=='PROVEN' || readiness?.evidence_states?.slice_p01_implementation!=='PROVEN' || readiness?.candidate_slices?.find(x=>x.id==='SLICE-P01')?.current_state!=='IMPLEMENTED') errors.push('SLICE-P01 relationship promotion: promotion must remain proven through readiness 1.3.0');
 if(!approvals.includes('## Part 21 — SLICE-P01 relationship semantic promotion') || !approvals.includes('| TEACH-K00 | 0.14.0 | 0.15.0 |') || !approvals.includes('| #24 |')) errors.push('SLICE-P01 relationship promotion: canonical approval ledger entry missing');
-const packageVersionOk=index.includes('- Package version: `0.16.0`');
+const packageVersionOk=index.includes('- Package version: `0.17.0`');
 const promotionSummaryOk=index.includes('K00 advances from `0.14.0` to `0.15.0`');
 if(!packageVersionOk || !promotionSummaryOk) errors.push('SLICE-P01 relationship promotion: contract package record missing');
 

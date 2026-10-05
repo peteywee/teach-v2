@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-C13",
   "class": "contract",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -11,7 +11,7 @@
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.4.0",
+    "approved_version": "1.5.0",
     "approved_on": "2026-10-04",
     "record": "contracts/APPROVAL-RECORD.md",
     "basis": "Owner explicitly approved C13 1.3.0 canonical lifecycle event definition (MembershipRevoked) by direct owner direction on 2026-10-04"
@@ -43,7 +43,7 @@
 | Contract ID        | C13                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.4.0                                                                                                                                                           |
+| Version            | 1.5.0                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
 | Approved by        | Patrick Craven (owner), 2026-10-04 — C13 1.3.0 canonical lifecycle event definition by direct owner direction |
@@ -100,7 +100,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **TEN-4** — Membership MUST be resolved from database-current state on every protected request.
 - **TEN-5** — Request bodies, query parameters, path parameters, client-set headers, frontend state, JWT claims, and user-editable metadata MUST NOT establish tenant or location authority.
 - **TEN-6** — A request with zero matching authorized scopes MUST fail closed.
-- **TEN-7** — A request where more than one scope could apply and the request does not unambiguously select one authorized scope MUST fail closed; the system MUST NOT fall back to a default or first-found scope (selection mechanism: see OQ-TEN-2; value Not yet verified).
+- **TEN-7** — A request MUST carry an explicit organization/location scope as a typed tuple, validated against the actor's current membership; a request with zero, multiple, or ambiguous scope selections MUST fail closed. The system MUST NOT fall back to a default or first-found scope. Transport encoding follows separate authority. Owner approved EXPLICIT_VALIDATED_SCOPE_TUPLE on 2026-10-05.
 - **TEN-8** — A request targeting an organization the actor has no active membership in MUST fail closed.
 - **TEN-9** — A request targeting a location outside the actor's active membership MUST fail closed.
 - **TEN-10** — Inactive or revoked memberships MUST confer no scope.
@@ -108,7 +108,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **TEN-12** — Reporting relationships MUST NOT grant membership, capability, or authority.
 - **TEN-13** — Every tenant-owned record MUST have exactly one non-null owning organization.
 - **TEN-14** — An actor in one tenant MUST NOT be able to read, modify, delete, or infer the existence of another tenant's protected data through any API path.
-- **TEN-15** — The membership model (single-location compatibility or normalized multi-location) MUST be the one the owner approves (see OQ-TEN-1; value Not yet verified).
+- **TEN-15** — The membership model is `NORMALIZED_MULTI_ORGANIZATION_MULTI_LOCATION`: normalized multi-organization, multi-location membership. V1 single-location compatibility is not adopted. Exact Membership/Location/grant shapes require promotion and admission. Owner approved on 2026-10-05.
 - **TEN-16** — The Organization domain MUST own the canonical `Entitlement` entity and authoritative local entitlement state; billing/provider state MUST NOT be the application authority for entitlement.
 - **TEN-17** — A change to local entitlement state originating from billing/provider reconciliation MUST cross the Organization domain's registered command boundary; C63 MUST NOT directly mutate Organization-owned entitlement state.
 - **TEN-18** — A created membership MUST begin `ACTIVE`. The only permitted MembershipStatus transitions are `ACTIVE -> INACTIVE` and `INACTIVE -> REVOKED`; `REVOKED` is terminal. `DELETED` is not a MembershipStatus, and an unlisted transition MUST fail closed.
@@ -136,8 +136,8 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 | ID       | Question                                                                                                                                                 | Blocks implementation | Affects |
 | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ------- |
-| OQ-TEN-1 | Does v2 start with the Gate A single-location compatibility membership or a normalized multi-organization, multi-location membership model?              | Yes                   | TEN-15  |
-| OQ-TEN-2 | How does a request select its scope when an identity holds more than one membership (explicit path segment, header validated against membership, other)? | Yes                   | TEN-7   |
+| OQ-TEN-1 | **Resolved** Does v2 start with the Gate A single-location compatibility membership or a normalized multi-organization, multi-location membership model? | Yes                   | TEN-15  |
+| OQ-TEN-2 | **Resolved** How does a request select its scope when an identity holds more than one membership (explicit path segment, header validated against membership, other)? | Yes                   | TEN-7   |
 | OQ-TEN-3 | **Resolved** Does v2 keep platform-operator cross-tenant access? Owner approved NO_CROSS_TENANT_GRANTS on 2026-10-05. | No                    | NO_CROSS_TENANT_GRANTS |
 
 ## 7. Verification Status

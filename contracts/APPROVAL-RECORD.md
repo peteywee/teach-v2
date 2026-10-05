@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-05
-- Contract package version: `0.16.0`
+- Contract package version: `0.17.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -83,6 +83,14 @@ Open-question decisions are recorded here under SYS-34. The contracts were activ
 | C31 | OQ-CNT-1 | What versioning scheme applies to the schema and to packs? | SEMVER_SCHEMA_AND_PACK_IMMUTABLE_REFERENCES: Strict SemVer 2.0; immutable content; exact version/digest refs | 2026-10-05 | Patrick Craven |
 | C32 | OQ-LRN-3 | When a pack gets a new version, does in-progress learner history carry over, restart, or stay pinned? | PIN_EXISTING_HISTORY_TO_ASSIGNED_VERSION: History pinned to assigned version; new assignments select new version explicitly | 2026-10-05 | Patrick Craven |
 | C34 | OQ-CERT-4 | May an actor ever be both learner and observer for the same certification? | NO_SELF_OBSERVATION: Learner and observer must be distinct Identities | 2026-10-05 | Patrick Craven |
+
+| C11 | OQ-IDN-1 | Which password hashing algorithm and parameters are approved? | ARGON2ID_19M_T2_P1: Argon2id m>=19456 KiB, t>=2, p=1; benchmark backend before implementation | 2026-10-05 | Patrick Craven |
+| C11 | OQ-IDN-3 | Which sessions does a credential change revoke? | ALL_SESSIONS_ON_CREDENTIAL_CHANGE: revoke all sessions atomically with change + audit | 2026-10-05 | Patrick Craven |
+| C11 | OQ-IDN-4 | What is the OAuth linking rule? | EXPLICIT_REAUTHENTICATED_LINKING: verified provider-subject link only; email match insufficient; reauthentication required | 2026-10-05 | Patrick Craven |
+| C13 | OQ-TEN-1 | Normalized multi-org/multi-location or V1 single-location compat? | NORMALIZED_MULTI_ORGANIZATION_MULTI_LOCATION | 2026-10-05 | Patrick Craven |
+| C13 | OQ-TEN-2 | How does a request select its scope? | EXPLICIT_VALIDATED_SCOPE_TUPLE: explicit org/location in typed request, validated; reject ambiguous | 2026-10-05 | Patrick Craven |
+| C33 | OQ-MGR-1 | Is manager visibility limited to direct reports, whole location, or configurable? | DIRECT_REPORTS_WITHIN_APPROVED_SCOPE: direct reports intersected with scope; never grants capabilities | 2026-10-05 | Patrick Craven |
+| C34 | OQ-CERT-1 | Is credential verification public or private? | PRIVATE_AUTHENTICATED_SCOPED_VERIFICATION: private, authenticated, scoped | 2026-10-05 | Patrick Craven |
 
 ## Part 2 — Contract approvals
 

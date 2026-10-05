@@ -2537,7 +2537,7 @@
     {
       "workflow_path": ".github/workflows/workflow-lifecycle-closure.yml",
       "workflow_name": "Workflow Lifecycle Closure",
-      "workflow_sha256": "96429e11633e52519bfa7383f1b952a7d7b0122ed4cee1c1a8d29f0f053b2538",
+      "workflow_sha256": "774da2bff92278380a974ce37cb3fba347892c2b60a44078fb2aa01e00d36445",
       "job_id": "close-workflow",
       "job_name": "close-workflow",
       "has_service_setup": false,
