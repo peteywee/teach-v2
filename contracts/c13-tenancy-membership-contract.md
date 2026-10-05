@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-C13",
   "class": "contract",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -11,7 +11,7 @@
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.3.0",
+    "approved_version": "1.4.0",
     "approved_on": "2026-10-04",
     "record": "contracts/APPROVAL-RECORD.md",
     "basis": "Owner explicitly approved C13 1.3.0 canonical lifecycle event definition (MembershipRevoked) by direct owner direction on 2026-10-04"
@@ -43,7 +43,7 @@
 | Contract ID        | C13                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.3.0                                                                                                                                                           |
+| Version            | 1.4.0                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
 | Approved by        | Patrick Craven (owner), 2026-10-04 — C13 1.3.0 canonical lifecycle event definition by direct owner direction |
@@ -138,7 +138,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ------- |
 | OQ-TEN-1 | Does v2 start with the Gate A single-location compatibility membership or a normalized multi-organization, multi-location membership model?              | Yes                   | TEN-15  |
 | OQ-TEN-2 | How does a request select its scope when an identity holds more than one membership (explicit path segment, header validated against membership, other)? | Yes                   | TEN-7   |
-| OQ-TEN-3 | Does v2 keep platform-operator cross-tenant access? Until decided, no role holds cross-tenant capability.                                                | No                    | —       |
+| OQ-TEN-3 | **Resolved** Does v2 keep platform-operator cross-tenant access? Owner approved NO_CROSS_TENANT_GRANTS on 2026-10-05. | No                    | NO_CROSS_TENANT_GRANTS |
 
 ## 7. Verification Status
 

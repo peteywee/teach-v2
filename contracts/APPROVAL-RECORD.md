@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -25,8 +25,8 @@
 
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
-- Last updated: 2026-10-04
-- Contract package version: `0.15.0`
+- Last updated: 2026-10-05
+- Contract package version: `0.16.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -77,6 +77,12 @@ Open-question decisions are recorded here under SYS-34. The contracts were activ
 | C52 | OQ-REL-1 | Owner-selected policy value | Supabase PostgreSQL + Vercel; no provisioning/deployment permission | 2026-10-04 | Patrick Craven |
 | C52 | OQ-REL-4 | Owner-selected policy value | 24-hour rollback support; migrations backward-compatible for full window | 2026-10-04 | Patrick Craven |
 | C53 | OQ-OBS-3 | Owner-selected policy value | 90-day operational logs; separate canonical audit policy; mechanism UNKNOWN | 2026-10-04 | Patrick Craven |
+
+| C13 | OQ-TEN-3 | Does v2 keep platform-operator cross-tenant access? | NO_CROSS_TENANT_GRANTS: No role holds cross-tenant capability; platform-operator cross-tenant access absent | 2026-10-05 | Patrick Craven |
+| C14 | OQ-AUTHZ-2 | Which cross-tenant platform capabilities, if any, exist in v2, and what audit do they require? | NO_CROSS_TENANT_GRANTS: No cross-tenant platform grants; V1 platform_operator not imported | 2026-10-05 | Patrick Craven |
+| C31 | OQ-CNT-1 | What versioning scheme applies to the schema and to packs? | SEMVER_SCHEMA_AND_PACK_IMMUTABLE_REFERENCES: Strict SemVer 2.0; immutable content; exact version/digest refs | 2026-10-05 | Patrick Craven |
+| C32 | OQ-LRN-3 | When a pack gets a new version, does in-progress learner history carry over, restart, or stay pinned? | PIN_EXISTING_HISTORY_TO_ASSIGNED_VERSION: History pinned to assigned version; new assignments select new version explicitly | 2026-10-05 | Patrick Craven |
+| C34 | OQ-CERT-4 | May an actor ever be both learner and observer for the same certification? | NO_SELF_OBSERVATION: Learner and observer must be distinct Identities | 2026-10-05 | Patrick Craven |
 
 ## Part 2 — Contract approvals
 

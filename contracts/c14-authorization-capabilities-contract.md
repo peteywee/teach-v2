@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-C14",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -11,7 +11,7 @@
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.1.0",
+    "approved_version": "1.2.0",
     "approved_on": "2026-10-03",
     "record": "contracts/APPROVAL-RECORD.md",
     "basis": "Owner explicitly approved C14 1.1.0 through domain-ownership approval token; GitHub issue #2"
@@ -43,7 +43,7 @@
 | Contract ID        | C14                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.1.0                                                                                                                                                           |
+| Version            | 1.2.0                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
 | Approved by        | Patrick Craven (owner), 2026-10-03 — C14 1.1.0 domain-ownership approval; see `APPROVAL-RECORD.md` and GitHub issue #2 |
@@ -110,7 +110,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **AUTHZ-17** — Every sensitive mutation MUST be evaluated with both actor scope and target scope.
 - **AUTHZ-18** — Every capability addition or change MUST ship with negative tests proving denial for actors that lack it, in the same change.
 - **AUTHZ-19** — The capability vocabulary and role bundles MUST be the owner-approved set (see OQ-AUTHZ-1; value Not yet verified).
-- **AUTHZ-20** — A role MUST NOT hold a cross-tenant capability unless the owner approves it (see OQ-AUTHZ-2; value Not yet verified).
+- **AUTHZ-20** — A role MUST NOT hold a cross-tenant capability. Owner approved NO_CROSS_TENANT_GRANTS on 2026-10-05: no cross-tenant platform grants exist; V1 platform_operator grants are not imported.
 - **AUTHZ-21** — Authorization MUST treat entitlement as a read-only input loaded from authoritative Organization-owned state; authorization code MUST NOT create or mutate entitlement state.
 
 ## 5. Acceptance Cases
@@ -136,7 +136,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | ID         | Question                                                                                                                  | Blocks implementation | Affects  |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------- | --------------------- | -------- |
 | OQ-AUTHZ-1 | Is the Gate A capability vocabulary and bundle table (accepted 2026-07-22) adopted verbatim for v2, amended, or replaced? | Yes                   | AUTHZ-19 |
-| OQ-AUTHZ-2 | Which cross-tenant platform capabilities, if any, exist in v2, and what audit do they require?                            | No                    | AUTHZ-20 |
+| OQ-AUTHZ-2 | **Resolved** Which cross-tenant platform capabilities, if any, exist in v2, and what audit do they require? | No                    | AUTHZ-20 (approved 2026-10-05) |
 
 ## 7. Verification Status
 

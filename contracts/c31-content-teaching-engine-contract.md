@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-C31",
   "class": "contract",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -43,7 +43,7 @@
 | Contract ID        | C31                                                                                                                                                             |
 | Group              | C30 Product Semantics                                                                                                                                           |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.0.3                                                                                                                                                           |
+| Version            | 1.1.0                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
 | Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
@@ -89,7 +89,7 @@ Related contracts: C00, C14, C32, C33.
 The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Requirement IDs are stable and MUST NOT be renumbered or reused.
 
 - **CNT-1** — Exactly one canonical content-pack schema MUST exist.
-- **CNT-2** — The schema MUST be versioned, and every pack MUST declare the schema version it conforms to (see OQ-CNT-1; value Not yet verified).
+- **CNT-2** — The schema MUST be versioned using strict SemVer 2.0, and every pack MUST declare the exact schema version it conforms to. Published content is immutable. All references MUST use exact version/digest. Owner approved SEMVER_SCHEMA_AND_PACK_IMMUTABLE_REFERENCES on 2026-10-05.
 - **CNT-3** — A pack MUST pass validation against its declared schema version before it can be published or assigned.
 - **CNT-4** — An invalid pack MUST NOT be served, assigned, or used by the engine.
 - **CNT-5** — Legacy formats MUST be accepted only through explicit adapters, each registered as compatibility code under C00.
@@ -119,7 +119,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 | ID       | Question                                                                            | Blocks implementation | Affects |
 | -------- | ----------------------------------------------------------------------------------- | --------------------- | ------- |
-| OQ-CNT-1 | What versioning scheme applies to the schema and to packs (semver, integer, other)? | No                    | CNT-2   |
+| OQ-CNT-1 | **Resolved** What versioning scheme applies to the schema and to packs (semver, integer, other)? | No                    | CNT-2 (approved 2026-10-05) |
 | OQ-CNT-2 | Where are customer content approvals recorded, and who may record one?              | No                    | CNT-11  |
 | OQ-CNT-3 | Which legacy pack formats must v2 accept through adapters?                          | No                    | —       |
 
