@@ -36,3 +36,5 @@ Next: register selected owner choices through SYS-21; prepare dependency-ready M
 Physical inventory remains 8 tables / 5 migrations / 8 repositories / 5 implemented slices. No controlling authority, admission or migration is changed by this batch. P06/P07/P08, runtime activation and shared/production execution remain BLOCKED. Legacy mechanisms accelerate recovery; legacy approval never resolves a V2 question.
 
 External guidance consulted: [OWASP Password Storage](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html) for the proposed Argon2id minimum; [SemVer 2.0](https://semver.org/) for leading-zero and immutable-version rules. These support proposals/tests, not owner approval.
+
+Follow-up: [owner policy registration #66](../owner-decisions/2026-10-04/review.md) resolves five question values after this V1 recovery baseline. The live [owner-decisions.md](owner-decisions.md) now contains 61 unresolved questions / 18 explicit blockers. The 66/19 counts above describe the original recovery batch; V1 sources/probe results are unchanged.

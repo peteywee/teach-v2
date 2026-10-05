@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -34,7 +34,7 @@
 
 # Teach v2 Contracts
 
-- Package version: `0.14.0`
+- Package version: `0.15.0`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
@@ -100,32 +100,32 @@ the requirement that keeps the feature off applies.
 
 ## Index
 
-| ID  | Contract                                                                                            | Version | Prefix  | Requirements | Acceptance cases | Open questions | Blocking implementation | Status   |
+| ID  | Contract                                                                                            | Version | Prefix  | Requirements | Acceptance cases | Unresolved questions | Blocking implementation | Status   |
 | --- | --------------------------------------------------------------------------------------------------- | ------- | ------- | ------------ | ---------------- | -------------- | ----------------------- | -------- |
-| C00 | [System Authority](c00-system-authority-contract.md)                                                | 1.0.3   | `SYS`   | 34           | 20               | 6              | 0                       | `active` |
-| C01 | [Canonical Semantics](c01-canonical-semantics-contract.md)                                          | 1.8.0   | `SEM`   | 36           | 25               | 0              | 0                       | `active` |
-| C02 | [Automation & Agent Authority](c02-automation-agent-authority-contract.md)                          | 1.0.3   | `AGT`   | 17           | 13               | 3              | 0                       | `active` |
-| C11 | [Identity & Credentials](c11-identity-credentials-contract.md)                                      | 1.3.0   | `IDN`   | 29           | 22               | 7              | 3                       | `active` |
-| C12 | [Application Sessions](c12-application-sessions-contract.md)                                        | 1.1.0   | `SES`   | 20           | 14               | 5              | 4                       | `active` |
-| C13 | [Tenancy & Membership](c13-tenancy-membership-contract.md)                                          | 1.3.0   | `TEN`   | 19           | 13               | 3              | 2                       | `active` |
-| C14 | [Authorization & Capabilities](c14-authorization-capabilities-contract.md)                          | 1.1.0   | `AUTHZ` | 21           | 13               | 2              | 1                       | `active` |
-| C15 | [Data Isolation & Privacy](c15-data-isolation-privacy-contract.md)                                  | 1.0.3   | `PRIV`  | 17           | 10               | 6              | 3                       | `active` |
-| C21 | [Database & Migration](c21-database-migration-contract.md)                                          | 1.1.0   | `MIG`   | 14           | 9                | 3              | 0                       | `active` |
-| C22 | [Transaction, Idempotency & Reconciliation](c22-transaction-idempotency-reconciliation-contract.md) | 1.2.0   | `TXN`   | 16           | 12               | 1              | 0                       | `active` |
-| C23 | [Audit & Lifecycle Events](c23-audit-lifecycle-events-contract.md)                                  | 1.0.3   | `AUD`   | 10           | 8                | 3              | 1                       | `active` |
-| C31 | [Content & Teaching Engine](c31-content-teaching-engine-contract.md)                                | 1.0.3   | `CNT`   | 12           | 9                | 3              | 0                       | `active` |
-| C32 | [Learning Sessions & Progress](c32-learning-sessions-progress-contract.md)                          | 1.1.0   | `LRN`   | 13           | 11               | 2              | 0                       | `active` |
-| C33 | [Manager Operations](c33-manager-operations-contract.md)                                            | 1.0.3   | `MGR`   | 10           | 8                | 2              | 1                       | `active` |
-| C34 | [Certification & Credentials](c34-certification-credentials-contract.md)                            | 1.0.3   | `CERT`  | 15           | 7                | 5              | 2                       | `active` |
-| C41 | [Application / Command / API Boundary](c41-api-boundary-contract.md)                                | 1.0.3   | `API`   | 15           | 11               | 3              | 1                       | `active` |
-| C42 | [Web Client Boundary](c42-web-client-boundary-contract.md)                                          | 1.0.3   | `WEB`   | 15           | 10               | 2              | 1                       | `active` |
-| C51 | [Verification & Evidence](c51-verification-evidence-contract.md)                                    | 1.0.3   | `EVD`   | 16           | 7                | 3              | 0                       | `active` |
-| C52 | [Deployment, Release & Recovery](c52-deployment-release-recovery-contract.md)                       | 1.1.0   | `REL`   | 16           | 9                | 3              | 0                       | `active` |
-| C53 | [Observability](c53-observability-contract.md)                                                      | 1.0.3   | `OBS`   | 10           | 8                | 3              | 0                       | `active` |
-| C61 | [Analytics](c61-analytics-contract.md)                                                              | 1.0.3   | `ANL`   | 8            | 7                | 2              | 0                       | `active` |
-| C62 | [PWA / Offline](c62-pwa-offline-contract.md)                                                        | 1.0.3   | `PWA`   | 9            | 4                | 1              | 0                       | `active` |
-| C63 | [Self-Service Billing](c63-billing-contract.md)                                                     | 1.1.0   | `BIL`   | 14           | 12               | 3              | 0                       | `active` |
-|     | **Total**                                                                                           |         |         | **386**      | **262**          | **71**         | **19**                  |          |
+| C00 | [System Authority](c00-system-authority-contract.md) | 1.0.3 | `SYS` | 34 | 20 | 3 | 0 | `active` |
+| C01 | [Canonical Semantics](c01-canonical-semantics-contract.md) | 1.8.0 | `SEM` | 36 | 25 | 0 | 0 | `active` |
+| C02 | [Automation & Agent Authority](c02-automation-agent-authority-contract.md) | 1.0.3 | `AGT` | 17 | 13 | 3 | 0 | `active` |
+| C11 | [Identity & Credentials](c11-identity-credentials-contract.md) | 1.4.0 | `IDN` | 30 | 23 | 4 | 3 | `active` |
+| C12 | [Application Sessions](c12-application-sessions-contract.md) | 1.1.0 | `SES` | 20 | 14 | 5 | 4 | `active` |
+| C13 | [Tenancy & Membership](c13-tenancy-membership-contract.md) | 1.3.0 | `TEN` | 19 | 13 | 3 | 2 | `active` |
+| C14 | [Authorization & Capabilities](c14-authorization-capabilities-contract.md) | 1.1.0 | `AUTHZ` | 21 | 13 | 2 | 1 | `active` |
+| C15 | [Data Isolation & Privacy](c15-data-isolation-privacy-contract.md) | 1.0.3 | `PRIV` | 17 | 10 | 6 | 3 | `active` |
+| C21 | [Database & Migration](c21-database-migration-contract.md) | 1.1.0 | `MIG` | 14 | 9 | 3 | 0 | `active` |
+| C22 | [Transaction, Idempotency & Reconciliation](c22-transaction-idempotency-reconciliation-contract.md) | 1.2.0 | `TXN` | 16 | 12 | 1 | 0 | `active` |
+| C23 | [Audit & Lifecycle Events](c23-audit-lifecycle-events-contract.md) | 1.1.0 | `AUD` | 11 | 9 | 2 | 0 | `active` |
+| C31 | [Content & Teaching Engine](c31-content-teaching-engine-contract.md) | 1.0.3 | `CNT` | 12 | 9 | 3 | 0 | `active` |
+| C32 | [Learning Sessions & Progress](c32-learning-sessions-progress-contract.md) | 1.1.0 | `LRN` | 13 | 11 | 2 | 0 | `active` |
+| C33 | [Manager Operations](c33-manager-operations-contract.md) | 1.0.3 | `MGR` | 10 | 8 | 2 | 1 | `active` |
+| C34 | [Certification & Credentials](c34-certification-credentials-contract.md) | 1.0.3 | `CERT` | 15 | 7 | 5 | 2 | `active` |
+| C41 | [Application / Command / API Boundary](c41-api-boundary-contract.md) | 1.0.3 | `API` | 15 | 11 | 3 | 1 | `active` |
+| C42 | [Web Client Boundary](c42-web-client-boundary-contract.md) | 1.0.3 | `WEB` | 15 | 10 | 2 | 1 | `active` |
+| C51 | [Verification & Evidence](c51-verification-evidence-contract.md) | 1.0.3 | `EVD` | 16 | 7 | 3 | 0 | `active` |
+| C52 | [Deployment, Release & Recovery](c52-deployment-release-recovery-contract.md) | 1.2.0 | `REL` | 18 | 11 | 1 | 0 | `active` |
+| C53 | [Observability](c53-observability-contract.md) | 1.1.0 | `OBS` | 11 | 9 | 2 | 0 | `active` |
+| C61 | [Analytics](c61-analytics-contract.md) | 1.0.3 | `ANL` | 8 | 7 | 2 | 0 | `active` |
+| C62 | [PWA / Offline](c62-pwa-offline-contract.md) | 1.0.3 | `PWA` | 9 | 4 | 1 | 0 | `active` |
+| C63 | [Self-Service Billing](c63-billing-contract.md) | 1.1.0 | `BIL` | 14 | 12 | 3 | 0 | `active` |
+|     | **Total** | | | **391** | **267** | **61** | **18** | |
 
 ## K00 semantic-kernel bootstrap
 
@@ -316,3 +316,9 @@ Package `0.13.0` records the owner-approved production-proof policy decisions fr
 ## SLICE-P02 owner decisions
 
 Package `0.14.0` records the owner-approved SLICE-P02 persistence-shape decisions from GitHub issue #32. C12 advances from `1.0.3` to `1.1.0`, resolving OQ-SES-3 as `SESSION_VERIFIER_V1_SHA256_256BIT` and OQ-SES-4 as `ABSOLUTE_12H_IDLE_30M`. The P02 ownership/scope decision is recorded as `IDENTITY_GLOBAL_PRINCIPAL_SESSION_IDENTITY_OWNED`. This package authorizes only the fresh Persistence Model admission evaluation; it does not itself authorize a table, migration, repository, cookie, route, or runtime session implementation.
+
+## Package 0.15.0 — Selected policies and owner-packet reconciliation
+
+SYS-21 issue #66 registers five explicit policy selections: C11 1.4.0 PIN parameters; C23 1.1.0 one-year central audit retention with deletion BLOCKED; C52 1.2.0 Supabase PostgreSQL + Vercel and 24-hour rollback compatibility; C53 1.1.0 90-day operational logs. Prior versions are preserved. Privacy/cookies/error providers remain drafts or recommendations; exact capability matrix #67 and privacy review #68 remain open. No physical/runtime/production authority changes.
+
+The index now consistently counts unresolved question rows from active contracts, excluding resolved rows. Current totals are 391 requirements / 267 acceptance cases / 61 unresolved questions / 18 explicit blockers; prior index summaries remain historical. See the live decision packet and registration for implementation proof limits.

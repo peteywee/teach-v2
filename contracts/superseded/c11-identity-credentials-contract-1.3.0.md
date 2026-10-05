@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C11",
   "class": "contract",
-  "version": "1.4.0",
+  "version": "1.3.0",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-04",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.4.0",
+    "approved_version": "1.3.0",
     "approved_on": "2026-10-04",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Explicit owner-selected policy values in chat; SYS-21 issue #66; implementation conformance remains separate"
+    "basis": "Owner explicitly approved dependency lifecycle closure decisions through approval token; GitHub issue #12"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -29,14 +29,17 @@
     "use": "reference only; does not govern and is not governed by this contract"
   },
   "supersedes": [
-    "TEACH-CON-C11@1.3.0"
+    "TEACH-CON-C11@1.2.0"
   ],
-  "superseded_by": null,
+  "superseded_by": "TEACH-CON-C11@1.4.0",
   "depends_on": [
     "contracts/"
   ]
 }
 -->
+
+> Superseded by TEACH-CON-C11@1.4.0 through #66. The original body below is preserved, including its former current-status wording.
+
 
 # C11 — Identity & Credentials Contract
 
@@ -45,17 +48,17 @@
 | Contract ID        | C11                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.4.0 |
+| Version            | 1.3.0                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by | Patrick Craven (owner), 2026-10-04 — selected policy values; SYS-21 issue #66 |
+| Approved by        | Patrick Craven (owner), 2026-10-04 — C11 1.3.0 dependency lifecycle closure; GitHub issue #12 |
 | Requirement prefix | `IDN`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/identity-access.json` (identity half); session half moves to C12.                                   |
-| Supersedes | C11 1.3.0 |
+| Supersedes         | C11 1.2.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated | 2026-10-04 |
+| Last updated       | 2026-10-04                                                                                                                                                      |
 
 ## 1. Purpose and Failure Prevented
 
@@ -129,8 +132,6 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **IDN-29** — SetupToken and PasswordResetToken lifecycle transitions MUST NOT emit a canonical business event unless a later active owning-domain contract explicitly defines one under C01 SEM-35; required audit records remain governed by C23.
 
 
-- **IDN-30** — The selected frontline PIN parameters MUST be 6 digits, 5 attempts, and a 15-minute lock. This policy selection MUST NOT enable PIN authentication; PIN authentication MUST remain unavailable until its implementation and applicable C11/C12/C14/C23 evidence gates pass. Existing salted-hash-only, learner credential control, and offboarding requirements remain binding.
-
 ## 5. Acceptance Cases
 
 | Case      | Proves         | Setup                                                                                                              | Expected                                                                                                                      |
@@ -157,7 +158,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | IDN-AC-20 | IDN-26 | Consume, revoke, and expire SetupToken and PasswordResetToken; then replay each terminal token | Only ACTIVE→CONSUMED/REVOKED/EXPIRED succeeds; every replay fails with no side effect |
 | IDN-AC-21 | IDN-20 | Attempt InviteIdentity for an offboarded identity email before ReactivateIdentity, then after explicit reactivation | First attempt rejects with no Invitation/token; after explicit reactivation normal invitation rules apply |
 | IDN-AC-22 | IDN-27 | Accept an Invitation while instrumenting all Membership writes | Invitation becomes ACCEPTED; membership change occurs only through CreateMembership; no Identity-owned direct Membership write occurs |
-| IDN-AC-23 | IDN-30 | Review the selected PIN policy and attempt PIN authentication before implementation | Parameters are 6 digits / 5 attempts / 15-minute lock; no PIN authentication path is enabled by the policy record |
+
 
 ## 6. Open Questions
 
@@ -168,25 +169,25 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | OQ-IDN-3 | Which sessions does a credential change revoke: all sessions, all other sessions, or another policy?                                                  | Yes                   | IDN-15  |
 | OQ-IDN-4 | What is the OAuth linking rule: verified-email match, explicit user-initiated linking only, or another rule?                                          | Yes                   | IDN-2   |
 | OQ-IDN-5 | Resolved: controlled rejection. An offboarded identity must be explicitly reactivated through ReactivateIdentity before a new invitation may be created. | No | IDN-20, IDN-27 |
-| OQ-IDN-6 | Resolved: PIN parameters selected as 6 digits, 5 attempts, 15-minute lock. PIN authentication remains unavailable until implementation and all applicable authentication gates pass. | No (resolved) | — |
+| OQ-IDN-6 | Are PINs an approved frontline credential type in v2, and if so what are their length and lockout rules?                                              | No                    | —       |
 | OQ-IDN-7 | Must password-reset and invitation responses be indistinguishable for registered and unregistered emails?                                             | No                    | —       |
 
 ## 7. Verification Status
 
 | Item                         | State                    | Detail                                                                                                                                                                                                                                                |
 | ---------------------------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Target codebase | verified (limited scope) | Consulted current V2 main 3fe92889aa55fa4a69d3b1e28c3a1211719b1b3f: foundation source and governance inspected for issue #66. Source inspection is not deployed conformance. |
-| Legacy repository consulted | reference only | Historical lineage is preserved in the superseded version and pinned V1 recovery records. No V1 policy/grants are adopted by issue #66; the new capability matrix is governed separately by #67. |
-| Implementation conformance | partial foundations / UNKNOWN runtime | Identity, ApplicationSession, single-use-secret and Credential persistence foundations exist. Full authentication/authorization/audit runtime conformance remains UNKNOWN; PIN hashing, attempt/lock/reset and transport implementation are absent. |
-| Acceptance cases implemented | structural / UNKNOWN operational | Policy selection/acceptance declarations are checked structurally; existing foundation/isolated PostgreSQL proofs cover their recorded scope. IDN-AC-23 operational PIN acceptance remains UNKNOWN. |
+| Target codebase              | verified (limited scope) | `peteywee/teach-v2` default branch `main`, verified through governance baseline commit `292e8da9123987e9d94f09669c7bc6b6d43c4320` on 2026-10-03. The repository contains the contract/governance foundation; application implementation remains not yet built.                                |
+| Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
+| Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
+| Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
 | Blocking open questions      | 3 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
-| Owner approval | declared | 1.4.0 approved policy selections recorded under #66; no runtime conformance, provisioning, deletion or production authority is inferred. |
-| Independent review | not performed | No independent reviewer is claimed for this revision; self-audit supplements review and does not replace independent verification. |
-| Source of intent | declared | Explicit owner policy selections supplied on 2026-10-04 America/Chicago, recorded through issue #66 and APPROVAL-RECORD.md. Other attachment recommendations/drafts remain unapproved. |
+| Owner approval               | declared                 | C11 1.2.0 approved by Patrick Craven on 2026-10-04 by direct owner direction (canonical lifecycle event definitions). |
+| Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
+| Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
 ## 8. Change Log
 
-| Version | Date | Change | By |
+| Version | Date       | Change                                                                                                                                                                                          | By               |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Aligned with C01: `Offboarded` no longer asserted to be a status value; IDN-18 now refers to the offboarded outcome pending C01 OQ-SEM-2.                                                       | Claude (drafter) |
@@ -199,4 +200,3 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.1.0   | 2026-10-03 | Approved bootstrap IdentityStatus transition graph; offboarding now explicitly results in INACTIVE; DELETED ingress remains fail-closed pending C15 privacy semantics. GitHub issue #4. | Patrick Craven (owner approval) |
 | 1.2.0   | 2026-10-04 | Defined canonical lifecycle events for deactivation and reactivation: IDN-22 requires `IdentityDeactivated` on non-offboarding `ACTIVE -> INACTIVE`; IDN-23 requires `IdentityReactivated` on `INACTIVE -> ACTIVE`. | Patrick Craven (owner direction) |
 | 1.3.0   | 2026-10-04 | Resolved invitation/single-use-token lifecycle semantics, token lifetimes, offboarded-email invitation rule, and cross-domain invitation acceptance boundary. GitHub issue #12. | Patrick Craven (owner approval) |
-| 1.4.0 | 2026-10-04 | Record owner-selected OQ-IDN-6 policy values, append requirement/acceptance cases and preserve prior version; SYS-21 #66. No runtime implementation or production permission. | Patrick Craven (owner selection) |

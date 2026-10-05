@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C23",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.0.3",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-04",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.1.0",
-    "approved_on": "2026-10-04",
+    "approved_version": "1.0.0",
+    "approved_on": "2026-10-03",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Explicit owner-selected policy values in chat; SYS-21 issue #66; implementation conformance remains separate"
+    "inheritance": "1.0.1, 1.0.2, and 1.0.3 are non-normative governance/truth-state cleanup patches; 1.0.0 owner approval remains controlling"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,15 +28,16 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": [
-    "TEACH-CON-C23@1.0.3"
-  ],
-  "superseded_by": null,
+  "supersedes": [],
+  "superseded_by": "TEACH-CON-C23@1.1.0",
   "depends_on": [
     "contracts/"
   ]
 }
 -->
+
+> Superseded by TEACH-CON-C23@1.1.0 through #66. The original body below is preserved, including its former current-status wording.
+
 
 # C23 — Audit & Lifecycle Events Contract
 
@@ -45,17 +46,17 @@
 | Contract ID        | C23                                                                                                                                                             |
 | Group              | C20 Data Correctness                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.1.0 |
+| Version            | 1.0.3                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by | Patrick Craven (owner), 2026-10-04 — selected policy values; SYS-21 issue #66 |
+| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
 | Requirement prefix | `AUD`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/analytics-audit.json` (audit half); analytics moves to C61.                                         |
-| Supersedes | C23 1.0.3 |
+| Supersedes         | None                                                                                                                                                            |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated | 2026-10-04 |
+| Last updated       | 2026-10-03                                                                                                                                                      |
 
 ## 1. Purpose and Failure Prevented
 
@@ -98,8 +99,6 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **AUD-9** — Audit records MUST NOT be analytics events; they MUST be stored and transported separately, and analytics failure MUST NOT affect audit writes.
 - **AUD-10** — Reading audit records MUST require an audit-read capability and MUST be tenant-scoped per C13 and C14.
 
-- **AUD-11** — The audit-retention policy MUST be one year, fixed centrally, with no tenant overrides. Selecting this duration MUST NOT authorize audit deletion or weaken AUD-4/AUD-6. Audit deletion remains BLOCKED; the retention clock, privileged expiry mechanism and conformance evidence require a separate implementation/admission review. C15 privacy/exemption drafts do not become approved through this selection.
-
 ## 5. Acceptance Cases
 
 | Case     | Proves       | Setup                                                                          | Expected                                                    |
@@ -112,13 +111,12 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | AUD-AC-6 | AUD-8        | Trigger designated denial types                                                | Recorded with result = denied, distinguishable from success |
 | AUD-AC-7 | AUD-9        | Disable analytics pipeline; perform audited mutations                          | Audit writes succeed; no audit records in analytics store   |
 | AUD-AC-8 | AUD-10       | Tenant A actor with and without audit capability reads audit                   | Without: 403; with: only tenant A records                   |
-| AUD-AC-9 | AUD-4, AUD-6, AUD-11 | Review retention policy; attempt tenant override or application DELETE; inspect expiry mechanism evidence | One-year central policy; tenant overrides and application deletion denied; deletion remains BLOCKED and absent retention mechanism remains UNKNOWN |
 
 ## 6. Open Questions
 
 | ID       | Question                                                                         | Blocks implementation | Affects |
 | -------- | -------------------------------------------------------------------------------- | --------------------- | ------- |
-| OQ-AUD-1 | Resolved: one-year audit retention; fixed central policy with no tenant overrides. Audit deletion remains BLOCKED. | No (resolved) | — |
+| OQ-AUD-1 | How long are audit records retained, and is retention per tenant configurable?   | Yes                   | —       |
 | OQ-AUD-2 | For which entities must current state be reconstructable from lifecycle history? | No                    | AUD-7   |
 | OQ-AUD-3 | Which denial types are operationally significant enough to record?               | No                    | AUD-8   |
 
@@ -126,18 +124,18 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 | Item                         | State                    | Detail                                                                                                                                                                                                                                                |
 | ---------------------------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Target codebase | verified (limited scope) | Consulted current V2 main 3fe92889aa55fa4a69d3b1e28c3a1211719b1b3f: foundation source and governance inspected for issue #66. Source inspection is not deployed conformance. |
-| Legacy repository consulted | reference only | Historical lineage is preserved in the superseded version and pinned V1 recovery records. No V1 policy/grants are adopted by issue #66; the new capability matrix is governed separately by #67. |
-| Implementation conformance | partial foundations / UNKNOWN runtime | Required-audit Application ports and Identity/session transaction mechanics have unit/disposable PostgreSQL probe evidence. Admitted AuditEvent storage, real append adapter and one-year retention clock/executor evidence remain absent or UNKNOWN; deletion BLOCKED. |
-| Acceptance cases implemented | structural / UNKNOWN operational | Existing transaction probe tests prove mechanics only. AUD-AC-9 policy/permission declarations are structural; real audit persistence privileges and retention enforcement remain UNKNOWN. |
-| Blocking open questions | 0 open | OQ-AUD-1 duration/configurability resolved; audit physical admission, required adapter, privacy semantics and retention mechanism remain separately gated. |
-| Owner approval | declared | 1.1.0 approved policy selections recorded under #66; no runtime conformance, provisioning, deletion or production authority is inferred. |
-| Independent review | not performed | No independent reviewer is claimed for this revision; self-audit supplements review and does not replace independent verification. |
-| Source of intent | declared | Explicit owner policy selections supplied on 2026-10-04 America/Chicago, recorded through issue #66 and APPROVAL-RECORD.md. Other attachment recommendations/drafts remain unapproved. |
+| Target codebase              | verified (limited scope) | `peteywee/teach-v2` default branch `main`, verified through governance baseline commit `292e8da9123987e9d94f09669c7bc6b6d43c4320` on 2026-10-03. The repository contains the contract/governance foundation; application implementation remains not yet built.                                |
+| Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
+| Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
+| Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
+| Blocking open questions      | 1 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
+| Owner approval               | declared                 | Approved by the owner on 2026-10-03; recorded in `APPROVAL-RECORD.md`. Initial owner-approval baseline is commit `2c9b1c849a520ba817efc91150be9a37797f4238`; this 1.0.3 revision is tracked by Git history.                                                                     |
+| Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
+| Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
 ## 8. Change Log
 
-| Version | Date | Change | By |
+| Version | Date       | Change                                                                                                                                                                                          | By               |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Group renamed to C20 Data Correctness. No requirement changes.                                                                                                                                  | Claude (drafter) |
@@ -147,4 +145,3 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.1   | 2026-10-03 | Non-normative document-governance metadata/provenance normalization; 1.0.0 owner approval remained controlling. | ChatGPT (governance) |
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
-| 1.1.0 | 2026-10-04 | Record owner-selected OQ-AUD-1 policy values, append requirement/acceptance cases and preserve prior version; SYS-21 #66. No runtime implementation or production permission. | Patrick Craven (owner selection) |
