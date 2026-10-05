@@ -5,7 +5,7 @@
 import { execFileSync } from 'node:child_process';
 import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { join, relative, resolve, sep } from 'node:path';
 
 const ROOT = resolve(new URL('.', import.meta.url).pathname, '../..');
 const results = [];
@@ -14,7 +14,9 @@ function scratch() {
   const dir = mkdtempSync(join(tmpdir(), 'pin-guard-'));
   cpSync(ROOT, dir, {
     recursive: true,
-    filter: (src) => !src.includes('/.git'),
+    // The pins lane uses only repository files and Node built-ins. Copying the
+    // installed dependency tree ten times exhausts the bounded CI stage.
+    filter: (src) => !relative(ROOT, src).split(sep).some(part => part === '.git' || part === 'node_modules'),
   });
   return dir;
 }
