@@ -156,7 +156,7 @@ test(
     replaceOrThrow(
       dir,
       'scripts/governance/validate-strict-nine-ratification.mjs',
-      "!index.includes('\"version\": \"0.16.0\"') || !index.includes('- Package version: `0.16.0`')",
+      "!index.includes('\"version\": \"0.17.0\"') || !index.includes('- Package version: `0.17.0`')",
       "!index.includes('\"version\": \"0.13.0\"') || !index.includes('- Package version: `0.13.0`')",
     );
   },
