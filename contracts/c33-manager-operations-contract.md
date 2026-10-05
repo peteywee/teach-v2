@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-C33",
   "class": "contract",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -43,7 +43,7 @@
 | Contract ID        | C33                                                                                                                                                             |
 | Group              | C30 Product Semantics                                                                                                                                           |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.0.3                                                                                                                                                           |
+| Version            | 1.1.0                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
 | Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
@@ -89,7 +89,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 - **MGR-1** — Manager capability MUST be separate from reporting relationships.
 - **MGR-2** — Managers MUST act only within their authorized organization and location scope.
-- **MGR-3** — Reporting relationships MAY narrow which learners a manager can see and MUST NOT grant capabilities (see OQ-MGR-1; value Not yet verified).
+- **MGR-3** — Manager visibility is `DIRECT_REPORTS_WITHIN_APPROVED_SCOPE`: a manager sees only their direct reports intersected with their current organization/location scope. Reporting relationships narrow visibility and MUST NOT grant capabilities. Owner approved on 2026-10-05.
 - **MGR-4** — Team reads MUST derive from authoritative membership and scope.
 - **MGR-5** — Each manager action MUST require its own capability.
 - **MGR-6** — Managers MUST see only persisted learner state.
@@ -115,7 +115,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 | ID       | Question                                                                                | Blocks implementation | Affects |
 | -------- | --------------------------------------------------------------------------------------- | --------------------- | ------- |
-| OQ-MGR-1 | Is manager visibility limited to direct reports, the whole location, or configurable?   | Yes                   | MGR-3   |
+| OQ-MGR-1 | **Resolved** Is manager visibility limited to direct reports, the whole location, or configurable? | Yes                   | MGR-3   |
 | OQ-MGR-2 | May managers offboard directly, or only request offboarding for an operator to approve? | No                    | —       |
 
 ## 7. Verification Status

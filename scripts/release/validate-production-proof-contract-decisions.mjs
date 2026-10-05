@@ -59,7 +59,7 @@ if (!c52.includes('SHA-256 of the sorted canonical manifest') || !c52.includes('
   errors.push('production proof decisions: C52 configuration-identity semantics drifted');
 }
 
-if (!index.includes('"version": "0.16.0"') || !index.includes('- Package version: `0.16.0`')) {
+if (!index.includes('"version": "0.17.0"') || !index.includes('- Package version: `0.17.0`')) {
   errors.push('production proof decisions: contract package must be 0.16.0');
 }
 if (!index.includes('| C21 |') || !index.includes('| 1.1.0 | `MIG`') || !index.includes('| 1.2.0 | `REL`')) {

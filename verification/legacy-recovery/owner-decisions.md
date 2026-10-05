@@ -2,7 +2,7 @@
 
 Consulted V2 main: `3fe92889aa55fa4a69d3b1e28c3a1211719b1b3f`. Live-source projection and proposal packet; recommendations are not approvals.
 
-**56 unresolved contract questions / 18 explicitly blocking rows / 12 physical-shape placeholders / 71 candidate entries.** These inventories overlap. A nonblocking row can still block its dependent feature.
+**49 unresolved contract questions / 11 explicitly blocking rows / 12 physical-shape placeholders / 71 candidate entries.** These inventories overlap. A nonblocking row can still block its dependent feature.
 
 Five selected policy questions were registered separately through [issue #66](https://github.com/peteywee/teach-v2/issues/66): OQ-IDN-6, OQ-AUD-1, OQ-REL-1, OQ-REL-4, OQ-OBS-3. See [registration and review](../owner-decisions/2026-10-04/review.md). Runtime, deletion, analytics, provisioning and production remain gated.
 
@@ -10,13 +10,6 @@ Five selected policy questions were registered separately through [issue #66](ht
 
 | ID | Proposed option | What it affects |
 | --- | --- | --- |
-| OQ-IDN-1 | ARGON2ID_19M_T2_P1 | IDN-5 |
-| OQ-IDN-3 | ALL_SESSIONS_ON_CREDENTIAL_CHANGE | IDN-15 |
-| OQ-IDN-4 | EXPLICIT_REAUTHENTICATED_LINKING | IDN-2 |
-| OQ-TEN-1 | NORMALIZED_MULTI_ORGANIZATION_MULTI_LOCATION | TEN-15 |
-| OQ-TEN-2 | EXPLICIT_VALIDATED_SCOPE_TUPLE | TEN-7 |
-| OQ-MGR-1 | DIRECT_REPORTS_WITHIN_APPROVED_SCOPE | MGR-3 |
-| OQ-CERT-1 | PRIVATE_AUTHENTICATED_SCOPED_VERIFICATION | CERT-13 |
 
 Exact capability matrix, privacy values and actual cookie/host selection remain unresolved. OQ-AUTHZ-1 records new V2 matrix direction only; no V1 grants are adopted. Sentry and Vercel Analytics remain recommendations; certification approvers remain UNKNOWN.
 
@@ -42,9 +35,6 @@ Exact capability matrix, privacy values and actual cookie/host selection remain 
 
 | ID | Blocking row | Exact unresolved question | Proposed choice or required input |
 | --- | --- | --- | --- |
-| OQ-IDN-1 | Yes | Which password hashing algorithm and parameters are approved? | Argon2id minimum m=19456 KiB, t=2, p=1, unique random salts and versioned encoded hashes; benchmark the approved backend before implementation. V1 bcrypt is reference only, with its explicit 72-byte guard. |
-| OQ-IDN-3 | Yes | Which sessions does a credential change revoke: all sessions, all other sessions, or another policy? | Revoke every session for the Identity atomically with successful credential change and audit; require a new sign-in. This is a proposed owner choice, not current authority. |
-| OQ-IDN-4 | Yes | What is the OAuth linking rule: verified-email match, explicit user-initiated linking only, or another rule? | Use existing verified provider-subject links; matching email alone cannot link or create a duplicate Identity. Linking to an existing Identity requires explicit user initiation and reauthentication. |
 | OQ-IDN-7 | No | Must password-reset and invitation responses be indistinguishable for registered and unregistered emails? | Use indistinguishable accepted responses for known/unknown email, with bounded abuse controls and no existence disclosure. |
 
 ### C12
@@ -56,13 +46,6 @@ Exact capability matrix, privacy values and actual cookie/host selection remain 
 | OQ-SES-5 | Yes | Is `SameSite` alone the approved CSRF control, or is an additional mechanism (token, origin check) required? | Require a canonical allowed Origin for unsafe cookie-authenticated requests, including logout. Missing, foreign, malformed or null origins deny before writes. |
 | OQ-SES-6 | Yes | On which events must the session credential rotate (sign-in, privilege change, other)? | Issue a fresh credential at successful sign-in and privilege elevation; never upgrade a pre-authentication credential. Implement rotation/revocation atomically. |
 | OQ-SES-7 | No | Is there a limit on concurrent sessions per identity? | Propose no count limit initially; preserve expiry/revocation controls. A later limit needs explicit selection and deterministic eviction semantics. |
-
-### C13
-
-| ID | Blocking row | Exact unresolved question | Proposed choice or required input |
-| --- | --- | --- | --- |
-| OQ-TEN-1 | Yes | Does v2 start with the Gate A single-location compatibility membership or a normalized multi-organization, multi-location membership model? | Choose normalized multi-organization, multi-location membership rather than V1 single-location compatibility. Exact Membership/Location/grant shapes still require promotion and admission. |
-| OQ-TEN-2 | Yes | How does a request select its scope when an identity holds more than one membership (explicit path segment, header validated against membership, other)? | Require explicit organization/location scope in the typed request, validated against current membership; reject zero, multiple or ambiguous selections. Transport encoding follows separate authority. |
 
 ### C14
 
@@ -119,14 +102,12 @@ Exact capability matrix, privacy values and actual cookie/host selection remain 
 
 | ID | Blocking row | Exact unresolved question | Proposed choice or required input |
 | --- | --- | --- | --- |
-| OQ-MGR-1 | Yes | Is manager visibility limited to direct reports, the whole location, or configurable? | Propose direct reports intersected with current organization/location scope; reporting relationships narrow visibility and never create capabilities. |
 | OQ-MGR-2 | No | May managers offboard directly, or only request offboarding for an operator to approve? | Propose manager offboarding only with its dedicated capability and canonical Identity service; global/multi-tenant effects need explicit policy before grants. |
 
 ### C34
 
 | ID | Blocking row | Exact unresolved question | Proposed choice or required input |
 | --- | --- | --- | --- |
-| OQ-CERT-1 | Yes | Is credential verification public (anyone with the link) or private (authenticated, scoped)? (Deferred by Gate A.) | Propose private, authenticated and scoped certification verification initially. A public link feature requires a separate approved disclosure model. |
 | OQ-CERT-2 | Yes | Who approves certification criteria versions, and where is approval recorded? | Propose version/digest-bound criteria approvals in Certification-owned records, with designated authorized customer approvers and audit. |
 | OQ-CERT-3 | No | What evidence types are acceptable (observation notes, checklist, photo, other)? | Propose structured checklist results and scoped observation notes first; photo uploads require separate storage/privacy/retention decisions. |
 | OQ-CERT-5 | No | Do certifications expire, and if so how is expiry represented? | Propose no automatic expiry initially; if expiry is desired, owner must approve its representation, effects and history/revocation rules. |
