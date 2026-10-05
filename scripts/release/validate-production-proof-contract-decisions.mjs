@@ -65,7 +65,7 @@ if (!index.includes('"version": "0.16.0"') || !index.includes('- Package version
 if (!index.includes('| C21 |') || !index.includes('| 1.1.0 | `MIG`') || !index.includes('| 1.2.0 | `REL`')) {
   errors.push('production proof decisions: C21/C52 index versions not synchronized');
 }
-if (!index.includes('**391**') || !index.includes('**267**') || !index.includes('**61**') || !index.includes('**18**')) {
+if (!index.includes('**391**') || !index.includes('**267**') || !index.includes('**56**') || !index.includes('**18**')) {
   errors.push('production proof decisions: contract totals not synchronized');
 }
 if (!approvals.includes('- Contract package version: `0.16.0`') || !approvals.includes('## Part 22 — Production-proof owner decisions')) {
