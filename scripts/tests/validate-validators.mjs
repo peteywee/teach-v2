@@ -13,6 +13,7 @@
 // Usage: node scripts/tests/validate-validators.mjs
 // Exit 0 = all tests pass. Exit 1 = at least one test failed.
 
+import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -20,12 +21,18 @@ import { join, resolve } from "node:path";
 
 const ROOT = resolve(new URL(".", import.meta.url).pathname, "../..");
 const results = [];
+const shardArg = process.argv.slice(2);
+if (shardArg.length > 1 || shardArg.length === 1 && !/^--shard=[1-9][0-9]*\/[1-9][0-9]*$/.test(shardArg[0])) throw new Error('only --shard=index/total is supported');
+const [shardIndex, shardTotal] = shardArg.length ? shardArg[0].slice(8).split('/').map(Number) : [1,1];
+if (shardIndex > shardTotal || shardTotal > 32) throw new Error('invalid validator shard');
+let inventoryCount=0;
+const inventoryNames=[];
 
 function scratch() {
   const dir = mkdtempSync(join(tmpdir(), "negtest-"));
   cpSync(ROOT, dir, {
     recursive: true,
-    filter: (src) => !/(^|\/)\.git(?:\/|$)/.test(src) && !/(^|\/)node_modules(?:\/|$)/.test(src),
+    filter: (src) => !/(^|\/)\.git(?:\/|$)/.test(src) && !/(^|\/)node_modules(?:\/|$)/.test(src) && !src.includes("/verification/generated/"),
   });
   return dir;
 }
@@ -44,6 +51,7 @@ function runValidator(dir, script) {
       cwd: dir,
       encoding: "utf8",
       stdio: ["ignore", "pipe", "pipe"],
+      timeout: 5000,
     });
     return { exit: 0, output: out };
   } catch (e) {
@@ -52,6 +60,9 @@ function runValidator(dir, script) {
 }
 
 function test(name, script, mutate, expect) {
+  inventoryNames.push(name);
+  const ordinal=inventoryCount++;
+  if(ordinal % shardTotal !== shardIndex-1) return;
   const dir = scratch();
   try {
     mutate(dir);
@@ -1048,6 +1059,20 @@ test('integration: future snapshot table cannot precede admission',integrationSc
 test('integration: path-filtered physical proof workflow fails',integrationScript,(dir)=>{const path='.github/workflows/slice-p01-implementation.yml';writeFileSync(join(dir,path),readFileSync(join(dir,path),'utf8').replace('pull_request:',"pull_request:\n    paths: ['src/**']"));},{pattern:/physical proofs must run on every PR and main tree/});
 test('integration: missing future evidence plan fails',integrationScript,(dir)=>{const path='persistence/physical-slices/queue-post-p05.json';const d=readJson(dir,path);d.slices[1].evidence_plan=null;writeJson(dir,path,d);},{pattern:/evidence plan is required/});
 
+// Development automation stays distinct from runtime authorization.
+const selfAuditScript='scripts/verification/validate-development-self-audit.mjs';
+const selfAuditWorkflow='.github/workflows/development-self-audit.yml';
+const mutateText=(dir,path,from,to)=>writeFileSync(join(dir,path),readFileSync(join(dir,path),'utf8').replace(from,to));
+test('self-audit: bounded complete automatic workflow passes',selfAuditScript,()=>{},{pass:true});
+test('self-audit: production permission cannot be inferred',selfAuditScript,(dir)=>{const path='verification/whole-repository/self-audit-plan.json';const d=readJson(dir,path);d.shared_or_production_execution_authorized=true;writeJson(dir,path,d);},{pattern:/exact bounded/});
+test('self-audit: unbounded command plan fails',selfAuditScript,(dir)=>{const path='verification/whole-repository/self-audit-plan.json';const d=readJson(dir,path);d.stages[0].timeout_ms=60000;writeJson(dir,path,d);},{pattern:/exact bounded/});
+test('self-audit: omitted CI checkpoint fails',selfAuditScript,(dir)=>mutateText(dir,selfAuditWorkflow,'--stage typecheck','--stage invented'),{pattern:/complete ordered/});
+test('self-audit: stale checkout cannot claim candidate proof',selfAuditScript,(dir)=>mutateText(dir,selfAuditWorkflow,'ref: ${{ github.event.pull_request.head.sha || github.sha }}','ref: main'),{pattern:/exact candidate/});
+test('self-audit: filtered automation fails',selfAuditScript,(dir)=>mutateText(dir,selfAuditWorkflow,'pull_request:',"pull_request:\n    paths: ['src/**']"),{pattern:/every PR/});
+test('self-audit: missing failure finalizer fails',selfAuditScript,(dir)=>mutateText(dir,selfAuditWorkflow,'if: always()','if: success()'),{pattern:/finalize and be retained/});
+test('self-audit: missing command PG evidence fails',selfAuditScript,(dir)=>mutateText(dir,'.github/workflows/slice-p02-implementation.yml','run: pnpm test:identity:commands:integration','run: echo skipped'),{pattern:/atomic Identity integration/});
+test('self-audit: missing transaction-bound audit connection fails',selfAuditScript,(dir)=>mutateText(dir,'src/modules/identity/infrastructure/persistence/postgres-identity-command-transaction.ts','bindings.audit(transaction)','bindings.audit(this.db)'),{pattern:/exact-transaction binding/});
+
 // Report
 // ---------------------------------------------------------------------------
 
@@ -1060,4 +1085,5 @@ for (const r of results) {
   }
 }
 console.log(`\n${results.length - failed}/${results.length} negative-path tests passed.`);
+console.log(`Validator inventory: ${inventoryCount}; shard: ${shardIndex}/${shardTotal}; selected: ${results.length}; digest: ${createHash("sha256").update(JSON.stringify(inventoryNames)).digest("hex")}`);
 process.exit(failed ? 1 : 0);

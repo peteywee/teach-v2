@@ -1,0 +1,189 @@
+{
+  "version": "0.1.0",
+  "scope": "development checks only; runtime and production authority remain separate",
+  "max_operation_ms": 25000,
+  "shell_execution": false,
+  "full_runtime_conformance": "UNKNOWN",
+  "runtime_activation": "BLOCKED",
+  "shared_or_production_execution_authorized": false,
+  "stages": [
+    {
+      "id": "authority",
+      "command": "node",
+      "args": [
+        "scripts/architecture/validate-whole-repository.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "pins",
+      "command": "node",
+      "args": [
+        "scripts/packaging/validate-apply-guards.mjs",
+        "pins"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "target-snapshots",
+      "command": "node",
+      "args": [
+        "--test",
+        "scripts/tests/validate-isolated-database-target.mjs",
+        "scripts/tests/validate-persistence-input-snapshots.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "production-denials",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-production-proof.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "migration-guards",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-migration-history-guards.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "apply-regressions",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-apply-guard-regressions.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-1",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=1/3"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-2",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=2/3"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-3",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=3/3"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "audit-regressions",
+      "command": "node",
+      "args": [
+        "--test",
+        "scripts/tests/validate-development-self-audit.test.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "typecheck",
+      "command": "pnpm",
+      "args": [
+        "typecheck"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "foundation",
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "tsx",
+        "--test"
+      ],
+      "timeout_ms": 25000,
+      "discover_tests": "src/modules"
+    },
+    {
+      "id": "generation",
+      "command": "pnpm",
+      "args": [
+        "db:verify-p05-generation"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "replay",
+      "command": "pnpm",
+      "args": [
+        "db:verify-p05-replay"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "migrate-isolated",
+      "command": "pnpm",
+      "args": [
+        "db:migrate"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "postgres-p01",
+      "command": "pnpm",
+      "args": [
+        "test:integration"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "postgres-p02",
+      "command": "pnpm",
+      "args": [
+        "test:p02:integration"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "postgres-identity-commands",
+      "command": "pnpm",
+      "args": [
+        "test:identity:commands:integration"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "postgres-p03",
+      "command": "pnpm",
+      "args": [
+        "test:p03:integration"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "postgres-p04",
+      "command": "pnpm",
+      "args": [
+        "test:p04:integration"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "postgres-p05",
+      "command": "pnpm",
+      "args": [
+        "test:p05:integration"
+      ],
+      "timeout_ms": 25000
+    }
+  ]
+}

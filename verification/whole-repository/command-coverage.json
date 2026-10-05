@@ -81,8 +81,8 @@
       "artifacts": [],
       "tests": [],
       "missing_obligations": [
-        "atomic token consumption, credential change and all-session revocation",
-        "authoritative scope/capability and audit"
+        "OQ-IDN-1 password hashing policy and OQ-IDN-3 session revocation decision remain owner gates",
+        "Atomic token consumption, credential mutation, owner-approved session revocation, authorization and required audit remain unimplemented"
       ]
     },
     {
@@ -196,15 +196,23 @@
           "path": "src/modules/identity/infrastructure/persistence/postgres-identity-repository.ts",
           "symbol": "deactivate",
           "kind": "repository-foundation"
+        },
+        {
+          "path": "src/modules/identity/application/identity-lifecycle-service.ts",
+          "symbol": "deactivateIdentity",
+          "kind": "application-foundation"
         }
       ],
       "tests": [
         "src/modules/identity/domain/identity.test.ts",
-        "tests/integration/identity/identity-session-repository.test.ts"
+        "tests/integration/identity/identity-session-repository.test.ts",
+        "src/modules/identity/application/identity-lifecycle-service.test.ts",
+        "tests/integration/identity/identity-command-transaction.test.ts"
       ],
       "missing_obligations": [
-        "Required event/audit and protected Application command are not composed",
-        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+        "Authoritative C14 backend actor, capability and scope adapter remains absent; fixture authorization is not conformance",
+        "Admitted AuditEvent storage and a real transaction-bound audit adapter remain absent; disposable probe proves rollback mechanics only",
+        "Canonical DomainEvent publication, transport composition and replay/idempotency conformance remain unknown"
       ]
     },
     {
@@ -322,15 +330,23 @@
           "path": "src/modules/identity/infrastructure/persistence/postgres-identity-repository.ts",
           "symbol": "reactivate",
           "kind": "repository-foundation"
+        },
+        {
+          "path": "src/modules/identity/application/identity-lifecycle-service.ts",
+          "symbol": "reactivateIdentity",
+          "kind": "application-foundation"
         }
       ],
       "tests": [
         "src/modules/identity/domain/identity.test.ts",
-        "tests/integration/identity/identity-session-repository.test.ts"
+        "tests/integration/identity/identity-session-repository.test.ts",
+        "src/modules/identity/application/identity-lifecycle-service.test.ts",
+        "tests/integration/identity/identity-command-transaction.test.ts"
       ],
       "missing_obligations": [
-        "Required event/audit and protected Application command are not composed",
-        "Full C14 protected operation registry, capability and scope conformance remains unknown"
+        "Authoritative C14 backend actor, capability and scope adapter remains absent; fixture authorization is not conformance",
+        "Admitted AuditEvent storage and a real transaction-bound audit adapter remain absent; disposable probe proves rollback mechanics only",
+        "Canonical DomainEvent publication, transport composition and replay/idempotency conformance remain unknown"
       ]
     },
     {

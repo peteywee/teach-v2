@@ -1,6 +1,6 @@
 import { snapshotPersistenceInput } from './input-snapshot.mjs';
 import { and, eq, sql } from 'drizzle-orm';
-import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import type { IdentityDatabase } from './identity-database.js';
 import {
   IdentityNotFoundError,
   IdentityTransitionConflictError,
@@ -11,7 +11,6 @@ import {
   type IdentityRecord,
   type IdentityStatus,
 } from '../../domain/identity.js';
-import * as schema from './schema.js';
 import {
   applicationSessions,
   identities,
@@ -19,7 +18,7 @@ import {
 } from './schema.js';
 
 export class PostgresIdentityRepository implements IdentityRepository {
-  constructor(private readonly db: NodePgDatabase<typeof schema>) {}
+  constructor(private readonly db: IdentityDatabase) {}
 
   async create(input: { readonly id: string; readonly now: Date }): Promise<IdentityRecord> {
     input = snapshotPersistenceInput(input);
@@ -118,7 +117,7 @@ export class PostgresIdentityRepository implements IdentityRepository {
 }
 
 async function lockIdentityStatus(
-  tx: Parameters<Parameters<NodePgDatabase<typeof schema>['transaction']>[0]>[0],
+  tx: Parameters<Parameters<IdentityDatabase['transaction']>[0]>[0],
   id: string,
 ): Promise<IdentityStatus | null> {
   const result = await tx.execute(
