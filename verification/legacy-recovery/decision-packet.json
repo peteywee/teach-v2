@@ -13,13 +13,8 @@
     "OQ-IDN-4",
     "OQ-TEN-1",
     "OQ-TEN-2",
-    "OQ-TEN-3",
-    "OQ-AUTHZ-2",
-    "OQ-CNT-1",
-    "OQ-LRN-3",
     "OQ-MGR-1",
-    "OQ-CERT-1",
-    "OQ-CERT-4"
+    "OQ-CERT-1"
   ],
   "not_selection_ready_without_more_detail": [
     "OQ-AUTHZ-1",
@@ -91,7 +86,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c02-automation-agent-authority-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-IDN-1",
@@ -131,7 +126,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c11-identity-credentials-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-SES-1",
@@ -181,7 +176,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c12-application-sessions-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-TEN-1",
@@ -204,16 +199,6 @@
       "affects": "TEN-7"
     },
     {
-      "id": "OQ-TEN-3",
-      "group": "Foundation",
-      "recommended_option": "NO_CROSS_TENANT_GRANTS",
-      "recommendation": "Keep platform cross-tenant access absent initially. Global Identity lifecycle authority in a multi-tenant model needs a separately reviewed scope/actor policy.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c13-tenancy-membership-contract.md",
-      "affects": "—"
-    },
-    {
       "id": "OQ-AUTHZ-1",
       "group": "Foundation",
       "recommended_option": "NEW_V2_MATRIX_PENDING_EXACT_APPROVAL",
@@ -224,16 +209,6 @@
       "affects": "AUTHZ-19"
     },
     {
-      "id": "OQ-AUTHZ-2",
-      "group": "Foundation",
-      "recommended_option": "NO_CROSS_TENANT_GRANTS",
-      "recommendation": "Approve no cross-tenant platform grants initially; do not import V1 platform_operator grants or role aliases.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c14-authorization-capabilities-contract.md",
-      "affects": "AUTHZ-20"
-    },
-    {
       "id": "OQ-PRIV-1",
       "group": "Privacy",
       "recommended_option": "OWNER_ERASURE_AND_HISTORY_MATRIX_REQUIRED",
@@ -241,7 +216,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-PRIV-2",
@@ -271,7 +246,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-PRIV-5",
@@ -281,7 +256,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-PRIV-6",
@@ -291,7 +266,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-MIG-3",
@@ -311,7 +286,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c21-database-migration-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-MIG-5",
@@ -321,7 +296,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c21-database-migration-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-TXN-2",
@@ -331,7 +306,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c22-transaction-idempotency-reconciliation-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-AUD-2",
@@ -354,16 +329,6 @@
       "affects": "AUD-8"
     },
     {
-      "id": "OQ-CNT-1",
-      "group": "Foundation",
-      "recommended_option": "SEMVER_SCHEMA_AND_PACK_IMMUTABLE_REFERENCES",
-      "recommendation": "Propose strict SemVer 2.0 for schema and pack versions, immutable published content and exact version/digest references. Do not copy V1 version helper leading-zero acceptance. Physical ContentVersion binding remains a separate shape gate.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c31-content-teaching-engine-contract.md",
-      "affects": "CNT-2"
-    },
-    {
       "id": "OQ-CNT-2",
       "group": "Content",
       "recommended_option": "CONTENT_APPROVAL_LEDGER_WITH_CUSTOMER_AUTHORITY",
@@ -381,7 +346,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c31-content-teaching-engine-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-LRN-2",
@@ -392,16 +357,6 @@
       "owner_approval_recorded": false,
       "authority_source": "contracts/c32-learning-sessions-progress-contract.md",
       "affects": "LRN-13"
-    },
-    {
-      "id": "OQ-LRN-3",
-      "group": "Foundation",
-      "recommended_option": "PIN_EXISTING_HISTORY_TO_ASSIGNED_VERSION",
-      "recommendation": "Existing sessions/history stay pinned to their assigned content version; new assignments use an explicitly selected new version without rewriting past evidence.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c32-learning-sessions-progress-contract.md",
-      "affects": "—"
     },
     {
       "id": "OQ-MGR-1",
@@ -421,7 +376,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c33-manager-operations-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-CERT-1",
@@ -454,16 +409,6 @@
       "affects": "CERT-7"
     },
     {
-      "id": "OQ-CERT-4",
-      "group": "Certification",
-      "recommended_option": "NO_SELF_OBSERVATION",
-      "recommendation": "Propose learner and observer must be distinct Identities for the same certification.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c34-certification-credentials-contract.md",
-      "affects": "CERT-15"
-    },
-    {
       "id": "OQ-CERT-5",
       "group": "Certification",
       "recommended_option": "NO_IMPLICIT_EXPIRY",
@@ -471,7 +416,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c34-certification-credentials-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-API-1",
@@ -481,7 +426,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c41-api-boundary-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-API-2",
@@ -521,7 +466,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c42-web-client-boundary-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-EVD-1",
@@ -541,7 +486,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c51-verification-evidence-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-EVD-3",
@@ -551,7 +496,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c51-verification-evidence-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-REL-3",
@@ -591,7 +536,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c61-analytics-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-ANL-2",
@@ -621,7 +566,7 @@
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c63-billing-contract.md",
-      "affects": "—"
+      "affects": "\u2014"
     },
     {
       "id": "OQ-BIL-2",

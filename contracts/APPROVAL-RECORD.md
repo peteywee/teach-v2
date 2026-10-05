@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.16.0",
+  "version": "0.15.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-05
-- Contract package version: `0.16.0`
+- Contract package version: `0.15.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 

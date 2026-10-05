@@ -136,7 +136,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | ID         | Question                                                                                                                  | Blocks implementation | Affects  |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------- | --------------------- | -------- |
 | OQ-AUTHZ-1 | Is the Gate A capability vocabulary and bundle table (accepted 2026-07-22) adopted verbatim for v2, amended, or replaced? | Yes                   | AUTHZ-19 |
-| OQ-AUTHZ-2 | Which cross-tenant platform capabilities, if any, exist in v2, and what audit do they require?                            | No                    | AUTHZ-20 (approved 2026-10-05) |
+| OQ-AUTHZ-2 | **Resolved** Which cross-tenant platform capabilities, if any, exist in v2, and what audit do they require? | No                    | AUTHZ-20 (approved 2026-10-05) |
 
 ## 7. Verification Status
 

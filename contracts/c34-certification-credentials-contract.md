@@ -43,7 +43,7 @@
 | Contract ID        | C34                                                                                                                                                             |
 | Group              | C30 Product Semantics                                                                                                                                           |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.0.3                                                                                                                                                           |
+| Version            | 1.1.0                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
 | Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
@@ -123,7 +123,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | OQ-CERT-1 | Is credential verification public (anyone with the link) or private (authenticated, scoped)? (Deferred by Gate A.) | Yes                   | CERT-13 |
 | OQ-CERT-2 | Who approves certification criteria versions, and where is approval recorded?                                      | Yes                   | CERT-4  |
 | OQ-CERT-3 | What evidence types are acceptable (observation notes, checklist, photo, other)?                                   | No                    | CERT-7  |
-| OQ-CERT-4 | May an actor ever be both learner and observer for the same certification?                                         | No                    | CERT-15 (approved 2026-10-05) |
+| OQ-CERT-4 | **Resolved** May an actor ever be both learner and observer for the same certification? | No                    | CERT-15 (approved 2026-10-05) |
 | OQ-CERT-5 | Do certifications expire, and if so how is expiry represented?                                                     | No                    | —       |
 
 ## 7. Verification Status

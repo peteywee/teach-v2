@@ -2,7 +2,7 @@
 
 Consulted V2 main: `3fe92889aa55fa4a69d3b1e28c3a1211719b1b3f`. Live-source projection and proposal packet; recommendations are not approvals.
 
-**61 unresolved contract questions / 18 explicitly blocking rows / 12 physical-shape placeholders / 71 candidate entries.** These inventories overlap. A nonblocking row can still block its dependent feature.
+**56 unresolved contract questions / 18 explicitly blocking rows / 12 physical-shape placeholders / 71 candidate entries.** These inventories overlap. A nonblocking row can still block its dependent feature.
 
 Five selected policy questions were registered separately through [issue #66](https://github.com/peteywee/teach-v2/issues/66): OQ-IDN-6, OQ-AUD-1, OQ-REL-1, OQ-REL-4, OQ-OBS-3. See [registration and review](../owner-decisions/2026-10-04/review.md). Runtime, deletion, analytics, provisioning and production remain gated.
 
@@ -15,13 +15,8 @@ Five selected policy questions were registered separately through [issue #66](ht
 | OQ-IDN-4 | EXPLICIT_REAUTHENTICATED_LINKING | IDN-2 |
 | OQ-TEN-1 | NORMALIZED_MULTI_ORGANIZATION_MULTI_LOCATION | TEN-15 |
 | OQ-TEN-2 | EXPLICIT_VALIDATED_SCOPE_TUPLE | TEN-7 |
-| OQ-TEN-3 | NO_CROSS_TENANT_GRANTS | — |
-| OQ-AUTHZ-2 | NO_CROSS_TENANT_GRANTS | AUTHZ-20 |
-| OQ-CNT-1 | SEMVER_SCHEMA_AND_PACK_IMMUTABLE_REFERENCES | CNT-2 |
-| OQ-LRN-3 | PIN_EXISTING_HISTORY_TO_ASSIGNED_VERSION | — |
 | OQ-MGR-1 | DIRECT_REPORTS_WITHIN_APPROVED_SCOPE | MGR-3 |
 | OQ-CERT-1 | PRIVATE_AUTHENTICATED_SCOPED_VERIFICATION | CERT-13 |
-| OQ-CERT-4 | NO_SELF_OBSERVATION | CERT-15 |
 
 Exact capability matrix, privacy values and actual cookie/host selection remain unresolved. OQ-AUTHZ-1 records new V2 matrix direction only; no V1 grants are adopted. Sentry and Vercel Analytics remain recommendations; certification approvers remain UNKNOWN.
 
@@ -68,14 +63,12 @@ Exact capability matrix, privacy values and actual cookie/host selection remain 
 | --- | --- | --- | --- |
 | OQ-TEN-1 | Yes | Does v2 start with the Gate A single-location compatibility membership or a normalized multi-organization, multi-location membership model? | Choose normalized multi-organization, multi-location membership rather than V1 single-location compatibility. Exact Membership/Location/grant shapes still require promotion and admission. |
 | OQ-TEN-2 | Yes | How does a request select its scope when an identity holds more than one membership (explicit path segment, header validated against membership, other)? | Require explicit organization/location scope in the typed request, validated against current membership; reject zero, multiple or ambiguous selections. Transport encoding follows separate authority. |
-| OQ-TEN-3 | No | Does v2 keep platform-operator cross-tenant access? Until decided, no role holds cross-tenant capability. | Keep platform cross-tenant access absent initially. Global Identity lifecycle authority in a multi-tenant model needs a separately reviewed scope/actor policy. |
 
 ### C14
 
 | ID | Blocking row | Exact unresolved question | Proposed choice or required input |
 | --- | --- | --- | --- |
 | OQ-AUTHZ-1 | Yes | Is the Gate A capability vocabulary and bundle table (accepted 2026-07-22) adopted verbatim for v2, amended, or replaced? | Owner selected creation of a new V2 capability matrix, not recovery of V1 grants; issue #67 must propose the exact command/capability/bundle matrix before owner approval can resolve this question. |
-| OQ-AUTHZ-2 | No | Which cross-tenant platform capabilities, if any, exist in v2, and what audit do they require? | Approve no cross-tenant platform grants initially; do not import V1 platform_operator grants or role aliases. |
 
 ### C15
 
@@ -113,7 +106,6 @@ Exact capability matrix, privacy values and actual cookie/host selection remain 
 
 | ID | Blocking row | Exact unresolved question | Proposed choice or required input |
 | --- | --- | --- | --- |
-| OQ-CNT-1 | No | What versioning scheme applies to the schema and to packs (semver, integer, other)? | Propose strict SemVer 2.0 for schema and pack versions, immutable published content and exact version/digest references. Do not copy V1 version helper leading-zero acceptance. Physical ContentVersion binding remains a separate shape gate. |
 | OQ-CNT-2 | No | Where are customer content approvals recorded, and who may record one? | Propose version/digest-bound approvals in Content-owned records, written only by an authorized customer approver; record actor/scope/time and required audit. |
 | OQ-CNT-3 | No | Which legacy pack formats must v2 accept through adapters? | Recover only named legacy formats with fixtures, version validation, deterministic conversion and removal conditions; no permissive catch-all parser. |
 
@@ -122,7 +114,6 @@ Exact capability matrix, privacy values and actual cookie/host selection remain 
 | ID | Blocking row | Exact unresolved question | Proposed choice or required input |
 | --- | --- | --- | --- |
 | OQ-LRN-2 | No | How are mastery, XP, streak, and rank derived from events? | Keep XP/mastery/streak/rank unavailable until exact versioned derivation formulas and replay evidence are owner-approved; persisted completion does not imply scoring. |
-| OQ-LRN-3 | No | When a pack gets a new version, does in-progress learner history carry over, restart, or stay pinned? | Existing sessions/history stay pinned to their assigned content version; new assignments use an explicitly selected new version without rewriting past evidence. |
 
 ### C33
 
@@ -138,7 +129,6 @@ Exact capability matrix, privacy values and actual cookie/host selection remain 
 | OQ-CERT-1 | Yes | Is credential verification public (anyone with the link) or private (authenticated, scoped)? (Deferred by Gate A.) | Propose private, authenticated and scoped certification verification initially. A public link feature requires a separate approved disclosure model. |
 | OQ-CERT-2 | Yes | Who approves certification criteria versions, and where is approval recorded? | Propose version/digest-bound criteria approvals in Certification-owned records, with designated authorized customer approvers and audit. |
 | OQ-CERT-3 | No | What evidence types are acceptable (observation notes, checklist, photo, other)? | Propose structured checklist results and scoped observation notes first; photo uploads require separate storage/privacy/retention decisions. |
-| OQ-CERT-4 | No | May an actor ever be both learner and observer for the same certification? | Propose learner and observer must be distinct Identities for the same certification. |
 | OQ-CERT-5 | No | Do certifications expire, and if so how is expiry represented? | Propose no automatic expiry initially; if expiry is desired, owner must approve its representation, effects and history/revocation rules. |
 
 ### C41

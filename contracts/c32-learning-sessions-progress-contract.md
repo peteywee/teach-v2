@@ -43,7 +43,7 @@
 | Contract ID        | C32                                                                                                                                                             |
 | Group              | C30 Product Semantics                                                                                                                                           |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.1.0                                                                                                                                                           |
+| Version            | 1.2.0                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
 | Approved by        | Patrick Craven (owner), 2026-10-03 — C32 1.1.0 state-machine approval; see `APPROVAL-RECORD.md` and GitHub issue #4 |
@@ -123,7 +123,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | -------- | ----------------------------------------------------------------------------------------------------- | --------------------- | ------- |
 | OQ-LRN-1 | Resolved 2026-10-03: bootstrap lifecycle is `ACTIVE -> COMPLETED`; progress events are allowed only in ACTIVE and COMPLETED is terminal. GitHub issue #4. | No | LRN-3 |
 | OQ-LRN-2 | How are mastery, XP, streak, and rank derived from events?                                            | No                    | LRN-13  |
-| OQ-LRN-3 | When a pack gets a new version, does in-progress learner history carry over, restart, or stay pinned? Owner approved PIN_EXISTING_HISTORY_TO_ASSIGNED_VERSION on 2026-10-05. | No                    | PIN_EXISTING_HISTORY_TO_ASSIGNED_VERSION |
+| OQ-LRN-3 | **Resolved** When a pack gets a new version, does in-progress learner history carry over, restart, or stay pinned? Owner approved PIN_EXISTING_HISTORY_TO_ASSIGNED_VERSION on 2026-10-05. | No                    | PIN_EXISTING_HISTORY_TO_ASSIGNED_VERSION |
 
 ## 7. Verification Status
 

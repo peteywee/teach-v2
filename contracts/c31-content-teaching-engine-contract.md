@@ -43,7 +43,7 @@
 | Contract ID        | C31                                                                                                                                                             |
 | Group              | C30 Product Semantics                                                                                                                                           |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.0.3                                                                                                                                                           |
+| Version            | 1.1.0                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
 | Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
@@ -119,7 +119,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 | ID       | Question                                                                            | Blocks implementation | Affects |
 | -------- | ----------------------------------------------------------------------------------- | --------------------- | ------- |
-| OQ-CNT-1 | What versioning scheme applies to the schema and to packs (semver, integer, other)? | No                    | CNT-2 (approved 2026-10-05) |
+| OQ-CNT-1 | **Resolved** What versioning scheme applies to the schema and to packs (semver, integer, other)? | No                    | CNT-2 (approved 2026-10-05) |
 | OQ-CNT-2 | Where are customer content approvals recorded, and who may record one?              | No                    | CNT-11  |
 | OQ-CNT-3 | Which legacy pack formats must v2 accept through adapters?                          | No                    | —       |
 

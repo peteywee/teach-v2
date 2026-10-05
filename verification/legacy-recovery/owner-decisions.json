@@ -6,7 +6,7 @@
   "runtime_activation": "BLOCKED",
   "shared_or_production_execution_authorized": false,
   "totals": {
-    "unresolved_contract_questions": 61,
+    "unresolved_contract_questions": 56,
     "explicit_contract_blockers": 18,
     "physical_shape_questions": 12,
     "semantic_candidates": 71
@@ -150,7 +150,7 @@
     {
       "id": "OQ-TEN-1",
       "contract": "contracts/c13-tenancy-membership-contract.md",
-      "contract_version": "1.3.0",
+      "contract_version": "1.4.0",
       "question": "Does v2 start with the Gate A single-location compatibility membership or a normalized multi-organization, multi-location membership model?",
       "explicitly_blocks_implementation": true,
       "affects": "TEN-15",
@@ -159,38 +159,20 @@
     {
       "id": "OQ-TEN-2",
       "contract": "contracts/c13-tenancy-membership-contract.md",
-      "contract_version": "1.3.0",
+      "contract_version": "1.4.0",
       "question": "How does a request select its scope when an identity holds more than one membership (explicit path segment, header validated against membership, other)?",
       "explicitly_blocks_implementation": true,
       "affects": "TEN-7",
       "source_line": 140
     },
     {
-      "id": "OQ-TEN-3",
-      "contract": "contracts/c13-tenancy-membership-contract.md",
-      "contract_version": "1.3.0",
-      "question": "Does v2 keep platform-operator cross-tenant access? Until decided, no role holds cross-tenant capability.",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 141
-    },
-    {
       "id": "OQ-AUTHZ-1",
       "contract": "contracts/c14-authorization-capabilities-contract.md",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "question": "Is the Gate A capability vocabulary and bundle table (accepted 2026-07-22) adopted verbatim for v2, amended, or replaced?",
       "explicitly_blocks_implementation": true,
       "affects": "AUTHZ-19",
       "source_line": 138
-    },
-    {
-      "id": "OQ-AUTHZ-2",
-      "contract": "contracts/c14-authorization-capabilities-contract.md",
-      "contract_version": "1.1.0",
-      "question": "Which cross-tenant platform capabilities, if any, exist in v2, and what audit do they require?",
-      "explicitly_blocks_implementation": false,
-      "affects": "AUTHZ-20",
-      "source_line": 139
     },
     {
       "id": "OQ-PRIV-1",
@@ -301,18 +283,9 @@
       "source_line": 123
     },
     {
-      "id": "OQ-CNT-1",
-      "contract": "contracts/c31-content-teaching-engine-contract.md",
-      "contract_version": "1.0.3",
-      "question": "What versioning scheme applies to the schema and to packs (semver, integer, other)?",
-      "explicitly_blocks_implementation": false,
-      "affects": "CNT-2",
-      "source_line": 122
-    },
-    {
       "id": "OQ-CNT-2",
       "contract": "contracts/c31-content-teaching-engine-contract.md",
-      "contract_version": "1.0.3",
+      "contract_version": "1.1.0",
       "question": "Where are customer content approvals recorded, and who may record one?",
       "explicitly_blocks_implementation": false,
       "affects": "CNT-11",
@@ -321,7 +294,7 @@
     {
       "id": "OQ-CNT-3",
       "contract": "contracts/c31-content-teaching-engine-contract.md",
-      "contract_version": "1.0.3",
+      "contract_version": "1.1.0",
       "question": "Which legacy pack formats must v2 accept through adapters?",
       "explicitly_blocks_implementation": false,
       "affects": "—",
@@ -330,20 +303,11 @@
     {
       "id": "OQ-LRN-2",
       "contract": "contracts/c32-learning-sessions-progress-contract.md",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "question": "How are mastery, XP, streak, and rank derived from events?",
       "explicitly_blocks_implementation": false,
       "affects": "LRN-13",
       "source_line": 125
-    },
-    {
-      "id": "OQ-LRN-3",
-      "contract": "contracts/c32-learning-sessions-progress-contract.md",
-      "contract_version": "1.1.0",
-      "question": "When a pack gets a new version, does in-progress learner history carry over, restart, or stay pinned?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 126
     },
     {
       "id": "OQ-MGR-1",
@@ -366,7 +330,7 @@
     {
       "id": "OQ-CERT-1",
       "contract": "contracts/c34-certification-credentials-contract.md",
-      "contract_version": "1.0.3",
+      "contract_version": "1.1.0",
       "question": "Is credential verification public (anyone with the link) or private (authenticated, scoped)? (Deferred by Gate A.)",
       "explicitly_blocks_implementation": true,
       "affects": "CERT-13",
@@ -375,7 +339,7 @@
     {
       "id": "OQ-CERT-2",
       "contract": "contracts/c34-certification-credentials-contract.md",
-      "contract_version": "1.0.3",
+      "contract_version": "1.1.0",
       "question": "Who approves certification criteria versions, and where is approval recorded?",
       "explicitly_blocks_implementation": true,
       "affects": "CERT-4",
@@ -384,25 +348,16 @@
     {
       "id": "OQ-CERT-3",
       "contract": "contracts/c34-certification-credentials-contract.md",
-      "contract_version": "1.0.3",
+      "contract_version": "1.1.0",
       "question": "What evidence types are acceptable (observation notes, checklist, photo, other)?",
       "explicitly_blocks_implementation": false,
       "affects": "CERT-7",
       "source_line": 125
     },
     {
-      "id": "OQ-CERT-4",
-      "contract": "contracts/c34-certification-credentials-contract.md",
-      "contract_version": "1.0.3",
-      "question": "May an actor ever be both learner and observer for the same certification?",
-      "explicitly_blocks_implementation": false,
-      "affects": "CERT-15",
-      "source_line": 126
-    },
-    {
       "id": "OQ-CERT-5",
       "contract": "contracts/c34-certification-credentials-contract.md",
-      "contract_version": "1.0.3",
+      "contract_version": "1.1.0",
       "question": "Do certifications expire, and if so how is expiry represented?",
       "explicitly_blocks_implementation": false,
       "affects": "—",
@@ -663,6 +618,24 @@
       "source_line": 171
     },
     {
+      "id": "OQ-TEN-3",
+      "contract": "contracts/c13-tenancy-membership-contract.md",
+      "contract_version": "1.4.0",
+      "question": "**Resolved** Does v2 keep platform-operator cross-tenant access? Owner approved NO_CROSS_TENANT_GRANTS on 2026-10-05.",
+      "explicitly_blocks_implementation": false,
+      "affects": "NO_CROSS_TENANT_GRANTS",
+      "source_line": 141
+    },
+    {
+      "id": "OQ-AUTHZ-2",
+      "contract": "contracts/c14-authorization-capabilities-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved** Which cross-tenant platform capabilities, if any, exist in v2, and what audit do they require?",
+      "explicitly_blocks_implementation": false,
+      "affects": "AUTHZ-20 (approved 2026-10-05)",
+      "source_line": 139
+    },
+    {
       "id": "OQ-AUD-1",
       "contract": "contracts/c23-audit-lifecycle-events-contract.md",
       "contract_version": "1.1.0",
@@ -672,13 +645,40 @@
       "source_line": 121
     },
     {
+      "id": "OQ-CNT-1",
+      "contract": "contracts/c31-content-teaching-engine-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved** What versioning scheme applies to the schema and to packs (semver, integer, other)?",
+      "explicitly_blocks_implementation": false,
+      "affects": "CNT-2 (approved 2026-10-05)",
+      "source_line": 122
+    },
+    {
       "id": "OQ-LRN-1",
       "contract": "contracts/c32-learning-sessions-progress-contract.md",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "question": "Resolved 2026-10-03: bootstrap lifecycle is `ACTIVE -> COMPLETED`; progress events are allowed only in ACTIVE and COMPLETED is terminal. GitHub issue #4.",
       "explicitly_blocks_implementation": false,
       "affects": "LRN-3",
       "source_line": 124
+    },
+    {
+      "id": "OQ-LRN-3",
+      "contract": "contracts/c32-learning-sessions-progress-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved** When a pack gets a new version, does in-progress learner history carry over, restart, or stay pinned? Owner approved PIN_EXISTING_HISTORY_TO_ASSIGNED_VERSION on 2026-10-05.",
+      "explicitly_blocks_implementation": false,
+      "affects": "PIN_EXISTING_HISTORY_TO_ASSIGNED_VERSION",
+      "source_line": 126
+    },
+    {
+      "id": "OQ-CERT-4",
+      "contract": "contracts/c34-certification-credentials-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved** May an actor ever be both learner and observer for the same certification?",
+      "explicitly_blocks_implementation": false,
+      "affects": "CERT-15 (approved 2026-10-05)",
+      "source_line": 126
     },
     {
       "id": "OQ-REL-1",
@@ -1252,16 +1252,16 @@
     "contracts/c02-automation-agent-authority-contract.md": "21202fef396b5179a718ded8fa2f28a4726497c393ce083fb7af5297f594de23",
     "contracts/c11-identity-credentials-contract.md": "b9adc24cee57cf468256b4c35d5231145055200939e21e5250d6631734569d5d",
     "contracts/c12-application-sessions-contract.md": "6bfda46131be1c25d3aa71f5a771dcc1374033156b2467757c3dacdee527481d",
-    "contracts/c13-tenancy-membership-contract.md": "7603211b5316af6d6d56bc5441bc8db86b3e8981f8f4d0c9f6d35aee852db96c",
-    "contracts/c14-authorization-capabilities-contract.md": "0e427c6a0fe62e6b2784e433d9185b755493a824e44c4330e0163c99b80ba917",
+    "contracts/c13-tenancy-membership-contract.md": "cb2c36261c09045b026489fddb627ad57667bee544e7226a983a86d9e21e38be",
+    "contracts/c14-authorization-capabilities-contract.md": "096d74892a7f9ef440598364205372e0dc0d38422a93a765265489d3f2526308",
     "contracts/c15-data-isolation-privacy-contract.md": "e14300a57e8bf75f39509efa5c11c6ae994dba9dd798336f01d23cce8c70e84e",
     "contracts/c21-database-migration-contract.md": "eb64b82349abda75370ab68961af92094e6840a3d02e18a1bfb2f4eaaac6a135",
     "contracts/c22-transaction-idempotency-reconciliation-contract.md": "41b6d408d3a90175119b6b47574a186564735d27721ea800e4bfc6c48d0a6f0e",
     "contracts/c23-audit-lifecycle-events-contract.md": "707651e689e57e779672cd88bf64fb76253801b1c468c5b1d171790c66415ebb",
-    "contracts/c31-content-teaching-engine-contract.md": "1ef58fc330e70d4cd38aad5df8440ccba36549dd17414e777f50fce667eebc45",
-    "contracts/c32-learning-sessions-progress-contract.md": "ea26f7e871ea95cef6fcfadbd8a25078c16342e031032c90ddd6104210f95bf2",
+    "contracts/c31-content-teaching-engine-contract.md": "d4fb182c07c50a56841f0c2b80d368bc3641f7df68ad8cc824b1141137819583",
+    "contracts/c32-learning-sessions-progress-contract.md": "61ed20459d1e1ba0cac624e13227aac7c2915e71b8e4c0ed0b4f1fedda41821d",
     "contracts/c33-manager-operations-contract.md": "22c0a55c03ce2fb5fb5072045b0518a727250918b8fcace2907554a5173e7ea7",
-    "contracts/c34-certification-credentials-contract.md": "aeffc9b249f050a72f77149df45e2dec379bbb75e5e3810780858210c0f221aa",
+    "contracts/c34-certification-credentials-contract.md": "cc67e5ade4ed652ec89dae93bbbd14fddaa7ae260ed0e90edb3481e831e6db76",
     "contracts/c41-api-boundary-contract.md": "59257d21573369827d0bed24919e7d6fedec5221c780ffeb404dcea68fb26e52",
     "contracts/c42-web-client-boundary-contract.md": "5655dc089faf29bc8db16fd81319fcad6a7b37b8c5833b1b5d0fdb8b97ce9e28",
     "contracts/c51-verification-evidence-contract.md": "7390163d21ef0d00a8c7190108fa2f1e5ab1dd28e0d18569dc8e823fe8cf0161",
