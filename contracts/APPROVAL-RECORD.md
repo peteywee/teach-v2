@@ -207,6 +207,7 @@ PATCH revisions preserve the controlling owner approval when they do not change 
 | C62 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
 | C63 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
 | 00 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 00 | 1.0.3 | 1.1.0 | 2026-10-05 | Registered OQ-SYS-1, OQ-SYS-2, OQ-SYS-5 (decision-closure r3.1, SYS-21) |
 | 02 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
 | 11 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
 | 12 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
