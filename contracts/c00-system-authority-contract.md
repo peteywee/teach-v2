@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-CON-C00",
   "class": "contract",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-03",
+  "updated_on": "2026-10-05",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
@@ -43,7 +43,7 @@
 | Contract ID        | C00                                                                                                                                                             |
 | Group              | C00 System Authority                                                                                                                                            |
 | Governed by        | None (root contract)                                                                                                                                            |
-| Version            | 1.0.3                                                                                                                                                           |
+| Version            | 1.1.0                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
 | Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
@@ -53,7 +53,7 @@
 | Supersedes         | None                                                                                                                                                            |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-03                                                                                                                                                      |
+| Last updated       | 2026-10-05                                                                                                                                                      |
 
 ## 1. Purpose and Failure Prevented
 
@@ -94,14 +94,14 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **SYS-1** — Where implementation and an `active` contract disagree, the implementation MUST be treated as non-conforming.
 - **SYS-2** — A contract MUST NOT be edited to match existing implementation except through the revision procedure in **SYS-21**.
 - **SYS-3** — Precedence MUST follow the order C00, C01, C02, C10, C20, C30, C40, C50, C60, where an earlier contract or group governs a later one.
-- **SYS-4** — Until the owner decides intra-group precedence (see OQ-SYS-1; value Not yet verified), a conflict between two contracts in the same group MUST be recorded as a conflict and the more restrictive requirement MUST apply.
+- **SYS-4** — Contracts within a group are peers; numeric order does not define precedence (OQ-SYS-1 resolved 2026-10-05). A conflict between two contracts in the same group MUST be recorded as a conflict and the more restrictive requirement MUST apply.
 - **SYS-5** — A lower contract MUST NOT weaken, reinterpret, or create an exception to a requirement in a higher contract; any clause that attempts to do so MUST be treated as void.
 - **SYS-6** — Each piece of mutable state MUST have exactly one owning contract, recorded in that contract's Scope section.
 - **SYS-7** — Each piece of mutable state MUST have exactly one owning component permitted to write it.
 - **SYS-8** — Each security-sensitive operation MUST have exactly one canonical implementation path; a second path MUST NOT exist unless it is registered compatibility code.
 - **SYS-9** — When the authority for an operation is unknown, ambiguous, contradictory, or cannot be read, the operation MUST fail closed.
 - **SYS-10** — Unavailability of an authority source (database, provider, registry, configuration) MUST NOT be interpreted as permission.
-- **SYS-11** — Every piece of compatibility code MUST be listed in the compatibility register with: identifier, location, bounded scope, owning contract, tests, and removal condition (register location: see OQ-SYS-2; value Not yet verified).
+- **SYS-11** — Every piece of compatibility code MUST be listed in the compatibility register with: identifier, location, bounded scope, owning contract, tests, and removal condition. The canonical register is `governance/compatibility-register.json` (CI-validated); a human-readable Markdown view is generated from it (OQ-SYS-2 resolved 2026-10-05).
 - **SYS-12** — Compatibility code that is not in the register MUST be treated as a contract violation and a release blocker.
 - **SYS-13** — A claim that production conforms to any contract MUST be supported by evidence that binds the exact source SHA, the exact environment, and authoritative runtime readback, as defined in C51 and C52.
 - **SYS-14** — CI success MUST NOT be cited as evidence that production conforms.
@@ -119,7 +119,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **SYS-26** — An `active` contract MUST govern until it is explicitly superseded; age, disuse, or implementation drift MUST NOT be treated as supersession.
 - **SYS-27** — A contract change MUST be approved before any implementation change that depends on it is merged.
 - **SYS-28** — Legacy Teach implementation MUST NOT be carried into v2 unless the reuse names an owning contract, an owner, and a purpose; the legacy repository MAY be used freely as a reference and evidence source.
-- **SYS-29** — A learner demo MUST NOT be presented until C00, C01, C02, the applicable parts of C11–C15 and C21–C23 (see OQ-SYS-5; value Not yet verified), C31, C32, C41, and C42 are `active`.
+- **SYS-29** — A learner demo MUST NOT be presented until C00, C01, C02, the applicable parts of C11–C15 and C21–C23 per the explicit demo-applicability matrix (OQ-SYS-5 resolved 2026-10-05; shared deployment requires release proof), C31, C32, C41, and C42 are `active`.
 - **SYS-30** — A manager demonstration MUST NOT be presented until, in addition, C33 is `active`.
 - **SYS-31** — A certification demonstration MUST NOT be presented until, in addition, C34 is `active`.
 - **SYS-32** — Runtime AI, analytics, PWA/offline, and self-service billing MUST NOT be treated as prerequisites for the learner demo.
@@ -155,11 +155,11 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 | ID       | Question                                                                                                                                                                                                                             | Blocks implementation | Affects |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------- | ------- |
-| OQ-SYS-1 | Does numeric order within a group (for example C11 before C12) define precedence, or are contracts within a group peers?                                                                                                             | No                    | SYS-4   |
-| OQ-SYS-2 | Where does the compatibility register live, and in what format (Markdown table, machine-readable file checked in CI, or both)?                                                                                                       | No                    | SYS-11  |
+| OQ-SYS-1 | **Resolved.** Owner, 2026-10-05: Contracts within a group are peers; numeric order does not define precedence. Conflicts use the more restrictive requirement and must be recorded. (Decision-closure r3.1) | No (resolved)         | SYS-4   |
+| OQ-SYS-2 | **Resolved.** Owner, 2026-10-05: Canonical register is `governance/compatibility-register.json` (CI-validated); human-readable Markdown view generated. (Decision-closure r3.1) | No (resolved)         | SYS-11  |
 | OQ-SYS-3 | **Resolved.** Owner, 2026-10-03: v2 is a new build governed only by these contracts. Legacy `.topshelf/contracts/domain/*.json` does not govern v2 and is not superseded in place; it stays with the legacy repository as reference. | No (resolved)         | —       |
 | OQ-SYS-4 | **Resolved.** Owner, 2026-10-03: these contracts govern the Teach v2 codebase, not the legacy repository or its branches.                                                                                                            | No (resolved)         | —       |
-| OQ-SYS-5 | Which parts of C11–C15 and C21–C23 are applicable to the learner demo?                                                                                                                                                               | No                    | SYS-29  |
+| OQ-SYS-5 | **Resolved.** Owner, 2026-10-05: Demo applicability uses the explicit matrix; shared deployment requires release proof. (Decision-closure r3.1) | No (resolved)         | SYS-29  |
 | OQ-SYS-6 | **Resolved.** Owner, 2026-10-03: Teach v2 lives in `peteywee/teach-v2`; default branch `main`. The repository had no commits when cloned on 2026-10-03, so anchors carry no SHA yet.                                                 | No (resolved)         | —       |
 
 ## 7. Verification Status
@@ -187,3 +187,4 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.1   | 2026-10-03 | Non-normative document-governance metadata/provenance normalization; 1.0.0 owner approval remained controlling. | ChatGPT (governance) |
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
+| 1.1.0   | 2026-10-05 | Registered OQ-SYS-1 (intra-group peers, restrictive-wins), OQ-SYS-2 (compatibility register at governance/compatibility-register.json, CI-validated), OQ-SYS-5 (demo applicability matrix). Updated SYS-4, SYS-11, SYS-29. (Decision-closure r3.1, SYS-21) | Astro |

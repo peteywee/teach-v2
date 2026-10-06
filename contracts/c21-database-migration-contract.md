@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C21",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-04",
-  "effective_on": "2026-10-03",
+  "updated_on": "2026-10-05",
+  "effective_on": "2026-10-05",
   "approval": {
     "state": "approved",
-    "approved_version": "1.1.0",
-    "approved_on": "2026-10-04",
+    "approved_version": "1.2.0",
+    "approved_on": "2026-10-05",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner approved production backup and restore-proof policy; GitHub issue #30"
+    "basis": "Owner manifest-bound decision-closure r3.1 approval under SYS-21 #75; sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,7 +28,10 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C21@1.0.3"],
+  "supersedes": [
+    "TEACH-CON-C21@1.0.3",
+    "TEACH-CON-C21@1.1.0"
+  ],
   "superseded_by": null,
   "depends_on": [
     "contracts/"
@@ -43,17 +46,17 @@
 | Contract ID        | C21                                                                                                                                                             |
 | Group              | C20 Data Correctness                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.1.0                                                                                                                                                           |
+| Version            | 1.2.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-04 — production backup/restore decisions approved through GitHub issue #30; see `APPROVAL-RECORD.md` |
+| Approved by        | Patrick Craven (owner), 2026-10-05; manifest-bound decision-closure r3.1, SYS-21 #75; see `APPROVAL-RECORD.md` |
 | Requirement prefix | `MIG`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/database-migration.json`.                                                                           |
-| Supersedes         | C21 1.0.3                                                                                                                                                            |
+| Supersedes         | 1.1.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-03                                                                                                                                                      |
+| Last updated       | 2026-10-05 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -98,7 +101,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **MIG-9** — Production containing non-reconstructable data MUST have platform-native transactionally consistent backup/restore capability with automated backups at least daily. A production migration that changes schema or data MUST NOT run without a fresh named restorable backup or restore point captured after the release candidate is frozen and before promotion; release evidence MUST record its identity and timestamp.
 - **MIG-10** — A production migration MUST NOT run unless the current backup method/configuration has been restored successfully in a disposable isolated environment using the same database-engine major version as production. The restore proof MUST be no older than 30 days at promotion time and MUST be repeated after any backup mechanism or backup-configuration change regardless of age. Evidence MUST identify the source backup, isolated restore target, database version, start/end timestamps, result, and verification checks.
 - **MIG-11** — Browser-reachable database roles MUST NOT have read or write access to backend-owned tables.
-- **MIG-12** — Database privilege and row-level-security posture MUST be tested where browser-reachable roles exist (see OQ-MIG-3; value Not yet verified).
+- **MIG-12** — Application tables MUST NOT be browser-reachable and have no implicit RLS exemption. Every Supabase-backed candidate requires target-project readback of Data API/exposed schemas, existing and default anon/authenticated grants on tables/sequences/functions, RLS on every application table, and an HTTP denial probe. Disable Data API, revoke existing/default privileges through governed migrations and enable RLS with no policies as specified; unreadable or missing project-specific evidence blocks promotion. Provider defaults MUST NOT substitute for readback. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (OQ-MIG-3 resolved 2026-10-05).
 - **MIG-13** — A destructive migration MUST NOT run without explicit owner approval and a written rollback or recovery plan.
 - **MIG-14** — Schema code and the deployed database MUST be reconciled before release; any drift MUST block release.
 
@@ -120,9 +123,9 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 | ID       | Question                                                                                                                                                                             | Blocks implementation | Affects |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------- | ------- |
-| OQ-MIG-3 | Will any browser-reachable database role exist in v2 (for example a hosted-auth client), making RLS tests applicable?                                                                | No                    | MIG-12  |
-| OQ-MIG-4 | Are production migrations applied by the deployment pipeline or by a manual, owner-approved step?                                                                                    | No                    | —       |
-| OQ-MIG-5 | Will v2 import any data from the legacy Teach database, and if so through which governed, audited path? Until decided, MIG-7's production baseline is the v2 production schema only. | No                    | —       |
+| OQ-MIG-3 | **Resolved.** Owner, 2026-10-05: Application tables MUST NOT be browser-reachable and have no implicit RLS exemption. Every Supabase-backed candidate requires target-project readback of Data API/exposed schemas, existing and default anon/authenticated grants on tables/sequences/functions, RLS on every application table, and an HTTP denial probe. Disable Data API, revoke existing/default privileges through governed migrations and enable RLS with no policies as specified; unreadable or missing project-specific evidence blocks promotion. Provider defaults MUST NOT substitute for readback. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1) | No (resolved) | MIG-12 |
+| OQ-MIG-4 | **Resolved.** Owner, 2026-10-05: Production migration apply MUST be manual and owner-approved for the exact frozen candidate, migration IDs and fresh named restore point, after replay and restore gates. Apply output and journal/drift readback are evidence. CI holds no production database credential and cannot grant production permission. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1) | No (resolved) | — |
+| OQ-MIG-5 | **Resolved.** Owner, 2026-10-05: Legacy Teach data import is ABSENT; this registration adopts no import job, script or route. Future import requires a separate source snapshot, transformation, reconciliation, audit and rollback plan. MIG-7's baseline remains the V2 production schema. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1) | No (resolved) | — |
 
 ### Resolved owner decisions in 1.1.0
 
@@ -137,14 +140,14 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
 | Implementation conformance   | partial PROVEN           | SLICE-P01 proves Drizzle migration authority, same-change-set schema/migration, deterministic from-zero replay, and PostgreSQL integration for MIG-1/MIG-4/MIG-6/MIG-8. Production backup/restore capability and upgrade-from-production proof remain unproven. |
 | Acceptance cases implemented | partial PROVEN           | MIG-AC-4 is implemented for SLICE-P01 with two independently empty PostgreSQL databases. Issue #30 adds provider-neutral fail-closed evidence validation for MIG-AC-6; actual provider evidence is still required before production. |
-| Blocking open questions      | 0 open                   | OQ-MIG-1 and OQ-MIG-2 are resolved by owner decision in 1.1.0. OQ-MIG-3/4/5 remain open and non-blocking; concrete production migration execution still fails closed until required runtime/provider evidence exists. |
-| Owner approval               | declared                 | 1.1.0 backup/restore policy approved by Patrick Craven on 2026-10-04 through GitHub issue #30 and recorded in `APPROVAL-RECORD.md`. |
+| Blocking open questions      | 0 open | Only unresolved question rows govern blocking; registration is not implementation evidence |
+| Owner approval               | declared | 1.2.0 owner approval recorded in APPROVAL-RECORD.md under #75; runtime implementation conformance remains UNKNOWN |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
 ## 8. Change Log
 
-| Version | Date       | Change                                                                                                                                                                                          | By               |
+| Version | Date | Change | By |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Group renamed to C20 Data Correctness; MIG-1 notes Drizzle and PostgreSQL are replaceable by contract revision.                                                                                 | Claude (drafter) |
@@ -155,3 +158,4 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.1.0   | 2026-10-04 | Normative production-proof revision: resolve OQ-MIG-1 with `MIGRATION_SCOPED_PLATFORM_NATIVE_BACKUP` and OQ-MIG-2 with `ISOLATED_RESTORE_MAX_30D`; refine MIG-9/MIG-10 and MIG-AC-6; GitHub issue #30. | Patrick Craven (owner approval) |
+| 1.2.0 | 2026-10-05 | Register OQ-MIG-3, OQ-MIG-4, OQ-MIG-5; preserve named residuals and existing requirement/acceptance IDs. Decision-closure r3.1 manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c; SYS-21 #75. | Patrick Craven (owner); ChatGPT (recorder) |

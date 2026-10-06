@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C41",
   "class": "contract",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-03",
-  "effective_on": "2026-10-03",
+  "updated_on": "2026-10-05",
+  "effective_on": "2026-10-05",
   "approval": {
     "state": "approved",
-    "approved_version": "1.0.0",
-    "approved_on": "2026-10-03",
+    "approved_version": "1.1.0",
+    "approved_on": "2026-10-05",
     "record": "contracts/APPROVAL-RECORD.md",
-    "inheritance": "1.0.1, 1.0.2, and 1.0.3 are non-normative governance/truth-state cleanup patches; 1.0.0 owner approval remains controlling"
+    "basis": "Owner manifest-bound decision-closure r3.1 approval under SYS-21 #75; sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,7 +28,9 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": [],
+  "supersedes": [
+    "TEACH-CON-C41@1.0.3"
+  ],
   "superseded_by": null,
   "depends_on": [
     "contracts/"
@@ -43,17 +45,17 @@
 | Contract ID        | C41                                                                                                                                                             |
 | Group              | C40 Application Boundaries                                                                                                                                      |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.0.3                                                                                                                                                           |
+| Version            | 1.1.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
+| Approved by        | Patrick Craven (owner), 2026-10-05; manifest-bound decision-closure r3.1, SYS-21 #75; see `APPROVAL-RECORD.md` |
 | Requirement prefix | `API`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New. Carries forward the legacy Gate A rule that route/OpenAPI drift fails CI.                                                                                  |
-| Supersedes         | None                                                                                                                                                            |
+| Supersedes         | 1.0.3 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-03                                                                                                                                                      |
+| Last updated       | 2026-10-05 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -96,10 +98,10 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **API-7** — Every protected operation MUST exist in the C14 registry.
 - **API-8** — Business rules MUST live below route handlers, in domain code that can be tested without HTTP.
 - **API-9** — Database queries MUST NOT derive tenant scope from client-supplied data.
-- **API-10** — API errors MUST use one stable error shape and stable status semantics (see OQ-API-2; value Not yet verified).
+- **API-10** — API errors MUST use exactly the stable `code`, `message`, `requestId` envelope and status semantics in `api-error-envelope.schema.json` and the registered API manifest. Missing and out-of-scope targets MUST produce identical non-disclosing denials; no target existence or private detail is leaked. See `governance/decision-closure/05-api-boundary-manifest.md`. (OQ-API-2 resolved 2026-10-05).
 - **API-11** — Production error responses MUST NOT expose stack traces, SQL, internal identifiers of other tenants, or secrets.
 - **API-12** — Every request ID MUST propagate into audit records and observability output.
-- **API-13** — A breaking change to an API consumer contract MUST be delivered behind explicit version handling, not in place (see OQ-API-3; value Not yet verified).
+- **API-13** — Breaking consumer changes MUST use the major-version path `/api/v1` and an explicit deprecation manifest rather than in-place replacement. Sunset periods remain UNKNOWN; no deprecation sunset is authorized until owner selection. See `governance/decision-closure/05-api-boundary-manifest.md`. (OQ-API-3 partially registered 2026-10-05).
 - **API-14** — Application commands MUST be the system boundary for state changes; HTTP routes, UI interactions, jobs, and agents MUST invoke registered commands (C01) rather than implement business rules.
 - **API-15** — An HTTP route MUST NOT define or alter the semantics of the command it exposes.
 
@@ -123,9 +125,9 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 | ID       | Question                                                | Blocks implementation | Affects |
 | -------- | ------------------------------------------------------- | --------------------- | ------- |
-| OQ-API-1 | Which routes are boundary exceptions outside `/api/v1`? | Yes                   | —       |
-| OQ-API-2 | What is the error envelope shape?                       | No                    | API-10  |
-| OQ-API-3 | What is the API versioning and deprecation policy?      | No                    | API-13  |
+| OQ-API-1 | **Resolved.** Owner, 2026-10-05: Product operations MUST live under `/api/v1/*`. The exhaustive outside-prefix exceptions are health/readiness and authentication callbacks in the registered API manifest; callbacks remain unmounted until their provider selection and prerequisites pass. No billing, analytics or internal operation is exposed by this registration. See `governance/decision-closure/05-api-boundary-manifest.md`. (Decision-closure r3.1) | No (resolved) | — |
+| OQ-API-2 | **Resolved.** Owner, 2026-10-05: API errors MUST use exactly the stable `code`, `message`, `requestId` envelope and status semantics in `api-error-envelope.schema.json` and the registered API manifest. Missing and out-of-scope targets MUST produce identical non-disclosing denials; no target existence or private detail is leaked. See `governance/decision-closure/05-api-boundary-manifest.md`. (Decision-closure r3.1) | No (resolved) | API-10 |
+| OQ-API-3 | **Open — residual only.** Which API deprecation sunset periods are approved? Owner, 2026-10-05: Breaking consumer changes MUST use the major-version path `/api/v1` and an explicit deprecation manifest rather than in-place replacement. Sunset periods remain UNKNOWN; no deprecation sunset is authorized until owner selection. See `governance/decision-closure/05-api-boundary-manifest.md`. (Decision-closure r3.1; partial registration) | No | API-13 |
 
 ## 7. Verification Status
 
@@ -135,14 +137,14 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
-| Blocking open questions      | 1 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
-| Owner approval               | declared                 | Approved by the owner on 2026-10-03; recorded in `APPROVAL-RECORD.md`. Initial owner-approval baseline is commit `2c9b1c849a520ba817efc91150be9a37797f4238`; this 1.0.3 revision is tracked by Git history.                                                                     |
+| Blocking open questions      | 0 open | Only unresolved question rows govern blocking; registration is not implementation evidence |
+| Owner approval               | declared | 1.1.0 owner approval recorded in APPROVAL-RECORD.md under #75; runtime implementation conformance remains UNKNOWN |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
 ## 8. Change Log
 
-| Version | Date       | Change                                                                                                                                                                                          | By               |
+| Version | Date | Change | By |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Retitled Application / Command / API Boundary; added API-14 and API-15 (commands are the boundary; routes do not define semantics) and API-AC-11.                                               | Claude (drafter) |
@@ -152,3 +154,4 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.1   | 2026-10-03 | Non-normative document-governance metadata/provenance normalization; 1.0.0 owner approval remained controlling. | ChatGPT (governance) |
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
+| 1.1.0 | 2026-10-05 | Register OQ-API-1, OQ-API-2, OQ-API-3; preserve named residuals and existing requirement/acceptance IDs. Decision-closure r3.1 manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c; SYS-21 #75. | Patrick Craven (owner); ChatGPT (recorder) |

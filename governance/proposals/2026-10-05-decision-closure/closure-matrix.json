@@ -1,0 +1,3450 @@
+{
+ "x-document": {
+  "doc_id": "TEACH-PROP-DCS-01-DATA",
+  "class": "decision-table",
+  "version": "0.3.0",
+  "status": "proposed",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-05",
+  "updated_on": "2026-10-05"
+ },
+ "baseline": {
+  "repo": "peteywee/teach-v2",
+  "ref": "main",
+  "commit": "6553eb465e469dc9e60368cde40d259f86262997"
+ },
+ "classification_baseline": "2b5714d8d850da7a47c1666da5a2c7974cabe40f",
+ "owner_decision": {
+  "approved_in_chat": "2026-10-05T04:05-05:00",
+  "scope": "decision sheet A-D",
+  "registration": "PENDING under issue #75"
+ },
+ "derived_from": {
+  "inventory_script": "scripts/verification/owner-decision-inventory.mjs#deriveOwnerDecisionInventory",
+  "answer_register": "verification/owner-decisions/2026-10-05/answer-register.json",
+  "answer_register_sha256": "996fa46fbc4e4891c349f4453e4f576868833a6d00e4aff645ee7cf6b83791f8",
+  "contract_sha256": {
+   "contracts/c00-system-authority-contract.md": "63500932db774880d5769f545887a21c2482961e405eee328aed2cc25fa4b661",
+   "contracts/c01-canonical-semantics-contract.md": "e407a52b739756e84264a66ef0a824d02435e4ee15e938c405c4caf8dc1ebd40",
+   "contracts/c02-automation-agent-authority-contract.md": "21202fef396b5179a718ded8fa2f28a4726497c393ce083fb7af5297f594de23",
+   "contracts/c11-identity-credentials-contract.md": "3240ae5ccb81fe1233f74e52c8f7bb63caf55bd5958a87506948e09bec95a0c6",
+   "contracts/c12-application-sessions-contract.md": "6bfda46131be1c25d3aa71f5a771dcc1374033156b2467757c3dacdee527481d",
+   "contracts/c13-tenancy-membership-contract.md": "e52371e79cf0619eac158d58785b6d5005dbd9a3381e3e5037fb0016255dbf6e",
+   "contracts/c14-authorization-capabilities-contract.md": "67c3f8820c5f4bc6d3e74f4601f079ef9202750ce7e4b48e6338d3b60c4b6fd3",
+   "contracts/c15-data-isolation-privacy-contract.md": "e14300a57e8bf75f39509efa5c11c6ae994dba9dd798336f01d23cce8c70e84e",
+   "contracts/c21-database-migration-contract.md": "eb64b82349abda75370ab68961af92094e6840a3d02e18a1bfb2f4eaaac6a135",
+   "contracts/c22-transaction-idempotency-reconciliation-contract.md": "41b6d408d3a90175119b6b47574a186564735d27721ea800e4bfc6c48d0a6f0e",
+   "contracts/c23-audit-lifecycle-events-contract.md": "707651e689e57e779672cd88bf64fb76253801b1c468c5b1d171790c66415ebb",
+   "contracts/c31-content-teaching-engine-contract.md": "d4fb182c07c50a56841f0c2b80d368bc3641f7df68ad8cc824b1141137819583",
+   "contracts/c32-learning-sessions-progress-contract.md": "61ed20459d1e1ba0cac624e13227aac7c2915e71b8e4c0ed0b4f1fedda41821d",
+   "contracts/c33-manager-operations-contract.md": "c52d29bd315d302cb3a9a749eabd354e1b741a3a4514e2c98aac30497fc363f9",
+   "contracts/c34-certification-credentials-contract.md": "ee6ce0685f0a47a0d050989ff43e969b78eddd6c08619dc8185ef7ea531e8c7d",
+   "contracts/c41-api-boundary-contract.md": "59257d21573369827d0bed24919e7d6fedec5221c780ffeb404dcea68fb26e52",
+   "contracts/c42-web-client-boundary-contract.md": "5655dc089faf29bc8db16fd81319fcad6a7b37b8c5833b1b5d0fdb8b97ce9e28",
+   "contracts/c51-verification-evidence-contract.md": "7390163d21ef0d00a8c7190108fa2f1e5ab1dd28e0d18569dc8e823fe8cf0161",
+   "contracts/c52-deployment-release-recovery-contract.md": "a1a3a4637366cff364c825cd4a703518b73ada649f9f6f5657ca966adb092584",
+   "contracts/c53-observability-contract.md": "1ac78f4cc861ce5a467ff8bea4eb8a2be4a2b7d2acff68ac53c41b08af64d209",
+   "contracts/c61-analytics-contract.md": "aad01e1353076e78e3e5bc6e342919ef7f9e4c4dc2da20b5b0809ae1ecad9fe2",
+   "contracts/c62-pwa-offline-contract.md": "891fb6513da8c8efb529f023f149153e8ed90e0d7ac9aa46af78f68f61ff8ce6",
+   "contracts/c63-billing-contract.md": "b01c3bf281cc0883e50cf74b9c52677fee1cc5b3ede422e5e015c58c5cfa0b9c"
+  }
+ },
+ "policy_or_runtime_authority_changed": false,
+ "owner_approval_recorded": false,
+ "totals": {
+  "rows": 56,
+  "live_unresolved": 49,
+  "registered_since_classification": 7,
+  "explicit_blockers": 11,
+  "by_closure_class": {
+   "CONFIRM_RECOMMENDATION": 3,
+   "READY_TO_REGISTER": 13,
+   "RECONCILE_DRAFT": 3,
+   "REGISTER_AS_DISABLED": 10,
+   "REGISTER_SPLIT_RESIDUAL": 6,
+   "REGISTER_WITH_ARTIFACT": 12,
+   "UNKNOWN_OWNER_VALUE": 2
+  },
+  "explicit_blockers_by_closure_class": {
+   "CONFIRM_RECOMMENDATION": 2,
+   "READY_TO_REGISTER": 1,
+   "RECONCILE_DRAFT": 3,
+   "REGISTER_WITH_ARTIFACT": 4,
+   "UNKNOWN_OWNER_VALUE": 1
+  },
+  "rows_with_missing_owner_values": 9
+ },
+ "rows": [
+  {
+   "id": "OQ-SYS-1",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c00-system-authority-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "SYS-4",
+   "question": "Does numeric order within a group (for example C11 before C12) define precedence, or are contracts within a group peers?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 57,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "dec29d4a87e3e5d25d27bd294a6660e3cc9120c6dbdf24d1a370e1c662c07287",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "intra_group_precedence": "PEERS",
+    "conflict_rule": "MORE_RESTRICTIVE_REQUIREMENT_APPLIES",
+    "conflict_must_be_recorded": true
+   },
+   "closure_class": "READY_TO_REGISTER",
+   "owner_action": "APPROVE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/09-governance-content-certification-web-packet.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c00-system-authority-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "SYS-4"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/09-governance-content-certification-web-packet.md",
+     "contains": [
+      "GROUP_PEERS_RESTRICTIVE_ON_CONFLICT",
+      "the more restrictive requirement governs"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-SYS-2",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c00-system-authority-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "SYS-11",
+   "question": "Where does the compatibility register live, and in what format (Markdown table, machine-readable file checked in CI, or both)?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 58,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "198a6bc0f1c663d6a54335bc3ffebfffdf831ed83ac91bcbec2f380edf074244",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "canonical_register": "governance/compatibility-register.json",
+    "human_view": "generated Markdown",
+    "ci_validated": true
+   },
+   "closure_class": "REGISTER_WITH_ARTIFACT",
+   "owner_action": "APPROVE_ARTIFACT_AND_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/09-governance-content-certification-web-packet.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [
+    "Register file does not exist at baseline; artifact defines its JSON Schema, generator and CI check."
+   ],
+   "registration_target": {
+    "contract": "contracts/c00-system-authority-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "SYS-11"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/09-governance-content-certification-web-packet.md",
+     "contains": [
+      "JSON_CANONICAL_REGISTER_WITH_MARKDOWN_VIEW",
+      "governance/compatibility-register.json"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-SYS-5",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c00-system-authority-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "SYS-29",
+   "question": "Which parts of C11–C15 and C21–C23 are applicable to the learner demo?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 59,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "ad1d27688fac8ee39a96501dc43a2d66bccc6100afdd876886782de4135dbd62",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "demo_applicability": "APPROVE_EXPLICIT_MATRIX",
+    "shared_deployment_requires_release_proof": true
+   },
+   "closure_class": "REGISTER_WITH_ARTIFACT",
+   "owner_action": "APPROVE_ARTIFACT_AND_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/09-governance-content-certification-web-packet.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [
+    "Exact requirement-level applicability matrix is authored in the controlling artifact."
+   ],
+   "registration_target": {
+    "contract": "contracts/c00-system-authority-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "SYS-29"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/09-governance-content-certification-web-packet.md",
+     "contains": [
+      "EXPLICIT_CORE_DEMO_APPLICABILITY"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-AGT-1",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c02-automation-agent-authority-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "AGT-9",
+   "question": "Where are AutomationActor execution identities and their capability sets registered?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 0,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "bf46bb5e70519ed95c027551c76342406e95737778bdfeb8bf47eefd97696d0e",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "automation_identity_registry": "backend execution-principal records",
+    "capability_assignment": "explicit per principal",
+    "ci_job_is_product_actor": false
+   },
+   "closure_class": "REGISTER_WITH_ARTIFACT",
+   "owner_action": "APPROVE_ARTIFACT_AND_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/02-c14-authorization-capability-matrix.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c02-automation-agent-authority-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "AGT-9"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/02-c14-authorization-capability-matrix.md",
+     "contains": [
+      "governance/automation-principals.json"
+     ],
+     "must_not_contain": []
+    },
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/c14-capability-matrix.json",
+     "contains": [
+      "\"automation_principals\": []"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-AGT-2",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c02-automation-agent-authority-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "AGT-16",
+   "question": "What is the first runtime-agent use case, if any, that would trigger the revision of this contract?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 1,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "7ba142627c6d452a395459eb14d9352f88e36646124b8d5a2ecda4eea97e73f0",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "runtime_agents": "DISABLED",
+    "enablement_trigger": "named use case + dedicated C02 revision defining AgentIdentity/AgentCapability/tool boundary/evidence/escalation/recovery"
+   },
+   "closure_class": "REGISTER_AS_DISABLED",
+   "owner_action": "APPROVE_DISABLED_STATE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c02-automation-agent-authority-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "AGT-16"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+     "contains": [
+      "DEFER_RUNTIME_AGENTS"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-AGT-3",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c02-automation-agent-authority-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "—",
+   "question": "Which existing jobs, workers, and CLI commands (for example `pnpm cli`) carry forward as AutomationActors?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 2,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "5f9619fbcbd8df881f2a78eb583cf9b80348a5761022a2fa0a3c88518e6e60c2",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "adoption_rule": "NAMED_JOB_BY_JOB",
+    "blanket_grandfathering": false
+   },
+   "closure_class": "REGISTER_WITH_ARTIFACT",
+   "owner_action": "APPROVE_ARTIFACT_AND_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/02-c14-authorization-capability-matrix.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [
+    "Baseline inventory: zero V2 jobs/workers/CLIs act as AutomationActors; scripts/db/migrate.ts is the C21 migration runner (AGT-11 exception), not a product actor."
+   ],
+   "registration_target": {
+    "contract": "contracts/c02-automation-agent-authority-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/02-c14-authorization-capability-matrix.md",
+     "contains": [
+      "NAMED_JOB_BY_JOB"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-IDN-1",
+   "live_state": "RESOLVED",
+   "registered_by": "#74",
+   "contract": "contracts/c11-identity-credentials-contract.md",
+   "contract_version_live": "1.5.0",
+   "explicit_blocker": true,
+   "affects": "IDN-5",
+   "question": "**Resolved** Which password hashing algorithm and parameters are approved?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 27,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "4e1480ceca5c440ef25c21f62d420a69fc0f71cd64ff886e9036290ac43b080a",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "algorithm": "argon2id",
+    "memory_kib": 19456,
+    "iterations": 2,
+    "parallelism": 1,
+    "salt": "unique CSPRNG salt per hash",
+    "encoding": "versioned PHC string"
+   },
+   "closure_class": "READY_TO_REGISTER",
+   "owner_action": "APPROVE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/06-identity-tenancy-manager-registration-packet.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [
+    "Salt length and tag length are engineering parameters proposed in the artifact, not owner-supplied.",
+    "Backend benchmark is implementation evidence, not a registration precondition."
+   ],
+   "registration_target": {
+    "contract": "contracts/c11-identity-credentials-contract.md",
+    "from_version": "1.5.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "IDN-5"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "contracts/c11-identity-credentials-contract.md",
+     "contains": [
+      "ARGON2ID_19M_T2_P1",
+      "at least 19456 KiB"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-IDN-3",
+   "live_state": "RESOLVED",
+   "registered_by": "#74",
+   "contract": "contracts/c11-identity-credentials-contract.md",
+   "contract_version_live": "1.5.0",
+   "explicit_blocker": true,
+   "affects": "IDN-15",
+   "question": "**Resolved** Which sessions does a credential change revoke: all sessions, all other sessions, or another policy?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 28,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "302f17f7f72f3ba8a6ad406fec6741f0dc5f06e35a8de741af2c3e22d2a30da0",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "credential_change_revokes": "ALL_SESSIONS_OF_TARGET_IDENTITY",
+    "atomic_with_credential_change": true,
+    "reauthentication_required": true
+   },
+   "closure_class": "READY_TO_REGISTER",
+   "owner_action": "APPROVE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/06-identity-tenancy-manager-registration-packet.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c11-identity-credentials-contract.md",
+    "from_version": "1.5.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "IDN-15"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "contracts/c11-identity-credentials-contract.md",
+     "contains": [
+      "ALL_SESSIONS_ON_CREDENTIAL_CHANGE",
+      "including the session that performed the change"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-IDN-4",
+   "live_state": "RESOLVED",
+   "registered_by": "#74",
+   "contract": "contracts/c11-identity-credentials-contract.md",
+   "contract_version_live": "1.5.0",
+   "explicit_blocker": true,
+   "affects": "IDN-2",
+   "question": "**Resolved** What is the OAuth linking rule: verified-email match, explicit user-initiated linking only, or another rule?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 29,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "da1a2a23528ac3cba8b9e9c34f2b933e833276b97547aaff0d19cb2b9d9b6401",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "linking_rule": "EXPLICIT_USER_INITIATED_REAUTHENTICATED",
+    "email_match_links": false,
+    "email_match_creates_identity": false
+   },
+   "closure_class": "READY_TO_REGISTER",
+   "owner_action": "APPROVE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/06-identity-tenancy-manager-registration-packet.md",
+   "missing_owner_values": [],
+   "dependencies": [
+    "OQ-TXN-2"
+   ],
+   "conflicts": [],
+   "technical_notes": [
+    "identity_credentials has no provider/subject columns at baseline; OAUTH_LINK persistence needs schema admission before implementation."
+   ],
+   "registration_target": {
+    "contract": "contracts/c11-identity-credentials-contract.md",
+    "from_version": "1.5.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "IDN-2"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "contracts/c11-identity-credentials-contract.md",
+     "contains": [
+      "EXPLICIT_REAUTHENTICATED_LINKING",
+      "a matching email address alone MUST NOT link"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-IDN-7",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c11-identity-credentials-contract.md",
+   "contract_version_live": "1.5.0",
+   "explicit_blocker": false,
+   "affects": "—",
+   "question": "Must password-reset and invitation responses be indistinguishable for registered and unregistered emails?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 31,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "62cfeebcef8ed6beefe153926f9c595c124da145036fa65def964389ac51c310",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "password_reset_and_invitation_response": "INDISTINGUISHABLE_FOR_KNOWN_AND_UNKNOWN_EMAIL",
+    "abuse_controls": "bounded"
+   },
+   "closure_class": "READY_TO_REGISTER",
+   "owner_action": "APPROVE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/06-identity-tenancy-manager-registration-packet.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c11-identity-credentials-contract.md",
+    "from_version": "1.5.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/06-identity-tenancy-manager-registration-packet.md",
+     "contains": [
+      "{\"status\":\"accepted\"}",
+      "INDISTINGUISHABLE_ACCEPTED_RESPONSE"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-SES-1",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c12-application-sessions-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": true,
+   "affects": "SES-5",
+   "question": "Which `SameSite` value is approved: `Strict` or `Lax`?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 52,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "RECOMMENDED",
+    "packet_answer_sha256": "81133f2b660aba7c747ef5a44370043171e73ab3058d44b0a2d3c1d9b3cf694a",
+    "follow_up_sha256": "ae7b0ce1a953d5a1415939c17f0d06133a30bb9ec8b44801705714f5f7b9772f"
+   },
+   "preserved_value": {
+    "sameSite": "Lax"
+   },
+   "closure_class": "CONFIRM_RECOMMENDATION",
+   "owner_action": "CONFIRM_OR_REJECT_RECOMMENDATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/04-session-transport-security-spec.md",
+   "missing_owner_values": [],
+   "dependencies": [
+    "OQ-SES-5"
+   ],
+   "conflicts": [],
+   "technical_notes": [
+    "Register state is RECOMMENDED; 2026-10-04 review requires owner selection. Lax is safe only together with SES-5 origin enforcement."
+   ],
+   "registration_target": {
+    "contract": "contracts/c12-application-sessions-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "SES-5"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/04-session-transport-security-spec.md",
+     "contains": [
+      "SameSite=Lax"
+     ],
+     "must_not_contain": [
+      "SameSite=Strict",
+      "SameSite=None"
+     ]
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-SES-2",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c12-application-sessions-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": true,
+   "affects": "SES-6",
+   "question": "Which cookie domain and path are approved given the web and API hostnames?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 53,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "RECOMMENDED",
+    "packet_answer_sha256": "9aed6311830358c9a3a8843f247cc03f9431b51177db7b2263b2d0df972f9b0e",
+    "follow_up_sha256": "ae7b0ce1a953d5a1415939c17f0d06133a30bb9ec8b44801705714f5f7b9772f"
+   },
+   "preserved_value": {
+    "topology": "same-origin",
+    "web_origin": "https://t34ch.com",
+    "api_prefix": "/api/v1",
+    "cookie": {
+     "Domain": null,
+     "Path": "/",
+     "Secure": true,
+     "HttpOnly": true,
+     "SameSite": "Lax"
+    }
+   },
+   "closure_class": "CONFIRM_RECOMMENDATION",
+   "owner_action": "CONFIRM_OR_REJECT_RECOMMENDATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/04-session-transport-security-spec.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [
+    "OQ-REL-1 (Vercel) is registered, so the original REL-1 dependency is satisfied. Exact project/domain binding remains release evidence."
+   ],
+   "registration_target": {
+    "contract": "contracts/c12-application-sessions-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "SES-6"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/04-session-transport-security-spec.md",
+     "contains": [
+      "__Host-teach_session",
+      "`https://t34ch.com`",
+      "| `Domain` | **Absent** |"
+     ],
+     "must_not_contain": [
+      "Domain=.t34ch.com",
+      "Domain=t34ch.com"
+     ]
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-SES-5",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c12-application-sessions-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": true,
+   "affects": "SES-18",
+   "question": "Is `SameSite` alone the approved CSRF control, or is an additional mechanism (token, origin check) required?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 54,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "aa17cb234429d0f9079492b6460b1964ba2e70e135e02b833b73321a7a23c199",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "csrf_control": "EXACT_ALLOWED_ORIGIN_ON_UNSAFE_METHODS",
+    "deny_when_origin": [
+     "missing",
+     "foreign",
+     "malformed",
+     "null"
+    ],
+    "includes_logout": true
+   },
+   "closure_class": "REGISTER_WITH_ARTIFACT",
+   "owner_action": "APPROVE_ARTIFACT_AND_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/04-session-transport-security-spec.md",
+   "missing_owner_values": [],
+   "dependencies": [
+    "OQ-SES-2"
+   ],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c12-application-sessions-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "SES-18"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/04-session-transport-security-spec.md",
+     "contains": [
+      "No `Referer` fallback",
+      "| Missing | `403 FORBIDDEN`, no write |"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-SES-6",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c12-application-sessions-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": true,
+   "affects": "SES-19",
+   "question": "On which events must the session credential rotate (sign-in, privilege change, other)?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 55,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "828f1ca46a38281367a7c558af40ed92a6727f22e6b44420275034200180da67",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "rotate_on": [
+     "successful sign-in",
+     "privilege elevation"
+    ],
+    "pre_authentication_credential_upgrade": false,
+    "atomic": true
+   },
+   "closure_class": "REGISTER_WITH_ARTIFACT",
+   "owner_action": "APPROVE_ARTIFACT_AND_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/04-session-transport-security-spec.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [
+    "SES-16 forbids sessions carrying authority, so \"privilege elevation\" must be defined as step-up reauthentication; artifact gives the exact event list."
+   ],
+   "registration_target": {
+    "contract": "contracts/c12-application-sessions-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "SES-19"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/04-session-transport-security-spec.md",
+     "contains": [
+      "step-up reauthentication",
+      "Never reuse or upgrade a presented value"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-SES-7",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c12-application-sessions-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": false,
+   "affects": "—",
+   "question": "Is there a limit on concurrent sessions per identity?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 56,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "088cafcdd901ceaf00bc05f9c493758e23b8df1996f3bbca8e1b541a7c5b9729",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "concurrent_session_limit": null,
+    "eviction_semantics": "not defined; a later limit requires explicit selection"
+   },
+   "closure_class": "READY_TO_REGISTER",
+   "owner_action": "APPROVE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/04-session-transport-security-spec.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c12-application-sessions-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/04-session-transport-security-spec.md",
+     "contains": [
+      "No count limit."
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-TEN-1",
+   "live_state": "RESOLVED",
+   "registered_by": "#74",
+   "contract": "contracts/c13-tenancy-membership-contract.md",
+   "contract_version_live": "1.5.0",
+   "explicit_blocker": true,
+   "affects": "TEN-15",
+   "question": "**Resolved** Does v2 start with the Gate A single-location compatibility membership or a normalized multi-organization, multi-location membership model?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 60,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "438b5d33e4838b55e60b04451623535e176c8f391c865d41f1608716fd4fff28",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "membership_model": "NORMALIZED_MULTI_ORGANIZATION_MULTI_LOCATION"
+   },
+   "closure_class": "REGISTER_WITH_ARTIFACT",
+   "owner_action": "APPROVE_ARTIFACT_AND_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/06-identity-tenancy-manager-registration-packet.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [
+    "Membership entity is held as candidate in kernel/entities.json pending this decision; Location is candidate."
+   ],
+   "registration_target": {
+    "contract": "contracts/c13-tenancy-membership-contract.md",
+    "from_version": "1.5.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "TEN-15"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "contracts/c13-tenancy-membership-contract.md",
+     "contains": [
+      "NORMALIZED_MULTI_ORGANIZATION_MULTI_LOCATION"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-TEN-2",
+   "live_state": "RESOLVED",
+   "registered_by": "#74",
+   "contract": "contracts/c13-tenancy-membership-contract.md",
+   "contract_version_live": "1.5.0",
+   "explicit_blocker": true,
+   "affects": "TEN-7",
+   "question": "**Resolved** How does a request select its scope when an identity holds more than one membership (explicit path segment, header validated against membership, other)?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 61,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "f15982d0c709300e6fee61c5e7d188eb0cb696a451cd5baf3c627d5978e1a9e0",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "scope_selection": "EXPLICIT_VALIDATED_SCOPE_TUPLE",
+    "implicit_default_or_first_found": false
+   },
+   "closure_class": "REGISTER_WITH_ARTIFACT",
+   "owner_action": "APPROVE_ARTIFACT_AND_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/06-identity-tenancy-manager-registration-packet.md",
+   "missing_owner_values": [],
+   "dependencies": [
+    "OQ-TEN-1"
+   ],
+   "conflicts": [],
+   "technical_notes": [
+    "Transport encoding of the tuple is proposed in 05-api-boundary-manifest.md."
+   ],
+   "registration_target": {
+    "contract": "contracts/c13-tenancy-membership-contract.md",
+    "from_version": "1.5.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "TEN-7"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "contracts/c13-tenancy-membership-contract.md",
+     "contains": [
+      "EXPLICIT_VALIDATED_SCOPE_TUPLE"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-AUTHZ-1",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c14-authorization-capabilities-contract.md",
+   "contract_version_live": "1.2.0",
+   "explicit_blocker": true,
+   "affects": "AUTHZ-19",
+   "question": "Is the Gate A capability vocabulary and bundle table (accepted 2026-07-22) adopted verbatim for v2, amended, or replaced?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 11,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "DIRECTION_RECORDED",
+    "packet_answer_sha256": "b63c34f73db357dd7330a4b045ed6677c53104a905865ce5670e6329feb03dc2",
+    "follow_up_sha256": "e3818dce3d1e7bb4929411d62c3ce4622d1a3e11e576ad0842ed9d69d4fcdaf4"
+   },
+   "preserved_value": {
+    "matrix_source": "NEW_V2",
+    "legacy_grants_adopted": false
+   },
+   "closure_class": "REGISTER_WITH_ARTIFACT",
+   "owner_action": "APPROVE_ARTIFACT_AND_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/02-c14-authorization-capability-matrix.md",
+   "missing_owner_values": [],
+   "dependencies": [
+    "OQ-TEN-1",
+    "OQ-TEN-2",
+    "OQ-MGR-1",
+    "OQ-MGR-2",
+    "OQ-AGT-1"
+   ],
+   "conflicts": [
+    "Global Identity lifecycle commands (DeactivateIdentity, ReactivateIdentity, OffboardIdentity) have cross-organization effects under a multi-organization model; OQ-TEN-3 resolution already records that a separate scope/actor policy is required."
+   ],
+   "technical_notes": [
+    "kernel/capabilities.json has 0 entries at baseline.",
+    "No registered command issues SetupToken/PasswordResetToken; no command creates Organization or Location."
+   ],
+   "registration_target": {
+    "contract": "contracts/c14-authorization-capabilities-contract.md",
+    "from_version": "1.2.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "AUTHZ-19"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/c14-capability-matrix.json",
+     "contains": [
+      "\"matrix_source\": \"NEW_V2\"",
+      "\"legacy_grants_adopted\": false",
+      "\"cross_tenant_capabilities\": []"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-PRIV-1",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c15-data-isolation-privacy-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": true,
+   "affects": "—",
+   "question": "What exactly do deleted, anonymized, retained, and offboarded mean in Teach?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 42,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "DRAFT_FOR_REVIEW",
+    "packet_answer_sha256": "b3e7b00c51bbc4846361c04c004adffe252300e0420cec6adecfa7f9eaa452f9",
+    "follow_up_sha256": "c8c318113bfa319d068e3724bb834247ac0b7c80e390f5d5e9a73e786ff2501a"
+   },
+   "preserved_value": {
+    "deletion": "hard delete from database",
+    "anonymization": "PII replaced with irreversible hash",
+    "retention": "keep as-is",
+    "offboarding": "revoke access, retain history"
+   },
+   "closure_class": "RECONCILE_DRAFT",
+   "owner_action": "APPROVE_CORRECTED_DRAFT",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [
+    "\"Irreversible hash\" is pseudonymization, not anonymization (2026-10-04 review; NIST SP 800-188 s4.3.2).",
+    "IdentityStatus DELETED has no authorized ingress (DB trigger blocks it)."
+   ],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c15-data-isolation-privacy-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+     "contains": [
+      "CORRECTED_LIFECYCLE_DEFINITIONS",
+      "MUST NOT call it anonymized"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-PRIV-2",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c15-data-isolation-privacy-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": true,
+   "affects": "PRIV-12",
+   "question": "What retention periods apply to each record class?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 43,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "DRAFT_FOR_REVIEW",
+    "packet_answer_sha256": "9270a7dcb72e6ce7a2912b077b9693bcfcf62951b90e8a571d7cd01335fe4865",
+    "follow_up_sha256": "c8c318113bfa319d068e3724bb834247ac0b7c80e390f5d5e9a73e786ff2501a"
+   },
+   "preserved_value": {
+    "duration": 1,
+    "unit": "year",
+    "record_classes": [
+     "Identity",
+     "Credential",
+     "session",
+     "token",
+     "membership",
+     "learning",
+     "certification",
+     "audit"
+    ],
+    "legal_hold": "suspends deletion"
+   },
+   "closure_class": "RECONCILE_DRAFT",
+   "owner_action": "APPROVE_CORRECTED_DRAFT",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [
+    "One-year record retention must not be read as one-year credential validity; 12h/30m session and 7d/15m/1h token limits remain binding.",
+    "Certification records MUST NOT be deleted through application paths (CERT-12)."
+   ],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c15-data-isolation-privacy-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "PRIV-12"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+     "contains": [
+      "ONE_YEAR_TERMINAL_CLOCK",
+      "automatic deletion of it is BLOCKED"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-PRIV-3",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c15-data-isolation-privacy-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": true,
+   "affects": "PRIV-15",
+   "question": "Which record classes are exempt from deletion, and on what legal or audit basis?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 44,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "DRAFT_FOR_REVIEW",
+    "packet_answer_sha256": "b8f76c8c99df1ef8325d8446d1d9d2a3ad836de63874a88856217dfcf1aba399",
+    "follow_up_sha256": "c8c318113bfa319d068e3724bb834247ac0b7c80e390f5d5e9a73e786ff2501a"
+   },
+   "preserved_value": {
+    "exemptions": [
+     "audit"
+    ],
+    "legal_hold_is_exemption": false
+   },
+   "closure_class": "RECONCILE_DRAFT",
+   "owner_action": "APPROVE_CORRECTED_DRAFT",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [
+    "Audit exemption from subject deletion differs from audit expiry at 1 year (AUD-11); audit deletion is still BLOCKED."
+   ],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c15-data-isolation-privacy-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "PRIV-15"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+     "contains": [
+      "AUDIT_SUBJECT_DELETION_EXEMPTION",
+      "Legal hold is a suspension, not an exemption"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-PRIV-4",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c15-data-isolation-privacy-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "—",
+   "question": "What export format and fulfillment deadline apply?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 45,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "d25cada6928fa539ded966fb32d7a180727f8980e87da00ab09699f7f692ae47",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "export_format": "JSON (machine-readable) + human-readable summary"
+   },
+   "closure_class": "REGISTER_SPLIT_RESIDUAL",
+   "owner_action": "APPROVE_PARTIAL_REGISTRATION_AND_SUPPLY_RESIDUAL_VALUE_LATER",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+   "missing_owner_values": [
+    "export fulfillment deadline"
+   ],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c15-data-isolation-privacy-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+     "contains": [
+      "\"export_version\":\"1.0.0\"",
+      "Deadline: **UNKNOWN** (OQ-PRIV-4 residual)"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-PRIV-5",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c15-data-isolation-privacy-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "—",
+   "question": "What deletion fulfillment deadline applies?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 46,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "43b8f9c2111d58fea3545dde13d33b0b7a29517aa862b16ffd49c59a1c5a1c01",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {},
+   "closure_class": "UNKNOWN_OWNER_VALUE",
+   "owner_action": "SUPPLY_VALUE_WHEN_LAYER_NEEDS_IT",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+   "missing_owner_values": [
+    "deletion fulfillment deadline"
+   ],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [
+    "Register labels this SUPPLIED_PACKET_RESPONSE, but the supplied text defers the value (\"Requires your input\"). No deadline exists in any source."
+   ],
+   "registration_target": {
+    "contract": "contracts/c15-data-isolation-privacy-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+     "contains": [
+      "Deletion deadline: **UNKNOWN** (OQ-PRIV-5)"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-PRIV-6",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c15-data-isolation-privacy-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "—",
+   "question": "Can export and deletion be fulfilled by an operator procedure at first, rather than self-service?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 47,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "7c0bb968861342d81013f7a540795a334634697d078558baae6dd96c5318db93",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "initial_fulfillment": "VERIFIED_SCOPED_AUDITED_OPERATOR_PROCEDURE",
+    "self_service": "later"
+   },
+   "closure_class": "READY_TO_REGISTER",
+   "owner_action": "APPROVE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c15-data-isolation-privacy-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+     "contains": [
+      "AUDITED_OPERATOR_PROCEDURE_FIRST"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-MIG-3",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c21-database-migration-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": false,
+   "affects": "MIG-12",
+   "question": "Will any browser-reachable database role exist in v2 (for example a hosted-auth client), making RLS tests applicable?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 36,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "37e9d9ff6089304edf8a1ef98c6db86153f43064b55a9ab0acbb05fa56986548",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "browser_reachable_application_tables": false,
+    "implicit_rls_exemption": false
+   },
+   "closure_class": "READY_TO_REGISTER",
+   "owner_action": "APPROVE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [
+    "Supabase exposure is project-specific (opt-in default for new projects from 2026-05-30, enforced on existing projects 2026-10-30); MIG-11/12 proof must come from readback of the exact target project showing zero application-table privileges for anon/authenticated."
+   ],
+   "registration_target": {
+    "contract": "contracts/c21-database-migration-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "MIG-12"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+     "contains": [
+      "BACKEND_ONLY_APPLICATION_DATABASE",
+      "**Release blocker:**",
+      "Project-specific; verified only by readback"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-MIG-4",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c21-database-migration-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": false,
+   "affects": "—",
+   "question": "Are production migrations applied by the deployment pipeline or by a manual, owner-approved step?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 37,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "46aa022f341064139363a9d83471726e79f6188d6b21da20a021732d01c0b2e8",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "production_apply": "MANUAL_OWNER_APPROVED_EXACT_CANDIDATE",
+    "ci_grants_production_permission": false
+   },
+   "closure_class": "READY_TO_REGISTER",
+   "owner_action": "APPROVE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c21-database-migration-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+     "contains": [
+      "MANUAL_OWNER_APPROVED_PRODUCTION_APPLY",
+      "CI holds no production database credential"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-MIG-5",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c21-database-migration-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": false,
+   "affects": "—",
+   "question": "Will v2 import any data from the legacy Teach database, and if so through which governed, audited path? Until decided, MIG-7's production baseline is the v2 production schema only.",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 38,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "b979c2026e48c741e9bc9ef9f268afa46b84b4bfebdc619b5781c92ef5b778f4",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "legacy_data_import": "ABSENT",
+    "future_import_requires": "own source snapshot, transformation, reconciliation, audit and rollback plan"
+   },
+   "closure_class": "REGISTER_AS_DISABLED",
+   "owner_action": "APPROVE_DISABLED_STATE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c21-database-migration-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+     "contains": [
+      "NO_LEGACY_DATA_IMPORT_YET"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-TXN-2",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c22-transaction-idempotency-reconciliation-contract.md",
+   "contract_version_live": "1.2.0",
+   "explicit_blocker": false,
+   "affects": "—",
+   "question": "Which external providers are in scope for v2 (email delivery, OAuth, payments, other), and which owns reconciliation for each?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 63,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "a19027e69a69d46723d6d7acd3fc4b49df378bcf5fcdac22a7b36e61a0f60b69",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "in_scope_external_effects": [
+     "email delivery",
+     "OAuth sign-in"
+    ],
+    "payments": "DISABLED"
+   },
+   "closure_class": "REGISTER_SPLIT_RESIDUAL",
+   "owner_action": "APPROVE_PARTIAL_REGISTRATION_AND_SUPPLY_RESIDUAL_VALUE_LATER",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+   "missing_owner_values": [
+    "email delivery provider",
+    "OAuth provider(s)"
+   ],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c22-transaction-idempotency-reconciliation-contract.md",
+    "from_version": "1.2.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+     "contains": [
+      "in scope = email delivery and OAuth sign-in; payments disabled"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-AUD-2",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c23-audit-lifecycle-events-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": false,
+   "affects": "AUD-7",
+   "question": "For which entities must current state be reconstructable from lifecycle history?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 9,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "c0f5fe1e681c8ff5f17b3664ae2f76b365a19fc0b6dd9cc94aa7a65709db3b2c",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "reconstructable_entities": [
+     "Identity",
+     "Membership",
+     "Assignment",
+     "Certification"
+    ],
+    "projections_separate_from_canonical_state": true
+   },
+   "closure_class": "READY_TO_REGISTER",
+   "owner_action": "APPROVE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c23-audit-lifecycle-events-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "AUD-7"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+     "contains": [
+      "IDENTITY_MEMBERSHIP_ASSIGNMENT_CERTIFICATION_HISTORY"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-AUD-3",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c23-audit-lifecycle-events-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": false,
+   "affects": "AUD-8",
+   "question": "Which denial types are operationally significant enough to record?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 10,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "a7cf24db14b2975415fbb14151a65dd47a108572d1bec2cbe8b9693df1723b72",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "recorded_denials": [
+     "capability",
+     "tenant scope",
+     "target scope",
+     "invalid or revoked credential abuse"
+    ],
+    "rate_limited": true,
+    "validation_errors_recorded": false
+   },
+   "closure_class": "REGISTER_WITH_ARTIFACT",
+   "owner_action": "APPROVE_ARTIFACT_AND_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [
+    "Rate-limit/deduplication parameters are engineering proposals in the artifact."
+   ],
+   "registration_target": {
+    "contract": "contracts/c23-audit-lifecycle-events-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "AUD-8"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+     "contains": [
+      "SECURITY_SIGNIFICANT_DENIALS_ONLY",
+      "100 rows per actor per hour"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-CNT-2",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c31-content-teaching-engine-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": false,
+   "affects": "CNT-11",
+   "question": "Where are customer content approvals recorded, and who may record one?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 22,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "3af74681267b659b5791ce797191ed06eec793af16bb2f23673b0238a6f64c47",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "mechanism": "version/digest-bound approval in Content-owned record; recorded actor/scope/time; audited"
+   },
+   "closure_class": "REGISTER_SPLIT_RESIDUAL",
+   "owner_action": "APPROVE_PARTIAL_REGISTRATION_AND_SUPPLY_RESIDUAL_VALUE_LATER",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/09-governance-content-certification-web-packet.md",
+   "missing_owner_values": [
+    "content approver role/title"
+   ],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [
+    "OQ-CNT-1 dependency is now resolved (C31 1.1.0).",
+    "Same approver-identity gap as OQ-CERT-2."
+   ],
+   "registration_target": {
+    "contract": "contracts/c31-content-teaching-engine-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "CNT-11"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/09-governance-content-certification-web-packet.md",
+     "contains": [
+      "A new content version never inherits an approval"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-CNT-3",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c31-content-teaching-engine-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": false,
+   "affects": "—",
+   "question": "Which legacy pack formats must v2 accept through adapters?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 23,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "2217109dde0389e6174fe7727280e70e2c47efc2d1a3719991a5ec9530795bb1",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "accepted_legacy_formats": [],
+    "admission_rule": "one named adapter per format, fixtures incl. negative fixtures, C00 compatibility-register entry"
+   },
+   "closure_class": "REGISTER_AS_DISABLED",
+   "owner_action": "APPROVE_DISABLED_STATE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c31-content-teaching-engine-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+     "contains": [
+      "ONE_NAMED_ADAPTER_PER_LEGACY_FORMAT"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-LRN-2",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c32-learning-sessions-progress-contract.md",
+   "contract_version_live": "1.2.0",
+   "explicit_blocker": false,
+   "affects": "LRN-13",
+   "question": "How are mastery, XP, streak, and rank derived from events?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 32,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "2a63e42b6cae5bdf371a1fc73fb232ed463f2d57212bf09c207d027f926b11ac",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "xp_mastery_streak_rank": "UNAVAILABLE_UNTIL_VERSIONED_FORMULAS_APPROVED"
+   },
+   "closure_class": "REGISTER_AS_DISABLED",
+   "owner_action": "APPROVE_DISABLED_STATE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [
+    "Verified: learning_sessions has columns id, identity_id, assignment_id, status only; no persisted XP, so the non-blocking label holds."
+   ],
+   "registration_target": {
+    "contract": "contracts/c32-learning-sessions-progress-contract.md",
+    "from_version": "1.2.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "LRN-13"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+     "contains": [
+      "DEFER_SCORING_FORMULAS"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-MGR-1",
+   "live_state": "RESOLVED",
+   "registered_by": "#74",
+   "contract": "contracts/c33-manager-operations-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": true,
+   "affects": "MGR-3",
+   "question": "**Resolved** Is manager visibility limited to direct reports, the whole location, or configurable?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 34,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "b52423223a39e3146f82c5ca052687b973f962a9cd3541d8f86cb842bd932824",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "manager_visibility": "DIRECT_REPORTS_INTERSECT_ACTIVE_ORGANIZATION_LOCATION_SCOPE",
+    "reporting_creates_capability": false
+   },
+   "closure_class": "REGISTER_WITH_ARTIFACT",
+   "owner_action": "APPROVE_ARTIFACT_AND_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/06-identity-tenancy-manager-registration-packet.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [
+    "No ReportingRelationship concept exists in kernel/entities.json; until one is registered (C01 semantic change) the direct-report set is empty and managers see no learners (fail closed)."
+   ],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c33-manager-operations-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "MGR-3"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "contracts/c33-manager-operations-contract.md",
+     "contains": [
+      "DIRECT_REPORTS_WITHIN_APPROVED_SCOPE"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-MGR-2",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c33-manager-operations-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": false,
+   "affects": "—",
+   "question": "May managers offboard directly, or only request offboarding for an operator to approve?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 35,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "8810cc9493f1f9ac0501b2c3a9ab604f0a75ab86bbf7754470b209b28ec1d2d2",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "manager_offboarding": "DEDICATED_CAPABILITY_THROUGH_CANONICAL_IDENTITY_SERVICE",
+    "global_effects": "require separate policy"
+   },
+   "closure_class": "REGISTER_WITH_ARTIFACT",
+   "owner_action": "APPROVE_ARTIFACT_AND_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/06-identity-tenancy-manager-registration-packet.md",
+   "missing_owner_values": [],
+   "dependencies": [
+    "OQ-AUTHZ-1"
+   ],
+   "conflicts": [
+    "Same global-lifecycle conflict as OQ-AUTHZ-1."
+   ],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c33-manager-operations-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/06-identity-tenancy-manager-registration-packet.md",
+     "contains": [
+      "EXPLICIT_OFFBOARD_CAPABILITY_THROUGH_IDENTITY_SERVICE",
+      "GLOBAL-EFFECT GUARD"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-CERT-1",
+   "live_state": "RESOLVED",
+   "registered_by": "#74",
+   "contract": "contracts/c34-certification-credentials-contract.md",
+   "contract_version_live": "1.2.0",
+   "explicit_blocker": true,
+   "affects": "CERT-13",
+   "question": "**Resolved** Is credential verification public (anyone with the link) or private (authenticated, scoped)? (Deferred by Gate A.)",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 16,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "c9e4246f7c275d1159266d7172be072958f7b36ac6dd8ef0b1c1712aff310821",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "verification_surface": "PRIVATE_AUTHENTICATED_SCOPED",
+    "public_link": "requires separate disclosure model"
+   },
+   "closure_class": "READY_TO_REGISTER",
+   "owner_action": "APPROVE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/09-governance-content-certification-web-packet.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c34-certification-credentials-contract.md",
+    "from_version": "1.2.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "CERT-13"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "contracts/c34-certification-credentials-contract.md",
+     "contains": [
+      "PRIVATE_AUTHENTICATED_SCOPED_VERIFICATION"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-CERT-2",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c34-certification-credentials-contract.md",
+   "contract_version_live": "1.2.0",
+   "explicit_blocker": true,
+   "affects": "CERT-4",
+   "question": "Who approves certification criteria versions, and where is approval recorded?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 17,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "UNKNOWN",
+    "packet_answer_sha256": "0cfb03bec23319134ee4625005379163ea7e1723f02fa5bc42c726051465cc1c",
+    "follow_up_sha256": "6563fe5a62e06c288d2a9f89167cbdfeed3cfb9029b4199023116cb0d39c7ad0"
+   },
+   "preserved_value": {
+    "mechanism": "version/digest-bound approval, designated approvers, audited",
+    "approver_role": "UNKNOWN",
+    "approval_record_location": "UNKNOWN"
+   },
+   "closure_class": "UNKNOWN_OWNER_VALUE",
+   "owner_action": "SUPPLY_VALUE_WHEN_LAYER_NEEDS_IT",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/09-governance-content-certification-web-packet.md",
+   "missing_owner_values": [
+    "certification-criteria approver role/title",
+    "approval-record ownership"
+   ],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c34-certification-credentials-contract.md",
+    "from_version": "1.2.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "CERT-4"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/09-governance-content-certification-web-packet.md",
+     "contains": [
+      "| Approver role/title | **UNKNOWN** |"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-CERT-3",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c34-certification-credentials-contract.md",
+   "contract_version_live": "1.2.0",
+   "explicit_blocker": false,
+   "affects": "CERT-7",
+   "question": "What evidence types are acceptable (observation notes, checklist, photo, other)?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 18,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "e411666b4e4e2be5b480cf47d7b59dbf3fabae82c24ea6e5d2c39ec3887a169b",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "accepted_evidence": [
+     "structured checklist result",
+     "scoped observation note"
+    ],
+    "photo_evidence": "DISABLED"
+   },
+   "closure_class": "READY_TO_REGISTER",
+   "owner_action": "APPROVE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c34-certification-credentials-contract.md",
+    "from_version": "1.2.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "CERT-7"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+     "contains": [
+      "STRUCTURED_CHECKLIST_AND_OBSERVATION_NOTES_FIRST"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-CERT-5",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c34-certification-credentials-contract.md",
+   "contract_version_live": "1.2.0",
+   "explicit_blocker": false,
+   "affects": "—",
+   "question": "Do certifications expire, and if so how is expiry represented?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 20,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "ed92dbc993f5fcfb42cb182c575514945a1a30896deaaf3debb706716c102b5b",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "certification_expiry": "NONE",
+    "future_expiry_requires": "owner-defined representation, effects, history/revocation rules"
+   },
+   "closure_class": "REGISTER_AS_DISABLED",
+   "owner_action": "APPROVE_DISABLED_STATE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c34-certification-credentials-contract.md",
+    "from_version": "1.2.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+     "contains": [
+      "NO_IMPLICIT_EXPIRY"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-API-1",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c41-api-boundary-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": true,
+   "affects": "—",
+   "question": "Which routes are boundary exceptions outside `/api/v1`?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 5,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SOURCE_SCAN_PENDING_SELECTION",
+    "packet_answer_sha256": "76795de259a0040278504b3b77109fc9a84c253008d9a61a150a541d0580dd51",
+    "follow_up_sha256": "bbcdda8a7bcdaf95bd1eeb371968d7138e3270e8b813f600bba5779900e51c34"
+   },
+   "preserved_value": {
+    "product_operations": "/api/v1/*",
+    "exceptions": "health/readiness + auth callbacks only",
+    "implemented_http_route_count_at_scan": 0
+   },
+   "closure_class": "REGISTER_WITH_ARTIFACT",
+   "owner_action": "APPROVE_ARTIFACT_AND_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/05-api-boundary-manifest.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [
+    "Exact exception list is authored in api-boundary-manifest.json; no route is authorized until registered."
+   ],
+   "registration_target": {
+    "contract": "contracts/c41-api-boundary-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/api-boundary-manifest.json",
+     "contains": [
+      "\"path\": \"/api/health\"",
+      "\"path\": \"/api/ready\"",
+      "\"path\": \"/api/auth/callback/{provider}\""
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-API-2",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c41-api-boundary-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "API-10",
+   "question": "What is the error envelope shape?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 6,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "14e220457a934c4bfd788c86b8e02b3d8c49ce0cfb11df08b501b11176c2639f",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "error_envelope": [
+     "code",
+     "message",
+     "requestId"
+    ],
+    "target_denials": "identical and non-disclosing"
+   },
+   "closure_class": "REGISTER_WITH_ARTIFACT",
+   "owner_action": "APPROVE_ARTIFACT_AND_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/05-api-boundary-manifest.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c41-api-boundary-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "API-10"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/05-api-boundary-manifest.md",
+     "contains": [
+      "CODE_MESSAGE_REQUEST_ID_ENVELOPE"
+     ],
+     "must_not_contain": []
+    },
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/api-error-envelope.schema.json",
+     "contains": [
+      "\"requestId\"",
+      "\"additionalProperties\": false"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-API-3",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c41-api-boundary-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "API-13",
+   "question": "What is the API versioning and deprecation policy?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 7,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "c18c36bdc60aaa5031134f451b41f8855fedefabd940e6b04cd6b1bdf3f56dfe",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "versioning": "/api/v1 major-version path",
+    "deprecation": "explicit deprecation manifest"
+   },
+   "closure_class": "REGISTER_SPLIT_RESIDUAL",
+   "owner_action": "APPROVE_PARTIAL_REGISTRATION_AND_SUPPLY_RESIDUAL_VALUE_LATER",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/05-api-boundary-manifest.md",
+   "missing_owner_values": [
+    "deprecation sunset periods"
+   ],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c41-api-boundary-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "API-13"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/05-api-boundary-manifest.md",
+     "contains": [
+      "`/api/v2`",
+      "**Sunset period: UNKNOWN**"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-WEB-1",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c42-web-client-boundary-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": true,
+   "affects": "WEB-15",
+   "question": "Which accessibility standard and level is approved (for example WCAG 2.2 AA)?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 64,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "04fd38138a9d0a9a185129888f46b88a4f8b7c08c5052d7c2e831c942eaa1a35",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "accessibility_standard": "WCAG 2.2",
+    "level": "AA",
+    "minimum_target_css_px": 44
+   },
+   "closure_class": "READY_TO_REGISTER",
+   "owner_action": "APPROVE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/09-governance-content-certification-web-packet.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c42-web-client-boundary-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "WEB-15"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/09-governance-content-certification-web-packet.md",
+     "contains": [
+      "WCAG_2_2_AA",
+      "44×44 CSS px"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-WEB-2",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c42-web-client-boundary-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "—",
+   "question": "Is the core-path list above complete for v2?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 65,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "c9c0f9b79ec6bd40f5177b692dd30cc0961273bc9e7aaf1004800f35a0e507f1",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "core_paths": [
+     "login",
+     "assigned-content start",
+     "recorded completion",
+     "scoped manager view",
+     "logout"
+    ],
+    "demo_isolation": "separately specified"
+   },
+   "closure_class": "READY_TO_REGISTER",
+   "owner_action": "APPROVE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/09-governance-content-certification-web-packet.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c42-web-client-boundary-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/09-governance-content-certification-web-packet.md",
+     "contains": [
+      "sign in, start assigned content, record completion, scoped manager view, sign out"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-EVD-1",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c51-verification-evidence-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "EVD-16",
+   "question": "Which contracts are high-risk and require independent verification?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 24,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "274d1f88cab8f888fe0b3802c009de9ad4fc10a5c03a8011d4fb4a9146707fa0",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "independent_verification_required_for": [
+     "C11",
+     "C12",
+     "C13",
+     "C14",
+     "C15",
+     "C21",
+     "C22",
+     "C23",
+     "C51",
+     "C52",
+     "protected cross-domain mutations"
+    ],
+    "self_audit_is_independent": false
+   },
+   "closure_class": "READY_TO_REGISTER",
+   "owner_action": "APPROVE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c51-verification-evidence-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "EVD-16"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+     "contains": [
+      "INDEPENDENT_SECURITY_DATA_RELEASE_VERIFICATION"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-EVD-2",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c51-verification-evidence-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "—",
+   "question": "Where are evidence records stored and for how long?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 25,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "6564ae72562cd5ecc122082a774585722e999bd0f4b6a67facdbaa6da911041b",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "storage": "repository metadata + SHA-bound artifacts",
+    "ci_artifacts_assumed_permanent": false
+   },
+   "closure_class": "REGISTER_SPLIT_RESIDUAL",
+   "owner_action": "APPROVE_PARTIAL_REGISTRATION_AND_SUPPLY_RESIDUAL_VALUE_LATER",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+   "missing_owner_values": [
+    "evidence retention duration",
+    "durable content-addressed archive location"
+   ],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c51-verification-evidence-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+     "contains": [
+      "Content addressing",
+      "Residual owner values: **retention duration** and **archive location**"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-EVD-3",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c51-verification-evidence-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "—",
+   "question": "How do these four evidence states map to the TOS truth states (verified, declared, inferred, unknown, conflicting, stale)?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 26,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "4a730ea1f395529f3fe03530facf2859d6e3791ee335bee551c385d5eafb98a1",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "PROVEN": "verified, current, exact-SHA evidence",
+    "BLOCKED": "unmet gate",
+    "UNKNOWN": "insufficient or stale evidence",
+    "CONTRADICTORY": "conflicting facts",
+    "declared_or_inferred_auto_promote": false
+   },
+   "closure_class": "READY_TO_REGISTER",
+   "owner_action": "APPROVE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c51-verification-evidence-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+     "contains": [
+      "Never auto-promotes",
+      "Only path to PROVEN"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-REL-3",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c52-deployment-release-recovery-contract.md",
+   "contract_version_live": "1.2.0",
+   "explicit_blocker": false,
+   "affects": "REL-8",
+   "question": "What does the deployed smoke test cover?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 50,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "de0a85f0c0a0aea45e313dc8bac536b585536bca1a50f0575349854b07fef8a8",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "smoke_scope": [
+     "deployment/config/schema identity",
+     "health/readiness",
+     "role/scope denials",
+     "assigned-content start/completion",
+     "atomic audit",
+     "logout replay",
+     "recovery"
+    ],
+    "url_200_sufficient": false
+   },
+   "closure_class": "REGISTER_WITH_ARTIFACT",
+   "owner_action": "APPROVE_ARTIFACT_AND_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c52-deployment-release-recovery-contract.md",
+    "from_version": "1.2.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "REL-8"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+     "contains": [
+      "SOURCE_ENV_AUTHORIZATION_RECOVERY_SMOKE_MATRIX",
+      "A `200` on the home page is not a step."
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-OBS-1",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c53-observability-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": false,
+   "affects": "OBS-2",
+   "question": "Which error-capture and alerting providers are approved, and where do alerts go?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 39,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "RECOMMENDED",
+    "packet_answer_sha256": "4d898d0341117e242017d4b5eb86e7572f55cdef7a99bc90c800208b19924cf7",
+    "follow_up_sha256": "0a67e03d01d6f88c498ca4663a7e149c5e42b54aa4d6ea251bb0a0a666d1f89a"
+   },
+   "preserved_value": {
+    "errors": "Sentry",
+    "traffic": "Vercel Analytics",
+    "alert_destination": "UNKNOWN"
+   },
+   "closure_class": "CONFIRM_RECOMMENDATION",
+   "owner_action": "CONFIRM_OR_REJECT_RECOMMENDATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+   "missing_owner_values": [
+    "alert destination"
+   ],
+   "dependencies": [],
+   "conflicts": [
+    "Vercel Analytics conflicts with OQ-ANL-1 (analytics disabled) unless reclassified as non-product operational traffic metrics with zero learner identifiers.",
+    "Sentry default retention (30-day lookback) cannot satisfy OBS-11 90-day retention alone."
+   ],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c53-observability-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "OBS-2"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+     "contains": [
+      "sendDefaultPii: false",
+      "**Alert destination: UNKNOWN**"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-OBS-2",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c53-observability-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": false,
+   "affects": "OBS-7",
+   "question": "Which learner fields, if any, may appear in logs?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 40,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "2923e637e730088bf717e72a79101225b8a65e222efaa7bef671ba167e9d34d5",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "logs_may_contain": [
+     "request ID",
+     "operation",
+     "denial reason class",
+     "approved pseudonymous operational identifiers"
+    ],
+    "logs_must_not_contain": [
+     "credentials",
+     "learner payload content"
+    ]
+   },
+   "closure_class": "READY_TO_REGISTER",
+   "owner_action": "APPROVE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c53-observability-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "OBS-7"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+     "contains": [
+      "NO_CREDENTIALS_OR_LEARNER_PAYLOAD_LOGGING"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-ANL-1",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c61-analytics-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "—",
+   "question": "Will analytics be enabled for v2, and with which provider?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 3,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "760f58347bc0abdb0c69454c328b68d50de76a0f66a8c54cd305d3f6df23e0b1",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "analytics": "DISABLED",
+    "provider": null
+   },
+   "closure_class": "REGISTER_AS_DISABLED",
+   "owner_action": "APPROVE_DISABLED_STATE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c61-analytics-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+     "contains": [
+      "`OQ-ANL-1` | C61 | Product analytics | `DISABLED`"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-ANL-2",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c61-analytics-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "ANL-7",
+   "question": "Which identifying fields, if any, may analytics events carry?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 4,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "4197618d6d468043e72d7cb88ca37ece02cb60c413e546597d72da884419dbeb",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "identifying_fields_permitted": []
+   },
+   "closure_class": "REGISTER_AS_DISABLED",
+   "owner_action": "APPROVE_DISABLED_STATE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c61-analytics-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "ANL-7"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+     "contains": [
+      "NO_IDENTIFYING_ANALYTICS_FIELDS"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-PWA-1",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c62-pwa-offline-contract.md",
+   "contract_version_live": "1.0.3",
+   "explicit_blocker": false,
+   "affects": "PWA-5",
+   "question": "Will offline writes ever be authorized, and for which operations?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 48,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "db6b6b958d15dbf5328b6a1aa6ee52ae4579ab4374968ebd14b8641aa726908f",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "offline_writes": "NOT_AUTHORIZED"
+   },
+   "closure_class": "REGISTER_AS_DISABLED",
+   "owner_action": "APPROVE_DISABLED_STATE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c62-pwa-offline-contract.md",
+    "from_version": "1.0.3",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "PWA-5"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+     "contains": [
+      "NO_OFFLINE_WRITES"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-BIL-1",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c63-billing-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": false,
+   "affects": "—",
+   "question": "When, if ever, is self-service billing enabled for v2?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 13,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "69e2d944631c343a37980288121720054764805ce00b395945c7b316d8a00b3b",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "self_service_billing": "DISABLED"
+   },
+   "closure_class": "REGISTER_AS_DISABLED",
+   "owner_action": "APPROVE_DISABLED_STATE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c63-billing-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": null
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+     "contains": [
+      "`OQ-BIL-1` | C63 | Self-service billing | `DISABLED`"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-BIL-2",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c63-billing-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": false,
+   "affects": "BIL-12",
+   "question": "Which payment provider is approved (the source proposal names Stripe)?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 14,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "1c5cb2d1fe3c804b36e8e86c64bd0d6223477becc685cdfceab278162820fed5",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "payment_provider": null,
+    "money_movement": "NOT_AUTHORIZED"
+   },
+   "closure_class": "REGISTER_AS_DISABLED",
+   "owner_action": "APPROVE_DISABLED_STATE_REGISTRATION",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+   "missing_owner_values": [],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c63-billing-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "BIL-12"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+     "contains": [
+      "DEFER_PAYMENT_PROVIDER"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  },
+  {
+   "id": "OQ-BIL-3",
+   "live_state": "UNRESOLVED",
+   "registered_by": null,
+   "contract": "contracts/c63-billing-contract.md",
+   "contract_version_live": "1.1.0",
+   "explicit_blocker": false,
+   "affects": "BIL-13",
+   "question": "How does an Organization relate to its billing account (for example one-to-one, owned by the organization)?",
+   "answer_register": {
+    "path": "verification/owner-decisions/2026-10-05/answer-register.json",
+    "record_index": 15,
+    "capture_state": "ANSWER_RECEIVED_UNREGISTERED",
+    "recorded_detail_state": "SUPPLIED_PACKET_RESPONSE",
+    "packet_answer_sha256": "954a92c0549f5e95938be5151ea3b5f708d4fd7d0c2a3a147df92cd4c18e96d1",
+    "follow_up_sha256": null
+   },
+   "preserved_value": {
+    "billing_account_owner": "Organization",
+    "entitlement_projection": "read-only, Organization-owned"
+   },
+   "closure_class": "REGISTER_SPLIT_RESIDUAL",
+   "owner_action": "APPROVE_PARTIAL_REGISTRATION_AND_SUPPLY_RESIDUAL_VALUE_LATER",
+   "repeat_original_question": false,
+   "controlling_artifact": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+   "missing_owner_values": [
+    "Organization-to-billing-account cardinality"
+   ],
+   "dependencies": [],
+   "conflicts": [],
+   "technical_notes": [],
+   "registration_target": {
+    "contract": "contracts/c63-billing-contract.md",
+    "from_version": "1.1.0",
+    "bump": "MINOR",
+    "procedure": "SYS-21",
+    "requirement_amended": "BIL-13"
+   },
+   "evidence_required_to_mark_resolved": [
+    "GitHub issue opened before material contract edits (SYS-21)",
+    "Prior contract version preserved under contracts/superseded/ with status superseded",
+    "OQ row marked Resolved with the selection token and approval date; affected requirement text carries the value",
+    "contracts/APPROVAL-RECORD.md entry naming contract ID and new version, recorded from an owner approval (SYS-17, SYS-18)",
+    "scripts/verification/owner-decision-inventory.mjs unresolved count decreases by exactly the resolved IDs and no others",
+    "scripts/docs/validate-document-metadata.mjs and existing CI pass on the exact registration SHA"
+   ],
+   "implementation_evidence_is_separate": true,
+   "semantic_assertions": [
+    {
+     "path": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+     "contains": [
+      "ORGANIZATION_OWNED_BILLING_RELATION_PROPOSAL",
+      "Organization-to-billing-account cardinality"
+     ],
+     "must_not_contain": []
+    }
+   ],
+   "state": "PROPOSED"
+  }
+ ]
+}

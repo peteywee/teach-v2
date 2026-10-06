@@ -60,7 +60,7 @@ for(const id of ['IdentityStateMachine','ApplicationSessionStateMachine']) if(fi
 const relation=find(relationships,'IdentityHasApplicationSession');
 if(!relation || relation.status!=='approved' || relation.cardinality!=='one-to-many' || relation.owning_domain!=='Identity') errors.push('SLICE-P02 admission: approved IdentityHasApplicationSession one-to-many relationship required');
 
-if(!c12.includes('"version": "1.1.0"') || c12.includes('| OQ-SES-3 |') || c12.includes('| OQ-SES-4 |')) errors.push('SLICE-P02 admission: C12 1.1.0 verifier/lifetime closure required');
+if(!c12.includes('"version": "1.2.0"') || c12.includes('| OQ-SES-3 |') || c12.includes('| OQ-SES-4 |')) errors.push('SLICE-P02 admission: C12 1.2.0 verifier/lifetime closure required');
 for(const unresolved of ['OQ-SES-1','OQ-SES-2','OQ-SES-5','OQ-SES-6']) if(!c12.includes(`| ${unresolved} |`)) errors.push(`SLICE-P02 admission: non-decision ${unresolved} must remain open`);
 for(const unresolved of ['OQ-PRIV-1','OQ-PRIV-2','OQ-PRIV-3']) if(!c15.includes(`| ${unresolved} |`)) errors.push(`SLICE-P02 admission: C15 non-decision ${unresolved} must remain open`);
 

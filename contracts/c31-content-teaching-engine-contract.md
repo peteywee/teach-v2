@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C31",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-03",
-  "effective_on": "2026-10-03",
+  "updated_on": "2026-10-05",
+  "effective_on": "2026-10-05",
   "approval": {
     "state": "approved",
-    "approved_version": "1.0.0",
-    "approved_on": "2026-10-03",
+    "approved_version": "1.2.0",
+    "approved_on": "2026-10-05",
     "record": "contracts/APPROVAL-RECORD.md",
-    "inheritance": "1.0.1, 1.0.2, and 1.0.3 are non-normative governance/truth-state cleanup patches; 1.0.0 owner approval remains controlling"
+    "basis": "Owner manifest-bound decision-closure r3.1 approval under SYS-21 #75; sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,7 +28,9 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": [],
+  "supersedes": [
+    "TEACH-CON-C31@1.1.0"
+  ],
   "superseded_by": null,
   "depends_on": [
     "contracts/"
@@ -43,17 +45,17 @@
 | Contract ID        | C31                                                                                                                                                             |
 | Group              | C30 Product Semantics                                                                                                                                           |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.1.0                                                                                                                                                           |
+| Version            | 1.2.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
+| Approved by        | Patrick Craven (owner), 2026-10-05; manifest-bound decision-closure r3.1, SYS-21 #75; see `APPROVAL-RECORD.md` |
 | Requirement prefix | `CNT`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/content-engine.json`.                                                                               |
-| Supersedes         | None                                                                                                                                                            |
+| Supersedes         | 1.1.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-03                                                                                                                                                      |
+| Last updated       | 2026-10-05 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -98,7 +100,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **CNT-8** — Engine core code MUST NOT depend on a web framework, database client, network client, or browser API.
 - **CNT-9** — Content existence MUST be separate from content assignment.
 - **CNT-10** — Knowing or possessing a pack ID MUST NOT grant access to the pack; access MUST follow C14 and assignment.
-- **CNT-11** — Content MUST NOT display or record a customer approval claim unless a recorded authorization exists (see OQ-CNT-2; value Not yet verified).
+- **CNT-11** — Customer-approval claims MUST be backed by a Content-owned append-only approval bound to content_pack_id, version and digest, recording authorized actor, organization scope, time and audit atomically. New versions inherit no approval; withdrawal is a new record. Approver role/title remains UNKNOWN, so no approval record or claim is authorized until selected. See `governance/decision-closure/09-governance-content-certification-web-packet.md`. (OQ-CNT-2 partially registered 2026-10-05).
 - **CNT-12** — Challenge configuration and engine schema MUST remain in parity, enforced by an automated check.
 
 ## 5. Acceptance Cases
@@ -120,8 +122,8 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | ID       | Question                                                                            | Blocks implementation | Affects |
 | -------- | ----------------------------------------------------------------------------------- | --------------------- | ------- |
 | OQ-CNT-1 | **Resolved** What versioning scheme applies to the schema and to packs (semver, integer, other)? | No                    | CNT-2 (approved 2026-10-05) |
-| OQ-CNT-2 | Where are customer content approvals recorded, and who may record one?              | No                    | CNT-11  |
-| OQ-CNT-3 | Which legacy pack formats must v2 accept through adapters?                          | No                    | —       |
+| OQ-CNT-2 | **Open — residual only.** Which customer content-approver role/title is approved? Owner, 2026-10-05: Customer-approval claims MUST be backed by a Content-owned append-only approval bound to content_pack_id, version and digest, recording authorized actor, organization scope, time and audit atomically. New versions inherit no approval; withdrawal is a new record. Approver role/title remains UNKNOWN, so no approval record or claim is authorized until selected. See `governance/decision-closure/09-governance-content-certification-web-packet.md`. (Decision-closure r3.1; partial registration) | No | CNT-11 |
+| OQ-CNT-3 | **Resolved.** Owner, 2026-10-05: No legacy content format is accepted. Admission requires one named adapter per format, deterministic conversion/version validation, positive and negative fixtures and a C00 compatibility-register entry with removal condition. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1) | No (resolved) | — |
 
 ## 7. Verification Status
 
@@ -131,14 +133,14 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
-| Blocking open questions      | 0 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
-| Owner approval               | declared                 | Approved by the owner on 2026-10-03; recorded in `APPROVAL-RECORD.md`. Initial owner-approval baseline is commit `2c9b1c849a520ba817efc91150be9a37797f4238`; this 1.0.3 revision is tracked by Git history.                                                                     |
+| Blocking open questions      | 0 open | Only unresolved question rows govern blocking; registration is not implementation evidence |
+| Owner approval               | declared | 1.2.0 owner approval recorded in APPROVAL-RECORD.md under #75; runtime implementation conformance remains UNKNOWN |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
 ## 8. Change Log
 
-| Version | Date       | Change                                                                                                                                                                                                | By               |
+| Version | Date | Change | By |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                      | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Group renamed to C30 Product Semantics. No requirement changes.                                                                                                                                       | Claude (drafter) |
@@ -148,3 +150,4 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.1   | 2026-10-03 | Non-normative document-governance metadata/provenance normalization; 1.0.0 owner approval remained controlling. | ChatGPT (governance) |
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
+| 1.2.0 | 2026-10-05 | Register OQ-CNT-2, OQ-CNT-3; preserve named residuals and existing requirement/acceptance IDs. Decision-closure r3.1 manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c; SYS-21 #75. | Patrick Craven (owner); ChatGPT (recorder) |

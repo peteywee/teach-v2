@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C34",
   "class": "contract",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-03",
-  "effective_on": "2026-10-03",
+  "updated_on": "2026-10-05",
+  "effective_on": "2026-10-05",
   "approval": {
     "state": "approved",
-    "approved_version": "1.0.0",
-    "approved_on": "2026-10-03",
+    "approved_version": "1.3.0",
+    "approved_on": "2026-10-05",
     "record": "contracts/APPROVAL-RECORD.md",
-    "inheritance": "1.0.1, 1.0.2, and 1.0.3 are non-normative governance/truth-state cleanup patches; 1.0.0 owner approval remains controlling"
+    "basis": "Owner manifest-bound decision-closure r3.1 approval under SYS-21 #75; sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,7 +28,9 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": [],
+  "supersedes": [
+    "TEACH-CON-C34@1.2.0"
+  ],
   "superseded_by": null,
   "depends_on": [
     "contracts/"
@@ -43,17 +45,17 @@
 | Contract ID        | C34                                                                                                                                                             |
 | Group              | C30 Product Semantics                                                                                                                                           |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.2.0                                                                                                                                                           |
+| Version            | 1.3.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
+| Approved by        | Patrick Craven (owner), 2026-10-05; manifest-bound decision-closure r3.1, SYS-21 #75; see `APPROVAL-RECORD.md` |
 | Requirement prefix | `CERT`                                                                                                                                                          |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/manager-operations.json` (sign-off/certification half).                                             |
-| Supersedes         | None                                                                                                                                                            |
+| Supersedes         | 1.2.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-03                                                                                                                                                      |
+| Last updated       | 2026-10-05 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -94,7 +96,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **CERT-4** — Issuance MUST bind an approved criteria/checklist version (see OQ-CERT-2; value Not yet verified).
 - **CERT-5** — Issuance MUST record an observer who holds the observe/issue capability in the learner's scope.
 - **CERT-6** — Issuance MUST record a server-assigned timestamp.
-- **CERT-7** — Issuance MUST record evidence of the observed performance (see OQ-CERT-3; value Not yet verified).
+- **CERT-7** — Issuance evidence MUST be structured checklist results and scoped observation notes bound to observed performance. Photos/files are DISABLED and rejected; enabling them requires separate storage, privacy, retention and access decisions. OQ-CERT-2 remains open and continues to block issuance. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (OQ-CERT-3 resolved 2026-10-05).
 - **CERT-8** — If any required issuance element is missing, issuance MUST be rejected and a certification record MUST NOT be created.
 - **CERT-9** — The certification record and its audit record MUST commit atomically.
 - **CERT-10** — Duplicate issuance requests MUST be idempotent and MUST NOT create a second certification.
@@ -122,9 +124,9 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | --------- | ------------------------------------------------------------------------------------------------------------------ | --------------------- | ------- |
 | OQ-CERT-1 | **Resolved** Is credential verification public (anyone with the link) or private (authenticated, scoped)? (Deferred by Gate A.) | Yes                   | CERT-13 |
 | OQ-CERT-2 | Who approves certification criteria versions, and where is approval recorded?                                      | Yes                   | CERT-4  |
-| OQ-CERT-3 | What evidence types are acceptable (observation notes, checklist, photo, other)?                                   | No                    | CERT-7  |
+| OQ-CERT-3 | **Resolved.** Owner, 2026-10-05: Issuance evidence MUST be structured checklist results and scoped observation notes bound to observed performance. Photos/files are DISABLED and rejected; enabling them requires separate storage, privacy, retention and access decisions. OQ-CERT-2 remains open and continues to block issuance. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1) | No (resolved) | CERT-7 |
 | OQ-CERT-4 | **Resolved** May an actor ever be both learner and observer for the same certification? | No                    | CERT-15 (approved 2026-10-05) |
-| OQ-CERT-5 | Do certifications expire, and if so how is expiry represented?                                                     | No                    | —       |
+| OQ-CERT-5 | **Resolved.** Owner, 2026-10-05: Certification validity has no implicit expiry: no expiry field or time-driven state transition is authorized, and revocation ends validity. Any later expiry requires an owner-defined representation, effects and history/revocation rules. Data-retention expiry remains separately governed and does not create validity expiry. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1) | No (resolved) | — |
 
 ## 7. Verification Status
 
@@ -134,14 +136,14 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
-| Blocking open questions      | 2 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
-| Owner approval               | declared                 | Approved by the owner on 2026-10-03; recorded in `APPROVAL-RECORD.md`. Initial owner-approval baseline is commit `2c9b1c849a520ba817efc91150be9a37797f4238`; this 1.0.3 revision is tracked by Git history.                                                                     |
+| Blocking open questions      | 1 open | Only unresolved question rows govern blocking; registration is not implementation evidence |
+| Owner approval               | declared | 1.3.0 owner approval recorded in APPROVAL-RECORD.md under #75; runtime implementation conformance remains UNKNOWN |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
 ## 8. Change Log
 
-| Version | Date       | Change                                                                                                                                                                                          | By               |
+| Version | Date | Change | By |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Group renamed to C30 Product Semantics; CERT-2 requires an active assignment; CERT-4 names the criteria/checklist version.                                                                      | Claude (drafter) |
@@ -151,3 +153,4 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.1   | 2026-10-03 | Non-normative document-governance metadata/provenance normalization; 1.0.0 owner approval remained controlling. | ChatGPT (governance) |
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
+| 1.3.0 | 2026-10-05 | Register OQ-CERT-3, OQ-CERT-5; preserve named residuals and existing requirement/acceptance IDs. Decision-closure r3.1 manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c; SYS-21 #75. | Patrick Craven (owner); ChatGPT (recorder) |

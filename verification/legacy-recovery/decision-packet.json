@@ -1,19 +1,23 @@
 {
   "package_id": "TEACH-V2-LEGACY-FOUNDATION-DECISION-PACKET",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "state": "PROPOSED",
   "owner_approval_recorded": false,
   "resolution_authorized": false,
   "runtime_activation": "BLOCKED",
   "shared_or_production_execution_authorized": false,
-  "scope": "recommendations for every unresolved question; selecting an option still requires SYS-21 revision, impact review and regenerated evidence",
+  "scope": "Missing owner values only after #75 decision-closure r3.1; recommendations remain proposed and grant no authority",
   "review_ready_selection_ids": [],
   "not_selection_ready_without_more_detail": [
-    "OQ-AUTHZ-1",
-    "OQ-PRIV-1",
-    "OQ-PRIV-2",
-    "OQ-PRIV-3",
-    "OQ-SES-2"
+    "OQ-PRIV-4",
+    "OQ-PRIV-5",
+    "OQ-TXN-2",
+    "OQ-CNT-2",
+    "OQ-CERT-2",
+    "OQ-API-3",
+    "OQ-EVD-2",
+    "OQ-OBS-1",
+    "OQ-BIL-3"
   ],
   "external_sources": {
     "password_storage": "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html",
@@ -21,494 +25,95 @@
   },
   "recommendations": [
     {
-      "id": "OQ-SYS-1",
-      "group": "Governance",
-      "recommended_option": "GROUP_PEERS_RESTRICTIVE_ON_CONFLICT",
-      "recommendation": "Keep contracts within each group as peers; record conflicts and apply the more restrictive requirement.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c00-system-authority-contract.md",
-      "affects": "SYS-4"
-    },
-    {
-      "id": "OQ-SYS-2",
-      "group": "Governance",
-      "recommended_option": "JSON_CANONICAL_REGISTER_WITH_MARKDOWN_VIEW",
-      "recommendation": "Propose governance/compatibility-register.json as canonical, with a generated Markdown view and CI; the current recovery map is reference evidence, not that approved register.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c00-system-authority-contract.md",
-      "affects": "SYS-11"
-    },
-    {
-      "id": "OQ-SYS-5",
-      "group": "Demo",
-      "recommended_option": "EXPLICIT_CORE_DEMO_APPLICABILITY",
-      "recommendation": "Approve a demo applicability matrix covering Identity/session/tenant/capability, isolation, database/transactions/audit, content/learning and API/web. Release proof remains required for any shared deployment.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c00-system-authority-contract.md",
-      "affects": "SYS-29"
-    },
-    {
-      "id": "OQ-AGT-1",
-      "group": "Automation",
-      "recommended_option": "REGISTERED_EXECUTION_PRINCIPALS",
-      "recommendation": "Use backend execution-principal records plus explicit capability assignments; no product actor is registered merely because a CI job exists.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c02-automation-agent-authority-contract.md",
-      "affects": "AGT-9"
-    },
-    {
-      "id": "OQ-AGT-2",
-      "group": "Later",
-      "recommended_option": "DEFER_RUNTIME_AGENTS",
-      "recommendation": "Keep deterministic paths first and runtime agents disabled; select a use case only through a dedicated C02 revision.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c02-automation-agent-authority-contract.md",
-      "affects": "AGT-16"
-    },
-    {
-      "id": "OQ-AGT-3",
-      "group": "Later",
-      "recommended_option": "NAMED_JOB_BY_JOB_ADOPTION",
-      "recommendation": "Inventory and approve each legacy job/worker/CLI separately, with capability, scope, transaction/reconciliation and audit ownership.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c02-automation-agent-authority-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-IDN-7",
-      "group": "Identity",
-      "recommended_option": "INDISTINGUISHABLE_ACCEPTED_RESPONSE",
-      "recommendation": "Use indistinguishable accepted responses for known/unknown email, with bounded abuse controls and no existence disclosure.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c11-identity-credentials-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-SES-1",
-      "group": "Transport",
-      "recommended_option": "LAX_WITH_EXPLICIT_CSRF",
-      "recommendation": "Propose SameSite=Lax to support provider redirects, with the separately approved Origin/CSRF control; Secure and HttpOnly remain mandatory.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c12-application-sessions-contract.md",
-      "affects": "SES-5"
-    },
-    {
-      "id": "OQ-SES-2",
-      "group": "Transport",
-      "recommended_option": "SAME_ORIGIN_HOST_ONLY_COOKIE",
-      "recommendation": "Propose a same-origin web/API boundary with a host-only cookie and Path=/; exact hosts/proxy topology must be selected in Transport/hosting authority first. Do not silently reuse V1 .t34ch.com-wide trust.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c12-application-sessions-contract.md",
-      "affects": "SES-6"
-    },
-    {
-      "id": "OQ-SES-5",
-      "group": "Transport",
-      "recommended_option": "EXACT_ALLOWED_ORIGIN_ON_UNSAFE_WRITES",
-      "recommendation": "Require a canonical allowed Origin for unsafe cookie-authenticated requests, including logout. Missing, foreign, malformed or null origins deny before writes.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c12-application-sessions-contract.md",
-      "affects": "SES-18"
-    },
-    {
-      "id": "OQ-SES-6",
-      "group": "Transport",
-      "recommended_option": "ROTATE_AT_SIGN_IN_AND_AUTHORITY_ELEVATION",
-      "recommendation": "Issue a fresh credential at successful sign-in and privilege elevation; never upgrade a pre-authentication credential. Implement rotation/revocation atomically.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c12-application-sessions-contract.md",
-      "affects": "SES-19"
-    },
-    {
-      "id": "OQ-SES-7",
-      "group": "Identity",
-      "recommended_option": "NO_ARBITRARY_CONCURRENT_SESSION_LIMIT",
-      "recommendation": "Propose no count limit initially; preserve expiry/revocation controls. A later limit needs explicit selection and deterministic eviction semantics.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c12-application-sessions-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-AUTHZ-1",
-      "group": "Foundation",
-      "recommended_option": "NEW_V2_MATRIX_PENDING_EXACT_APPROVAL",
-      "recommendation": "Owner selected creation of a new V2 capability matrix, not recovery of V1 grants; issue #67 must propose the exact command/capability/bundle matrix before owner approval can resolve this question.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c14-authorization-capabilities-contract.md",
-      "affects": "AUTHZ-19"
-    },
-    {
-      "id": "OQ-PRIV-1",
-      "group": "Privacy",
-      "recommended_option": "OWNER_ERASURE_AND_HISTORY_MATRIX_REQUIRED",
-      "recommendation": "Propose offboarding as access revocation with retained history; require exact owner-approved meanings and field actions for deletion, anonymization and retention before implementing erasure.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-PRIV-2",
-      "group": "Privacy",
-      "recommended_option": "OWNER_RETENTION_VALUES_REQUIRED",
-      "recommendation": "Owner must supply periods per Identity/Credential/session/token/membership/learning/certification/audit class and legal-hold handling. No unsupported universal duration is proposed.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
-      "affects": "PRIV-12"
-    },
-    {
-      "id": "OQ-PRIV-3",
-      "group": "Privacy",
-      "recommended_option": "OWNER_EXEMPTION_BASIS_REQUIRED",
-      "recommendation": "Owner must name each deletion-exempt class, retained fields and legal/audit basis. No blanket audit exemption is inferred.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
-      "affects": "PRIV-15"
-    },
-    {
       "id": "OQ-PRIV-4",
       "group": "Privacy",
-      "recommended_option": "JSON_EXPORT_WITH_APPROVED_DEADLINE",
-      "recommendation": "Propose machine-readable JSON plus a readable summary; owner must supply fulfillment deadline and identity/scope verification requirements.",
+      "recommended_option": "OWNER_VALUE_REQUIRED",
+      "recommendation": "**Open — residual only.** What export fulfillment deadline applies? Owner, 2026-10-05: Export format is machine-readable JSON plus a human-readable summary. Only the export fulfillment deadline remains undecided. See `governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md`. (Decision-closure r3.1; partial registration)",
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-PRIV-5",
       "group": "Privacy",
-      "recommended_option": "OWNER_DELETION_DEADLINE_REQUIRED",
-      "recommendation": "Owner must supply a deletion deadline, verification standard and exception/hold response policy.",
+      "recommended_option": "OWNER_VALUE_REQUIRED",
+      "recommendation": "What deletion fulfillment deadline applies?",
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-PRIV-6",
-      "group": "Privacy",
-      "recommended_option": "AUDITED_OPERATOR_PROCEDURE_FIRST",
-      "recommendation": "Propose a verified, scoped and audited operator procedure initially, before self-service export/deletion UI.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c15-data-isolation-privacy-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-MIG-3",
-      "group": "Infrastructure",
-      "recommended_option": "BACKEND_ONLY_APPLICATION_DATABASE",
-      "recommendation": "Propose no browser-reachable application tables. If hosted-auth roles exist, prove every application table remains backend-only; no implicit RLS exemption.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c21-database-migration-contract.md",
-      "affects": "MIG-12"
-    },
-    {
-      "id": "OQ-MIG-4",
-      "group": "Release",
-      "recommended_option": "MANUAL_OWNER_APPROVED_PRODUCTION_APPLY",
-      "recommendation": "Propose a manual exact-candidate owner-approved production apply after existing backup/restore/recovery gates. Development CI cannot grant production permission.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c21-database-migration-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-MIG-5",
-      "group": "Later",
-      "recommended_option": "NO_LEGACY_DATA_IMPORT_YET",
-      "recommendation": "Keep legacy data import absent; a later import needs its own source snapshot, transformation, reconciliation, audit and rollback plan. Code lessons are not data migration.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c21-database-migration-contract.md",
-      "affects": "\u2014"
+      "affects": "—"
     },
     {
       "id": "OQ-TXN-2",
       "group": "Integration",
-      "recommended_option": "EMAIL_OAUTH_FIRST_PROVIDER_SCOPES",
-      "recommendation": "Propose email and OAuth first; select actual providers and per-effect reconciliation adapters explicitly. Payments stay disabled.",
+      "recommended_option": "OWNER_VALUE_REQUIRED",
+      "recommendation": "**Open — residual only.** Which email delivery provider and OAuth provider(s) are approved? Owner, 2026-10-05: External-effect scope is email delivery and OAuth sign-in; payments remain DISABLED. TransactionControl owns ambiguous email-send reconciliation, and canonical provider readback MUST precede any retry. Failed OAuth exchange fails sign-in. Email and OAuth providers remain unselected: no provider adapter/delivery or mounted OAuth callback is authorized. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1; partial registration)",
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c22-transaction-idempotency-reconciliation-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-AUD-2",
-      "group": "Audit",
-      "recommended_option": "IDENTITY_MEMBERSHIP_ASSIGNMENT_CERTIFICATION_HISTORY",
-      "recommendation": "Propose reconstructable lifecycle history for Identity, Membership, Assignment and Certification, with derived projections kept separate from canonical state.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c23-audit-lifecycle-events-contract.md",
-      "affects": "AUD-7"
-    },
-    {
-      "id": "OQ-AUD-3",
-      "group": "Audit",
-      "recommended_option": "SECURITY_SIGNIFICANT_DENIALS_ONLY",
-      "recommendation": "Propose scoped records for capability/tenant/target violations and invalid/revoked credential abuse, with rate limits and redaction; avoid turning every validation typo into permanent audit.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c23-audit-lifecycle-events-contract.md",
-      "affects": "AUD-8"
+      "affects": "—"
     },
     {
       "id": "OQ-CNT-2",
       "group": "Content",
-      "recommended_option": "CONTENT_APPROVAL_LEDGER_WITH_CUSTOMER_AUTHORITY",
-      "recommendation": "Propose version/digest-bound approvals in Content-owned records, written only by an authorized customer approver; record actor/scope/time and required audit.",
+      "recommended_option": "OWNER_VALUE_REQUIRED",
+      "recommendation": "**Open — residual only.** Which customer content-approver role/title is approved? Owner, 2026-10-05: Customer-approval claims MUST be backed by a Content-owned append-only approval bound to content_pack_id, version and digest, recording authorized actor, organization scope, time and audit atomically. New versions inherit no approval; withdrawal is a new record. Approver role/title remains UNKNOWN, so no approval record or claim is authorized until selected. See `governance/decision-closure/09-governance-content-certification-web-packet.md`. (Decision-closure r3.1; partial registration)",
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c31-content-teaching-engine-contract.md",
       "affects": "CNT-11"
     },
     {
-      "id": "OQ-CNT-3",
-      "group": "Content",
-      "recommended_option": "ONE_NAMED_ADAPTER_PER_LEGACY_FORMAT",
-      "recommendation": "Recover only named legacy formats with fixtures, version validation, deterministic conversion and removal conditions; no permissive catch-all parser.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c31-content-teaching-engine-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-LRN-2",
-      "group": "Learning",
-      "recommended_option": "DEFER_SCORING_FORMULAS",
-      "recommendation": "Keep XP/mastery/streak/rank unavailable until exact versioned derivation formulas and replay evidence are owner-approved; persisted completion does not imply scoring.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c32-learning-sessions-progress-contract.md",
-      "affects": "LRN-13"
-    },
-    {
-      "id": "OQ-MGR-2",
-      "group": "Manager",
-      "recommended_option": "EXPLICIT_OFFBOARD_CAPABILITY_THROUGH_IDENTITY_SERVICE",
-      "recommendation": "Propose manager offboarding only with its dedicated capability and canonical Identity service; global/multi-tenant effects need explicit policy before grants.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c33-manager-operations-contract.md",
-      "affects": "\u2014"
-    },
-    {
       "id": "OQ-CERT-2",
       "group": "Certification",
-      "recommended_option": "AUTHORIZED_APPROVER_VERSION_DIGEST_LEDGER",
-      "recommendation": "Propose version/digest-bound criteria approvals in Certification-owned records, with designated authorized customer approvers and audit.",
+      "recommended_option": "OWNER_VALUE_REQUIRED",
+      "recommendation": "Who approves certification criteria versions, and where is approval recorded?",
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c34-certification-credentials-contract.md",
       "affects": "CERT-4"
     },
     {
-      "id": "OQ-CERT-3",
-      "group": "Certification",
-      "recommended_option": "STRUCTURED_CHECKLIST_AND_OBSERVATION_NOTES_FIRST",
-      "recommendation": "Propose structured checklist results and scoped observation notes first; photo uploads require separate storage/privacy/retention decisions.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c34-certification-credentials-contract.md",
-      "affects": "CERT-7"
-    },
-    {
-      "id": "OQ-CERT-5",
-      "group": "Certification",
-      "recommended_option": "NO_IMPLICIT_EXPIRY",
-      "recommendation": "Propose no automatic expiry initially; if expiry is desired, owner must approve its representation, effects and history/revocation rules.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c34-certification-credentials-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-API-1",
-      "group": "Transport",
-      "recommended_option": "EXPLICIT_PUBLIC_HEALTH_AND_AUTH_EXCEPTION_LIST",
-      "recommendation": "Prepare an exact exception list for health/readiness and necessary sign-in/provider-callback routes; all product operations use the approved versioned boundary. No routes are authorized by this proposal.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c41-api-boundary-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-API-2",
-      "group": "Transport",
-      "recommended_option": "CODE_MESSAGE_REQUEST_ID_ERROR_ENVELOPE",
-      "recommendation": "Propose a uniform code/message/requestId envelope and identical non-disclosing target denials; publish the exact schema before handlers/client code.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c41-api-boundary-contract.md",
-      "affects": "API-10"
-    },
-    {
       "id": "OQ-API-3",
       "group": "Transport",
-      "recommended_option": "EXPLICIT_MAJOR_VERSION_AND_DEPRECATION_MANIFEST",
-      "recommendation": "Propose /api/v1 for core operations and an explicit major-version/deprecation manifest with owner-selected sunset periods.",
+      "recommended_option": "OWNER_VALUE_REQUIRED",
+      "recommendation": "**Open — residual only.** Which API deprecation sunset periods are approved? Owner, 2026-10-05: Breaking consumer changes MUST use the major-version path `/api/v1` and an explicit deprecation manifest rather than in-place replacement. Sunset periods remain UNKNOWN; no deprecation sunset is authorized until owner selection. See `governance/decision-closure/05-api-boundary-manifest.md`. (Decision-closure r3.1; partial registration)",
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c41-api-boundary-contract.md",
       "affects": "API-13"
     },
     {
-      "id": "OQ-WEB-1",
-      "group": "Web",
-      "recommended_option": "WCAG_2_2_AA",
-      "recommendation": "Propose WCAG 2.2 AA with keyboard/focus, screen-reader, contrast, touch-target and low-end-device evidence; automation supplements manual checks.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c42-web-client-boundary-contract.md",
-      "affects": "WEB-15"
-    },
-    {
-      "id": "OQ-WEB-2",
-      "group": "Demo",
-      "recommended_option": "EXPLICIT_LEARNER_MANAGER_DEMO_CORE_PATHS",
-      "recommendation": "Confirm the complete path list: login, assigned-content start, recorded completion, scoped manager view and logout; credentialless demo isolation/reset remains separately specified.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c42-web-client-boundary-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-EVD-1",
-      "group": "Evidence",
-      "recommended_option": "INDEPENDENT_SECURITY_DATA_RELEASE_VERIFICATION",
-      "recommendation": "Propose independent verification for C11-C15, C21-C23 and C51-C52 plus protected cross-domain mutations; self-audit is never the independent reviewer.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c51-verification-evidence-contract.md",
-      "affects": "EVD-16"
-    },
-    {
       "id": "OQ-EVD-2",
       "group": "Evidence",
-      "recommended_option": "REPO_METADATA_WITH_RETAINED_SHA_ARTIFACTS",
-      "recommendation": "Propose repo metadata plus SHA-bound CI artifacts; owner must choose artifact duration and durable archival. Current GitHub artifacts are not assumed permanent.",
+      "recommended_option": "OWNER_VALUE_REQUIRED",
+      "recommendation": "**Open — residual only.** What evidence retention duration and durable content-addressed archive location are approved? Owner, 2026-10-05: Evidence uses repository metadata plus exact-SHA-bound content-addressed artifacts, digest-verified archive readback and explicit expiry. CI artifacts are not assumed permanent; retention duration and durable archive location remain UNKNOWN. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1; partial registration)",
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c51-verification-evidence-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-EVD-3",
-      "group": "Evidence",
-      "recommended_option": "EXPLICIT_NON_COLLAPSING_TRUTH_MAPPING",
-      "recommendation": "Propose PROVEN only with current verified evidence, BLOCKED for unmet gates, UNKNOWN for insufficient/stale evidence, CONTRADICTORY for conflicting facts; declared/inferred never auto-promote to PROVEN.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c51-verification-evidence-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-REL-3",
-      "group": "Release",
-      "recommended_option": "SOURCE_ENV_AUTHORIZATION_RECOVERY_SMOKE_MATRIX",
-      "recommendation": "Propose exact deployment/config/schema identity, health/readiness, role/scope denials, assigned-content start/completion, atomic audit and logout replay plus recovery checks. URL 200 alone is insufficient.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c52-deployment-release-recovery-contract.md",
-      "affects": "REL-8"
+      "affects": "—"
     },
     {
       "id": "OQ-OBS-1",
       "group": "Observability",
-      "recommended_option": "OWNER_PROVIDER_AND_DESTINATION_REQUIRED",
-      "recommendation": "Owner must select error/alert providers and verified alert destinations; recover V1 redaction/correlation tests independently of provider choice.",
+      "recommended_option": "OWNER_VALUE_REQUIRED",
+      "recommendation": "**Open — residual only.** Where must operational alerts be delivered? Owner, 2026-10-05: Sentry is selected for server errors with sendDefaultPii false and redaction of credential headers and request bodies; request ID tagging only. Vercel Analytics remains OFF under the disabled analytics policy. Alert destination remains UNKNOWN and the separate 90-day redacted-log sink evidence is still required. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1; partial registration)",
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c53-observability-contract.md",
       "affects": "OBS-2"
     },
     {
-      "id": "OQ-OBS-2",
-      "group": "Observability",
-      "recommended_option": "NO_CREDENTIALS_OR_LEARNER_PAYLOAD_LOGGING",
-      "recommendation": "Propose no credential or learner payload content in logs; permit only approved correlation and pseudonymous operational identifiers with scope-aware access.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c53-observability-contract.md",
-      "affects": "OBS-7"
-    },
-    {
-      "id": "OQ-ANL-1",
-      "group": "Optional",
-      "recommended_option": "REMAIN_DISABLED",
-      "recommendation": "Keep analytics disabled initially; provider/enablement is a later dedicated decision.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c61-analytics-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-ANL-2",
-      "group": "Optional",
-      "recommended_option": "NO_IDENTIFYING_ANALYTICS_FIELDS",
-      "recommendation": "Keep identifying learner fields absent; approve a minimum schema before enabling analytics.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c61-analytics-contract.md",
-      "affects": "ANL-7"
-    },
-    {
-      "id": "OQ-PWA-1",
-      "group": "Optional",
-      "recommended_option": "NO_OFFLINE_WRITES",
-      "recommendation": "Keep offline writes unauthorized. V1 queued completion is useful historical evidence, but cannot establish V2 durable completion or offline permission.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c62-pwa-offline-contract.md",
-      "affects": "PWA-5"
-    },
-    {
-      "id": "OQ-BIL-1",
-      "group": "Optional",
-      "recommended_option": "REMAIN_DISABLED",
-      "recommendation": "Keep self-service billing disabled initially.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c63-billing-contract.md",
-      "affects": "\u2014"
-    },
-    {
-      "id": "OQ-BIL-2",
-      "group": "Optional",
-      "recommended_option": "DEFER_PAYMENT_PROVIDER",
-      "recommendation": "Do not select a payment provider or permit money movement in the foundation batch.",
-      "state": "PROPOSED",
-      "owner_approval_recorded": false,
-      "authority_source": "contracts/c63-billing-contract.md",
-      "affects": "BIL-12"
-    },
-    {
       "id": "OQ-BIL-3",
       "group": "Optional",
-      "recommended_option": "ORGANIZATION_OWNED_BILLING_RELATION_PROPOSAL",
-      "recommendation": "Propose Organization-owned local billing-account relationship and read-only entitlement projection; exact cardinality/provider linkage requires owner-approved semantics.",
+      "recommended_option": "OWNER_VALUE_REQUIRED",
+      "recommendation": "**Open — residual only.** What Organization-to-billing-account cardinality is approved? Owner, 2026-10-05: Billing accounts are Organization-owned and entitlement is a read-only Organization-owned projection; the relationship requires separate C01 semantic registration. Organization-to-billing-account cardinality remains UNKNOWN; no billing-account creation is authorized while billing is disabled. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1; partial registration)",
       "state": "PROPOSED",
       "owner_approval_recorded": false,
       "authority_source": "contracts/c63-billing-contract.md",
       "affects": "BIL-13"
     }
-  ]
+  ],
+  "supersedes": "history/pre-decision-closure/decision-packet.json"
 }

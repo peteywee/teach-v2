@@ -1080,12 +1080,14 @@ test('recovery: omitted owner question fails',recoveryScript,dir=>{const p=recov
 test('recovery: newly added question cannot escape projection',recoveryScript,dir=>mutateText(dir,'contracts/c00-system-authority-contract.md','## 7.','| OQ-SYS-99 | Additional owner choice | Yes | SYS-4 |\n\n## 7.'),{pattern:/live owner inventory drift/});
 test('recovery: recommendation cannot record approval',recoveryScript,dir=>{const p=recoveryBase+'decision-packet.json',d=readJson(dir,p);d.owner_approval_recorded=true;writeJson(dir,p,d);},{pattern:/recommendations cannot grant authority/});
 test('recovery: missing recommendation fails',recoveryScript,dir=>{const p=recoveryBase+'decision-packet.json',d=readJson(dir,p);d.recommendations.pop();writeJson(dir,p,d);},{pattern:/exact complete recommendation/});
-test('recovery: incomplete capability bundle cannot be review ready',recoveryScript,dir=>{const p=recoveryBase+'decision-packet.json',d=readJson(dir,p);d.review_ready_selection_ids.push('OQ-AUTHZ-1');writeJson(dir,p,d);},{pattern:/detailed owner values/});
+test('recovery: unresolved certification approver cannot be review ready',recoveryScript,dir=>{const p=recoveryBase+'decision-packet.json',d=readJson(dir,p);d.review_ready_selection_ids.push('OQ-CERT-2');writeJson(dir,p,d);},{pattern:/detailed owner values/});
 test('recovery: legacy cannot authorize V2',recoveryScript,dir=>{const p=recoveryBase+'legacy-sources.json',d=readJson(dir,p);d.legacy_authority_for_v2=true;writeJson(dir,p,d);},{pattern:/legacy evidence cannot grant/});
 test('recovery: wrong pinned head fails',recoveryScript,dir=>{const p=recoveryBase+'legacy-sources.json',d=readJson(dir,p);d.sources[0].head_sha='0'.repeat(40);writeJson(dir,p,d);},{pattern:/exact pinned source/});
 test('recovery: altered reference excerpt fails',recoveryScript,dir=>{const p=recoveryBase+'legacy-excerpts.json',d=readJson(dir,p);d.excerpts[0].text+='invented';writeJson(dir,p,d);},{pattern:/excerpt source and digest/});
 test('recovery: global audit transaction binding fails',recoveryScript,dir=>mutateText(dir,'src/modules/identity/infrastructure/persistence/postgres-session-command-transaction.ts','auditFactory(transaction)','auditFactory(this.db)'),{pattern:/same transaction binding/});
 test('recovery: missing session PG CI evidence fails',recoveryScript,dir=>mutateText(dir,'.github/workflows/slice-p02-implementation.yml','run: pnpm test:session:commands:integration','run: echo skipped'),{pattern:/session transaction PG automation/});
+
+test('decision closure: registered policy and 24 denial regressions pass','scripts/tests/validate-decision-closure.test.mjs',()=>{},{pass:true});
 
 // Explicit owner choices never authorize the accompanying draft recommendations.
 const ownerPolicyScript='scripts/verification/validate-owner-policy-registration.mjs', ownerPolicyBase='verification/owner-decisions/2026-10-04/';
@@ -1103,7 +1105,7 @@ test('owner policy: selected duration cannot claim retention enforcement',ownerP
 test('owner policy: rewritten superseded contract fails',ownerPolicyScript,dir=>mutateText(dir,'contracts/superseded/c11-identity-credentials-contract-1.3.0.md','**IDN-1**','**IDN-999**'),{pattern:/historical contract body cannot be rewritten/});
 test('owner policy: existing audit deletion guard cannot weaken',ownerPolicyScript,dir=>mutateText(dir,'contracts/c23-audit-lifecycle-events-contract.md','MUST NOT be updated or deleted through application paths','MAY be deleted through application paths'),{pattern:/existing requirement meaning/});
 test('owner policy: new route source invalidates empty scan',ownerPolicyScript,dir=>{writeFileSync(join(dir,'src/bootstrap/new-router.ts'),"router.get('/health', handler);\n");},{pattern:/route scan must cover exact current src inventory/});
-test('recovery: generated owner view cannot misstate a recommendation',recoveryScript,dir=>mutateText(dir,recoveryBase+'owner-decisions.md','Keep deterministic paths first','MUTATED_RECOMMENDATION'),{pattern:/exact generated decision view/});
+test('recovery: generated owner view cannot misstate a recommendation',recoveryScript,dir=>mutateText(dir,recoveryBase+'owner-decisions.md','Only the listed residual owner values remain open','MUTATED_RECOMMENDATION'),{pattern:/exact generated decision view/});
 
 test('owner policy: malformed revision change-log header fails',ownerPolicyScript,dir=>mutateText(dir,'contracts/c23-audit-lifecycle-events-contract.md','| Version | Date | Change | By |','| Version | 1.1.0 |'),{pattern:/complete revision change-log table/});
 // Report

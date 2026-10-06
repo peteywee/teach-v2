@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C22",
   "class": "contract",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-04",
-  "effective_on": "2026-10-03",
+  "updated_on": "2026-10-05",
+  "effective_on": "2026-10-05",
   "approval": {
     "state": "approved",
-    "approved_version": "1.2.0",
-    "approved_on": "2026-10-04",
+    "approved_version": "1.3.0",
+    "approved_on": "2026-10-05",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner explicitly approved TransactionControl first-slice idempotency source/retention decisions; GitHub issue #20"
+    "basis": "Owner manifest-bound decision-closure r3.1 approval under SYS-21 #75; sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,7 +28,10 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C22@1.1.0"],
+  "supersedes": [
+    "TEACH-CON-C22@1.1.0",
+    "TEACH-CON-C22@1.2.0"
+  ],
   "superseded_by": null,
   "depends_on": [
     "contracts/"
@@ -43,17 +46,17 @@
 | Contract ID        | C22                                                                                                                                                             |
 | Group              | C20 Data Correctness                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.2.0                                                                                                                                                           |
+| Version            | 1.3.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-04 — C22 1.2.0 idempotency source/retention closure; GitHub issue #20 |
+| Approved by        | Patrick Craven (owner), 2026-10-05; manifest-bound decision-closure r3.1, SYS-21 #75; see `APPROVAL-RECORD.md` |
 | Requirement prefix | `TXN`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New. Carries the ambiguous-outcome lessons from xqueue into Teach.                                                                                              |
-| Supersedes         | C22 1.1.0 |
+| Supersedes         | 1.2.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-04                                                                                                                                                      |
+| Last updated       | 2026-10-05 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -132,7 +135,7 @@ OQ-TXN-1 was resolved in C22 1.2.0: each retryable operation explicitly selects 
 
 | ID       | Question                                                                                                                       | Blocks implementation | Affects |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------- | ------- |
-| OQ-TXN-2 | Which external providers are in scope for v2 (email delivery, OAuth, payments, other), and which owns reconciliation for each? | No                    | —       |
+| OQ-TXN-2 | **Open — residual only.** Which email delivery provider and OAuth provider(s) are approved? Owner, 2026-10-05: External-effect scope is email delivery and OAuth sign-in; payments remain DISABLED. TransactionControl owns ambiguous email-send reconciliation, and canonical provider readback MUST precede any retry. Failed OAuth exchange fails sign-in. Email and OAuth providers remain unselected: no provider adapter/delivery or mounted OAuth callback is authorized. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1; partial registration) | No | — |
 
 ## 7. Verification Status
 
@@ -142,14 +145,14 @@ OQ-TXN-1 was resolved in C22 1.2.0: each retryable operation explicitly selects 
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
-| Blocking open questions      | 0 open                   | OQ-TXN-1 is resolved by owner approval in GitHub issue #20. OQ-TXN-2 remains open and non-blocking.                                                                                                   |
-| Owner approval               | declared                 | C22 1.2.0 approved by Patrick Craven on 2026-10-04 for OQ-TXN-1 idempotency source/retention closure; recorded in `APPROVAL-RECORD.md` under GitHub issue #20.                                                                     |
+| Blocking open questions      | 0 open | Only unresolved question rows govern blocking; registration is not implementation evidence |
+| Owner approval               | declared | 1.3.0 owner approval recorded in APPROVAL-RECORD.md under #75; runtime implementation conformance remains UNKNOWN |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
 ## 8. Change Log
 
-| Version | Date       | Change                                                                                                                                                                                          | By               |
+| Version | Date | Change | By |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Group renamed to C20 Data Correctness. No requirement changes.                                                                                                                                  | Claude (drafter) |
@@ -161,3 +164,4 @@ OQ-TXN-1 was resolved in C22 1.2.0: each retryable operation explicitly selects 
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.1.0   | 2026-10-04 | Established canonical ReconciliationRecord lifecycle, external-effect outcome vocabulary, provider-neutral detail rule, and safe retry disposition. GitHub issue #12. | Patrick Craven (owner approval) |
 | 1.2.0   | 2026-10-04 | Resolved OQ-TXN-1: each retryable operation explicitly selects client-supplied or server-derived idempotency-key policy with no implicit fallback and declares retention at least as long as its complete retry/reconciliation horizon. GitHub issue #20. | Patrick Craven (owner approval) |
+| 1.3.0 | 2026-10-05 | Register OQ-TXN-2; preserve named residuals and existing requirement/acceptance IDs. Decision-closure r3.1 manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c; SYS-21 #75. | Patrick Craven (owner); ChatGPT (recorder) |

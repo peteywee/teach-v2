@@ -1,0 +1,577 @@
+{
+  "version": "1.0.0",
+  "issue": "#75",
+  "owner": "Patrick Craven",
+  "owner_local_date": "2026-10-05",
+  "timezone": "America/Chicago",
+  "approved_manifest_sha256": "ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c",
+  "baseline_sha": "6553eb465e469dc9e60368cde40d259f86262997",
+  "template_sha": "40fcfa80b3cc4b6a88fe6df6fa6910895840389e",
+  "implementation_conformance": "UNKNOWN",
+  "independent_verification": "NOT_PERFORMED",
+  "runtime_activation_authorized": false,
+  "shared_or_production_execution_authorized": false,
+  "capability_promotion_authorized": false,
+  "batches": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "contracts": [
+    {
+      "contract": "C02",
+      "path": "contracts/c02-automation-agent-authority-contract.md",
+      "from_version": "1.0.3",
+      "to_version": "1.1.0",
+      "superseded_copy": "contracts/superseded/c02-automation-agent-authority-contract-1.0.3.md",
+      "historical_body_sha256": "ca44ad335e96bb1b08b43eb6df91d8e65a1e5ec0c6583ba50af2d9fc8e4154fe",
+      "questions": [
+        {
+          "id": "OQ-AGT-1",
+          "state": "RESOLVED",
+          "value": "AutomationActor identities MUST be backend execution-principal records with explicit capabilities per principal, inventoried in `governance/automation-principals.json`; CI jobs are DevelopmentAgents, not product actors. No principal is grandfathered or provisioned by this registration.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/02-c14-authorization-capability-matrix.md",
+          "affects": "AGT-9"
+        },
+        {
+          "id": "OQ-AGT-2",
+          "state": "RESOLVED",
+          "value": "Runtime agents remain DISABLED. Enablement requires a named use case and a dedicated C02 revision defining AgentIdentity, AgentCapability, tool/command boundary, decision evidence, approval/escalation and failure/recovery, after the deterministic dependencies are active and evidenced.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "AGT-16"
+        },
+        {
+          "id": "OQ-AGT-3",
+          "state": "RESOLVED",
+          "value": "Adoption is NAMED_JOB_BY_JOB with no blanket grandfathering. No V2 job, worker or CLI is adopted as an AutomationActor by this decision; the C21 migration runner retains only AGT-11's schema-migration exception.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/02-c14-authorization-capability-matrix.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C11",
+      "path": "contracts/c11-identity-credentials-contract.md",
+      "from_version": "1.5.0",
+      "to_version": "1.6.0",
+      "superseded_copy": "contracts/superseded/c11-identity-credentials-contract-1.5.0.md",
+      "historical_body_sha256": "9bb6e9adbf384f82fae6d7fc0ead71c1796983add305baa3fd3f30b43624d538",
+      "questions": [
+        {
+          "id": "OQ-IDN-7",
+          "state": "RESOLVED",
+          "value": "Password-reset requests and invitation-related email lookups MUST return identical `202` responses with `{\"status\":\"accepted\"}` and the same headers for known, unknown, INACTIVE and offboarded addresses. The same job type is queued off the response path; bounds are 5 requests per normalized-email digest per 15 minutes and 20 per client IP per hour. Over-limit requests are dropped and recorded while returning the same `202`; no `429` or account-existence signal is exposed.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/06-identity-tenancy-manager-registration-packet.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C12",
+      "path": "contracts/c12-application-sessions-contract.md",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "superseded_copy": "contracts/superseded/c12-application-sessions-contract-1.1.0.md",
+      "historical_body_sha256": "f15d8682ad966cb408b61b9bc14d8c50acd750aea3c8257f36ad27d6213160ba",
+      "questions": [
+        {
+          "id": "OQ-SES-1",
+          "state": "RESOLVED",
+          "value": "The session cookie MUST set `SameSite=Lax` together with SES-18's exact-origin CSRF control.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/04-session-transport-security-spec.md",
+          "affects": "SES-5"
+        },
+        {
+          "id": "OQ-SES-2",
+          "state": "RESOLVED",
+          "value": "The approved topology is same-origin `https://t34ch.com` with API prefix `/api/v1`. The cookie MUST be `__Host-teach_session`, host-only with no Domain, `Path=/`, Secure and HttpOnly; issuance Max-Age is 43200 and logout Max-Age is 0. Each isolated preview uses exactly its own deployment origin, without production credentials.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/04-session-transport-security-spec.md",
+          "affects": "SES-6"
+        },
+        {
+          "id": "OQ-SES-5",
+          "state": "RESOLVED",
+          "value": "Every cookie-authenticated unsafe request (POST, PUT, PATCH, DELETE), including logout, MUST enforce a byte-exact deployment allowed Origin before session lookup; missing, foreign, malformed or `null` Origin is denied with zero writes. There is no Referer fallback; a present Sec-Fetch-Site other than same-origin is denied; unsafe API requests require application/json. Missing allowed-origin configuration fails closed. Safe methods MUST NOT mutate state except the separately bound state/PKCE OAuth callback.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/04-session-transport-security-spec.md",
+          "affects": "SES-18"
+        },
+        {
+          "id": "OQ-SES-6",
+          "state": "RESOLVED",
+          "value": "Successful sign-in and step-up reauthentication MUST create a new session and revoke the presenting session, atomically with audit; a pre-authentication credential MUST NOT be upgraded. Failed commit sets no new cookie. ChangeCredential instead revokes ALL sessions and issues none under IDN-15; deactivation/offboarding revoke all, logout revokes the presented session. Membership/grant/entitlement changes require no rotation because authority is database-current under SES-16.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/04-session-transport-security-spec.md",
+          "affects": "SES-19"
+        },
+        {
+          "id": "OQ-SES-7",
+          "state": "RESOLVED",
+          "value": "No concurrent-session count limit is imposed. Existing expiry/revocation still apply; a later limit requires an explicit value and deterministic eviction rule through a C12 revision.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/04-session-transport-security-spec.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C14",
+      "path": "contracts/c14-authorization-capabilities-contract.md",
+      "from_version": "1.2.0",
+      "to_version": "1.3.0",
+      "superseded_copy": "contracts/superseded/c14-authorization-capabilities-contract-1.2.0.md",
+      "historical_body_sha256": "0505cc540ec039499aaa0d793f845788528d31f09f3f8ce55a92bcefdd0b3a41",
+      "questions": [
+        {
+          "id": "OQ-AUTHZ-1",
+          "state": "RESOLVED",
+          "value": "The capability vocabulary and bundles MUST be the NEW_V2 matrix in the registered C14 specification and `c14-capability-matrix.json`: 34 operation capabilities, explicit self/learner/manager/org_admin bundles, and no imported legacy grants or cross-tenant platform capabilities. Evaluation, bootstrap exceptions, conditional/blocked grants and negative tests MUST follow that matrix. This registration does not promote the 34 capability identifiers into C01/K00; implementation remains BLOCKED until their semantic registration and all matrix dependencies pass.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/02-c14-authorization-capability-matrix.md",
+          "affects": "AUTHZ-19"
+        }
+      ]
+    },
+    {
+      "contract": "C15",
+      "path": "contracts/c15-data-isolation-privacy-contract.md",
+      "from_version": "1.0.3",
+      "to_version": "1.1.0",
+      "superseded_copy": "contracts/superseded/c15-data-isolation-privacy-contract-1.0.3.md",
+      "historical_body_sha256": "a432601b49391a9e1bca62918ddfad63177ddb5c7dab6c34abf9450c32467c0d",
+      "questions": [
+        {
+          "id": "OQ-PRIV-1",
+          "state": "RESOLVED",
+          "value": "DELETED means governed audited primary-row removal, with an Identity terminal tombstone containing only id/status/created_at and dependent-copy expiry under the lifecycle matrix. ANONYMIZED applies only to unrecoverable aggregates with at least 5 identities per reported group; individual hashes/opaque links are PSEUDONYMIZED personal data. RETAINED means access-controlled preservation until the class clock/duration/action. OFFBOARDED means IDN-18 access revocation and retained history, never deletion. The corrected matrix controls; executor ingress, schema, backup-window and recovery evidence gates remain required.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+          "affects": "\u2014"
+        },
+        {
+          "id": "OQ-PRIV-2",
+          "state": "RESOLVED",
+          "value": "Retention clocks, durations and expiry actions MUST follow the registered lifecycle matrix: one year for named identity, credential, session/token, membership, learning, certification and audit classes, with each class's terminal clock; OperationalLog retains its separate 90-day policy. Legal holds suspend deletion without extending authentication validity. Undefined clocks or unregistered classes have retention UNKNOWN, automatic deletion BLOCKED and no retention/deletion/compliance claim. Every stated retention period MUST have executable enforcement evidence before any promise; backup/provider windows and executor/schema admission remain separate gates.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+          "affects": "PRIV-12"
+        },
+        {
+          "id": "OQ-PRIV-3",
+          "state": "RESOLVED",
+          "value": "Subject-deletion exemptions MUST be exactly AuditEvent and LifecycleEvent until their one-year expiry (AUD-1/4/6), and ReconciliationRecord until its expiry (TXN-5/7); OPEN reconciliation never expires. Legal hold is a deletion suspension, not an exemption. Application paths MUST NOT delete immutable audit records; privileged expiry requires its separate admission and evidence.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+          "affects": "PRIV-15"
+        },
+        {
+          "id": "OQ-PRIV-4",
+          "state": "OPEN_RESIDUAL",
+          "value": "Export format is machine-readable JSON plus a human-readable summary. Only the export fulfillment deadline remains undecided.",
+          "residual": "What export fulfillment deadline applies?",
+          "controlling_artifact": "governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+          "affects": "\u2014"
+        },
+        {
+          "id": "OQ-PRIV-6",
+          "state": "RESOLVED",
+          "value": "Initial export/deletion fulfillment MUST use a verified, scoped, audited operator procedure; self-service is deferred. Requests use the verification/hold/fulfillment lifecycle in the registered privacy matrix and MUST NOT claim a deadline or completed deletion while its gates are unmet.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C21",
+      "path": "contracts/c21-database-migration-contract.md",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "superseded_copy": "contracts/superseded/c21-database-migration-contract-1.1.0.md",
+      "historical_body_sha256": "59ec35351a06b92a7ada7df262970b8050f0ef5c8f5ad3cfe0fb61e315b38f2c",
+      "questions": [
+        {
+          "id": "OQ-MIG-3",
+          "state": "RESOLVED",
+          "value": "Application tables MUST NOT be browser-reachable and have no implicit RLS exemption. Every Supabase-backed candidate requires target-project readback of Data API/exposed schemas, existing and default anon/authenticated grants on tables/sequences/functions, RLS on every application table, and an HTTP denial probe. Disable Data API, revoke existing/default privileges through governed migrations and enable RLS with no policies as specified; unreadable or missing project-specific evidence blocks promotion. Provider defaults MUST NOT substitute for readback.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
+          "affects": "MIG-12"
+        },
+        {
+          "id": "OQ-MIG-4",
+          "state": "RESOLVED",
+          "value": "Production migration apply MUST be manual and owner-approved for the exact frozen candidate, migration IDs and fresh named restore point, after replay and restore gates. Apply output and journal/drift readback are evidence. CI holds no production database credential and cannot grant production permission.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
+          "affects": "\u2014"
+        },
+        {
+          "id": "OQ-MIG-5",
+          "state": "RESOLVED",
+          "value": "Legacy Teach data import is ABSENT; this registration adopts no import job, script or route. Future import requires a separate source snapshot, transformation, reconciliation, audit and rollback plan. MIG-7's baseline remains the V2 production schema.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C22",
+      "path": "contracts/c22-transaction-idempotency-reconciliation-contract.md",
+      "from_version": "1.2.0",
+      "to_version": "1.3.0",
+      "superseded_copy": "contracts/superseded/c22-transaction-idempotency-reconciliation-contract-1.2.0.md",
+      "historical_body_sha256": "85dcde82bc348551c9b3557c80ecfbb0ae57a173d8e4e70a8ba98a9e2655f3d4",
+      "questions": [
+        {
+          "id": "OQ-TXN-2",
+          "state": "OPEN_RESIDUAL",
+          "value": "External-effect scope is email delivery and OAuth sign-in; payments remain DISABLED. TransactionControl owns ambiguous email-send reconciliation, and canonical provider readback MUST precede any retry. Failed OAuth exchange fails sign-in. Email and OAuth providers remain unselected: no provider adapter/delivery or mounted OAuth callback is authorized.",
+          "residual": "Which email delivery provider and OAuth provider(s) are approved?",
+          "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C23",
+      "path": "contracts/c23-audit-lifecycle-events-contract.md",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "superseded_copy": "contracts/superseded/c23-audit-lifecycle-events-contract-1.1.0.md",
+      "historical_body_sha256": "9a51855bdbcbe3690d0ca6ad3b812794dbc25ec65bed0508413e9896c7328abb",
+      "questions": [
+        {
+          "id": "OQ-AUD-2",
+          "state": "RESOLVED",
+          "value": "Identity, Membership, Assignment and Certification state MUST be reconstructable from lifecycle history; every transition appends its LifecycleEvent in the same transaction and replay MUST equal current lifecycle fields. Projections remain separate from canonical state.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
+          "affects": "AUD-7"
+        },
+        {
+          "id": "OQ-AUD-3",
+          "state": "RESOLVED",
+          "value": "Capability, tenant-scope, target-scope, credential-abuse and Origin denials MUST be recorded separately from successful mutations; validation errors and plain unauthenticated requests are excluded. Records contain only the specified redacted fields, deduplicate per actor/IP-prefix, class, operation and 5-minute bucket, cap at 100 rows per actor/hour and record one overflow row/hour. Audit immutability and one-year retention remain binding.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
+          "affects": "AUD-8"
+        }
+      ]
+    },
+    {
+      "contract": "C31",
+      "path": "contracts/c31-content-teaching-engine-contract.md",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "superseded_copy": "contracts/superseded/c31-content-teaching-engine-contract-1.1.0.md",
+      "historical_body_sha256": "4befb0024ffab5138039b1fd130f2b007a6e847ddb1d6330edb289541c25aff2",
+      "questions": [
+        {
+          "id": "OQ-CNT-2",
+          "state": "OPEN_RESIDUAL",
+          "value": "Customer-approval claims MUST be backed by a Content-owned append-only approval bound to content_pack_id, version and digest, recording authorized actor, organization scope, time and audit atomically. New versions inherit no approval; withdrawal is a new record. Approver role/title remains UNKNOWN, so no approval record or claim is authorized until selected.",
+          "residual": "Which customer content-approver role/title is approved?",
+          "controlling_artifact": "governance/decision-closure/09-governance-content-certification-web-packet.md",
+          "affects": "CNT-11"
+        },
+        {
+          "id": "OQ-CNT-3",
+          "state": "RESOLVED",
+          "value": "No legacy content format is accepted. Admission requires one named adapter per format, deterministic conversion/version validation, positive and negative fixtures and a C00 compatibility-register entry with removal condition.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C32",
+      "path": "contracts/c32-learning-sessions-progress-contract.md",
+      "from_version": "1.2.0",
+      "to_version": "1.3.0",
+      "superseded_copy": "contracts/superseded/c32-learning-sessions-progress-contract-1.2.0.md",
+      "historical_body_sha256": "33f081cce18a5cc42f03a7a325df9a1a65c22fbe105b367cfd91bff1d0ccc134",
+      "questions": [
+        {
+          "id": "OQ-LRN-2",
+          "state": "RESOLVED",
+          "value": "XP, mastery, streak and rank remain UNAVAILABLE until owner-approved versioned derivation formulas and replay evidence exist. No real score may be stored or displayed; sample/demo scores MUST be labelled.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "LRN-13"
+        }
+      ]
+    },
+    {
+      "contract": "C33",
+      "path": "contracts/c33-manager-operations-contract.md",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "superseded_copy": "contracts/superseded/c33-manager-operations-contract-1.1.0.md",
+      "historical_body_sha256": "3bd876789c45d01a894f7b134fb2a0245d7aa531078d3a5741d0a8827440876c",
+      "questions": [
+        {
+          "id": "OQ-MGR-2",
+          "state": "RESOLVED",
+          "value": "Manager offboarding requires a dedicated capability through the canonical Identity lifecycle service and current scope. It grants no credential control or global lifecycle authority; multi-organization effects remain BLOCKED until a separate policy exists.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/06-identity-tenancy-manager-registration-packet.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C34",
+      "path": "contracts/c34-certification-credentials-contract.md",
+      "from_version": "1.2.0",
+      "to_version": "1.3.0",
+      "superseded_copy": "contracts/superseded/c34-certification-credentials-contract-1.2.0.md",
+      "historical_body_sha256": "f47818f2613793d729ded86b84a224ba7151f51da6283ce80690741136753979",
+      "questions": [
+        {
+          "id": "OQ-CERT-3",
+          "state": "RESOLVED",
+          "value": "Issuance evidence MUST be structured checklist results and scoped observation notes bound to observed performance. Photos/files are DISABLED and rejected; enabling them requires separate storage, privacy, retention and access decisions. OQ-CERT-2 remains open and continues to block issuance.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "CERT-7"
+        },
+        {
+          "id": "OQ-CERT-5",
+          "state": "RESOLVED",
+          "value": "Certification validity has no implicit expiry: no expiry field or time-driven state transition is authorized, and revocation ends validity. Any later expiry requires an owner-defined representation, effects and history/revocation rules. Data-retention expiry remains separately governed and does not create validity expiry.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C41",
+      "path": "contracts/c41-api-boundary-contract.md",
+      "from_version": "1.0.3",
+      "to_version": "1.1.0",
+      "superseded_copy": "contracts/superseded/c41-api-boundary-contract-1.0.3.md",
+      "historical_body_sha256": "9be0542c3cdb4bb713ba80ca6ebae43b39e13afa23fee42e3da71e9b93dff3eb",
+      "questions": [
+        {
+          "id": "OQ-API-1",
+          "state": "RESOLVED",
+          "value": "Product operations MUST live under `/api/v1/*`. The exhaustive outside-prefix exceptions are health/readiness and authentication callbacks in the registered API manifest; callbacks remain unmounted until their provider selection and prerequisites pass. No billing, analytics or internal operation is exposed by this registration.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/05-api-boundary-manifest.md",
+          "affects": "\u2014"
+        },
+        {
+          "id": "OQ-API-2",
+          "state": "RESOLVED",
+          "value": "API errors MUST use exactly the stable `code`, `message`, `requestId` envelope and status semantics in `api-error-envelope.schema.json` and the registered API manifest. Missing and out-of-scope targets MUST produce identical non-disclosing denials; no target existence or private detail is leaked.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/05-api-boundary-manifest.md",
+          "affects": "API-10"
+        },
+        {
+          "id": "OQ-API-3",
+          "state": "OPEN_RESIDUAL",
+          "value": "Breaking consumer changes MUST use the major-version path `/api/v1` and an explicit deprecation manifest rather than in-place replacement. Sunset periods remain UNKNOWN; no deprecation sunset is authorized until owner selection.",
+          "residual": "Which API deprecation sunset periods are approved?",
+          "controlling_artifact": "governance/decision-closure/05-api-boundary-manifest.md",
+          "affects": "API-13"
+        }
+      ]
+    },
+    {
+      "contract": "C42",
+      "path": "contracts/c42-web-client-boundary-contract.md",
+      "from_version": "1.0.3",
+      "to_version": "1.1.0",
+      "superseded_copy": "contracts/superseded/c42-web-client-boundary-contract-1.0.3.md",
+      "historical_body_sha256": "e5b9e3578dc652e9e7ad1ff56b6101e2844b7d3d549cd1e782710db9c0443551",
+      "questions": [
+        {
+          "id": "OQ-WEB-1",
+          "state": "RESOLVED",
+          "value": "Core paths MUST meet WCAG 2.2 Level AA with interactive targets at least 44 by 44 CSS pixels. Automated checks supplement, not replace, keyboard, screen-reader, contrast and mobile checks.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/09-governance-content-certification-web-packet.md",
+          "affects": "WEB-15"
+        },
+        {
+          "id": "OQ-WEB-2",
+          "state": "RESOLVED",
+          "value": "Core paths are login, assigned-content start, recorded completion, scoped manager view and logout. Each requires E2E and accessibility evidence. Credentialless demo isolation/reset remains separately specified.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/09-governance-content-certification-web-packet.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C51",
+      "path": "contracts/c51-verification-evidence-contract.md",
+      "from_version": "1.0.3",
+      "to_version": "1.1.0",
+      "superseded_copy": "contracts/superseded/c51-verification-evidence-contract-1.0.3.md",
+      "historical_body_sha256": "89d51dfd51f5b01814c1d3d33da07b46e3d43fb4df1c9b44d06a998525b4d280",
+      "questions": [
+        {
+          "id": "OQ-EVD-1",
+          "state": "RESOLVED",
+          "value": "Independent verification MUST cover C11, C12, C13, C14, C15, C21, C22, C23, C51, C52 and protected cross-domain mutations. The verifier must be other than the implementer; self-audit is not independent verification. A DevelopmentAgent verifier requires explicit owner designation for the change.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
+          "affects": "EVD-16"
+        },
+        {
+          "id": "OQ-EVD-2",
+          "state": "OPEN_RESIDUAL",
+          "value": "Evidence uses repository metadata plus exact-SHA-bound content-addressed artifacts, digest-verified archive readback and explicit expiry. CI artifacts are not assumed permanent; retention duration and durable archive location remain UNKNOWN.",
+          "residual": "What evidence retention duration and durable content-addressed archive location are approved?",
+          "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
+          "affects": "\u2014"
+        },
+        {
+          "id": "OQ-EVD-3",
+          "state": "RESOLVED",
+          "value": "PROVEN requires verified, current exact-SHA readable evidence; unmet/failed/skipped gates are BLOCKED; insufficient, planned, declared, inferred, stale or different-SHA evidence is UNKNOWN; conflicting facts are CONTRADICTORY. Declared or inferred states MUST NOT auto-promote.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C52",
+      "path": "contracts/c52-deployment-release-recovery-contract.md",
+      "from_version": "1.2.0",
+      "to_version": "1.3.0",
+      "superseded_copy": "contracts/superseded/c52-deployment-release-recovery-contract-1.2.0.md",
+      "historical_body_sha256": "e1b97e1eb709ffecd684b9716ec29a36362a3529ebf2b085d149f961985affc9",
+      "questions": [
+        {
+          "id": "OQ-REL-3",
+          "state": "RESOLVED",
+          "value": "Deployed smoke tests MUST bind candidate source/deployment/config/schema identity and prove health/readiness, unauthenticated and role/scope/Origin denials, database exposure denials, assigned-content start/progress/completion with atomic audit, cross-tenant/nonexistent parity, logout replay denial and recovery readiness. A URL returning 200 is insufficient; every failed or unavailable step blocks promotion.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
+          "affects": "REL-8"
+        }
+      ]
+    },
+    {
+      "contract": "C53",
+      "path": "contracts/c53-observability-contract.md",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "superseded_copy": "contracts/superseded/c53-observability-contract-1.1.0.md",
+      "historical_body_sha256": "a4b98cf854ac8574a96398f1290cfcc89ceec65acb4499b9c51e9bd6811d4aca",
+      "questions": [
+        {
+          "id": "OQ-OBS-1",
+          "state": "OPEN_RESIDUAL",
+          "value": "Sentry is selected for server errors with sendDefaultPii false and redaction of credential headers and request bodies; request ID tagging only. Vercel Analytics remains OFF under the disabled analytics policy. Alert destination remains UNKNOWN and the separate 90-day redacted-log sink evidence is still required.",
+          "residual": "Where must operational alerts be delivered?",
+          "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
+          "affects": "OBS-2"
+        },
+        {
+          "id": "OQ-OBS-2",
+          "state": "RESOLVED",
+          "value": "Logs MAY contain request ID, operation, method/route template, status, duration, denial class, failed authorization step and approved pseudonymous operational IDs. Logs MUST NOT contain credentials, cookies, verifiers/hashes, provider tokens, names/emails, filled paths, request/response bodies, observation notes or learner payload content; all sinks require canary-leak tests.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
+          "affects": "OBS-7"
+        }
+      ]
+    },
+    {
+      "contract": "C61",
+      "path": "contracts/c61-analytics-contract.md",
+      "from_version": "1.0.3",
+      "to_version": "1.1.0",
+      "superseded_copy": "contracts/superseded/c61-analytics-contract-1.0.3.md",
+      "historical_body_sha256": "87eb47f4b7959a626fe30af9a31ce4187b9e00c55fd239d4ec4be834a89582da",
+      "questions": [
+        {
+          "id": "OQ-ANL-1",
+          "state": "RESOLVED",
+          "value": "Product analytics remains DISABLED with no selected provider, SDK, beacon or emitted analytics event. Enablement requires an owner decision naming provider, versioned event schema and approved fields through a C61 revision.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "\u2014"
+        },
+        {
+          "id": "OQ-ANL-2",
+          "state": "RESOLVED",
+          "value": "The identifying-field allowlist is empty: no identifying analytics field is permitted. Any later minimum field list requires a C61 revision; this decision does not enable analytics.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "ANL-7"
+        }
+      ]
+    },
+    {
+      "contract": "C62",
+      "path": "contracts/c62-pwa-offline-contract.md",
+      "from_version": "1.0.3",
+      "to_version": "1.1.0",
+      "superseded_copy": "contracts/superseded/c62-pwa-offline-contract-1.0.3.md",
+      "historical_body_sha256": "199e91fdc2f6a672304c54ae28ad12e14e35f84e1fbe9f148ae04c23a590615b",
+      "questions": [
+        {
+          "id": "OQ-PWA-1",
+          "state": "RESOLVED",
+          "value": "Offline writes remain NOT_AUTHORIZED. Every mutation requires connectivity; offline UI MUST show not-sent and MUST NOT claim success. No client write queue is authorized; re-enable only through an active C62 revision or dedicated offline-write contract.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "PWA-5"
+        }
+      ]
+    },
+    {
+      "contract": "C63",
+      "path": "contracts/c63-billing-contract.md",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "superseded_copy": "contracts/superseded/c63-billing-contract-1.1.0.md",
+      "historical_body_sha256": "9ee4a0e00aa0c383cb8580306325057174a1f23c6001879028d4f8be258f81f9",
+      "questions": [
+        {
+          "id": "OQ-BIL-1",
+          "state": "RESOLVED",
+          "value": "Self-service billing remains DISABLED. No checkout, webhook or billing route is authorized; billing remains manual outside the application until an owner-enabled C63 revision.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "\u2014"
+        },
+        {
+          "id": "OQ-BIL-2",
+          "state": "RESOLVED",
+          "value": "No payment provider is selected, and production money movement remains NOT_AUTHORIZED. A named provider and explicit owner authorization are required before enablement; this registration introduces no SDK, key or webhook secret.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "BIL-12"
+        },
+        {
+          "id": "OQ-BIL-3",
+          "state": "OPEN_RESIDUAL",
+          "value": "Billing accounts are Organization-owned and entitlement is a read-only Organization-owned projection; the relationship requires separate C01 semantic registration. Organization-to-billing-account cardinality remains UNKNOWN; no billing-account creation is authorized while billing is disabled.",
+          "residual": "What Organization-to-billing-account cardinality is approved?",
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "BIL-13"
+        }
+      ]
+    }
+  ]
+}

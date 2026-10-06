@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C15",
   "class": "contract",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-03",
-  "effective_on": "2026-10-03",
+  "updated_on": "2026-10-05",
+  "effective_on": "2026-10-05",
   "approval": {
     "state": "approved",
-    "approved_version": "1.0.0",
-    "approved_on": "2026-10-03",
+    "approved_version": "1.1.0",
+    "approved_on": "2026-10-05",
     "record": "contracts/APPROVAL-RECORD.md",
-    "inheritance": "1.0.1, 1.0.2, and 1.0.3 are non-normative governance/truth-state cleanup patches; 1.0.0 owner approval remains controlling"
+    "basis": "Owner manifest-bound decision-closure r3.1 approval under SYS-21 #75; sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,7 +28,9 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": [],
+  "supersedes": [
+    "TEACH-CON-C15@1.0.3"
+  ],
   "superseded_by": null,
   "depends_on": [
     "contracts/"
@@ -43,17 +45,17 @@
 | Contract ID        | C15                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.0.3                                                                                                                                                           |
+| Version            | 1.1.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
+| Approved by        | Patrick Craven (owner), 2026-10-05; manifest-bound decision-closure r3.1, SYS-21 #75; see `APPROVAL-RECORD.md` |
 | Requirement prefix | `PRIV`                                                                                                                                                          |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New. No adequate predecessor.                                                                                                                                   |
-| Supersedes         | None                                                                                                                                                            |
+| Supersedes         | 1.0.3 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-03                                                                                                                                                      |
+| Last updated       | 2026-10-05 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -81,7 +83,11 @@ Related contracts: C00, C13, C14, C23, C53, C61, C62.
 
 | Term                                      | Meaning                                                                                                                                                     |
 | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Deleted, anonymized, retained, offboarded | Distinct lifecycle terms whose exact meanings MUST be recorded in this contract; content pending an owner decision (see OQ-PRIV-1; value Not yet verified). |
+| DELETED | Governed, audited primary-row removal; an Identity becomes a terminal tombstone containing id/status/created_at only, with every dependent-copy expiry action governed by the registered lifecycle matrix. Executor/ingress admission remains required. (OQ-PRIV-1 resolved 2026-10-05) |
+| ANONYMIZED | Unrecoverable aggregate output with a minimum cell size of 5 identities. Individual hashes and opaque links are personal data, never anonymized. (OQ-PRIV-1 resolved 2026-10-05) |
+| PSEUDONYMIZED | Replaced direct identifiers that still permit linkage, including keyed/unkeyed hashes and opaque IDs while a mapping exists; treated as personal data. |
+| RETAINED | Kept unchanged under C14 access control until the record-class clock plus duration expires and its governed expiry action runs; never extends authentication validity. (OQ-PRIV-1 resolved 2026-10-05) |
+| OFFBOARDED | IDN-18 atomic INACTIVE status, lifecycle audit, revocation of sessions/credentials/tokens and effective memberships/grants; deletes nothing and retains history. (OQ-PRIV-1 resolved 2026-10-05) |
 | Protected record                          | Any record that is not intentionally public.                                                                                                                |
 | Shared device                             | A device used by more than one identity, such as a kitchen tablet.                                                                                          |
 
@@ -100,10 +106,10 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **PRIV-9** — Protected data MUST NOT persist in browser storage after logout.
 - **PRIV-10** — Data-export requests MUST have an implemented fulfillment lifecycle with explicit states, an owner, and a terminal outcome.
 - **PRIV-11** — Data-deletion requests MUST have an implemented fulfillment lifecycle with explicit states, an owner, and a terminal outcome.
-- **PRIV-12** — Every stated retention period MUST correspond to an executable mechanism that enforces it (see OQ-PRIV-2; value Not yet verified).
+- **PRIV-12** — Retention clocks, durations and expiry actions MUST follow the registered lifecycle matrix: one year for named identity, credential, session/token, membership, learning, certification and audit classes, with each class's terminal clock; OperationalLog retains its separate 90-day policy. Legal holds suspend deletion without extending authentication validity. Undefined clocks or unregistered classes have retention UNKNOWN, automatic deletion BLOCKED and no retention/deletion/compliance claim. Every stated retention period MUST have executable enforcement evidence before any promise; backup/provider windows and executor/schema admission remain separate gates. See `governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md`. (OQ-PRIV-2 resolved 2026-10-05).
 - **PRIV-13** — The terms deleted, anonymized, retained, and offboarded MUST each have one recorded meaning, and code and documents MUST NOT use them interchangeably.
 - **PRIV-14** — A policy, contract template, or UI MUST NOT promise hard purge unless an executable purge mechanism exists.
-- **PRIV-15** — Legal and audit records exempt from deletion MUST be explicitly listed with the reason for exemption (see OQ-PRIV-3; value Not yet verified).
+- **PRIV-15** — Subject-deletion exemptions MUST be exactly AuditEvent and LifecycleEvent until their one-year expiry (AUD-1/4/6), and ReconciliationRecord until its expiry (TXN-5/7); OPEN reconciliation never expires. Legal hold is a deletion suspension, not an exemption. Application paths MUST NOT delete immutable audit records; privileged expiry requires its separate admission and evidence. See `governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md`. (OQ-PRIV-3 resolved 2026-10-05).
 - **PRIV-16** — After logout on a shared device, the next user MUST NOT be able to see the previous user's data in UI, memory, caches, or storage.
 - **PRIV-17** — Published privacy statements MUST NOT describe behavior the system does not execute.
 
@@ -126,12 +132,12 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 | ID        | Question                                                                                          | Blocks implementation | Affects |
 | --------- | ------------------------------------------------------------------------------------------------- | --------------------- | ------- |
-| OQ-PRIV-1 | What exactly do deleted, anonymized, retained, and offboarded mean in Teach?                      | Yes                   | —       |
-| OQ-PRIV-2 | What retention periods apply to each record class?                                                | Yes                   | PRIV-12 |
-| OQ-PRIV-3 | Which record classes are exempt from deletion, and on what legal or audit basis?                  | Yes                   | PRIV-15 |
-| OQ-PRIV-4 | What export format and fulfillment deadline apply?                                                | No                    | —       |
+| OQ-PRIV-1 | **Resolved.** Owner, 2026-10-05: DELETED means governed audited primary-row removal, with an Identity terminal tombstone containing only id/status/created_at and dependent-copy expiry under the lifecycle matrix. ANONYMIZED applies only to unrecoverable aggregates with at least 5 identities per reported group; individual hashes/opaque links are PSEUDONYMIZED personal data. RETAINED means access-controlled preservation until the class clock/duration/action. OFFBOARDED means IDN-18 access revocation and retained history, never deletion. The corrected matrix controls; executor ingress, schema, backup-window and recovery evidence gates remain required. See `governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md`. (Decision-closure r3.1) | No (resolved) | — |
+| OQ-PRIV-2 | **Resolved.** Owner, 2026-10-05: Retention clocks, durations and expiry actions MUST follow the registered lifecycle matrix: one year for named identity, credential, session/token, membership, learning, certification and audit classes, with each class's terminal clock; OperationalLog retains its separate 90-day policy. Legal holds suspend deletion without extending authentication validity. Undefined clocks or unregistered classes have retention UNKNOWN, automatic deletion BLOCKED and no retention/deletion/compliance claim. Every stated retention period MUST have executable enforcement evidence before any promise; backup/provider windows and executor/schema admission remain separate gates. See `governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md`. (Decision-closure r3.1) | No (resolved) | PRIV-12 |
+| OQ-PRIV-3 | **Resolved.** Owner, 2026-10-05: Subject-deletion exemptions MUST be exactly AuditEvent and LifecycleEvent until their one-year expiry (AUD-1/4/6), and ReconciliationRecord until its expiry (TXN-5/7); OPEN reconciliation never expires. Legal hold is a deletion suspension, not an exemption. Application paths MUST NOT delete immutable audit records; privileged expiry requires its separate admission and evidence. See `governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md`. (Decision-closure r3.1) | No (resolved) | PRIV-15 |
+| OQ-PRIV-4 | **Open — residual only.** What export fulfillment deadline applies? Owner, 2026-10-05: Export format is machine-readable JSON plus a human-readable summary. Only the export fulfillment deadline remains undecided. See `governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md`. (Decision-closure r3.1; partial registration) | No | — |
 | OQ-PRIV-5 | What deletion fulfillment deadline applies?                                                       | No                    | —       |
-| OQ-PRIV-6 | Can export and deletion be fulfilled by an operator procedure at first, rather than self-service? | No                    | —       |
+| OQ-PRIV-6 | **Resolved.** Owner, 2026-10-05: Initial export/deletion fulfillment MUST use a verified, scoped, audited operator procedure; self-service is deferred. Requests use the verification/hold/fulfillment lifecycle in the registered privacy matrix and MUST NOT claim a deadline or completed deletion while its gates are unmet. See `governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md`. (Decision-closure r3.1) | No (resolved) | — |
 
 ## 7. Verification Status
 
@@ -141,14 +147,14 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
-| Blocking open questions      | 3 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
-| Owner approval               | declared                 | Approved by the owner on 2026-10-03; recorded in `APPROVAL-RECORD.md`. Initial owner-approval baseline is commit `2c9b1c849a520ba817efc91150be9a37797f4238`; this 1.0.3 revision is tracked by Git history.                                                                     |
+| Blocking open questions      | 0 open | Only unresolved question rows govern blocking; registration is not implementation evidence |
+| Owner approval               | declared | 1.1.0 owner approval recorded in APPROVAL-RECORD.md under #75; runtime implementation conformance remains UNKNOWN |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
 ## 8. Change Log
 
-| Version | Date       | Change                                                                                                                                                                                          | By               |
+| Version | Date | Change | By |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Retargeted to the Teach v2 codebase: legacy `peteywee/teach` is reference only; anchors and paths no longer point into the legacy repository.                                                   | Claude (drafter) |
@@ -157,3 +163,4 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.1   | 2026-10-03 | Non-normative document-governance metadata/provenance normalization; 1.0.0 owner approval remained controlling. | ChatGPT (governance) |
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
+| 1.1.0 | 2026-10-05 | Register OQ-PRIV-1, OQ-PRIV-2, OQ-PRIV-3, OQ-PRIV-4, OQ-PRIV-6; preserve named residuals and existing requirement/acceptance IDs. Decision-closure r3.1 manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c; SYS-21 #75. | Patrick Craven (owner); ChatGPT (recorder) |

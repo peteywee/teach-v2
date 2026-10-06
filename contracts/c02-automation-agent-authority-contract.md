@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C02",
   "class": "contract",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-03",
-  "effective_on": "2026-10-03",
+  "updated_on": "2026-10-05",
+  "effective_on": "2026-10-05",
   "approval": {
     "state": "approved",
-    "approved_version": "1.0.0",
-    "approved_on": "2026-10-03",
+    "approved_version": "1.1.0",
+    "approved_on": "2026-10-05",
     "record": "contracts/APPROVAL-RECORD.md",
-    "inheritance": "1.0.1, 1.0.2, and 1.0.3 are non-normative governance/truth-state cleanup patches; 1.0.0 owner approval remains controlling"
+    "basis": "Owner manifest-bound decision-closure r3.1 approval under SYS-21 #75; sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,7 +28,9 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": [],
+  "supersedes": [
+    "TEACH-CON-C02@1.0.3"
+  ],
   "superseded_by": null,
   "depends_on": [
     "contracts/"
@@ -43,17 +45,17 @@
 | Contract ID        | C02                                                                                                                                                             |
 | Group              | C02 Automation & Agent Authority                                                                                                                                |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.0.3                                                                                                                                                           |
+| Version            | 1.1.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
+| Approved by        | Patrick Craven (owner), 2026-10-05; manifest-bound decision-closure r3.1, SYS-21 #75; see `APPROVAL-RECORD.md` |
 | Requirement prefix | `AGT`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New.                                                                                                                                                            |
-| Supersedes         | None                                                                                                                                                            |
+| Supersedes         | 1.0.3 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-03                                                                                                                                                      |
+| Last updated       | 2026-10-05 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -100,14 +102,14 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **AGT-6** — Every actor MUST be classified as exactly one of HumanActor, RuntimeAgent, AutomationActor, or DevelopmentAgent, and the types MUST NOT be conflated.
 - **AGT-7** — Execution type (human, AI, CLI, scheduler, worker, or internal application code) MUST NOT by itself confer authority.
 - **AGT-8** — Privileged activity by any actor MUST pass, in order: identity or execution identity, capability, scope, command, domain invariants, transaction, audit.
-- **AGT-9** — Each AutomationActor MUST act under a registered execution identity with an explicit capability set (see OQ-AGT-1; value Not yet verified).
+- **AGT-9** — AutomationActor identities MUST be backend execution-principal records with explicit capabilities per principal, inventoried in `governance/automation-principals.json`; CI jobs are DevelopmentAgents, not product actors. No principal is grandfathered or provisioned by this registration. See `governance/decision-closure/02-c14-authorization-capability-matrix.md`. (OQ-AGT-1 resolved 2026-10-05).
 - **AGT-10** — An actor MAY use a different transport than a human, but MUST cross the same authorization boundary, command boundary, domain invariants, transaction rules, and audit rules as a human performing the same command.
 - **AGT-11** — A RuntimeAgent or AutomationActor MUST NOT receive direct privileged database access as a substitute for domain commands; the migration runner governed by C21 is the only exception, and only for schema migration.
 - **AGT-12** — A RuntimeAgent MAY propose or attempt actions; whether an action is valid and authorized MUST be decided by Teach's deterministic logic, and agent output MUST NOT be accepted as authorization.
 - **AGT-13** — Agentic judgment MUST be limited to proposal-type output; draft training content produced by an agent MUST pass C31 validation and approval before use.
 - **AGT-14** — Audit records of actions by a RuntimeAgent or AutomationActor MUST record the actor type and execution identity.
 - **AGT-15** — Runtime agents MUST NOT redefine identity, authorization, scope, transactions, state machines, idempotency, audit, or data ownership.
-- **AGT-16** — Runtime agents MUST NOT be enabled until the deterministic paths they depend on are `active` and evidenced, and a revision of this contract defines AgentIdentity, AgentCapability, the tool/command boundary, agent decision evidence, human approval and escalation, and agent failure and recovery (see OQ-AGT-2; value Not yet verified).
+- **AGT-16** — Runtime agents remain DISABLED. Enablement requires a named use case and a dedicated C02 revision defining AgentIdentity, AgentCapability, tool/command boundary, decision evidence, approval/escalation and failure/recovery, after the deterministic dependencies are active and evidenced. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (OQ-AGT-2 resolved 2026-10-05).
 - **AGT-17** — A DevelopmentAgent MUST NOT approve contracts (C00), MUST NOT introduce canonical semantics without an approved semantic change (C01), and its output MUST NOT count as independent verification of its own work (C51).
 
 ## 5. Acceptance Cases
@@ -132,9 +134,9 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 | ID       | Question                                                                                                   | Blocks implementation | Affects |
 | -------- | ---------------------------------------------------------------------------------------------------------- | --------------------- | ------- |
-| OQ-AGT-1 | Where are AutomationActor execution identities and their capability sets registered?                       | No                    | AGT-9   |
-| OQ-AGT-2 | What is the first runtime-agent use case, if any, that would trigger the revision of this contract?        | No                    | AGT-16  |
-| OQ-AGT-3 | Which existing jobs, workers, and CLI commands (for example `pnpm cli`) carry forward as AutomationActors? | No                    | —       |
+| OQ-AGT-1 | **Resolved.** Owner, 2026-10-05: AutomationActor identities MUST be backend execution-principal records with explicit capabilities per principal, inventoried in `governance/automation-principals.json`; CI jobs are DevelopmentAgents, not product actors. No principal is grandfathered or provisioned by this registration. See `governance/decision-closure/02-c14-authorization-capability-matrix.md`. (Decision-closure r3.1) | No (resolved) | AGT-9 |
+| OQ-AGT-2 | **Resolved.** Owner, 2026-10-05: Runtime agents remain DISABLED. Enablement requires a named use case and a dedicated C02 revision defining AgentIdentity, AgentCapability, tool/command boundary, decision evidence, approval/escalation and failure/recovery, after the deterministic dependencies are active and evidenced. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1) | No (resolved) | AGT-16 |
+| OQ-AGT-3 | **Resolved.** Owner, 2026-10-05: Adoption is NAMED_JOB_BY_JOB with no blanket grandfathering. No V2 job, worker or CLI is adopted as an AutomationActor by this decision; the C21 migration runner retains only AGT-11's schema-migration exception. See `governance/decision-closure/02-c14-authorization-capability-matrix.md`. (Decision-closure r3.1) | No (resolved) | — |
 
 ## 7. Verification Status
 
@@ -144,14 +146,14 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
-| Blocking open questions      | 0 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
-| Owner approval               | declared                 | Approved by the owner on 2026-10-03; recorded in `APPROVAL-RECORD.md`. Initial owner-approval baseline is commit `2c9b1c849a520ba817efc91150be9a37797f4238`; this 1.0.3 revision is tracked by Git history.                                                                     |
+| Blocking open questions      | 0 open | Only unresolved question rows govern blocking; registration is not implementation evidence |
+| Owner approval               | declared | 1.1.0 owner approval recorded in APPROVAL-RECORD.md under #75; runtime implementation conformance remains UNKNOWN |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
 ## 8. Change Log
 
-| Version | Date       | Change                                                                                                                                                                                          | By               |
+| Version | Date | Change | By |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`). Not approved.                                              | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Retargeted to the Teach v2 codebase: legacy `peteywee/teach` is reference only; anchors and paths no longer point into the legacy repository.                                                   | Claude (drafter) |
@@ -160,3 +162,4 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.1   | 2026-10-03 | Non-normative document-governance metadata/provenance normalization; 1.0.0 owner approval remained controlling. | ChatGPT (governance) |
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
+| 1.1.0 | 2026-10-05 | Register OQ-AGT-1, OQ-AGT-2, OQ-AGT-3; preserve named residuals and existing requirement/acceptance IDs. Decision-closure r3.1 manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c; SYS-21 #75. | Patrick Craven (owner); ChatGPT (recorder) |

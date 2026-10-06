@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C53",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-04",
-  "effective_on": "2026-10-03",
+  "updated_on": "2026-10-05",
+  "effective_on": "2026-10-05",
   "approval": {
     "state": "approved",
-    "approved_version": "1.1.0",
-    "approved_on": "2026-10-04",
+    "approved_version": "1.2.0",
+    "approved_on": "2026-10-05",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Explicit owner-selected policy values in chat; SYS-21 issue #66; implementation conformance remains separate"
+    "basis": "Owner manifest-bound decision-closure r3.1 approval under SYS-21 #75; sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -29,7 +29,8 @@
     "use": "reference only; does not govern and is not governed by this contract"
   },
   "supersedes": [
-    "TEACH-CON-C53@1.0.3"
+    "TEACH-CON-C53@1.0.3",
+    "TEACH-CON-C53@1.1.0"
   ],
   "superseded_by": null,
   "depends_on": [
@@ -45,17 +46,17 @@
 | Contract ID        | C53                                                                                                                                                             |
 | Group              | C50 Production Proof                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.1.0 |
+| Version | 1.2.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by | Patrick Craven (owner), 2026-10-04 — selected policy values; SYS-21 issue #66 |
+| Approved by | Patrick Craven (owner), 2026-10-05; manifest-bound decision-closure r3.1, SYS-21 #75; see `APPROVAL-RECORD.md` |
 | Requirement prefix | `OBS`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New.                                                                                                                                                            |
-| Supersedes | C53 1.0.3 |
+| Supersedes | 1.1.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated | 2026-10-04 |
+| Last updated | 2026-10-05 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -90,12 +91,12 @@ Related contracts: C00, C23, C61.
 The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Requirement IDs are stable and MUST NOT be renumbered or reused.
 
 - **OBS-1** — Every request MUST receive a correlation/request ID that is returned in the response.
-- **OBS-2** — Production errors MUST be captured in an owner-approved error store (see OQ-OBS-1; value Not yet verified).
+- **OBS-2** — Sentry is selected for server errors with sendDefaultPii false and redaction of credential headers and request bodies; request ID tagging only. Vercel Analytics remains OFF under the disabled analytics policy. Alert destination remains UNKNOWN and the separate 90-day redacted-log sink evidence is still required. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (OQ-OBS-1 partially registered 2026-10-05).
 - **OBS-3** — The health signal MUST report process availability only.
 - **OBS-4** — The readiness signal MUST report dependency readiness and MUST fail when a required dependency is unavailable.
 - **OBS-5** — Every alert MUST correspond to a condition with a documented action.
 - **OBS-6** — Logs MUST NOT contain passwords, PINs, session credentials, single-use tokens, or secrets.
-- **OBS-7** — Logs MUST NOT contain protected learner data beyond what diagnosis requires (see OQ-OBS-2; value Not yet verified).
+- **OBS-7** — Logs MAY contain request ID, operation, method/route template, status, duration, denial class, failed authorization step and approved pseudonymous operational IDs. Logs MUST NOT contain credentials, cookies, verifiers/hashes, provider tokens, names/emails, filled paths, request/response bodies, observation notes or learner payload content; all sinks require canary-leak tests. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (OQ-OBS-2 resolved 2026-10-05).
 - **OBS-8** — Security-sensitive failures MUST be logged with enough context to diagnose (request ID, operation, denial reason class) without protected details.
 - **OBS-9** — Critical external integrations MUST expose failure and reconciliation state.
 - **OBS-10** — Observability failures MUST NOT alter authorization decisions or request outcomes.
@@ -120,8 +121,8 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 | ID       | Question                                                                         | Blocks implementation | Affects |
 | -------- | -------------------------------------------------------------------------------- | --------------------- | ------- |
-| OQ-OBS-1 | Which error-capture and alerting providers are approved, and where do alerts go? | No                    | OBS-2   |
-| OQ-OBS-2 | Which learner fields, if any, may appear in logs?                                | No                    | OBS-7   |
+| OQ-OBS-1 | **Open — residual only.** Where must operational alerts be delivered? Owner, 2026-10-05: Sentry is selected for server errors with sendDefaultPii false and redaction of credential headers and request bodies; request ID tagging only. Vercel Analytics remains OFF under the disabled analytics policy. Alert destination remains UNKNOWN and the separate 90-day redacted-log sink evidence is still required. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1; partial registration) | No | OBS-2 |
+| OQ-OBS-2 | **Resolved.** Owner, 2026-10-05: Logs MAY contain request ID, operation, method/route template, status, duration, denial class, failed authorization step and approved pseudonymous operational IDs. Logs MUST NOT contain credentials, cookies, verifiers/hashes, provider tokens, names/emails, filled paths, request/response bodies, observation notes or learner payload content; all sinks require canary-leak tests. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1) | No (resolved) | OBS-7 |
 | OQ-OBS-3 | Resolved: operational logs retained for 90 days, separately from the one-year canonical audit-retention policy. Provider/archival mechanism proof remains UNKNOWN. | No (resolved) | — |
 
 ## 7. Verification Status
@@ -132,8 +133,8 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Legacy repository consulted | reference only | Historical lineage is preserved in the superseded version and pinned V1 recovery records. No V1 policy/grants are adopted by issue #66; the new capability matrix is governed separately by #67. |
 | Implementation conformance | partial foundations / UNKNOWN runtime | Development self-audit exists and is separate from product observability. Runtime request/health/readiness/error/alert/log sinks, provider/archive selection and executable 90-day retention proof remain absent or UNKNOWN. Analytics remains unapproved. |
 | Acceptance cases implemented | structural / UNKNOWN operational | OBS-AC-9 policy/acceptance declarations are checked structurally; runtime log retention, sink failures, correlation/redaction and alert acceptance remain UNKNOWN. |
-| Blocking open questions      | 0 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
-| Owner approval | declared | 1.1.0 approved policy selections recorded under #66; no runtime conformance, provisioning, deletion or production authority is inferred. |
+| Blocking open questions      | 0 open | Only unresolved question rows govern blocking; registration is not implementation evidence |
+| Owner approval | declared | 1.2.0 owner approval recorded in APPROVAL-RECORD.md under #75; runtime implementation conformance remains UNKNOWN |
 | Independent review | not performed | No independent reviewer is claimed for this revision; self-audit supplements review and does not replace independent verification. |
 | Source of intent | declared | Explicit owner policy selections supplied on 2026-10-04 America/Chicago, recorded through issue #66 and APPROVAL-RECORD.md. Other attachment recommendations/drafts remain unapproved. |
 
@@ -149,3 +150,4 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.1.0 | 2026-10-04 | Record owner-selected OQ-OBS-3 policy values, append requirement/acceptance cases and preserve prior version; SYS-21 #66. No runtime implementation or production permission. | Patrick Craven (owner selection) |
+| 1.2.0 | 2026-10-05 | Register OQ-OBS-1, OQ-OBS-2; preserve named residuals and existing requirement/acceptance IDs. Decision-closure r3.1 manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c; SYS-21 #75. | Patrick Craven (owner); ChatGPT (recorder) |

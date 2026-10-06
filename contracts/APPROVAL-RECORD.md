@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-04",
+  "updated_on": "2026-10-05",
   "effective_on": "2026-10-03",
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-05
-- Contract package version: `0.17.0`
+- Contract package version: `0.18.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -207,6 +207,7 @@ PATCH revisions preserve the controlling owner approval when they do not change 
 | C62 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
 | C63 | 1.0.1 | 1.0.2 | 2026-10-03 | Baseline/status cleanup; no normative behavior change |
 | 00 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
+| 00 | 1.0.3 | 1.1.0 | 2026-10-05 | Registered OQ-SYS-1, OQ-SYS-2, OQ-SYS-5 (decision-closure r3.1, SYS-21) |
 | 02 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
 | 11 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
 | 12 | 1.0.2 | 1.0.3 | 2026-10-03 | Truth-state cleanup; no normative behavior change |
@@ -438,3 +439,32 @@ Explicit owner values selected on 2026-10-04 America/Chicago; recommendations/dr
 | C53 | 1.0.3 | 1.1.0 | OQ-OBS-3; see governing contract and verification/owner-decisions/2026-10-04/registration.json | 2026-10-04 | Patrick Craven | #66 |
 
 OQ-AUTHZ-1 records the direction to create a new V2 matrix (#67); exact names/semantics/bundles remain unapproved. OQ-PRIV-1/2/3 remain drafts (#68). OQ-OBS-1 and OQ-SES-2 remain recommendations, OQ-CERT-2 remains UNKNOWN, OQ-API-1 remains unselected after source scan. No other recommendation in the supplied attachment is an owner approval. Its 99% labels are not evidence.
+
+
+## Part 25 — Decision-closure r3.1 registration (#75)
+
+Patrick Craven explicitly approved `approve decision-closure manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c` on 2026-10-05 America/Chicago; GitHub issue #75 records that approval. The approved source package remains byte-for-byte preserved under `governance/proposals/2026-10-05-decision-closure/`; its proposed metadata records its pre-registration state. Registered governing copies under `governance/decision-closure/` carry the selected policy. Registration grants no runtime, schema, provider, capability-promotion or production-execution authority; implementation conformance remains UNKNOWN. Self-review is not independent verification.
+
+| Contract | From | To | Questions registered | Date | Owner | Issue |
+| --- | --- | --- | --- | --- | --- | --- |
+| C00 | 1.0.3 | 1.1.0 | OQ-SYS-1, OQ-SYS-2, OQ-SYS-5 (previous template commit 40fcfa8; archive metadata corrected separately) | 2026-10-05 | Patrick Craven | #75 |
+| C02 | 1.0.3 | 1.1.0 | OQ-AGT-1, OQ-AGT-2, OQ-AGT-3 | 2026-10-05 | Patrick Craven | #75 |
+| C11 | 1.5.0 | 1.6.0 | OQ-IDN-7 | 2026-10-05 | Patrick Craven | #75 |
+| C12 | 1.1.0 | 1.2.0 | OQ-SES-1, OQ-SES-2, OQ-SES-5, OQ-SES-6, OQ-SES-7 | 2026-10-05 | Patrick Craven | #75 |
+| C14 | 1.2.0 | 1.3.0 | OQ-AUTHZ-1 | 2026-10-05 | Patrick Craven | #75 |
+| C15 | 1.0.3 | 1.1.0 | OQ-PRIV-1, OQ-PRIV-2, OQ-PRIV-3, OQ-PRIV-4 (residual open), OQ-PRIV-6 | 2026-10-05 | Patrick Craven | #75 |
+| C21 | 1.1.0 | 1.2.0 | OQ-MIG-3, OQ-MIG-4, OQ-MIG-5 | 2026-10-05 | Patrick Craven | #75 |
+| C22 | 1.2.0 | 1.3.0 | OQ-TXN-2 (residual open) | 2026-10-05 | Patrick Craven | #75 |
+| C23 | 1.1.0 | 1.2.0 | OQ-AUD-2, OQ-AUD-3 | 2026-10-05 | Patrick Craven | #75 |
+| C31 | 1.1.0 | 1.2.0 | OQ-CNT-2 (residual open), OQ-CNT-3 | 2026-10-05 | Patrick Craven | #75 |
+| C32 | 1.2.0 | 1.3.0 | OQ-LRN-2 | 2026-10-05 | Patrick Craven | #75 |
+| C33 | 1.1.0 | 1.2.0 | OQ-MGR-2 | 2026-10-05 | Patrick Craven | #75 |
+| C34 | 1.2.0 | 1.3.0 | OQ-CERT-3, OQ-CERT-5 | 2026-10-05 | Patrick Craven | #75 |
+| C41 | 1.0.3 | 1.1.0 | OQ-API-1, OQ-API-2, OQ-API-3 (residual open) | 2026-10-05 | Patrick Craven | #75 |
+| C42 | 1.0.3 | 1.1.0 | OQ-WEB-1, OQ-WEB-2 | 2026-10-05 | Patrick Craven | #75 |
+| C51 | 1.0.3 | 1.1.0 | OQ-EVD-1, OQ-EVD-2 (residual open), OQ-EVD-3 | 2026-10-05 | Patrick Craven | #75 |
+| C52 | 1.2.0 | 1.3.0 | OQ-REL-3 | 2026-10-05 | Patrick Craven | #75 |
+| C53 | 1.1.0 | 1.2.0 | OQ-OBS-1 (residual open), OQ-OBS-2 | 2026-10-05 | Patrick Craven | #75 |
+| C61 | 1.0.3 | 1.1.0 | OQ-ANL-1, OQ-ANL-2 | 2026-10-05 | Patrick Craven | #75 |
+| C62 | 1.0.3 | 1.1.0 | OQ-PWA-1 | 2026-10-05 | Patrick Craven | #75 |
+| C63 | 1.1.0 | 1.2.0 | OQ-BIL-1, OQ-BIL-2, OQ-BIL-3 (residual open) | 2026-10-05 | Patrick Craven | #75 |

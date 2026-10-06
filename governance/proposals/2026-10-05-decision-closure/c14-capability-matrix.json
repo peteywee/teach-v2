@@ -1,0 +1,1474 @@
+{
+ "x-document": {
+  "doc_id": "TEACH-PROP-DCS-02-DATA",
+  "class": "decision-table",
+  "version": "0.2.0",
+  "status": "proposed",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-05",
+  "updated_on": "2026-10-05"
+ },
+ "baseline": {
+  "repo": "peteywee/teach-v2",
+  "ref": "main",
+  "commit": "6553eb465e469dc9e60368cde40d259f86262997"
+ },
+ "resolves_if_approved": [
+  "OQ-AUTHZ-1",
+  "OQ-AGT-1",
+  "OQ-AGT-3"
+ ],
+ "supports": [
+  "OQ-MGR-2"
+ ],
+ "depends_on_registered": {
+  "MGR-3": "#74 DIRECT_REPORTS_WITHIN_APPROVED_SCOPE",
+  "TEN-7": "#74 EXPLICIT_VALIDATED_SCOPE_TUPLE",
+  "TEN-15": "#74 NORMALIZED_MULTI_ORGANIZATION_MULTI_LOCATION",
+  "CERT-13": "#74 PRIVATE_AUTHENTICATED_SCOPED_VERIFICATION",
+  "AUTHZ-20": "#73 NO_CROSS_TENANT_GRANTS"
+ },
+ "application_interface_authority": "application-interfaces/authority.json TEACH-APPLICATION-INTERFACES 1.0.0",
+ "owner_decision": {
+  "approved_in_chat": "2026-10-05T04:05-05:00",
+  "registration": "PENDING under issue #75"
+ },
+ "matrix_source": "NEW_V2",
+ "legacy_grants_adopted": false,
+ "cross_tenant_capabilities": [],
+ "capability_identifier_grammar": "^[a-z]+\\.[a-z]+\\.[a-z_]+$",
+ "scopes": {
+  "BOOTSTRAP": "No application session. Authority comes only from a presented credential proof or single-use secret verified server-side. Membership/scope steps are not evaluated; the operation never reads or writes tenant data beyond the secret's own bound target.",
+  "SELF": "Target identity is the session identity, resolved server-side. No client-supplied identity ID is accepted. Membership step is skipped; capability comes from the `self` baseline bundle held by every ACTIVE Identity.",
+  "LOCATION": "Request carries an explicit (organizationId, locationId) tuple (TEN-2). Actor must hold an ACTIVE Membership for exactly that organization and location, or an ACTIVE organization-wide Membership for that organization.",
+  "ORGANIZATION": "Request carries an explicit organizationId. Actor must hold an ACTIVE organization-wide Membership (locationId NULL) for that organization.",
+  "RECORD": "AutomationActor only. Scope is the record's immutable `authoritative_scope`; the principal must be registered for that operation and scope class (AGT-9).",
+  "INTERNAL": "Not exposed on any route and holds no grant. Invoked only inside another governed operation's transaction by the owning module's command boundary.",
+  "BLOCKED": "No bundle holds the capability. Every request fails closed (403 when routed). Unblocking requires the named dependency."
+ },
+ "bundles": {
+  "self": {
+   "holder": "Every ACTIVE Identity, independent of membership",
+   "scope": "SELF",
+   "capabilities": [
+    "certification.credential.read_self",
+    "identity.credential.change",
+    "identity.session.read",
+    "identity.session.revoke",
+    "organization.membership.read_self"
+   ]
+  },
+  "learner": {
+   "holder": "Holder of an ACTIVE learner grant on a Membership",
+   "scope": "LOCATION",
+   "capabilities": [
+    "content.pack.read_assigned",
+    "learning.assignment.read_self",
+    "learning.progress.record",
+    "learning.session.complete",
+    "learning.session.start",
+    "learning.state.read_self"
+   ]
+  },
+  "observer": {
+   "holder": "Holder of an ACTIVE observer grant on a Membership",
+   "scope": "LOCATION",
+   "capabilities": [
+    "certification.credential.issue",
+    "certification.credential.verify"
+   ]
+  },
+  "manager": {
+   "holder": "Holder of an ACTIVE manager grant on a location Membership",
+   "scope": "LOCATION",
+   "capabilities": [
+    "certification.credential.verify",
+    "identity.invitation.create",
+    "identity.invitation.read",
+    "identity.invitation.revoke",
+    "identity.lifecycle.offboard",
+    "identity.token.revoke",
+    "learning.assignment.create",
+    "learning.state.read_team",
+    "organization.membership.deactivate",
+    "organization.team.read"
+   ]
+  },
+  "org_admin": {
+   "holder": "Holder of an ACTIVE org_admin grant on an organization-wide Membership (locationId NULL)",
+   "scope": "ORGANIZATION",
+   "capabilities": [
+    "audit.event.read",
+    "certification.credential.revoke",
+    "certification.credential.verify",
+    "identity.invitation.create",
+    "identity.invitation.read",
+    "identity.invitation.revoke",
+    "identity.lifecycle.deactivate",
+    "identity.lifecycle.offboard",
+    "identity.lifecycle.reactivate",
+    "identity.token.revoke",
+    "learning.assignment.create",
+    "learning.state.read_team",
+    "organization.membership.deactivate",
+    "organization.membership.revoke",
+    "organization.team.read"
+   ]
+  }
+ },
+ "evaluation_order": [
+  {
+   "step": 1,
+   "name": "identity",
+   "check": "Valid, ACTIVE, unexpired session (SES-11, SES-15)",
+   "status": 401,
+   "code": "UNAUTHENTICATED"
+  },
+  {
+   "step": 2,
+   "name": "membership",
+   "check": "ACTIVE Membership in the requested organization (TEN-8, TEN-10)",
+   "status": 403,
+   "code": "FORBIDDEN"
+  },
+  {
+   "step": 3,
+   "name": "scope",
+   "check": "Requested tuple exactly matches an authorized scope; zero or ambiguous selection fails (TEN-6, TEN-7, TEN-9)",
+   "status": 403,
+   "code": "FORBIDDEN"
+  },
+  {
+   "step": 4,
+   "name": "capability",
+   "check": "A held bundle includes the operation capability (AUTHZ-7, AUTHZ-13)",
+   "status": 403,
+   "code": "FORBIDDEN"
+  },
+  {
+   "step": 5,
+   "name": "target",
+   "check": "Target resolved server-side and inside actor scope; wrong tenant / location / reporting scope / nonexistent all identical (AUTHZ-14, AUTHZ-16)",
+   "status": 404,
+   "code": "NOT_FOUND"
+  },
+  {
+   "step": 6,
+   "name": "entitlement",
+   "check": "Organization-owned entitlement does not remove the capability effect (AUTHZ-8, AUTHZ-21)",
+   "status": 403,
+   "code": "FORBIDDEN"
+  }
+ ],
+ "post_authorization_outcomes": [
+  {
+   "stage": "request body schema",
+   "status": 400,
+   "code": "INVALID_REQUEST",
+   "note": "Evaluated after step 4 so unauthorized actors cannot probe payload schemas; before any handler effect (API-2, API-3)."
+  },
+  {
+   "stage": "domain precondition / state machine",
+   "status": 409,
+   "code": "CONFLICT",
+   "note": "Only after steps 1-6 pass; no side effect."
+  },
+  {
+   "stage": "fail-closed unmet policy dependency",
+   "status": 409,
+   "code": "PRECONDITION_FAILED",
+   "note": "E.g. IssueCertification while no approved criteria version can exist."
+  }
+ ],
+ "automation_principals": [],
+ "automation_principal_record_shape": {
+  "principal_id": "stable string, e.g. automation:reconciliation-worker",
+  "actor_class": "AutomationActor",
+  "capabilities": "explicit list of capability IDs; never a bundle name",
+  "scope_class": "RECORD | ORGANIZATION (explicit organizationId)",
+  "credential": "workload credential reference (secret-version ID only, never the secret, REL-6)",
+  "owner": "named human owner",
+  "approved_on": "ISO date",
+  "removal_condition": "text",
+  "audit_actor_fields": [
+   "actor_type",
+   "execution_identity"
+  ]
+ },
+ "operations": [
+  {
+   "id": "AuthenticateIdentity",
+   "kind": "command",
+   "capability": "identity.credential.authenticate",
+   "scope": "BOOTSTRAP",
+   "bundles": [],
+   "actor_classes": [
+    "Unauthenticated"
+   ],
+   "target_resolution": "Identity resolved from the credential proof only (password; OAuth provider subject after IDN-4 linking). Never from a client-supplied identity ID.",
+   "preconditions": [
+    "Identity status ACTIVE (IDN-14)",
+    "PIN credential type rejected: PIN authentication unavailable (IDN-30)",
+    "Unknown identity, wrong secret and inactive identity return byte-identical 401 bodies"
+   ],
+   "idempotency_proposed": "NONE (each success creates a new session; replay of the request is a new sign-in)",
+   "audit_on_success": "Success: AuthenticateIdentity audit in same transaction as session creation. Failure: credential-abuse denial record, rate-limited (OQ-AUD-3).",
+   "transaction_owner": "Identity",
+   "transaction_participants": [
+    "CreateApplicationSession (Identity, internal)"
+   ],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "IDN-14",
+    "IDN-30",
+    "SES-17",
+    "SES-19"
+   ],
+   "owning_domain": "Identity",
+   "application_interface": "Identity application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "BLOCKED",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 2
+   }
+  },
+  {
+   "id": "CreateApplicationSession",
+   "kind": "command",
+   "capability": "identity.session.issue",
+   "scope": "INTERNAL",
+   "bundles": [],
+   "actor_classes": [],
+   "target_resolution": "Identity already authenticated by the invoking operation.",
+   "preconditions": [
+    "Invoked only by AuthenticateIdentity or step-up reauthentication",
+    "Any credential presented before authentication is never upgraded (SES-19)"
+   ],
+   "idempotency_proposed": "NONE (internal)",
+   "audit_on_success": "Covered by the invoking operation's audit record.",
+   "transaction_owner": "Identity",
+   "transaction_participants": [],
+   "route_exposure": "INTERNAL",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "SES-1",
+    "SES-3",
+    "SES-8",
+    "SES-19"
+   ],
+   "owning_domain": "Identity",
+   "application_interface": "Identity application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [],
+   "ledger": {
+    "state": "PARTIAL",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 2
+   }
+  },
+  {
+   "id": "ChangeCredential",
+   "kind": "command",
+   "capability": "identity.credential.change",
+   "scope": "SELF",
+   "bundles": [
+    "self"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "SELF path: session identity. Token path (BOOTSTRAP): the identity bound to the ACTIVE SetupToken/PasswordResetToken.",
+   "preconditions": [
+    "SELF path requires reverification of the current credential in the same request",
+    "Token path requires an ACTIVE, unexpired token; token consumed in the same transaction (IDN-26)",
+    "Revokes ALL sessions of the identity atomically (OQ-IDN-3 proposed value)",
+    "No manager path exists (IDN-13)"
+   ],
+   "idempotency_proposed": "SERVER_DERIVED from token ID on the token path; SELF path is not retried automatically",
+   "audit_on_success": "ChangeCredential audit + session-revocation effects in one transaction.",
+   "transaction_owner": "Identity",
+   "transaction_participants": [
+    "RevokeApplicationSession canonical path (Identity, internal)"
+   ],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "IDN-13",
+    "IDN-15",
+    "IDN-26",
+    "SES-14"
+   ],
+   "owning_domain": "Identity",
+   "application_interface": "Identity application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "BLOCKED",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 2
+   }
+  },
+  {
+   "id": "CreateIdentity",
+   "kind": "command",
+   "capability": "identity.identity.create",
+   "scope": "INTERNAL",
+   "bundles": [],
+   "actor_classes": [],
+   "target_resolution": "New Identity created only inside AcceptInvitation (new person) or the tenant-bootstrap procedure.",
+   "preconditions": [
+    "Email match never links to or creates a duplicate Identity (IDN-2, OQ-IDN-4)"
+   ],
+   "idempotency_proposed": "Inherited from invoking operation",
+   "audit_on_success": "Covered by invoking operation audit (IDN-16).",
+   "transaction_owner": "Identity",
+   "transaction_participants": [],
+   "route_exposure": "INTERNAL",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "IDN-1",
+    "IDN-16"
+   ],
+   "owning_domain": "Identity",
+   "application_interface": "Identity application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [],
+   "ledger": {
+    "state": "PARTIAL",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 2
+   }
+  },
+  {
+   "id": "InviteIdentity",
+   "kind": "command",
+   "capability": "identity.invitation.create",
+   "scope": "LOCATION",
+   "bundles": [
+    "manager",
+    "org_admin"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Invitation target is a prospective person; scope is the requested (organizationId, locationId) tuple.",
+   "preconditions": [
+    "Invitation to an email bound to an offboarded Identity is rejected, creating no Invitation (IDN-20)",
+    "Response is indistinguishable for known/unknown email (OQ-IDN-7)",
+    "Delivery requires an approved email provider (OQ-TXN-2 residual); until then invitations can be created but not delivered"
+   ],
+   "idempotency_proposed": "CLIENT_SUPPLIED key (TXN-5: no duplicate invitations)",
+   "audit_on_success": "InviteIdentity audit in same transaction.",
+   "transaction_owner": "Identity",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": "identity_invitations has no email/recipient column at baseline; recipient storage needs schema admission.",
+   "contract_refs": [
+    "IDN-20",
+    "IDN-24",
+    "IDN-25"
+   ],
+   "owning_domain": "Identity",
+   "application_interface": "Identity application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "PARTIAL",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 2
+   }
+  },
+  {
+   "id": "RevokeInvitation",
+   "kind": "command",
+   "capability": "identity.invitation.revoke",
+   "scope": "LOCATION",
+   "bundles": [
+    "manager",
+    "org_admin"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Invitation resolved by ID, then checked: invitation scope tuple must be within actor scope; otherwise 404.",
+   "preconditions": [
+    "Only PENDING -> REVOKED (IDN-24); acceptance secret unusable in the same transaction (IDN-28)"
+   ],
+   "idempotency_proposed": "STATE_GUARDED: repeat on REVOKED returns 409 with no side effect",
+   "audit_on_success": "RevokeInvitation audit in same transaction.",
+   "transaction_owner": "Identity",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "IDN-28"
+   ],
+   "owning_domain": "Identity",
+   "application_interface": "Identity application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "PARTIAL",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 2
+   }
+  },
+  {
+   "id": "AcceptInvitation",
+   "kind": "command",
+   "capability": "identity.invitation.accept",
+   "scope": "BOOTSTRAP",
+   "bundles": [],
+   "actor_classes": [
+    "Unauthenticated",
+    "HumanActor"
+   ],
+   "target_resolution": "Invitation resolved from the presented acceptance secret verifier. An already-authenticated Identity may accept only after explicit reauthentication (same rule as OQ-IDN-4).",
+   "preconditions": [
+    "Invitation PENDING and unexpired (IDN-27)",
+    "Membership created only through Organization CreateMembership command boundary (IDN-27)"
+   ],
+   "idempotency_proposed": "SERVER_DERIVED from invitation ID (second consumption fails, IDN-10)",
+   "audit_on_success": "AcceptInvitation + CreateMembership (+ CreateIdentity if new) audits in one transaction.",
+   "transaction_owner": "Identity",
+   "transaction_participants": [
+    "CreateIdentity (Identity, internal)",
+    "CreateMembership (Organization, internal)"
+   ],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "IDN-10",
+    "IDN-27"
+   ],
+   "owning_domain": "Identity",
+   "application_interface": "Identity application-command-boundary (APP-1)",
+   "orchestration": "explicit cross-domain orchestration, Identity application layer (APP-8)",
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "PARTIAL",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 2
+   }
+  },
+  {
+   "id": "RevokeSingleUseToken",
+   "kind": "command",
+   "capability": "identity.token.revoke",
+   "scope": "LOCATION",
+   "bundles": [
+    "manager",
+    "org_admin"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Token resolved by ID; bound identity must be in actor visibility (MGR-3 for manager); otherwise 404.",
+   "preconditions": [
+    "Only ACTIVE -> REVOKED (IDN-26)"
+   ],
+   "idempotency_proposed": "STATE_GUARDED",
+   "audit_on_success": "RevokeSingleUseToken audit.",
+   "transaction_owner": "Identity",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": "No registered command ISSUES SetupToken/PasswordResetToken; revocation is grantable but issuance requires a C01 semantic change.",
+   "contract_refs": [
+    "IDN-11",
+    "IDN-26"
+   ],
+   "owning_domain": "Identity",
+   "application_interface": "Identity application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "PARTIAL",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 2
+   }
+  },
+  {
+   "id": "DeactivateIdentity",
+   "kind": "command",
+   "capability": "identity.lifecycle.deactivate",
+   "scope": "ORGANIZATION",
+   "bundles": [
+    "org_admin"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Identity resolved by ID through actor organization memberships; otherwise 404.",
+   "preconditions": [
+    "Only ACTIVE -> INACTIVE (IDN-21)",
+    "GLOBAL-EFFECT GUARD: every non-REVOKED Membership of the target belongs to the actor organization"
+   ],
+   "idempotency_proposed": "STATE_GUARDED",
+   "audit_on_success": "DeactivateIdentity + IdentityDeactivated + session revocation in one transaction.",
+   "transaction_owner": "Identity",
+   "transaction_participants": [
+    "RevokeApplicationSession canonical path (Identity, internal)"
+   ],
+   "route_exposure": "ROUTED",
+   "grant_state": "CONDITIONAL",
+   "blocking_note": "Multi-organization targets are BLOCKED pending the global Identity lifecycle policy recorded under OQ-TEN-3.",
+   "contract_refs": [
+    "IDN-21",
+    "IDN-22",
+    "SES-14"
+   ],
+   "owning_domain": "Identity",
+   "application_interface": "Identity application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "PARTIAL",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 3
+   }
+  },
+  {
+   "id": "ReactivateIdentity",
+   "kind": "command",
+   "capability": "identity.lifecycle.reactivate",
+   "scope": "ORGANIZATION",
+   "bundles": [
+    "org_admin"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Identity resolved by ID through actor organization memberships (including INACTIVE memberships); otherwise 404.",
+   "preconditions": [
+    "Only INACTIVE -> ACTIVE (IDN-21)",
+    "Same GLOBAL-EFFECT GUARD as DeactivateIdentity"
+   ],
+   "idempotency_proposed": "STATE_GUARDED",
+   "audit_on_success": "ReactivateIdentity + IdentityReactivated in one transaction.",
+   "transaction_owner": "Identity",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "CONDITIONAL",
+   "blocking_note": "Same multi-organization block as DeactivateIdentity.",
+   "contract_refs": [
+    "IDN-21",
+    "IDN-23"
+   ],
+   "owning_domain": "Identity",
+   "application_interface": "Identity application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "PARTIAL",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 3
+   }
+  },
+  {
+   "id": "OffboardIdentity",
+   "kind": "command",
+   "capability": "identity.lifecycle.offboard",
+   "scope": "LOCATION",
+   "bundles": [
+    "manager",
+    "org_admin"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Manager: target must be a direct report within the location scope (MGR-3, registered by #74). org_admin: any member of the organization.",
+   "preconditions": [
+    "One shared identity lifecycle service (IDN-17, MGR-8)",
+    "Same GLOBAL-EFFECT GUARD as DeactivateIdentity"
+   ],
+   "idempotency_proposed": "CLIENT_SUPPLIED key; repeat returns same final state and original timestamp (IDN-19)",
+   "audit_on_success": "OffboardIdentity + IdentityOffboarded + revocations in one transaction (IDN-18).",
+   "transaction_owner": "Identity",
+   "transaction_participants": [
+    "RevokeApplicationSession canonical path (Identity)",
+    "RevokeSingleUseToken (Identity)",
+    "DeactivateMembership/RevokeMembership (Organization command boundary)"
+   ],
+   "route_exposure": "ROUTED",
+   "grant_state": "CONDITIONAL",
+   "blocking_note": "Multi-organization targets BLOCKED (OQ-TEN-3 global-lifecycle policy). Manager grant is empty until ReportingRelationship is registered.",
+   "contract_refs": [
+    "IDN-17",
+    "IDN-18",
+    "IDN-19",
+    "MGR-8"
+   ],
+   "owning_domain": "Identity",
+   "application_interface": "Identity application-command-boundary (APP-1)",
+   "orchestration": "explicit cross-domain orchestration, Identity application layer (APP-8)",
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "BLOCKED",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 2
+   }
+  },
+  {
+   "id": "RevokeApplicationSession",
+   "kind": "command",
+   "capability": "identity.session.revoke",
+   "scope": "SELF",
+   "bundles": [
+    "self"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Session resolved by ID and must belong to the session identity; otherwise 404. Logout targets the presented session.",
+   "preconditions": [
+    "Only ACTIVE -> REVOKED (SES-20)",
+    "Logout response expires the cookie (SES-13)",
+    "Unsafe method: Origin check required (OQ-SES-5)"
+   ],
+   "idempotency_proposed": "STATE_GUARDED: replay of a revoked cookie returns 401",
+   "audit_on_success": "RevokeApplicationSession audit (atomic session audit already connected at baseline).",
+   "transaction_owner": "Identity",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "SES-12",
+    "SES-13",
+    "SES-20"
+   ],
+   "owning_domain": "Identity",
+   "application_interface": "Identity application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "PARTIAL",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 3
+   }
+  },
+  {
+   "id": "CreateMembership",
+   "kind": "command",
+   "capability": "organization.membership.create",
+   "scope": "INTERNAL",
+   "bundles": [],
+   "actor_classes": [],
+   "target_resolution": "Invoked by AcceptInvitation (or tenant bootstrap) with the invitation's bound scope tuple.",
+   "preconditions": [
+    "New Membership starts ACTIVE (TEN-18)"
+   ],
+   "idempotency_proposed": "Inherited",
+   "audit_on_success": "Covered by invoking operation audit.",
+   "transaction_owner": "Organization",
+   "transaction_participants": [],
+   "route_exposure": "INTERNAL",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "TEN-3",
+    "TEN-18"
+   ],
+   "owning_domain": "Organization",
+   "application_interface": "Organization application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [],
+   "ledger": {
+    "state": "BLOCKED",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 3
+   }
+  },
+  {
+   "id": "DeactivateMembership",
+   "kind": "command",
+   "capability": "organization.membership.deactivate",
+   "scope": "LOCATION",
+   "bundles": [
+    "manager",
+    "org_admin"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Membership resolved by ID; manager: membership location equals actor location AND member is a direct report. Otherwise 404.",
+   "preconditions": [
+    "Only ACTIVE -> INACTIVE (TEN-18)"
+   ],
+   "idempotency_proposed": "STATE_GUARDED",
+   "audit_on_success": "DeactivateMembership + MembershipDeactivated in one transaction.",
+   "transaction_owner": "Organization",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "TEN-10",
+    "TEN-18"
+   ],
+   "owning_domain": "Organization",
+   "application_interface": "Organization application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "BLOCKED",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 2
+   }
+  },
+  {
+   "id": "RevokeMembership",
+   "kind": "command",
+   "capability": "organization.membership.revoke",
+   "scope": "ORGANIZATION",
+   "bundles": [
+    "org_admin"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Membership resolved by ID within actor organization; otherwise 404.",
+   "preconditions": [
+    "Only INACTIVE -> REVOKED; REVOKED terminal (TEN-18, TEN-19)"
+   ],
+   "idempotency_proposed": "STATE_GUARDED",
+   "audit_on_success": "RevokeMembership + MembershipRevoked in one transaction.",
+   "transaction_owner": "Organization",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "TEN-18",
+    "TEN-19"
+   ],
+   "owning_domain": "Organization",
+   "application_interface": "Organization application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "BLOCKED",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 2
+   }
+  },
+  {
+   "id": "AssignContent",
+   "kind": "command",
+   "capability": "learning.assignment.create",
+   "scope": "LOCATION",
+   "bundles": [
+    "manager",
+    "org_admin"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Learner resolved by ID through MGR-3 visibility (manager) or org membership (org_admin); ContentPack version resolved by exact version/digest (CNT-2). Otherwise 404.",
+   "preconditions": [
+    "ContentPack version published and valid (CNT-3, CNT-4)",
+    "ContentPack available to the organization (ownership scope UNDEFINED \u2014 see PublishContentPack)"
+   ],
+   "idempotency_proposed": "CLIENT_SUPPLIED key (TXN-5: no duplicate assignments)",
+   "audit_on_success": "AssignContent + ContentAssigned audit (MGR-7).",
+   "transaction_owner": "Learning",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "CONDITIONAL",
+   "blocking_note": "Usable only after ContentPack ownership/availability scope is defined in C31.",
+   "contract_refs": [
+    "MGR-7",
+    "LRN-2",
+    "CNT-10"
+   ],
+   "owning_domain": "Learning",
+   "application_interface": "Learning application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "BLOCKED",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 4
+   }
+  },
+  {
+   "id": "StartLearningSession",
+   "kind": "command",
+   "capability": "learning.session.start",
+   "scope": "SELF",
+   "bundles": [
+    "learner"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Assignment resolved by ID; must be assigned to the session identity within an ACTIVE learner Membership; otherwise 404.",
+   "preconditions": [
+    "Assignment ACTIVE and content version valid (LRN-2)",
+    "Requires connectivity (LRN-12)"
+   ],
+   "idempotency_proposed": "CLIENT_SUPPLIED key",
+   "audit_on_success": "StartLearningSession + LearningSessionStarted.",
+   "transaction_owner": "Learning",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "LRN-1",
+    "LRN-2",
+    "LRN-3"
+   ],
+   "owning_domain": "Learning",
+   "application_interface": "Learning application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "PARTIAL",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 2
+   }
+  },
+  {
+   "id": "RecordProgressEvent",
+   "kind": "command",
+   "capability": "learning.progress.record",
+   "scope": "SELF",
+   "bundles": [
+    "learner"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "LearningSession resolved by ID; must belong to session identity; otherwise 404.",
+   "preconditions": [
+    "Session ACTIVE (LRN-3)",
+    "Event records content identity + version (LRN-10)"
+   ],
+   "idempotency_proposed": "CLIENT_SUPPLIED key (LRN-7)",
+   "audit_on_success": "ProgressRecorded fact; audit only if classified security-sensitive (not by default).",
+   "transaction_owner": "Learning",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "LRN-3",
+    "LRN-7",
+    "LRN-10"
+   ],
+   "owning_domain": "Learning",
+   "application_interface": "Learning application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "BLOCKED",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 3
+   }
+  },
+  {
+   "id": "CompleteLearningSession",
+   "kind": "command",
+   "capability": "learning.session.complete",
+   "scope": "SELF",
+   "bundles": [
+    "learner"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "LearningSession resolved by ID; must belong to session identity; otherwise 404.",
+   "preconditions": [
+    "Only ACTIVE -> COMPLETED (LRN-3)"
+   ],
+   "idempotency_proposed": "STATE_GUARDED",
+   "audit_on_success": "CompleteLearningSession + LearningSessionCompleted.",
+   "transaction_owner": "Learning",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "LRN-3",
+    "LRN-5"
+   ],
+   "owning_domain": "Learning",
+   "application_interface": "Learning application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "PARTIAL",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 2
+   }
+  },
+  {
+   "id": "PublishContentPack",
+   "kind": "command",
+   "capability": "content.pack.publish",
+   "scope": "BLOCKED",
+   "bundles": [],
+   "actor_classes": [],
+   "target_resolution": "Undefined: C31 does not state whether a ContentPack is organization-owned or a global catalog item.",
+   "preconditions": [
+    "Pack validates against declared schema version (CNT-3)"
+   ],
+   "idempotency_proposed": "N/A while blocked",
+   "audit_on_success": "N/A",
+   "transaction_owner": "Content",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "BLOCKED",
+   "blocking_note": "A global-catalog publish would be a cross-tenant platform capability, which AUTHZ-20 forbids. Requires a C31/C13 decision on ContentPack ownership scope; an AutomationActor content-release principal is one candidate (AGT-1).",
+   "contract_refs": [
+    "CNT-3",
+    "CNT-6",
+    "AUTHZ-20"
+   ],
+   "owning_domain": "Content",
+   "application_interface": "Content application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "BLOCKED",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 2
+   }
+  },
+  {
+   "id": "IssueCertification",
+   "kind": "command",
+   "capability": "certification.credential.issue",
+   "scope": "LOCATION",
+   "bundles": [
+    "observer"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Learner resolved by ID; must hold ACTIVE learner Membership in the same organization and location; otherwise 404.",
+   "preconditions": [
+    "Actor != learner (CERT-15)",
+    "Active learner membership and active assignment (CERT-1, CERT-2)",
+    "Approved criteria version bound (CERT-4) \u2014 impossible until OQ-CERT-2 is resolved",
+    "Evidence: checklist + observation note only (OQ-CERT-3)"
+   ],
+   "idempotency_proposed": "CLIENT_SUPPLIED key (CERT-10)",
+   "audit_on_success": "IssueCertification + CertificationIssued atomically (CERT-9).",
+   "transaction_owner": "Certification",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "CONDITIONAL",
+   "blocking_note": "Every request fails closed with 409 PRECONDITION_FAILED until OQ-CERT-2 supplies an approver and an approved criteria version exists.",
+   "contract_refs": [
+    "CERT-1",
+    "CERT-4",
+    "CERT-5",
+    "CERT-9",
+    "CERT-15"
+   ],
+   "owning_domain": "Certification",
+   "application_interface": "Certification application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "BLOCKED",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 3
+   }
+  },
+  {
+   "id": "RevokeCertification",
+   "kind": "command",
+   "capability": "certification.credential.revoke",
+   "scope": "ORGANIZATION",
+   "bundles": [
+    "org_admin"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Certification resolved by ID within actor organization; otherwise 404.",
+   "preconditions": [
+    "Reason required; record preserved (CERT-11, CERT-12)"
+   ],
+   "idempotency_proposed": "STATE_GUARDED",
+   "audit_on_success": "RevokeCertification + CertificationRevoked.",
+   "transaction_owner": "Certification",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "CERT-11",
+    "CERT-12"
+   ],
+   "owning_domain": "Certification",
+   "application_interface": "Certification application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface"
+   ],
+   "ledger": {
+    "state": "BLOCKED",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 2
+   }
+  },
+  {
+   "id": "ReconcileExternalEffect",
+   "kind": "command",
+   "capability": "transaction.reconciliation.resolve",
+   "scope": "RECORD",
+   "bundles": [],
+   "actor_classes": [
+    "AutomationActor"
+   ],
+   "target_resolution": "ReconciliationRecord resolved by ID; principal must be registered for the record's operation_name.",
+   "preconditions": [
+    "Record OPEN; resolves only after canonical provider readback (TXN-7, TXN-14)"
+   ],
+   "idempotency_proposed": "STATE_GUARDED (RESOLVED is terminal)",
+   "audit_on_success": "Reconciliation audit with actor type + execution identity (AGT-14).",
+   "transaction_owner": "TransactionControl",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "BLOCKED",
+   "blocking_note": "No AutomationActor principal is registered (OQ-AGT-1). No human tenant role receives this capability.",
+   "contract_refs": [
+    "TXN-7",
+    "TXN-14",
+    "AGT-9",
+    "AGT-14"
+   ],
+   "owning_domain": "TransactionControl",
+   "application_interface": "TransactionControl application-command-boundary (APP-1)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface",
+    "AuditAppendInterface",
+    "ExternalProviderReadbackInterface"
+   ],
+   "ledger": {
+    "state": "PARTIAL",
+    "runtime_conformance": "UNKNOWN",
+    "missing_obligations": 2
+   }
+  },
+  {
+   "id": "ReadCurrentSession",
+   "kind": "query",
+   "capability": "identity.session.read",
+   "scope": "SELF",
+   "bundles": [
+    "self"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Presented session only.",
+   "preconditions": [],
+   "idempotency_proposed": "N/A (safe method)",
+   "audit_on_success": "None by default; denials per OQ-AUD-3.",
+   "transaction_owner": "N/A",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "WEB-2"
+   ],
+   "owning_domain": "Identity",
+   "application_interface": "MISSING: Application Interfaces 1.0.0 defines command entry points (APP-1) and module-to-module reads (APP-6) only; a transport-facing owner query interface is required (Application Interface revision)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface"
+   ],
+   "ledger": null
+  },
+  {
+   "id": "ListOwnMemberships",
+   "kind": "query",
+   "capability": "organization.membership.read_self",
+   "scope": "SELF",
+   "bundles": [
+    "self"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Memberships of session identity only; returns the scope tuples the client may select (TEN-2).",
+   "preconditions": [],
+   "idempotency_proposed": "N/A (safe method)",
+   "audit_on_success": "None by default; denials per OQ-AUD-3.",
+   "transaction_owner": "N/A",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "TEN-4"
+   ],
+   "owning_domain": "Organization",
+   "application_interface": "MISSING: Application Interfaces 1.0.0 defines command entry points (APP-1) and module-to-module reads (APP-6) only; a transport-facing owner query interface is required (Application Interface revision)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface"
+   ],
+   "ledger": null
+  },
+  {
+   "id": "ListOwnAssignments",
+   "kind": "query",
+   "capability": "learning.assignment.read_self",
+   "scope": "LOCATION",
+   "bundles": [
+    "learner"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Assignments of session identity in the selected scope.",
+   "preconditions": [],
+   "idempotency_proposed": "N/A (safe method)",
+   "audit_on_success": "None by default; denials per OQ-AUD-3.",
+   "transaction_owner": "N/A",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "LRN-2"
+   ],
+   "owning_domain": "Learning",
+   "application_interface": "MISSING: Application Interfaces 1.0.0 defines command entry points (APP-1) and module-to-module reads (APP-6) only; a transport-facing owner query interface is required (Application Interface revision)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface"
+   ],
+   "ledger": null
+  },
+  {
+   "id": "ReadAssignedContentVersion",
+   "kind": "query",
+   "capability": "content.pack.read_assigned",
+   "scope": "LOCATION",
+   "bundles": [
+    "learner"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "ContentPack version reachable only through an ACTIVE assignment of the session identity (CNT-10).",
+   "preconditions": [],
+   "idempotency_proposed": "N/A (safe method)",
+   "audit_on_success": "None by default; denials per OQ-AUD-3.",
+   "transaction_owner": "N/A",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "CNT-10"
+   ],
+   "owning_domain": "Content",
+   "application_interface": "MISSING: Application Interfaces 1.0.0 defines command entry points (APP-1) and module-to-module reads (APP-6) only; a transport-facing owner query interface is required (Application Interface revision)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface"
+   ],
+   "ledger": null
+  },
+  {
+   "id": "ReadOwnLearnerState",
+   "kind": "query",
+   "capability": "learning.state.read_self",
+   "scope": "LOCATION",
+   "bundles": [
+    "learner"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Session identity only (LRN-8).",
+   "preconditions": [],
+   "idempotency_proposed": "N/A (safe method)",
+   "audit_on_success": "None by default; denials per OQ-AUD-3.",
+   "transaction_owner": "N/A",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "LRN-8"
+   ],
+   "owning_domain": "Learning",
+   "application_interface": "MISSING: Application Interfaces 1.0.0 defines command entry points (APP-1) and module-to-module reads (APP-6) only; a transport-facing owner query interface is required (Application Interface revision)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface"
+   ],
+   "ledger": null
+  },
+  {
+   "id": "ListOwnCertifications",
+   "kind": "query",
+   "capability": "certification.credential.read_self",
+   "scope": "SELF",
+   "bundles": [
+    "self"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Session identity only.",
+   "preconditions": [],
+   "idempotency_proposed": "N/A (safe method)",
+   "audit_on_success": "None by default; denials per OQ-AUD-3.",
+   "transaction_owner": "N/A",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "CERT-1"
+   ],
+   "owning_domain": "Certification",
+   "application_interface": "MISSING: Application Interfaces 1.0.0 defines command entry points (APP-1) and module-to-module reads (APP-6) only; a transport-facing owner query interface is required (Application Interface revision)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface"
+   ],
+   "ledger": null
+  },
+  {
+   "id": "ListTeam",
+   "kind": "query",
+   "capability": "organization.team.read",
+   "scope": "LOCATION",
+   "bundles": [
+    "manager",
+    "org_admin"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Manager: direct reports within location (MGR-3, registered by #74). org_admin: organization members.",
+   "preconditions": [],
+   "idempotency_proposed": "N/A (safe method)",
+   "audit_on_success": "None by default; denials per OQ-AUD-3.",
+   "transaction_owner": "N/A",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "CONDITIONAL",
+   "blocking_note": "Manager result is empty until ReportingRelationship exists.",
+   "contract_refs": [
+    "MGR-3",
+    "MGR-4"
+   ],
+   "owning_domain": "Organization",
+   "application_interface": "MISSING: Application Interfaces 1.0.0 defines command entry points (APP-1) and module-to-module reads (APP-6) only; a transport-facing owner query interface is required (Application Interface revision)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface"
+   ],
+   "ledger": null
+  },
+  {
+   "id": "ReadTeamMemberLearnerState",
+   "kind": "query",
+   "capability": "learning.state.read_team",
+   "scope": "LOCATION",
+   "bundles": [
+    "manager",
+    "org_admin"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Same visibility predicate as ListTeam; persisted state only (MGR-6).",
+   "preconditions": [],
+   "idempotency_proposed": "N/A (safe method)",
+   "audit_on_success": "None by default; denials per OQ-AUD-3.",
+   "transaction_owner": "N/A",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "CONDITIONAL",
+   "blocking_note": null,
+   "contract_refs": [
+    "MGR-6"
+   ],
+   "owning_domain": "Learning",
+   "application_interface": "MISSING: Application Interfaces 1.0.0 defines command entry points (APP-1) and module-to-module reads (APP-6) only; a transport-facing owner query interface is required (Application Interface revision)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface"
+   ],
+   "ledger": null
+  },
+  {
+   "id": "ListInvitations",
+   "kind": "query",
+   "capability": "identity.invitation.read",
+   "scope": "LOCATION",
+   "bundles": [
+    "manager",
+    "org_admin"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Invitations whose scope tuple is within actor scope.",
+   "preconditions": [],
+   "idempotency_proposed": "N/A (safe method)",
+   "audit_on_success": "None by default; denials per OQ-AUD-3.",
+   "transaction_owner": "N/A",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "IDN-24"
+   ],
+   "owning_domain": "Identity",
+   "application_interface": "MISSING: Application Interfaces 1.0.0 defines command entry points (APP-1) and module-to-module reads (APP-6) only; a transport-facing owner query interface is required (Application Interface revision)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface"
+   ],
+   "ledger": null
+  },
+  {
+   "id": "VerifyCertification",
+   "kind": "query",
+   "capability": "certification.credential.verify",
+   "scope": "LOCATION",
+   "bundles": [
+    "manager",
+    "org_admin",
+    "observer"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Certification issued within actor organization/location scope; non-public fields only per registry (CERT-13, CERT-14).",
+   "preconditions": [],
+   "idempotency_proposed": "N/A (safe method)",
+   "audit_on_success": "None by default; denials per OQ-AUD-3.",
+   "transaction_owner": "N/A",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": null,
+   "contract_refs": [
+    "CERT-13",
+    "CERT-14"
+   ],
+   "owning_domain": "Certification",
+   "application_interface": "MISSING: Application Interfaces 1.0.0 defines command entry points (APP-1) and module-to-module reads (APP-6) only; a transport-facing owner query interface is required (Application Interface revision)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface"
+   ],
+   "ledger": null
+  },
+  {
+   "id": "ReadAuditEvents",
+   "kind": "query",
+   "capability": "audit.event.read",
+   "scope": "ORGANIZATION",
+   "bundles": [
+    "org_admin"
+   ],
+   "actor_classes": [
+    "HumanActor"
+   ],
+   "target_resolution": "Audit events whose organization equals actor organization (AUD-10).",
+   "preconditions": [],
+   "idempotency_proposed": "N/A (safe method)",
+   "audit_on_success": "None by default; denials per OQ-AUD-3.",
+   "transaction_owner": "N/A",
+   "transaction_participants": [],
+   "route_exposure": "ROUTED",
+   "grant_state": "PROPOSED",
+   "blocking_note": "AuditEvent entity is candidate; storage not admitted.",
+   "contract_refs": [
+    "AUD-10"
+   ],
+   "owning_domain": "AuditLifecycle",
+   "application_interface": "MISSING: Application Interfaces 1.0.0 defines command entry points (APP-1) and module-to-module reads (APP-6) only; a transport-facing owner query interface is required (Application Interface revision)",
+   "orchestration": null,
+   "policy_interfaces": [
+    "AuthorizationDecisionInterface"
+   ],
+   "ledger": null
+  }
+ ]
+}

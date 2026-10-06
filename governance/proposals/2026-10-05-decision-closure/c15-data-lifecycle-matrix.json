@@ -1,0 +1,959 @@
+{
+ "x-document": {
+  "doc_id": "TEACH-PROP-DCS-03-DATA",
+  "class": "decision-table",
+  "version": "0.1.0",
+  "status": "proposed",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-05",
+  "updated_on": "2026-10-05"
+ },
+ "baseline": {
+  "repo": "peteywee/teach-v2",
+  "ref": "main",
+  "commit": "2b5714d8d850da7a47c1666da5a2c7974cabe40f"
+ },
+ "resolves_if_approved": [
+  "OQ-PRIV-1",
+  "OQ-PRIV-2",
+  "OQ-PRIV-3",
+  "OQ-PRIV-6"
+ ],
+ "partially_resolves": [
+  "OQ-PRIV-4"
+ ],
+ "remains_unknown": [
+  "OQ-PRIV-5"
+ ],
+ "terms": {
+  "DELETED": "Applied to a record: the row is removed from the primary database by a governed, audited executor in a committed transaction, every dependent copy listed in this matrix has its stated expiry action, and the deletion is entered in the deletion ledger. Applied to an Identity: the Identity row becomes the DELETED tombstone (id, status, created_at only) and every personal-data record of the subject is hard-deleted or expired per §4. DELETED is terminal.",
+  "ANONYMIZED": "Applies only to aggregate outputs from which no individual record can be recovered, with a minimum cell size of 5 identities per reported group (proposed engineering value). An individual-level record is never called anonymized, regardless of hashing.",
+  "PSEUDONYMIZED (technical term, not one of the four)": "Direct identifiers replaced by a value that still allows linkage — opaque IDs while a mapping exists, keyed or unkeyed hashes, payload hashes. Pseudonymized data is personal data. Code and documents MUST NOT call it anonymized.",
+  "RETAINED": "The record is kept unchanged, readable only through C14-authorized operations, until its retention clock plus duration elapses; then its expiry action runs. Retention never extends authentication validity.",
+  "OFFBOARDED": "Exactly the IDN-18 effects in one transaction: IdentityStatus INACTIVE, IdentityOffboarded emitted, all sessions revoked, frontline credentials and pending single-use tokens revoked, effective Membership and grants removed through the Organization boundary. Offboarding deletes nothing and starts retention clocks."
+ },
+ "request_lifecycle_states": [
+  "RECEIVED",
+  "IDENTITY_VERIFIED",
+  "SCOPE_CONFIRMED",
+  "IN_PROGRESS",
+  "ON_HOLD",
+  "COMPLETED",
+  "REJECTED"
+ ],
+ "record_classes": [
+  {
+   "record_class": "Identity",
+   "store": "primary-db",
+   "physical_state": "IMPLEMENTED_SCHEMA",
+   "table": "identity_identities",
+   "columns": [
+    {
+     "name": "id",
+     "category": "OPAQUE_ID"
+    },
+    {
+     "name": "status",
+     "category": "STATUS"
+    },
+    {
+     "name": "offboarded_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "created_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "updated_at",
+     "category": "TIMESTAMP"
+    }
+   ],
+   "owning_domain": "Identity",
+   "retention_clock_start": "offboarded_at; for non-offboard deactivation: UNDEFINED (no deactivated_at column)",
+   "retention_duration": {
+    "value": 1,
+    "unit": "year",
+    "source": "OWNER_DRAFT_OQ-PRIV-2"
+   },
+   "expiry_action": "Transition to DELETED tombstone: row kept with id/status/created_at only so immutable audit and lifecycle references stay valid. Requires C11 revision authorizing DELETED ingress solely from the retention/deletion executor (DB trigger currently blocks it).",
+   "offboarding_effect": "status INACTIVE, offboarded_at set once, IdentityOffboarded emitted (IDN-18). No data removed.",
+   "subject_deletion_action": "Same as expiry action, executed on request after verification (PRIV-11), subject to holds.",
+   "legal_hold_effect": "Suspends expiry action and subject deletion for matching rows; does not suspend offboarding, revocation or authentication denial.",
+   "subject_deletion_exemption": null,
+   "gaps": [
+    "No deactivated_at timestamp: retention clock for DeactivateIdentity (non-offboard) cannot start.",
+    "DELETED ingress blocked by identity_guard_identity_update trigger; any deletion implementation is BLOCKED until C11 changes."
+   ],
+   "contract_refs": [
+    "IDN-18",
+    "IDN-21",
+    "PRIV-11",
+    "PRIV-13"
+   ]
+  },
+  {
+   "record_class": "Credential",
+   "store": "primary-db",
+   "physical_state": "IMPLEMENTED_SCHEMA",
+   "table": "identity_credentials",
+   "columns": [
+    {
+     "name": "id",
+     "category": "OPAQUE_ID"
+    },
+    {
+     "name": "identity_id",
+     "category": "OPAQUE_LINK"
+    },
+    {
+     "name": "credential_type",
+     "category": "STATUS"
+    },
+    {
+     "name": "password_hash",
+     "category": "CREDENTIAL_HASH",
+     "note": "Argon2id PHC string after OQ-IDN-1; authentication verifier, never an anonymization device"
+    },
+    {
+     "name": "revoked_at",
+     "category": "TIMESTAMP"
+    }
+   ],
+   "owning_domain": "Identity",
+   "retention_clock_start": "revoked_at",
+   "retention_duration": {
+    "value": 1,
+    "unit": "year",
+    "source": "OWNER_DRAFT_OQ-PRIV-2"
+   },
+   "expiry_action": "Hard DELETE of the row.",
+   "offboarding_effect": "Credential revoked (revoked_at set) in the offboarding transaction (IDN-18).",
+   "subject_deletion_action": "Hard DELETE of every credential row of the identity in the deletion transaction (no hold exemption needed: a hash has no evidentiary value).",
+   "legal_hold_effect": "Suspends expiry action and subject deletion for matching rows; does not suspend offboarding, revocation or authentication denial.",
+   "subject_deletion_exemption": null,
+   "gaps": [
+    "RECOMMENDATION R-1: retaining a revoked password hash for one year keeps an offline-crackable secret with no evidentiary use. Recommended correction: null password_hash at revocation and keep the row (type, revoked_at) for the 1-year history. Requires C11/P04 domain change (PASSWORD rows currently require a hash)."
+   ],
+   "contract_refs": [
+    "IDN-5",
+    "IDN-6",
+    "IDN-18"
+   ]
+  },
+  {
+   "record_class": "ApplicationSession",
+   "store": "primary-db",
+   "physical_state": "IMPLEMENTED_SCHEMA",
+   "table": "identity_application_sessions",
+   "columns": [
+    {
+     "name": "id",
+     "category": "OPAQUE_ID"
+    },
+    {
+     "name": "identity_id",
+     "category": "OPAQUE_LINK"
+    },
+    {
+     "name": "status",
+     "category": "STATUS"
+    },
+    {
+     "name": "verifier_version",
+     "category": "STATUS"
+    },
+    {
+     "name": "credential_verifier",
+     "category": "SECRET_VERIFIER",
+     "note": "SHA-256 of domain-separated 32-byte credential"
+    },
+    {
+     "name": "issued_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "absolute_expires_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "last_used_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "revoked_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "expired_at",
+     "category": "TIMESTAMP"
+    }
+   ],
+   "owning_domain": "Identity",
+   "retention_clock_start": "COALESCE(revoked_at, expired_at, absolute_expires_at)",
+   "retention_duration": {
+    "value": 1,
+    "unit": "year",
+    "source": "OWNER_DRAFT_OQ-PRIV-2"
+   },
+   "expiry_action": "Hard DELETE of the row.",
+   "offboarding_effect": "All ACTIVE sessions REVOKED in the offboarding transaction (IDN-18, SES-14).",
+   "subject_deletion_action": "Hard DELETE of all session rows of the identity.",
+   "legal_hold_effect": "Suspends expiry action and subject deletion for matching rows; does not suspend offboarding, revocation or authentication denial.",
+   "subject_deletion_exemption": null,
+   "gaps": [
+    "Record retention is not validity: SES-11 (12h absolute / 30m idle) still governs authentication."
+   ],
+   "contract_refs": [
+    "SES-8",
+    "SES-10",
+    "SES-11",
+    "SES-14"
+   ]
+  },
+  {
+   "record_class": "Invitation",
+   "store": "primary-db",
+   "physical_state": "IMPLEMENTED_SCHEMA",
+   "table": "identity_invitations",
+   "columns": [
+    {
+     "name": "id",
+     "category": "OPAQUE_ID"
+    },
+    {
+     "name": "owner_identity_id",
+     "category": "OPAQUE_LINK"
+    },
+    {
+     "name": "invited_identity_id",
+     "category": "OPAQUE_LINK"
+    },
+    {
+     "name": "status",
+     "category": "STATUS"
+    },
+    {
+     "name": "secret_verifier",
+     "category": "SECRET_VERIFIER"
+    },
+    {
+     "name": "issued_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "expires_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "accepted_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "revoked_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "expired_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "recipient_email (planned)",
+     "category": "DIRECT_IDENTIFIER",
+     "note": "NOT ADMITTED; needed for delivery and IDN-20 offboarded-email check"
+    }
+   ],
+   "owning_domain": "Identity",
+   "retention_clock_start": "COALESCE(accepted_at, revoked_at, expired_at)",
+   "retention_duration": {
+    "value": 1,
+    "unit": "year",
+    "source": "OWNER_DRAFT_OQ-PRIV-2"
+   },
+   "expiry_action": "Hard DELETE of the row.",
+   "offboarding_effect": "PENDING invitations created by or for the identity are REVOKED (pending single-use secrets, IDN-18).",
+   "subject_deletion_action": "Hard DELETE of invitations where the identity is invited_identity_id; for owner_identity_id rows, set owner reference to the identity tombstone (opaque, retained).",
+   "legal_hold_effect": "Suspends expiry action and subject deletion for matching rows; does not suspend offboarding, revocation or authentication denial.",
+   "subject_deletion_exemption": null,
+   "gaps": [
+    "IDN-20 requires recognizing an offboarded identity's email; that check needs a retained email or keyed email digest, which is pseudonymous personal data and must be listed here once admitted."
+   ],
+   "contract_refs": [
+    "IDN-20",
+    "IDN-24",
+    "IDN-25"
+   ]
+  },
+  {
+   "record_class": "SetupToken",
+   "store": "primary-db",
+   "physical_state": "IMPLEMENTED_SCHEMA",
+   "table": "identity_setup_tokens",
+   "columns": [
+    {
+     "name": "id",
+     "category": "OPAQUE_ID"
+    },
+    {
+     "name": "identity_id",
+     "category": "OPAQUE_LINK"
+    },
+    {
+     "name": "status",
+     "category": "STATUS"
+    },
+    {
+     "name": "secret_verifier",
+     "category": "SECRET_VERIFIER"
+    },
+    {
+     "name": "issued_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "expires_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "consumed_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "revoked_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "expired_at",
+     "category": "TIMESTAMP"
+    }
+   ],
+   "owning_domain": "Identity",
+   "retention_clock_start": "COALESCE(consumed_at, revoked_at, expired_at)",
+   "retention_duration": {
+    "value": 1,
+    "unit": "year",
+    "source": "OWNER_DRAFT_OQ-PRIV-2"
+   },
+   "expiry_action": "Hard DELETE of the row.",
+   "offboarding_effect": "ACTIVE tokens REVOKED in the offboarding transaction (IDN-18).",
+   "subject_deletion_action": "Hard DELETE of all rows of the identity.",
+   "legal_hold_effect": "Suspends expiry action and subject deletion for matching rows; does not suspend offboarding, revocation or authentication denial.",
+   "subject_deletion_exemption": null,
+   "gaps": [],
+   "contract_refs": [
+    "IDN-9",
+    "IDN-26"
+   ]
+  },
+  {
+   "record_class": "PasswordResetToken",
+   "store": "primary-db",
+   "physical_state": "IMPLEMENTED_SCHEMA",
+   "table": "identity_password_reset_tokens",
+   "columns": [
+    {
+     "name": "id",
+     "category": "OPAQUE_ID"
+    },
+    {
+     "name": "identity_id",
+     "category": "OPAQUE_LINK"
+    },
+    {
+     "name": "status",
+     "category": "STATUS"
+    },
+    {
+     "name": "secret_verifier",
+     "category": "SECRET_VERIFIER"
+    },
+    {
+     "name": "issued_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "expires_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "consumed_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "revoked_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "expired_at",
+     "category": "TIMESTAMP"
+    }
+   ],
+   "owning_domain": "Identity",
+   "retention_clock_start": "COALESCE(consumed_at, revoked_at, expired_at)",
+   "retention_duration": {
+    "value": 1,
+    "unit": "year",
+    "source": "OWNER_DRAFT_OQ-PRIV-2"
+   },
+   "expiry_action": "Hard DELETE of the row.",
+   "offboarding_effect": "ACTIVE tokens REVOKED in the offboarding transaction (IDN-18).",
+   "subject_deletion_action": "Hard DELETE of all rows of the identity.",
+   "legal_hold_effect": "Suspends expiry action and subject deletion for matching rows; does not suspend offboarding, revocation or authentication denial.",
+   "subject_deletion_exemption": null,
+   "gaps": [],
+   "contract_refs": [
+    "IDN-9",
+    "IDN-26"
+   ]
+  },
+  {
+   "record_class": "LearningSession",
+   "store": "primary-db",
+   "physical_state": "IMPLEMENTED_SCHEMA",
+   "table": "learning_sessions",
+   "columns": [
+    {
+     "name": "id",
+     "category": "OPAQUE_ID"
+    },
+    {
+     "name": "identity_id",
+     "category": "OPAQUE_LINK"
+    },
+    {
+     "name": "assignment_id",
+     "category": "OPAQUE_LINK"
+    },
+    {
+     "name": "status",
+     "category": "STATUS"
+    }
+   ],
+   "owning_domain": "Learning",
+   "retention_clock_start": "Time the learner's last Membership in the owning organization reaches INACTIVE or REVOKED (proposed); never while a Membership is ACTIVE",
+   "retention_duration": {
+    "value": 1,
+    "unit": "year",
+    "source": "OWNER_DRAFT_OQ-PRIV-2"
+   },
+   "expiry_action": "Hard DELETE of the session and its ProgressEvents in one transaction.",
+   "offboarding_effect": "Retained unchanged (history retained).",
+   "subject_deletion_action": "Hard DELETE (same as expiry).",
+   "legal_hold_effect": "Suspends expiry action and subject deletion for matching rows; does not suspend offboarding, revocation or authentication denial.",
+   "subject_deletion_exemption": null,
+   "gaps": [
+    "No organization_id column: PRIV-1/TEN-13 require exactly one owning organization per tenant-owned record; ownership is only derivable through the not-yet-admitted Assignment. Retention clock cannot be computed until fixed.",
+    "No timestamps on learning_sessions; retention needs at least started_at/completed_at."
+   ],
+   "contract_refs": [
+    "PRIV-1",
+    "TEN-13",
+    "LRN-1"
+   ]
+  },
+  {
+   "record_class": "ProgressEvent",
+   "store": "primary-db",
+   "physical_state": "PLANNED_NOT_ADMITTED",
+   "table": "(P08)",
+   "columns": [
+    {
+     "name": "id",
+     "category": "OPAQUE_ID"
+    },
+    {
+     "name": "learning_session_id",
+     "category": "OPAQUE_LINK"
+    },
+    {
+     "name": "content identity+version",
+     "category": "CONTENT_REF"
+    },
+    {
+     "name": "payload",
+     "category": "LEARNER_PAYLOAD"
+    }
+   ],
+   "owning_domain": "Learning",
+   "retention_clock_start": "Inherits LearningSession clock",
+   "retention_duration": {
+    "value": 1,
+    "unit": "year",
+    "source": "OWNER_DRAFT_OQ-PRIV-2"
+   },
+   "expiry_action": "Deleted with its LearningSession.",
+   "offboarding_effect": "Retained.",
+   "subject_deletion_action": "Deleted with its LearningSession.",
+   "legal_hold_effect": "Suspends expiry action and subject deletion for matching rows; does not suspend offboarding, revocation or authentication denial.",
+   "subject_deletion_exemption": null,
+   "gaps": [],
+   "contract_refs": [
+    "LRN-4",
+    "LRN-10"
+   ]
+  },
+  {
+   "record_class": "Assignment",
+   "store": "primary-db",
+   "physical_state": "PLANNED_NOT_ADMITTED",
+   "table": "(P06)",
+   "columns": [
+    {
+     "name": "id",
+     "category": "OPAQUE_ID"
+    },
+    {
+     "name": "identity_id",
+     "category": "OPAQUE_LINK"
+    },
+    {
+     "name": "organization_id",
+     "category": "SCOPE_REF"
+    },
+    {
+     "name": "content version/digest",
+     "category": "CONTENT_REF"
+    }
+   ],
+   "owning_domain": "Learning",
+   "retention_clock_start": "Same as LearningSession",
+   "retention_duration": {
+    "value": 1,
+    "unit": "year",
+    "source": "OWNER_DRAFT_OQ-PRIV-2"
+   },
+   "expiry_action": "Hard DELETE after dependent LearningSessions are deleted.",
+   "offboarding_effect": "Retained.",
+   "subject_deletion_action": "Hard DELETE (after dependents).",
+   "legal_hold_effect": "Suspends expiry action and subject deletion for matching rows; does not suspend offboarding, revocation or authentication denial.",
+   "subject_deletion_exemption": null,
+   "gaps": [],
+   "contract_refs": [
+    "AUD-7"
+   ]
+  },
+  {
+   "record_class": "Membership",
+   "store": "primary-db",
+   "physical_state": "PLANNED_NOT_ADMITTED",
+   "table": "(Membership held candidate pending OQ-TEN-1)",
+   "columns": [
+    {
+     "name": "id",
+     "category": "OPAQUE_ID"
+    },
+    {
+     "name": "identity_id",
+     "category": "OPAQUE_LINK"
+    },
+    {
+     "name": "organization_id",
+     "category": "SCOPE_REF"
+    },
+    {
+     "name": "location_id",
+     "category": "SCOPE_REF"
+    },
+    {
+     "name": "status",
+     "category": "STATUS"
+    },
+    {
+     "name": "grants",
+     "category": "AUTHORITY"
+    }
+   ],
+   "owning_domain": "Organization",
+   "retention_clock_start": "Time status becomes REVOKED",
+   "retention_duration": {
+    "value": 1,
+    "unit": "year",
+    "source": "OWNER_DRAFT_OQ-PRIV-2"
+   },
+   "expiry_action": "Hard DELETE of the row; history remains in lifecycle events (AUD-7) under audit retention.",
+   "offboarding_effect": "ACTIVE → INACTIVE → REVOKED through Organization command boundary (IDN-18 \"remove effective membership\").",
+   "subject_deletion_action": "Hard DELETE after REVOKED.",
+   "legal_hold_effect": "Suspends expiry action and subject deletion for matching rows; does not suspend offboarding, revocation or authentication denial.",
+   "subject_deletion_exemption": null,
+   "gaps": [],
+   "contract_refs": [
+    "TEN-18",
+    "AUD-7"
+   ]
+  },
+  {
+   "record_class": "Certification",
+   "store": "primary-db",
+   "physical_state": "PLANNED_NOT_ADMITTED",
+   "table": "(P07)",
+   "columns": [
+    {
+     "name": "id",
+     "category": "OPAQUE_ID"
+    },
+    {
+     "name": "learner identity_id",
+     "category": "OPAQUE_LINK"
+    },
+    {
+     "name": "observer identity_id",
+     "category": "OPAQUE_LINK"
+    },
+    {
+     "name": "criteria version/digest",
+     "category": "CONTENT_REF"
+    },
+    {
+     "name": "checklist result",
+     "category": "STRUCTURED_EVIDENCE"
+    },
+    {
+     "name": "observation note",
+     "category": "FREE_TEXT",
+     "note": "Free text can contain direct identifiers and health/behavior details; treat as personal data"
+    }
+   ],
+   "owning_domain": "Certification",
+   "retention_clock_start": "Same as LearningSession",
+   "retention_duration": {
+    "value": 1,
+    "unit": "year",
+    "source": "OWNER_DRAFT_OQ-PRIV-2"
+   },
+   "expiry_action": "CONFLICT: CERT-12 forbids deleting certification records through application paths. Expiry cannot run until resolved (see §6).",
+   "offboarding_effect": "Retained.",
+   "subject_deletion_action": "CONFLICT (same as expiry).",
+   "legal_hold_effect": "Suspends expiry action and subject deletion for matching rows; does not suspend offboarding, revocation or authentication denial.",
+   "subject_deletion_exemption": "UNRESOLVED — see §6 conflict C-2",
+   "gaps": [
+    "Free-text observation notes are the highest-risk personal-data field in the planned schema."
+   ],
+   "contract_refs": [
+    "CERT-7",
+    "CERT-12"
+   ]
+  },
+  {
+   "record_class": "AuditEvent",
+   "store": "primary-db",
+   "physical_state": "PLANNED_NOT_ADMITTED",
+   "table": "(AuditEvent candidate)",
+   "columns": [
+    {
+     "name": "actor reference",
+     "category": "OPAQUE_LINK"
+    },
+    {
+     "name": "target reference",
+     "category": "OPAQUE_LINK"
+    },
+    {
+     "name": "organization/location",
+     "category": "SCOPE_REF"
+    },
+    {
+     "name": "action/result/time",
+     "category": "OPERATIONAL"
+    },
+    {
+     "name": "request/idempotency id",
+     "category": "OPERATIONAL"
+    }
+   ],
+   "owning_domain": "AuditLifecycle",
+   "retention_clock_start": "occurred_at",
+   "retention_duration": {
+    "value": 1,
+    "unit": "year",
+    "source": "REGISTERED_AUD-11"
+   },
+   "expiry_action": "Privileged expiry executor deletes rows older than 1 year. BLOCKED: AUD-11 keeps audit deletion BLOCKED until the clock/executor is admitted; AUD-4 forbids application-path deletion.",
+   "offboarding_effect": "Retained.",
+   "subject_deletion_action": "EXEMPT from subject deletion (draft OQ-PRIV-3). Retained until its own 1-year expiry. Contains opaque references only (AUD-5).",
+   "legal_hold_effect": "Suspends expiry action and subject deletion for matching rows; does not suspend offboarding, revocation or authentication denial.",
+   "subject_deletion_exemption": "AUDIT — basis: AUD-1/AUD-4 integrity of security record; OQ-PRIV-3 draft",
+   "gaps": [],
+   "contract_refs": [
+    "AUD-4",
+    "AUD-5",
+    "AUD-11"
+   ]
+  },
+  {
+   "record_class": "LifecycleEvent",
+   "store": "primary-db",
+   "physical_state": "PLANNED_NOT_ADMITTED",
+   "table": "(LifecycleEvent candidate)",
+   "columns": [
+    {
+     "name": "entity reference",
+     "category": "OPAQUE_LINK"
+    },
+    {
+     "name": "transition",
+     "category": "STATUS"
+    },
+    {
+     "name": "time",
+     "category": "TIMESTAMP"
+    }
+   ],
+   "owning_domain": "AuditLifecycle",
+   "retention_clock_start": "occurred_at",
+   "retention_duration": {
+    "value": 1,
+    "unit": "year",
+    "source": "PROPOSED: follow audit retention"
+   },
+   "expiry_action": "Same executor as AuditEvent; BLOCKED with it.",
+   "offboarding_effect": "Retained.",
+   "subject_deletion_action": "EXEMPT with AuditEvent (proposed).",
+   "legal_hold_effect": "Suspends expiry action and subject deletion for matching rows; does not suspend offboarding, revocation or authentication denial.",
+   "subject_deletion_exemption": null,
+   "gaps": [],
+   "contract_refs": [
+    "AUD-6",
+    "AUD-7"
+   ]
+  },
+  {
+   "record_class": "ReconciliationRecord",
+   "store": "primary-db",
+   "physical_state": "IMPLEMENTED_SCHEMA",
+   "table": "transaction_control_reconciliation_records",
+   "columns": [
+    {
+     "name": "id",
+     "category": "OPAQUE_ID"
+    },
+    {
+     "name": "authoritative_scope",
+     "category": "SCOPE_REF"
+    },
+    {
+     "name": "provider_name",
+     "category": "OPERATIONAL"
+    },
+    {
+     "name": "provider_reference",
+     "category": "PROVIDER_DATA",
+     "note": "MUST be a provider message/event ID, never an email address"
+    },
+    {
+     "name": "provider_detail",
+     "category": "PROVIDER_DATA",
+     "note": "jsonb: MUST NOT contain direct identifiers or payload"
+    },
+    {
+     "name": "idempotency_key",
+     "category": "OPERATIONAL"
+    },
+    {
+     "name": "payload_hash",
+     "category": "OPERATIONAL",
+     "note": "hash of request payload; pseudonymous if payload held personal data"
+    }
+   ],
+   "owning_domain": "TransactionControl",
+   "retention_clock_start": "GREATEST(resolved_at, idempotency_retention_until); OPEN records have no clock",
+   "retention_duration": {
+    "value": 1,
+    "unit": "year",
+    "source": "OWNER_DRAFT_OQ-PRIV-2"
+   },
+   "expiry_action": "Hard DELETE when RESOLVED and clock elapsed. OPEN records never expire (TXN-8).",
+   "offboarding_effect": "Retained.",
+   "subject_deletion_action": "Retained until expiry: needed to prevent duplicate external effects (TXN-5, TXN-7); contains no direct identifiers if constraints hold.",
+   "legal_hold_effect": "Suspends expiry action and subject deletion for matching rows; does not suspend offboarding, revocation or authentication denial.",
+   "subject_deletion_exemption": null,
+   "gaps": [
+    "No CHECK constraint prevents personal data in provider_detail; enforce in the adapter and test with canary values (PRIV-AC-4)."
+   ],
+   "contract_refs": [
+    "TXN-7",
+    "TXN-8",
+    "TXN-13"
+   ]
+  },
+  {
+   "record_class": "OperationalLog",
+   "store": "vercel/sentry (external sink)",
+   "physical_state": "EXTERNAL_COPY",
+   "table": "—",
+   "columns": [
+    {
+     "name": "request id, operation, denial class",
+     "category": "OPERATIONAL"
+    },
+    {
+     "name": "pseudonymous operational ids",
+     "category": "OPAQUE_LINK"
+    }
+   ],
+   "owning_domain": "Observability",
+   "retention_clock_start": "emitted_at",
+   "retention_duration": {
+    "value": 90,
+    "unit": "days",
+    "source": "REGISTERED_OBS-11"
+   },
+   "expiry_action": "Sink deletes at 90 days. UNKNOWN: no sink meets 90 days by default (Vercel ≤30d by plan; Sentry 30d lookback).",
+   "offboarding_effect": "None.",
+   "subject_deletion_action": "Not individually deleted; ages out at 90 days. Logs must not contain direct identifiers (OBS-2), which makes per-subject deletion unnecessary.",
+   "legal_hold_effect": "Not applicable (no per-subject content).",
+   "subject_deletion_exemption": null,
+   "gaps": [],
+   "contract_refs": [
+    "OBS-6",
+    "OBS-7",
+    "OBS-11"
+   ]
+  },
+  {
+   "record_class": "DatabaseBackup",
+   "store": "supabase (provider)",
+   "physical_state": "EXTERNAL_COPY",
+   "table": "—",
+   "columns": [
+    {
+     "name": "full database copy",
+     "category": "ALL"
+    }
+   ],
+   "owning_domain": "Release/C21",
+   "retention_clock_start": "backup creation time",
+   "retention_duration": "UNKNOWN (provider retention configuration; MIG-9 requires ≥ daily backups)",
+   "expiry_action": "Provider ages backups out. Deleted subjects persist in backups until then.",
+   "offboarding_effect": "None.",
+   "subject_deletion_action": "Not edited. Subject data in backups expires with the backup. Any restore MUST replay the deletion ledger before the restored database serves traffic.",
+   "legal_hold_effect": "Holds do not extend backups; a hold that needs data beyond backup age requires an explicit export to a held archive.",
+   "subject_deletion_exemption": null,
+   "gaps": [
+    "Backup retention window W is UNKNOWN; the privacy statement may promise only \"deleted from backups within W days\" once W is evidenced (PRIV-14, PRIV-17)."
+   ],
+   "contract_refs": [
+    "MIG-9",
+    "MIG-10",
+    "PRIV-14"
+   ]
+  },
+  {
+   "record_class": "DeletionLedger",
+   "store": "primary-db (separate schema, not restored over)",
+   "physical_state": "PLANNED_NOT_ADMITTED",
+   "table": "(new)",
+   "columns": [
+    {
+     "name": "subject identity id",
+     "category": "OPAQUE_ID"
+    },
+    {
+     "name": "record class",
+     "category": "OPERATIONAL"
+    },
+    {
+     "name": "executed_at",
+     "category": "TIMESTAMP"
+    },
+    {
+     "name": "request id",
+     "category": "OPERATIONAL"
+    }
+   ],
+   "owning_domain": "Privacy executor",
+   "retention_clock_start": "executed_at",
+   "retention_duration": {
+    "value": "W + 30",
+    "unit": "days",
+    "source": "PROPOSED: backup window W plus 30 days"
+   },
+   "expiry_action": "Hard DELETE.",
+   "offboarding_effect": "—",
+   "subject_deletion_action": "—",
+   "legal_hold_effect": "Not applicable.",
+   "subject_deletion_exemption": null,
+   "gaps": [
+    "Must survive a database restore, so it cannot live only inside the restorable database; candidate: separate store or export with each backup cycle."
+   ],
+   "contract_refs": [
+    "PRIV-11"
+   ]
+  },
+  {
+   "record_class": "DataExportBundle",
+   "store": "operator-delivered file",
+   "physical_state": "PLANNED_NOT_ADMITTED",
+   "table": "(new)",
+   "columns": [
+    {
+     "name": "subject records",
+     "category": "ALL_SUBJECT_DATA"
+    }
+   ],
+   "owning_domain": "Privacy executor",
+   "retention_clock_start": "generated_at",
+   "retention_duration": {
+    "value": 7,
+    "unit": "days",
+    "source": "PROPOSED engineering value"
+   },
+   "expiry_action": "Delete stored copy after 7 days.",
+   "offboarding_effect": "—",
+   "subject_deletion_action": "Deleted with the request.",
+   "legal_hold_effect": "Held exports retained while hold active.",
+   "subject_deletion_exemption": null,
+   "gaps": [],
+   "contract_refs": [
+    "PRIV-10"
+   ]
+  },
+  {
+   "record_class": "ExternalProviderCopy",
+   "store": "email + OAuth providers (unselected)",
+   "physical_state": "EXTERNAL_COPY",
+   "table": "—",
+   "columns": [
+    {
+     "name": "recipient email, message metadata",
+     "category": "DIRECT_IDENTIFIER"
+    }
+   ],
+   "owning_domain": "TransactionControl",
+   "retention_clock_start": "provider-defined",
+   "retention_duration": "UNKNOWN until OQ-TXN-2 providers are selected",
+   "expiry_action": "Provider retention.",
+   "offboarding_effect": "—",
+   "subject_deletion_action": "Provider deletion API or retention; documented per provider before selection.",
+   "legal_hold_effect": "Provider-defined.",
+   "subject_deletion_exemption": null,
+   "gaps": [],
+   "contract_refs": [
+    "TXN-2"
+   ]
+  },
+  {
+   "record_class": "CIEvidenceArtifact",
+   "store": "GitHub Actions artifacts",
+   "physical_state": "EXTERNAL_COPY",
+   "table": "—",
+   "columns": [
+    {
+     "name": "test output",
+     "category": "OPERATIONAL"
+    }
+   ],
+   "owning_domain": "VerificationEvidence",
+   "retention_clock_start": "upload time",
+   "retention_duration": "GitHub artifact expiry (OQ-EVD-2 residual)",
+   "expiry_action": "Expires.",
+   "offboarding_effect": "—",
+   "subject_deletion_action": "Not applicable: fixtures MUST be synthetic; real personal data in CI artifacts is a defect.",
+   "legal_hold_effect": "Not applicable.",
+   "subject_deletion_exemption": null,
+   "gaps": [],
+   "contract_refs": [
+    "EVD-10"
+   ]
+  }
+ ]
+}
