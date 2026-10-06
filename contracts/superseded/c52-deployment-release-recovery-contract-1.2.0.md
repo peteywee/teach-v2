@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C52",
   "class": "contract",
-  "version": "1.3.0",
+  "version": "1.2.0",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-05",
-  "effective_on": "2026-10-05",
+  "updated_on": "2026-10-04",
+  "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.3.0",
-    "approved_on": "2026-10-05",
+    "approved_version": "1.2.0",
+    "approved_on": "2026-10-04",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner manifest-bound decision-closure r3.1 approval under SYS-21 #75; sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
+    "basis": "Explicit owner-selected policy values in chat; SYS-21 issue #66; implementation conformance remains separate"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -29,16 +29,20 @@
     "use": "reference only; does not govern and is not governed by this contract"
   },
   "supersedes": [
-    "TEACH-CON-C52@1.1.0",
-    "TEACH-CON-C52@1.2.0"
+    "TEACH-CON-C52@1.1.0"
   ],
-  "superseded_by": null,
+  "superseded_by": "TEACH-CON-C52@1.3.0",
   "depends_on": [
     "contracts/"
   ]
 }
 -->
 
+# Superseded TEACH-CON-C52 1.2.0
+
+Superseded by `TEACH-CON-C52@1.3.0` under SYS-21 #75.
+
+The original body below is preserved, including its former current-status wording.
 # C52 — Deployment, Release & Recovery Contract
 
 | Field              | Value                                                                                                                                                           |
@@ -46,17 +50,17 @@
 | Contract ID        | C52                                                                                                                                                             |
 | Group              | C50 Production Proof                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.3.0 |
+| Version | 1.2.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by | Patrick Craven (owner), 2026-10-05; manifest-bound decision-closure r3.1, SYS-21 #75; see `APPROVAL-RECORD.md` |
+| Approved by | Patrick Craven (owner), 2026-10-04 — selected policy values; SYS-21 issue #66 |
 | Requirement prefix | `REL`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New.                                                                                                                                                            |
-| Supersedes | 1.2.0 |
+| Supersedes | C52 1.1.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated | 2026-10-05 |
+| Last updated | 2026-10-04 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -97,7 +101,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **REL-5** — Migration state MUST be reconciled per C21.
 - **REL-6** — Production configuration MUST be represented by a deterministic canonical manifest. Runtime-affecting non-secret values MUST be represented directly; secrets MUST be represented only by stable deployment-bound provider secret-version/revision identifiers or equivalent opaque revision identifiers, never raw secret values or secret-derived hashes. The candidate configuration identity MUST be the SHA-256 of the sorted canonical manifest. A required config/secret without a stable revision identity MUST block release.
 - **REL-7** — Health and readiness MUST pass on the deployed candidate.
-- **REL-8** — Deployed smoke tests MUST bind candidate source/deployment/config/schema identity and prove health/readiness, unauthenticated and role/scope/Origin denials, database exposure denials, assigned-content start/progress/completion with atomic audit, cross-tenant/nonexistent parity, logout replay denial and recovery readiness. A URL returning 200 is insufficient; every failed or unavailable step blocks promotion. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (OQ-REL-3 resolved 2026-10-05).
+- **REL-8** — A deployed smoke test MUST pass on the candidate (see OQ-REL-3; value Not yet verified).
 - **REL-9** — Canonical runtime readback MUST confirm the deployed identity equals the candidate.
 - **REL-10** — A rollback path MUST exist and be named before promotion.
 - **REL-11** — Releases that change data MUST have backup and restore proof per C21.
@@ -131,7 +135,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | ID       | Question                                                                            | Blocks implementation | Affects |
 | -------- | ----------------------------------------------------------------------------------- | --------------------- | ------- |
 | OQ-REL-1 | Resolved: Supabase PostgreSQL for the database and Vercel for web/API hosting. This does not approve a project, hostname, plan, provider authorization model or deployment. | No (resolved) | — |
-| OQ-REL-3 | **Resolved.** Owner, 2026-10-05: Deployed smoke tests MUST bind candidate source/deployment/config/schema identity and prove health/readiness, unauthenticated and role/scope/Origin denials, database exposure denials, assigned-content start/progress/completion with atomic audit, cross-tenant/nonexistent parity, logout replay denial and recovery readiness. A URL returning 200 is insufficient; every failed or unavailable step blocks promotion. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1) | No (resolved) | REL-8 |
+| OQ-REL-3 | What does the deployed smoke test cover?                                            | No                    | REL-8   |
 | OQ-REL-4 | Resolved: rollback to the prior candidate is supported for 24 hours after deployment/promotion; migrations remain backward-compatible during that full window. | No (resolved) | — |
 
 ### Resolved owner decision in 1.1.0
@@ -146,14 +150,14 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Legacy repository consulted | reference only | Historical lineage is preserved in the superseded version and pinned V1 recovery records. No V1 policy/grants are adopted by issue #66; the new capability matrix is governed separately by #67. |
 | Implementation conformance | partial foundations / UNKNOWN runtime | Provider-neutral configuration-identity and production-migration evidence gates exist. Supabase PostgreSQL + Vercel and the 24-hour rollback window are selected policy; actual provider targets/capabilities, deployments, prior-candidate rollback and compatibility proof remain UNKNOWN. |
 | Acceptance cases implemented | structural / UNKNOWN operational | REL-AC-4 has deterministic configuration-identity tests. New REL-AC-10/11 declarations are checked structurally; actual 24-hour rollback/provider release acceptance remains UNKNOWN. |
-| Blocking open questions | 0 open | Only unresolved question rows govern blocking; registration is not implementation evidence |
-| Owner approval | declared | 1.3.0 owner approval recorded in APPROVAL-RECORD.md under #75; runtime implementation conformance remains UNKNOWN |
+| Blocking open questions | 0 open | OQ-REL-1/2/4 resolved; OQ-REL-3 smoke coverage remains open. Actual production promotion still requires every applicable gate and explicit owner approval. |
+| Owner approval | declared | 1.2.0 approved policy selections recorded under #66; no runtime conformance, provisioning, deletion or production authority is inferred. |
 | Independent review | not performed | No independent reviewer is claimed for this revision; self-audit supplements review and does not replace independent verification. |
 | Source of intent | declared | Explicit owner policy selections supplied on 2026-10-04 America/Chicago, recorded through issue #66 and APPROVAL-RECORD.md. Other attachment recommendations/drafts remain unapproved. |
 
 ## 8. Change Log
 
-| Version | 1.3.0 |
+| Version | Date | Change | By |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Retargeted to the Teach v2 codebase: legacy `peteywee/teach` is reference only; anchors and paths no longer point into the legacy repository.                                                   | Claude (drafter) |
@@ -164,4 +168,3 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.1.0   | 2026-10-04 | Normative production-proof revision: resolve OQ-REL-2 with `CANONICAL_CONFIG_MANIFEST_SHA256`; refine REL-6 and REL-AC-4; GitHub issue #30. | Patrick Craven (owner approval) |
 | 1.2.0 | 2026-10-04 | Record owner-selected OQ-REL-1, OQ-REL-4 policy values, append requirement/acceptance cases and preserve prior version; SYS-21 #66. No runtime implementation or production permission. | Patrick Craven (owner selection) |
-| 1.3.0 | 2026-10-05 | Register OQ-REL-3; preserve named residuals and existing requirement/acceptance IDs. Decision-closure r3.1 manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c; SYS-21 #75. | Patrick Craven (owner); ChatGPT (recorder) |

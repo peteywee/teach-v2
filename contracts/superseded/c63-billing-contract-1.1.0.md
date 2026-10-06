@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C63",
   "class": "contract",
-  "version": "1.2.0",
+  "version": "1.1.0",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-05",
-  "effective_on": "2026-10-05",
+  "updated_on": "2026-10-03",
+  "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.2.0",
-    "approved_on": "2026-10-05",
+    "approved_version": "1.1.0",
+    "approved_on": "2026-10-03",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner manifest-bound decision-closure r3.1 approval under SYS-21 #75; sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
+    "basis": "Owner explicitly approved C63 1.1.0 through domain-ownership approval token; GitHub issue #2"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -29,16 +29,20 @@
     "use": "reference only; does not govern and is not governed by this contract"
   },
   "supersedes": [
-    "TEACH-CON-C63@1.0.3",
-    "TEACH-CON-C63@1.1.0"
+    "TEACH-CON-C63@1.0.3"
   ],
-  "superseded_by": null,
+  "superseded_by": "TEACH-CON-C63@1.2.0",
   "depends_on": [
     "contracts/"
   ]
 }
 -->
 
+# Superseded TEACH-CON-C63 1.1.0
+
+Superseded by `TEACH-CON-C63@1.2.0` under SYS-21 #75.
+
+The original body below is preserved, including its former current-status wording.
 # C63 — Self-Service Billing Contract
 
 | Field              | Value                                                                                                                                                           |
@@ -46,17 +50,17 @@
 | Contract ID        | C63                                                                                                                                                             |
 | Group              | C60 Optional Feature Contracts                                                                                                                                  |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.2.0 |
+| Version            | 1.1.0                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-05; manifest-bound decision-closure r3.1, SYS-21 #75; see `APPROVAL-RECORD.md` |
+| Approved by        | Patrick Craven (owner), 2026-10-03 — C63 1.1.0 domain-ownership approval; see `APPROVAL-RECORD.md` and GitHub issue #2 |
 | Requirement prefix | `BIL`                                                                                                                                                           |
 | Activation         | Conditional — binding only when the owner enables this feature                                                                                                  |
 | Legacy lineage     | New.                                                                                                                                                            |
-| Supersedes         | 1.1.0 |
+| Supersedes         | C63 1.0.3                                                                                                                                                            |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-05 |
+| Last updated       | 2026-10-03                                                                                                                                                      |
 
 ## 1. Purpose and Failure Prevented
 
@@ -103,8 +107,8 @@ This contract belongs to C60 (Good to Have). Its requirements bind only after th
 - **BIL-9** — Out-of-order provider events MUST be reconciled and MUST NOT overwrite newer state.
 - **BIL-10** — Payment success and local entitlement state MUST be reconciled against the provider.
 - **BIL-11** — Billing state MUST NOT grant an application capability.
-- **BIL-12** — No payment provider is selected, and production money movement remains NOT_AUTHORIZED. A named provider and explicit owner authorization are required before enablement; this registration introduces no SDK, key or webhook secret. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (OQ-BIL-2 resolved 2026-10-05).
-- **BIL-13** — Billing accounts are Organization-owned and entitlement is a read-only Organization-owned projection; the relationship requires separate C01 semantic registration. Organization-to-billing-account cardinality remains UNKNOWN; no billing-account creation is authorized while billing is disabled. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (OQ-BIL-3 partially registered 2026-10-05).
+- **BIL-12** — Production money movement MUST require explicit owner authorization (see OQ-BIL-2; value Not yet verified).
+- **BIL-13** — The ownership relationship between an Organization and its billing account MUST be defined in C01 even while self-service billing is disabled (see OQ-BIL-3; value Not yet verified).
 - **BIL-14** — Billing/provider reconciliation MUST request local entitlement changes through the Organization domain's registered command boundary and MUST NOT directly mutate the Organization-owned `Entitlement` entity or persistence.
 
 ## 5. Acceptance Cases
@@ -128,9 +132,9 @@ This contract belongs to C60 (Good to Have). Its requirements bind only after th
 
 | ID       | Question                                                                                                    | Blocks implementation | Affects |
 | -------- | ----------------------------------------------------------------------------------------------------------- | --------------------- | ------- |
-| OQ-BIL-1 | **Resolved.** Owner, 2026-10-05: Self-service billing remains DISABLED. No checkout, webhook or billing route is authorized; billing remains manual outside the application until an owner-enabled C63 revision. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1) | No (resolved) | — |
-| OQ-BIL-2 | **Resolved.** Owner, 2026-10-05: No payment provider is selected, and production money movement remains NOT_AUTHORIZED. A named provider and explicit owner authorization are required before enablement; this registration introduces no SDK, key or webhook secret. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1) | No (resolved) | BIL-12 |
-| OQ-BIL-3 | **Open — residual only.** What Organization-to-billing-account cardinality is approved? Owner, 2026-10-05: Billing accounts are Organization-owned and entitlement is a read-only Organization-owned projection; the relationship requires separate C01 semantic registration. Organization-to-billing-account cardinality remains UNKNOWN; no billing-account creation is authorized while billing is disabled. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1; partial registration) | No | BIL-13 |
+| OQ-BIL-1 | When, if ever, is self-service billing enabled for v2?                                                      | No                    | —       |
+| OQ-BIL-2 | Which payment provider is approved (the source proposal names Stripe)?                                      | No                    | BIL-12  |
+| OQ-BIL-3 | How does an Organization relate to its billing account (for example one-to-one, owned by the organization)? | No                    | BIL-13  |
 
 ## 7. Verification Status
 
@@ -140,14 +144,14 @@ This contract belongs to C60 (Good to Have). Its requirements bind only after th
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
-| Blocking open questions      | 0 open | Only unresolved question rows govern blocking; registration is not implementation evidence |
-| Owner approval               | declared | 1.2.0 owner approval recorded in APPROVAL-RECORD.md under #75; runtime implementation conformance remains UNKNOWN |
+| Blocking open questions      | 0 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
+| Owner approval               | declared                 | C63 1.1.0 approved by Patrick Craven on 2026-10-03 through explicit domain-ownership approval; GitHub issue #2. |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
 ## 8. Change Log
 
-| Version | 1.2.0 |
+| Version | Date       | Change                                                                                                                                                                                                | By               |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                      | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Retitled Self-Service Billing; group renamed to C60 Optional Feature Contracts; added BIL-13 (organization/billing ownership defined even while disabled), BIL-AC-11, and OQ-BIL-3.                   | Claude (drafter) |
@@ -158,4 +162,3 @@ This contract belongs to C60 (Good to Have). Its requirements bind only after th
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.1.0   | 2026-10-03 | Billing owns provider reconciliation process, not local Entitlement state; reconciliation must cross Organization boundary. GitHub issue #2. | Patrick Craven (owner approval) |
-| 1.2.0 | 2026-10-05 | Register OQ-BIL-1, OQ-BIL-2, OQ-BIL-3; preserve named residuals and existing requirement/acceptance IDs. Decision-closure r3.1 manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c; SYS-21 #75. | Patrick Craven (owner); ChatGPT (recorder) |

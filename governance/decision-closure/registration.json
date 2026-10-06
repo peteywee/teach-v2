@@ -17,7 +17,8 @@
     2,
     3,
     4,
-    5
+    5,
+    6
   ],
   "contracts": [
     {
@@ -413,6 +414,162 @@
           "residual": null,
           "controlling_artifact": "governance/decision-closure/09-governance-content-certification-web-packet.md",
           "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C51",
+      "path": "contracts/c51-verification-evidence-contract.md",
+      "from_version": "1.0.3",
+      "to_version": "1.1.0",
+      "superseded_copy": "contracts/superseded/c51-verification-evidence-contract-1.0.3.md",
+      "historical_body_sha256": "89d51dfd51f5b01814c1d3d33da07b46e3d43fb4df1c9b44d06a998525b4d280",
+      "questions": [
+        {
+          "id": "OQ-EVD-1",
+          "state": "RESOLVED",
+          "value": "Independent verification MUST cover C11, C12, C13, C14, C15, C21, C22, C23, C51, C52 and protected cross-domain mutations. The verifier must be other than the implementer; self-audit is not independent verification. A DevelopmentAgent verifier requires explicit owner designation for the change.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
+          "affects": "EVD-16"
+        },
+        {
+          "id": "OQ-EVD-2",
+          "state": "OPEN_RESIDUAL",
+          "value": "Evidence uses repository metadata plus exact-SHA-bound content-addressed artifacts, digest-verified archive readback and explicit expiry. CI artifacts are not assumed permanent; retention duration and durable archive location remain UNKNOWN.",
+          "residual": "What evidence retention duration and durable content-addressed archive location are approved?",
+          "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
+          "affects": "\u2014"
+        },
+        {
+          "id": "OQ-EVD-3",
+          "state": "RESOLVED",
+          "value": "PROVEN requires verified, current exact-SHA readable evidence; unmet/failed/skipped gates are BLOCKED; insufficient, planned, declared, inferred, stale or different-SHA evidence is UNKNOWN; conflicting facts are CONTRADICTORY. Declared or inferred states MUST NOT auto-promote.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C52",
+      "path": "contracts/c52-deployment-release-recovery-contract.md",
+      "from_version": "1.2.0",
+      "to_version": "1.3.0",
+      "superseded_copy": "contracts/superseded/c52-deployment-release-recovery-contract-1.2.0.md",
+      "historical_body_sha256": "e1b97e1eb709ffecd684b9716ec29a36362a3529ebf2b085d149f961985affc9",
+      "questions": [
+        {
+          "id": "OQ-REL-3",
+          "state": "RESOLVED",
+          "value": "Deployed smoke tests MUST bind candidate source/deployment/config/schema identity and prove health/readiness, unauthenticated and role/scope/Origin denials, database exposure denials, assigned-content start/progress/completion with atomic audit, cross-tenant/nonexistent parity, logout replay denial and recovery readiness. A URL returning 200 is insufficient; every failed or unavailable step blocks promotion.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
+          "affects": "REL-8"
+        }
+      ]
+    },
+    {
+      "contract": "C53",
+      "path": "contracts/c53-observability-contract.md",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "superseded_copy": "contracts/superseded/c53-observability-contract-1.1.0.md",
+      "historical_body_sha256": "a4b98cf854ac8574a96398f1290cfcc89ceec65acb4499b9c51e9bd6811d4aca",
+      "questions": [
+        {
+          "id": "OQ-OBS-1",
+          "state": "OPEN_RESIDUAL",
+          "value": "Sentry is selected for server errors with sendDefaultPii false and redaction of credential headers and request bodies; request ID tagging only. Vercel Analytics remains OFF under the disabled analytics policy. Alert destination remains UNKNOWN and the separate 90-day redacted-log sink evidence is still required.",
+          "residual": "Where must operational alerts be delivered?",
+          "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
+          "affects": "OBS-2"
+        },
+        {
+          "id": "OQ-OBS-2",
+          "state": "RESOLVED",
+          "value": "Logs MAY contain request ID, operation, method/route template, status, duration, denial class, failed authorization step and approved pseudonymous operational IDs. Logs MUST NOT contain credentials, cookies, verifiers/hashes, provider tokens, names/emails, filled paths, request/response bodies, observation notes or learner payload content; all sinks require canary-leak tests.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
+          "affects": "OBS-7"
+        }
+      ]
+    },
+    {
+      "contract": "C61",
+      "path": "contracts/c61-analytics-contract.md",
+      "from_version": "1.0.3",
+      "to_version": "1.1.0",
+      "superseded_copy": "contracts/superseded/c61-analytics-contract-1.0.3.md",
+      "historical_body_sha256": "87eb47f4b7959a626fe30af9a31ce4187b9e00c55fd239d4ec4be834a89582da",
+      "questions": [
+        {
+          "id": "OQ-ANL-1",
+          "state": "RESOLVED",
+          "value": "Product analytics remains DISABLED with no selected provider, SDK, beacon or emitted analytics event. Enablement requires an owner decision naming provider, versioned event schema and approved fields through a C61 revision.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "\u2014"
+        },
+        {
+          "id": "OQ-ANL-2",
+          "state": "RESOLVED",
+          "value": "The identifying-field allowlist is empty: no identifying analytics field is permitted. Any later minimum field list requires a C61 revision; this decision does not enable analytics.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "ANL-7"
+        }
+      ]
+    },
+    {
+      "contract": "C62",
+      "path": "contracts/c62-pwa-offline-contract.md",
+      "from_version": "1.0.3",
+      "to_version": "1.1.0",
+      "superseded_copy": "contracts/superseded/c62-pwa-offline-contract-1.0.3.md",
+      "historical_body_sha256": "199e91fdc2f6a672304c54ae28ad12e14e35f84e1fbe9f148ae04c23a590615b",
+      "questions": [
+        {
+          "id": "OQ-PWA-1",
+          "state": "RESOLVED",
+          "value": "Offline writes remain NOT_AUTHORIZED. Every mutation requires connectivity; offline UI MUST show not-sent and MUST NOT claim success. No client write queue is authorized; re-enable only through an active C62 revision or dedicated offline-write contract.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "PWA-5"
+        }
+      ]
+    },
+    {
+      "contract": "C63",
+      "path": "contracts/c63-billing-contract.md",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "superseded_copy": "contracts/superseded/c63-billing-contract-1.1.0.md",
+      "historical_body_sha256": "9ee4a0e00aa0c383cb8580306325057174a1f23c6001879028d4f8be258f81f9",
+      "questions": [
+        {
+          "id": "OQ-BIL-1",
+          "state": "RESOLVED",
+          "value": "Self-service billing remains DISABLED. No checkout, webhook or billing route is authorized; billing remains manual outside the application until an owner-enabled C63 revision.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "\u2014"
+        },
+        {
+          "id": "OQ-BIL-2",
+          "state": "RESOLVED",
+          "value": "No payment provider is selected, and production money movement remains NOT_AUTHORIZED. A named provider and explicit owner authorization are required before enablement; this registration introduces no SDK, key or webhook secret.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "BIL-12"
+        },
+        {
+          "id": "OQ-BIL-3",
+          "state": "OPEN_RESIDUAL",
+          "value": "Billing accounts are Organization-owned and entitlement is a read-only Organization-owned projection; the relationship requires separate C01 semantic registration. Organization-to-billing-account cardinality remains UNKNOWN; no billing-account creation is authorized while billing is disabled.",
+          "residual": "What Organization-to-billing-account cardinality is approved?",
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "BIL-13"
         }
       ]
     }
