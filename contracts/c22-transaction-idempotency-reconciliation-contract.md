@@ -152,7 +152,7 @@ OQ-TXN-1 was resolved in C22 1.2.0: each retryable operation explicitly selects 
 
 ## 8. Change Log
 
-| Version | 1.3.0 |
+| Version | Date | Change | By |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Group renamed to C20 Data Correctness. No requirement changes.                                                                                                                                  | Claude (drafter) |

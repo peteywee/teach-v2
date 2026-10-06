@@ -187,7 +187,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 ## 8. Change Log
 
-| Version | 1.6.0 |
+| Version | Date | Change | By |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Aligned with C01: `Offboarded` no longer asserted to be a status value; IDN-18 now refers to the offboarded outcome pending C01 OQ-SEM-2.                                                       | Claude (drafter) |

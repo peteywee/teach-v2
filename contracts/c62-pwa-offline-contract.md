@@ -128,7 +128,7 @@ This contract belongs to C60 (Good to Have). Its requirements bind only after th
 
 ## 8. Change Log
 
-| Version | 1.1.0 |
+| Version | Date | Change | By |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Group renamed to C60 Optional Feature Contracts; PWA-5 requires an explicit contract defining offline writes.                                                                                   | Claude (drafter) |

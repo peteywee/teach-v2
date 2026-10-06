@@ -1,22 +1,105 @@
 {
   "version": "0.1.0",
   "scope": "all unresolved active-contract question rows, future physical-shape questions, and candidate promotion inventory; no owner approval",
-  "consulted_v2_baseline": "3fe92889aa55fa4a69d3b1e28c3a1211719b1b3f",
+  "consulted_v2_baseline": "6553eb465e469dc9e60368cde40d259f86262997",
   "owner_approval_recorded": false,
   "runtime_activation": "BLOCKED",
   "shared_or_production_execution_authorized": false,
   "totals": {
-    "unresolved_contract_questions": 49,
-    "explicit_contract_blockers": 11,
+    "unresolved_contract_questions": 9,
+    "explicit_contract_blockers": 1,
     "physical_shape_questions": 12,
     "semantic_candidates": 71
   },
   "unresolved_contract_questions": [
     {
+      "id": "OQ-PRIV-4",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Open — residual only.** What export fulfillment deadline applies? Owner, 2026-10-05: Export format is machine-readable JSON plus a human-readable summary. Only the export fulfillment deadline remains undecided. See `governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md`. (Decision-closure r3.1; partial registration)",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 138
+    },
+    {
+      "id": "OQ-PRIV-5",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version": "1.1.0",
+      "question": "What deletion fulfillment deadline applies?",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 139
+    },
+    {
+      "id": "OQ-TXN-2",
+      "contract": "contracts/c22-transaction-idempotency-reconciliation-contract.md",
+      "contract_version": "1.3.0",
+      "question": "**Open — residual only.** Which email delivery provider and OAuth provider(s) are approved? Owner, 2026-10-05: External-effect scope is email delivery and OAuth sign-in; payments remain DISABLED. TransactionControl owns ambiguous email-send reconciliation, and canonical provider readback MUST precede any retry. Failed OAuth exchange fails sign-in. Email and OAuth providers remain unselected: no provider adapter/delivery or mounted OAuth callback is authorized. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1; partial registration)",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 138
+    },
+    {
+      "id": "OQ-CNT-2",
+      "contract": "contracts/c31-content-teaching-engine-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Open — residual only.** Which customer content-approver role/title is approved? Owner, 2026-10-05: Customer-approval claims MUST be backed by a Content-owned append-only approval bound to content_pack_id, version and digest, recording authorized actor, organization scope, time and audit atomically. New versions inherit no approval; withdrawal is a new record. Approver role/title remains UNKNOWN, so no approval record or claim is authorized until selected. See `governance/decision-closure/09-governance-content-certification-web-packet.md`. (Decision-closure r3.1; partial registration)",
+      "explicitly_blocks_implementation": false,
+      "affects": "CNT-11",
+      "source_line": 125
+    },
+    {
+      "id": "OQ-CERT-2",
+      "contract": "contracts/c34-certification-credentials-contract.md",
+      "contract_version": "1.3.0",
+      "question": "Who approves certification criteria versions, and where is approval recorded?",
+      "explicitly_blocks_implementation": true,
+      "affects": "CERT-4",
+      "source_line": 126
+    },
+    {
+      "id": "OQ-API-3",
+      "contract": "contracts/c41-api-boundary-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Open — residual only.** Which API deprecation sunset periods are approved? Owner, 2026-10-05: Breaking consumer changes MUST use the major-version path `/api/v1` and an explicit deprecation manifest rather than in-place replacement. Sunset periods remain UNKNOWN; no deprecation sunset is authorized until owner selection. See `governance/decision-closure/05-api-boundary-manifest.md`. (Decision-closure r3.1; partial registration)",
+      "explicitly_blocks_implementation": false,
+      "affects": "API-13",
+      "source_line": 130
+    },
+    {
+      "id": "OQ-EVD-2",
+      "contract": "contracts/c51-verification-evidence-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Open — residual only.** What evidence retention duration and durable content-addressed archive location are approved? Owner, 2026-10-05: Evidence uses repository metadata plus exact-SHA-bound content-addressed artifacts, digest-verified archive readback and explicit expiry. CI artifacts are not assumed permanent; retention duration and durable archive location remain UNKNOWN. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1; partial registration)",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 128
+    },
+    {
+      "id": "OQ-OBS-1",
+      "contract": "contracts/c53-observability-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Open — residual only.** Where must operational alerts be delivered? Owner, 2026-10-05: Sentry is selected for server errors with sendDefaultPii false and redaction of credential headers and request bodies; request ID tagging only. Vercel Analytics remains OFF under the disabled analytics policy. Alert destination remains UNKNOWN and the separate 90-day redacted-log sink evidence is still required. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1; partial registration)",
+      "explicitly_blocks_implementation": false,
+      "affects": "OBS-2",
+      "source_line": 124
+    },
+    {
+      "id": "OQ-BIL-3",
+      "contract": "contracts/c63-billing-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Open — residual only.** What Organization-to-billing-account cardinality is approved? Owner, 2026-10-05: Billing accounts are Organization-owned and entitlement is a read-only Organization-owned projection; the relationship requires separate C01 semantic registration. Organization-to-billing-account cardinality remains UNKNOWN; no billing-account creation is authorized while billing is disabled. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1; partial registration)",
+      "explicitly_blocks_implementation": false,
+      "affects": "BIL-13",
+      "source_line": 133
+    }
+  ],
+  "resolved_question_rows": [
+    {
       "id": "OQ-SYS-1",
       "contract": "contracts/c00-system-authority-contract.md",
-      "contract_version": "1.0.3",
-      "question": "Does numeric order within a group (for example C11 before C12) define precedence, or are contracts within a group peers?",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Contracts within a group are peers; numeric order does not define precedence. Conflicts use the more restrictive requirement and must be recorded. (Decision-closure r3.1)",
       "explicitly_blocks_implementation": false,
       "affects": "SYS-4",
       "source_line": 158
@@ -24,441 +107,16 @@
     {
       "id": "OQ-SYS-2",
       "contract": "contracts/c00-system-authority-contract.md",
-      "contract_version": "1.0.3",
-      "question": "Where does the compatibility register live, and in what format (Markdown table, machine-readable file checked in CI, or both)?",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Canonical register is `governance/compatibility-register.json` (CI-validated); human-readable Markdown view generated. (Decision-closure r3.1)",
       "explicitly_blocks_implementation": false,
       "affects": "SYS-11",
       "source_line": 159
     },
     {
-      "id": "OQ-SYS-5",
-      "contract": "contracts/c00-system-authority-contract.md",
-      "contract_version": "1.0.3",
-      "question": "Which parts of C11–C15 and C21–C23 are applicable to the learner demo?",
-      "explicitly_blocks_implementation": false,
-      "affects": "SYS-29",
-      "source_line": 162
-    },
-    {
-      "id": "OQ-AGT-1",
-      "contract": "contracts/c02-automation-agent-authority-contract.md",
-      "contract_version": "1.0.3",
-      "question": "Where are AutomationActor execution identities and their capability sets registered?",
-      "explicitly_blocks_implementation": false,
-      "affects": "AGT-9",
-      "source_line": 135
-    },
-    {
-      "id": "OQ-AGT-2",
-      "contract": "contracts/c02-automation-agent-authority-contract.md",
-      "contract_version": "1.0.3",
-      "question": "What is the first runtime-agent use case, if any, that would trigger the revision of this contract?",
-      "explicitly_blocks_implementation": false,
-      "affects": "AGT-16",
-      "source_line": 136
-    },
-    {
-      "id": "OQ-AGT-3",
-      "contract": "contracts/c02-automation-agent-authority-contract.md",
-      "contract_version": "1.0.3",
-      "question": "Which existing jobs, workers, and CLI commands (for example `pnpm cli`) carry forward as AutomationActors?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 137
-    },
-    {
-      "id": "OQ-IDN-7",
-      "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.5.0",
-      "question": "Must password-reset and invitation responses be indistinguishable for registered and unregistered emails?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 172
-    },
-    {
-      "id": "OQ-SES-1",
-      "contract": "contracts/c12-application-sessions-contract.md",
-      "contract_version": "1.1.0",
-      "question": "Which `SameSite` value is approved: `Strict` or `Lax`?",
-      "explicitly_blocks_implementation": true,
-      "affects": "SES-5",
-      "source_line": 135
-    },
-    {
-      "id": "OQ-SES-2",
-      "contract": "contracts/c12-application-sessions-contract.md",
-      "contract_version": "1.1.0",
-      "question": "Which cookie domain and path are approved given the web and API hostnames?",
-      "explicitly_blocks_implementation": true,
-      "affects": "SES-6",
-      "source_line": 136
-    },
-    {
-      "id": "OQ-SES-5",
-      "contract": "contracts/c12-application-sessions-contract.md",
-      "contract_version": "1.1.0",
-      "question": "Is `SameSite` alone the approved CSRF control, or is an additional mechanism (token, origin check) required?",
-      "explicitly_blocks_implementation": true,
-      "affects": "SES-18",
-      "source_line": 137
-    },
-    {
-      "id": "OQ-SES-6",
-      "contract": "contracts/c12-application-sessions-contract.md",
-      "contract_version": "1.1.0",
-      "question": "On which events must the session credential rotate (sign-in, privilege change, other)?",
-      "explicitly_blocks_implementation": true,
-      "affects": "SES-19",
-      "source_line": 138
-    },
-    {
-      "id": "OQ-SES-7",
-      "contract": "contracts/c12-application-sessions-contract.md",
-      "contract_version": "1.1.0",
-      "question": "Is there a limit on concurrent sessions per identity?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 139
-    },
-    {
-      "id": "OQ-AUTHZ-1",
-      "contract": "contracts/c14-authorization-capabilities-contract.md",
-      "contract_version": "1.2.0",
-      "question": "Is the Gate A capability vocabulary and bundle table (accepted 2026-07-22) adopted verbatim for v2, amended, or replaced?",
-      "explicitly_blocks_implementation": true,
-      "affects": "AUTHZ-19",
-      "source_line": 138
-    },
-    {
-      "id": "OQ-PRIV-1",
-      "contract": "contracts/c15-data-isolation-privacy-contract.md",
-      "contract_version": "1.0.3",
-      "question": "What exactly do deleted, anonymized, retained, and offboarded mean in Teach?",
-      "explicitly_blocks_implementation": true,
-      "affects": "—",
-      "source_line": 129
-    },
-    {
-      "id": "OQ-PRIV-2",
-      "contract": "contracts/c15-data-isolation-privacy-contract.md",
-      "contract_version": "1.0.3",
-      "question": "What retention periods apply to each record class?",
-      "explicitly_blocks_implementation": true,
-      "affects": "PRIV-12",
-      "source_line": 130
-    },
-    {
-      "id": "OQ-PRIV-3",
-      "contract": "contracts/c15-data-isolation-privacy-contract.md",
-      "contract_version": "1.0.3",
-      "question": "Which record classes are exempt from deletion, and on what legal or audit basis?",
-      "explicitly_blocks_implementation": true,
-      "affects": "PRIV-15",
-      "source_line": 131
-    },
-    {
-      "id": "OQ-PRIV-4",
-      "contract": "contracts/c15-data-isolation-privacy-contract.md",
-      "contract_version": "1.0.3",
-      "question": "What export format and fulfillment deadline apply?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 132
-    },
-    {
-      "id": "OQ-PRIV-5",
-      "contract": "contracts/c15-data-isolation-privacy-contract.md",
-      "contract_version": "1.0.3",
-      "question": "What deletion fulfillment deadline applies?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 133
-    },
-    {
-      "id": "OQ-PRIV-6",
-      "contract": "contracts/c15-data-isolation-privacy-contract.md",
-      "contract_version": "1.0.3",
-      "question": "Can export and deletion be fulfilled by an operator procedure at first, rather than self-service?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 134
-    },
-    {
-      "id": "OQ-MIG-3",
-      "contract": "contracts/c21-database-migration-contract.md",
-      "contract_version": "1.1.0",
-      "question": "Will any browser-reachable database role exist in v2 (for example a hosted-auth client), making RLS tests applicable?",
-      "explicitly_blocks_implementation": false,
-      "affects": "MIG-12",
-      "source_line": 123
-    },
-    {
-      "id": "OQ-MIG-4",
-      "contract": "contracts/c21-database-migration-contract.md",
-      "contract_version": "1.1.0",
-      "question": "Are production migrations applied by the deployment pipeline or by a manual, owner-approved step?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 124
-    },
-    {
-      "id": "OQ-MIG-5",
-      "contract": "contracts/c21-database-migration-contract.md",
-      "contract_version": "1.1.0",
-      "question": "Will v2 import any data from the legacy Teach database, and if so through which governed, audited path? Until decided, MIG-7's production baseline is the v2 production schema only.",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 125
-    },
-    {
-      "id": "OQ-TXN-2",
-      "contract": "contracts/c22-transaction-idempotency-reconciliation-contract.md",
-      "contract_version": "1.2.0",
-      "question": "Which external providers are in scope for v2 (email delivery, OAuth, payments, other), and which owns reconciliation for each?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 135
-    },
-    {
-      "id": "OQ-AUD-2",
-      "contract": "contracts/c23-audit-lifecycle-events-contract.md",
-      "contract_version": "1.1.0",
-      "question": "For which entities must current state be reconstructable from lifecycle history?",
-      "explicitly_blocks_implementation": false,
-      "affects": "AUD-7",
-      "source_line": 122
-    },
-    {
-      "id": "OQ-AUD-3",
-      "contract": "contracts/c23-audit-lifecycle-events-contract.md",
-      "contract_version": "1.1.0",
-      "question": "Which denial types are operationally significant enough to record?",
-      "explicitly_blocks_implementation": false,
-      "affects": "AUD-8",
-      "source_line": 123
-    },
-    {
-      "id": "OQ-CNT-2",
-      "contract": "contracts/c31-content-teaching-engine-contract.md",
-      "contract_version": "1.1.0",
-      "question": "Where are customer content approvals recorded, and who may record one?",
-      "explicitly_blocks_implementation": false,
-      "affects": "CNT-11",
-      "source_line": 123
-    },
-    {
-      "id": "OQ-CNT-3",
-      "contract": "contracts/c31-content-teaching-engine-contract.md",
-      "contract_version": "1.1.0",
-      "question": "Which legacy pack formats must v2 accept through adapters?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 124
-    },
-    {
-      "id": "OQ-LRN-2",
-      "contract": "contracts/c32-learning-sessions-progress-contract.md",
-      "contract_version": "1.2.0",
-      "question": "How are mastery, XP, streak, and rank derived from events?",
-      "explicitly_blocks_implementation": false,
-      "affects": "LRN-13",
-      "source_line": 125
-    },
-    {
-      "id": "OQ-MGR-2",
-      "contract": "contracts/c33-manager-operations-contract.md",
-      "contract_version": "1.1.0",
-      "question": "May managers offboard directly, or only request offboarding for an operator to approve?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 119
-    },
-    {
-      "id": "OQ-CERT-2",
-      "contract": "contracts/c34-certification-credentials-contract.md",
-      "contract_version": "1.2.0",
-      "question": "Who approves certification criteria versions, and where is approval recorded?",
-      "explicitly_blocks_implementation": true,
-      "affects": "CERT-4",
-      "source_line": 124
-    },
-    {
-      "id": "OQ-CERT-3",
-      "contract": "contracts/c34-certification-credentials-contract.md",
-      "contract_version": "1.2.0",
-      "question": "What evidence types are acceptable (observation notes, checklist, photo, other)?",
-      "explicitly_blocks_implementation": false,
-      "affects": "CERT-7",
-      "source_line": 125
-    },
-    {
-      "id": "OQ-CERT-5",
-      "contract": "contracts/c34-certification-credentials-contract.md",
-      "contract_version": "1.2.0",
-      "question": "Do certifications expire, and if so how is expiry represented?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 127
-    },
-    {
-      "id": "OQ-API-1",
-      "contract": "contracts/c41-api-boundary-contract.md",
-      "contract_version": "1.0.3",
-      "question": "Which routes are boundary exceptions outside `/api/v1`?",
-      "explicitly_blocks_implementation": true,
-      "affects": "—",
-      "source_line": 126
-    },
-    {
-      "id": "OQ-API-2",
-      "contract": "contracts/c41-api-boundary-contract.md",
-      "contract_version": "1.0.3",
-      "question": "What is the error envelope shape?",
-      "explicitly_blocks_implementation": false,
-      "affects": "API-10",
-      "source_line": 127
-    },
-    {
-      "id": "OQ-API-3",
-      "contract": "contracts/c41-api-boundary-contract.md",
-      "contract_version": "1.0.3",
-      "question": "What is the API versioning and deprecation policy?",
-      "explicitly_blocks_implementation": false,
-      "affects": "API-13",
-      "source_line": 128
-    },
-    {
-      "id": "OQ-WEB-1",
-      "contract": "contracts/c42-web-client-boundary-contract.md",
-      "contract_version": "1.0.3",
-      "question": "Which accessibility standard and level is approved (for example WCAG 2.2 AA)?",
-      "explicitly_blocks_implementation": true,
-      "affects": "WEB-15",
-      "source_line": 125
-    },
-    {
-      "id": "OQ-WEB-2",
-      "contract": "contracts/c42-web-client-boundary-contract.md",
-      "contract_version": "1.0.3",
-      "question": "Is the core-path list above complete for v2?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 126
-    },
-    {
-      "id": "OQ-EVD-1",
-      "contract": "contracts/c51-verification-evidence-contract.md",
-      "contract_version": "1.0.3",
-      "question": "Which contracts are high-risk and require independent verification?",
-      "explicitly_blocks_implementation": false,
-      "affects": "EVD-16",
-      "source_line": 125
-    },
-    {
-      "id": "OQ-EVD-2",
-      "contract": "contracts/c51-verification-evidence-contract.md",
-      "contract_version": "1.0.3",
-      "question": "Where are evidence records stored and for how long?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 126
-    },
-    {
-      "id": "OQ-EVD-3",
-      "contract": "contracts/c51-verification-evidence-contract.md",
-      "contract_version": "1.0.3",
-      "question": "How do these four evidence states map to the TOS truth states (verified, declared, inferred, unknown, conflicting, stale)?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 127
-    },
-    {
-      "id": "OQ-REL-3",
-      "contract": "contracts/c52-deployment-release-recovery-contract.md",
-      "contract_version": "1.2.0",
-      "question": "What does the deployed smoke test cover?",
-      "explicitly_blocks_implementation": false,
-      "affects": "REL-8",
-      "source_line": 133
-    },
-    {
-      "id": "OQ-OBS-1",
-      "contract": "contracts/c53-observability-contract.md",
-      "contract_version": "1.1.0",
-      "question": "Which error-capture and alerting providers are approved, and where do alerts go?",
-      "explicitly_blocks_implementation": false,
-      "affects": "OBS-2",
-      "source_line": 123
-    },
-    {
-      "id": "OQ-OBS-2",
-      "contract": "contracts/c53-observability-contract.md",
-      "contract_version": "1.1.0",
-      "question": "Which learner fields, if any, may appear in logs?",
-      "explicitly_blocks_implementation": false,
-      "affects": "OBS-7",
-      "source_line": 124
-    },
-    {
-      "id": "OQ-ANL-1",
-      "contract": "contracts/c61-analytics-contract.md",
-      "contract_version": "1.0.3",
-      "question": "Will analytics be enabled for v2, and with which provider?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 114
-    },
-    {
-      "id": "OQ-ANL-2",
-      "contract": "contracts/c61-analytics-contract.md",
-      "contract_version": "1.0.3",
-      "question": "Which identifying fields, if any, may analytics events carry?",
-      "explicitly_blocks_implementation": false,
-      "affects": "ANL-7",
-      "source_line": 115
-    },
-    {
-      "id": "OQ-PWA-1",
-      "contract": "contracts/c62-pwa-offline-contract.md",
-      "contract_version": "1.0.3",
-      "question": "Will offline writes ever be authorized, and for which operations?",
-      "explicitly_blocks_implementation": false,
-      "affects": "PWA-5",
-      "source_line": 112
-    },
-    {
-      "id": "OQ-BIL-1",
-      "contract": "contracts/c63-billing-contract.md",
-      "contract_version": "1.1.0",
-      "question": "When, if ever, is self-service billing enabled for v2?",
-      "explicitly_blocks_implementation": false,
-      "affects": "—",
-      "source_line": 128
-    },
-    {
-      "id": "OQ-BIL-2",
-      "contract": "contracts/c63-billing-contract.md",
-      "contract_version": "1.1.0",
-      "question": "Which payment provider is approved (the source proposal names Stripe)?",
-      "explicitly_blocks_implementation": false,
-      "affects": "BIL-12",
-      "source_line": 129
-    },
-    {
-      "id": "OQ-BIL-3",
-      "contract": "contracts/c63-billing-contract.md",
-      "contract_version": "1.1.0",
-      "question": "How does an Organization relate to its billing account (for example one-to-one, owned by the organization)?",
-      "explicitly_blocks_implementation": false,
-      "affects": "BIL-13",
-      "source_line": 130
-    }
-  ],
-  "resolved_question_rows": [
-    {
       "id": "OQ-SYS-3",
       "contract": "contracts/c00-system-authority-contract.md",
-      "contract_version": "1.0.3",
+      "contract_version": "1.1.0",
       "question": "**Resolved.** Owner, 2026-10-03: v2 is a new build governed only by these contracts. Legacy `.topshelf/contracts/domain/*.json` does not govern v2 and is not superseded in place; it stays with the legacy repository as reference.",
       "explicitly_blocks_implementation": false,
       "affects": "—",
@@ -467,16 +125,25 @@
     {
       "id": "OQ-SYS-4",
       "contract": "contracts/c00-system-authority-contract.md",
-      "contract_version": "1.0.3",
+      "contract_version": "1.1.0",
       "question": "**Resolved.** Owner, 2026-10-03: these contracts govern the Teach v2 codebase, not the legacy repository or its branches.",
       "explicitly_blocks_implementation": false,
       "affects": "—",
       "source_line": 161
     },
     {
+      "id": "OQ-SYS-5",
+      "contract": "contracts/c00-system-authority-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Demo applicability uses the explicit matrix; shared deployment requires release proof. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "SYS-29",
+      "source_line": 162
+    },
+    {
       "id": "OQ-SYS-6",
       "contract": "contracts/c00-system-authority-contract.md",
-      "contract_version": "1.0.3",
+      "contract_version": "1.1.0",
       "question": "**Resolved.** Owner, 2026-10-03: Teach v2 lives in `peteywee/teach-v2`; default branch `main`. The repository had no commits when cloned on 2026-10-03, so anchors carry no SHA yet.",
       "explicitly_blocks_implementation": false,
       "affects": "—",
@@ -528,58 +195,139 @@
       "source_line": 188
     },
     {
+      "id": "OQ-AGT-1",
+      "contract": "contracts/c02-automation-agent-authority-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: AutomationActor identities MUST be backend execution-principal records with explicit capabilities per principal, inventoried in `governance/automation-principals.json`; CI jobs are DevelopmentAgents, not product actors. No principal is grandfathered or provisioned by this registration. See `governance/decision-closure/02-c14-authorization-capability-matrix.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "AGT-9",
+      "source_line": 137
+    },
+    {
+      "id": "OQ-AGT-2",
+      "contract": "contracts/c02-automation-agent-authority-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Runtime agents remain DISABLED. Enablement requires a named use case and a dedicated C02 revision defining AgentIdentity, AgentCapability, tool/command boundary, decision evidence, approval/escalation and failure/recovery, after the deterministic dependencies are active and evidenced. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "AGT-16",
+      "source_line": 138
+    },
+    {
+      "id": "OQ-AGT-3",
+      "contract": "contracts/c02-automation-agent-authority-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Adoption is NAMED_JOB_BY_JOB with no blanket grandfathering. No V2 job, worker or CLI is adopted as an AutomationActor by this decision; the C21 migration runner retains only AGT-11's schema-migration exception. See `governance/decision-closure/02-c14-authorization-capability-matrix.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 139
+    },
+    {
       "id": "OQ-IDN-1",
       "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.5.0",
+      "contract_version": "1.6.0",
       "question": "**Resolved** Which password hashing algorithm and parameters are approved?",
       "explicitly_blocks_implementation": true,
       "affects": "IDN-5",
-      "source_line": 166
+      "source_line": 167
     },
     {
       "id": "OQ-IDN-2",
       "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.5.0",
+      "contract_version": "1.6.0",
       "question": "Resolved: Invitation acceptance secret = 7 days; SetupToken = 15 minutes; PasswordResetToken = 1 hour. Legacy values were reference only; this decision is v2 authority through the owner approval package.",
       "explicitly_blocks_implementation": false,
       "affects": "IDN-9, IDN-25, IDN-26",
-      "source_line": 167
+      "source_line": 168
     },
     {
       "id": "OQ-IDN-3",
       "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.5.0",
+      "contract_version": "1.6.0",
       "question": "**Resolved** Which sessions does a credential change revoke: all sessions, all other sessions, or another policy?",
       "explicitly_blocks_implementation": true,
       "affects": "IDN-15",
-      "source_line": 168
+      "source_line": 169
     },
     {
       "id": "OQ-IDN-4",
       "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.5.0",
+      "contract_version": "1.6.0",
       "question": "**Resolved** What is the OAuth linking rule: verified-email match, explicit user-initiated linking only, or another rule?",
       "explicitly_blocks_implementation": true,
       "affects": "IDN-2",
-      "source_line": 169
+      "source_line": 170
     },
     {
       "id": "OQ-IDN-5",
       "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.5.0",
+      "contract_version": "1.6.0",
       "question": "Resolved: controlled rejection. An offboarded identity must be explicitly reactivated through ReactivateIdentity before a new invitation may be created.",
       "explicitly_blocks_implementation": false,
       "affects": "IDN-20, IDN-27",
-      "source_line": 170
+      "source_line": 171
     },
     {
       "id": "OQ-IDN-6",
       "contract": "contracts/c11-identity-credentials-contract.md",
-      "contract_version": "1.5.0",
+      "contract_version": "1.6.0",
       "question": "Resolved: PIN parameters selected as 6 digits, 5 attempts, 15-minute lock. PIN authentication remains unavailable until implementation and all applicable authentication gates pass.",
       "explicitly_blocks_implementation": false,
       "affects": "—",
-      "source_line": 171
+      "source_line": 172
+    },
+    {
+      "id": "OQ-IDN-7",
+      "contract": "contracts/c11-identity-credentials-contract.md",
+      "contract_version": "1.6.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Password-reset requests and invitation-related email lookups MUST return identical `202` responses with `{\"status\":\"accepted\"}` and the same headers for known, unknown, INACTIVE and offboarded addresses. The same job type is queued off the response path; bounds are 5 requests per normalized-email digest per 15 minutes and 20 per client IP per hour. Over-limit requests are dropped and recorded while returning the same `202`; no `429` or account-existence signal is exposed. See `governance/decision-closure/06-identity-tenancy-manager-registration-packet.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 173
+    },
+    {
+      "id": "OQ-SES-1",
+      "contract": "contracts/c12-application-sessions-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved.** Owner, 2026-10-05: The session cookie MUST set `SameSite=Lax` together with SES-18's exact-origin CSRF control. See `governance/decision-closure/04-session-transport-security-spec.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "SES-5",
+      "source_line": 138
+    },
+    {
+      "id": "OQ-SES-2",
+      "contract": "contracts/c12-application-sessions-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved.** Owner, 2026-10-05: The approved topology is same-origin `https://t34ch.com` with API prefix `/api/v1`. The cookie MUST be `__Host-teach_session`, host-only with no Domain, `Path=/`, Secure and HttpOnly; issuance Max-Age is 43200 and logout Max-Age is 0. Each isolated preview uses exactly its own deployment origin, without production credentials. See `governance/decision-closure/04-session-transport-security-spec.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "SES-6",
+      "source_line": 139
+    },
+    {
+      "id": "OQ-SES-5",
+      "contract": "contracts/c12-application-sessions-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Every cookie-authenticated unsafe request (POST, PUT, PATCH, DELETE), including logout, MUST enforce a byte-exact deployment allowed Origin before session lookup; missing, foreign, malformed or `null` Origin is denied with zero writes. There is no Referer fallback; a present Sec-Fetch-Site other than same-origin is denied; unsafe API requests require application/json. Missing allowed-origin configuration fails closed. Safe methods MUST NOT mutate state except the separately bound state/PKCE OAuth callback. See `governance/decision-closure/04-session-transport-security-spec.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "SES-18",
+      "source_line": 140
+    },
+    {
+      "id": "OQ-SES-6",
+      "contract": "contracts/c12-application-sessions-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Successful sign-in and step-up reauthentication MUST create a new session and revoke the presenting session, atomically with audit; a pre-authentication credential MUST NOT be upgraded. Failed commit sets no new cookie. ChangeCredential instead revokes ALL sessions and issues none under IDN-15; deactivation/offboarding revoke all, logout revokes the presented session. Membership/grant/entitlement changes require no rotation because authority is database-current under SES-16. See `governance/decision-closure/04-session-transport-security-spec.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "SES-19",
+      "source_line": 141
+    },
+    {
+      "id": "OQ-SES-7",
+      "contract": "contracts/c12-application-sessions-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved.** Owner, 2026-10-05: No concurrent-session count limit is imposed. Existing expiry/revocation still apply; a later limit requires an explicit value and deterministic eviction rule through a C12 revision. See `governance/decision-closure/04-session-transport-security-spec.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 142
     },
     {
       "id": "OQ-TEN-1",
@@ -609,103 +357,355 @@
       "source_line": 141
     },
     {
+      "id": "OQ-AUTHZ-1",
+      "contract": "contracts/c14-authorization-capabilities-contract.md",
+      "contract_version": "1.3.0",
+      "question": "**Resolved.** Owner, 2026-10-05: The capability vocabulary and bundles MUST be the NEW_V2 matrix in the registered C14 specification and `c14-capability-matrix.json`: 34 operation capabilities, explicit self/learner/manager/org_admin bundles, and no imported legacy grants or cross-tenant platform capabilities. Evaluation, bootstrap exceptions, conditional/blocked grants and negative tests MUST follow that matrix. This registration does not promote the 34 capability identifiers into C01/K00; implementation remains BLOCKED until their semantic registration and all matrix dependencies pass. See `governance/decision-closure/02-c14-authorization-capability-matrix.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "AUTHZ-19",
+      "source_line": 141
+    },
+    {
       "id": "OQ-AUTHZ-2",
       "contract": "contracts/c14-authorization-capabilities-contract.md",
-      "contract_version": "1.2.0",
+      "contract_version": "1.3.0",
       "question": "**Resolved** Which cross-tenant platform capabilities, if any, exist in v2, and what audit do they require?",
       "explicitly_blocks_implementation": false,
       "affects": "AUTHZ-20 (approved 2026-10-05)",
-      "source_line": 139
+      "source_line": 142
+    },
+    {
+      "id": "OQ-PRIV-1",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: DELETED means governed audited primary-row removal, with an Identity terminal tombstone containing only id/status/created_at and dependent-copy expiry under the lifecycle matrix. ANONYMIZED applies only to unrecoverable aggregates with at least 5 identities per reported group; individual hashes/opaque links are PSEUDONYMIZED personal data. RETAINED means access-controlled preservation until the class clock/duration/action. OFFBOARDED means IDN-18 access revocation and retained history, never deletion. The corrected matrix controls; executor ingress, schema, backup-window and recovery evidence gates remain required. See `governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 135
+    },
+    {
+      "id": "OQ-PRIV-2",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Retention clocks, durations and expiry actions MUST follow the registered lifecycle matrix: one year for named identity, credential, session/token, membership, learning, certification and audit classes, with each class's terminal clock; OperationalLog retains its separate 90-day policy. Legal holds suspend deletion without extending authentication validity. Undefined clocks or unregistered classes have retention UNKNOWN, automatic deletion BLOCKED and no retention/deletion/compliance claim. Every stated retention period MUST have executable enforcement evidence before any promise; backup/provider windows and executor/schema admission remain separate gates. See `governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "PRIV-12",
+      "source_line": 136
+    },
+    {
+      "id": "OQ-PRIV-3",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Subject-deletion exemptions MUST be exactly AuditEvent and LifecycleEvent until their one-year expiry (AUD-1/4/6), and ReconciliationRecord until its expiry (TXN-5/7); OPEN reconciliation never expires. Legal hold is a deletion suspension, not an exemption. Application paths MUST NOT delete immutable audit records; privileged expiry requires its separate admission and evidence. See `governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "PRIV-15",
+      "source_line": 137
+    },
+    {
+      "id": "OQ-PRIV-6",
+      "contract": "contracts/c15-data-isolation-privacy-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Initial export/deletion fulfillment MUST use a verified, scoped, audited operator procedure; self-service is deferred. Requests use the verification/hold/fulfillment lifecycle in the registered privacy matrix and MUST NOT claim a deadline or completed deletion while its gates are unmet. See `governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 140
+    },
+    {
+      "id": "OQ-MIG-3",
+      "contract": "contracts/c21-database-migration-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Application tables MUST NOT be browser-reachable and have no implicit RLS exemption. Every Supabase-backed candidate requires target-project readback of Data API/exposed schemas, existing and default anon/authenticated grants on tables/sequences/functions, RLS on every application table, and an HTTP denial probe. Disable Data API, revoke existing/default privileges through governed migrations and enable RLS with no policies as specified; unreadable or missing project-specific evidence blocks promotion. Provider defaults MUST NOT substitute for readback. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "MIG-12",
+      "source_line": 126
+    },
+    {
+      "id": "OQ-MIG-4",
+      "contract": "contracts/c21-database-migration-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Production migration apply MUST be manual and owner-approved for the exact frozen candidate, migration IDs and fresh named restore point, after replay and restore gates. Apply output and journal/drift readback are evidence. CI holds no production database credential and cannot grant production permission. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 127
+    },
+    {
+      "id": "OQ-MIG-5",
+      "contract": "contracts/c21-database-migration-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Legacy Teach data import is ABSENT; this registration adopts no import job, script or route. Future import requires a separate source snapshot, transformation, reconciliation, audit and rollback plan. MIG-7's baseline remains the V2 production schema. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 128
     },
     {
       "id": "OQ-AUD-1",
       "contract": "contracts/c23-audit-lifecycle-events-contract.md",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "question": "Resolved: one-year audit retention; fixed central policy with no tenant overrides. Audit deletion remains BLOCKED.",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 122
+    },
+    {
+      "id": "OQ-AUD-2",
+      "contract": "contracts/c23-audit-lifecycle-events-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Identity, Membership, Assignment and Certification state MUST be reconstructable from lifecycle history; every transition appends its LifecycleEvent in the same transaction and replay MUST equal current lifecycle fields. Projections remain separate from canonical state. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "AUD-7",
+      "source_line": 123
+    },
+    {
+      "id": "OQ-AUD-3",
+      "contract": "contracts/c23-audit-lifecycle-events-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Capability, tenant-scope, target-scope, credential-abuse and Origin denials MUST be recorded separately from successful mutations; validation errors and plain unauthenticated requests are excluded. Records contain only the specified redacted fields, deduplicate per actor/IP-prefix, class, operation and 5-minute bucket, cap at 100 rows per actor/hour and record one overflow row/hour. Audit immutability and one-year retention remain binding. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "AUD-8",
+      "source_line": 124
+    },
+    {
+      "id": "OQ-CNT-1",
+      "contract": "contracts/c31-content-teaching-engine-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved** What versioning scheme applies to the schema and to packs (semver, integer, other)?",
+      "explicitly_blocks_implementation": false,
+      "affects": "CNT-2 (approved 2026-10-05)",
+      "source_line": 124
+    },
+    {
+      "id": "OQ-CNT-3",
+      "contract": "contracts/c31-content-teaching-engine-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved.** Owner, 2026-10-05: No legacy content format is accepted. Admission requires one named adapter per format, deterministic conversion/version validation, positive and negative fixtures and a C00 compatibility-register entry with removal condition. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 126
+    },
+    {
+      "id": "OQ-LRN-1",
+      "contract": "contracts/c32-learning-sessions-progress-contract.md",
+      "contract_version": "1.3.0",
+      "question": "Resolved 2026-10-03: bootstrap lifecycle is `ACTIVE -> COMPLETED`; progress events are allowed only in ACTIVE and COMPLETED is terminal. GitHub issue #4.",
+      "explicitly_blocks_implementation": false,
+      "affects": "LRN-3",
+      "source_line": 127
+    },
+    {
+      "id": "OQ-LRN-2",
+      "contract": "contracts/c32-learning-sessions-progress-contract.md",
+      "contract_version": "1.3.0",
+      "question": "**Resolved.** Owner, 2026-10-05: XP, mastery, streak and rank remain UNAVAILABLE until owner-approved versioned derivation formulas and replay evidence exist. No real score may be stored or displayed; sample/demo scores MUST be labelled. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "LRN-13",
+      "source_line": 128
+    },
+    {
+      "id": "OQ-LRN-3",
+      "contract": "contracts/c32-learning-sessions-progress-contract.md",
+      "contract_version": "1.3.0",
+      "question": "**Resolved** When a pack gets a new version, does in-progress learner history carry over, restart, or stay pinned? Owner approved PIN_EXISTING_HISTORY_TO_ASSIGNED_VERSION on 2026-10-05.",
+      "explicitly_blocks_implementation": false,
+      "affects": "PIN_EXISTING_HISTORY_TO_ASSIGNED_VERSION",
+      "source_line": 129
+    },
+    {
+      "id": "OQ-MGR-1",
+      "contract": "contracts/c33-manager-operations-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved** Is manager visibility limited to direct reports, the whole location, or configurable?",
+      "explicitly_blocks_implementation": true,
+      "affects": "MGR-3",
+      "source_line": 120
+    },
+    {
+      "id": "OQ-MGR-2",
+      "contract": "contracts/c33-manager-operations-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Manager offboarding requires a dedicated capability through the canonical Identity lifecycle service and current scope. It grants no credential control or global lifecycle authority; multi-organization effects remain BLOCKED until a separate policy exists. See `governance/decision-closure/06-identity-tenancy-manager-registration-packet.md`. (Decision-closure r3.1)",
       "explicitly_blocks_implementation": false,
       "affects": "—",
       "source_line": 121
     },
     {
-      "id": "OQ-CNT-1",
-      "contract": "contracts/c31-content-teaching-engine-contract.md",
-      "contract_version": "1.1.0",
-      "question": "**Resolved** What versioning scheme applies to the schema and to packs (semver, integer, other)?",
-      "explicitly_blocks_implementation": false,
-      "affects": "CNT-2 (approved 2026-10-05)",
-      "source_line": 122
-    },
-    {
-      "id": "OQ-LRN-1",
-      "contract": "contracts/c32-learning-sessions-progress-contract.md",
-      "contract_version": "1.2.0",
-      "question": "Resolved 2026-10-03: bootstrap lifecycle is `ACTIVE -> COMPLETED`; progress events are allowed only in ACTIVE and COMPLETED is terminal. GitHub issue #4.",
-      "explicitly_blocks_implementation": false,
-      "affects": "LRN-3",
-      "source_line": 124
-    },
-    {
-      "id": "OQ-LRN-3",
-      "contract": "contracts/c32-learning-sessions-progress-contract.md",
-      "contract_version": "1.2.0",
-      "question": "**Resolved** When a pack gets a new version, does in-progress learner history carry over, restart, or stay pinned? Owner approved PIN_EXISTING_HISTORY_TO_ASSIGNED_VERSION on 2026-10-05.",
-      "explicitly_blocks_implementation": false,
-      "affects": "PIN_EXISTING_HISTORY_TO_ASSIGNED_VERSION",
-      "source_line": 126
-    },
-    {
-      "id": "OQ-MGR-1",
-      "contract": "contracts/c33-manager-operations-contract.md",
-      "contract_version": "1.1.0",
-      "question": "**Resolved** Is manager visibility limited to direct reports, the whole location, or configurable?",
-      "explicitly_blocks_implementation": true,
-      "affects": "MGR-3",
-      "source_line": 118
-    },
-    {
       "id": "OQ-CERT-1",
       "contract": "contracts/c34-certification-credentials-contract.md",
-      "contract_version": "1.2.0",
+      "contract_version": "1.3.0",
       "question": "**Resolved** Is credential verification public (anyone with the link) or private (authenticated, scoped)? (Deferred by Gate A.)",
       "explicitly_blocks_implementation": true,
       "affects": "CERT-13",
-      "source_line": 123
+      "source_line": 125
+    },
+    {
+      "id": "OQ-CERT-3",
+      "contract": "contracts/c34-certification-credentials-contract.md",
+      "contract_version": "1.3.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Issuance evidence MUST be structured checklist results and scoped observation notes bound to observed performance. Photos/files are DISABLED and rejected; enabling them requires separate storage, privacy, retention and access decisions. OQ-CERT-2 remains open and continues to block issuance. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "CERT-7",
+      "source_line": 127
     },
     {
       "id": "OQ-CERT-4",
       "contract": "contracts/c34-certification-credentials-contract.md",
-      "contract_version": "1.2.0",
+      "contract_version": "1.3.0",
       "question": "**Resolved** May an actor ever be both learner and observer for the same certification?",
       "explicitly_blocks_implementation": false,
       "affects": "CERT-15 (approved 2026-10-05)",
-      "source_line": 126
+      "source_line": 128
+    },
+    {
+      "id": "OQ-CERT-5",
+      "contract": "contracts/c34-certification-credentials-contract.md",
+      "contract_version": "1.3.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Certification validity has no implicit expiry: no expiry field or time-driven state transition is authorized, and revocation ends validity. Any later expiry requires an owner-defined representation, effects and history/revocation rules. Data-retention expiry remains separately governed and does not create validity expiry. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 129
+    },
+    {
+      "id": "OQ-API-1",
+      "contract": "contracts/c41-api-boundary-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Product operations MUST live under `/api/v1/*`. The exhaustive outside-prefix exceptions are health/readiness and authentication callbacks in the registered API manifest; callbacks remain unmounted until their provider selection and prerequisites pass. No billing, analytics or internal operation is exposed by this registration. See `governance/decision-closure/05-api-boundary-manifest.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 128
+    },
+    {
+      "id": "OQ-API-2",
+      "contract": "contracts/c41-api-boundary-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: API errors MUST use exactly the stable `code`, `message`, `requestId` envelope and status semantics in `api-error-envelope.schema.json` and the registered API manifest. Missing and out-of-scope targets MUST produce identical non-disclosing denials; no target existence or private detail is leaked. See `governance/decision-closure/05-api-boundary-manifest.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "API-10",
+      "source_line": 129
+    },
+    {
+      "id": "OQ-WEB-1",
+      "contract": "contracts/c42-web-client-boundary-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Core paths MUST meet WCAG 2.2 Level AA with interactive targets at least 44 by 44 CSS pixels. Automated checks supplement, not replace, keyboard, screen-reader, contrast and mobile checks. See `governance/decision-closure/09-governance-content-certification-web-packet.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "WEB-15",
+      "source_line": 127
+    },
+    {
+      "id": "OQ-WEB-2",
+      "contract": "contracts/c42-web-client-boundary-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Core paths are login, assigned-content start, recorded completion, scoped manager view and logout. Each requires E2E and accessibility evidence. Credentialless demo isolation/reset remains separately specified. See `governance/decision-closure/09-governance-content-certification-web-packet.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 128
+    },
+    {
+      "id": "OQ-EVD-1",
+      "contract": "contracts/c51-verification-evidence-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Independent verification MUST cover C11, C12, C13, C14, C15, C21, C22, C23, C51, C52 and protected cross-domain mutations. The verifier must be other than the implementer; self-audit is not independent verification. A DevelopmentAgent verifier requires explicit owner designation for the change. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "EVD-16",
+      "source_line": 127
+    },
+    {
+      "id": "OQ-EVD-3",
+      "contract": "contracts/c51-verification-evidence-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: PROVEN requires verified, current exact-SHA readable evidence; unmet/failed/skipped gates are BLOCKED; insufficient, planned, declared, inferred, stale or different-SHA evidence is UNKNOWN; conflicting facts are CONTRADICTORY. Declared or inferred states MUST NOT auto-promote. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 129
     },
     {
       "id": "OQ-REL-1",
       "contract": "contracts/c52-deployment-release-recovery-contract.md",
-      "contract_version": "1.2.0",
+      "contract_version": "1.3.0",
       "question": "Resolved: Supabase PostgreSQL for the database and Vercel for web/API hosting. This does not approve a project, hostname, plan, provider authorization model or deployment.",
       "explicitly_blocks_implementation": false,
       "affects": "—",
-      "source_line": 132
+      "source_line": 133
+    },
+    {
+      "id": "OQ-REL-3",
+      "contract": "contracts/c52-deployment-release-recovery-contract.md",
+      "contract_version": "1.3.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Deployed smoke tests MUST bind candidate source/deployment/config/schema identity and prove health/readiness, unauthenticated and role/scope/Origin denials, database exposure denials, assigned-content start/progress/completion with atomic audit, cross-tenant/nonexistent parity, logout replay denial and recovery readiness. A URL returning 200 is insufficient; every failed or unavailable step blocks promotion. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "REL-8",
+      "source_line": 134
     },
     {
       "id": "OQ-REL-4",
       "contract": "contracts/c52-deployment-release-recovery-contract.md",
-      "contract_version": "1.2.0",
+      "contract_version": "1.3.0",
       "question": "Resolved: rollback to the prior candidate is supported for 24 hours after deployment/promotion; migrations remain backward-compatible during that full window.",
       "explicitly_blocks_implementation": false,
       "affects": "—",
-      "source_line": 134
+      "source_line": 135
+    },
+    {
+      "id": "OQ-OBS-2",
+      "contract": "contracts/c53-observability-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Logs MAY contain request ID, operation, method/route template, status, duration, denial class, failed authorization step and approved pseudonymous operational IDs. Logs MUST NOT contain credentials, cookies, verifiers/hashes, provider tokens, names/emails, filled paths, request/response bodies, observation notes or learner payload content; all sinks require canary-leak tests. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "OBS-7",
+      "source_line": 125
     },
     {
       "id": "OQ-OBS-3",
       "contract": "contracts/c53-observability-contract.md",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "question": "Resolved: operational logs retained for 90 days, separately from the one-year canonical audit-retention policy. Provider/archival mechanism proof remains UNKNOWN.",
       "explicitly_blocks_implementation": false,
       "affects": "—",
-      "source_line": 125
+      "source_line": 126
+    },
+    {
+      "id": "OQ-ANL-1",
+      "contract": "contracts/c61-analytics-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Product analytics remains DISABLED with no selected provider, SDK, beacon or emitted analytics event. Enablement requires an owner decision naming provider, versioned event schema and approved fields through a C61 revision. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 116
+    },
+    {
+      "id": "OQ-ANL-2",
+      "contract": "contracts/c61-analytics-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: The identifying-field allowlist is empty: no identifying analytics field is permitted. Any later minimum field list requires a C61 revision; this decision does not enable analytics. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "ANL-7",
+      "source_line": 117
+    },
+    {
+      "id": "OQ-PWA-1",
+      "contract": "contracts/c62-pwa-offline-contract.md",
+      "contract_version": "1.1.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Offline writes remain NOT_AUTHORIZED. Every mutation requires connectivity; offline UI MUST show not-sent and MUST NOT claim success. No client write queue is authorized; re-enable only through an active C62 revision or dedicated offline-write contract. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "PWA-5",
+      "source_line": 114
+    },
+    {
+      "id": "OQ-BIL-1",
+      "contract": "contracts/c63-billing-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved.** Owner, 2026-10-05: Self-service billing remains DISABLED. No checkout, webhook or billing route is authorized; billing remains manual outside the application until an owner-enabled C63 revision. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "—",
+      "source_line": 131
+    },
+    {
+      "id": "OQ-BIL-2",
+      "contract": "contracts/c63-billing-contract.md",
+      "contract_version": "1.2.0",
+      "question": "**Resolved.** Owner, 2026-10-05: No payment provider is selected, and production money movement remains NOT_AUTHORIZED. A named provider and explicit owner authorization are required before enablement; this registration introduces no SDK, key or webhook secret. See `governance/decision-closure/08-deferred-feature-policy-register.md`. (Decision-closure r3.1)",
+      "explicitly_blocks_implementation": false,
+      "affects": "BIL-12",
+      "source_line": 132
     }
   ],
   "physical_shape_questions": [
@@ -1247,29 +1247,29 @@
     }
   ],
   "source_sha256": {
-    "contracts/c00-system-authority-contract.md": "63500932db774880d5769f545887a21c2482961e405eee328aed2cc25fa4b661",
+    "contracts/c00-system-authority-contract.md": "9bdd192ae245742ab638ec6a2fdfda9a22bfc6173b6ec834d2fa8599210f6070",
     "contracts/c01-canonical-semantics-contract.md": "e407a52b739756e84264a66ef0a824d02435e4ee15e938c405c4caf8dc1ebd40",
-    "contracts/c02-automation-agent-authority-contract.md": "21202fef396b5179a718ded8fa2f28a4726497c393ce083fb7af5297f594de23",
-    "contracts/c11-identity-credentials-contract.md": "3240ae5ccb81fe1233f74e52c8f7bb63caf55bd5958a87506948e09bec95a0c6",
-    "contracts/c12-application-sessions-contract.md": "6bfda46131be1c25d3aa71f5a771dcc1374033156b2467757c3dacdee527481d",
+    "contracts/c02-automation-agent-authority-contract.md": "d74910420a58e64cf215731f738b88681227c01b302d2b04e71ce0a3bb475242",
+    "contracts/c11-identity-credentials-contract.md": "7069cffc51033c97ce36d9245e0c8cd0114eb58220bd641261a14851c0799ec6",
+    "contracts/c12-application-sessions-contract.md": "4be88320f96a475c1524a15a1ec77a92c3e2e3739636b6573bf44b1e99e3bc42",
     "contracts/c13-tenancy-membership-contract.md": "e52371e79cf0619eac158d58785b6d5005dbd9a3381e3e5037fb0016255dbf6e",
-    "contracts/c14-authorization-capabilities-contract.md": "67c3f8820c5f4bc6d3e74f4601f079ef9202750ce7e4b48e6338d3b60c4b6fd3",
-    "contracts/c15-data-isolation-privacy-contract.md": "e14300a57e8bf75f39509efa5c11c6ae994dba9dd798336f01d23cce8c70e84e",
-    "contracts/c21-database-migration-contract.md": "eb64b82349abda75370ab68961af92094e6840a3d02e18a1bfb2f4eaaac6a135",
-    "contracts/c22-transaction-idempotency-reconciliation-contract.md": "41b6d408d3a90175119b6b47574a186564735d27721ea800e4bfc6c48d0a6f0e",
-    "contracts/c23-audit-lifecycle-events-contract.md": "707651e689e57e779672cd88bf64fb76253801b1c468c5b1d171790c66415ebb",
-    "contracts/c31-content-teaching-engine-contract.md": "d4fb182c07c50a56841f0c2b80d368bc3641f7df68ad8cc824b1141137819583",
-    "contracts/c32-learning-sessions-progress-contract.md": "61ed20459d1e1ba0cac624e13227aac7c2915e71b8e4c0ed0b4f1fedda41821d",
-    "contracts/c33-manager-operations-contract.md": "c52d29bd315d302cb3a9a749eabd354e1b741a3a4514e2c98aac30497fc363f9",
-    "contracts/c34-certification-credentials-contract.md": "ee6ce0685f0a47a0d050989ff43e969b78eddd6c08619dc8185ef7ea531e8c7d",
-    "contracts/c41-api-boundary-contract.md": "59257d21573369827d0bed24919e7d6fedec5221c780ffeb404dcea68fb26e52",
-    "contracts/c42-web-client-boundary-contract.md": "5655dc089faf29bc8db16fd81319fcad6a7b37b8c5833b1b5d0fdb8b97ce9e28",
-    "contracts/c51-verification-evidence-contract.md": "7390163d21ef0d00a8c7190108fa2f1e5ab1dd28e0d18569dc8e823fe8cf0161",
-    "contracts/c52-deployment-release-recovery-contract.md": "a1a3a4637366cff364c825cd4a703518b73ada649f9f6f5657ca966adb092584",
-    "contracts/c53-observability-contract.md": "1ac78f4cc861ce5a467ff8bea4eb8a2be4a2b7d2acff68ac53c41b08af64d209",
-    "contracts/c61-analytics-contract.md": "aad01e1353076e78e3e5bc6e342919ef7f9e4c4dc2da20b5b0809ae1ecad9fe2",
-    "contracts/c62-pwa-offline-contract.md": "891fb6513da8c8efb529f023f149153e8ed90e0d7ac9aa46af78f68f61ff8ce6",
-    "contracts/c63-billing-contract.md": "b01c3bf281cc0883e50cf74b9c52677fee1cc5b3ede422e5e015c58c5cfa0b9c",
+    "contracts/c14-authorization-capabilities-contract.md": "5a68851faea0e0616717748b470bbfe5b7dd2597fac9bced57b7c1697c8f2937",
+    "contracts/c15-data-isolation-privacy-contract.md": "00afb8427890476ac8361ca33c68fe0468946549e6fb0d14104c483cc36089ae",
+    "contracts/c21-database-migration-contract.md": "8e3c550fb583a90d7c9ee2c1b62ed53b7c1b573fb874d316ba51c27eaa388279",
+    "contracts/c22-transaction-idempotency-reconciliation-contract.md": "56ddacfddfe57801de9646fe1a7d8f9e70277f4820dc8d30087098f1f0a1e0bc",
+    "contracts/c23-audit-lifecycle-events-contract.md": "264f9ba837a55824ced69dc62c29dbbba0fa114e5d6cdfcfc0e6cfb14be585d5",
+    "contracts/c31-content-teaching-engine-contract.md": "34d44d5d7c3b7df6a8ba6dc9709844cf8fc5b25d731744878f2fbfad6912ae79",
+    "contracts/c32-learning-sessions-progress-contract.md": "3039b78f3328a72bb435cada32e1612304efa2c9ce4ac6d3434b76371e102295",
+    "contracts/c33-manager-operations-contract.md": "305ce3796d240882c9e85dd1bc996a9b3dfbb75394e382dc0e2c5950f31be35a",
+    "contracts/c34-certification-credentials-contract.md": "790ea960a7176572621bdbbd0926243ab52d12fe9d264af82a3eabbc2f809cb3",
+    "contracts/c41-api-boundary-contract.md": "35d7a1938e15e7f5f7cc2ce180f3bf52be8d70acd918dfee838f3ab30662794e",
+    "contracts/c42-web-client-boundary-contract.md": "4fef90a7f419d9c40bb9a426afeeee38e1b79e3365f5e2e86b488bd6be149b02",
+    "contracts/c51-verification-evidence-contract.md": "6fe65bc8f8cd85723a890669bcd0b273e5fea2efbcb43853b8dde119fab29efe",
+    "contracts/c52-deployment-release-recovery-contract.md": "0c5125f5a2321013bfee7ac4e09d012cb2eceba9cca6ca8d35cc2cf5f1b50f81",
+    "contracts/c53-observability-contract.md": "d578609609641a410d1f6ee97fd067498b68b372557718b3647f7d25b8c7c168",
+    "contracts/c61-analytics-contract.md": "c4edd12a7385e18b6e63a5ca5b7843a915dd2ffb95755f9221293ddfb30d1061",
+    "contracts/c62-pwa-offline-contract.md": "a0a614435393e8fa6cbf8dc0bf0770cd87e63aa9ab51740c1c89a0b59684e724",
+    "contracts/c63-billing-contract.md": "34fd126a33dcffa7e5b2644f340a36245dc88fc30713609ed96d0bab66555597",
     "persistence/physical-slices/assignment/admission-evidence-plan.json": "107750afb12c3e3412d72bb606aaa2770617ce0cc27373aa2a1a7ca5fa849aa9",
     "persistence/physical-slices/certification/admission-evidence-plan.json": "be72e653d7a43bc62570674a27b39772ace6ca7d39526766ebe24d5e7a1f5c17",
     "persistence/physical-slices/progress-event/admission-evidence-plan.json": "ce9f2714891d80563e80e7aca94937715a82fe1b17fc297a3cdd38bba934b8fc",

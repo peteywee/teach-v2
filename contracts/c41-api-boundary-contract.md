@@ -144,7 +144,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 ## 8. Change Log
 
-| Version | 1.1.0 |
+| Version | Date | Change | By |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Retitled Application / Command / API Boundary; added API-14 and API-15 (commands are the boundary; routes do not define semantics) and API-AC-11.                                               | Claude (drafter) |

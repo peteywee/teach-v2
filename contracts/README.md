@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-04",
+  "updated_on": "2026-10-05",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
@@ -34,11 +34,11 @@
 
 # Teach v2 Contracts
 
-- Package version: `0.17.0`
+- Package version: `0.18.0`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
-- Last updated: 2026-10-04
+- Last updated: 2026-10-05
 
 These are the normative behavior contracts Teach v2 is built on. They state what the system MUST and
 MUST NOT do. Implementation is measured against them, not the other way round.
@@ -102,30 +102,30 @@ the requirement that keeps the feature off applies.
 
 | ID  | Contract                                                                                            | Version | Prefix  | Requirements | Acceptance cases | Unresolved questions | Blocking implementation | Status   |
 | --- | --------------------------------------------------------------------------------------------------- | ------- | ------- | ------------ | ---------------- | -------------- | ----------------------- | -------- |
-| C00 | [System Authority](c00-system-authority-contract.md) | 1.0.3 | `SYS` | 34 | 20 | 3 | 0 | `active` |
+| C00 | [System Authority](c00-system-authority-contract.md) | 1.1.0 | `SYS` | 34 | 20 | 0 | 0 | `active` |
 | C01 | [Canonical Semantics](c01-canonical-semantics-contract.md) | 1.8.0 | `SEM` | 36 | 25 | 0 | 0 | `active` |
-| C02 | [Automation & Agent Authority](c02-automation-agent-authority-contract.md) | 1.0.3 | `AGT` | 17 | 13 | 3 | 0 | `active` |
-| C11 | [Identity & Credentials](c11-identity-credentials-contract.md) | 1.4.0 | `IDN` | 30 | 23 | 4 | 3 | `active` |
-| C12 | [Application Sessions](c12-application-sessions-contract.md) | 1.1.0 | `SES` | 20 | 14 | 5 | 4 | `active` |
-| C13 | [Tenancy & Membership](c13-tenancy-membership-contract.md) | 1.3.0 | `TEN` | 19 | 13 | 3 | 2 | `active` |
-| C14 | [Authorization & Capabilities](c14-authorization-capabilities-contract.md) | 1.1.0 | `AUTHZ` | 21 | 13 | 2 | 1 | `active` |
-| C15 | [Data Isolation & Privacy](c15-data-isolation-privacy-contract.md) | 1.0.3 | `PRIV` | 17 | 10 | 6 | 3 | `active` |
-| C21 | [Database & Migration](c21-database-migration-contract.md) | 1.1.0 | `MIG` | 14 | 9 | 3 | 0 | `active` |
-| C22 | [Transaction, Idempotency & Reconciliation](c22-transaction-idempotency-reconciliation-contract.md) | 1.2.0 | `TXN` | 16 | 12 | 1 | 0 | `active` |
-| C23 | [Audit & Lifecycle Events](c23-audit-lifecycle-events-contract.md) | 1.1.0 | `AUD` | 11 | 9 | 2 | 0 | `active` |
-| C31 | [Content & Teaching Engine](c31-content-teaching-engine-contract.md) | 1.0.3 | `CNT` | 12 | 9 | 3 | 0 | `active` |
-| C32 | [Learning Sessions & Progress](c32-learning-sessions-progress-contract.md) | 1.1.0 | `LRN` | 13 | 11 | 2 | 0 | `active` |
-| C33 | [Manager Operations](c33-manager-operations-contract.md) | 1.0.3 | `MGR` | 10 | 8 | 2 | 1 | `active` |
-| C34 | [Certification & Credentials](c34-certification-credentials-contract.md) | 1.0.3 | `CERT` | 15 | 7 | 5 | 2 | `active` |
-| C41 | [Application / Command / API Boundary](c41-api-boundary-contract.md) | 1.0.3 | `API` | 15 | 11 | 3 | 1 | `active` |
-| C42 | [Web Client Boundary](c42-web-client-boundary-contract.md) | 1.0.3 | `WEB` | 15 | 10 | 2 | 1 | `active` |
-| C51 | [Verification & Evidence](c51-verification-evidence-contract.md) | 1.0.3 | `EVD` | 16 | 7 | 3 | 0 | `active` |
-| C52 | [Deployment, Release & Recovery](c52-deployment-release-recovery-contract.md) | 1.2.0 | `REL` | 18 | 11 | 1 | 0 | `active` |
-| C53 | [Observability](c53-observability-contract.md) | 1.1.0 | `OBS` | 11 | 9 | 2 | 0 | `active` |
-| C61 | [Analytics](c61-analytics-contract.md) | 1.0.3 | `ANL` | 8 | 7 | 2 | 0 | `active` |
-| C62 | [PWA / Offline](c62-pwa-offline-contract.md) | 1.0.3 | `PWA` | 9 | 4 | 1 | 0 | `active` |
-| C63 | [Self-Service Billing](c63-billing-contract.md) | 1.1.0 | `BIL` | 14 | 12 | 3 | 0 | `active` |
-|     | **Total** | | | **391** | **267** | **49** | **11** | |
+| C02 | [Automation & Agent Authority](c02-automation-agent-authority-contract.md) | 1.1.0 | `AGT` | 17 | 13 | 0 | 0 | `active` |
+| C11 | [Identity & Credentials](c11-identity-credentials-contract.md) | 1.6.0 | `IDN` | 30 | 23 | 0 | 0 | `active` |
+| C12 | [Application Sessions](c12-application-sessions-contract.md) | 1.2.0 | `SES` | 20 | 14 | 0 | 0 | `active` |
+| C13 | [Tenancy & Membership](c13-tenancy-membership-contract.md) | 1.5.0 | `TEN` | 19 | 13 | 0 | 0 | `active` |
+| C14 | [Authorization & Capabilities](c14-authorization-capabilities-contract.md) | 1.3.0 | `AUTHZ` | 21 | 13 | 0 | 0 | `active` |
+| C15 | [Data Isolation & Privacy](c15-data-isolation-privacy-contract.md) | 1.1.0 | `PRIV` | 17 | 10 | 2 | 0 | `active` |
+| C21 | [Database & Migration](c21-database-migration-contract.md) | 1.2.0 | `MIG` | 14 | 9 | 0 | 0 | `active` |
+| C22 | [Transaction, Idempotency & Reconciliation](c22-transaction-idempotency-reconciliation-contract.md) | 1.3.0 | `TXN` | 16 | 12 | 1 | 0 | `active` |
+| C23 | [Audit & Lifecycle Events](c23-audit-lifecycle-events-contract.md) | 1.2.0 | `AUD` | 11 | 9 | 0 | 0 | `active` |
+| C31 | [Content & Teaching Engine](c31-content-teaching-engine-contract.md) | 1.2.0 | `CNT` | 12 | 9 | 1 | 0 | `active` |
+| C32 | [Learning Sessions & Progress](c32-learning-sessions-progress-contract.md) | 1.3.0 | `LRN` | 13 | 11 | 0 | 0 | `active` |
+| C33 | [Manager Operations](c33-manager-operations-contract.md) | 1.2.0 | `MGR` | 10 | 8 | 0 | 0 | `active` |
+| C34 | [Certification & Credentials](c34-certification-credentials-contract.md) | 1.3.0 | `CERT` | 15 | 7 | 1 | 1 | `active` |
+| C41 | [Application / Command / API Boundary](c41-api-boundary-contract.md) | 1.1.0 | `API` | 15 | 11 | 1 | 0 | `active` |
+| C42 | [Web Client Boundary](c42-web-client-boundary-contract.md) | 1.1.0 | `WEB` | 15 | 10 | 0 | 0 | `active` |
+| C51 | [Verification & Evidence](c51-verification-evidence-contract.md) | 1.1.0 | `EVD` | 16 | 7 | 1 | 0 | `active` |
+| C52 | [Deployment, Release & Recovery](c52-deployment-release-recovery-contract.md) | 1.3.0 | `REL` | 18 | 11 | 0 | 0 | `active` |
+| C53 | [Observability](c53-observability-contract.md) | 1.2.0 | `OBS` | 11 | 9 | 1 | 0 | `active` |
+| C61 | [Analytics](c61-analytics-contract.md) | 1.1.0 | `ANL` | 8 | 7 | 0 | 0 | `active` |
+| C62 | [PWA / Offline](c62-pwa-offline-contract.md) | 1.1.0 | `PWA` | 9 | 4 | 0 | 0 | `active` |
+| C63 | [Self-Service Billing](c63-billing-contract.md) | 1.2.0 | `BIL` | 14 | 12 | 1 | 0 | `active` |
+|     | **Total** | | | **391** | **267** | **9** | **1** | |
 
 ## K00 semantic-kernel bootstrap
 
