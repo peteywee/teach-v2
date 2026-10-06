@@ -15,7 +15,8 @@
   "batches": [
     1,
     2,
-    3
+    3,
+    4
   ],
   "contracts": [
     {
@@ -263,6 +264,94 @@
           "residual": null,
           "controlling_artifact": "governance/decision-closure/07-evidence-release-operations-spec.md",
           "affects": "AUD-8"
+        }
+      ]
+    },
+    {
+      "contract": "C31",
+      "path": "contracts/c31-content-teaching-engine-contract.md",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "superseded_copy": "contracts/superseded/c31-content-teaching-engine-contract-1.1.0.md",
+      "historical_body_sha256": "4befb0024ffab5138039b1fd130f2b007a6e847ddb1d6330edb289541c25aff2",
+      "questions": [
+        {
+          "id": "OQ-CNT-2",
+          "state": "OPEN_RESIDUAL",
+          "value": "Customer-approval claims MUST be backed by a Content-owned append-only approval bound to content_pack_id, version and digest, recording authorized actor, organization scope, time and audit atomically. New versions inherit no approval; withdrawal is a new record. Approver role/title remains UNKNOWN, so no approval record or claim is authorized until selected.",
+          "residual": "Which customer content-approver role/title is approved?",
+          "controlling_artifact": "governance/decision-closure/09-governance-content-certification-web-packet.md",
+          "affects": "CNT-11"
+        },
+        {
+          "id": "OQ-CNT-3",
+          "state": "RESOLVED",
+          "value": "No legacy content format is accepted. Admission requires one named adapter per format, deterministic conversion/version validation, positive and negative fixtures and a C00 compatibility-register entry with removal condition.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C32",
+      "path": "contracts/c32-learning-sessions-progress-contract.md",
+      "from_version": "1.2.0",
+      "to_version": "1.3.0",
+      "superseded_copy": "contracts/superseded/c32-learning-sessions-progress-contract-1.2.0.md",
+      "historical_body_sha256": "33f081cce18a5cc42f03a7a325df9a1a65c22fbe105b367cfd91bff1d0ccc134",
+      "questions": [
+        {
+          "id": "OQ-LRN-2",
+          "state": "RESOLVED",
+          "value": "XP, mastery, streak and rank remain UNAVAILABLE until owner-approved versioned derivation formulas and replay evidence exist. No real score may be stored or displayed; sample/demo scores MUST be labelled.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "LRN-13"
+        }
+      ]
+    },
+    {
+      "contract": "C33",
+      "path": "contracts/c33-manager-operations-contract.md",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "superseded_copy": "contracts/superseded/c33-manager-operations-contract-1.1.0.md",
+      "historical_body_sha256": "3bd876789c45d01a894f7b134fb2a0245d7aa531078d3a5741d0a8827440876c",
+      "questions": [
+        {
+          "id": "OQ-MGR-2",
+          "state": "RESOLVED",
+          "value": "Manager offboarding requires a dedicated capability through the canonical Identity lifecycle service and current scope. It grants no credential control or global lifecycle authority; multi-organization effects remain BLOCKED until a separate policy exists.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/06-identity-tenancy-manager-registration-packet.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C34",
+      "path": "contracts/c34-certification-credentials-contract.md",
+      "from_version": "1.2.0",
+      "to_version": "1.3.0",
+      "superseded_copy": "contracts/superseded/c34-certification-credentials-contract-1.2.0.md",
+      "historical_body_sha256": "f47818f2613793d729ded86b84a224ba7151f51da6283ce80690741136753979",
+      "questions": [
+        {
+          "id": "OQ-CERT-3",
+          "state": "RESOLVED",
+          "value": "Issuance evidence MUST be structured checklist results and scoped observation notes bound to observed performance. Photos/files are DISABLED and rejected; enabling them requires separate storage, privacy, retention and access decisions. OQ-CERT-2 remains open and continues to block issuance.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "CERT-7"
+        },
+        {
+          "id": "OQ-CERT-5",
+          "state": "RESOLVED",
+          "value": "Certification validity has no implicit expiry: no expiry field or time-driven state transition is authorized, and revocation ends validity. Any later expiry requires an owner-defined representation, effects and history/revocation rules. Data-retention expiry remains separately governed and does not create validity expiry.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "\u2014"
         }
       ]
     }
