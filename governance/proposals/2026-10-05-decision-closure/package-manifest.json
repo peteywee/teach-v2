@@ -1,0 +1,258 @@
+{
+ "x-document": {
+  "doc_id": "TEACH-PROP-DCS-MANIFEST",
+  "class": "evidence-summary",
+  "version": "1.0.1",
+  "status": "proposed",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-05",
+  "updated_on": "2026-10-05"
+ },
+ "package": "decision-closure super-batch",
+ "revision": "r3.1",
+ "baseline_commit": "6553eb465e469dc9e60368cde40d259f86262997",
+ "classification_baseline": "2b5714d8d850da7a47c1666da5a2c7974cabe40f",
+ "registration_issue": "#75",
+ "registration_form": {
+  "new_requirement_ids": 0,
+  "new_acceptance_ids": 0,
+  "requirement_total": 391,
+  "acceptance_total": 267,
+  "expected_effect": {
+   "unresolved": [
+    49,
+    9
+   ],
+   "explicit_blockers": [
+    11,
+    1
+   ],
+   "contracts_revised": 21
+  }
+ },
+ "owner_approval": {
+  "approved_revision": "r1",
+  "approved_archive": "teach-v2-decision-closure-2026-10-05.zip",
+  "approved_archive_sha256": "0e5cb74b68a1e8c82ca1a80153e53987715507b977b7b9d5c98fe77c01aa6449",
+  "approved_at": "2026-10-05T04:05:00-05:00",
+  "scope": "decision sheet A-D",
+  "channel": "chat",
+  "this_revision_state": "PENDING_OWNER_APPROVAL_OF_THIS_MANIFEST",
+  "reason": "r3 contains normative corrections in 03, 04, 05 (+ api-boundary-manifest.json) and 07; r3.1 is a non-normative package-inventory/validator clarification; exact r3.1 manifest approval is still required",
+  "approval_token_format": "approve decision-closure manifest sha256:<package-manifest.sha256>"
+ },
+ "artifacts": [
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/00-README.md",
+   "sha256": "d2d94e97fbb82a930325c455ff8b808be287f9ab370685a1bb4eb76ff5eff7f4",
+   "bytes": 23815,
+   "version": "0.3.1",
+   "role": "index",
+   "changed_since_approved_r1": true,
+   "change_class": "INDEX",
+   "change_note": "Index; r3.1 clarifies listed-artifact counts versus complete archive inventory and exact #75 correction text; no decision semantic changed"
+  },
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/01-closure-matrix.md",
+   "sha256": "be0810ea2d073c72162a88feaab3d3b1547ee394312ee55b74615f87a16c8988",
+   "bytes": 56715,
+   "version": "0.3.0",
+   "role": "governing",
+   "changed_since_approved_r1": true,
+   "change_class": "NON_NORMATIVE",
+   "change_note": "Generated view: live state after #74, semantic bindings, wording of OQ-MIG-3 note"
+  },
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/02-c14-authorization-capability-matrix.md",
+   "sha256": "f333fce6cabe3f2ecca10c90d0f32dcde869bd668e9a1aa4ea8e872e18144552",
+   "bytes": 54988,
+   "version": "0.2.0",
+   "role": "governing",
+   "changed_since_approved_r1": true,
+   "change_class": "NON_NORMATIVE_ADDITIVE",
+   "change_note": "Interface/ledger tracing, registry cases, gap 6; capabilities, bundles, scopes and denials unchanged"
+  },
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+   "sha256": "8c5f124c536c4c3a470fd6c402b995a0b776230388d08e412c74394057fe95eb",
+   "bytes": 33833,
+   "version": "0.3.0",
+   "role": "governing",
+   "changed_since_approved_r1": true,
+   "change_class": "NORMATIVE",
+   "change_note": "Unregistered record class: retention UNKNOWN, deletion BLOCKED (was one-year default); adds residual-linkage analysis and PRIV-X-11..15"
+  },
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/04-session-transport-security-spec.md",
+   "sha256": "19ecc659fcbc8cd107a719348b84371c4c0a24a2851d03a3ceca4672849023c9",
+   "bytes": 13107,
+   "version": "0.3.0",
+   "role": "governing",
+   "changed_since_approved_r1": true,
+   "change_class": "NORMATIVE",
+   "change_note": "HSTS header drops includeSubDomains; acceptance IDs renamed TRS-1..10 (non-normative)"
+  },
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/05-api-boundary-manifest.md",
+   "sha256": "361320150b2b928ed9cfed4bf8191ab44746d95479cd7f0ad994c5d66ba532ea",
+   "bytes": 16188,
+   "version": "0.3.0",
+   "role": "governing",
+   "changed_since_approved_r1": true,
+   "change_class": "NORMATIVE",
+   "change_note": "/api/health and /api/ready exempt from the error envelope with exact bodies"
+  },
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/06-identity-tenancy-manager-registration-packet.md",
+   "sha256": "252559bb4e474a5dfb9bcb17a7656ce187af3bff13457ffc17af760e9c8343c6",
+   "bytes": 15945,
+   "version": "0.3.0",
+   "role": "governing",
+   "changed_since_approved_r1": true,
+   "change_class": "NON_NORMATIVE",
+   "change_note": "Marks #74 registrations; values move from proposed new IDs into resolved rows (same behavior)"
+  },
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/07-evidence-release-operations-spec.md",
+   "sha256": "68ac952e9c0083f413ef241820a663d4238a46870729d7308c83c0f5527058d9",
+   "bytes": 17053,
+   "version": "0.3.0",
+   "role": "governing",
+   "changed_since_approved_r1": true,
+   "change_class": "NORMATIVE",
+   "change_note": "Supabase exposure proven only by target-project readback (stricter pass criteria); closure-observer note"
+  },
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/08-deferred-feature-policy-register.md",
+   "sha256": "e12152c4b5045d87007523e6818b0a8d437e5c67e65dfa26ef76f700ff6c9cc4",
+   "bytes": 8765,
+   "version": "0.2.0",
+   "role": "governing",
+   "changed_since_approved_r1": true,
+   "change_class": "NON_NORMATIVE",
+   "change_note": "Status and version notes only"
+  },
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/09-governance-content-certification-web-packet.md",
+   "sha256": "70cfcdead0762147b5d7874edfbb3bb55dafb04bf10db9768f5591c602261029",
+   "bytes": 10580,
+   "version": "0.2.0",
+   "role": "governing",
+   "changed_since_approved_r1": true,
+   "change_class": "NON_NORMATIVE",
+   "change_note": "Marks CERT-1 registered by #74"
+  },
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/api-boundary-manifest.json",
+   "sha256": "ffd76450a80fd2f6cd816b4c81ec6e36dbc9c4257e30e95c8a786dcdd71c146b",
+   "bytes": 15384,
+   "version": "0.2.0",
+   "role": "governing",
+   "changed_since_approved_r1": true,
+   "change_class": "NORMATIVE",
+   "change_note": "error_envelope policy and exact_bodies on boundary exceptions"
+  },
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/api-error-envelope.schema.json",
+   "sha256": "81028a4c0c42620fc93f0acdaef204d7559456bcc2f2d45efe1d5cfb42571a90",
+   "bytes": 3200,
+   "version": "0.1.0",
+   "role": "governing",
+   "changed_since_approved_r1": false,
+   "change_class": "UNCHANGED",
+   "change_note": "Byte-identical to revision 1"
+  },
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/c14-capability-matrix.json",
+   "sha256": "031b823c100dedcefa8f9d336cbfb617ae760576c35ed24096a3db98c3bcc98d",
+   "bytes": 47975,
+   "version": "0.2.0",
+   "role": "governing",
+   "changed_since_approved_r1": true,
+   "change_class": "NON_NORMATIVE_ADDITIVE",
+   "change_note": "Adds owning_domain, application_interface, policy_interfaces, ledger; grants unchanged"
+  },
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/c14-negative-test-matrix.json",
+   "sha256": "427040f6bbb33fff438ac452953d3706281818af65b30de3a016626554b5e92f",
+   "bytes": 186494,
+   "version": "0.2.0",
+   "role": "governing",
+   "changed_since_approved_r1": true,
+   "change_class": "NON_NORMATIVE_ADDITIVE",
+   "change_note": "Adds 8 registry-level cases; 495 operation cases unchanged"
+  },
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/c15-data-lifecycle-matrix.json",
+   "sha256": "f537ba306a59a0e3fd1e777f9708edc4319d32dfcc53dbc27133b014de0e90f7",
+   "bytes": 29527,
+   "version": "0.1.0",
+   "role": "governing",
+   "changed_since_approved_r1": false,
+   "change_class": "UNCHANGED",
+   "change_note": "Byte-identical to revision 1"
+  },
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/closure-matrix.json",
+   "sha256": "7825b5246ddd8583e1fe04e1ceba92431d9a12b4e6b17725a7d21ddf362ffda7",
+   "bytes": 147039,
+   "version": "0.3.0",
+   "role": "governing",
+   "changed_since_approved_r1": true,
+   "change_class": "NON_NORMATIVE",
+   "change_note": "live_state/registered_by, semantic_assertions; approved values unchanged"
+  },
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/closure-matrix.schema.json",
+   "sha256": "88d09250aa4940c6e4db315d30e0d7995b13e830ef952fcd464fcbe2b453dea2",
+   "bytes": 9115,
+   "version": "0.3.0",
+   "role": "governing",
+   "changed_since_approved_r1": true,
+   "change_class": "NON_NORMATIVE",
+   "change_note": "Schema for added fields"
+  },
+  {
+   "path": "governance/proposals/2026-10-05-decision-closure/deferred-feature-register.json",
+   "sha256": "a19c797a09faf053e7902aac6b90cd56c83b6f463a2b5e79ee9acb436ad06a00",
+   "bytes": 8507,
+   "version": "0.1.0",
+   "role": "governing",
+   "changed_since_approved_r1": false,
+   "change_class": "UNCHANGED",
+   "change_note": "Byte-identical to revision 1"
+  },
+  {
+   "path": "scripts/verification/validate-decision-closure.mjs",
+   "sha256": "4ca3c9196dab2d3e0cc1605c371e473cdf1268d9644512b78bfa08c73742cad4",
+   "bytes": 20651,
+   "version": null,
+   "role": "tooling",
+   "changed_since_approved_r1": true,
+   "change_class": "VERIFICATION_TOOLING",
+   "change_note": "Proposed validator; r3.1 validates listed-artifact counts separately from complete archive inventory; not wired into CI"
+  },
+  {
+   "path": "scripts/tests/validate-decision-closure.test.mjs",
+   "sha256": "239164649c4c78efe344274999c37af64580b1434382bd92daca6ac324d3ded6",
+   "bytes": 9937,
+   "version": null,
+   "role": "tooling",
+   "changed_since_approved_r1": true,
+   "change_class": "VERIFICATION_TOOLING",
+   "change_note": "Proposed validator tests; r3.1 adds archive-inventory mismatch regression; not wired into CI"
+  }
+ ],
+ "listed_artifact_counts": {
+  "markdown": 10,
+  "json": 8,
+  "script": 2
+ },
+ "archive_inventory": {
+  "markdown": 10,
+  "json": 9,
+  "sidecar": 1,
+  "script": 2,
+  "total_files": 22
+ }
+}

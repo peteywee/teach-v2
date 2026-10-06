@@ -4,7 +4,7 @@
   "class": "contract",
   "version": "1.0.3",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
   "updated_on": "2026-10-03",
@@ -29,13 +29,18 @@
     "use": "reference only; does not govern and is not governed by this contract"
   },
   "supersedes": [],
-  "superseded_by": null,
+  "superseded_by": "TEACH-CON-C00@1.1.0",
   "depends_on": [
     "contracts/"
   ]
 }
 -->
 
+# Superseded TEACH-CON-C00 1.0.3
+
+Superseded by `TEACH-CON-C00@1.1.0` under SYS-21 #75.
+
+The original body below is preserved, including its former current-status wording.
 # C00 — System Authority Contract
 
 | Field              | Value                                                                                                                                                           |

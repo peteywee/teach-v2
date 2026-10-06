@@ -1,0 +1,6516 @@
+{
+ "x-document": {
+  "doc_id": "TEACH-PROP-DCS-02-TESTS",
+  "class": "specification",
+  "version": "0.2.0",
+  "status": "proposed",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-05",
+  "updated_on": "2026-10-05"
+ },
+ "proves": [
+  "AUTHZ-AC-2",
+  "AUTHZ-AC-5",
+  "AUTHZ-AC-6",
+  "AUTHZ-AC-7",
+  "AUTHZ-AC-8",
+  "AUTHZ-AC-9",
+  "AUTHZ-AC-10",
+  "AUTHZ-AC-12",
+  "SES-AC-12"
+ ],
+ "fixture_actors": {
+  "self_only": "ACTIVE Identity, no Membership",
+  "learner": "learner grant @ (orgA, loc1)",
+  "observer": "observer grant @ (orgA, loc1)",
+  "manager": "manager grant @ (orgA, loc1) with direct report L1",
+  "org_admin": "org_admin grant @ (orgA, NULL)",
+  "foreign": "org_admin grant @ (orgB, NULL)"
+ },
+ "case_count": 495,
+ "cases": [
+  {
+   "case_id": "C14-AuthenticateIdentity-INVALID_PROOF",
+   "operation": "AuthenticateIdentity",
+   "capability": "identity.credential.authenticate",
+   "scenario": "INVALID_PROOF",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_across_bootstrap_failures"
+   ]
+  },
+  {
+   "case_id": "C14-AuthenticateIdentity-UNKNOWN_SUBJECT",
+   "operation": "AuthenticateIdentity",
+   "capability": "identity.credential.authenticate",
+   "scenario": "UNKNOWN_SUBJECT",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_across_bootstrap_failures"
+   ]
+  },
+  {
+   "case_id": "C14-AuthenticateIdentity-EXPIRED_SECRET",
+   "operation": "AuthenticateIdentity",
+   "capability": "identity.credential.authenticate",
+   "scenario": "EXPIRED_SECRET",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_across_bootstrap_failures"
+   ]
+  },
+  {
+   "case_id": "C14-AuthenticateIdentity-CONSUMED_SECRET",
+   "operation": "AuthenticateIdentity",
+   "capability": "identity.credential.authenticate",
+   "scenario": "CONSUMED_SECRET",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_across_bootstrap_failures"
+   ]
+  },
+  {
+   "case_id": "C14-AuthenticateIdentity-REVOKED_SECRET",
+   "operation": "AuthenticateIdentity",
+   "capability": "identity.credential.authenticate",
+   "scenario": "REVOKED_SECRET",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_across_bootstrap_failures"
+   ]
+  },
+  {
+   "case_id": "C14-AuthenticateIdentity-INACTIVE_IDENTITY",
+   "operation": "AuthenticateIdentity",
+   "capability": "identity.credential.authenticate",
+   "scenario": "INACTIVE_IDENTITY",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_across_bootstrap_failures"
+   ]
+  },
+  {
+   "case_id": "C14-AuthenticateIdentity-VALID",
+   "operation": "AuthenticateIdentity",
+   "capability": "identity.credential.authenticate",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "audit_committed_with_mutation"
+   ]
+  },
+  {
+   "case_id": "C14-CreateApplicationSession-NO_ROUTE",
+   "operation": "CreateApplicationSession",
+   "capability": "identity.session.issue",
+   "scenario": "NO_ROUTE",
+   "expected_status": null,
+   "expected_code": null,
+   "assertions": [
+    "no_mounted_route_maps_to_operation",
+    "registry_marks_internal"
+   ]
+  },
+  {
+   "case_id": "C14-ChangeCredential-NO_SESSION",
+   "operation": "ChangeCredential",
+   "capability": "identity.credential.change",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ChangeCredential-MALFORMED_SESSION",
+   "operation": "ChangeCredential",
+   "capability": "identity.credential.change",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ChangeCredential-EXPIRED_SESSION",
+   "operation": "ChangeCredential",
+   "capability": "identity.credential.change",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ChangeCredential-REVOKED_SESSION",
+   "operation": "ChangeCredential",
+   "capability": "identity.credential.change",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ChangeCredential-FOREIGN_OR_MISSING_ORIGIN",
+   "operation": "ChangeCredential",
+   "capability": "identity.credential.change",
+   "scenario": "FOREIGN_OR_MISSING_ORIGIN",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "origin_checked_before_authorization"
+   ]
+  },
+  {
+   "case_id": "C14-ChangeCredential-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "ChangeCredential",
+   "capability": "identity.credential.change",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ChangeCredential-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "ChangeCredential",
+   "capability": "identity.credential.change",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ChangeCredential-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "ChangeCredential",
+   "capability": "identity.credential.change",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ChangeCredential-ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "operation": "ChangeCredential",
+   "capability": "identity.credential.change",
+   "scenario": "ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ChangeCredential-TARGET_NONEXISTENT",
+   "operation": "ChangeCredential",
+   "capability": "identity.credential.change",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-ChangeCredential-TARGET_OTHER_TENANT",
+   "operation": "ChangeCredential",
+   "capability": "identity.credential.change",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-ChangeCredential-TARGET_OWNED_BY_OTHER_IDENTITY",
+   "operation": "ChangeCredential",
+   "capability": "identity.credential.change",
+   "scenario": "TARGET_OWNED_BY_OTHER_IDENTITY",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ChangeCredential-CAPABILITY_REVOKED_MID_SESSION",
+   "operation": "ChangeCredential",
+   "capability": "identity.credential.change",
+   "scenario": "CAPABILITY_REVOKED_MID_SESSION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "no_relogin_required"
+   ]
+  },
+  {
+   "case_id": "C14-ChangeCredential-INVALID_BODY_AFTER_AUTHORIZATION",
+   "operation": "ChangeCredential",
+   "capability": "identity.credential.change",
+   "scenario": "INVALID_BODY_AFTER_AUTHORIZATION",
+   "expected_status": 400,
+   "expected_code": "INVALID_REQUEST",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ChangeCredential-VALID",
+   "operation": "ChangeCredential",
+   "capability": "identity.credential.change",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "audit_committed_with_mutation"
+   ]
+  },
+  {
+   "case_id": "C14-CreateIdentity-NO_ROUTE",
+   "operation": "CreateIdentity",
+   "capability": "identity.identity.create",
+   "scenario": "NO_ROUTE",
+   "expected_status": null,
+   "expected_code": null,
+   "assertions": [
+    "no_mounted_route_maps_to_operation",
+    "registry_marks_internal"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-NO_SESSION",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-MALFORMED_SESSION",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-EXPIRED_SESSION",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-REVOKED_SESSION",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-FOREIGN_OR_MISSING_ORIGIN",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "FOREIGN_OR_MISSING_ORIGIN",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "origin_checked_before_authorization"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-INACTIVE_MEMBERSHIP",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-REVOKED_MEMBERSHIP",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-WRONG_LOCATION",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "WRONG_LOCATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-TARGET_NONEXISTENT",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-TARGET_OTHER_TENANT",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-TARGET_OTHER_LOCATION",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "TARGET_OTHER_LOCATION",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-CAPABILITY_REVOKED_MID_SESSION",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "CAPABILITY_REVOKED_MID_SESSION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "no_relogin_required"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-INVALID_BODY_AFTER_AUTHORIZATION",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "INVALID_BODY_AFTER_AUTHORIZATION",
+   "expected_status": 400,
+   "expected_code": "INVALID_REQUEST",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-InviteIdentity-VALID",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "audit_committed_with_mutation"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-NO_SESSION",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-MALFORMED_SESSION",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-EXPIRED_SESSION",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-REVOKED_SESSION",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-FOREIGN_OR_MISSING_ORIGIN",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "FOREIGN_OR_MISSING_ORIGIN",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "origin_checked_before_authorization"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-INACTIVE_MEMBERSHIP",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-REVOKED_MEMBERSHIP",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-WRONG_LOCATION",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "WRONG_LOCATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-TARGET_NONEXISTENT",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-TARGET_OTHER_TENANT",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-TARGET_OTHER_LOCATION",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "TARGET_OTHER_LOCATION",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-CAPABILITY_REVOKED_MID_SESSION",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "CAPABILITY_REVOKED_MID_SESSION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "no_relogin_required"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-INVALID_BODY_AFTER_AUTHORIZATION",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "INVALID_BODY_AFTER_AUTHORIZATION",
+   "expected_status": 400,
+   "expected_code": "INVALID_REQUEST",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeInvitation-VALID",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "audit_committed_with_mutation"
+   ]
+  },
+  {
+   "case_id": "C14-AcceptInvitation-INVALID_PROOF",
+   "operation": "AcceptInvitation",
+   "capability": "identity.invitation.accept",
+   "scenario": "INVALID_PROOF",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_across_bootstrap_failures"
+   ]
+  },
+  {
+   "case_id": "C14-AcceptInvitation-UNKNOWN_SUBJECT",
+   "operation": "AcceptInvitation",
+   "capability": "identity.invitation.accept",
+   "scenario": "UNKNOWN_SUBJECT",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_across_bootstrap_failures"
+   ]
+  },
+  {
+   "case_id": "C14-AcceptInvitation-EXPIRED_SECRET",
+   "operation": "AcceptInvitation",
+   "capability": "identity.invitation.accept",
+   "scenario": "EXPIRED_SECRET",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_across_bootstrap_failures"
+   ]
+  },
+  {
+   "case_id": "C14-AcceptInvitation-CONSUMED_SECRET",
+   "operation": "AcceptInvitation",
+   "capability": "identity.invitation.accept",
+   "scenario": "CONSUMED_SECRET",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_across_bootstrap_failures"
+   ]
+  },
+  {
+   "case_id": "C14-AcceptInvitation-REVOKED_SECRET",
+   "operation": "AcceptInvitation",
+   "capability": "identity.invitation.accept",
+   "scenario": "REVOKED_SECRET",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_across_bootstrap_failures"
+   ]
+  },
+  {
+   "case_id": "C14-AcceptInvitation-INACTIVE_IDENTITY",
+   "operation": "AcceptInvitation",
+   "capability": "identity.invitation.accept",
+   "scenario": "INACTIVE_IDENTITY",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_across_bootstrap_failures"
+   ]
+  },
+  {
+   "case_id": "C14-AcceptInvitation-VALID",
+   "operation": "AcceptInvitation",
+   "capability": "identity.invitation.accept",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "audit_committed_with_mutation"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-NO_SESSION",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-MALFORMED_SESSION",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-EXPIRED_SESSION",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-REVOKED_SESSION",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-FOREIGN_OR_MISSING_ORIGIN",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "FOREIGN_OR_MISSING_ORIGIN",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "origin_checked_before_authorization"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-INACTIVE_MEMBERSHIP",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-REVOKED_MEMBERSHIP",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-WRONG_LOCATION",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "WRONG_LOCATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-TARGET_NONEXISTENT",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-TARGET_OTHER_TENANT",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-TARGET_OTHER_LOCATION",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "TARGET_OTHER_LOCATION",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-CAPABILITY_REVOKED_MID_SESSION",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "CAPABILITY_REVOKED_MID_SESSION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "no_relogin_required"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-INVALID_BODY_AFTER_AUTHORIZATION",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "INVALID_BODY_AFTER_AUTHORIZATION",
+   "expected_status": 400,
+   "expected_code": "INVALID_REQUEST",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeSingleUseToken-VALID",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "audit_committed_with_mutation"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-NO_SESSION",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-MALFORMED_SESSION",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-EXPIRED_SESSION",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-REVOKED_SESSION",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-FOREIGN_OR_MISSING_ORIGIN",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "FOREIGN_OR_MISSING_ORIGIN",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "origin_checked_before_authorization"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-INACTIVE_MEMBERSHIP",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-REVOKED_MEMBERSHIP",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-TARGET_NONEXISTENT",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-TARGET_OTHER_TENANT",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-CAPABILITY_REVOKED_MID_SESSION",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "CAPABILITY_REVOKED_MID_SESSION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "no_relogin_required"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-INVALID_BODY_AFTER_AUTHORIZATION",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "INVALID_BODY_AFTER_AUTHORIZATION",
+   "expected_status": 400,
+   "expected_code": "INVALID_REQUEST",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-TARGET_HAS_MEMBERSHIP_IN_OTHER_ORGANIZATION",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "TARGET_HAS_MEMBERSHIP_IN_OTHER_ORGANIZATION",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_identical_to_TARGET_NONEXISTENT",
+    "no_other_tenant_inference"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateIdentity-VALID",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "audit_committed_with_mutation"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-NO_SESSION",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-MALFORMED_SESSION",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-EXPIRED_SESSION",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-REVOKED_SESSION",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-FOREIGN_OR_MISSING_ORIGIN",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "FOREIGN_OR_MISSING_ORIGIN",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "origin_checked_before_authorization"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-INACTIVE_MEMBERSHIP",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-REVOKED_MEMBERSHIP",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-TARGET_NONEXISTENT",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-TARGET_OTHER_TENANT",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-CAPABILITY_REVOKED_MID_SESSION",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "CAPABILITY_REVOKED_MID_SESSION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "no_relogin_required"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-INVALID_BODY_AFTER_AUTHORIZATION",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "INVALID_BODY_AFTER_AUTHORIZATION",
+   "expected_status": 400,
+   "expected_code": "INVALID_REQUEST",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-TARGET_HAS_MEMBERSHIP_IN_OTHER_ORGANIZATION",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "TARGET_HAS_MEMBERSHIP_IN_OTHER_ORGANIZATION",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_identical_to_TARGET_NONEXISTENT",
+    "no_other_tenant_inference"
+   ]
+  },
+  {
+   "case_id": "C14-ReactivateIdentity-VALID",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "audit_committed_with_mutation"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-NO_SESSION",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-MALFORMED_SESSION",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-EXPIRED_SESSION",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-REVOKED_SESSION",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-FOREIGN_OR_MISSING_ORIGIN",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "FOREIGN_OR_MISSING_ORIGIN",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "origin_checked_before_authorization"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-INACTIVE_MEMBERSHIP",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-REVOKED_MEMBERSHIP",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-WRONG_LOCATION",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "WRONG_LOCATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-TARGET_NONEXISTENT",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-TARGET_OTHER_TENANT",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-TARGET_OTHER_LOCATION",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "TARGET_OTHER_LOCATION",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-CAPABILITY_REVOKED_MID_SESSION",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "CAPABILITY_REVOKED_MID_SESSION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "no_relogin_required"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-INVALID_BODY_AFTER_AUTHORIZATION",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "INVALID_BODY_AFTER_AUTHORIZATION",
+   "expected_status": 400,
+   "expected_code": "INVALID_REQUEST",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-TARGET_HAS_MEMBERSHIP_IN_OTHER_ORGANIZATION",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "TARGET_HAS_MEMBERSHIP_IN_OTHER_ORGANIZATION",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_identical_to_TARGET_NONEXISTENT",
+    "no_other_tenant_inference"
+   ]
+  },
+  {
+   "case_id": "C14-OffboardIdentity-VALID",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "audit_committed_with_mutation"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeApplicationSession-NO_SESSION",
+   "operation": "RevokeApplicationSession",
+   "capability": "identity.session.revoke",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeApplicationSession-MALFORMED_SESSION",
+   "operation": "RevokeApplicationSession",
+   "capability": "identity.session.revoke",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeApplicationSession-EXPIRED_SESSION",
+   "operation": "RevokeApplicationSession",
+   "capability": "identity.session.revoke",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeApplicationSession-REVOKED_SESSION",
+   "operation": "RevokeApplicationSession",
+   "capability": "identity.session.revoke",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeApplicationSession-FOREIGN_OR_MISSING_ORIGIN",
+   "operation": "RevokeApplicationSession",
+   "capability": "identity.session.revoke",
+   "scenario": "FOREIGN_OR_MISSING_ORIGIN",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "origin_checked_before_authorization"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeApplicationSession-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "RevokeApplicationSession",
+   "capability": "identity.session.revoke",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeApplicationSession-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "RevokeApplicationSession",
+   "capability": "identity.session.revoke",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeApplicationSession-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "RevokeApplicationSession",
+   "capability": "identity.session.revoke",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeApplicationSession-ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "operation": "RevokeApplicationSession",
+   "capability": "identity.session.revoke",
+   "scenario": "ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeApplicationSession-TARGET_NONEXISTENT",
+   "operation": "RevokeApplicationSession",
+   "capability": "identity.session.revoke",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeApplicationSession-TARGET_OTHER_TENANT",
+   "operation": "RevokeApplicationSession",
+   "capability": "identity.session.revoke",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeApplicationSession-TARGET_OWNED_BY_OTHER_IDENTITY",
+   "operation": "RevokeApplicationSession",
+   "capability": "identity.session.revoke",
+   "scenario": "TARGET_OWNED_BY_OTHER_IDENTITY",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeApplicationSession-CAPABILITY_REVOKED_MID_SESSION",
+   "operation": "RevokeApplicationSession",
+   "capability": "identity.session.revoke",
+   "scenario": "CAPABILITY_REVOKED_MID_SESSION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "no_relogin_required"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeApplicationSession-INVALID_BODY_AFTER_AUTHORIZATION",
+   "operation": "RevokeApplicationSession",
+   "capability": "identity.session.revoke",
+   "scenario": "INVALID_BODY_AFTER_AUTHORIZATION",
+   "expected_status": 400,
+   "expected_code": "INVALID_REQUEST",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeApplicationSession-VALID",
+   "operation": "RevokeApplicationSession",
+   "capability": "identity.session.revoke",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "audit_committed_with_mutation"
+   ]
+  },
+  {
+   "case_id": "C14-CreateMembership-NO_ROUTE",
+   "operation": "CreateMembership",
+   "capability": "organization.membership.create",
+   "scenario": "NO_ROUTE",
+   "expected_status": null,
+   "expected_code": null,
+   "assertions": [
+    "no_mounted_route_maps_to_operation",
+    "registry_marks_internal"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-NO_SESSION",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-MALFORMED_SESSION",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-EXPIRED_SESSION",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-REVOKED_SESSION",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-FOREIGN_OR_MISSING_ORIGIN",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "FOREIGN_OR_MISSING_ORIGIN",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "origin_checked_before_authorization"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-INACTIVE_MEMBERSHIP",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-REVOKED_MEMBERSHIP",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-WRONG_LOCATION",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "WRONG_LOCATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-TARGET_NONEXISTENT",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-TARGET_OTHER_TENANT",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-TARGET_OTHER_LOCATION",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "TARGET_OTHER_LOCATION",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-CAPABILITY_REVOKED_MID_SESSION",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "CAPABILITY_REVOKED_MID_SESSION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "no_relogin_required"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-INVALID_BODY_AFTER_AUTHORIZATION",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "INVALID_BODY_AFTER_AUTHORIZATION",
+   "expected_status": 400,
+   "expected_code": "INVALID_REQUEST",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-DeactivateMembership-VALID",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "audit_committed_with_mutation"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-NO_SESSION",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-MALFORMED_SESSION",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-EXPIRED_SESSION",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-REVOKED_SESSION",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-FOREIGN_OR_MISSING_ORIGIN",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "FOREIGN_OR_MISSING_ORIGIN",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "origin_checked_before_authorization"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-INACTIVE_MEMBERSHIP",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-REVOKED_MEMBERSHIP",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-TARGET_NONEXISTENT",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-TARGET_OTHER_TENANT",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-CAPABILITY_REVOKED_MID_SESSION",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "CAPABILITY_REVOKED_MID_SESSION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "no_relogin_required"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-INVALID_BODY_AFTER_AUTHORIZATION",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "INVALID_BODY_AFTER_AUTHORIZATION",
+   "expected_status": 400,
+   "expected_code": "INVALID_REQUEST",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeMembership-VALID",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "audit_committed_with_mutation"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-NO_SESSION",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-MALFORMED_SESSION",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-EXPIRED_SESSION",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-REVOKED_SESSION",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-FOREIGN_OR_MISSING_ORIGIN",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "FOREIGN_OR_MISSING_ORIGIN",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "origin_checked_before_authorization"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-INACTIVE_MEMBERSHIP",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-REVOKED_MEMBERSHIP",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-WRONG_LOCATION",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "WRONG_LOCATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-TARGET_NONEXISTENT",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-TARGET_OTHER_TENANT",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-TARGET_OTHER_LOCATION",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "TARGET_OTHER_LOCATION",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-CAPABILITY_REVOKED_MID_SESSION",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "CAPABILITY_REVOKED_MID_SESSION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "no_relogin_required"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-INVALID_BODY_AFTER_AUTHORIZATION",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "INVALID_BODY_AFTER_AUTHORIZATION",
+   "expected_status": 400,
+   "expected_code": "INVALID_REQUEST",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-AssignContent-VALID",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "audit_committed_with_mutation"
+   ]
+  },
+  {
+   "case_id": "C14-StartLearningSession-NO_SESSION",
+   "operation": "StartLearningSession",
+   "capability": "learning.session.start",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-StartLearningSession-MALFORMED_SESSION",
+   "operation": "StartLearningSession",
+   "capability": "learning.session.start",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-StartLearningSession-EXPIRED_SESSION",
+   "operation": "StartLearningSession",
+   "capability": "learning.session.start",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-StartLearningSession-REVOKED_SESSION",
+   "operation": "StartLearningSession",
+   "capability": "learning.session.start",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-StartLearningSession-FOREIGN_OR_MISSING_ORIGIN",
+   "operation": "StartLearningSession",
+   "capability": "learning.session.start",
+   "scenario": "FOREIGN_OR_MISSING_ORIGIN",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "origin_checked_before_authorization"
+   ]
+  },
+  {
+   "case_id": "C14-StartLearningSession-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "StartLearningSession",
+   "capability": "learning.session.start",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-StartLearningSession-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "StartLearningSession",
+   "capability": "learning.session.start",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-StartLearningSession-ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "operation": "StartLearningSession",
+   "capability": "learning.session.start",
+   "scenario": "ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-StartLearningSession-TARGET_NONEXISTENT",
+   "operation": "StartLearningSession",
+   "capability": "learning.session.start",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-StartLearningSession-TARGET_OTHER_TENANT",
+   "operation": "StartLearningSession",
+   "capability": "learning.session.start",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-StartLearningSession-TARGET_OWNED_BY_OTHER_IDENTITY",
+   "operation": "StartLearningSession",
+   "capability": "learning.session.start",
+   "scenario": "TARGET_OWNED_BY_OTHER_IDENTITY",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-StartLearningSession-CAPABILITY_REVOKED_MID_SESSION",
+   "operation": "StartLearningSession",
+   "capability": "learning.session.start",
+   "scenario": "CAPABILITY_REVOKED_MID_SESSION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "no_relogin_required"
+   ]
+  },
+  {
+   "case_id": "C14-StartLearningSession-INVALID_BODY_AFTER_AUTHORIZATION",
+   "operation": "StartLearningSession",
+   "capability": "learning.session.start",
+   "scenario": "INVALID_BODY_AFTER_AUTHORIZATION",
+   "expected_status": 400,
+   "expected_code": "INVALID_REQUEST",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-StartLearningSession-VALID",
+   "operation": "StartLearningSession",
+   "capability": "learning.session.start",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "audit_committed_with_mutation"
+   ]
+  },
+  {
+   "case_id": "C14-RecordProgressEvent-NO_SESSION",
+   "operation": "RecordProgressEvent",
+   "capability": "learning.progress.record",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RecordProgressEvent-MALFORMED_SESSION",
+   "operation": "RecordProgressEvent",
+   "capability": "learning.progress.record",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RecordProgressEvent-EXPIRED_SESSION",
+   "operation": "RecordProgressEvent",
+   "capability": "learning.progress.record",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RecordProgressEvent-REVOKED_SESSION",
+   "operation": "RecordProgressEvent",
+   "capability": "learning.progress.record",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RecordProgressEvent-FOREIGN_OR_MISSING_ORIGIN",
+   "operation": "RecordProgressEvent",
+   "capability": "learning.progress.record",
+   "scenario": "FOREIGN_OR_MISSING_ORIGIN",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "origin_checked_before_authorization"
+   ]
+  },
+  {
+   "case_id": "C14-RecordProgressEvent-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "RecordProgressEvent",
+   "capability": "learning.progress.record",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RecordProgressEvent-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "RecordProgressEvent",
+   "capability": "learning.progress.record",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RecordProgressEvent-ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "operation": "RecordProgressEvent",
+   "capability": "learning.progress.record",
+   "scenario": "ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RecordProgressEvent-TARGET_NONEXISTENT",
+   "operation": "RecordProgressEvent",
+   "capability": "learning.progress.record",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-RecordProgressEvent-TARGET_OTHER_TENANT",
+   "operation": "RecordProgressEvent",
+   "capability": "learning.progress.record",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-RecordProgressEvent-TARGET_OWNED_BY_OTHER_IDENTITY",
+   "operation": "RecordProgressEvent",
+   "capability": "learning.progress.record",
+   "scenario": "TARGET_OWNED_BY_OTHER_IDENTITY",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-RecordProgressEvent-CAPABILITY_REVOKED_MID_SESSION",
+   "operation": "RecordProgressEvent",
+   "capability": "learning.progress.record",
+   "scenario": "CAPABILITY_REVOKED_MID_SESSION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "no_relogin_required"
+   ]
+  },
+  {
+   "case_id": "C14-RecordProgressEvent-INVALID_BODY_AFTER_AUTHORIZATION",
+   "operation": "RecordProgressEvent",
+   "capability": "learning.progress.record",
+   "scenario": "INVALID_BODY_AFTER_AUTHORIZATION",
+   "expected_status": 400,
+   "expected_code": "INVALID_REQUEST",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-RecordProgressEvent-VALID",
+   "operation": "RecordProgressEvent",
+   "capability": "learning.progress.record",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "audit_committed_with_mutation"
+   ]
+  },
+  {
+   "case_id": "C14-CompleteLearningSession-NO_SESSION",
+   "operation": "CompleteLearningSession",
+   "capability": "learning.session.complete",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-CompleteLearningSession-MALFORMED_SESSION",
+   "operation": "CompleteLearningSession",
+   "capability": "learning.session.complete",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-CompleteLearningSession-EXPIRED_SESSION",
+   "operation": "CompleteLearningSession",
+   "capability": "learning.session.complete",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-CompleteLearningSession-REVOKED_SESSION",
+   "operation": "CompleteLearningSession",
+   "capability": "learning.session.complete",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-CompleteLearningSession-FOREIGN_OR_MISSING_ORIGIN",
+   "operation": "CompleteLearningSession",
+   "capability": "learning.session.complete",
+   "scenario": "FOREIGN_OR_MISSING_ORIGIN",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "origin_checked_before_authorization"
+   ]
+  },
+  {
+   "case_id": "C14-CompleteLearningSession-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "CompleteLearningSession",
+   "capability": "learning.session.complete",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-CompleteLearningSession-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "CompleteLearningSession",
+   "capability": "learning.session.complete",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-CompleteLearningSession-ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "operation": "CompleteLearningSession",
+   "capability": "learning.session.complete",
+   "scenario": "ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-CompleteLearningSession-TARGET_NONEXISTENT",
+   "operation": "CompleteLearningSession",
+   "capability": "learning.session.complete",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-CompleteLearningSession-TARGET_OTHER_TENANT",
+   "operation": "CompleteLearningSession",
+   "capability": "learning.session.complete",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-CompleteLearningSession-TARGET_OWNED_BY_OTHER_IDENTITY",
+   "operation": "CompleteLearningSession",
+   "capability": "learning.session.complete",
+   "scenario": "TARGET_OWNED_BY_OTHER_IDENTITY",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-CompleteLearningSession-CAPABILITY_REVOKED_MID_SESSION",
+   "operation": "CompleteLearningSession",
+   "capability": "learning.session.complete",
+   "scenario": "CAPABILITY_REVOKED_MID_SESSION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "no_relogin_required"
+   ]
+  },
+  {
+   "case_id": "C14-CompleteLearningSession-INVALID_BODY_AFTER_AUTHORIZATION",
+   "operation": "CompleteLearningSession",
+   "capability": "learning.session.complete",
+   "scenario": "INVALID_BODY_AFTER_AUTHORIZATION",
+   "expected_status": 400,
+   "expected_code": "INVALID_REQUEST",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-CompleteLearningSession-VALID",
+   "operation": "CompleteLearningSession",
+   "capability": "learning.session.complete",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "audit_committed_with_mutation"
+   ]
+  },
+  {
+   "case_id": "C14-PublishContentPack-NO_SESSION",
+   "operation": "PublishContentPack",
+   "capability": "content.pack.publish",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-PublishContentPack-MALFORMED_SESSION",
+   "operation": "PublishContentPack",
+   "capability": "content.pack.publish",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-PublishContentPack-EXPIRED_SESSION",
+   "operation": "PublishContentPack",
+   "capability": "content.pack.publish",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-PublishContentPack-REVOKED_SESSION",
+   "operation": "PublishContentPack",
+   "capability": "content.pack.publish",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-PublishContentPack-FOREIGN_OR_MISSING_ORIGIN",
+   "operation": "PublishContentPack",
+   "capability": "content.pack.publish",
+   "scenario": "FOREIGN_OR_MISSING_ORIGIN",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "origin_checked_before_authorization"
+   ]
+  },
+  {
+   "case_id": "C14-PublishContentPack-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "PublishContentPack",
+   "capability": "content.pack.publish",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-PublishContentPack-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "PublishContentPack",
+   "capability": "content.pack.publish",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-PublishContentPack-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "PublishContentPack",
+   "capability": "content.pack.publish",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-PublishContentPack-ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "operation": "PublishContentPack",
+   "capability": "content.pack.publish",
+   "scenario": "ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-PublishContentPack-ANY_ACTOR",
+   "operation": "PublishContentPack",
+   "capability": "content.pack.publish",
+   "scenario": "ANY_ACTOR",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "registry_marks_blocked"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-NO_SESSION",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-MALFORMED_SESSION",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-EXPIRED_SESSION",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-REVOKED_SESSION",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-FOREIGN_OR_MISSING_ORIGIN",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "FOREIGN_OR_MISSING_ORIGIN",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "origin_checked_before_authorization"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-INACTIVE_MEMBERSHIP",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-REVOKED_MEMBERSHIP",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-WRONG_LOCATION",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "WRONG_LOCATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-TARGET_NONEXISTENT",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-TARGET_OTHER_TENANT",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-TARGET_OTHER_LOCATION",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "TARGET_OTHER_LOCATION",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-CAPABILITY_REVOKED_MID_SESSION",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "CAPABILITY_REVOKED_MID_SESSION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "no_relogin_required"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-INVALID_BODY_AFTER_AUTHORIZATION",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "INVALID_BODY_AFTER_AUTHORIZATION",
+   "expected_status": 400,
+   "expected_code": "INVALID_REQUEST",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-SELF_OBSERVATION",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "SELF_OBSERVATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-IssueCertification-NO_APPROVED_CRITERIA_VERSION",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scenario": "NO_APPROVED_CRITERIA_VERSION",
+   "expected_status": 409,
+   "expected_code": "PRECONDITION_FAILED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-NO_SESSION",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-MALFORMED_SESSION",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-EXPIRED_SESSION",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-REVOKED_SESSION",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-FOREIGN_OR_MISSING_ORIGIN",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "FOREIGN_OR_MISSING_ORIGIN",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "origin_checked_before_authorization"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-INACTIVE_MEMBERSHIP",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-REVOKED_MEMBERSHIP",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-TARGET_NONEXISTENT",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-TARGET_OTHER_TENANT",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-CAPABILITY_REVOKED_MID_SESSION",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "CAPABILITY_REVOKED_MID_SESSION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "no_relogin_required"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-INVALID_BODY_AFTER_AUTHORIZATION",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "INVALID_BODY_AFTER_AUTHORIZATION",
+   "expected_status": 400,
+   "expected_code": "INVALID_REQUEST",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-RevokeCertification-VALID",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "audit_committed_with_mutation"
+   ]
+  },
+  {
+   "case_id": "C14-ReconcileExternalEffect-NO_SESSION",
+   "operation": "ReconcileExternalEffect",
+   "capability": "transaction.reconciliation.resolve",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReconcileExternalEffect-MALFORMED_SESSION",
+   "operation": "ReconcileExternalEffect",
+   "capability": "transaction.reconciliation.resolve",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReconcileExternalEffect-EXPIRED_SESSION",
+   "operation": "ReconcileExternalEffect",
+   "capability": "transaction.reconciliation.resolve",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReconcileExternalEffect-REVOKED_SESSION",
+   "operation": "ReconcileExternalEffect",
+   "capability": "transaction.reconciliation.resolve",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReconcileExternalEffect-UNREGISTERED_PRINCIPAL",
+   "operation": "ReconcileExternalEffect",
+   "capability": "transaction.reconciliation.resolve",
+   "scenario": "UNREGISTERED_PRINCIPAL",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReconcileExternalEffect-HUMAN_ACTOR_ANY_BUNDLE",
+   "operation": "ReconcileExternalEffect",
+   "capability": "transaction.reconciliation.resolve",
+   "scenario": "HUMAN_ACTOR_ANY_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReconcileExternalEffect-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "ReconcileExternalEffect",
+   "capability": "transaction.reconciliation.resolve",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReconcileExternalEffect-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "ReconcileExternalEffect",
+   "capability": "transaction.reconciliation.resolve",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReconcileExternalEffect-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "ReconcileExternalEffect",
+   "capability": "transaction.reconciliation.resolve",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReconcileExternalEffect-ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "operation": "ReconcileExternalEffect",
+   "capability": "transaction.reconciliation.resolve",
+   "scenario": "ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReconcileExternalEffect-ANY_ACTOR",
+   "operation": "ReconcileExternalEffect",
+   "capability": "transaction.reconciliation.resolve",
+   "scenario": "ANY_ACTOR",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "registry_marks_blocked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadCurrentSession-NO_SESSION",
+   "operation": "ReadCurrentSession",
+   "capability": "identity.session.read",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadCurrentSession-MALFORMED_SESSION",
+   "operation": "ReadCurrentSession",
+   "capability": "identity.session.read",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadCurrentSession-EXPIRED_SESSION",
+   "operation": "ReadCurrentSession",
+   "capability": "identity.session.read",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadCurrentSession-REVOKED_SESSION",
+   "operation": "ReadCurrentSession",
+   "capability": "identity.session.read",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadCurrentSession-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "ReadCurrentSession",
+   "capability": "identity.session.read",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadCurrentSession-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "ReadCurrentSession",
+   "capability": "identity.session.read",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadCurrentSession-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "ReadCurrentSession",
+   "capability": "identity.session.read",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadCurrentSession-ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "operation": "ReadCurrentSession",
+   "capability": "identity.session.read",
+   "scenario": "ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadCurrentSession-TARGET_NONEXISTENT",
+   "operation": "ReadCurrentSession",
+   "capability": "identity.session.read",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-ReadCurrentSession-TARGET_OTHER_TENANT",
+   "operation": "ReadCurrentSession",
+   "capability": "identity.session.read",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-ReadCurrentSession-TARGET_OWNED_BY_OTHER_IDENTITY",
+   "operation": "ReadCurrentSession",
+   "capability": "identity.session.read",
+   "scenario": "TARGET_OWNED_BY_OTHER_IDENTITY",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ReadCurrentSession-VALID",
+   "operation": "ReadCurrentSession",
+   "capability": "identity.session.read",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnMemberships-NO_SESSION",
+   "operation": "ListOwnMemberships",
+   "capability": "organization.membership.read_self",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnMemberships-MALFORMED_SESSION",
+   "operation": "ListOwnMemberships",
+   "capability": "organization.membership.read_self",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnMemberships-EXPIRED_SESSION",
+   "operation": "ListOwnMemberships",
+   "capability": "organization.membership.read_self",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnMemberships-REVOKED_SESSION",
+   "operation": "ListOwnMemberships",
+   "capability": "organization.membership.read_self",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnMemberships-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "ListOwnMemberships",
+   "capability": "organization.membership.read_self",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnMemberships-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "ListOwnMemberships",
+   "capability": "organization.membership.read_self",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnMemberships-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "ListOwnMemberships",
+   "capability": "organization.membership.read_self",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnMemberships-ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "operation": "ListOwnMemberships",
+   "capability": "organization.membership.read_self",
+   "scenario": "ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnMemberships-TARGET_NONEXISTENT",
+   "operation": "ListOwnMemberships",
+   "capability": "organization.membership.read_self",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnMemberships-TARGET_OTHER_TENANT",
+   "operation": "ListOwnMemberships",
+   "capability": "organization.membership.read_self",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnMemberships-TARGET_OWNED_BY_OTHER_IDENTITY",
+   "operation": "ListOwnMemberships",
+   "capability": "organization.membership.read_self",
+   "scenario": "TARGET_OWNED_BY_OTHER_IDENTITY",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnMemberships-VALID",
+   "operation": "ListOwnMemberships",
+   "capability": "organization.membership.read_self",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnAssignments-NO_SESSION",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnAssignments-MALFORMED_SESSION",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnAssignments-EXPIRED_SESSION",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnAssignments-REVOKED_SESSION",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnAssignments-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnAssignments-INACTIVE_MEMBERSHIP",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnAssignments-REVOKED_MEMBERSHIP",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnAssignments-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnAssignments-WRONG_LOCATION",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scenario": "WRONG_LOCATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnAssignments-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnAssignments-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnAssignments-ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scenario": "ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnAssignments-TARGET_NONEXISTENT",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnAssignments-TARGET_OTHER_TENANT",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnAssignments-TARGET_OTHER_LOCATION",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scenario": "TARGET_OTHER_LOCATION",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnAssignments-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnAssignments-VALID",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAssignedContentVersion-NO_SESSION",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAssignedContentVersion-MALFORMED_SESSION",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAssignedContentVersion-EXPIRED_SESSION",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAssignedContentVersion-REVOKED_SESSION",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAssignedContentVersion-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAssignedContentVersion-INACTIVE_MEMBERSHIP",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAssignedContentVersion-REVOKED_MEMBERSHIP",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAssignedContentVersion-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAssignedContentVersion-WRONG_LOCATION",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scenario": "WRONG_LOCATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAssignedContentVersion-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAssignedContentVersion-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAssignedContentVersion-ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scenario": "ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAssignedContentVersion-TARGET_NONEXISTENT",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAssignedContentVersion-TARGET_OTHER_TENANT",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAssignedContentVersion-TARGET_OTHER_LOCATION",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scenario": "TARGET_OTHER_LOCATION",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAssignedContentVersion-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAssignedContentVersion-VALID",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ReadOwnLearnerState-NO_SESSION",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadOwnLearnerState-MALFORMED_SESSION",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadOwnLearnerState-EXPIRED_SESSION",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadOwnLearnerState-REVOKED_SESSION",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadOwnLearnerState-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-ReadOwnLearnerState-INACTIVE_MEMBERSHIP",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadOwnLearnerState-REVOKED_MEMBERSHIP",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadOwnLearnerState-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadOwnLearnerState-WRONG_LOCATION",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scenario": "WRONG_LOCATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadOwnLearnerState-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadOwnLearnerState-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadOwnLearnerState-ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scenario": "ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadOwnLearnerState-TARGET_NONEXISTENT",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-ReadOwnLearnerState-TARGET_OTHER_TENANT",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-ReadOwnLearnerState-TARGET_OTHER_LOCATION",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scenario": "TARGET_OTHER_LOCATION",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ReadOwnLearnerState-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadOwnLearnerState-VALID",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnCertifications-NO_SESSION",
+   "operation": "ListOwnCertifications",
+   "capability": "certification.credential.read_self",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnCertifications-MALFORMED_SESSION",
+   "operation": "ListOwnCertifications",
+   "capability": "certification.credential.read_self",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnCertifications-EXPIRED_SESSION",
+   "operation": "ListOwnCertifications",
+   "capability": "certification.credential.read_self",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnCertifications-REVOKED_SESSION",
+   "operation": "ListOwnCertifications",
+   "capability": "certification.credential.read_self",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnCertifications-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "ListOwnCertifications",
+   "capability": "certification.credential.read_self",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnCertifications-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "ListOwnCertifications",
+   "capability": "certification.credential.read_self",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnCertifications-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "ListOwnCertifications",
+   "capability": "certification.credential.read_self",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnCertifications-ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "operation": "ListOwnCertifications",
+   "capability": "certification.credential.read_self",
+   "scenario": "ACTOR_WITH_ONLY_ORG_ADMIN_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnCertifications-TARGET_NONEXISTENT",
+   "operation": "ListOwnCertifications",
+   "capability": "certification.credential.read_self",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnCertifications-TARGET_OTHER_TENANT",
+   "operation": "ListOwnCertifications",
+   "capability": "certification.credential.read_self",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnCertifications-TARGET_OWNED_BY_OTHER_IDENTITY",
+   "operation": "ListOwnCertifications",
+   "capability": "certification.credential.read_self",
+   "scenario": "TARGET_OWNED_BY_OTHER_IDENTITY",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ListOwnCertifications-VALID",
+   "operation": "ListOwnCertifications",
+   "capability": "certification.credential.read_self",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ListTeam-NO_SESSION",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListTeam-MALFORMED_SESSION",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListTeam-EXPIRED_SESSION",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListTeam-REVOKED_SESSION",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListTeam-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-ListTeam-INACTIVE_MEMBERSHIP",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListTeam-REVOKED_MEMBERSHIP",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListTeam-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListTeam-WRONG_LOCATION",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scenario": "WRONG_LOCATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListTeam-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListTeam-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListTeam-TARGET_NONEXISTENT",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-ListTeam-TARGET_OTHER_TENANT",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-ListTeam-TARGET_OTHER_LOCATION",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scenario": "TARGET_OTHER_LOCATION",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ListTeam-MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scenario": "MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ListTeam-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListTeam-VALID",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ReadTeamMemberLearnerState-NO_SESSION",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadTeamMemberLearnerState-MALFORMED_SESSION",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadTeamMemberLearnerState-EXPIRED_SESSION",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadTeamMemberLearnerState-REVOKED_SESSION",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadTeamMemberLearnerState-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-ReadTeamMemberLearnerState-INACTIVE_MEMBERSHIP",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadTeamMemberLearnerState-REVOKED_MEMBERSHIP",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadTeamMemberLearnerState-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadTeamMemberLearnerState-WRONG_LOCATION",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scenario": "WRONG_LOCATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadTeamMemberLearnerState-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadTeamMemberLearnerState-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadTeamMemberLearnerState-TARGET_NONEXISTENT",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-ReadTeamMemberLearnerState-TARGET_OTHER_TENANT",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-ReadTeamMemberLearnerState-TARGET_OTHER_LOCATION",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scenario": "TARGET_OTHER_LOCATION",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ReadTeamMemberLearnerState-MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scenario": "MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ReadTeamMemberLearnerState-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadTeamMemberLearnerState-VALID",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ListInvitations-NO_SESSION",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListInvitations-MALFORMED_SESSION",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListInvitations-EXPIRED_SESSION",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListInvitations-REVOKED_SESSION",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListInvitations-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-ListInvitations-INACTIVE_MEMBERSHIP",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListInvitations-REVOKED_MEMBERSHIP",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListInvitations-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListInvitations-WRONG_LOCATION",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scenario": "WRONG_LOCATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListInvitations-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListInvitations-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListInvitations-TARGET_NONEXISTENT",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-ListInvitations-TARGET_OTHER_TENANT",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-ListInvitations-TARGET_OTHER_LOCATION",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scenario": "TARGET_OTHER_LOCATION",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ListInvitations-MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scenario": "MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ListInvitations-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ListInvitations-VALID",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-VerifyCertification-NO_SESSION",
+   "operation": "VerifyCertification",
+   "capability": "certification.credential.verify",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-VerifyCertification-MALFORMED_SESSION",
+   "operation": "VerifyCertification",
+   "capability": "certification.credential.verify",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-VerifyCertification-EXPIRED_SESSION",
+   "operation": "VerifyCertification",
+   "capability": "certification.credential.verify",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-VerifyCertification-REVOKED_SESSION",
+   "operation": "VerifyCertification",
+   "capability": "certification.credential.verify",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-VerifyCertification-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "VerifyCertification",
+   "capability": "certification.credential.verify",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-VerifyCertification-INACTIVE_MEMBERSHIP",
+   "operation": "VerifyCertification",
+   "capability": "certification.credential.verify",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-VerifyCertification-REVOKED_MEMBERSHIP",
+   "operation": "VerifyCertification",
+   "capability": "certification.credential.verify",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-VerifyCertification-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "VerifyCertification",
+   "capability": "certification.credential.verify",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-VerifyCertification-WRONG_LOCATION",
+   "operation": "VerifyCertification",
+   "capability": "certification.credential.verify",
+   "scenario": "WRONG_LOCATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-VerifyCertification-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "VerifyCertification",
+   "capability": "certification.credential.verify",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-VerifyCertification-TARGET_NONEXISTENT",
+   "operation": "VerifyCertification",
+   "capability": "certification.credential.verify",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-VerifyCertification-TARGET_OTHER_TENANT",
+   "operation": "VerifyCertification",
+   "capability": "certification.credential.verify",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-VerifyCertification-TARGET_OTHER_LOCATION",
+   "operation": "VerifyCertification",
+   "capability": "certification.credential.verify",
+   "scenario": "TARGET_OTHER_LOCATION",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-VerifyCertification-MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "operation": "VerifyCertification",
+   "capability": "certification.credential.verify",
+   "scenario": "MANAGER_TARGET_NOT_DIRECT_REPORT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-VerifyCertification-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "VerifyCertification",
+   "capability": "certification.credential.verify",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-VerifyCertification-VALID",
+   "operation": "VerifyCertification",
+   "capability": "certification.credential.verify",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAuditEvents-NO_SESSION",
+   "operation": "ReadAuditEvents",
+   "capability": "audit.event.read",
+   "scenario": "NO_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAuditEvents-MALFORMED_SESSION",
+   "operation": "ReadAuditEvents",
+   "capability": "audit.event.read",
+   "scenario": "MALFORMED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAuditEvents-EXPIRED_SESSION",
+   "operation": "ReadAuditEvents",
+   "capability": "audit.event.read",
+   "scenario": "EXPIRED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAuditEvents-REVOKED_SESSION",
+   "operation": "ReadAuditEvents",
+   "capability": "audit.event.read",
+   "scenario": "REVOKED_SESSION",
+   "expected_status": 401,
+   "expected_code": "UNAUTHENTICATED",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAuditEvents-NO_MEMBERSHIP_IN_ORGANIZATION",
+   "operation": "ReadAuditEvents",
+   "capability": "audit.event.read",
+   "scenario": "NO_MEMBERSHIP_IN_ORGANIZATION",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked",
+    "body_identical_for_nonexistent_organization"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAuditEvents-INACTIVE_MEMBERSHIP",
+   "operation": "ReadAuditEvents",
+   "capability": "audit.event.read",
+   "scenario": "INACTIVE_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAuditEvents-REVOKED_MEMBERSHIP",
+   "operation": "ReadAuditEvents",
+   "capability": "audit.event.read",
+   "scenario": "REVOKED_MEMBERSHIP",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAuditEvents-AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "operation": "ReadAuditEvents",
+   "capability": "audit.event.read",
+   "scenario": "AMBIGUOUS_OR_MISSING_SCOPE_TUPLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAuditEvents-ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "operation": "ReadAuditEvents",
+   "capability": "audit.event.read",
+   "scenario": "ACTOR_WITH_ONLY_LEARNER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAuditEvents-ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "operation": "ReadAuditEvents",
+   "capability": "audit.event.read",
+   "scenario": "ACTOR_WITH_ONLY_OBSERVER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAuditEvents-ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "operation": "ReadAuditEvents",
+   "capability": "audit.event.read",
+   "scenario": "ACTOR_WITH_ONLY_MANAGER_BUNDLE",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAuditEvents-TARGET_NONEXISTENT",
+   "operation": "ReadAuditEvents",
+   "capability": "audit.event.read",
+   "scenario": "TARGET_NONEXISTENT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "body_bytes_equal_except_requestId:TARGET_OTHER_TENANT"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAuditEvents-TARGET_OTHER_TENANT",
+   "operation": "ReadAuditEvents",
+   "capability": "audit.event.read",
+   "scenario": "TARGET_OTHER_TENANT",
+   "expected_status": 404,
+   "expected_code": "NOT_FOUND",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "no_target_fields_in_body"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAuditEvents-ENTITLEMENT_REMOVES_EFFECT",
+   "operation": "ReadAuditEvents",
+   "capability": "audit.event.read",
+   "scenario": "ENTITLEMENT_REMOVES_EFFECT",
+   "expected_status": 403,
+   "expected_code": "FORBIDDEN",
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects",
+    "handler_not_invoked"
+   ]
+  },
+  {
+   "case_id": "C14-ReadAuditEvents-VALID",
+   "operation": "ReadAuditEvents",
+   "capability": "audit.event.read",
+   "scenario": "VALID",
+   "expected_status": "2xx",
+   "expected_code": null,
+   "assertions": [
+    "zero_persisted_writes",
+    "zero_external_effects"
+   ]
+  }
+ ],
+ "registry_cases": [
+  {
+   "case_id": "C14-REG-UNREGISTERED-ROUTE",
+   "setup": "A mounted route with no registry entry",
+   "expected": "CI and startup fail (AUTHZ-AC-1)"
+  },
+  {
+   "case_id": "C14-REG-UNKNOWN-OPERATION-REQUEST",
+   "setup": "Request to a path that exists in code but not in the registry",
+   "expected": "Denied before handler; handler_not_invoked (AUTHZ-AC-2)"
+  },
+  {
+   "case_id": "C14-REG-UNKNOWN-CAPABILITY-IN-BUNDLE",
+   "setup": "A bundle lists a capability absent from the matrix or K00",
+   "expected": "Matrix validation fails; startup refuses to load"
+  },
+  {
+   "case_id": "C14-REG-UNKNOWN-SCOPE-CLASS",
+   "setup": "An operation declares a scope not in the scopes table",
+   "expected": "Matrix validation fails"
+  },
+  {
+   "case_id": "C14-REG-DUPLICATE-CAPABILITY",
+   "setup": "Two operations share one capability",
+   "expected": "Matrix validation fails (AUTHZ-2)"
+  },
+  {
+   "case_id": "C14-REG-DUPLICATE-OPERATION",
+   "setup": "Two rows for one command",
+   "expected": "Matrix validation fails"
+  },
+  {
+   "case_id": "C14-REG-MISSING-OWNER",
+   "setup": "An operation with no owning domain or transaction owner",
+   "expected": "Matrix validation fails (#67)"
+  },
+  {
+   "case_id": "C14-REG-MEMBERSHIP-SCOPE-CHANGED",
+   "setup": "Actor membership moves to another location between two requests",
+   "expected": "Second request 403 on the old tuple without re-login (AUTHZ-10, TEN-4)"
+  }
+ ]
+}

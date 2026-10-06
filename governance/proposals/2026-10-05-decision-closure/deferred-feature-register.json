@@ -1,0 +1,192 @@
+{
+ "x-document": {
+  "doc_id": "TEACH-PROP-DCS-08-DATA",
+  "class": "decision-table",
+  "version": "0.1.0",
+  "status": "proposed",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-05",
+  "updated_on": "2026-10-05"
+ },
+ "entries": [
+  {
+   "oq": "OQ-AGT-2",
+   "contract": "C02",
+   "feature": "Runtime AI agents",
+   "registered_state": "DISABLED",
+   "fail_closed_behavior": "No RuntimeAgent principal, capability or tool boundary exists; any request claiming RuntimeAgent actor class is rejected 403 at C14 step 4.",
+   "disabled_proof_check": "automation-principals.json contains no actor_class RuntimeAgent; static check: no LLM SDK import under src/ outside an approved module list (list empty).",
+   "re_enable_trigger": "Named use case + dedicated C02 revision defining AgentIdentity, AgentCapability, tool/command boundary, decision evidence, human approval/escalation, failure/recovery (AGT-16).",
+   "selection_token": "DEFER_RUNTIME_AGENTS",
+   "requirements": [
+    "AGT-1",
+    "AGT-2",
+    "AGT-16"
+   ],
+   "residual_owner_value": null
+  },
+  {
+   "oq": "OQ-ANL-1",
+   "contract": "C61",
+   "feature": "Product analytics",
+   "registered_state": "DISABLED",
+   "fail_closed_behavior": "No analytics SDK, beacon or provider call; no analytics events emitted.",
+   "disabled_proof_check": "Bundle scan of built web assets for known analytics endpoints/SDK names returns zero; network capture during E2E core paths shows no third-party analytics request.",
+   "re_enable_trigger": "Owner enablement decision naming provider, event schema v1 and the ANL-7 field list (C61 revision).",
+   "selection_token": "REMAIN_DISABLED",
+   "requirements": [
+    "ANL-1",
+    "PRIV-5"
+   ],
+   "residual_owner_value": null
+  },
+  {
+   "oq": "OQ-ANL-2",
+   "contract": "C61",
+   "feature": "Identifying fields in analytics",
+   "registered_state": "NONE_PERMITTED",
+   "fail_closed_behavior": "If analytics is ever enabled, the approved identifying-field list starts empty.",
+   "disabled_proof_check": "Schema check on any future analytics event definitions: zero fields classified DIRECT_IDENTIFIER or OPAQUE_LINK to Identity.",
+   "re_enable_trigger": "C61 revision approving a minimum field list.",
+   "selection_token": "NO_IDENTIFYING_ANALYTICS_FIELDS",
+   "requirements": [
+    "ANL-7"
+   ],
+   "residual_owner_value": null
+  },
+  {
+   "oq": "OQ-PWA-1",
+   "contract": "C62",
+   "feature": "Offline writes",
+   "registered_state": "NOT_AUTHORIZED",
+   "fail_closed_behavior": "Every mutation requires connectivity (LRN-12); offline UI shows a not-sent state and never claims success (PWA-4); no client write queue exists (PWA-9).",
+   "disabled_proof_check": "Service-worker source contains no fetch handler for non-GET methods and no IndexedDB/Cache Storage write of request bodies; E2E offline mutation attempt leaves zero server rows after reconnect without user resubmission.",
+   "re_enable_trigger": "Active C62 revision or dedicated contract defining PWA-6..8 queue binding.",
+   "selection_token": "NO_OFFLINE_WRITES",
+   "requirements": [
+    "PWA-2",
+    "PWA-4",
+    "PWA-5",
+    "PWA-9"
+   ],
+   "residual_owner_value": null
+  },
+  {
+   "oq": "OQ-BIL-1",
+   "contract": "C63",
+   "feature": "Self-service billing",
+   "registered_state": "DISABLED",
+   "fail_closed_behavior": "No checkout, webhook or billing route mounted; billing handled manually outside the application (BIL-1).",
+   "disabled_proof_check": "API manifest contains no billing route; route parity check enforces it.",
+   "re_enable_trigger": "Owner enables C63 by revision.",
+   "selection_token": "REMAIN_DISABLED",
+   "requirements": [
+    "BIL-1"
+   ],
+   "residual_owner_value": null
+  },
+  {
+   "oq": "OQ-BIL-2",
+   "contract": "C63",
+   "feature": "Payment provider / money movement",
+   "registered_state": "NOT_SELECTED",
+   "fail_closed_behavior": "No payment provider SDK, key or webhook secret in any environment manifest (REL-6).",
+   "disabled_proof_check": "Config-manifest check: no key matching payment-provider patterns; dependency check: no payment SDK in package.json.",
+   "re_enable_trigger": "Owner authorization of a named provider and production money movement (BIL-12).",
+   "selection_token": "DEFER_PAYMENT_PROVIDER",
+   "requirements": [
+    "BIL-12"
+   ],
+   "residual_owner_value": null
+  },
+  {
+   "oq": "OQ-BIL-3",
+   "contract": "C63",
+   "feature": "Organization ↔ billing-account relation",
+   "registered_state": "MODEL_REGISTERED_CARDINALITY_OPEN",
+   "fail_closed_behavior": "Billing account is Organization-owned; entitlement is a read-only projection; no billing-account record is created while billing is disabled.",
+   "disabled_proof_check": "No billing-account table admitted.",
+   "re_enable_trigger": "Owner supplies cardinality when billing is enabled.",
+   "selection_token": "ORGANIZATION_OWNED_BILLING_RELATION_PROPOSAL",
+   "requirements": [
+    "BIL-13",
+    "BIL-14",
+    "TEN-16"
+   ],
+   "residual_owner_value": "Organization-to-billing-account cardinality"
+  },
+  {
+   "oq": "OQ-LRN-2",
+   "contract": "C32",
+   "feature": "XP, mastery, streak, rank",
+   "registered_state": "UNAVAILABLE",
+   "fail_closed_behavior": "No derived score is stored or displayed as real; any sample value is labelled sample/demo (LRN-11).",
+   "disabled_proof_check": "Verified at baseline: learning_sessions has no score columns. Check: no column matching xp|mastery|streak|rank in any admitted table; UI test asserts label on any such display.",
+   "re_enable_trigger": "Owner-approved versioned derivation formulas with replay evidence (C32 revision).",
+   "selection_token": "DEFER_SCORING_FORMULAS",
+   "requirements": [
+    "LRN-11",
+    "LRN-13"
+   ],
+   "residual_owner_value": null
+  },
+  {
+   "oq": "OQ-CERT-3",
+   "contract": "C34",
+   "feature": "Photo evidence",
+   "registered_state": "DISABLED (checklist + observation notes ENABLED)",
+   "fail_closed_behavior": "IssueCertification accepts only structured checklist results and scoped observation notes; any file/photo field → 400.",
+   "disabled_proof_check": "Certification request schema has no binary/file/URL field; no object-storage bucket for certification media exists.",
+   "re_enable_trigger": "Separate decision on photo storage, privacy, retention (C15 matrix row) and access.",
+   "selection_token": "STRUCTURED_CHECKLIST_AND_OBSERVATION_NOTES_FIRST",
+   "requirements": [
+    "CERT-7"
+   ],
+   "residual_owner_value": null
+  },
+  {
+   "oq": "OQ-CERT-5",
+   "contract": "C34",
+   "feature": "Certification expiry",
+   "registered_state": "NONE",
+   "fail_closed_behavior": "Certifications have no expiry field and never change state by time; only RevokeCertification ends validity.",
+   "disabled_proof_check": "No expires_at column on the admitted certification table; verification surface shows no expiry.",
+   "re_enable_trigger": "Owner-defined representation, effects, history and revocation interaction (C34 revision).",
+   "selection_token": "NO_IMPLICIT_EXPIRY",
+   "requirements": [
+    "CERT-11",
+    "CERT-12"
+   ],
+   "residual_owner_value": null
+  },
+  {
+   "oq": "OQ-MIG-5",
+   "contract": "C21",
+   "feature": "Legacy Teach data import",
+   "registered_state": "ABSENT",
+   "fail_closed_behavior": "No import job, script or route; production baseline is the V2 schema only (MIG-7).",
+   "disabled_proof_check": "No code path reads a legacy database URL; config manifest has no legacy DB credential.",
+   "re_enable_trigger": "Separate project with source snapshot, transformation spec, reconciliation, audit and rollback plan.",
+   "selection_token": "NO_LEGACY_DATA_IMPORT_YET",
+   "requirements": [
+    "MIG-7"
+   ],
+   "residual_owner_value": null
+  },
+  {
+   "oq": "OQ-CNT-3",
+   "contract": "C31",
+   "feature": "Legacy content-pack formats",
+   "registered_state": "NONE_ACCEPTED",
+   "fail_closed_behavior": "Only the canonical V2 pack schema validates; any other format is rejected before parse beyond the format sniff.",
+   "disabled_proof_check": "compatibility-register.json has zero CNT-5 adapter entries; parser fuzz/negative fixtures (oversized, nested-entity, archive bomb, bad encoding) all rejected.",
+   "re_enable_trigger": "Per format: named adapter, positive + negative fixtures, version validation, deterministic conversion, removal condition, compatibility-register entry (CNT-5).",
+   "selection_token": "ONE_NAMED_ADAPTER_PER_LEGACY_FORMAT",
+   "requirements": [
+    "CNT-1",
+    "CNT-5"
+   ],
+   "residual_owner_value": null
+  }
+ ]
+}

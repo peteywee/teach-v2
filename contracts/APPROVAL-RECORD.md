@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-04",
+  "updated_on": "2026-10-05",
   "effective_on": "2026-10-03",
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-05
-- Contract package version: `0.17.0`
+- Contract package version: `0.18.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -439,3 +439,15 @@ Explicit owner values selected on 2026-10-04 America/Chicago; recommendations/dr
 | C53 | 1.0.3 | 1.1.0 | OQ-OBS-3; see governing contract and verification/owner-decisions/2026-10-04/registration.json | 2026-10-04 | Patrick Craven | #66 |
 
 OQ-AUTHZ-1 records the direction to create a new V2 matrix (#67); exact names/semantics/bundles remain unapproved. OQ-PRIV-1/2/3 remain drafts (#68). OQ-OBS-1 and OQ-SES-2 remain recommendations, OQ-CERT-2 remains UNKNOWN, OQ-API-1 remains unselected after source scan. No other recommendation in the supplied attachment is an owner approval. Its 99% labels are not evidence.
+
+
+## Part 25 — Decision-closure r3.1 registration (#75)
+
+Patrick Craven explicitly approved `approve decision-closure manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c` on 2026-10-05 America/Chicago; GitHub issue #75 records that approval. The approved source package remains byte-for-byte preserved under `governance/proposals/2026-10-05-decision-closure/`; its proposed metadata records its pre-registration state. Registered governing copies under `governance/decision-closure/` carry the selected policy. Registration grants no runtime, schema, provider, capability-promotion or production-execution authority; implementation conformance remains UNKNOWN. Self-review is not independent verification.
+
+| Contract | From | To | Questions registered | Date | Owner | Issue |
+| --- | --- | --- | --- | --- | --- | --- |
+| C00 | 1.0.3 | 1.1.0 | OQ-SYS-1, OQ-SYS-2, OQ-SYS-5 (previous template commit 40fcfa8; archive metadata corrected separately) | 2026-10-05 | Patrick Craven | #75 |
+| C02 | 1.0.3 | 1.1.0 | OQ-AGT-1, OQ-AGT-2, OQ-AGT-3 | 2026-10-05 | Patrick Craven | #75 |
+| C11 | 1.5.0 | 1.6.0 | OQ-IDN-7 | 2026-10-05 | Patrick Craven | #75 |
+| C12 | 1.1.0 | 1.2.0 | OQ-SES-1, OQ-SES-2, OQ-SES-5, OQ-SES-6, OQ-SES-7 | 2026-10-05 | Patrick Craven | #75 |

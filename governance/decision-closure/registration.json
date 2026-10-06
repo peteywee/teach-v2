@@ -1,0 +1,122 @@
+{
+  "version": "1.0.0",
+  "issue": "#75",
+  "owner": "Patrick Craven",
+  "owner_local_date": "2026-10-05",
+  "timezone": "America/Chicago",
+  "approved_manifest_sha256": "ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c",
+  "baseline_sha": "6553eb465e469dc9e60368cde40d259f86262997",
+  "template_sha": "40fcfa80b3cc4b6a88fe6df6fa6910895840389e",
+  "implementation_conformance": "UNKNOWN",
+  "independent_verification": "NOT_PERFORMED",
+  "runtime_activation_authorized": false,
+  "shared_or_production_execution_authorized": false,
+  "capability_promotion_authorized": false,
+  "batches": [
+    1
+  ],
+  "contracts": [
+    {
+      "contract": "C02",
+      "path": "contracts/c02-automation-agent-authority-contract.md",
+      "from_version": "1.0.3",
+      "to_version": "1.1.0",
+      "superseded_copy": "contracts/superseded/c02-automation-agent-authority-contract-1.0.3.md",
+      "historical_body_sha256": "ca44ad335e96bb1b08b43eb6df91d8e65a1e5ec0c6583ba50af2d9fc8e4154fe",
+      "questions": [
+        {
+          "id": "OQ-AGT-1",
+          "state": "RESOLVED",
+          "value": "AutomationActor identities MUST be backend execution-principal records with explicit capabilities per principal, inventoried in `governance/automation-principals.json`; CI jobs are DevelopmentAgents, not product actors. No principal is grandfathered or provisioned by this registration.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/02-c14-authorization-capability-matrix.md",
+          "affects": "AGT-9"
+        },
+        {
+          "id": "OQ-AGT-2",
+          "state": "RESOLVED",
+          "value": "Runtime agents remain DISABLED. Enablement requires a named use case and a dedicated C02 revision defining AgentIdentity, AgentCapability, tool/command boundary, decision evidence, approval/escalation and failure/recovery, after the deterministic dependencies are active and evidenced.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "AGT-16"
+        },
+        {
+          "id": "OQ-AGT-3",
+          "state": "RESOLVED",
+          "value": "Adoption is NAMED_JOB_BY_JOB with no blanket grandfathering. No V2 job, worker or CLI is adopted as an AutomationActor by this decision; the C21 migration runner retains only AGT-11's schema-migration exception.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/02-c14-authorization-capability-matrix.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C11",
+      "path": "contracts/c11-identity-credentials-contract.md",
+      "from_version": "1.5.0",
+      "to_version": "1.6.0",
+      "superseded_copy": "contracts/superseded/c11-identity-credentials-contract-1.5.0.md",
+      "historical_body_sha256": "9bb6e9adbf384f82fae6d7fc0ead71c1796983add305baa3fd3f30b43624d538",
+      "questions": [
+        {
+          "id": "OQ-IDN-7",
+          "state": "RESOLVED",
+          "value": "Password-reset requests and invitation-related email lookups MUST return identical `202` responses with `{\"status\":\"accepted\"}` and the same headers for known, unknown, INACTIVE and offboarded addresses. The same job type is queued off the response path; bounds are 5 requests per normalized-email digest per 15 minutes and 20 per client IP per hour. Over-limit requests are dropped and recorded while returning the same `202`; no `429` or account-existence signal is exposed.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/06-identity-tenancy-manager-registration-packet.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C12",
+      "path": "contracts/c12-application-sessions-contract.md",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "superseded_copy": "contracts/superseded/c12-application-sessions-contract-1.1.0.md",
+      "historical_body_sha256": "f15d8682ad966cb408b61b9bc14d8c50acd750aea3c8257f36ad27d6213160ba",
+      "questions": [
+        {
+          "id": "OQ-SES-1",
+          "state": "RESOLVED",
+          "value": "The session cookie MUST set `SameSite=Lax` together with SES-18's exact-origin CSRF control.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/04-session-transport-security-spec.md",
+          "affects": "SES-5"
+        },
+        {
+          "id": "OQ-SES-2",
+          "state": "RESOLVED",
+          "value": "The approved topology is same-origin `https://t34ch.com` with API prefix `/api/v1`. The cookie MUST be `__Host-teach_session`, host-only with no Domain, `Path=/`, Secure and HttpOnly; issuance Max-Age is 43200 and logout Max-Age is 0. Each isolated preview uses exactly its own deployment origin, without production credentials.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/04-session-transport-security-spec.md",
+          "affects": "SES-6"
+        },
+        {
+          "id": "OQ-SES-5",
+          "state": "RESOLVED",
+          "value": "Every cookie-authenticated unsafe request (POST, PUT, PATCH, DELETE), including logout, MUST enforce a byte-exact deployment allowed Origin before session lookup; missing, foreign, malformed or `null` Origin is denied with zero writes. There is no Referer fallback; a present Sec-Fetch-Site other than same-origin is denied; unsafe API requests require application/json. Missing allowed-origin configuration fails closed. Safe methods MUST NOT mutate state except the separately bound state/PKCE OAuth callback.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/04-session-transport-security-spec.md",
+          "affects": "SES-18"
+        },
+        {
+          "id": "OQ-SES-6",
+          "state": "RESOLVED",
+          "value": "Successful sign-in and step-up reauthentication MUST create a new session and revoke the presenting session, atomically with audit; a pre-authentication credential MUST NOT be upgraded. Failed commit sets no new cookie. ChangeCredential instead revokes ALL sessions and issues none under IDN-15; deactivation/offboarding revoke all, logout revokes the presented session. Membership/grant/entitlement changes require no rotation because authority is database-current under SES-16.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/04-session-transport-security-spec.md",
+          "affects": "SES-19"
+        },
+        {
+          "id": "OQ-SES-7",
+          "state": "RESOLVED",
+          "value": "No concurrent-session count limit is imposed. Existing expiry/revocation still apply; a later limit requires an explicit value and deterministic eviction rule through a C12 revision.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/04-session-transport-security-spec.md",
+          "affects": "\u2014"
+        }
+      ]
+    }
+  ]
+}
