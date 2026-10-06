@@ -16,7 +16,8 @@
     1,
     2,
     3,
-    4
+    4,
+    5
   ],
   "contracts": [
     {
@@ -351,6 +352,66 @@
           "value": "Certification validity has no implicit expiry: no expiry field or time-driven state transition is authorized, and revocation ends validity. Any later expiry requires an owner-defined representation, effects and history/revocation rules. Data-retention expiry remains separately governed and does not create validity expiry.",
           "residual": null,
           "controlling_artifact": "governance/decision-closure/08-deferred-feature-policy-register.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C41",
+      "path": "contracts/c41-api-boundary-contract.md",
+      "from_version": "1.0.3",
+      "to_version": "1.1.0",
+      "superseded_copy": "contracts/superseded/c41-api-boundary-contract-1.0.3.md",
+      "historical_body_sha256": "9be0542c3cdb4bb713ba80ca6ebae43b39e13afa23fee42e3da71e9b93dff3eb",
+      "questions": [
+        {
+          "id": "OQ-API-1",
+          "state": "RESOLVED",
+          "value": "Product operations MUST live under `/api/v1/*`. The exhaustive outside-prefix exceptions are health/readiness and authentication callbacks in the registered API manifest; callbacks remain unmounted until their provider selection and prerequisites pass. No billing, analytics or internal operation is exposed by this registration.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/05-api-boundary-manifest.md",
+          "affects": "\u2014"
+        },
+        {
+          "id": "OQ-API-2",
+          "state": "RESOLVED",
+          "value": "API errors MUST use exactly the stable `code`, `message`, `requestId` envelope and status semantics in `api-error-envelope.schema.json` and the registered API manifest. Missing and out-of-scope targets MUST produce identical non-disclosing denials; no target existence or private detail is leaked.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/05-api-boundary-manifest.md",
+          "affects": "API-10"
+        },
+        {
+          "id": "OQ-API-3",
+          "state": "OPEN_RESIDUAL",
+          "value": "Breaking consumer changes MUST use the major-version path `/api/v1` and an explicit deprecation manifest rather than in-place replacement. Sunset periods remain UNKNOWN; no deprecation sunset is authorized until owner selection.",
+          "residual": "Which API deprecation sunset periods are approved?",
+          "controlling_artifact": "governance/decision-closure/05-api-boundary-manifest.md",
+          "affects": "API-13"
+        }
+      ]
+    },
+    {
+      "contract": "C42",
+      "path": "contracts/c42-web-client-boundary-contract.md",
+      "from_version": "1.0.3",
+      "to_version": "1.1.0",
+      "superseded_copy": "contracts/superseded/c42-web-client-boundary-contract-1.0.3.md",
+      "historical_body_sha256": "e5b9e3578dc652e9e7ad1ff56b6101e2844b7d3d549cd1e782710db9c0443551",
+      "questions": [
+        {
+          "id": "OQ-WEB-1",
+          "state": "RESOLVED",
+          "value": "Core paths MUST meet WCAG 2.2 Level AA with interactive targets at least 44 by 44 CSS pixels. Automated checks supplement, not replace, keyboard, screen-reader, contrast and mobile checks.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/09-governance-content-certification-web-packet.md",
+          "affects": "WEB-15"
+        },
+        {
+          "id": "OQ-WEB-2",
+          "state": "RESOLVED",
+          "value": "Core paths are login, assigned-content start, recorded completion, scoped manager view and logout. Each requires E2E and accessibility evidence. Credentialless demo isolation/reset remains separately specified.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/09-governance-content-certification-web-packet.md",
           "affects": "\u2014"
         }
       ]
