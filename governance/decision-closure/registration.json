@@ -13,7 +13,8 @@
   "shared_or_production_execution_authorized": false,
   "capability_promotion_authorized": false,
   "batches": [
-    1
+    1,
+    2
   ],
   "contracts": [
     {
@@ -114,6 +115,74 @@
           "value": "No concurrent-session count limit is imposed. Existing expiry/revocation still apply; a later limit requires an explicit value and deterministic eviction rule through a C12 revision.",
           "residual": null,
           "controlling_artifact": "governance/decision-closure/04-session-transport-security-spec.md",
+          "affects": "\u2014"
+        }
+      ]
+    },
+    {
+      "contract": "C14",
+      "path": "contracts/c14-authorization-capabilities-contract.md",
+      "from_version": "1.2.0",
+      "to_version": "1.3.0",
+      "superseded_copy": "contracts/superseded/c14-authorization-capabilities-contract-1.2.0.md",
+      "historical_body_sha256": "0505cc540ec039499aaa0d793f845788528d31f09f3f8ce55a92bcefdd0b3a41",
+      "questions": [
+        {
+          "id": "OQ-AUTHZ-1",
+          "state": "RESOLVED",
+          "value": "The capability vocabulary and bundles MUST be the NEW_V2 matrix in the registered C14 specification and `c14-capability-matrix.json`: 34 operation capabilities, explicit self/learner/manager/org_admin bundles, and no imported legacy grants or cross-tenant platform capabilities. Evaluation, bootstrap exceptions, conditional/blocked grants and negative tests MUST follow that matrix. This registration does not promote the 34 capability identifiers into C01/K00; implementation remains BLOCKED until their semantic registration and all matrix dependencies pass.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/02-c14-authorization-capability-matrix.md",
+          "affects": "AUTHZ-19"
+        }
+      ]
+    },
+    {
+      "contract": "C15",
+      "path": "contracts/c15-data-isolation-privacy-contract.md",
+      "from_version": "1.0.3",
+      "to_version": "1.1.0",
+      "superseded_copy": "contracts/superseded/c15-data-isolation-privacy-contract-1.0.3.md",
+      "historical_body_sha256": "a432601b49391a9e1bca62918ddfad63177ddb5c7dab6c34abf9450c32467c0d",
+      "questions": [
+        {
+          "id": "OQ-PRIV-1",
+          "state": "RESOLVED",
+          "value": "DELETED means governed audited primary-row removal, with an Identity terminal tombstone containing only id/status/created_at and dependent-copy expiry under the lifecycle matrix. ANONYMIZED applies only to unrecoverable aggregates with at least 5 identities per reported group; individual hashes/opaque links are PSEUDONYMIZED personal data. RETAINED means access-controlled preservation until the class clock/duration/action. OFFBOARDED means IDN-18 access revocation and retained history, never deletion. The corrected matrix controls; executor ingress, schema, backup-window and recovery evidence gates remain required.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+          "affects": "\u2014"
+        },
+        {
+          "id": "OQ-PRIV-2",
+          "state": "RESOLVED",
+          "value": "Retention clocks, durations and expiry actions MUST follow the registered lifecycle matrix: one year for named identity, credential, session/token, membership, learning, certification and audit classes, with each class's terminal clock; OperationalLog retains its separate 90-day policy. Legal holds suspend deletion without extending authentication validity. Undefined clocks or unregistered classes have retention UNKNOWN, automatic deletion BLOCKED and no retention/deletion/compliance claim. Every stated retention period MUST have executable enforcement evidence before any promise; backup/provider windows and executor/schema admission remain separate gates.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+          "affects": "PRIV-12"
+        },
+        {
+          "id": "OQ-PRIV-3",
+          "state": "RESOLVED",
+          "value": "Subject-deletion exemptions MUST be exactly AuditEvent and LifecycleEvent until their one-year expiry (AUD-1/4/6), and ReconciliationRecord until its expiry (TXN-5/7); OPEN reconciliation never expires. Legal hold is a deletion suspension, not an exemption. Application paths MUST NOT delete immutable audit records; privileged expiry requires its separate admission and evidence.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+          "affects": "PRIV-15"
+        },
+        {
+          "id": "OQ-PRIV-4",
+          "state": "OPEN_RESIDUAL",
+          "value": "Export format is machine-readable JSON plus a human-readable summary. Only the export fulfillment deadline remains undecided.",
+          "residual": "What export fulfillment deadline applies?",
+          "controlling_artifact": "governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+          "affects": "\u2014"
+        },
+        {
+          "id": "OQ-PRIV-6",
+          "state": "RESOLVED",
+          "value": "Initial export/deletion fulfillment MUST use a verified, scoped, audited operator procedure; self-service is deferred. Requests use the verification/hold/fulfillment lifecycle in the registered privacy matrix and MUST NOT claim a deadline or completed deletion while its gates are unmet.",
+          "residual": null,
+          "controlling_artifact": "governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
           "affects": "\u2014"
         }
       ]

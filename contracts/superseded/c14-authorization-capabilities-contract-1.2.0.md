@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C14",
   "class": "contract",
-  "version": "1.3.0",
+  "version": "1.2.0",
   "claims_truth_state": "declared",
-  "status": "active",
+  "status": "superseded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-05",
-  "effective_on": "2026-10-05",
+  "updated_on": "2026-10-03",
+  "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_version": "1.3.0",
-    "approved_on": "2026-10-05",
+    "approved_version": "1.2.0",
+    "approved_on": "2026-10-03",
     "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner manifest-bound decision-closure r3.1 approval under SYS-21 #75; sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
+    "basis": "Owner explicitly approved C14 1.1.0 through domain-ownership approval token; GitHub issue #2"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -29,16 +29,20 @@
     "use": "reference only; does not govern and is not governed by this contract"
   },
   "supersedes": [
-    "TEACH-CON-C14@1.0.3",
-    "TEACH-CON-C14@1.2.0"
+    "TEACH-CON-C14@1.0.3"
   ],
-  "superseded_by": null,
+  "superseded_by": "TEACH-CON-C14@1.3.0",
   "depends_on": [
     "contracts/"
   ]
 }
 -->
 
+# Superseded TEACH-CON-C14 1.2.0
+
+Superseded by `TEACH-CON-C14@1.3.0` under SYS-21 #75.
+
+The original body below is preserved, including its former current-status wording.
 # C14 — Authorization & Capabilities Contract
 
 | Field              | Value                                                                                                                                                           |
@@ -46,17 +50,17 @@
 | Contract ID        | C14                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.3.0 |
+| Version            | 1.2.0                                                                                                                                                           |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-05; manifest-bound decision-closure r3.1, SYS-21 #75; see `APPROVAL-RECORD.md` |
+| Approved by        | Patrick Craven (owner), 2026-10-03 — C14 1.1.0 domain-ownership approval; see `APPROVAL-RECORD.md` and GitHub issue #2 |
 | Requirement prefix | `AUTHZ`                                                                                                                                                         |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/tenancy.json` (capability resolution half); carries forward Gate A denial semantics.                |
-| Supersedes         | 1.2.0 |
+| Supersedes         | C14 1.0.3                                                                                                                                                            |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-05 |
+| Last updated       | 2026-10-03                                                                                                                                                      |
 
 ## 1. Purpose and Failure Prevented
 
@@ -112,7 +116,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **AUTHZ-16** — A target ID supplied by the client MUST NOT establish authorization; the target MUST be resolved and checked against actor scope.
 - **AUTHZ-17** — Every sensitive mutation MUST be evaluated with both actor scope and target scope.
 - **AUTHZ-18** — Every capability addition or change MUST ship with negative tests proving denial for actors that lack it, in the same change.
-- **AUTHZ-19** — The capability vocabulary and bundles MUST be the NEW_V2 matrix in the registered C14 specification and `c14-capability-matrix.json`: 34 operation capabilities, explicit self/learner/manager/org_admin bundles, and no imported legacy grants or cross-tenant platform capabilities. Evaluation, bootstrap exceptions, conditional/blocked grants and negative tests MUST follow that matrix. This registration does not promote the 34 capability identifiers into C01/K00; implementation remains BLOCKED until their semantic registration and all matrix dependencies pass. See `governance/decision-closure/02-c14-authorization-capability-matrix.md`. (OQ-AUTHZ-1 resolved 2026-10-05).
+- **AUTHZ-19** — The capability vocabulary and role bundles MUST be the owner-approved set (see OQ-AUTHZ-1; value Not yet verified).
 - **AUTHZ-20** — A role MUST NOT hold a cross-tenant capability. Owner approved NO_CROSS_TENANT_GRANTS on 2026-10-05: no cross-tenant platform grants exist; V1 platform_operator grants are not imported.
 - **AUTHZ-21** — Authorization MUST treat entitlement as a read-only input loaded from authoritative Organization-owned state; authorization code MUST NOT create or mutate entitlement state.
 
@@ -138,7 +142,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 | ID         | Question                                                                                                                  | Blocks implementation | Affects  |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------- | --------------------- | -------- |
-| OQ-AUTHZ-1 | **Resolved.** Owner, 2026-10-05: The capability vocabulary and bundles MUST be the NEW_V2 matrix in the registered C14 specification and `c14-capability-matrix.json`: 34 operation capabilities, explicit self/learner/manager/org_admin bundles, and no imported legacy grants or cross-tenant platform capabilities. Evaluation, bootstrap exceptions, conditional/blocked grants and negative tests MUST follow that matrix. This registration does not promote the 34 capability identifiers into C01/K00; implementation remains BLOCKED until their semantic registration and all matrix dependencies pass. See `governance/decision-closure/02-c14-authorization-capability-matrix.md`. (Decision-closure r3.1) | No (resolved) | AUTHZ-19 |
+| OQ-AUTHZ-1 | Is the Gate A capability vocabulary and bundle table (accepted 2026-07-22) adopted verbatim for v2, amended, or replaced? | Yes                   | AUTHZ-19 |
 | OQ-AUTHZ-2 | **Resolved** Which cross-tenant platform capabilities, if any, exist in v2, and what audit do they require? | No                    | AUTHZ-20 (approved 2026-10-05) |
 
 ## 7. Verification Status
@@ -149,14 +153,14 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
 | Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
 | Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
-| Blocking open questions      | 0 open | Only unresolved question rows govern blocking; registration is not implementation evidence |
-| Owner approval               | declared | 1.3.0 owner approval recorded in APPROVAL-RECORD.md under #75; runtime implementation conformance remains UNKNOWN |
+| Blocking open questions      | 1 open                   | Contract is `active` with these open. Each blocks implementation of the requirements it affects beyond fail-closed behavior until decided (SYS-34).                                                                                                   |
+| Owner approval               | declared                 | C14 1.1.0 approved by Patrick Craven on 2026-10-03 through explicit domain-ownership approval; GitHub issue #2. |
 | Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
 ## 8. Change Log
 
-| Version | 1.3.0 |
+| Version | Date       | Change                                                                                                                                                                                          | By               |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | 0.1.0   | 2026-10-03 | Initial proposed draft from the owner-supplied hierarchy proposal. Not approved.                                                                                                                | Claude (drafter) |
 | 0.2.0   | 2026-10-03 | Retargeted to the Teach v2 codebase: legacy `peteywee/teach` is reference only; anchors and paths no longer point into the legacy repository.                                                   | Claude (drafter) |
@@ -166,4 +170,3 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.1.0   | 2026-10-03 | C01 registers capability identifiers; C14 owns authorization semantics and consumes Organization-owned entitlement state read-only. GitHub issue #2. | Patrick Craven (owner approval) |
-| 1.3.0 | 2026-10-05 | Register OQ-AUTHZ-1; preserve named residuals and existing requirement/acceptance IDs. Decision-closure r3.1 manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c; SYS-21 #75. | Patrick Craven (owner); ChatGPT (recorder) |

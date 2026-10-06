@@ -451,3 +451,5 @@ Patrick Craven explicitly approved `approve decision-closure manifest sha256:ff7
 | C02 | 1.0.3 | 1.1.0 | OQ-AGT-1, OQ-AGT-2, OQ-AGT-3 | 2026-10-05 | Patrick Craven | #75 |
 | C11 | 1.5.0 | 1.6.0 | OQ-IDN-7 | 2026-10-05 | Patrick Craven | #75 |
 | C12 | 1.1.0 | 1.2.0 | OQ-SES-1, OQ-SES-2, OQ-SES-5, OQ-SES-6, OQ-SES-7 | 2026-10-05 | Patrick Craven | #75 |
+| C14 | 1.2.0 | 1.3.0 | OQ-AUTHZ-1 | 2026-10-05 | Patrick Craven | #75 |
+| C15 | 1.0.3 | 1.1.0 | OQ-PRIV-1, OQ-PRIV-2, OQ-PRIV-3, OQ-PRIV-4 (residual open), OQ-PRIV-6 | 2026-10-05 | Patrick Craven | #75 |
