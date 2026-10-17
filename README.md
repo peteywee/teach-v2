@@ -47,3 +47,7 @@ Before asking for policy input, read the [preserved owner answers](verification/
 ## Complete development workflow lifecycle
 
 The [workflow lifecycle policy and inventory](verification/workflow-lifecycle/README.md) covers one 31-stage verification producer, one trusted closure observer and all 23 product commands. Each CI producer captures exact-source outcomes and retained evidence; the observer independently verifies actual jobs, artifacts and workflow provenance before development handoff. Product/runtime authority and durable retention policy remain separate gates.
+
+## Lean verification
+
+Choose checks from the changed behavior and the existing bounded stage catalog. Preserve distinct contract, boundary, failure, recovery and contention cases; consolidate repeated setup or duplicate execution only after mapping their coverage. Keep the full live validator inventory and matching shard digests, with a fresh isolated fixture and validator process for every mutation. Batch independent checks and reuse passing evidence while its source and scope remain unchanged; rerun affected checks after a change or failure. Required CI stages, source checks and safety gates still run before merge. Record comparable case identities and timings when evaluating an optimization, and distinguish local observations from hosted CI performance.

@@ -15,7 +15,7 @@
 
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
@@ -28,13 +28,42 @@ if (shardIndex > shardTotal || shardTotal > 32) throw new Error('invalid validat
 let inventoryCount=0;
 const inventoryNames=[];
 
-function scratch() {
-  const dir = mkdtempSync(join(tmpdir(), "negtest-"));
-  cpSync(ROOT, dir, {
-    recursive: true,
-    filter: (src) => !/(^|\/)\.git(?:\/|$)/.test(src) && !/(^|\/)node_modules(?:\/|$)/.test(src) && !src.includes("/verification/generated/"),
+// Cache only the immutable source snapshot, never a mutable test directory.
+// Native extraction avoids repeated JavaScript traversal on Ubuntu CI. Other
+// platforms, symlinks/special files, and hosts without tar retain Node copying.
+const includeFixture = src => !/(^|\/)\.git(?:\/|$)/.test(src) && !/(^|\/)node_modules(?:\/|$)/.test(src) && !src.includes("/verification/generated/");
+function archiveCompatible(dir) {
+  return readdirSync(dir, { withFileTypes: true }).every(entry => {
+    const path = join(dir, entry.name);
+    return !includeFixture(path) || entry.isFile() || entry.isDirectory() && archiveCompatible(path);
   });
-  return dir;
+}
+let archiveDir, useArchive = process.platform === "linux";
+process.once("exit", () => { if (archiveDir) rmSync(archiveDir, { recursive: true, force: true }); });
+function scratch() {
+  if (useArchive && !archiveDir) {
+    if (!archiveCompatible(ROOT)) useArchive = false;
+    else {
+      archiveDir = mkdtempSync(join(tmpdir(), "negtest-source-"));
+      try {
+        execFileSync("tar", ["-cf", join(archiveDir, "source.tar"), "--hard-dereference", "--exclude=.git", "--exclude=node_modules", "--exclude=*/verification/generated/*", "-C", ROOT, "."], { timeout: 5000 });
+      } catch (error) {
+        rmSync(archiveDir, { recursive: true, force: true });
+        archiveDir = undefined;
+        if (error.code === "ENOENT") useArchive = false;
+        else throw error;
+      }
+    }
+  }
+  const dir = mkdtempSync(join(tmpdir(), "negtest-"));
+  try {
+    if (useArchive) execFileSync("tar", ["-xf", join(archiveDir, "source.tar"), "--no-same-owner", "--no-overwrite-dir", "-C", dir], { timeout: 5000 });
+    else cpSync(ROOT, dir, { recursive: true, filter: includeFixture });
+    return dir;
+  } catch (error) {
+    rmSync(dir, { recursive: true, force: true });
+    throw error;
+  }
 }
 
 function readJson(dir, rel) {
