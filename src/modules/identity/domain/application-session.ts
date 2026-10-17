@@ -82,11 +82,20 @@ export function evaluateSessionAuthentication(
   },
   now: Date,
 ): SessionAuthenticationDecision {
-  if (!input.identityActive) return { allowed: false, reason: 'IDENTITY_INACTIVE' };
+  if (input.identityActive !== true) return { allowed: false, reason: 'IDENTITY_INACTIVE' };
   if (input.status !== 'ACTIVE') return { allowed: false, reason: 'SESSION_NOT_ACTIVE' };
   if ([now, input.issuedAt, input.absoluteExpiresAt, input.lastUsedAt].some(
     value => !(value instanceof Date) || !Number.isFinite(value.getTime()),
   )) return { allowed: false, reason: 'INVALID_TIME' };
+  // A valid lifetime is anchored to immutable issuance, not supplied expiry or
+  // a future last-use timestamp. Keep these invariants aligned with persistence.
+  if (
+    input.absoluteExpiresAt.getTime() !== input.issuedAt.getTime() + SESSION_ABSOLUTE_LIFETIME_MS ||
+    input.lastUsedAt.getTime() < input.issuedAt.getTime() ||
+    input.lastUsedAt.getTime() > input.absoluteExpiresAt.getTime() ||
+    now.getTime() < input.issuedAt.getTime() ||
+    now.getTime() < input.lastUsedAt.getTime()
+  ) return { allowed: false, reason: 'INVALID_TIME' };
   if (now.getTime() >= input.absoluteExpiresAt.getTime()) {
     return { allowed: false, reason: 'ABSOLUTE_EXPIRED' };
   }

@@ -39,7 +39,18 @@ if(!schema.includes("dataType() {\n    return 'bytea';") || !schema.includes("oc
 if(identityRepo.includes("status: 'DELETED'") || identityRepo.includes('"DELETED"')) errors.push('SLICE-P02 implementation: repository must not implement Identity DELETED ingress');
 if(!identityRepo.includes('for update') || !identityRepo.includes("status: 'REVOKED'") || !identityRepo.includes('applicationSessions.identityId')) errors.push('SLICE-P02 implementation: deactivation must lock Identity and revoke ACTIVE sessions atomically');
 if(!sessionRepo.includes('for update') || !sessionRepo.includes('identityId: input.identityId') || !sessionRepo.includes('eq(applicationSessions.identityId, input.identityId)')) errors.push('SLICE-P02 implementation: session issuance/authentication and protected access must synchronize/scope by IdentityId');
-if(!sessionRepo.includes("interval '30 minutes'") || !sessionRepo.includes('Denial is authoritative even when lazy EXPIRED persistence fails')) errors.push('SLICE-P02 implementation: atomic current-state authentication/expiry proof missing');
+// Supplemental source boundary only: executable repository/DB tests prove the
+// no-write behavior. Authentication may refresh last use only on a matching row.
+const authenticationBody=sessionRepo.split('async authenticateByVerifier(')[1]?.split('\nfunction validSessionTimelineAt(')[0]??'';
+if(
+  !authenticationBody.includes("interval '30 minutes'") ||
+  !authenticationBody.includes('validSessionTimelineAt(input.now)') ||
+  !authenticationBody.includes('return this.db.transaction(') ||
+  !authenticationBody.includes('return updated ? mapSession(updated) : null;') ||
+  (authenticationBody.match(/\.update\(applicationSessions\)/g)??[]).length!==1 ||
+  !authenticationBody.includes('.set({ lastUsedAt: input.now, updatedAt: input.now })') ||
+  /(?:status\s*:|expiredAt\s*:|revokedAt\s*:|appendRequired\s*\()/.test(authenticationBody)
+) errors.push('SLICE-P02 implementation: guarded authentication and no-write denial proof missing');
 if(!sessionDomain.includes("randomBytes(SESSION_CREDENTIAL_BYTES)") || !sessionDomain.includes("Buffer.from('teach-session-v1\\0'")) errors.push('SLICE-P02 implementation: approved verifier construction missing');
 if(!migration.includes('BEFORE INSERT OR UPDATE ON "identity_identities"') || !migration.includes('Identity DELETED ingress is not authorized')) errors.push('SLICE-P02 implementation: insert/update DELETED guard missing from immutable migration');
 if((migration.match(/CREATE TABLE "identity_/g)??[]).length!==2) errors.push('SLICE-P02 implementation: immutable migration must create exactly two Identity-owned tables');

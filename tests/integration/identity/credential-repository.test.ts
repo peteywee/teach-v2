@@ -8,6 +8,9 @@ import { PostgresCredentialRepository } from '../../../src/modules/identity/infr
 import * as identitySchema from '../../../src/modules/identity/infrastructure/persistence/schema.js';
 import * as credentialSchema from '../../../src/modules/identity/infrastructure/persistence/credential-schema.js';
 
+// Structurally valid storage fixture only; no hashing/authentication claim.
+const passwordHashFixture = '$argon2id$v=19$m=19456,t=2,p=1$AQEBAQEBAQEBAQEBAQEBAQ$AgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgI';
+
 const { Pool } = pg;
 const connectionString = assertIsolatedDatabaseTarget(process.env.DATABASE_URL);
 if (!connectionString) throw new Error('DATABASE_URL is required');
@@ -40,13 +43,13 @@ test('Credential persists a PASSWORD hash for an ACTIVE Identity', async () => {
     id: 'cred-1',
     identityId: 'identity-1',
     credentialType: 'PASSWORD',
-    passwordHash: '$argon2id$v=19$fixture',
+    passwordHash: passwordHashFixture,
     now,
   });
 
   assert.equal(created.identityId, 'identity-1');
   assert.equal(created.credentialType, 'PASSWORD');
-  assert.equal(created.passwordHash, '$argon2id$v=19$fixture');
+  assert.equal(created.passwordHash, passwordHashFixture);
 
   const row = await pool.query<{
     identity_id: string;
@@ -59,7 +62,7 @@ test('Credential persists a PASSWORD hash for an ACTIVE Identity', async () => {
   assert.deepEqual(row.rows[0], {
     identity_id: 'identity-1',
     credential_type: 'PASSWORD',
-    password_hash: '$argon2id$v=19$fixture',
+    password_hash: passwordHashFixture,
   });
 });
 
@@ -76,7 +79,7 @@ test('Credential creation rejects an INACTIVE Identity', async () => {
       id: 'cred-inactive',
       identityId: 'identity-1',
       credentialType: 'PASSWORD',
-      passwordHash: '$argon2id$v=19$fixture',
+      passwordHash: passwordHashFixture,
       now: new Date('2026-10-04T12:02:00Z'),
     }),
     /authoritative Identity must be ACTIVE/,
@@ -88,7 +91,7 @@ test('caller mutation during Identity lock wait cannot redirect Credential owner
   await identities.create({ id: 'identity-active', now });
   await identities.create({ id: 'identity-inactive', now });
   await identities.deactivate({ id: 'identity-inactive', now });
-  const mutable = { id: 'cred-captured', identityId: 'identity-active', credentialType: 'PASSWORD' as const, passwordHash: '$hash', now: new Date(now) };
+  const mutable = { id: 'cred-captured', identityId: 'identity-active', credentialType: 'PASSWORD' as const, passwordHash: passwordHashFixture, now: new Date(now) };
   const holder = await pool.connect();
   let pending: ReturnType<typeof credentials.create> | undefined;
   try {
@@ -118,7 +121,7 @@ test('caller mutation during Identity lock wait cannot redirect Credential owner
   const record = await pending!;
   assert.equal(record.id, 'cred-captured');
   assert.equal(record.identityId, 'identity-active');
-  assert.equal(record.passwordHash, '$hash');
+  assert.equal(record.passwordHash, passwordHashFixture);
   assert.equal(record.createdAt.toISOString(), '2026-10-04T12:00:00.000Z');
   assert.equal((await credentials.listByIdentity({ identityId: 'identity-inactive' })).length, 0);
 });
@@ -154,7 +157,7 @@ test('protected Credential reads, lists, and revocation are Identity-scoped', as
     id: 'cred-1',
     identityId: 'identity-1',
     credentialType: 'PASSWORD',
-    passwordHash: '$hash',
+    passwordHash: passwordHashFixture,
     now,
   });
 
@@ -214,14 +217,14 @@ test('P04 Credential table copies no tenant or authorization authority columns',
 
 test('16 concurrent Credential revocations mutate once and preserve original scope', async () => {
   const now = new Date('2026-10-04T12:00:00Z'); await identities.create({id:'owner',now});
-  await credentials.create({id:'revoke-race',identityId:'owner',credentialType:'PASSWORD',passwordHash:'$hash',now});
+  await credentials.create({id:'revoke-race',identityId:'owner',credentialType:'PASSWORD',passwordHash:passwordHashFixture,now});
   const results = await Promise.all(Array.from({length:16},()=>credentials.revoke({id:'revoke-race',identityId:'owner',now})));
   assert.equal(results.filter(Boolean).length,1);
   assert.equal((await credentials.findById({id:'revoke-race',identityId:'owner'}))?.revokedAt?.getTime(),now.getTime());
 });
 test('failed Credential revocation commits no partial status or timestamp change', async () => {
   const now = new Date('2026-10-04T12:00:00Z'); await identities.create({id:'owner',now});
-  await credentials.create({id:'revoke-fault',identityId:'owner',credentialType:'PASSWORD',passwordHash:'$hash',now});
+  await credentials.create({id:'revoke-fault',identityId:'owner',credentialType:'PASSWORD',passwordHash:passwordHashFixture,now});
   await pool.query(`create function test_fail_credential_revoke() returns trigger language plpgsql as $$ begin raise exception 'forced credential failure'; end $$`);
   await pool.query('create trigger test_fail_credential_revoke before update on identity_credentials for each row execute function test_fail_credential_revoke()');
   try {

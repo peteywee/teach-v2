@@ -7,6 +7,8 @@ import {
 } from '../../application/ports/application-session-repository.js';
 import {
   absoluteExpiryFromIssuedAt,
+  SESSION_CREDENTIAL_BYTES,
+  SESSION_VERIFIER_VERSION,
   type ApplicationSessionRecord,
 } from '../../domain/application-session.js';
 import {
@@ -116,7 +118,12 @@ export class PostgresApplicationSessionRepository
     readonly now: Date;
   }): Promise<ApplicationSessionRecord | null> {
     input = snapshotPersistenceInput(input);
-    const authenticated = await this.db.transaction(async (tx) => {
+    if (
+      input.verifierVersion !== SESSION_VERIFIER_VERSION ||
+      !Buffer.isBuffer(input.verifier) || input.verifier.length !== SESSION_CREDENTIAL_BYTES ||
+      !(input.now instanceof Date) || !Number.isFinite(input.now.getTime())
+    ) return null;
+    return this.db.transaction(async (tx) => {
       const [candidate] = await tx
         .select({
           id: applicationSessions.id,
@@ -145,6 +152,7 @@ export class PostgresApplicationSessionRepository
             eq(applicationSessions.id, candidate.id),
             eq(applicationSessions.identityId, candidate.identityId),
             eq(applicationSessions.status, 'ACTIVE'),
+            validSessionTimelineAt(input.now),
             sql`${input.now} < ${applicationSessions.absoluteExpiresAt}`,
             sql`${input.now} < ${applicationSessions.lastUsedAt} + interval '30 minutes'`,
           ),
@@ -153,34 +161,23 @@ export class PostgresApplicationSessionRepository
 
       return updated ? mapSession(updated) : null;
     });
-
-    if (authenticated) return authenticated;
-
-    try {
-      await this.db
-        .update(applicationSessions)
-        .set({
-          status: 'EXPIRED',
-          expiredAt: input.now,
-          updatedAt: input.now,
-        })
-        .where(
-          and(
-            eq(applicationSessions.verifierVersion, input.verifierVersion),
-            eq(applicationSessions.credentialVerifier, input.verifier),
-            eq(applicationSessions.status, 'ACTIVE'),
-            sql`(
-              ${input.now} >= ${applicationSessions.absoluteExpiresAt}
-              OR ${input.now} >= ${applicationSessions.lastUsedAt} + interval '30 minutes'
-            )`,
-          ),
-        );
-    } catch {
-      // Denial is authoritative even when lazy EXPIRED persistence fails.
-    }
-
-    return null;
   }
+}
+
+function validSessionTimelineAt(now: Date) {
+  // Match the domain's temporal checks before successful authentication can
+  // refresh last use. Denial never writes lifecycle state; a clock rollback
+  // must not reach the monotonic last-use trigger and raise a database error.
+  return sql`(
+    isfinite(${applicationSessions.issuedAt})
+    AND isfinite(${applicationSessions.absoluteExpiresAt})
+    AND isfinite(${applicationSessions.lastUsedAt})
+    AND ${applicationSessions.absoluteExpiresAt} = ${applicationSessions.issuedAt} + interval '12 hours'
+    AND ${applicationSessions.lastUsedAt} >= ${applicationSessions.issuedAt}
+    AND ${applicationSessions.lastUsedAt} <= ${applicationSessions.absoluteExpiresAt}
+    AND ${now} >= ${applicationSessions.issuedAt}
+    AND ${now} >= ${applicationSessions.lastUsedAt}
+  )`;
 }
 
 function mapSession(row: ApplicationSessionRow): ApplicationSessionRecord {

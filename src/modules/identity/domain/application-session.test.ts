@@ -67,3 +67,76 @@ test('session and single-use verifiers are separated even for identical raw byte
   const secret = Buffer.alloc(32, 1).toString('base64url');
   assert.notDeepEqual(deriveSessionVerifier(secret), deriveSingleUseVerifier(secret));
 });
+
+const sessionStart = new Date('2026-10-04T12:00:00Z');
+const activeSession = {
+  identityActive: true,
+  status: 'ACTIVE' as const,
+  issuedAt: sessionStart,
+  absoluteExpiresAt: new Date(sessionStart.getTime() + SESSION_ABSOLUTE_LIFETIME_MS),
+  lastUsedAt: sessionStart,
+};
+
+test('active sessions authenticate at issuance and immediately before each expiry boundary', () => {
+  const beforeIdle = new Date(sessionStart.getTime() + SESSION_IDLE_LIFETIME_MS - 1);
+  const beforeAbsolute = new Date(activeSession.absoluteExpiresAt.getTime() - 1);
+  assert.deepEqual(evaluateSessionAuthentication(activeSession, sessionStart), { allowed: true });
+  assert.deepEqual(evaluateSessionAuthentication(activeSession, beforeIdle), { allowed: true });
+  assert.deepEqual(evaluateSessionAuthentication({ ...activeSession, lastUsedAt: beforeAbsolute }, beforeAbsolute), { allowed: true });
+});
+
+for (const [label, input, now] of [
+  ['before issuance', activeSession, new Date(sessionStart.getTime() - 1)],
+  ['future last use', { ...activeSession, lastUsedAt: new Date(sessionStart.getTime() + 1) }, sessionStart],
+  ['last use before issuance', { ...activeSession, lastUsedAt: new Date(sessionStart.getTime() - 1) }, sessionStart],
+  ['shortened absolute lifetime', { ...activeSession, absoluteExpiresAt: new Date(activeSession.absoluteExpiresAt.getTime() - 1) }, sessionStart],
+  ['extended absolute lifetime', { ...activeSession, absoluteExpiresAt: new Date(activeSession.absoluteExpiresAt.getTime() + 1), lastUsedAt: activeSession.absoluteExpiresAt }, activeSession.absoluteExpiresAt],
+] as const) {
+  test(`${label} fails closed without mutating the session`, () => {
+    const before = structuredClone(input);
+    assert.deepEqual(evaluateSessionAuthentication(input, now), { allowed: false, reason: 'INVALID_TIME' });
+    assert.deepEqual(input, before);
+  });
+}
+
+test('only a literal active identity and canonical ACTIVE session may authenticate', () => {
+  for (const identityActive of [false, undefined, null, 0, 1, 'false', 'true', {}]) {
+    assert.deepEqual(
+      evaluateSessionAuthentication({ ...activeSession, identityActive: identityActive as boolean }, sessionStart),
+      { allowed: false, reason: 'IDENTITY_INACTIVE' },
+    );
+  }
+  for (const status of ['REVOKED', 'EXPIRED', 'active', '', undefined, null]) {
+    assert.deepEqual(
+      evaluateSessionAuthentication({ ...activeSession, status: status as typeof activeSession.status }, sessionStart),
+      { allowed: false, reason: 'SESSION_NOT_ACTIVE' },
+    );
+  }
+});
+
+test('non-Date temporal inputs fail closed rather than being coerced', () => {
+  for (const field of ['issuedAt', 'absoluteExpiresAt', 'lastUsedAt', 'now'] as const) {
+    for (const invalid of [undefined, null, 0, sessionStart.toISOString(), {}]) {
+      const input = { ...activeSession, now: sessionStart, [field]: invalid };
+      assert.deepEqual(
+        evaluateSessionAuthentication(input as typeof activeSession, input.now as Date),
+        { allowed: false, reason: 'INVALID_TIME' },
+      );
+    }
+  }
+});
+
+test('session verifier matches the fixed v1 domain-separated SHA-256 vector', () => {
+  assert.equal(
+    deriveSessionVerifier('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA').toString('hex'),
+    'bd788819f2c15498bf4e92e8c76ccc1c5150d4b523f6da81ad9172a21944fb50',
+  );
+});
+
+test('malformed or noncanonical session credentials cannot produce a verifier', () => {
+  for (const credential of [
+    '', ' '.repeat(43), 'A'.repeat(42), 'A'.repeat(44), `${'A'.repeat(43)}=`,
+    `${'A'.repeat(42)}+`, `${'A'.repeat(42)}/`, `${'A'.repeat(42)}B`,
+    ` ${'A'.repeat(43)}`, `${'A'.repeat(43)}\n`,
+  ]) assert.throws(() => deriveSessionVerifier(credential), RangeError);
+});
