@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1",
+  "version": "0.2.0",
   "scope": "development checks only; runtime and production authority remain separate",
   "max_operation_ms": 25000,
   "shell_execution": false,
@@ -12,6 +12,23 @@
       "command": "node",
       "args": [
         "scripts/architecture/validate-whole-repository.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "document-governance",
+      "command": "node",
+      "args": [
+        "scripts/docs/validate-document-metadata.mjs"
+      ],
+      "timeout_ms": 25000,
+      "dynamic_input": "source-bound-event-document-base"
+    },
+    {
+      "id": "production-contract-decisions",
+      "command": "node",
+      "args": [
+        "scripts/release/validate-production-proof-contract-decisions.mjs"
       ],
       "timeout_ms": 25000
     },
@@ -90,7 +107,8 @@
       "command": "node",
       "args": [
         "--test",
-        "scripts/tests/validate-development-self-audit.test.mjs"
+        "scripts/tests/validate-development-self-audit.test.mjs",
+        "scripts/tests/validate-ci-consolidation.test.mjs"
       ],
       "timeout_ms": 25000
     },
@@ -136,10 +154,52 @@
       "discover_tests": "src/modules"
     },
     {
+      "id": "drizzle-history",
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "drizzle-kit",
+        "check"
+      ],
+      "timeout_ms": 25000
+    },
+    {
       "id": "generation",
       "command": "pnpm",
       "args": [
         "db:verify-p05-generation"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "replay-p01",
+      "command": "pnpm",
+      "args": [
+        "db:verify-replay"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "replay-p02",
+      "command": "pnpm",
+      "args": [
+        "db:verify-p02-replay"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "replay-p03",
+      "command": "pnpm",
+      "args": [
+        "db:verify-p03-replay"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "replay-p04",
+      "command": "pnpm",
+      "args": [
+        "db:verify-p04-replay"
       ],
       "timeout_ms": 25000
     },

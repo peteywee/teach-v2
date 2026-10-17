@@ -2,6 +2,8 @@
 // command authorization registry, or permission to execute shared migrations.
 export const stageCatalog = Object.freeze([
   ['authority', 'node', ['scripts/architecture/validate-whole-repository.mjs']],
+  ['document-governance', 'node', ['scripts/docs/validate-document-metadata.mjs']],
+  ['production-contract-decisions', 'node', ['scripts/release/validate-production-proof-contract-decisions.mjs']],
   ['pins', 'node', ['scripts/packaging/validate-apply-guards.mjs', 'pins']],
   ['target-snapshots', 'node', ['--test', 'scripts/tests/validate-isolated-database-target.mjs', 'scripts/tests/validate-persistence-input-snapshots.mjs']],
   ['production-denials', 'node', ['scripts/tests/validate-production-proof.mjs']],
@@ -10,12 +12,17 @@ export const stageCatalog = Object.freeze([
   ['validator-shard-1', 'node', ['scripts/tests/validate-validators.mjs', '--shard=1/3']],
   ['validator-shard-2', 'node', ['scripts/tests/validate-validators.mjs', '--shard=2/3']],
   ['validator-shard-3', 'node', ['scripts/tests/validate-validators.mjs', '--shard=3/3']],
-  ['audit-regressions', 'node', ['--test', 'scripts/tests/validate-development-self-audit.test.mjs']],
+  ['audit-regressions', 'node', ['--test', 'scripts/tests/validate-development-self-audit.test.mjs', 'scripts/tests/validate-ci-consolidation.test.mjs']],
   ['recovery-regressions', 'node', ['--test', 'scripts/tests/validate-owner-decision-inventory.test.mjs']],
   ['lifecycle-regressions', 'node', ['--test', 'scripts/tests/validate-workflow-lifecycle.test.mjs', 'scripts/tests/validate-workflow-lifecycle-wiring.test.mjs', 'scripts/tests/validate-workflow-lifecycle-readback.test.mjs']],
   ['typecheck', 'pnpm', ['typecheck']],
   ['foundation', 'pnpm', ['exec', 'node', '--import', 'tsx', '--test']],
+  ['drizzle-history', 'pnpm', ['exec', 'drizzle-kit', 'check']],
   ['generation', 'pnpm', ['db:verify-p05-generation']],
+  ['replay-p01', 'pnpm', ['db:verify-replay']],
+  ['replay-p02', 'pnpm', ['db:verify-p02-replay']],
+  ['replay-p03', 'pnpm', ['db:verify-p03-replay']],
+  ['replay-p04', 'pnpm', ['db:verify-p04-replay']],
   ['replay', 'pnpm', ['db:verify-p05-replay']],
   ['migrate-isolated', 'pnpm', ['db:migrate']],
   ['postgres-p01', 'pnpm', ['test:integration']],
@@ -27,10 +34,10 @@ export const stageCatalog = Object.freeze([
   ['postgres-p05', 'pnpm', ['test:p05:integration']],
 ]);
 export const expectedPlan = {
-  version: '0.1.1', scope: 'development checks only; runtime and production authority remain separate',
+  version: '0.2.0', scope: 'development checks only; runtime and production authority remain separate',
   max_operation_ms: 25000, shell_execution: false,
   full_runtime_conformance: 'UNKNOWN', runtime_activation: 'BLOCKED', shared_or_production_execution_authorized: false,
-  stages: stageCatalog.map(([id, command, args]) => ({ id, command, args, timeout_ms: 25000, ...(id === 'foundation' ? { discover_tests: 'src/modules' } : {}) })),
+  stages: stageCatalog.map(([id, command, args]) => ({ id, command, args, timeout_ms: 25000, ...(id === 'document-governance' ? { dynamic_input: 'source-bound-event-document-base' } : {}), ...(id === 'foundation' ? { discover_tests: 'src/modules' } : {}) })),
 };
 export function inspectAuditPlan(plan) {
   return JSON.stringify(plan) === JSON.stringify(expectedPlan) ? [] : ['self-audit: exact bounded development command catalog and fail-closed scope required'];

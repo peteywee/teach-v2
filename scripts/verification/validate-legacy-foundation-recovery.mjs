@@ -2,6 +2,7 @@
 import {readFileSync,existsSync} from 'node:fs';
 import {resolve,join} from 'node:path';
 import {createHash} from 'node:crypto';
+import {inspectConsolidatedVerification} from './consolidated-ci-evidence.mjs';
 import {renderOwnerDecisions} from './render-owner-decisions.mjs';
 import {deriveOwnerDecisionInventory} from './owner-decision-inventory.mjs';
 const root=resolve(new URL('../..',import.meta.url).pathname);
@@ -30,6 +31,6 @@ try {
  const service=read('src/modules/identity/application/session-revocation-service.ts'),binder=read('src/modules/identity/infrastructure/persistence/postgres-session-command-transaction.ts');
  check(service.includes('requireSessionAuthorization(structuredClone(captured))')&&service.includes('if (outcome.transitioned) await context.audit.appendRequired')&&service.indexOf('requireSessionAuthorization')<service.indexOf('revokeWithOutcome'),'authorized conditional required audit mechanism required');
  check(binder.includes('authorizationFactory(transaction)')&&binder.includes('auditFactory(transaction)')&&binder.includes('new PostgresApplicationSessionRepository(transaction)')&&binder.includes('throw new IdentityCommandDependenciesUnavailableError()'),'same transaction binding and refusal required');
- check(read('.github/workflows/slice-p02-implementation.yml').includes('run: pnpm test:session:commands:integration')&&read('scripts/verification/self-audit-catalog.mjs').includes("['postgres-session-commands'"),'session transaction PG automation required');
+ check(inspectConsolidatedVerification(root).length===0,'session transaction PG automation required with complete consolidated catalog');
  console.log(`PASS legacy recovery: ${ids.length} unresolved owner questions, pinned reference evidence and conditional session audit; runtime BLOCKED`);
 } catch(error){console.error(error.message);process.exitCode=1;}

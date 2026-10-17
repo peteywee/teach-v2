@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { localDocumentGovernanceContext } from '../verification/document-governance-context.mjs';
 import { expectedPlan,inspectAuditPlan } from '../verification/self-audit-catalog.mjs';
 import { sourceIdentity,runBounded,runAuditStage,evaluateAuditReports,discoverFoundationTests } from '../verification/development-self-audit.mjs';
 const hash=value=>createHash('sha256').update(value).digest('hex');
@@ -22,14 +23,16 @@ function fixture(body='console.log("fixture check");'){
 function evidence(){
  const source={source_sha:'a'.repeat(40),tree_sha:'b'.repeat(40),working_digest:hash(''),stamp:hash('source'),dirty:false};
  const tests=['src/modules/example/domain/a.test.ts'],planHash=hash('plan');
+ const documentContext=localDocumentGovernanceContext(source.source_sha);
  const reports=expectedPlan.stages.map(stage=>({kind:'development-stage-evidence',stage:stage.id,state:'PROVEN',source:structuredClone(source),source_unchanged:true,plan_sha256:planHash,
- command:[stage.command,...stage.args,...(stage.discover_tests?tests:[])],runtime:{node:'v20.19.0',platform:'linux'},
+ ...(stage.dynamic_input?{input_context:structuredClone(documentContext),input_context_error:null}:{}),
+ command:[stage.command,...stage.args,...(stage.discover_tests?tests:[])],runtime:{node:'v20.20.2',platform:'linux'},
  started_at:'2026-10-05T02:00:00.000Z',finished_at:'2026-10-05T02:00:00.010Z',duration_ms:10,exit_code:0,timed_out:false,execution_error:null,stdout_sha256:hash('out'),stderr_sha256:hash(''),
  ...(stage.id.startsWith('validator-shard-')?{validator_shard:{inventory:186,index:Number(stage.id.at(-1)),total:3,selected:62,digest:hash('inventory')}}:{}),
  full_runtime_conformance:'UNKNOWN',runtime_activation:'BLOCKED',shared_or_production_execution_authorized:false}));
- return {source,tests,planHash,reports};
+ return {source,tests,planHash,reports,documentContext};
 }
-const evaluate=f=>evaluateAuditReports(expectedPlan,f.reports,f.source,f.planHash,f.tests);
+const evaluate=f=>evaluateAuditReports(expectedPlan,f.reports,f.source,f.planHash,f.tests,f.documentContext);
 test('one clean source with every bounded stage passes reconciliation',()=>assert.deepEqual(evaluate(evidence()),[]));
 for(const [name,mutate,pattern] of [
  ['missing stage',f=>f.reports.pop(),/every distinct|missing/],

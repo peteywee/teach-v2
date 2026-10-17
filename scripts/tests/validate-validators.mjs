@@ -1056,7 +1056,7 @@ test('coverage: duplicate row cannot conceal missing command',coverageScript,(di
 test('integration: future table cannot hide in existing module',integrationScript,(dir)=>{const path='src/modules/identity/infrastructure/persistence/schema.ts';writeFileSync(join(dir,path),readFileSync(join(dir,path),'utf8')+'\nexport const futureTable = pgTable("learning_assignments", {});\n');},{pattern:/future physical table has no ADMIT authority/});
 test('integration: future table cannot enter existing migration',integrationScript,(dir)=>{const path='drizzle/0004_slice_p05_learning_session.sql';writeFileSync(join(dir,path),readFileSync(join(dir,path),'utf8')+'\nCREATE TABLE "certifications" (id text);\n');},{pattern:/future migration table has no ADMIT authority/});
 test('integration: future snapshot table cannot precede admission',integrationScript,(dir)=>{const path='drizzle/meta/0004_snapshot.json';const d=readJson(dir,path);d.tables['public.progress_events']={};writeJson(dir,path,d);},{pattern:/future snapshot table has no ADMIT authority/});
-test('integration: path-filtered physical proof workflow fails',integrationScript,(dir)=>{const path='.github/workflows/slice-p01-implementation.yml';writeFileSync(join(dir,path),readFileSync(join(dir,path),'utf8').replace('pull_request:',"pull_request:\n    paths: ['src/**']"));},{pattern:/physical proofs must run on every PR and main tree/});
+test('integration: path-filtered physical proof workflow fails',integrationScript,(dir)=>{const path='.github/workflows/development-self-audit.yml';writeFileSync(join(dir,path),readFileSync(join(dir,path),'utf8').replace('pull_request:',"pull_request:\n    paths: ['src/**']"));},{pattern:/physical proofs must run on every PR and main tree/});
 test('integration: missing future evidence plan fails',integrationScript,(dir)=>{const path='persistence/physical-slices/queue-post-p05.json';const d=readJson(dir,path);d.slices[1].evidence_plan=null;writeJson(dir,path,d);},{pattern:/evidence plan is required/});
 
 // Development automation stays distinct from runtime authorization.
@@ -1070,7 +1070,7 @@ test('self-audit: omitted CI checkpoint fails',selfAuditScript,(dir)=>mutateText
 test('self-audit: stale checkout cannot claim candidate proof',selfAuditScript,(dir)=>mutateText(dir,selfAuditWorkflow,'ref: ${{ github.event.pull_request.head.sha || github.sha }}','ref: main'),{pattern:/exact candidate/});
 test('self-audit: filtered automation fails',selfAuditScript,(dir)=>mutateText(dir,selfAuditWorkflow,'pull_request:',"pull_request:\n    paths: ['src/**']"),{pattern:/every PR/});
 test('self-audit: missing failure finalizer fails',selfAuditScript,(dir)=>mutateText(dir,selfAuditWorkflow,'if: always()','if: success()'),{pattern:/finalize and be retained/});
-test('self-audit: missing command PG evidence fails',selfAuditScript,(dir)=>mutateText(dir,'.github/workflows/slice-p02-implementation.yml','run: pnpm test:identity:commands:integration','run: echo skipped'),{pattern:/atomic Identity integration/});
+test('self-audit: missing command PG evidence fails',selfAuditScript,(dir)=>mutateText(dir,selfAuditWorkflow,'run: node scripts/verification/run-self-audit.mjs --stage postgres-identity-commands','run: echo skipped'),{pattern:/atomic Identity integration/});
 test('self-audit: missing transaction-bound audit connection fails',selfAuditScript,(dir)=>mutateText(dir,'src/modules/identity/infrastructure/persistence/postgres-identity-command-transaction.ts','bindings.audit(transaction)','bindings.audit(this.db)'),{pattern:/exact-transaction binding/});
 
 // Recovery proposals and legacy evidence remain separate from owner authority.
@@ -1085,7 +1085,7 @@ test('recovery: legacy cannot authorize V2',recoveryScript,dir=>{const p=recover
 test('recovery: wrong pinned head fails',recoveryScript,dir=>{const p=recoveryBase+'legacy-sources.json',d=readJson(dir,p);d.sources[0].head_sha='0'.repeat(40);writeJson(dir,p,d);},{pattern:/exact pinned source/});
 test('recovery: altered reference excerpt fails',recoveryScript,dir=>{const p=recoveryBase+'legacy-excerpts.json',d=readJson(dir,p);d.excerpts[0].text+='invented';writeJson(dir,p,d);},{pattern:/excerpt source and digest/});
 test('recovery: global audit transaction binding fails',recoveryScript,dir=>mutateText(dir,'src/modules/identity/infrastructure/persistence/postgres-session-command-transaction.ts','auditFactory(transaction)','auditFactory(this.db)'),{pattern:/same transaction binding/});
-test('recovery: missing session PG CI evidence fails',recoveryScript,dir=>mutateText(dir,'.github/workflows/slice-p02-implementation.yml','run: pnpm test:session:commands:integration','run: echo skipped'),{pattern:/session transaction PG automation/});
+test('recovery: missing session PG CI evidence fails',recoveryScript,dir=>mutateText(dir,selfAuditWorkflow,'run: node scripts/verification/run-self-audit.mjs --stage postgres-session-commands','run: echo skipped'),{pattern:/session transaction PG automation/});
 
 test('decision closure: registered policy and 24 denial regressions pass','scripts/tests/validate-decision-closure.test.mjs',()=>{},{pass:true});
 

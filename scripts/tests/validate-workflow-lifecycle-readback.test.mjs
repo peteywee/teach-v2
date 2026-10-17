@@ -9,7 +9,7 @@ import { declaredStepContext } from '../verification/workflow-lifecycle-step-con
 import { collectRunLifecycle,createGitHubReadback,decodeCheckpointArchive } from '../verification/workflow-lifecycle-readback.mjs';
 const hash=b=>createHash('sha256').update(b).digest('hex');
 function fixture(){
- const repository='peteywee/teach-v2',runId=100,source='a'.repeat(40),tree='b'.repeat(40),path='.github/workflows/relationship-discovery.yml';
+ const repository='peteywee/teach-v2',runId=100,source='a'.repeat(40),tree='b'.repeat(40),path='.github/workflows/development-self-audit.yml';
  const text=readFileSync(new URL('../../'+path,import.meta.url),'utf8');const definition=inspectWorkflowText(path,text)[0];
  const steps=Object.fromEntries(definition.required_steps.map(id=>[id,{outcome:'success',conclusion:'success'}]));
  const report=buildWorkflowReport({definition,context:{repository,workflow_source_sha:source,run_id:runId,attempt:1,job_id:definition.job_id,event:'push',expected_sha:source},source:{source_sha:source,tree_sha:tree,dirty:false},steps,jobStatus:'success',now:'2026-10-05T06:00:00.000Z'});

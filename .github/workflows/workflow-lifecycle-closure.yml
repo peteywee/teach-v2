@@ -2,50 +2,7 @@ name: Workflow Lifecycle Closure
 on:
   workflow_run:
     workflows:
-      - "Application Interface Authority"
-      - "Application Interface Discovery"
-      - "Architecture Application Cross-Layer Audit"
-      - "Architecture Application Persistence Audit"
-      - "Architecture Authority"
-      - "Architecture Discovery"
-      - "Architecture Proposal"
-      - "Command Event Discovery"
-      - "Decision Table Discovery"
-      - "Dependency Concepts"
-      - "Dependency Lifecycle Discovery"
       - "Development Self Audit"
-      - "Document Governance"
-      - "Domain Ownership Discovery"
-      - "First Physical Slice Readiness"
-      - "Invariant Discovery"
-      - "Persistence Authority"
-      - "Persistence Discovery"
-      - "Persistence Semantic Closure Discovery"
-      - "Persistence Semantic Closure Proposal"
-      - "Persistence Semantic Closure Registration"
-      - "Production Proof Decisions"
-      - "Relationship Discovery"
-      - "SLICE-P01 Implementation"
-      - "SLICE-P01 Relationship Promotion"
-      - "SLICE-P02 Implementation"
-      - "SLICE-P02 Owner Decisions"
-      - "SLICE-P02 Schema Admission"
-      - "SLICE-P03 Implementation"
-      - "SLICE-P03 Schema Admission"
-      - "SLICE-P04 Implementation"
-      - "SLICE-P04 Schema Admission"
-      - "SLICE-P05 Domain Application Foundation"
-      - "SLICE-P05 Owner Decisions"
-      - "SLICE-P05 Physical Implementation"
-      - "SLICE-P05 Schema Admission"
-      - "Semantic Kernel"
-      - "State Discovery"
-      - "Strict-Nine Governance Ratification"
-      - "TransactionControl First Slice Decision Packet"
-      - "TransactionControl First Slice Decision Registration"
-      - "Validate Apply Pins"
-      - "Validator Negative Paths"
-      - "Whole Repository Integration Audit"
     types: [completed]
 permissions:
   contents: read
@@ -69,7 +26,7 @@ jobs:
         id: workflow_step_002
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '20.20.2'
       - name: Read authoritative run and retained evidence
         id: workflow_step_003
         env:

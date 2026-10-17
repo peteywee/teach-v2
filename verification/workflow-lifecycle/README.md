@@ -20,7 +20,7 @@ A workflow is complete only when every applicable phase has an owner, executable
 
 ## Implemented verification layer
 
-All 44 verification producers use a pinned source checkout, explicit step identities, read-only permissions, a job timeout, an always-run checkpoint recorder and an always-run artifact upload. The self-audit catalog keeps each verification stage limited to 25 seconds. A job timeout is an outer deadline, not evidence that each unrelated setup step is limited to 25 seconds.
+The consolidated verification producer uses a pinned source checkout, explicit step identities, read-only permissions, a job timeout, an always-run checkpoint recorder and an always-run artifact upload. The self-audit catalog keeps each verification stage limited to 25 seconds. A job timeout is an outer deadline, not evidence that each unrelated setup step is limited to 25 seconds.
 
 The checkpoint records required outcomes and exact source/tree without retaining arbitrary step outputs. Its success disposition is AWAITING_RECEIPT. Failed, skipped, missing, contradictory and interrupted outcomes cannot close. Runner-managed isolated resources are torn down with the job. Hard termination can prevent capture: a missing report/receipt is incomplete, never a success.
 
@@ -51,6 +51,14 @@ Receipt retention means the artifact was intact and unexpired at the recorded ob
 
 ## Batch validation and handoff
 
-The 45-workflow inventory contains 44 producers and one observer; all 23 approved product commands carry their existing missing obligations. The lifecycle regression stage runs core, wiring and readback tests. Negative cases cover rehashed reports, omitted steps, permission/source substitution, actual job failure, container setup, reruns, archive tampering, duplicate/path-traversing ZIP entries and artifact disappearance.
+The two-workflow inventory contains one 31-stage producer and one independent observer; all 23 approved product commands carry their existing missing obligations. The lifecycle regression stage runs core, wiring and readback tests. Negative cases cover rehashed reports, omitted steps, permission/source substitution, actual job failure, container setup, reruns, archive tampering, duplicate/path-traversing ZIP entries and artifact disappearance.
 
 This development layer grants only `DEVELOPMENT_EVIDENCE_ONLY` handoff. P06–P08, real Authorization/Audit adapters and production execution keep their existing gates. The preserved owner-answer register must be loaded before proposing the next authority/admission layer; implementation blockers do not erase supplied answers.
+
+## Coverage-preserving CI consolidation
+
+The prior 44-producer layout is retained in Git history. The consolidated producer preserves all 24 prior stage identities, all 53 standalone validators, the complete 216-case validator inventory, all 13 foundation test files and seven PostgreSQL suites. Seven additional bounded stages preserve event-base document governance, production contract decisions, one Drizzle history check and P01–P04 replay. Every PR target branch, every main push and manual dispatch are covered without path filters.
+
+Document governance reads the runner event JSON, validates source/repository/run/attempt and base SHA, and records that context plus the actual shell-free argv. PRs require their exact base; pushes require their before SHA, with initial all-zero push handled explicitly. Dispatch and local runs without a supplied base record a no-base fallback. Missing history for a declared base blocks instead of dropping comparison. Full history is requested with fetch-depth zero. A local shallow checkout cannot be described as a full-history hosted proof.
+
+See [coverage manifest](../whole-repository/ci-consolidation-coverage.json) and [measurement and rollback notes](../whole-repository/ci-consolidation.md). No runtime, migration, deployment or repository-settings authority changes.

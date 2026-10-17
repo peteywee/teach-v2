@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
 import { join,resolve } from 'node:path';
+import { renderConsolidatedProducerWorkflow } from './self-audit-workflow.mjs';
 import { closureObserverPath, deriveWorkflowInventory,inspectClosureObserverText,inspectWorkflowText } from './workflow-lifecycle-inventory.mjs';
 
 export function inspectProducerWorkflowWiring(path,text) {
   const errors=[],fail=message=>errors.push(`${path}: ${message}`);
+  if(path==='.github/workflows/development-self-audit.yml'&&text!==renderConsolidatedProducerWorkflow())fail('exact constrained producer execution template required');
   // Explicit producer form only. Job-level overrides, error suppression and
   // conditional execution can otherwise make a green run omit required proof.
+  if(/^\s*(?:shell|defaults|working-directory):/m.test(text))fail('shell, defaults and working-directory execution overrides forbidden');
   const permissionBlocks=[...text.matchAll(/^([ \t]*)permissions:(.*)$/gm)];
   if(permissionBlocks.length!==1||permissionBlocks[0]?.[1]!==''||permissionBlocks[0]?.[2].trim()!==''||!/^permissions:\n  contents: read\n(?:\s*\n)*jobs:/m.test(text))fail('one top-level read-only contents permission block required');
   if(/^\s*(?:continue-on-error|secrets|environment):/m.test(text)||/^\s*[A-Za-z-]+: (?:write|write-all)\s*$/m.test(text))fail('suppressed failures, secret contexts and write permissions forbidden');
@@ -43,6 +46,7 @@ export function inspectWorkflowLifecycles(root) {
   try {
     const inventory=deriveWorkflowInventory(root),stored=JSON.parse(readFileSync(join(root,'verification/workflow-lifecycle/inventory.json'),'utf8'));
     if(JSON.stringify(inventory)!==JSON.stringify(stored))fail('complete generated workflow/product inventory required');
+    if(inventory.ci_workflows!==2||inventory.ci_jobs!==2||JSON.stringify(inventory.ci.map(row=>row.workflow_path))!==JSON.stringify(['.github/workflows/development-self-audit.yml',closureObserverPath]))fail('exact two-workflow producer/independent-observer inventory required');
     const observer=inventory.ci.filter(row=>row.workflow_path===closureObserverPath);
     if(observer.length!==1)fail('exactly one non-recursive closure observer job required');
     for(const row of inventory.ci) {
@@ -54,7 +58,7 @@ export function inspectWorkflowLifecycles(root) {
       for(const error of inspectProducerWorkflowWiring(row.workflow_path,text))fail(error);
       if(!text.includes('permissions:\n  contents: read')||/\b(?:contents|issues|pull-requests|id-token): write/.test(text))fail(`${row.workflow_path}: read-only job permissions required`);
       if(!text.includes('ref: ${{ github.event.pull_request.head.sha || github.sha }}')||!text.includes('persist-credentials: false'))fail(`${row.workflow_path}: exact source checkout required`);
-      if(!text.includes('timeout-minutes: 15')||!text.includes("node-version: '20'"))fail(`${row.workflow_path}: bounded job and pinned Node required`);
+      if(!/^    timeout-minutes: 15$/m.test(text)||[...text.matchAll(/^    timeout-minutes:/gm)].length!==1||!text.includes("node-version: '20.20.2'"))fail(`${row.workflow_path}: bounded job and pinned Node required`);
       const job=inspectWorkflowText(row.workflow_path,text).find(x=>x.job_id===row.job_id),steps=job.lifecycle_steps;
       const record=steps.find(x=>x.id==='lifecycle_record')?.body||'',upload=steps.find(x=>x.id==='lifecycle_upload')?.body||'';
       if(!record.includes('if: always()')||!record.includes('run: node scripts/verification/record-workflow-lifecycle.mjs')||!record.includes('LIFECYCLE_STEPS: ${{ toJson(steps) }}')||!record.includes('LIFECYCLE_JOB_STATUS: ${{ job.status }}')||!record.includes('LIFECYCLE_EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}')||!record.includes(`LIFECYCLE_WORKFLOW_PATH: ${row.workflow_path}`))fail(`${row.workflow_path}: always-run exact-source outcome capture required`);

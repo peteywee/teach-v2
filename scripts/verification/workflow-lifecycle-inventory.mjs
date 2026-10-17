@@ -47,7 +47,7 @@ jobs:
         id: workflow_step_002
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '20.20.2'
       - name: Read authoritative run and retained evidence
         id: workflow_step_003
         env:
