@@ -29,13 +29,13 @@ jobs:
       TEACH_ISOLATED_DB: '1'
       AUDIT_EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         id: workflow_step_001
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
         id: workflow_step_002
         with:
           node-version: '20.20.2'
@@ -147,7 +147,7 @@ jobs:
       - name: Save audit evidence
         id: audit_upload
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: development-self-audit-${{ github.event.pull_request.head.sha || github.sha }}
           path: verification/generated/self-audit/
@@ -164,7 +164,7 @@ jobs:
       - name: Retain workflow lifecycle evidence
         id: lifecycle_upload
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: workflow-lifecycle-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}
           path: verification/generated/workflow-lifecycle/report.json

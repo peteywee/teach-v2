@@ -17,7 +17,7 @@ export function inspectProducerWorkflowWiring(path,text) {
   if(/^\s*[^#\n]+:\s*[&*!]/m.test(text)||/^\s*<<:/m.test(text))fail('YAML aliases, anchors, merges and tags require an explicit reviewed parser extension');
   const checkoutSteps=text.split(/^      - /m).slice(1).filter(body=>/(?:^|\n        )uses: actions\/checkout@/.test(body));
   for(const checkout of checkoutSteps) {
-    if(!/(?:^|\n        )uses: actions\/checkout@v4\s*\n/.test(checkout)||
+    if(!/(?:^|\n        )uses: actions\/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1\s*\n/.test(checkout)||
        [...checkout.matchAll(/^          ref: /gm)].length!==1||
        [...checkout.matchAll(/^          persist-credentials: /gm)].length!==1||
        !/^          ref: \$\{\{ github.event.pull_request.head.sha \|\| github.sha \}\}\s*$/m.test(checkout)||
@@ -33,7 +33,7 @@ export function inspectProducerWorkflowWiring(path,text) {
       const expectedRecord=`        id: lifecycle_record\n        if: always()\n        env:\n          LIFECYCLE_STEPS: \${{ toJson(steps) }}\n          LIFECYCLE_JOB_STATUS: \${{ job.status }}\n          LIFECYCLE_EXPECTED_SHA: \${{ github.event.pull_request.head.sha || github.sha }}\n          LIFECYCLE_WORKFLOW_PATH: ${path}\n        run: node scripts/verification/record-workflow-lifecycle.mjs`;
       if(recordBehavior!==expectedRecord)fail('exact always-run lifecycle capture wiring required');
       const uploadBehavior=upload.replace(/^name: [^\n]*\n/,'').trimEnd();
-      const expectedUpload='        id: lifecycle_upload\n        if: always()\n        uses: actions/upload-artifact@v4\n        with:\n          name: workflow-lifecycle-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}\n          path: verification/generated/workflow-lifecycle/report.json\n          if-no-files-found: error';
+      const expectedUpload='        id: lifecycle_upload\n        if: always()\n        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9\n        with:\n          name: workflow-lifecycle-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}\n          path: verification/generated/workflow-lifecycle/report.json\n          if-no-files-found: error';
       if(uploadBehavior!==expectedUpload)fail('exact always-run lifecycle retention wiring required');
       if(job.all_step_ids.slice(-2).join(',')!=='lifecycle_record,lifecycle_upload')fail('record then retain must be final job steps');
     }
@@ -62,7 +62,7 @@ export function inspectWorkflowLifecycles(root) {
       const job=inspectWorkflowText(row.workflow_path,text).find(x=>x.job_id===row.job_id),steps=job.lifecycle_steps;
       const record=steps.find(x=>x.id==='lifecycle_record')?.body||'',upload=steps.find(x=>x.id==='lifecycle_upload')?.body||'';
       if(!record.includes('if: always()')||!record.includes('run: node scripts/verification/record-workflow-lifecycle.mjs')||!record.includes('LIFECYCLE_STEPS: ${{ toJson(steps) }}')||!record.includes('LIFECYCLE_JOB_STATUS: ${{ job.status }}')||!record.includes('LIFECYCLE_EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}')||!record.includes(`LIFECYCLE_WORKFLOW_PATH: ${row.workflow_path}`))fail(`${row.workflow_path}: always-run exact-source outcome capture required`);
-      if(!upload.includes('if: always()')||!upload.includes('uses: actions/upload-artifact@v4')||!upload.includes('name: workflow-lifecycle-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}')||!upload.includes('path: verification/generated/workflow-lifecycle/report.json')||!upload.includes('if-no-files-found: error'))fail(`${row.workflow_path}: distinct failure/success artifact receipt required`);
+      if(!upload.includes('if: always()')||!upload.includes('uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9')||!upload.includes('name: workflow-lifecycle-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}')||!upload.includes('path: verification/generated/workflow-lifecycle/report.json')||!upload.includes('if-no-files-found: error'))fail(`${row.workflow_path}: distinct failure/success artifact receipt required`);
       if(text.indexOf('id: lifecycle_record')>text.indexOf('id: lifecycle_upload')||!text.trimEnd().endsWith('if-no-files-found: error'))fail(`${row.workflow_path}: record then retain must be final steps`);
     }
     const audit=readFileSync(join(root,'.github/workflows/development-self-audit.yml'),'utf8');
