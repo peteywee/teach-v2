@@ -1,9 +1,12 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const ROOT = resolve(process.cwd());
 const errors = [];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load = (p) => {
   try { return JSON.parse(readFileSync(join(ROOT, p), 'utf8')); }
   catch (e) { errors.push(`${p}: ${e.message}`); return null; }
@@ -21,12 +24,13 @@ const files = {
   decision_table: load('kernel/decision-tables.json'),
   relationship: load('kernel/relationships.json'),
   command: load('kernel/commands.json'),
-  event: load('kernel/events.json')
+  event: load('kernel/events.json'),
+  capability: load('kernel/capabilities.json')
 };
 
 if (map) {
   if (map.map_id !== 'TEACH-DOMAIN-OWNERSHIP') errors.push('ownership map: map_id must be TEACH-DOMAIN-OWNERSHIP');
-  if (map.version !== '1.7.0') errors.push('ownership map: version must be 1.7.0');
+  if (map.version !== '1.8.0') errors.push('ownership map: version must be 1.8.0');
   if (map.status !== 'active') errors.push('ownership map: approved map must be active');
 }
 

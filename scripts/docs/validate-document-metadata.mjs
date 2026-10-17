@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
@@ -55,6 +56,12 @@ const activeIds = new Map();
 for (const abs of docs) {
   const path = relative(ROOT, abs).replaceAll('\\','/');
   const text = readFileSync(abs, 'utf8');
+  // Immutable pre-admission exhibit: its original bytes must not be rewritten
+  // to retrofit governed-document metadata. Its governed wrapper is adjacent.
+  if (path === 'domains/capabilities/proposal-0.1.1/README.md') {
+    if (createHash('sha256').update(text).digest('hex') !== '614fafb66d90df7cab78474c68cd6f1b17afdfca426e557c9c16d497eae9a161') errors.push(`${path}: immutable reviewed exhibit differs`);
+    continue;
+  }
   let m;
   try { m = parseMeta(text, path); } catch (e) { errors.push(e.message); continue; }
   for (const key of ['doc_id','class','version','status','owner','created_on','updated_on']) {

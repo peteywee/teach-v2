@@ -1,9 +1,12 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{ try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;} };
 
 const a=load('persistence/authority.json');
@@ -15,7 +18,7 @@ const m=load('kernel/manifest.json');
 const ids=load('kernel/identifiers.json');
 const rel=load('kernel/relationships.json');
 
-if (m?.version!=='0.16.0') errors.push(`persistence authority: expected K00 0.16.0, found ${m?.version}`);
+if (m?.version!=='0.17.0') errors.push(`persistence authority: expected K00 0.17.0, found ${m?.version}`);
 if (arch?.version!=='1.0.0' || arch?.status!=='active') errors.push('persistence authority: Architecture 1.0.0 required');
 if (app?.version!=='1.0.0' || app?.status!=='active') errors.push('persistence authority: Application Interfaces 1.0.0 required');
 if (d?.version!=='0.1.0' || d?.status!=='recorded') errors.push('persistence authority: discovery 0.1.0 required');
@@ -33,7 +36,7 @@ if (a) {
   if (a.migration_implementation_status!=='BLOCKED') errors.push('persistence authority: migration implementation must remain BLOCKED');
 }
 
-if ((ids?.entries||[]).filter(x=>x.status==='approved').length!==15) errors.push('persistence authority: identifier promotions occurred unexpectedly');
+if ((ids?.entries||[]).filter(x=>x.status==='approved').length!==16) errors.push('persistence authority: identifier promotions occurred unexpectedly');
 if ((rel?.entries||[]).filter(x=>x.status==='approved').length!==15) errors.push('persistence authority: relationship promotions occurred unexpectedly');
 
 if (errors.length) {

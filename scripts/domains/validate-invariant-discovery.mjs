@@ -1,9 +1,12 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const ROOT = resolve(process.cwd());
 const errors = [];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load = (p) => {
   try { return JSON.parse(readFileSync(join(ROOT, p), 'utf8')); }
   catch (e) { errors.push(`${p}: ${e.message}`); return null; }
@@ -23,8 +26,8 @@ if (proposal) {
   if (proposal.baseline?.commit !== '0d0da31243b78f83aac66e21733fc0b9a2371f83') errors.push('invariant discovery: baseline mismatch');
 }
 
-if (manifest?.version !== '0.16.0') errors.push(`invariant registration: expected K00 0.16.0, found ${manifest?.version}`);
-if (ownership?.version !== '1.7.0' || ownership?.status !== 'active') errors.push('invariant registration: requires active Domain Ownership Map 1.7.0');
+if (manifest?.version !== '0.17.0') errors.push(`invariant registration: expected K00 0.17.0, found ${manifest?.version}`);
+if (ownership?.version !== '1.8.0' || ownership?.status !== 'active') errors.push('invariant registration: requires active Domain Ownership Map 1.8.0');
 if ((machines?.entries || []).length !== 8) errors.push('invariant discovery: expected 8 current registered state machines');
 
 const ready = proposal?.ready_invariants || [];

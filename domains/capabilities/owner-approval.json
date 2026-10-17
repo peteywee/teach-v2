@@ -1,0 +1,23 @@
+{
+  "record_id": "TEACH-SEM-CAPABILITY-NAMES-OWNER-APPROVAL-2026-10-17",
+  "package_id": "TEACH-SEM-CAPABILITY-NAMES-2026-10-17",
+  "package_version": "0.1.1",
+  "package_sha256": "6d02a94d16cbc94b209500dc111be15862e6738fa63920ae6bd711f6c0dd3b51",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "recorded_on": "2026-10-17",
+  "state": "approved",
+  "source": "Owner conversation, transcribed verbatim; this record is not an agent-issued approval or a cryptographic identity proof.",
+  "question": {
+    "author": "assistant",
+    "message_id": "Sentinel_a97aa8743ce48191a76960f45241ce01",
+    "text": "The next package passed independent review. Two approvals to continue:\n\n1. Publish the verified Stage 1 repairs as a branch and pull request in your public peteywee/teach-v2 repo, without merging or deploying.\n2. Approve TEACH-SEM-CAPABILITY-NAMES-2026-10-17@0.1.1: register and promote exactly its 34 existing permission names plus their two type definitions, after admission checks pass. This grants no access and enables no runtime features.\n\nApprove both? The attachment includes the exact proposal and the legacy-code reuse inventory."
+  },
+  "response": {
+    "author": "user",
+    "message_id": "Sentinel_a5557f1a883c8191a225ac795dd87a6b",
+    "text": "approve both"
+  },
+  "applied_clause": 2,
+  "approved_scope": "Register and promote exactly the package\u2019s 36 capability-name/type entries after admission checks pass. No access grants or runtime features.",
+  "runtime_activation_authorized": false
+}

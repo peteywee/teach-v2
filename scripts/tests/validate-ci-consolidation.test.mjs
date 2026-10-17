@@ -407,10 +407,35 @@ function enumerateCases(source) {
   }, { timeout: 2000 });
   return cases;
 }
-test('all 216 baseline case identities keep validator targets and positive/negative semantics', () => {
+// Frozen original capability registration a94f7a05dcdf72d8623525ea73725ed76a1edbb9
+// replaces one historical candidate-only denial with exact-package provenance
+// denial. The old BASELINE_CASES record remains unchanged as historical evidence.
+// No other original expected outcome is relaxed; four reviewed cases are added.
+const admittedCaseTransition = {
+  before: { name: 'closure: excluded capability cannot become approved', script: 'scripts/persistence/validate-persistence-semantic-closure-registration.mjs', positive: false, pattern: 'excluded CapabilityId must remain candidate' },
+  after: { name: 'closure: later capability approval requires precise provenance', script: 'scripts/persistence/validate-persistence-semantic-closure-registration.mjs', positive: false, pattern: 'later CapabilityId requires exact name\\/type admission' },
+};
+const admittedCases = [
+  { name: 'sem36: all-registry in-memory closure regressions pass', script: 'scripts/tests/validate-semantic-dependency-closure.mjs', positive: true },
+  { name: 'capability admission: exact owner-approved package and adversarial cases pass', script: 'scripts/tests/validate-capability-admission.mjs', positive: true },
+  { name: 'capability admission: forged owner approval fails', script: 'scripts/kernel/validate-capability-admission.mjs', positive: false, pattern: 'exact recorded owner approval' },
+  { name: 'capability admission: unrelated promotion fails', script: 'scripts/kernel/validate-capability-admission.mjs', positive: false, pattern: 'exact approved overlay' },
+];
+test('all 215 unchanged baseline cases and the exact approved provenance-denial transition remain enforced', () => {
   const cases = enumerateCases(read('scripts/tests/validate-validators.mjs'));
   assert.equal(new Set(cases.map(x => x.name)).size, cases.length, 'no duplicate case names');
-  for (const baseline of BASELINE_CASES) assert.deepEqual(cases.find(x => x.name === baseline.name), baseline, baseline.name);
+  assert.deepEqual(BASELINE_CASES.find(x => x.name === admittedCaseTransition.before.name), admittedCaseTransition.before, 'historical denial remains frozen');
+  for (const baseline of BASELINE_CASES) {
+    const expected = baseline.name === admittedCaseTransition.before.name ? admittedCaseTransition.after : baseline;
+    assert.deepEqual(cases.find(x => x.name === expected.name), expected, expected.name);
+  }
+});
+test('complete 220-case catalog includes exactly the four approved checker and admission additions', () => {
+  const cases = enumerateCases(read('scripts/tests/validate-validators.mjs'));
+  const expected = [...BASELINE_CASES.map(row => row.name === admittedCaseTransition.before.name ? admittedCaseTransition.after : row), ...admittedCases];
+  const byName = (a, b) => a.name.localeCompare(b.name);
+  assert.equal(expected.length, 220);
+  assert.deepEqual(cases.sort(byName), expected.sort(byName));
 });
 test('all 53 baseline validators remain in the live umbrella discovery domain', () => {
   const live = [];
@@ -829,4 +854,15 @@ for (const path of ['scripts/db/verify-migration-replay.ts', 'tests/integration/
 });
 test('live coverage rejects a deleted historical validator even if manifest counts stay unchanged', () => {
   mutateFixtureFile(BASELINE_VALIDATORS[0], file => rmSync(file));
+});
+
+test('live coverage requires the newly admitted capability validator, not just the historical 53', () => {
+  mutateFixtureFile('scripts/kernel/validate-capability-admission.mjs', file => rmSync(file));
+});
+test('live coverage rejects an unreviewed extra standalone validator', () => {
+  const path = join(structuralRoot, 'scripts/kernel/validate-unreviewed-admission.mjs');
+  try {
+    writeFileSync(path, '// Unreviewed inventory addition.\n');
+    assert.match(inspectConsolidationCoverage(structuralRoot).join('\n'), /complete baseline plus admitted capability standalone validator inventory/);
+  } finally { rmSync(path); }
 });

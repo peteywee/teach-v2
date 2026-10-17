@@ -35,6 +35,41 @@
       "status": "candidate",
       "definition": "Stable retry identity for an idempotent operation.",
       "owning_domain": "TransactionControl"
+    },
+    {
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "Capability",
+      "kind": "value_object",
+      "definition": "A typed, dot-delimited action constant.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "CapabilityId"
+      ],
+      "lifecycle_note": "No independent business lifecycle. Registry candidate/approved status is governance metadata, not a product lifecycle.",
+      "authority_implications": [
+        "A constant identifies an action; possession or registration of the constant does not grant permission.",
+        "C14 alone defines the action meaning, assignment, scope, evaluation and denial semantics.",
+        "An unregistered or unauthorized protected operation fails closed.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "definition_sources": [
+        "contracts/c14-authorization-capabilities-contract.md#3-definitions",
+        "contracts/c01-canonical-semantics-contract.md#4-requirements:SEM-16,SEM-28"
+      ],
+      "promotion": {
+        "package_id": "TEACH-SEM-CAPABILITY-NAMES-2026-10-17",
+        "package_version": "0.1.1",
+        "approval_record": "domains/capabilities/owner-approval.json",
+        "promoted_on": "2026-10-17"
+      }
     }
   ]
 }

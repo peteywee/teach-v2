@@ -1,9 +1,12 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{
   try { return JSON.parse(readFileSync(join(ROOT,p),'utf8')); }
   catch(e){ errors.push(`${p}: ${e.message}`); return null; }
@@ -17,8 +20,8 @@ const commands=load('kernel/commands.json');
 const registration=load('domains/dependencies/registration.json');
 const lifecycleRegistration=load('domains/dependencies/lifecycle-registration.json');
 
-if (manifest?.version!=='0.16.0') errors.push(`dependency concepts: expected K00 0.16.0, found ${manifest?.version}`);
-if (ownership?.version!=='1.7.0' || ownership?.status!=='active') errors.push('dependency concepts: expected active Domain Ownership Map 1.7.0');
+if (manifest?.version!=='0.17.0') errors.push(`dependency concepts: expected K00 0.17.0, found ${manifest?.version}`);
+if (ownership?.version!=='1.8.0' || ownership?.status!=='active') errors.push('dependency concepts: expected active Domain Ownership Map 1.8.0');
 
 const expected=new Map([
   ['Invitation',{id:'InvitationId',owner:'Identity',machine:'InvitationStateMachine'}],

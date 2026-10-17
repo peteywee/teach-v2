@@ -1,9 +1,12 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 
 const proposal=load('domains/commands-events/proposed.json');
@@ -17,8 +20,8 @@ const commands=load('kernel/commands.json');
 const events=load('kernel/events.json');
 const decisions=load('kernel/decision-tables.json');
 
-if (manifest?.version !== '0.16.0') errors.push(`command/event discovery: expected K00 0.16.0, found ${manifest?.version}`);
-if (ownership?.version !== '1.7.0' || ownership?.status !== 'active') errors.push('command/event discovery: expected active Domain Ownership Map 1.7.0');
+if (manifest?.version !== '0.17.0') errors.push(`command/event discovery: expected K00 0.17.0, found ${manifest?.version}`);
+if (ownership?.version !== '1.8.0' || ownership?.status !== 'active') errors.push('command/event discovery: expected active Domain Ownership Map 1.8.0');
 if ((decisions?.entries || []).length !== 8) errors.push('command/event discovery: expected 8 registered decision tables');
 if (proposal?.version !== '0.1.0' || proposal?.status !== 'proposed') errors.push('command/event discovery: proposal must be proposed 0.1.0');
 if (!/^[0-9a-f]{40}$/.test(proposal?.baseline?.commit || '')) errors.push('command/event discovery: exact baseline SHA required');

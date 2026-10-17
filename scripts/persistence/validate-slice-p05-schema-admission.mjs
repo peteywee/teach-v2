@@ -1,10 +1,13 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { inspectAdmissionCriteria } from './admission-criteria.mjs';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 const text=(p)=>{try{return readFileSync(join(ROOT,p),'utf8');}catch(e){errors.push(`${p}: ${e.message}`);return '';}};
 const find=(doc,id)=>(doc?.entries||[]).find(x=>x.id===id);
@@ -26,8 +29,8 @@ const c32=text('contracts/c32-learning-sessions-progress-contract.md');
 const learningBoundary=text('src/modules/learning/README.md');
 
 if(authority?.version!=='1.0.0' || authority?.status!=='active') errors.push('SLICE-P05 admission: active Persistence Model 1.0.0 required');
-if(manifest?.version!=='0.16.0') errors.push('SLICE-P05 admission: K00 0.16.0 required');
-if(ownership?.version!=='1.7.0' || ownership?.status!=='active') errors.push('SLICE-P05 admission: Domain Ownership Map 1.7.0 required');
+if(manifest?.version!=='0.17.0') errors.push('SLICE-P05 admission: K00 0.17.0 required');
+if(ownership?.version!=='1.8.0' || ownership?.status!=='active') errors.push('SLICE-P05 admission: Domain Ownership Map 1.8.0 required');
 if(architecture?.version!=='1.0.0' || architecture?.status!=='active' || !(architecture?.topology?.runtime_domain_modules||[]).includes('Learning')) errors.push('SLICE-P05 admission: Architecture 1.0.0 Learning runtime module authority required');
 
 if(registration?.registration_id!=='TEACH-SLICE-P05-OWNER-DECISION-REGISTRATION' || registration?.version!=='1.0.0' || registration?.status!=='recorded' || registration?.issue!=='#47') errors.push('SLICE-P05 admission: owner decision registration missing');

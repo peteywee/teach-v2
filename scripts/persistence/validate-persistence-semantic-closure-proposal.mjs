@@ -1,9 +1,12 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 
 const p=load('persistence/semantic-closure/proposed.json');
@@ -17,7 +20,7 @@ if (p) {
   if (p.promotion_counts?.total!==24) errors.push('semantic closure proposal: expected 24 proposed promotions');
   if ((p.explicitly_not_promoted||[]).length!==10) errors.push('semantic closure proposal: expected 10 explicit exclusions');
 }
-if (m?.version!=='0.16.0') errors.push(`semantic closure proposal: current K00 must be 0.16.0, found ${m?.version}`);
+if (m?.version!=='0.17.0') errors.push(`semantic closure proposal: current K00 must be 0.17.0, found ${m?.version}`);
 if (reg?.status!=='recorded' || reg?.kernel_to!=='0.14.0') errors.push('semantic closure proposal: registration evidence missing');
 
 if (errors.length) {

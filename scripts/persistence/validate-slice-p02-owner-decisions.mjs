@@ -1,9 +1,12 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 const text=(p)=>{try{return readFileSync(join(ROOT,p),'utf8');}catch(e){errors.push(`${p}: ${e.message}`);return '';}};
 
@@ -21,7 +24,7 @@ const index=text('contracts/README.md');
 
 const find=(doc,id)=>(doc?.entries||[]).find(x=>x.id===id);
 
-if(manifest?.version!=='0.16.0') errors.push('SLICE-P02 decisions: K00 must remain 0.16.0');
+if(manifest?.version!=='0.17.0') errors.push('SLICE-P02 decisions: K00 must remain 0.17.0');
 if(reg?.registration_id!=='TEACH-SLICE-P02-OWNER-DECISION-REGISTRATION' || reg?.version!=='1.0.0' || reg?.status!=='recorded' || reg?.issue!=='#32') errors.push('SLICE-P02 decisions: registration identity/state mismatch');
 
 const expected=new Map([
@@ -62,6 +65,6 @@ if(errors.length){
 console.log('SLICE-P02 OWNER DECISIONS PASS');
 console.log('C12: 1.1.0');
 console.log('P02 decisions: 3 PROVEN');
-console.log('K00: 0.16.0 unchanged');
+console.log('K00: 0.17.0 unchanged');
 console.log('P02 physical schema: ADMITTED; implementation pending');
 

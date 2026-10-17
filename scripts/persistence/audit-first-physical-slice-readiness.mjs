@@ -1,10 +1,13 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { inspectLearningImplementation } from './learning-implementation-evidence.mjs';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 
 const m=load('kernel/manifest.json');
@@ -21,11 +24,11 @@ const p04Implementation=load('persistence/physical-slices/identity-credentials/i
 const p05Registration=load('persistence/physical-slices/learning-session/registration.json');
 const p05Admission=load('persistence/physical-slices/learning-session/admission.json');
 
-if(m?.version!=='0.16.0') errors.push('whole-stack audit: K00 must be 0.16.0');
+if(m?.version!=='0.17.0') errors.push('whole-stack audit: K00 must be 0.17.0');
 const checks=[
  ['commands-approved',(commands?.entries||[]).filter(x=>x.status==='approved').length,23],
  ['events-candidate',(events?.entries||[]).filter(x=>x.status==='candidate').length,10],
- ['ids-approved',(ids?.entries||[]).filter(x=>x.status==='approved').length,15],
+ ['ids-approved',(ids?.entries||[]).filter(x=>x.status==='approved').length,16],
  ['states-approved',(states?.entries||[]).filter(x=>x.status==='approved').length,7],
  ['states-candidate',(states?.entries||[]).filter(x=>x.status==='candidate').length,2],
  ['machines-approved',(machines?.entries||[]).filter(x=>x.status==='approved').length,7],
@@ -63,7 +66,7 @@ if(errors.length){
  process.exit(1);
 }
 console.log('POST-CLOSURE WHOLE-STACK AUDIT PASS');
-console.log('PROVEN: K00 0.16.0 semantic counts');
+console.log('PROVEN: K00 0.17.0 semantic counts');
 console.log('PROVEN: P01-P04 implementation state');
 console.log('PROVEN: P05 REQUIRED_ONE_ASSIGNMENT owner decision');
 console.log('PROVEN: P05 LearningSession schema admission');

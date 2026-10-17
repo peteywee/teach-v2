@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-K00",
   "class": "semantic-kernel",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-04",
+  "updated_on": "2026-10-17",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
-    "approved_on": "2026-10-04",
-    "record": "persistence/physical-slices/identity-tokens/registration.json",
-    "issue": "#40",
-    "basis": "Owner-approved SLICE-P03 relationship registration; GitHub issue #40; K00 0.16.0"
+    "approved_on": "2026-10-17",
+    "owner": "Patrick Craven, Top Shelf Service LLC",
+    "record": "domains/capabilities/owner-approval.json",
+    "basis": "TEACH-SEM-CAPABILITY-NAMES-2026-10-17@0.1.1: exactly 36 capability-name/type entries; all other semantics and runtime gates preserved."
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -25,6 +25,15 @@
   "governed_by": [
     "TEACH-CON-C00",
     "TEACH-CON-C01"
+  ],
+  "approval_history": [
+    {
+      "state": "approved",
+      "approved_on": "2026-10-04",
+      "record": "persistence/physical-slices/identity-tokens/registration.json",
+      "issue": "#40",
+      "basis": "Owner-approved SLICE-P03 relationship registration; GitHub issue #40; K00 0.16.0"
+    }
   ]
 }
 -->
@@ -33,7 +42,7 @@
 
 Canonical machine-readable source format: JSON.
 
-K00 version: `0.16.0`.
+K00 version: `0.17.0`.
 
 Active domain ownership authority: `domains/ownership-map.json`.
 
@@ -68,3 +77,8 @@ SLICE-P01 relationship promotion: K00 `0.15.0` promotes exactly `ReconciliationR
 ## K00 0.16.0 — SLICE-P03 owner-approved relationships
 
 Issue #40 registers four approved Identity-domain relationships required for SLICE-P03: `InvitationForIdentity` (many-to-zero-or-one), `SetupTokenBelongsToIdentity` (many-to-one), `PasswordResetTokenBelongsToIdentity` (many-to-one), and `InvitationOwnedByIdentity` (many-to-one protected owner scope). No other semantic status changes are made.
+
+
+## K00 0.17.0 — Capability name/type admission
+
+Exactly 36 entries are approved under `TEACH-SEM-CAPABILITY-NAMES-2026-10-17@0.1.1`: immutable `Capability`, completed `CapabilityId`, and the 34 unchanged C14 action constants. The package and owner response are preserved in `domains/capabilities/`; the ownership map is 1.8.0. This is semantic naming/type admission only: no grants, routes, runtime activation, principal, schema or migration changes. Membership and CERT-2 gates remain unchanged. Historical sections above describe their original registration scope, not current counts.

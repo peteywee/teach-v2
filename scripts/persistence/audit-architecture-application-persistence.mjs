@@ -1,9 +1,12 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{ try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;} };
 
 const arch=load('architecture/authority.json');
@@ -24,7 +27,7 @@ if (arch?.version!=='1.0.0' || arch?.status!=='active') errors.push('persistence
 if (app?.version!=='1.0.0' || app?.status!=='active') errors.push('persistence audit: Application Interfaces 1.0.0 missing');
 if (per?.version!=='1.0.0' || per?.status!=='active') errors.push('persistence audit: Persistence Model 1.0.0 missing');
 if (proposal?.version!=='0.1.0' || proposal?.status!=='proposed') errors.push('persistence audit: historical proposal must remain proposed');
-if (m?.version!=='0.16.0') errors.push(`persistence audit: K00 drifted to ${m?.version}`);
+if (m?.version!=='0.17.0') errors.push(`persistence audit: K00 drifted to ${m?.version}`);
 
 const counts={
   approvedEntities:(entities?.entries||[]).filter(x=>x.status==='approved').length,
@@ -36,7 +39,7 @@ const counts={
   candidateDecisions:(dt?.entries||[]).filter(x=>x.status==='candidate').length,
   gaps:(gaps?.core_missing_kernel_candidates||[]).length,
 };
-const expected={approvedEntities:13,approvedIds:15,candidateStates:2,candidateRelationships:8,candidateEvents:10,candidateInvariants:22,candidateDecisions:8,gaps:9};
+const expected={approvedEntities:13,approvedIds:16,candidateStates:2,candidateRelationships:8,candidateEvents:10,candidateInvariants:22,candidateDecisions:8,gaps:9};
 for (const [k,v] of Object.entries(expected)) if (counts[k]!==v) errors.push(`persistence audit: ${k} expected ${v}, found ${counts[k]}`);
 
 if (per?.full_relational_schema_status!=='BLOCKED' || per?.migration_implementation_status!=='BLOCKED') errors.push('persistence audit: physical implementation was unblocked by policy approval');

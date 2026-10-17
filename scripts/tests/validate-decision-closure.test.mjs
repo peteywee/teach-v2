@@ -8,7 +8,7 @@ const root=resolve(new URL('../..',import.meta.url).pathname);
 const edit=(dir,path,fn)=>writeFileSync(join(dir,path),fn(readFileSync(join(dir,path),'utf8')));
 const json=(dir,path,fn)=>edit(dir,path,text=>{const value=JSON.parse(text);fn(value);return JSON.stringify(value,null,2)+'\n';});
 const registration=(dir,fn)=>json(dir,'governance/decision-closure/registration.json',fn);
-function rejects(name,mutate,pattern){test(name,()=>{const dir=mkdtempSync(join(tmpdir(),'teach-closure-'));try{for(const path of ['contracts','governance','kernel'])cpSync(join(root,path),join(dir,path),{recursive:true});mutate(dir);const r=validateDecisionClosure(dir);assert.ok(r.errors.some(x=>pattern.test(x)),`expected ${pattern}; got ${r.errors.join('\n')}`);}finally{rmSync(dir,{recursive:true,force:true});}});}
+function rejects(name,mutate,pattern){test(name,()=>{const dir=mkdtempSync(join(tmpdir(),'teach-closure-'));try{for(const path of ['contracts','governance','kernel','domains','application-interfaces'])cpSync(join(root,path),join(dir,path),{recursive:true});mutate(dir);const r=validateDecisionClosure(dir);assert.ok(r.errors.some(x=>pattern.test(x)),`expected ${pattern}; got ${r.errors.join('\n')}`);}finally{rmSync(dir,{recursive:true,force:true});}});}
 test('complete registered policy has exact approval, versions, IDs and residuals',()=>assert.deepEqual(validateDecisionClosure(root).errors,[]));
 rejects('different manifest approval fails',d=>registration(d,x=>{x.approved_manifest_sha256='0'.repeat(64);}),/owner approval provenance/);
 rejects('owner identity cannot be invented',d=>registration(d,x=>{x.owner='DevelopmentAgent';}),/owner approval provenance/);
@@ -33,4 +33,4 @@ rejects('historical body cannot be rewritten',d=>edit(d,'contracts/superseded/c1
 rejects('archive cannot remain active',d=>edit(d,'contracts/superseded/c00-system-authority-contract-1.0.3.md',x=>x.replace('"status": "superseded"','"status": "active"')),/C00 template/);
 rejects('missing approval ledger fails',d=>edit(d,'contracts/APPROVAL-RECORD.md',x=>x.replace('## Part 25 — Decision-closure r3.1 registration (#75)','## Lost registration')),/approval ledger/);
 rejects('unapproved version fails',d=>edit(d,'contracts/c12-application-sessions-contract.md',x=>x.replace('"version": "1.2.0"','"version": "1.3.0"')),/approved current version/);
-rejects('capability promotion cannot ride with registration',d=>json(d,'kernel/capabilities.json',x=>{x.entries.push({id:'identity.credential.authenticate',status:'approved'});}),/capability promotion remains separate/);
+rejects('unapproved capability cannot ride with historical policy registration',d=>json(d,'kernel/capabilities.json',x=>{x.entries.push({id:'identity.credential.authenticate',status:'approved'});}),/exact approved overlay/);

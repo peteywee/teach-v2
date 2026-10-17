@@ -1,0 +1,220 @@
+{
+  "package_id": "TEACH-SEM-CAPABILITY-NAMES-2026-10-17",
+  "version": "0.1.1",
+  "baseline": "a77909814a031b21fb995818f98aad80a422d3cb",
+  "result": "PASS",
+  "checks": 42,
+  "scope": "Static proposal and synthetic negative fixtures only; no runtime or live-kernel tests.",
+  "actual_promotions": 0,
+  "source_writes": 0,
+  "runtime_grants_created": false,
+  "runtime_dependency_closure_proven": false,
+  "results": [
+    {
+      "test": "exact_candidate_package_and_C14_policy",
+      "result": "PASS"
+    },
+    {
+      "test": "all_source_sha256_hashes",
+      "result": "PASS"
+    },
+    {
+      "test": "candidate_package_makes_no_promotion",
+      "result": "PASS"
+    },
+    {
+      "test": "hypothetical_name_type_graph_closes_only",
+      "result": "PASS"
+    },
+    {
+      "test": "hypothetical_promotion_without_owner_approval",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "status_activation_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "represents_model_drift_rejected_separately",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "mutable_Capability_entity_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "new_or_legacy_name_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "namespace_drift_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "duplicate_35th_capability_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "missing_capability_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "operation_owner_cannot_replace_name_owner",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "kernel_scope_grant_invention_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "runtime_grants_created_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "activation_authorized_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "runtime_dependency_closure_proven_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "fabricated_owner_approval_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "C14_operation_scope_drift_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "C14_operation_bundles_drift_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "C14_operation_capability_drift_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "C14_bundle_grant_drift_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "nonstring_definition_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "invented_authority_implication_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "nonstring_authority_implication_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "unrelated_extra_promotion_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "partial_promotion_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "promotion_manifest_extra_ID_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "promotion_manifest_missing_ID_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "SEM36_requires_array_candidate_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "SEM36_from_scalar_candidate_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "SEM36_to_scalar_candidate_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "SEM36_to_array_candidate_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "SEM36_entity_scalar_candidate_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "SEM36_emitted_by_scalar_candidate_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "SEM36_scope_scalar_candidate_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "SEM36_scope_array_candidate_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "transitive_candidate_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "unresolved_dependency_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "unlisted_hold_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "listed_hold_without_record_rejected",
+      "result": "PASS",
+      "expected": "rejection"
+    },
+    {
+      "test": "partial_35_entry_promotion_not_closed",
+      "result": "PASS",
+      "expected": "rejection"
+    }
+  ]
+}
