@@ -20,7 +20,7 @@ export function inspectConsolidatedVerification(root) {
     const expected = '${{ github.event.pull_request.head.sha || github.sha }}';
     if (!workflow.includes(`ref: ${expected}`) || !/^      AUDIT_EXPECTED_SHA: \$\{\{ github.event.pull_request.head.sha \|\| github.sha \}\}$/m.test(workflow)) fail('exact candidate checkout and expected SHA required');
     const steps = workflow.split(/^      - /m).slice(1);
-    const checkouts = steps.filter(step => /(?:^|\n        )uses: actions\/checkout@v4\n/.test(step));
+    const checkouts = steps.filter(step => /(?:^|\n        )uses: actions\/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1\n/.test(step));
     if (checkouts.length !== 1 || !/^          fetch-depth: 0$/m.test(checkouts[0]) || [...checkouts[0].matchAll(/^          fetch-depth:/gm)].length !== 1) fail('full-history credential-free document checkout required');
     if (inspectWorkflowText(path,workflow).length !== 1) fail('one explicit producer job required');
     if (!workflow.includes("node-version: '20.20.2'") || !workflow.includes('pnpm@12.8.1') || !workflow.includes('run: pnpm install --frozen-lockfile\n') || !workflow.includes('image: postgres:17.11-alpine') || !workflow.includes("TEACH_ISOLATED_DB: '1'") || !workflow.includes('timeout-minutes: 15')) fail('pinned runtime and isolated PostgreSQL required');
@@ -30,7 +30,7 @@ export function inspectConsolidatedVerification(root) {
     if (!stages.includes('postgres-identity-commands') || identity?.command !== 'pnpm' || JSON.stringify(identity?.args) !== JSON.stringify(['test:identity:commands:integration'])) fail('atomic Identity integration evidence must run in consolidated CI');
     const session = plan?.stages?.find(stage => stage.id === 'postgres-session-commands');
     if (!stages.includes('postgres-session-commands') || session?.command !== 'pnpm' || JSON.stringify(session?.args) !== JSON.stringify(['test:session:commands:integration'])) fail('session transaction PG automation required');
-    if (!workflow.includes('if: always()\n        run: node scripts/verification/run-self-audit.mjs --finish\n') || !workflow.includes('if: always()\n        uses: actions/upload-artifact@v4') || !workflow.includes('          path: verification/generated/self-audit/\n          if-no-files-found: error')) fail('failed or missing audit evidence must finalize and be retained');
+    if (!workflow.includes('if: always()\n        run: node scripts/verification/run-self-audit.mjs --finish\n') || !workflow.includes('if: always()\n        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9') || !workflow.includes('          path: verification/generated/self-audit/\n          if-no-files-found: error')) fail('failed or missing audit evidence must finalize and be retained');
   } catch (error) { fail(error.message); }
   return errors;
 }

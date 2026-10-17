@@ -11,6 +11,7 @@ export function workflowName(path, text) {
   return names[0][1].trim();
 }
 
+// Node24 action pins match the producer: checkout v7.0.1, setup-node v7.1.0, upload-artifact v7.0.2.
 // The observer is deliberately a constrained template: editing its permissions,
 // trigger, checkout, shell or execution steps requires a reviewed model change.
 // Its own final upload cannot prove itself; an independent reader must close it.
@@ -39,13 +40,13 @@ jobs:
     steps:
       - name: Checkout trusted default-branch observer source
         id: workflow_step_001
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: \${{ github.sha }}
           persist-credentials: false
       - name: Pin observer Node runtime
         id: workflow_step_002
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
         with:
           node-version: '20.20.2'
       - name: Read authoritative run and retained evidence
@@ -57,7 +58,7 @@ jobs:
       - name: Retain independent closure evidence even on failure
         id: workflow_step_004
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: workflow-closure-\${{ github.event.workflow_run.id }}-observer-\${{ github.run_id }}-\${{ github.run_attempt }}
           path: verification/generated/workflow-closure/
@@ -74,7 +75,7 @@ jobs:
       - name: Retain observer evidence for independent terminal readback
         id: lifecycle_upload
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: workflow-lifecycle-\${{ github.run_id }}-\${{ github.run_attempt }}-\${{ github.job }}
           path: verification/generated/workflow-lifecycle/report.json

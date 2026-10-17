@@ -13,6 +13,22 @@ const inventory=deriveWorkflowInventory(root),names=inventory.closure_observer.o
 const observer=readFileSync(join(root,closureObserverPath),'utf8');
 const producerPath='.github/workflows/development-self-audit.yml',producer=readFileSync(join(root,producerPath),'utf8');
 
+
+for (const [action, sha, release] of [
+  ['checkout', '3d3c42e5aac5ba805825da76410c181273ba90b1', 'v7.0.1'],
+  ['setup-node', '949feb2413d6458794dcd2491c4babbbce0c15c1', 'v7.1.0'],
+  ['upload-artifact', 'cf430e030ddbb5b0abf93d22962f4752f3646cd9', 'v7.0.2'],
+]) {
+  for (const ref of ['v4', release, '0'.repeat(40)]) test(`both workflows reject ${action} ref drift to ${ref}`, () => {
+    const before = `actions/${action}@${sha}`, after = `actions/${action}@${ref}`;
+    for (const [text, inspect] of [[producer, value => inspectProducerWorkflowWiring(producerPath, value)], [observer, value => inspectClosureObserverText(value, names)]]) {
+      const altered = text.replace(before, after);
+      assert.notEqual(altered, text);
+      assert.ok(inspect(altered).length > 0);
+    }
+  });
+}
+
 test('observer covers every producer exactly once and preserves independent terminal readback',()=>{
   assert.equal(names.length,inventory.ci_workflows-1);
   assert.equal(new Set(names).size,names.length);
@@ -72,7 +88,7 @@ const producerMutations={
   'step failure suppression':text=>text.replace('        id: lifecycle_record','        continue-on-error: true\n        id: lifecycle_record'),
   'job conditional skip':text=>text.replace('    runs-on:','    if: false\n    runs-on:'),
   'capture conditional skip':text=>text.replace('        if: always()','        if: false'),
-  'upload command masking':text=>text.replace('        uses: actions/upload-artifact@v4','        uses: actions/upload-artifact@v4\n        continue-on-error: true'),
+  'upload command masking':text=>text.replace('        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9','        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9\n        continue-on-error: true'),
   'duplicate capture run key':text=>text.replace('        run: node scripts/verification/record-workflow-lifecycle.mjs','        run: node scripts/verification/record-workflow-lifecycle.mjs\n        run: true'),
   'duplicate capture condition':text=>text.replace('        id: lifecycle_record','        id: lifecycle_record\n        if: false'),
   'comment pretending capture command':text=>text.replace('        run: node scripts/verification/record-workflow-lifecycle.mjs','        # run: node scripts/verification/record-workflow-lifecycle.mjs\n        run: true'),
@@ -81,7 +97,7 @@ const producerMutations={
   'actions write permission':text=>text.replace('  contents: read','  contents: read\n  actions: write'),
   'altered checkout hidden by comment':text=>text.replace('ref: ${{ github.event.pull_request.head.sha || github.sha }}','ref: main\n          # ref: ${{ github.event.pull_request.head.sha || github.sha }}'),
   'alternate repository checkout':text=>text.replace('          persist-credentials: false','          repository: attacker/other\n          persist-credentials: false'),
-  'duplicate checkout action':text=>text.replace('uses: actions/checkout@v4','uses: actions/checkout@v4\n        uses: attacker/checkout@main'),
+  'duplicate checkout action':text=>text.replace('uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1','uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1\n        uses: attacker/checkout@main'),
   'duplicate credential override':text=>text.replace('          persist-credentials: false','          persist-credentials: false\n          persist-credentials: true'),
   'YAML alias':text=>text.replace('    runs-on: ubuntu-latest','    runs-on: &runner ubuntu-latest'),
 };

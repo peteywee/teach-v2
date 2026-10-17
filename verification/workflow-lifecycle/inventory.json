@@ -30,7 +30,7 @@
     {
       "workflow_path": ".github/workflows/development-self-audit.yml",
       "workflow_name": "Development Self Audit",
-      "workflow_sha256": "9b410dd143282aa80d0bf4b19f7fda19d4987fa33904e7c3b94569a6c27ead46",
+      "workflow_sha256": "a39967933726bc302a984dd7d77654a9ed26dc3d7ff3d0e574fbe91981946655",
       "job_id": "self-audit",
       "job_name": "self-audit",
       "has_service_setup": true,
@@ -76,8 +76,8 @@
         "lifecycle_upload"
       ],
       "all_step_names": [
-        "Run actions/checkout@v4",
-        "Run actions/setup-node@v4",
+        "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+        "Run actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1",
         "Enable pinned pnpm",
         "Install frozen dependencies",
         "Audit authority",
@@ -182,7 +182,7 @@
     {
       "workflow_path": ".github/workflows/workflow-lifecycle-closure.yml",
       "workflow_name": "Workflow Lifecycle Closure",
-      "workflow_sha256": "6e68b1101773315b653e8cc08fa7eec0ecdea99c6274ec8edd467a635efb242e",
+      "workflow_sha256": "26229a6e10c477e01f716d646bc1e21c3c9e96080fad136a49eb2addc754f95e",
       "job_id": "close-workflow",
       "job_name": "close-workflow",
       "has_service_setup": false,
