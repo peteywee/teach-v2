@@ -1,5 +1,6 @@
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { resolve, join, dirname } from 'node:path';
+import { inspectConsolidatedVerification } from '../verification/consolidated-ci-evidence.mjs';
 import { inspectFutureAdmission } from '../persistence/future-admission-evidence.mjs';
 import { inspectCommandCoverage } from './command-coverage-evidence.mjs';
 import { inspectAssignmentAdmission } from '../persistence/assignment-admission-evidence.mjs';
@@ -80,11 +81,7 @@ export function inspectRepositoryIntegration(root) {
     const pool=source.search(/new\s+(?:pg\.)?Pool\s*\(/);
     if(!source.includes('import { assertIsolatedDatabaseTarget }') || guard<0 || pool<0 || guard>pool) fail(`${path}: isolated target guard must run before any Pool`);
   }
-  for(const n of [1,2,3,4,5]) {
-    const workflow=text(`.github/workflows/slice-p0${n}-implementation.yml`);
-    if(!workflow.includes("TEACH_ISOLATED_DB: '1'")) fail(`P0${n}: isolated CI declaration required`);
-    if(/\bpaths(?:-ignore)?:/.test(workflow) || !/pull_request:\s*\n\s*branches: \[main\]/.test(workflow) || !/push:\s*\n\s*branches: \[main\]/.test(workflow)) fail(`P0${n}: physical proofs must run on every PR and main tree`);
-  }
+  errors.push(...inspectConsolidatedVerification(root));
   errors.push(...inspectAssignmentAdmission(root), ...inspectFutureAdmission(root,'P07'), ...inspectFutureAdmission(root,'P08'), ...inspectCommandCoverage(root));
   return errors;
 }

@@ -5,12 +5,13 @@ import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { closureObserverName,closureObserverPath,deriveWorkflowInventory,inspectClosureObserverText,inspectWorkflowText,renderClosureObserverWorkflow } from '../verification/workflow-lifecycle-inventory.mjs';
+import { localDocumentGovernanceContext,documentGovernanceArgs } from '../verification/document-governance-context.mjs';
 import { inspectProducerWorkflowWiring,inspectWorkflowLifecycles } from '../verification/validate-workflow-lifecycle.mjs';
 
 const root=new URL('../..',import.meta.url).pathname;
 const inventory=deriveWorkflowInventory(root),names=inventory.closure_observer.observed_workflows;
 const observer=readFileSync(join(root,closureObserverPath),'utf8');
-const producerPath='.github/workflows/semantic-kernel.yml',producer=readFileSync(join(root,producerPath),'utf8');
+const producerPath='.github/workflows/development-self-audit.yml',producer=readFileSync(join(root,producerPath),'utf8');
 
 test('observer covers every producer exactly once and preserves independent terminal readback',()=>{
   assert.equal(names.length,inventory.ci_workflows-1);
@@ -38,7 +39,7 @@ const observerMutations={
   'attacker branch shell interpolation':text=>text.replace('--run "$LIFECYCLE_RUN_ID"','--run "${{ github.event.workflow_run.head_branch }}"'),
   'unquoted run ID':text=>text.replace('"$LIFECYCLE_RUN_ID"','$LIFECYCLE_RUN_ID'),
   'unbounded invocation':text=>text.replace('timeout --signal=TERM --kill-after=2s 25s ',''),
-  'node runtime drift':text=>text.replace("node-version: '20'","node-version: '22'"),
+  'node runtime drift':text=>text.replace("node-version: '20.20.2'","node-version: '22'"),
   'missing producer':text=>text.replace(`      - ${JSON.stringify(names[0])}\n`,''),
   'recursive observer trigger':text=>text.replace('    types: [completed]',`      - ${JSON.stringify(closureObserverName)}\n    types: [completed]`),
   'started instead of completed':text=>text.replace('types: [completed]','types: [requested]'),
@@ -97,42 +98,33 @@ test('actual API step names remain unambiguous and cannot be dynamic',()=>{
   assert.equal(row.all_step_names.at(-1),'Retain workflow lifecycle evidence');
   assert.throws(()=>inspectWorkflowText(producerPath,producer.replace('name: Record workflow lifecycle checkpoint','name: ${{ github.head_ref }}')),/literal step name/);
   assert.throws(()=>inspectWorkflowText(producerPath,producer.replace('name: Retain workflow lifecycle evidence','name: Record workflow lifecycle checkpoint')),/distinct literal step names/);
-  const path='.github/workflows/application-interface-authority.yml';
-  const text=readFileSync(join(root,path),'utf8'),unnamed=inspectWorkflowText(path,text)[0];
-  assert.ok(unnamed.all_step_names.includes('Run node scripts/application-interfaces/validate-application-interface-authority.mjs'));
-  assert.throws(()=>inspectWorkflowText(path,text.replace('run: node scripts/application-interfaces/validate-application-interface-authority.mjs','run: |\n          node scripts/application-interfaces/validate-application-interface-authority.mjs')),/literal step name/);
+  const path=producerPath;
+  const text=producer.replace(/      - name: Audit authority\n        id: ([^\n]+)\n        run: ([^\n]+)\n/, '      - run: $2\n        id: $1\n');
+  const unnamed=inspectWorkflowText(path,text)[0];
+  assert.ok(unnamed.all_step_names.includes('Run node scripts/verification/run-self-audit.mjs --stage authority'));
+  assert.throws(()=>inspectWorkflowText(path,text.replace('run: node scripts/verification/run-self-audit.mjs --stage authority','run: |\n          node scripts/verification/run-self-audit.mjs --stage authority')),/literal step name/);
 });
 
 test('runner service setup is derived only from the exact job service or container declaration',()=>{
-  assert.equal(inspectWorkflowText(producerPath,producer)[0].has_service_setup,false);
-  for(const path of ['.github/workflows/development-self-audit.yml','.github/workflows/slice-p05-implementation.yml']){
-    const row=inspectWorkflowText(path,readFileSync(join(root,path),'utf8'))[0];
-    assert.equal(row.has_service_setup,true);
-    assert.ok(row.required_steps.every(id=>!/[a-f0-9]{32}/.test(id)));
-  }
-  assert.equal(inspectWorkflowText(producerPath,producer.replace('    runs-on:','    container: node:20\n    runs-on:'))[0].has_service_setup,true);
-  for(const misleading of ['    # services: example\n','        # container: example\n'])assert.equal(inspectWorkflowText(producerPath,producer.replace('    runs-on:',`${misleading}    runs-on:`))[0].has_service_setup,false);
+  const noService=producer.replace(/^    services:[\s\S]*?(?=^    env:)/m,'');
+  assert.equal(inspectWorkflowText(producerPath,noService)[0].has_service_setup,false);
+  const row=inspectWorkflowText(producerPath,producer)[0];
+  assert.equal(row.has_service_setup,true);
+  assert.ok(row.required_steps.every(id=>!/[a-f0-9]{32}/.test(id)));
+  assert.equal(inspectWorkflowText(producerPath,noService.replace('    runs-on:','    container: node:20\n    runs-on:'))[0].has_service_setup,true);
+  for(const misleading of ['    # services: example\n','        # container: example\n'])assert.equal(inspectWorkflowText(producerPath,noService.replace('    runs-on:',`${misleading}    runs-on:`))[0].has_service_setup,false);
 });
 
-test('document governance uses the exact event base with a complete credential-free checkout',()=>{
-  const text=readFileSync(join(root,'.github/workflows/document-governance.yml'),'utf8');
-  assert.match(text,/^          DOCUMENT_BASE_SHA: \$\{\{ github.event.pull_request.base.sha \|\| github.event.before \}\}$/m);
-  assert.match(text,/^          fetch-depth: 0$/m);
-  assert.match(text,/^          persist-credentials: false$/m);
-  assert.doesNotMatch(text,/persist-credentials: true|git fetch|github.base_ref/);
-  const stage=text.split('      - name: Validate document metadata\n')[1].split('      - name: Record workflow lifecycle checkpoint')[0];
-  const script=stage.split('        run: |\n')[1].split('\n').map(line=>line.replace(/^          /,'')).join('\n');
-  assert.doesNotMatch(script,/\$\{\{/);
-  const fixture=mkdtempSync(join(tmpdir(),'teach-document-base-'));
-  try{
-    writeFileSync(join(fixture,'node'),'#!/bin/sh\nprintf \'%s\\0\' "$@"\n');chmodSync(join(fixture,'node'),0o755);
-    writeFileSync(join(fixture,'git'),'#!/bin/sh\nexit 97\n');chmodSync(join(fixture,'git'),0o755);
-    const validate=base=>execFileSync('/bin/bash',['-c',script],{env:{PATH:fixture,DOCUMENT_BASE_SHA:base},encoding:'utf8',timeout:5000}).split('\0').slice(0,-1);
-    for(const base of ['', '0'.repeat(40)])assert.deepEqual(validate(base),['scripts/docs/validate-document-metadata.mjs']);
-    for(const base of ['a'.repeat(40),'b'.repeat(40),'base with spaces; exit 99'])assert.deepEqual(validate(base),['scripts/docs/validate-document-metadata.mjs','--base',base]);
-    writeFileSync(join(fixture,'node'),'#!/bin/sh\nexit 42\n');
-    assert.throws(()=>validate('a'.repeat(40)),error=>error.status===42);
-  }finally{rmSync(fixture,{recursive:true,force:true});}
+test('document governance uses validated event-bound argv with a complete credential-free checkout',()=>{
+  assert.match(producer,/^          fetch-depth: 0$/m);
+  assert.match(producer,/^          persist-credentials: false$/m);
+  assert.doesNotMatch(producer,/persist-credentials: true|git fetch|github.base_ref/);
+  const stage=producer.split('      - name: Audit document-governance\n')[1].split('      - name:')[0];
+  assert.match(stage,/run: node scripts\/verification\/run-self-audit\.mjs --stage document-governance/);
+  assert.doesNotMatch(stage,/\$\{\{/);
+  for(const base of ['', '0'.repeat(40)])assert.deepEqual(documentGovernanceArgs(localDocumentGovernanceContext('c'.repeat(40),base)),['scripts/docs/validate-document-metadata.mjs']);
+  for(const base of ['a'.repeat(40),'b'.repeat(40)])assert.deepEqual(documentGovernanceArgs(localDocumentGovernanceContext('c'.repeat(40),base)),['scripts/docs/validate-document-metadata.mjs','--base',base]);
+  assert.throws(()=>localDocumentGovernanceContext('c'.repeat(40),'base with spaces; exit 99'),/exact SHA/);
 });
 
 test('generated inventory alone cannot approve an unsafe observer or omit it',()=>{

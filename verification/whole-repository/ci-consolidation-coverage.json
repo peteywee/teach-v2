@@ -1,0 +1,2470 @@
+{
+  "version": "0.1.0",
+  "scope": "CI packaging only; no runtime, authority, schema or production change",
+  "baseline": {
+    "main_sha": "fdb71287845ed024dabb83fb67b5a803fd55153d",
+    "local_sha": "513c233576ea5fb32b84bdd572b26b47be6418c6",
+    "tree": "3cfaa3d8f0ed2d778ec8e18bd75dc52fb45846c3"
+  },
+  "before": {
+    "workflow_files": 45,
+    "job_definitions": 45,
+    "producer_workflows": 44,
+    "observer_workflows": 1,
+    "path_filtered_producers": 36,
+    "unfiltered_producers": 8,
+    "fully_redundant_wrappers": 36,
+    "migrate_unique_wrappers": 7,
+    "umbrella_validators": 53,
+    "self_audit_stages": 24,
+    "validator_test_cases": 216,
+    "validator_test_positive_controls": 40,
+    "validator_test_negative_cases": 176,
+    "foundation_test_files": 13,
+    "postgres_integration_suites": 7,
+    "installs_on_broad_change": 7,
+    "postgres_services_on_every_main_event": 6
+  },
+  "planned_after": {
+    "workflow_files": 2,
+    "producer_jobs": 1,
+    "observer_jobs": 1,
+    "stages": 31,
+    "standalone_validators": 53,
+    "validator_regression_cases": 216,
+    "foundation_test_files": 13,
+    "postgres_suites": 7
+  },
+  "retained_stage_ids": [
+    "authority",
+    "pins",
+    "target-snapshots",
+    "production-denials",
+    "migration-guards",
+    "apply-regressions",
+    "validator-shard-1",
+    "validator-shard-2",
+    "validator-shard-3",
+    "audit-regressions",
+    "recovery-regressions",
+    "lifecycle-regressions",
+    "typecheck",
+    "foundation",
+    "generation",
+    "replay",
+    "migrate-isolated",
+    "postgres-p01",
+    "postgres-p02",
+    "postgres-identity-commands",
+    "postgres-session-commands",
+    "postgres-p03",
+    "postgres-p04",
+    "postgres-p05"
+  ],
+  "added_stage_ids": [
+    "document-governance",
+    "production-contract-decisions",
+    "drizzle-history",
+    "replay-p01",
+    "replay-p02",
+    "replay-p03",
+    "replay-p04"
+  ],
+  "baseline_umbrella_validators": [
+    "scripts/application-interfaces/audit-architecture-application.mjs",
+    "scripts/application-interfaces/validate-application-interface-authority.mjs",
+    "scripts/application-interfaces/validate-application-interface-discovery.mjs",
+    "scripts/application-interfaces/validate-application-interface-proposal.mjs",
+    "scripts/architecture/validate-architecture-authority.mjs",
+    "scripts/architecture/validate-architecture-discovery.mjs",
+    "scripts/architecture/validate-architecture-proposal.mjs",
+    "scripts/architecture/validate-command-coverage.mjs",
+    "scripts/architecture/validate-repository-integration.mjs",
+    "scripts/docs/validate-document-metadata.mjs",
+    "scripts/domains/validate-command-event-discovery.mjs",
+    "scripts/domains/validate-decision-table-discovery.mjs",
+    "scripts/domains/validate-dependency-concepts.mjs",
+    "scripts/domains/validate-dependency-lifecycle-discovery.mjs",
+    "scripts/domains/validate-domain-ownership.mjs",
+    "scripts/domains/validate-invariant-discovery.mjs",
+    "scripts/domains/validate-relationships.mjs",
+    "scripts/domains/validate-state-discovery.mjs",
+    "scripts/governance/validate-strict-nine-ratification.mjs",
+    "scripts/kernel/validate-semantic-kernel.mjs",
+    "scripts/persistence/audit-architecture-application-persistence.mjs",
+    "scripts/persistence/audit-first-physical-slice-readiness.mjs",
+    "scripts/persistence/validate-first-physical-slice-readiness.mjs",
+    "scripts/persistence/validate-persistence-authority.mjs",
+    "scripts/persistence/validate-persistence-discovery.mjs",
+    "scripts/persistence/validate-persistence-proposal.mjs",
+    "scripts/persistence/validate-persistence-semantic-closure-discovery.mjs",
+    "scripts/persistence/validate-persistence-semantic-closure-proposal.mjs",
+    "scripts/persistence/validate-persistence-semantic-closure-registration.mjs",
+    "scripts/persistence/validate-slice-p01-implementation-boundary.mjs",
+    "scripts/persistence/validate-slice-p01-relationship-promotion.mjs",
+    "scripts/persistence/validate-slice-p01-schema-admission.mjs",
+    "scripts/persistence/validate-slice-p02-implementation-boundary.mjs",
+    "scripts/persistence/validate-slice-p02-owner-decisions.mjs",
+    "scripts/persistence/validate-slice-p02-schema-admission.mjs",
+    "scripts/persistence/validate-slice-p03-implementation-boundary.mjs",
+    "scripts/persistence/validate-slice-p03-schema-admission.mjs",
+    "scripts/persistence/validate-slice-p04-implementation-boundary.mjs",
+    "scripts/persistence/validate-slice-p04-schema-admission.mjs",
+    "scripts/persistence/validate-slice-p05-foundation.mjs",
+    "scripts/persistence/validate-slice-p05-implementation-boundary.mjs",
+    "scripts/persistence/validate-slice-p05-owner-decisions.mjs",
+    "scripts/persistence/validate-slice-p05-schema-admission.mjs",
+    "scripts/persistence/validate-slice-p06-schema-admission.mjs",
+    "scripts/persistence/validate-slice-p07-schema-admission.mjs",
+    "scripts/persistence/validate-slice-p08-schema-admission.mjs",
+    "scripts/persistence/validate-transactioncontrol-first-slice-decision-packet.mjs",
+    "scripts/persistence/validate-transactioncontrol-first-slice-decision-registration.mjs",
+    "scripts/verification/validate-decision-closure.mjs",
+    "scripts/verification/validate-development-self-audit.mjs",
+    "scripts/verification/validate-legacy-foundation-recovery.mjs",
+    "scripts/verification/validate-owner-policy-registration.mjs",
+    "scripts/verification/validate-workflow-lifecycle.mjs"
+  ],
+  "preserved_test_and_replay_files": [
+    {
+      "path": "scripts/db/verify-migration-replay.ts",
+      "sha256": "4c2698fd9da53776d7cd58e727d82d2d841fe46b3d670eb980ee3ef89887b764"
+    },
+    {
+      "path": "scripts/db/verify-slice-p02-migration-replay.ts",
+      "sha256": "badcb82c5a95022df54a5484a24f848c1aa59d48946e52e00e33fa272de914aa"
+    },
+    {
+      "path": "scripts/db/verify-slice-p03-migration-replay.ts",
+      "sha256": "75e4823b61f054fdbaf0edc187fdf65eb021b9da7f69ae3669ebd427903e0def"
+    },
+    {
+      "path": "scripts/db/verify-slice-p04-migration-replay.ts",
+      "sha256": "e2506bc0a0d4be4a16f345ddd91a9aec2f2a9573f4e346f79a9db739374f8daf"
+    },
+    {
+      "path": "scripts/db/verify-slice-p05-migration-replay.ts",
+      "sha256": "d52b8fe273aec6b881d087de6f22a4f48fc09da8cc6bcd0e31e027d4a37ef9be"
+    },
+    {
+      "path": "src/modules/identity/application/identity-lifecycle-service.test.ts",
+      "sha256": "9f2cc704641b199fb287143c9fcc573e64660c7d771ae04d2b75b8c5dfe93850"
+    },
+    {
+      "path": "src/modules/identity/application/identity-token-service.test.ts",
+      "sha256": "d58d404a30f52d00fcd988aba2d7cab4dee027a20d4cf7b7d6213d2e9f4c1af6"
+    },
+    {
+      "path": "src/modules/identity/application/session-revocation-service.test.ts",
+      "sha256": "6ef2edea5f332a58c5fb23df18e9f6be6c34dd97e4d3482976ea897b3922ea6d"
+    },
+    {
+      "path": "src/modules/identity/application/session-service.test.ts",
+      "sha256": "2905ca0162e306ae40e534ffd6ffdb1f037d61c7c6799b78b77e0ab143b077a3"
+    },
+    {
+      "path": "src/modules/identity/domain/application-session.test.ts",
+      "sha256": "1c4a112d07c716c585ec825668e7f5b14635d1c76957fb68d30c89d49f490416"
+    },
+    {
+      "path": "src/modules/identity/domain/credential.test.ts",
+      "sha256": "ef73725aaee2cd786919f2aba4ec20bfd113c85ed0cbf272fd99a670e291feae"
+    },
+    {
+      "path": "src/modules/identity/domain/identity.test.ts",
+      "sha256": "d33c74bfb8bdd77cc9736f266b67d790927cfd147df81c40497e3b02de448c26"
+    },
+    {
+      "path": "src/modules/identity/domain/single-use-secret.test.ts",
+      "sha256": "7c1d46baf42a0e0bfdebecedbc2a36098ebfb0cb80577b215e72244affc53857"
+    },
+    {
+      "path": "src/modules/identity/infrastructure/persistence/postgres-application-session-repository.test.ts",
+      "sha256": "6ec84961af63afe9539b87c6d962129e908c1b2a0e4e4c49b60ab14822c04e22"
+    },
+    {
+      "path": "src/modules/learning/application/learning-session-service.test.ts",
+      "sha256": "60ccd129a3effd80d3f167978d45ee9d0eb257d09c5503a79644b6948694d8e2"
+    },
+    {
+      "path": "src/modules/learning/domain/learning-session.test.ts",
+      "sha256": "8f268c729660fe48bd469a14dedddb894ecfb9bcfcfd81c681e1d259518cad4a"
+    },
+    {
+      "path": "src/modules/transaction-control/application/reconciliation-service.test.ts",
+      "sha256": "1cbe9324be2ae6ee790080b4ae7f76ce8643f4a33d88aa23ac200c957f94a213"
+    },
+    {
+      "path": "src/modules/transaction-control/domain/reconciliation-record.test.ts",
+      "sha256": "dfe139aa4436e7f145e24413b1a20a9920abcf6642f79fe82be48ed2e7851add"
+    },
+    {
+      "path": "tests/integration/identity/credential-repository.test.ts",
+      "sha256": "b37359a4d09aba4481a0d1b054a0192e4d74b6b6e3a699938f9c891c1a67a8c0"
+    },
+    {
+      "path": "tests/integration/identity/identity-command-transaction.test.ts",
+      "sha256": "6799e1b2bf4a554740a6dee07e06e664586196594e94626c1fd9d61aa716b6b0"
+    },
+    {
+      "path": "tests/integration/identity/identity-session-repository.test.ts",
+      "sha256": "139de8b004cbf407c6ac8b66171875fbac6be0e64e6f05204a829ebd0dffa812"
+    },
+    {
+      "path": "tests/integration/identity/identity-token-repository.test.ts",
+      "sha256": "9142ddded1e704065f1fcc48bacd2efc88e9aa18722bbf319aad19f9c9d5e892"
+    },
+    {
+      "path": "tests/integration/identity/session-command-transaction.test.ts",
+      "sha256": "25bcbda4b272586c6a4a07189f3da6688b8880089af0cad2d4defba21984108e"
+    },
+    {
+      "path": "tests/integration/learning/learning-session-repository.test.ts",
+      "sha256": "f8c215ac4b2b7eacab0bc6b4db223ee1a12781c6e3394ebc27a619ae13f4ec5e"
+    },
+    {
+      "path": "tests/integration/transaction-control/reconciliation-record-repository.test.ts",
+      "sha256": "efe6914b7ed237bb07f24994ba785c2652e57e51d0beeb34ad4529045f64ac0b"
+    }
+  ],
+  "producer_command_mapping": [
+    {
+      "workflow": "application-interface-authority.yml",
+      "name": "Application Interface Authority",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/application-interfaces/validate-application-interface-authority.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/application-interfaces/validate-application-interface-authority.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/application-interfaces/validate-application-interface-authority.mjs"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_004",
+          "baseline_run": "node scripts/application-interfaces/audit-architecture-application.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/application-interfaces/audit-architecture-application.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/application-interfaces/audit-architecture-application.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "application-interface-discovery.yml",
+      "name": "Application Interface Discovery",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/application-interfaces/validate-application-interface-discovery.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/application-interfaces/validate-application-interface-discovery.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/application-interfaces/validate-application-interface-discovery.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "architecture-application-audit.yml",
+      "name": "Architecture Application Cross-Layer Audit",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/application-interfaces/audit-architecture-application.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/application-interfaces/audit-architecture-application.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/application-interfaces/audit-architecture-application.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "architecture-application-persistence-audit.yml",
+      "name": "Architecture Application Persistence Audit",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/persistence/validate-persistence-discovery.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-persistence-discovery.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-persistence-discovery.mjs"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_004",
+          "baseline_run": "node scripts/persistence/validate-persistence-proposal.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-persistence-proposal.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-persistence-proposal.mjs"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_005",
+          "baseline_run": "node scripts/persistence/audit-architecture-application-persistence.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/audit-architecture-application-persistence.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/audit-architecture-application-persistence.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "architecture-authority.yml",
+      "name": "Architecture Authority",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/architecture/validate-architecture-authority.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/architecture/validate-architecture-authority.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/architecture/validate-architecture-authority.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "architecture-discovery.yml",
+      "name": "Architecture Discovery",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/architecture/validate-architecture-discovery.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/architecture/validate-architecture-discovery.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/architecture/validate-architecture-discovery.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "architecture-proposal.yml",
+      "name": "Architecture Proposal",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/architecture/validate-architecture-proposal.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/architecture/validate-architecture-proposal.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/architecture/validate-architecture-proposal.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "command-event-discovery.yml",
+      "name": "Command Event Discovery",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/domains/validate-command-event-discovery.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/domains/validate-command-event-discovery.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/domains/validate-command-event-discovery.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "decision-table-discovery.yml",
+      "name": "Decision Table Discovery",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/domains/validate-decision-table-discovery.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/domains/validate-decision-table-discovery.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/domains/validate-decision-table-discovery.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "dependency-concepts.yml",
+      "name": "Dependency Concepts",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/domains/validate-dependency-concepts.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/domains/validate-dependency-concepts.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/domains/validate-dependency-concepts.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "dependency-lifecycle-discovery.yml",
+      "name": "Dependency Lifecycle Discovery",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/domains/validate-dependency-lifecycle-discovery.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/domains/validate-dependency-lifecycle-discovery.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/domains/validate-dependency-lifecycle-discovery.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "development-self-audit.yml",
+      "name": "Development Self Audit",
+      "disposition": "KEEP_EXPAND",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "corepack enable\ncorepack prepare pnpm@12.8.1 --activate\n",
+          "coverage": [
+            {
+              "command": "corepack enable",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_003"
+            },
+            {
+              "command": "corepack prepare pnpm@12.8.1 --activate",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_003"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_004",
+          "baseline_run": "pnpm install --frozen-lockfile",
+          "coverage": [
+            {
+              "command": "pnpm install --frozen-lockfile",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_004"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_005",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage authority",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage authority",
+              "kind": "bounded_stage",
+              "stages": [
+                "authority"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_006",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage pins",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage pins",
+              "kind": "bounded_stage",
+              "stages": [
+                "pins"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_007",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage target-snapshots",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage target-snapshots",
+              "kind": "bounded_stage",
+              "stages": [
+                "target-snapshots"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_008",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage production-denials",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage production-denials",
+              "kind": "bounded_stage",
+              "stages": [
+                "production-denials"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_009",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage migration-guards",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage migration-guards",
+              "kind": "bounded_stage",
+              "stages": [
+                "migration-guards"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_010",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage apply-regressions",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage apply-regressions",
+              "kind": "bounded_stage",
+              "stages": [
+                "apply-regressions"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_011",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage validator-shard-1",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage validator-shard-1",
+              "kind": "bounded_stage",
+              "stages": [
+                "validator-shard-1"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_012",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage validator-shard-2",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage validator-shard-2",
+              "kind": "bounded_stage",
+              "stages": [
+                "validator-shard-2"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_013",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage validator-shard-3",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage validator-shard-3",
+              "kind": "bounded_stage",
+              "stages": [
+                "validator-shard-3"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_014",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage audit-regressions",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage audit-regressions",
+              "kind": "bounded_stage",
+              "stages": [
+                "audit-regressions"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_015",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage recovery-regressions",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage recovery-regressions",
+              "kind": "bounded_stage",
+              "stages": [
+                "recovery-regressions"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_016",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage lifecycle-regressions",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage lifecycle-regressions",
+              "kind": "bounded_stage",
+              "stages": [
+                "lifecycle-regressions"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_017",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage typecheck",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage typecheck",
+              "kind": "bounded_stage",
+              "stages": [
+                "typecheck"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_018",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage foundation",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage foundation",
+              "kind": "bounded_stage",
+              "stages": [
+                "foundation"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_019",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage generation",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage generation",
+              "kind": "bounded_stage",
+              "stages": [
+                "generation"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_020",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage replay",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage replay",
+              "kind": "bounded_stage",
+              "stages": [
+                "replay"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_021",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage migrate-isolated",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage migrate-isolated",
+              "kind": "bounded_stage",
+              "stages": [
+                "migrate-isolated"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_022",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage postgres-p01",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage postgres-p01",
+              "kind": "bounded_stage",
+              "stages": [
+                "postgres-p01"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_023",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage postgres-p02",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage postgres-p02",
+              "kind": "bounded_stage",
+              "stages": [
+                "postgres-p02"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_024",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage postgres-identity-commands",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage postgres-identity-commands",
+              "kind": "bounded_stage",
+              "stages": [
+                "postgres-identity-commands"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_025",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage postgres-session-commands",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage postgres-session-commands",
+              "kind": "bounded_stage",
+              "stages": [
+                "postgres-session-commands"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_026",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage postgres-p03",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage postgres-p03",
+              "kind": "bounded_stage",
+              "stages": [
+                "postgres-p03"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_027",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage postgres-p04",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage postgres-p04",
+              "kind": "bounded_stage",
+              "stages": [
+                "postgres-p04"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_028",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --stage postgres-p05",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --stage postgres-p05",
+              "kind": "bounded_stage",
+              "stages": [
+                "postgres-p05"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_029",
+          "baseline_run": "node scripts/verification/run-self-audit.mjs --finish",
+          "coverage": [
+            {
+              "command": "node scripts/verification/run-self-audit.mjs --finish",
+              "kind": "always_run_finalizer",
+              "step": "audit_finalize"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "document-governance.yml",
+      "name": "Document Governance",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "if [ -n \"$DOCUMENT_BASE_SHA\" ] && [ \"$DOCUMENT_BASE_SHA\" != \"0000000000000000000000000000000000000000\" ]; then\n  node scripts/docs/validate-document-metadata.mjs --base \"$DOCUMENT_BASE_SHA\"\nelse\n  node scripts/docs/validate-document-metadata.mjs\nfi\n",
+          "coverage": [
+            {
+              "command": "node scripts/docs/validate-document-metadata.mjs [--base EXACT_EVENT_BASE_SHA]",
+              "kind": "source_event_bound_argv",
+              "stages": [
+                "document-governance"
+              ],
+              "fallback": "only explicit dispatch/local absent or initial push zero; malformed/missing required event context blocks"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "domain-ownership.yml",
+      "name": "Domain Ownership Discovery",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/domains/validate-domain-ownership.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/domains/validate-domain-ownership.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/domains/validate-domain-ownership.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "first-physical-slice-readiness.yml",
+      "name": "First Physical Slice Readiness",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/persistence/validate-first-physical-slice-readiness.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-first-physical-slice-readiness.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-first-physical-slice-readiness.mjs"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_004",
+          "baseline_run": "node scripts/persistence/audit-first-physical-slice-readiness.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/audit-first-physical-slice-readiness.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/audit-first-physical-slice-readiness.mjs"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_005",
+          "baseline_run": "node scripts/persistence/validate-slice-p01-schema-admission.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-slice-p01-schema-admission.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p01-schema-admission.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "invariant-discovery.yml",
+      "name": "Invariant Discovery",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/domains/validate-invariant-discovery.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/domains/validate-invariant-discovery.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/domains/validate-invariant-discovery.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "persistence-authority.yml",
+      "name": "Persistence Authority",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/persistence/validate-persistence-authority.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-persistence-authority.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-persistence-authority.mjs"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_004",
+          "baseline_run": "node scripts/persistence/audit-architecture-application-persistence.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/audit-architecture-application-persistence.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/audit-architecture-application-persistence.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "persistence-discovery.yml",
+      "name": "Persistence Discovery",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/persistence/validate-persistence-discovery.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-persistence-discovery.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-persistence-discovery.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "persistence-semantic-closure-discovery.yml",
+      "name": "Persistence Semantic Closure Discovery",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/persistence/validate-persistence-semantic-closure-discovery.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-persistence-semantic-closure-discovery.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-persistence-semantic-closure-discovery.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "persistence-semantic-closure-proposal.yml",
+      "name": "Persistence Semantic Closure Proposal",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/persistence/validate-persistence-semantic-closure-proposal.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-persistence-semantic-closure-proposal.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-persistence-semantic-closure-proposal.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "persistence-semantic-closure-registration.yml",
+      "name": "Persistence Semantic Closure Registration",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/persistence/validate-persistence-semantic-closure-registration.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-persistence-semantic-closure-registration.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-persistence-semantic-closure-registration.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "production-proof-decisions.yml",
+      "name": "Production Proof Decisions",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/release/validate-production-proof-contract-decisions.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/release/validate-production-proof-contract-decisions.mjs",
+              "kind": "bounded_stage",
+              "stages": [
+                "production-contract-decisions"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_004",
+          "baseline_run": "node scripts/tests/validate-production-proof.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/tests/validate-production-proof.mjs",
+              "kind": "bounded_stage",
+              "stages": [
+                "production-denials"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "relationship-discovery.yml",
+      "name": "Relationship Discovery",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/domains/validate-relationships.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/domains/validate-relationships.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/domains/validate-relationships.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "semantic-kernel.yml",
+      "name": "Semantic Kernel",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/kernel/validate-semantic-kernel.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/kernel/validate-semantic-kernel.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/kernel/validate-semantic-kernel.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "slice-p01-implementation.yml",
+      "name": "SLICE-P01 Implementation",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "corepack enable\ncorepack prepare pnpm@12.8.1 --activate\n",
+          "coverage": [
+            {
+              "command": "corepack enable",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_003"
+            },
+            {
+              "command": "corepack prepare pnpm@12.8.1 --activate",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_003"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_004",
+          "baseline_run": "pnpm install --frozen-lockfile",
+          "coverage": [
+            {
+              "command": "pnpm install --frozen-lockfile",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_004"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_005",
+          "baseline_run": "pnpm exec drizzle-kit check",
+          "coverage": [
+            {
+              "command": "pnpm exec drizzle-kit check",
+              "kind": "bounded_stage",
+              "stages": [
+                "drizzle-history"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_006",
+          "baseline_run": "pnpm typecheck",
+          "coverage": [
+            {
+              "command": "pnpm typecheck",
+              "kind": "bounded_stage",
+              "stages": [
+                "typecheck"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_007",
+          "baseline_run": "pnpm test",
+          "coverage": [
+            {
+              "command": "pnpm test",
+              "kind": "live_foundation_inventory",
+              "stages": [
+                "foundation"
+              ],
+              "test_files": [
+                "src/modules/transaction-control/domain/reconciliation-record.test.ts",
+                "src/modules/transaction-control/application/reconciliation-service.test.ts"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_008",
+          "baseline_run": "pnpm validate:slice-p01",
+          "coverage": [
+            {
+              "command": "pnpm validate:slice-p01",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p01-implementation-boundary.mjs"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_009",
+          "baseline_run": "pnpm db:verify-replay",
+          "coverage": [
+            {
+              "command": "pnpm db:verify-replay",
+              "kind": "bounded_stage",
+              "stages": [
+                "replay-p01"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_010",
+          "baseline_run": "pnpm db:migrate",
+          "coverage": [
+            {
+              "command": "pnpm db:migrate",
+              "kind": "bounded_stage",
+              "stages": [
+                "migrate-isolated"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_011",
+          "baseline_run": "pnpm test:integration",
+          "coverage": [
+            {
+              "command": "pnpm test:integration",
+              "kind": "bounded_stage",
+              "stages": [
+                "postgres-p01"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "slice-p01-relationship-promotion.yml",
+      "name": "SLICE-P01 Relationship Promotion",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/persistence/validate-slice-p01-relationship-promotion.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-slice-p01-relationship-promotion.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p01-relationship-promotion.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "slice-p02-implementation.yml",
+      "name": "SLICE-P02 Implementation",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "corepack enable\ncorepack prepare pnpm@12.8.1 --activate\n",
+          "coverage": [
+            {
+              "command": "corepack enable",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_003"
+            },
+            {
+              "command": "corepack prepare pnpm@12.8.1 --activate",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_003"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_004",
+          "baseline_run": "pnpm install --frozen-lockfile",
+          "coverage": [
+            {
+              "command": "pnpm install --frozen-lockfile",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_004"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_005",
+          "baseline_run": "pnpm exec drizzle-kit check",
+          "coverage": [
+            {
+              "command": "pnpm exec drizzle-kit check",
+              "kind": "bounded_stage",
+              "stages": [
+                "drizzle-history"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_006",
+          "baseline_run": "pnpm typecheck",
+          "coverage": [
+            {
+              "command": "pnpm typecheck",
+              "kind": "bounded_stage",
+              "stages": [
+                "typecheck"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_007",
+          "baseline_run": "pnpm test:p02",
+          "coverage": [
+            {
+              "command": "pnpm test:p02",
+              "kind": "live_foundation_inventory",
+              "stages": [
+                "foundation"
+              ],
+              "test_files": [
+                "src/modules/identity/domain/identity.test.ts",
+                "src/modules/identity/domain/application-session.test.ts",
+                "src/modules/identity/application/session-service.test.ts",
+                "src/modules/identity/application/identity-lifecycle-service.test.ts",
+                "src/modules/identity/application/session-revocation-service.test.ts",
+                "src/modules/identity/infrastructure/persistence/postgres-application-session-repository.test.ts"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_008",
+          "baseline_run": "node scripts/persistence/validate-slice-p02-owner-decisions.mjs\nnode scripts/persistence/validate-slice-p02-schema-admission.mjs\npnpm validate:slice-p02\n",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-slice-p02-owner-decisions.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p02-owner-decisions.mjs"
+            },
+            {
+              "command": "node scripts/persistence/validate-slice-p02-schema-admission.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p02-schema-admission.mjs"
+            },
+            {
+              "command": "pnpm validate:slice-p02",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p02-implementation-boundary.mjs"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_009",
+          "baseline_run": "pnpm db:verify-p02-replay",
+          "coverage": [
+            {
+              "command": "pnpm db:verify-p02-replay",
+              "kind": "bounded_stage",
+              "stages": [
+                "replay-p02"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_010",
+          "baseline_run": "pnpm db:migrate",
+          "coverage": [
+            {
+              "command": "pnpm db:migrate",
+              "kind": "bounded_stage",
+              "stages": [
+                "migrate-isolated"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_011",
+          "baseline_run": "pnpm test:p02:integration",
+          "coverage": [
+            {
+              "command": "pnpm test:p02:integration",
+              "kind": "bounded_stage",
+              "stages": [
+                "postgres-p02"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_012",
+          "baseline_run": "pnpm test:identity:commands:integration",
+          "coverage": [
+            {
+              "command": "pnpm test:identity:commands:integration",
+              "kind": "bounded_stage",
+              "stages": [
+                "postgres-identity-commands"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_013",
+          "baseline_run": "pnpm test:session:commands:integration",
+          "coverage": [
+            {
+              "command": "pnpm test:session:commands:integration",
+              "kind": "bounded_stage",
+              "stages": [
+                "postgres-session-commands"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "slice-p02-owner-decisions.yml",
+      "name": "SLICE-P02 Owner Decisions",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/persistence/validate-slice-p02-owner-decisions.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-slice-p02-owner-decisions.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p02-owner-decisions.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "slice-p02-schema-admission.yml",
+      "name": "SLICE-P02 Schema Admission",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/persistence/validate-slice-p02-schema-admission.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-slice-p02-schema-admission.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p02-schema-admission.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "slice-p03-implementation.yml",
+      "name": "SLICE-P03 Implementation",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "corepack enable\ncorepack prepare pnpm@12.8.1 --activate\n",
+          "coverage": [
+            {
+              "command": "corepack enable",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_003"
+            },
+            {
+              "command": "corepack prepare pnpm@12.8.1 --activate",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_003"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_004",
+          "baseline_run": "pnpm install --frozen-lockfile",
+          "coverage": [
+            {
+              "command": "pnpm install --frozen-lockfile",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_004"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_005",
+          "baseline_run": "pnpm exec drizzle-kit check",
+          "coverage": [
+            {
+              "command": "pnpm exec drizzle-kit check",
+              "kind": "bounded_stage",
+              "stages": [
+                "drizzle-history"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_006",
+          "baseline_run": "pnpm typecheck",
+          "coverage": [
+            {
+              "command": "pnpm typecheck",
+              "kind": "bounded_stage",
+              "stages": [
+                "typecheck"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_007",
+          "baseline_run": "pnpm test:p03",
+          "coverage": [
+            {
+              "command": "pnpm test:p03",
+              "kind": "live_foundation_inventory",
+              "stages": [
+                "foundation"
+              ],
+              "test_files": [
+                "src/modules/identity/domain/single-use-secret.test.ts",
+                "src/modules/identity/application/identity-token-service.test.ts"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_008",
+          "baseline_run": "node scripts/persistence/validate-slice-p03-schema-admission.mjs\npnpm validate:slice-p03\n",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-slice-p03-schema-admission.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p03-schema-admission.mjs"
+            },
+            {
+              "command": "pnpm validate:slice-p03",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p03-implementation-boundary.mjs"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_009",
+          "baseline_run": "pnpm db:verify-p03-replay",
+          "coverage": [
+            {
+              "command": "pnpm db:verify-p03-replay",
+              "kind": "bounded_stage",
+              "stages": [
+                "replay-p03"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_010",
+          "baseline_run": "pnpm db:migrate",
+          "coverage": [
+            {
+              "command": "pnpm db:migrate",
+              "kind": "bounded_stage",
+              "stages": [
+                "migrate-isolated"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_011",
+          "baseline_run": "pnpm test:p03:integration",
+          "coverage": [
+            {
+              "command": "pnpm test:p03:integration",
+              "kind": "bounded_stage",
+              "stages": [
+                "postgres-p03"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "slice-p03-schema-admission.yml",
+      "name": "SLICE-P03 Schema Admission",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/persistence/validate-slice-p03-schema-admission.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-slice-p03-schema-admission.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p03-schema-admission.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "slice-p04-implementation.yml",
+      "name": "SLICE-P04 Implementation",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "corepack enable\ncorepack prepare pnpm@12.8.1 --activate\n",
+          "coverage": [
+            {
+              "command": "corepack enable",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_003"
+            },
+            {
+              "command": "corepack prepare pnpm@12.8.1 --activate",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_003"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_004",
+          "baseline_run": "pnpm install --frozen-lockfile",
+          "coverage": [
+            {
+              "command": "pnpm install --frozen-lockfile",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_004"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_005",
+          "baseline_run": "pnpm exec drizzle-kit check",
+          "coverage": [
+            {
+              "command": "pnpm exec drizzle-kit check",
+              "kind": "bounded_stage",
+              "stages": [
+                "drizzle-history"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_006",
+          "baseline_run": "pnpm typecheck",
+          "coverage": [
+            {
+              "command": "pnpm typecheck",
+              "kind": "bounded_stage",
+              "stages": [
+                "typecheck"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_007",
+          "baseline_run": "pnpm test:p04",
+          "coverage": [
+            {
+              "command": "pnpm test:p04",
+              "kind": "live_foundation_inventory",
+              "stages": [
+                "foundation"
+              ],
+              "test_files": [
+                "src/modules/identity/domain/credential.test.ts"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_008",
+          "baseline_run": "node scripts/persistence/validate-slice-p04-schema-admission.mjs\npnpm validate:slice-p04\n",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-slice-p04-schema-admission.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p04-schema-admission.mjs"
+            },
+            {
+              "command": "pnpm validate:slice-p04",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p04-implementation-boundary.mjs"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_009",
+          "baseline_run": "pnpm db:verify-p04-replay",
+          "coverage": [
+            {
+              "command": "pnpm db:verify-p04-replay",
+              "kind": "bounded_stage",
+              "stages": [
+                "replay-p04"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_010",
+          "baseline_run": "pnpm db:migrate",
+          "coverage": [
+            {
+              "command": "pnpm db:migrate",
+              "kind": "bounded_stage",
+              "stages": [
+                "migrate-isolated"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_011",
+          "baseline_run": "pnpm test:p04:integration",
+          "coverage": [
+            {
+              "command": "pnpm test:p04:integration",
+              "kind": "bounded_stage",
+              "stages": [
+                "postgres-p04"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "slice-p04-schema-admission.yml",
+      "name": "SLICE-P04 Schema Admission",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/persistence/validate-slice-p04-schema-admission.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-slice-p04-schema-admission.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p04-schema-admission.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "slice-p05-foundation.yml",
+      "name": "SLICE-P05 Domain Application Foundation",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "corepack enable\ncorepack prepare pnpm@12.8.1 --activate\n",
+          "coverage": [
+            {
+              "command": "corepack enable",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_003"
+            },
+            {
+              "command": "corepack prepare pnpm@12.8.1 --activate",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_003"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_004",
+          "baseline_run": "pnpm install --frozen-lockfile",
+          "coverage": [
+            {
+              "command": "pnpm install --frozen-lockfile",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_004"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_005",
+          "baseline_run": "pnpm typecheck",
+          "coverage": [
+            {
+              "command": "pnpm typecheck",
+              "kind": "bounded_stage",
+              "stages": [
+                "typecheck"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_006",
+          "baseline_run": "pnpm test:p05:foundation",
+          "coverage": [
+            {
+              "command": "pnpm test:p05:foundation",
+              "kind": "live_foundation_inventory",
+              "stages": [
+                "foundation"
+              ],
+              "test_files": [
+                "src/modules/learning/domain/learning-session.test.ts",
+                "src/modules/learning/application/learning-session-service.test.ts"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_007",
+          "baseline_run": "node scripts/persistence/validate-slice-p05-foundation.mjs\nnode scripts/persistence/validate-slice-p05-owner-decisions.mjs\nnode scripts/persistence/validate-slice-p05-schema-admission.mjs\nnode scripts/persistence/validate-first-physical-slice-readiness.mjs\nnode scripts/persistence/audit-first-physical-slice-readiness.mjs\nnode scripts/packaging/validate-apply-guards.mjs pins\n",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-slice-p05-foundation.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p05-foundation.mjs"
+            },
+            {
+              "command": "node scripts/persistence/validate-slice-p05-owner-decisions.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p05-owner-decisions.mjs"
+            },
+            {
+              "command": "node scripts/persistence/validate-slice-p05-schema-admission.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p05-schema-admission.mjs"
+            },
+            {
+              "command": "node scripts/persistence/validate-first-physical-slice-readiness.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-first-physical-slice-readiness.mjs"
+            },
+            {
+              "command": "node scripts/persistence/audit-first-physical-slice-readiness.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/audit-first-physical-slice-readiness.mjs"
+            },
+            {
+              "command": "node scripts/packaging/validate-apply-guards.mjs pins",
+              "kind": "bounded_stage",
+              "stages": [
+                "pins"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "slice-p05-implementation.yml",
+      "name": "SLICE-P05 Physical Implementation",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "corepack enable\ncorepack prepare pnpm@12.8.1 --activate\npnpm install --frozen-lockfile\n",
+          "coverage": [
+            {
+              "command": "corepack enable",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_003"
+            },
+            {
+              "command": "corepack prepare pnpm@12.8.1 --activate",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_003"
+            },
+            {
+              "command": "pnpm install --frozen-lockfile",
+              "kind": "shared_runner_setup",
+              "step": "workflow_step_004"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_004",
+          "baseline_run": "pnpm typecheck",
+          "coverage": [
+            {
+              "command": "pnpm typecheck",
+              "kind": "bounded_stage",
+              "stages": [
+                "typecheck"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_005",
+          "baseline_run": "pnpm exec drizzle-kit check\npnpm db:verify-p05-generation\n",
+          "coverage": [
+            {
+              "command": "pnpm exec drizzle-kit check",
+              "kind": "bounded_stage",
+              "stages": [
+                "drizzle-history"
+              ]
+            },
+            {
+              "command": "pnpm db:verify-p05-generation",
+              "kind": "bounded_stage",
+              "stages": [
+                "generation"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_006",
+          "baseline_run": "pnpm test:p05:foundation",
+          "coverage": [
+            {
+              "command": "pnpm test:p05:foundation",
+              "kind": "live_foundation_inventory",
+              "stages": [
+                "foundation"
+              ],
+              "test_files": [
+                "src/modules/learning/domain/learning-session.test.ts",
+                "src/modules/learning/application/learning-session-service.test.ts"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_007",
+          "baseline_run": "node scripts/persistence/validate-slice-p05-owner-decisions.mjs\nnode scripts/persistence/validate-slice-p05-schema-admission.mjs\npnpm validate:slice-p05\nnode scripts/persistence/validate-slice-p05-foundation.mjs\nnode scripts/persistence/validate-first-physical-slice-readiness.mjs\nnode scripts/persistence/audit-first-physical-slice-readiness.mjs\nnode scripts/packaging/validate-apply-guards.mjs pins\n",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-slice-p05-owner-decisions.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p05-owner-decisions.mjs"
+            },
+            {
+              "command": "node scripts/persistence/validate-slice-p05-schema-admission.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p05-schema-admission.mjs"
+            },
+            {
+              "command": "pnpm validate:slice-p05",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p05-implementation-boundary.mjs"
+            },
+            {
+              "command": "node scripts/persistence/validate-slice-p05-foundation.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p05-foundation.mjs"
+            },
+            {
+              "command": "node scripts/persistence/validate-first-physical-slice-readiness.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-first-physical-slice-readiness.mjs"
+            },
+            {
+              "command": "node scripts/persistence/audit-first-physical-slice-readiness.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/audit-first-physical-slice-readiness.mjs"
+            },
+            {
+              "command": "node scripts/packaging/validate-apply-guards.mjs pins",
+              "kind": "bounded_stage",
+              "stages": [
+                "pins"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_008",
+          "baseline_run": "pnpm db:verify-p05-replay",
+          "coverage": [
+            {
+              "command": "pnpm db:verify-p05-replay",
+              "kind": "bounded_stage",
+              "stages": [
+                "replay"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_009",
+          "baseline_run": "pnpm db:migrate",
+          "coverage": [
+            {
+              "command": "pnpm db:migrate",
+              "kind": "bounded_stage",
+              "stages": [
+                "migrate-isolated"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_010",
+          "baseline_run": "pnpm test:p05:integration",
+          "coverage": [
+            {
+              "command": "pnpm test:p05:integration",
+              "kind": "bounded_stage",
+              "stages": [
+                "postgres-p05"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "slice-p05-owner-decisions.yml",
+      "name": "SLICE-P05 Owner Decisions",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/persistence/validate-slice-p05-owner-decisions.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-slice-p05-owner-decisions.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p05-owner-decisions.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "slice-p05-schema-admission.yml",
+      "name": "SLICE-P05 Schema Admission",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/persistence/validate-slice-p05-owner-decisions.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-slice-p05-owner-decisions.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p05-owner-decisions.mjs"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_004",
+          "baseline_run": "node scripts/persistence/validate-slice-p05-schema-admission.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-slice-p05-schema-admission.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-slice-p05-schema-admission.mjs"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_005",
+          "baseline_run": "node scripts/persistence/validate-first-physical-slice-readiness.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-first-physical-slice-readiness.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-first-physical-slice-readiness.mjs"
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_006",
+          "baseline_run": "node scripts/persistence/audit-first-physical-slice-readiness.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/audit-first-physical-slice-readiness.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/audit-first-physical-slice-readiness.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "state-discovery.yml",
+      "name": "State Discovery",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/domains/validate-state-discovery.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/domains/validate-state-discovery.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/domains/validate-state-discovery.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "strict-nine-governance-ratification.yml",
+      "name": "Strict-Nine Governance Ratification",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/governance/validate-strict-nine-ratification.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/governance/validate-strict-nine-ratification.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/governance/validate-strict-nine-ratification.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "transactioncontrol-first-slice-decision-packet.yml",
+      "name": "TransactionControl First Slice Decision Packet",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/persistence/validate-transactioncontrol-first-slice-decision-packet.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-transactioncontrol-first-slice-decision-packet.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-transactioncontrol-first-slice-decision-packet.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "transactioncontrol-first-slice-decision-registration.yml",
+      "name": "TransactionControl First Slice Decision Registration",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/persistence/validate-transactioncontrol-first-slice-decision-registration.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/persistence/validate-transactioncontrol-first-slice-decision-registration.mjs",
+              "kind": "umbrella_validator",
+              "stages": [
+                "authority"
+              ],
+              "validator": "scripts/persistence/validate-transactioncontrol-first-slice-decision-registration.mjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "validate-apply-pins.yml",
+      "name": "Validate Apply Pins",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/packaging/validate-apply-guards.mjs pins",
+          "coverage": [
+            {
+              "command": "node scripts/packaging/validate-apply-guards.mjs pins",
+              "kind": "bounded_stage",
+              "stages": [
+                "pins"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_004",
+          "baseline_run": "node scripts/tests/validate-migration-history-guards.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/tests/validate-migration-history-guards.mjs",
+              "kind": "bounded_stage",
+              "stages": [
+                "migration-guards"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "validator-negative-paths.yml",
+      "name": "Validator Negative Paths",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/tests/validate-validators.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/tests/validate-validators.mjs",
+              "kind": "complete_sharded_inventory",
+              "stages": [
+                "validator-shard-1",
+                "validator-shard-2",
+                "validator-shard-3"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_004",
+          "baseline_run": "node scripts/tests/validate-apply-guard-regressions.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/tests/validate-apply-guard-regressions.mjs",
+              "kind": "bounded_stage",
+              "stages": [
+                "apply-regressions"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "whole-repository-audit.yml",
+      "name": "Whole Repository Integration Audit",
+      "disposition": "RETIRE_WRAPPER_KEEP_LOGICAL_CHECKS",
+      "steps": [
+        {
+          "baseline_step_id": "workflow_step_003",
+          "baseline_run": "node scripts/architecture/validate-whole-repository.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/architecture/validate-whole-repository.mjs",
+              "kind": "bounded_stage",
+              "stages": [
+                "authority"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_004",
+          "baseline_run": "node --test scripts/tests/validate-isolated-database-target.mjs",
+          "coverage": [
+            {
+              "command": "node --test scripts/tests/validate-isolated-database-target.mjs",
+              "kind": "bounded_stage",
+              "stages": [
+                "target-snapshots"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_005",
+          "baseline_run": "node --test scripts/tests/validate-persistence-input-snapshots.mjs",
+          "coverage": [
+            {
+              "command": "node --test scripts/tests/validate-persistence-input-snapshots.mjs",
+              "kind": "bounded_stage",
+              "stages": [
+                "target-snapshots"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_006",
+          "baseline_run": "node scripts/packaging/validate-apply-guards.mjs pins",
+          "coverage": [
+            {
+              "command": "node scripts/packaging/validate-apply-guards.mjs pins",
+              "kind": "bounded_stage",
+              "stages": [
+                "pins"
+              ]
+            }
+          ]
+        },
+        {
+          "baseline_step_id": "workflow_step_007",
+          "baseline_run": "node scripts/tests/validate-production-proof.mjs",
+          "coverage": [
+            {
+              "command": "node scripts/tests/validate-production-proof.mjs",
+              "kind": "bounded_stage",
+              "stages": [
+                "production-denials"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "trigger_coverage": {
+    "pull_request": "all target branches, no path filters",
+    "push": "main, no path filters",
+    "workflow_dispatch": true
+  },
+  "lifecycle": {
+    "producer": ".github/workflows/development-self-audit.yml",
+    "independent_observer": ".github/workflows/workflow-lifecycle-closure.yml",
+    "observer_terminal_readback": "still required independently",
+    "retired_wrapper_count": 43
+  },
+  "measurement_status": "planned structural counts; local and hosted measured results are separate evidence, never inferred from a green count",
+  "rollback": "revert the complete consolidation commit (workflows, catalog, guards, tests and generated inventory together); create fresh exact-source receipts for the reverted tree"
+}
