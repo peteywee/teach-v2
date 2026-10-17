@@ -14,7 +14,7 @@ export const stageCatalog = Object.freeze([
   ['recovery-regressions', 'node', ['--test', 'scripts/tests/validate-owner-decision-inventory.test.mjs']],
   ['lifecycle-regressions', 'node', ['--test', 'scripts/tests/validate-workflow-lifecycle.test.mjs', 'scripts/tests/validate-workflow-lifecycle-wiring.test.mjs', 'scripts/tests/validate-workflow-lifecycle-readback.test.mjs']],
   ['typecheck', 'pnpm', ['typecheck']],
-  ['foundation', 'pnpm', ['exec', 'tsx', '--test']],
+  ['foundation', 'pnpm', ['exec', 'node', '--import', 'tsx', '--test']],
   ['generation', 'pnpm', ['db:verify-p05-generation']],
   ['replay', 'pnpm', ['db:verify-p05-replay']],
   ['migrate-isolated', 'pnpm', ['db:migrate']],
@@ -27,7 +27,7 @@ export const stageCatalog = Object.freeze([
   ['postgres-p05', 'pnpm', ['test:p05:integration']],
 ]);
 export const expectedPlan = {
-  version: '0.1.0', scope: 'development checks only; runtime and production authority remain separate',
+  version: '0.1.1', scope: 'development checks only; runtime and production authority remain separate',
   max_operation_ms: 25000, shell_execution: false,
   full_runtime_conformance: 'UNKNOWN', runtime_activation: 'BLOCKED', shared_or_production_execution_authorized: false,
   stages: stageCatalog.map(([id, command, args]) => ({ id, command, args, timeout_ms: 25000, ...(id === 'foundation' ? { discover_tests: 'src/modules' } : {}) })),

@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scope": "development checks only; runtime and production authority remain separate",
   "max_operation_ms": 25000,
   "shell_execution": false,
@@ -127,6 +127,8 @@
       "command": "pnpm",
       "args": [
         "exec",
+        "node",
+        "--import",
         "tsx",
         "--test"
       ],

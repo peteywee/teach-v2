@@ -8,7 +8,7 @@ import {
   authenticateApplicationSession,
   issueApplicationSession,
 } from '../../../src/modules/identity/application/session-service.js';
-import { deriveSessionVerifier } from '../../../src/modules/identity/domain/application-session.js';
+import { deriveSessionVerifier, SESSION_ABSOLUTE_LIFETIME_MS, SESSION_IDLE_LIFETIME_MS } from '../../../src/modules/identity/domain/application-session.js';
 import { PostgresApplicationSessionRepository } from '../../../src/modules/identity/infrastructure/persistence/postgres-application-session-repository.js';
 import { PostgresIdentityRepository } from '../../../src/modules/identity/infrastructure/persistence/postgres-identity-repository.js';
 import * as schema from '../../../src/modules/identity/infrastructure/persistence/schema.js';
@@ -192,7 +192,7 @@ test('deactivation and session issuance serialize on the Identity row', async ()
   assert.equal(active.rows[0]?.count, '0');
 });
 
-test('idle expiry denies authentication even when EXPIRED persistence fails', async () => {
+test('idle expiry denial requires no EXPIRED persistence and leaves the row unchanged', async () => {
   const issuedAt = new Date('2026-10-04T00:00:00Z');
   await identities.create({ id: 'identity-1', now: issuedAt });
   const issued = await issueApplicationSession(sessions, {
@@ -200,6 +200,7 @@ test('idle expiry denies authentication even when EXPIRED persistence fails', as
     identityId: 'identity-1',
     now: issuedAt,
   });
+  const before = await sessions.getById({ id: 'session-idle-fail', identityId: 'identity-1' });
 
   await pool.query(`
     create function test_fail_session_expire() returns trigger language plpgsql as $$
@@ -226,12 +227,12 @@ test('idle expiry denies authentication even when EXPIRED persistence fails', as
       ),
       null,
     );
-    assert.equal(
-      (await sessions.getById({
+    assert.deepEqual(
+      await sessions.getById({
         id: 'session-idle-fail',
         identityId: 'identity-1',
-      }))?.status,
-      'ACTIVE',
+      }),
+      before,
     );
   } finally {
     await pool.query('drop trigger if exists test_fail_session_expire_trigger on identity_application_sessions');
@@ -239,7 +240,7 @@ test('idle expiry denies authentication even when EXPIRED persistence fails', as
   }
 });
 
-test('absolute expiry fails closed and normal lazy expiry persists', async () => {
+test('absolute expiry fails closed without changing the session record', async () => {
   const start = new Date('2026-10-05T00:00:00Z');
   await identities.create({ id: 'identity-1', now: start });
   const issued = await issueApplicationSession(sessions, {
@@ -247,6 +248,7 @@ test('absolute expiry fails closed and normal lazy expiry persists', async () =>
     identityId: 'identity-1',
     now: start,
   });
+  const before = await sessions.getById({ id: 'session-absolute', identityId: 'identity-1' });
   assert.equal(
     await authenticateApplicationSession(
       sessions,
@@ -255,12 +257,12 @@ test('absolute expiry fails closed and normal lazy expiry persists', async () =>
     ),
     null,
   );
-  assert.equal(
-    (await sessions.getById({
+  assert.deepEqual(
+    await sessions.getById({
       id: 'session-absolute',
       identityId: 'identity-1',
-    }))?.status,
-    'EXPIRED',
+    }),
+    before,
   );
 });
 
@@ -341,4 +343,73 @@ test('session issuance captures Identity, verifier Buffer and Date before lock w
   assert.equal(row.id, 'captured'); assert.equal(row.identityId, 'original');
   assert.deepEqual(row.verifier, Buffer.alloc(32, 7)); assert.equal(row.issuedAt.getTime(), now.getTime());
   assert.equal(await sessions.getById({ id: 'redirect', identityId: 'inactive' }), null);
+});
+
+test('a future-issued session denies before any row change instead of raising a database error', async () => {
+  const issuedAt = new Date('2026-10-04T12:00:00Z');
+  await identities.create({ id: 'identity-1', now: issuedAt });
+  const issued = await issueApplicationSession(sessions, { id: 'future-session', identityId: 'identity-1', now: issuedAt });
+  const before = await sessions.getById({ id: issued.session.id, identityId: 'identity-1' });
+
+  assert.equal(await authenticateApplicationSession(sessions, issued.credential, new Date(issuedAt.getTime() - 1)), null);
+  assert.deepEqual(await sessions.getById({ id: issued.session.id, identityId: 'identity-1' }), before);
+  assert.equal((await authenticateApplicationSession(sessions, issued.credential, issuedAt))?.id, issued.session.id);
+});
+
+test('a request clock before authoritative last use denies without a write; equality remains valid', async () => {
+  const issuedAt = new Date('2026-10-04T12:00:00Z');
+  await identities.create({ id: 'identity-1', now: issuedAt });
+  const issued = await issueApplicationSession(sessions, { id: 'last-use-session', identityId: 'identity-1', now: issuedAt });
+  const lastUsedAt = new Date(issuedAt.getTime() + 60_000);
+  assert.equal((await authenticateApplicationSession(sessions, issued.credential, lastUsedAt))?.id, issued.session.id);
+  const before = await sessions.getById({ id: issued.session.id, identityId: 'identity-1' });
+
+  assert.equal(await authenticateApplicationSession(sessions, issued.credential, new Date(lastUsedAt.getTime() - 1)), null);
+  assert.deepEqual(await sessions.getById({ id: issued.session.id, identityId: 'identity-1' }), before);
+  assert.equal((await authenticateApplicationSession(sessions, issued.credential, lastUsedAt))?.id, issued.session.id);
+});
+
+test('idle lifetime permits one millisecond before expiry but denies at the exact limit', async () => {
+  const issuedAt = new Date('2026-10-04T12:00:00Z');
+  await identities.create({ id: 'identity-1', now: issuedAt });
+  const issued = await issueApplicationSession(sessions, { id: 'idle-boundary', identityId: 'identity-1', now: issuedAt });
+  const beforeExpiry = new Date(issuedAt.getTime() + SESSION_IDLE_LIFETIME_MS - 1);
+  assert.equal((await authenticateApplicationSession(sessions, issued.credential, beforeExpiry))?.id, issued.session.id);
+  const before = await sessions.getById({ id: issued.session.id, identityId: 'identity-1' });
+  const exactExpiry = new Date(beforeExpiry.getTime() + SESSION_IDLE_LIFETIME_MS);
+  assert.equal(await authenticateApplicationSession(sessions, issued.credential, exactExpiry), null);
+  const expired = await sessions.getById({ id: issued.session.id, identityId: 'identity-1' });
+  assert.deepEqual(expired, before);
+  assert.equal(expired?.lastUsedAt.getTime(), beforeExpiry.getTime());
+  assert.equal(await authenticateApplicationSession(sessions, issued.credential, new Date(exactExpiry.getTime() + 1)), null);
+  assert.deepEqual(await sessions.getById({ id: issued.session.id, identityId: 'identity-1' }), expired);
+});
+
+test('last-use refresh never extends immutable absolute expiry', async () => {
+  const issuedAt = new Date('2026-10-04T12:00:00Z');
+  await identities.create({ id: 'identity-1', now: issuedAt });
+  const issued = await issueApplicationSession(sessions, { id: 'absolute-boundary', identityId: 'identity-1', now: issuedAt });
+  const absoluteExpiry = new Date(issuedAt.getTime() + SESSION_ABSOLUTE_LIFETIME_MS);
+  // Represent a legitimately refreshed session without advancing hundreds of requests.
+  const priorUse = new Date(absoluteExpiry.getTime() - 60_000);
+  await pool.query('update identity_application_sessions set last_used_at=$1, updated_at=$1 where id=$2', [priorUse, issued.session.id]);
+  assert.equal((await authenticateApplicationSession(sessions, issued.credential, new Date(absoluteExpiry.getTime() - 1)))?.id, issued.session.id);
+  const before = await sessions.getById({ id: issued.session.id, identityId: 'identity-1' });
+  assert.equal(await authenticateApplicationSession(sessions, issued.credential, absoluteExpiry), null);
+  const expired = await sessions.getById({ id: issued.session.id, identityId: 'identity-1' });
+  assert.equal(expired?.absoluteExpiresAt.getTime(), absoluteExpiry.getTime());
+  assert.equal(expired?.lastUsedAt.getTime(), absoluteExpiry.getTime() - 1);
+  assert.deepEqual(expired, before);
+});
+
+test('unknown and revoked credentials cannot change a session', async () => {
+  const issuedAt = new Date('2026-10-04T12:00:00Z');
+  await identities.create({ id: 'identity-1', now: issuedAt });
+  const issued = await issueApplicationSession(sessions, { id: 'revoked-session', identityId: 'identity-1', now: issuedAt });
+  await sessions.revoke({ id: issued.session.id, identityId: 'identity-1', now: issuedAt });
+  const before = await sessions.getById({ id: issued.session.id, identityId: 'identity-1' });
+  const later = new Date(issuedAt.getTime() + 1);
+  assert.equal(await authenticateApplicationSession(sessions, Buffer.alloc(32).toString('base64url'), later), null);
+  assert.equal(await authenticateApplicationSession(sessions, issued.credential, later), null);
+  assert.deepEqual(await sessions.getById({ id: issued.session.id, identityId: 'identity-1' }), before);
 });
