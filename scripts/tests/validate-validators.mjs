@@ -118,6 +118,13 @@ function test(name, script, mutate, expect) {
 // ---------------------------------------------------------------------------
 
 test(
+  "sem36: all-registry in-memory closure regressions pass",
+  "scripts/tests/validate-semantic-dependency-closure.mjs",
+  () => {},
+  { pass: true }
+);
+
+test(
   "sem36: approved command depending on candidate fails",
   "scripts/kernel/validate-semantic-kernel.mjs",
   (dir) => {
@@ -216,7 +223,7 @@ test(
   (dir) => {
     const p = join(dir, "scripts/domains/validate-invariant-discovery.mjs");
     let t = readFileSync(p, "utf8");
-    t = t.replace("0.16.0", "0.17.0");
+    t = t.replace("0.17.0", "0.18.0");
     writeFileSync(p, t);
   },
   { pattern: /stale K00 manifest version pin/ }
@@ -998,10 +1005,10 @@ test('closure: historical promotion set drift fails',closureScript,(dir)=>{
   const path='persistence/semantic-closure/registration.json';const value=readJson(dir,path);
   value.promotions.identifiers[0].id='AssignmentId';writeJson(dir,path,value);
 },{pattern:/exact historical identifiers promotion set/});
-test('closure: excluded capability cannot become approved',closureScript,(dir)=>{
+test('closure: later capability approval requires precise provenance',closureScript,(dir)=>{
   const path='kernel/identifiers.json';const value=readJson(dir,path);
-  value.entries.find(x=>x.id==='CapabilityId').status='approved';writeJson(dir,path,value);
-},{pattern:/excluded CapabilityId must remain candidate/});
+  delete value.entries.find(x=>x.id==='CapabilityId').promotion;writeJson(dir,path,value);
+},{pattern:/later CapabilityId requires exact name\/type admission/});
 
 const integrationScript='scripts/architecture/validate-repository-integration.mjs';
 test('integration: clean complete source/authority inventory passes',integrationScript,()=>{},{pass:true});
@@ -1137,6 +1144,10 @@ test('owner policy: new route source invalidates empty scan',ownerPolicyScript,d
 test('recovery: generated owner view cannot misstate a recommendation',recoveryScript,dir=>mutateText(dir,recoveryBase+'owner-decisions.md','Only the listed residual owner values remain open','MUTATED_RECOMMENDATION'),{pattern:/exact generated decision view/});
 
 test('owner policy: malformed revision change-log header fails',ownerPolicyScript,dir=>mutateText(dir,'contracts/c23-audit-lifecycle-events-contract.md','| Version | Date | Change | By |','| Version | 1.1.0 |'),{pattern:/complete revision change-log table/});
+test('capability admission: exact owner-approved package and adversarial cases pass', 'scripts/tests/validate-capability-admission.mjs', () => {}, {pass:true});
+test('capability admission: forged owner approval fails', 'scripts/kernel/validate-capability-admission.mjs', dir => {const p='domains/capabilities/owner-approval.json',d=readJson(dir,p);d.response.author='agent';writeJson(dir,p,d);}, {pattern:/exact recorded owner approval/});
+test('capability admission: unrelated promotion fails', 'scripts/kernel/validate-capability-admission.mjs', dir => {const p='kernel/values.json',d=readJson(dir,p);d.entries.find(x=>x.id==='EmailAddress').status='approved';writeJson(dir,p,d);}, {pattern:/exact approved overlay/});
+
 // Report
 // ---------------------------------------------------------------------------
 

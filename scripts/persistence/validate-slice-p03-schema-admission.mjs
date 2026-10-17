@@ -1,10 +1,13 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { inspectAdmissionCriteria } from './admission-criteria.mjs';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 const text=(p)=>{try{return readFileSync(join(ROOT,p),'utf8');}catch(e){errors.push(`${p}: ${e.message}`);return '';}};
 
@@ -25,8 +28,8 @@ const c15=text('contracts/c15-data-isolation-privacy-contract.md');
 const find=(doc,id)=>(doc?.entries||[]).find(x=>x.id===id);
 
 if(authority?.version!=='1.0.0' || authority?.status!=='active') errors.push('SLICE-P03 admission: active Persistence Model 1.0.0 required');
-if(manifest?.version!=='0.16.0') errors.push('SLICE-P03 admission: K00 0.16.0 required');
-if(ownership?.version!=='1.7.0' || ownership?.status!=='active') errors.push('SLICE-P03 admission: Domain Ownership Map 1.7.0 required');
+if(manifest?.version!=='0.17.0') errors.push('SLICE-P03 admission: K00 0.17.0 required');
+if(ownership?.version!=='1.8.0' || ownership?.status!=='active') errors.push('SLICE-P03 admission: Domain Ownership Map 1.8.0 required');
 if(admission?.admission_id!=='TEACH-SLICE-P03-PHYSICAL-SCHEMA-ADMISSION' || admission?.version!=='1.0.0' || admission?.status!=='recorded' || admission?.issue!=='#42') errors.push('SLICE-P03 admission: admission identity/state mismatch');
 if(admission?.semantic_baseline_commit!=='84c94ba1abe466907b63d79b281ac4df36b77b6c') errors.push('SLICE-P03 admission: exact post-registration baseline required');
 if(plan?.plan_id!=='TEACH-SLICE-P03-ADMISSION-EVIDENCE-PLAN' || plan?.version!=='1.0.0' || plan?.status!=='recorded' || plan?.physical_schema_authorized!==false) errors.push('SLICE-P03 admission: evidence plan missing or over-authorizing');

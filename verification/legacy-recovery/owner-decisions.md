@@ -2,7 +2,7 @@
 
 Consulted V2 main: `6553eb465e469dc9e60368cde40d259f86262997`. Live-source projection and proposal packet; recommendations are not approvals.
 
-**9 unresolved contract questions / 1 explicitly blocking rows / 12 physical-shape placeholders / 71 candidate entries.** These inventories overlap. A nonblocking row can still block its dependent feature.
+**9 unresolved contract questions / 1 explicitly blocking rows / 12 physical-shape placeholders / 70 candidate entries.** These inventories overlap. A nonblocking row can still block its dependent feature.
 
 Five selected policy questions were registered separately through [issue #66](https://github.com/peteywee/teach-v2/issues/66): OQ-IDN-6, OQ-AUD-1, OQ-REL-1, OQ-REL-4, OQ-OBS-3. See [registration and review](../owner-decisions/2026-10-04/review.md). Runtime, deletion, analytics, provisioning and production remain gated.
 
@@ -122,7 +122,6 @@ Candidate is not approval. Every promotion requires the existing strict-nine aut
 ### kernel/identifiers.json
 
 - AuditEventId
-- CapabilityId
 - ContentBlockId
 - EntitlementId
 - LearnerStateId

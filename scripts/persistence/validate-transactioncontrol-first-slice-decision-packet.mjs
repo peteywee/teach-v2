@@ -1,8 +1,11 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 const p=load('persistence/physical-slices/transaction-control/proposed.json');
 const reg=load('persistence/physical-slices/transaction-control/registration.json');
@@ -10,7 +13,7 @@ const r=load('persistence/physical-slices/readiness.json');
 const m=load('kernel/manifest.json');
 const ids=load('kernel/identifiers.json');
 
-if(m?.version!=='0.16.0') errors.push(`transaction slice: expected K00 0.16.0, found ${m?.version}`);
+if(m?.version!=='0.17.0') errors.push(`transaction slice: expected K00 0.17.0, found ${m?.version}`);
 if(r?.version!=='1.3.0' || r?.current_physical_slice_admissions?.find(x=>x.id==='SLICE-P01')?.implementation_state!=='PROVEN' || r?.evidence_states?.slice_p01_implementation!=='PROVEN') errors.push('transaction slice: readiness must preserve SLICE-P01 as implemented/proven');
 if((ids?.entries||[]).find(x=>x.id==='IdempotencyKey')?.status!=='approved') errors.push('transaction slice: IdempotencyKey must be approved');
 if(p){

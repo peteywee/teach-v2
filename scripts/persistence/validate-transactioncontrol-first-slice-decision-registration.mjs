@@ -1,8 +1,11 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 const text=(p)=>{try{return readFileSync(join(ROOT,p),'utf8');}catch(e){errors.push(`${p}: ${e.message}`);return '';}};
 const reg=load('persistence/physical-slices/transaction-control/registration.json');
@@ -11,7 +14,7 @@ const manifest=load('kernel/manifest.json');
 const relationships=load('kernel/relationships.json');
 const c22=text('contracts/c22-transaction-idempotency-reconciliation-contract.md');
 const approvals=text('contracts/APPROVAL-RECORD.md');
-if(manifest?.version!=='0.16.0') errors.push('transaction decision registration: K00 current version must be 0.16.0');
+if(manifest?.version!=='0.17.0') errors.push('transaction decision registration: K00 current version must be 0.17.0');
 if(reg?.registration_id!=='TEACH-TRANSACTIONCONTROL-FIRST-SLICE-DECISION-REGISTRATION' || reg?.version!=='1.0.0' || reg?.status!=='recorded' || reg?.issue!=='#20') errors.push('transaction decision registration: identity/state mismatch');
 const expected=new Map([['TXN-SLICE-D01','BOTH_BY_OPERATION'],['TXN-SLICE-D02','OPERATION_DECLARED_MINIMUM'],['TXN-SLICE-D03','OPTIONAL_ONE'],['TXN-SLICE-D04','INHERIT_ORIGINATING_OPERATION_SCOPE']]);
 const selected=new Map((reg?.decisions||[]).map(x=>[x.id,x.selection]));
@@ -30,7 +33,7 @@ if(errors.length){console.error(`TransactionControl decision registration FAILED
 console.log('TransactionControl decision registration PASS');
 console.log('Owner decisions: 4 approved');
 console.log('C22: 1.2.0 / OQ-TXN-1 resolved');
-console.log('K00: 0.16.0 current; historical TransactionControl decision preserved');
+console.log('K00: 0.17.0 current; historical TransactionControl decision preserved');
 console.log('Relationship registration: PROVEN');
 console.log('Relationship promotion: PROVEN');
 console.log('Admission rerun: PROVEN / SLICE-P01 IMPLEMENTED');

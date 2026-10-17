@@ -4,6 +4,7 @@ import {readFileSync,existsSync,readdirSync} from 'node:fs';
 import {resolve,join} from 'node:path';
 import {createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
+import {inspectCapabilityAdmission} from '../kernel/capability-admission.mjs';
 import {scanContractQuestions} from './owner-decision-inventory.mjs';
 
 export const PKG='governance/proposals/2026-10-05-decision-closure';
@@ -88,7 +89,9 @@ export function validateDecisionClosure(root){
   for(const name of readdirSync(join(root,'contracts')).filter(x=>/^c\d\d-.*\.md$/.test(x))){const text=read('contracts/'+name);reqTotal+=requirements(text).length;caseTotal+=cases(text).length;}
   check(reqTotal===391&&caseTotal===267,'391 requirements / 267 acceptance IDs required');
   const index=read('contracts/README.md');check(metadata(index).version==='0.18.0'&&['**391**','**267**','**9**','**1**'].every(x=>index.includes(x)),'current index version/totals required');
-  const caps=json('kernel/capabilities.json');check(caps.entries.length===0,'capability promotion remains separate');
+  // r3.1 never granted semantic promotion; later exact SEM-30 approval is separate.
+  // Check that later authority rather than force the live registry back to empty.
+  errors.push(...inspectCapabilityAdmission(root).errors);
  }catch(error){errors.push(`decision closure fails closed: ${error.message}`);}
  return {errors};
 }

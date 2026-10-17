@@ -65,7 +65,7 @@ test(
     replaceOrThrow(
       dir,
       'scripts/persistence/validate-persistence-authority.mjs',
-      "m?.version!=='0.16.0'",
+      "m?.version!=='0.17.0'",
       "m?.version!=='0.14.0'",
     );
   },
@@ -91,7 +91,7 @@ test(
     replaceOrThrow(
       dir,
       'scripts/persistence/validate-persistence-authority.mjs',
-      ".filter(x=>x.status==='approved').length!==15",
+      ".filter(x=>x.status==='approved').length!==16",
       ".filter(x=>x.status==='approved').length!==4",
     );
   },
@@ -130,7 +130,7 @@ test(
     replaceOrThrow(
       dir,
       'scripts/kernel/validate-semantic-kernel.mjs',
-      "if (manifest.version !== '0.16.0')",
+      "if (manifest.version !== '0.17.0')",
       "if (manifest.version !== '0.14.0')",
     );
   },

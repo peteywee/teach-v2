@@ -1,9 +1,12 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const ROOT = resolve(process.cwd());
 const errors = [];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load = (p) => {
   try { return JSON.parse(readFileSync(join(ROOT, p), 'utf8')); }
   catch (e) { errors.push(`${p}: ${e.message}`); return null; }
@@ -22,8 +25,8 @@ if (proposal) {
   if (proposal.baseline?.commit !== '1cb51b4b0a171866628886d5445277b4f6b21e15') errors.push('relationship proposal: baseline commit mismatch');
 }
 
-if (ownership?.status !== 'active' || ownership?.version !== '1.7.0') {
-  errors.push('relationship proposal: requires active Domain Ownership Map 1.7.0');
+if (ownership?.status !== 'active' || ownership?.version !== '1.8.0') {
+  errors.push('relationship proposal: requires active Domain Ownership Map 1.8.0');
 }
 
 const entityIds = new Set((entities?.entries || []).map(x => x.id));

@@ -1,10 +1,13 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { inspectLearningImplementation } from './learning-implementation-evidence.mjs';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 const text=(p)=>{try{return readFileSync(join(ROOT,p),'utf8');}catch(e){errors.push(`${p}: ${e.message}`);return '';}};
 
@@ -17,7 +20,7 @@ const p05Admission=load('persistence/physical-slices/learning-session/admission.
 const p05Plan=load('persistence/physical-slices/learning-session/admission-evidence-plan.json');
 const learningBoundary=text('src/modules/learning/README.md');
 
-if(m?.version!=='0.16.0') errors.push(`slice readiness: expected K00 0.16.0, found ${m?.version}`);
+if(m?.version!=='0.17.0') errors.push(`slice readiness: expected K00 0.17.0, found ${m?.version}`);
 if(reg?.version!=='1.0.0' || reg?.status!=='recorded') errors.push('slice readiness: semantic closure registration missing');
 
 if(r){
@@ -63,7 +66,7 @@ if(errors.length){
 }
 
 console.log('Post-closure physical slice readiness PASS');
-console.log('K00: 0.16.0');
+console.log('K00: 0.17.0');
 console.log('Implemented artifacts: P01-P05; acceptance evidence is recorded separately');
 console.log('P05 LearningSession schema admission: ADMIT / PROVEN');
 console.log('P05 Assignment reference: REQUIRED / NON-NULL');

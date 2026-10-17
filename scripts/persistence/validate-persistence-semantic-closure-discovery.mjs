@@ -1,9 +1,12 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 
 const d=load('persistence/semantic-closure/discovery.json');
@@ -20,7 +23,7 @@ if (d) {
   if (d.proposed_revision_if_approved?.total_candidate_to_approved_promotions!==24) errors.push('semantic closure discovery: expected 24 historical proposed promotions');
   if (d.proposed_revision_if_approved?.k00_target_version!=='0.14.0') errors.push('semantic closure discovery: target must remain 0.14.0');
 }
-if (m?.version!=='0.16.0') errors.push(`semantic closure discovery: current K00 must be 0.16.0, found ${m?.version}`);
+if (m?.version!=='0.17.0') errors.push(`semantic closure discovery: current K00 must be 0.17.0, found ${m?.version}`);
 if (reg) {
   if (reg.kernel_to!=='0.14.0' || reg.promotion_counts?.total!==24) errors.push('semantic closure discovery: current registration mismatch');
 }

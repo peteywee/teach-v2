@@ -39,12 +39,46 @@
       "owning_domain": "AuditLifecycle"
     },
     {
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
       "id": "CapabilityId",
       "kind": "identifier",
-      "status": "candidate",
+      "definition": "The canonical string identifier of a Capability action constant, using the exact C14 capability vocabulary.",
+      "identifier": null,
+      "identifier_note": "This record defines an identifier type. Its own registry identity is id=CapabilityId; it does not have a second independently allocated business identifier.",
       "value_type": "string",
       "represents": "Capability",
-      "owning_domain": "Authorization"
+      "requires": [
+        "Capability"
+      ],
+      "validation": {
+        "pattern": "^[a-z]+\\.[a-z]+\\.[a-z_]+$",
+        "allowed_values_source": "kernel/capabilities.json"
+      },
+      "authority_implications": [
+        "A valid identifier string is not a capability grant.",
+        "C01 owns naming; C14 owns authorization semantics.",
+        "Unknown names fail closed.",
+        "The existing candidate status is unchanged."
+      ],
+      "definition_sources": [
+        "kernel/identifiers.json#CapabilityId",
+        "contracts/c14-authorization-capabilities-contract.md#3-definitions",
+        "governance/decision-closure/c14-capability-matrix.json#capability_identifier_grammar"
+      ],
+      "promotion": {
+        "package_id": "TEACH-SEM-CAPABILITY-NAMES-2026-10-17",
+        "package_version": "0.1.1",
+        "approval_record": "domains/capabilities/owner-approval.json",
+        "promoted_on": "2026-10-17"
+      }
     },
     {
       "id": "CertificationId",

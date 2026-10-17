@@ -1,9 +1,12 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{
   try { return JSON.parse(readFileSync(join(ROOT,p),'utf8')); }
   catch(e){ errors.push(`${p}: ${e.message}`); return null; }
@@ -18,7 +21,7 @@ const invariants=load('kernel/invariants.json');
 const decisions=load('kernel/decision-tables.json');
 const gaps=load('domains/discovery-gaps.json');
 
-if (manifest?.version!=='0.16.0') errors.push(`architecture authority: expected K00 0.16.0, found ${manifest?.version}`);
+if (manifest?.version!=='0.17.0') errors.push(`architecture authority: expected K00 0.17.0, found ${manifest?.version}`);
 if (!d || d.status!=='recorded') errors.push('architecture authority: recorded discovery required');
 if (!p || p.status!=='proposed') errors.push('architecture authority: preserved proposal required');
 if (a) {

@@ -1,9 +1,12 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 const find=(doc,id)=>(doc?.entries||[]).find(x=>x.id===id);
 
@@ -16,7 +19,7 @@ const authority=load('persistence/authority.json');
 
 if(registration?.registration_id!=='TEACH-SLICE-P05-OWNER-DECISION-REGISTRATION' || registration?.version!=='1.0.0' || registration?.status!=='recorded' || registration?.issue!=='#47') errors.push('SLICE-P05 owner decision: registration identity/state mismatch');
 if(registration?.baseline_commit!=='971b77faad88c4be5119324b5c324b56d0a78055') errors.push('SLICE-P05 owner decision: exact pre-decision main baseline required');
-if(manifest?.version!=='0.16.0') errors.push('SLICE-P05 owner decision: K00 0.16.0 required');
+if(manifest?.version!=='0.17.0') errors.push('SLICE-P05 owner decision: K00 0.17.0 required');
 if(authority?.version!=='1.0.0' || authority?.status!=='active') errors.push('SLICE-P05 owner decision: active Persistence Model 1.0.0 required');
 if(architecture?.version!=='1.0.0' || !(architecture?.topology?.runtime_domain_modules||[]).includes('Learning')) errors.push('SLICE-P05 owner decision: Learning runtime module authority missing');
 

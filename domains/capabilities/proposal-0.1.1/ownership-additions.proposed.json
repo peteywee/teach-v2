@@ -1,0 +1,363 @@
+{
+  "package_id": "TEACH-SEM-CAPABILITY-NAMES-2026-10-17",
+  "version": "0.1.1",
+  "state": "PROPOSED",
+  "existing_assignment_preserved": {
+    "kind": "identifier",
+    "id": "CapabilityId",
+    "owner": "Authorization"
+  },
+  "proposed_additions": [
+    {
+      "kind": "value_object",
+      "id": "Capability",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "identity.credential.authenticate",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "identity.session.issue",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "identity.credential.change",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "identity.identity.create",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "identity.invitation.create",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "identity.invitation.revoke",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "identity.invitation.accept",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "identity.token.revoke",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "identity.lifecycle.deactivate",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "identity.lifecycle.reactivate",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "identity.lifecycle.offboard",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "identity.session.revoke",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "organization.membership.create",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "organization.membership.deactivate",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "organization.membership.revoke",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "learning.assignment.create",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "learning.session.start",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "learning.progress.record",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "learning.session.complete",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "content.pack.publish",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "certification.credential.issue",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "certification.credential.revoke",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "transaction.reconciliation.resolve",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "identity.session.read",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "organization.membership.read_self",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "learning.assignment.read_self",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "content.pack.read_assigned",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "learning.state.read_self",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "certification.credential.read_self",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "organization.team.read",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "learning.state.read_team",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "identity.invitation.read",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "certification.credential.verify",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    },
+    {
+      "kind": "capability",
+      "id": "audit.event.read",
+      "decision_state": "proposed",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ]
+    }
+  ],
+  "existing_approved_owner_changes": []
+}

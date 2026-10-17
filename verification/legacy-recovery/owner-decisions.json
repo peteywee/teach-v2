@@ -9,7 +9,7 @@
     "unresolved_contract_questions": 9,
     "explicit_contract_blockers": 1,
     "physical_shape_questions": 12,
-    "semantic_candidates": 71
+    "semantic_candidates": 70
   },
   "unresolved_contract_questions": [
     {
@@ -977,12 +977,6 @@
     },
     {
       "registry": "kernel/identifiers.json",
-      "id": "CapabilityId",
-      "owner": "Authorization",
-      "status": "candidate"
-    },
-    {
-      "registry": "kernel/identifiers.json",
       "id": "ContentBlockId",
       "owner": "Content",
       "status": "candidate"
@@ -1273,16 +1267,16 @@
     "persistence/physical-slices/assignment/admission-evidence-plan.json": "107750afb12c3e3412d72bb606aaa2770617ce0cc27373aa2a1a7ca5fa849aa9",
     "persistence/physical-slices/certification/admission-evidence-plan.json": "be72e653d7a43bc62570674a27b39772ace6ca7d39526766ebe24d5e7a1f5c17",
     "persistence/physical-slices/progress-event/admission-evidence-plan.json": "ce9f2714891d80563e80e7aca94937715a82fe1b17fc297a3cdd38bba934b8fc",
-    "kernel/capabilities.json": "c5ba8ca9de8e86ba51f78a59ce0406fd2c5137a931ed4ad83988f609eaeb3461",
+    "kernel/capabilities.json": "8916eb906f1f49eadefb8c8ea802c249daa73171b65519fcb45e8707eed65724",
     "kernel/commands.json": "91ae49c8bffcf1e4be76188f18d8eb2b06eedd7a276e5c5a0970563ffdd92727",
     "kernel/decision-tables.json": "bf4beb3da3ba76e2ba3466fe28934b78f39c83aff69b6dfd02cd5a196f93123b",
     "kernel/entities.json": "b0ace040e3f639e2c73953c7935c445526d09e88f28c5e0cc7e68ca5fc11689e",
     "kernel/events.json": "98eacc6f7c6ec73e42dc39e98c25b9124218572f0ec86f9b44aa6d87ae2e11a8",
-    "kernel/identifiers.json": "cb85ffc5927a8f29af15b3648d936862a52d302a763f86f1f34015cc97251bf4",
+    "kernel/identifiers.json": "273bb0a708780f59a49b06d97aa9e444b641c90df2a07f928c8c9b527482bf18",
     "kernel/invariants.json": "651b7331605f07756586cd43a7d8cb50cf5e48f56f85ea84ef30ce08165e69c0",
     "kernel/relationships.json": "84fac8ade7f8df06f3d6a7444256469a18b1f399fcf45e564dddb895fbbb4713",
     "kernel/state-machines.json": "6180ba1f6b1bfc9506736906cca4e47cc98d604a6cd7afd340f168c1462e13e2",
     "kernel/states.json": "30237f294389d8c6d8f9621c4da30fd1357f07205e8a3091e8916bc210de06dc",
-    "kernel/values.json": "fda608c1d0b435528767150b97a938ca70c2a728b632bff57796089c708f3c6f"
+    "kernel/values.json": "03a926847a2c83654e3d676c2c916b2a4f7bb820db52294ebbe927809557c6bd"
   }
 }

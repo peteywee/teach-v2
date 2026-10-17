@@ -1,8 +1,11 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 const text=(p)=>{try{return readFileSync(join(ROOT,p),'utf8');}catch(e){errors.push(`${p}: ${e.message}`);return '';}};
 
@@ -13,7 +16,7 @@ const readiness=load('persistence/physical-slices/readiness.json');
 const approvals=text('contracts/APPROVAL-RECORD.md');
 const index=text('contracts/README.md');
 
-if(m?.version!=='0.16.0') errors.push('SLICE-P01 relationship promotion: K00 must be 0.16.0');
+if(m?.version!=='0.17.0') errors.push('SLICE-P01 relationship promotion: K00 must be 0.17.0');
 if(promo?.promotion_id!=='TEACH-SLICE-P01-RELATIONSHIP-PROMOTION' || promo?.version!=='1.0.0' || promo?.status!=='recorded' || promo?.issue!=='#24') errors.push('SLICE-P01 relationship promotion: promotion record identity/state mismatch');
 if(promo?.kernel_revision?.from!=='0.14.0' || promo?.kernel_revision?.to!=='0.15.0' || promo?.other_semantic_status_changes!==0) errors.push('SLICE-P01 relationship promotion: kernel revision scope drifted');
 const rr=(rel?.entries||[]).find(x=>x.id==='ReconciliationRecordUsesIdempotencyKey');
@@ -50,7 +53,7 @@ if(errors.length){
  process.exit(1);
 }
 console.log('SLICE-P01 RELATIONSHIP PROMOTION PASS');
-console.log('K00: 0.16.0 current; P01 promotion history preserved');
+console.log('K00: 0.17.0 current; P01 promotion history preserved');
 console.log('ReconciliationRecordUsesIdempotencyKey: approved');
 console.log('Relationships: historical P01 approved subset preserved; current set may include later owner-approved additions');
 console.log('Other semantic status changes: 0');

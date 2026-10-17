@@ -1,0 +1,297 @@
+{
+  "package_id": "TEACH-SEM-CAPABILITY-NAMES-2026-10-17",
+  "version": "0.1.1",
+  "state": "PROPOSED",
+  "baseline_commit": "a77909814a031b21fb995818f98aad80a422d3cb",
+  "baseline_kernel": "0.16.0",
+  "proposed_future_kernel_version": "0.17.0",
+  "baseline_ownership_map": "1.7.0",
+  "proposed_future_ownership_map_version": "1.8.0",
+  "candidate_registration": {
+    "new_entries": 35,
+    "existing_candidate_completed": "CapabilityId",
+    "total_entries": 36
+  },
+  "proposed_future_promotion_set": [
+    {
+      "kind": "value_object",
+      "id": "Capability"
+    },
+    {
+      "kind": "identifier",
+      "id": "CapabilityId"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.credential.authenticate"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.session.issue"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.credential.change"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.identity.create"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.invitation.create"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.invitation.revoke"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.invitation.accept"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.token.revoke"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.lifecycle.deactivate"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.lifecycle.reactivate"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.lifecycle.offboard"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.session.revoke"
+    },
+    {
+      "kind": "capability",
+      "id": "organization.membership.create"
+    },
+    {
+      "kind": "capability",
+      "id": "organization.membership.deactivate"
+    },
+    {
+      "kind": "capability",
+      "id": "organization.membership.revoke"
+    },
+    {
+      "kind": "capability",
+      "id": "learning.assignment.create"
+    },
+    {
+      "kind": "capability",
+      "id": "learning.session.start"
+    },
+    {
+      "kind": "capability",
+      "id": "learning.progress.record"
+    },
+    {
+      "kind": "capability",
+      "id": "learning.session.complete"
+    },
+    {
+      "kind": "capability",
+      "id": "content.pack.publish"
+    },
+    {
+      "kind": "capability",
+      "id": "certification.credential.issue"
+    },
+    {
+      "kind": "capability",
+      "id": "certification.credential.revoke"
+    },
+    {
+      "kind": "capability",
+      "id": "transaction.reconciliation.resolve"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.session.read"
+    },
+    {
+      "kind": "capability",
+      "id": "organization.membership.read_self"
+    },
+    {
+      "kind": "capability",
+      "id": "learning.assignment.read_self"
+    },
+    {
+      "kind": "capability",
+      "id": "content.pack.read_assigned"
+    },
+    {
+      "kind": "capability",
+      "id": "learning.state.read_self"
+    },
+    {
+      "kind": "capability",
+      "id": "certification.credential.read_self"
+    },
+    {
+      "kind": "capability",
+      "id": "organization.team.read"
+    },
+    {
+      "kind": "capability",
+      "id": "learning.state.read_team"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.invitation.read"
+    },
+    {
+      "kind": "capability",
+      "id": "certification.credential.verify"
+    },
+    {
+      "kind": "capability",
+      "id": "audit.event.read"
+    }
+  ],
+  "actual_promotions": [],
+  "owner_approval": null,
+  "runtime_grants_created": false,
+  "activation_authorized": false,
+  "runtime_dependency_closure_proven": false,
+  "name_type_graph_intent": "All 36 remain candidate in this artifact. The exact 36-entry proposed future status overlay closes the naming/type graph; it does not close C14 operational dependencies.",
+  "registration_target_files": [
+    "kernel/values.json",
+    "kernel/identifiers.json",
+    "kernel/capabilities.json",
+    "kernel/manifest.json",
+    "domains/ownership-map.json"
+  ],
+  "future_gate_work": [
+    "Add capability family to all-family SEM-36 traversal and deterministic schema validation.",
+    "Require explicit owner approval for precisely the named package before any promotion.",
+    "Keep C14 policy snapshot byte-identical, all runtime flags false, and remaining candidate holds unchanged.",
+    "Register review/approval provenance and independently audit exact implementation diff."
+  ],
+  "sources": [
+    {
+      "path": "contracts/c00-system-authority-contract.md",
+      "sha256": "9bdd192ae245742ab638ec6a2fdfda9a22bfc6173b6ec834d2fa8599210f6070",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/contracts/c00-system-authority-contract.md"
+    },
+    {
+      "path": "contracts/c01-canonical-semantics-contract.md",
+      "sha256": "e407a52b739756e84264a66ef0a824d02435e4ee15e938c405c4caf8dc1ebd40",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/contracts/c01-canonical-semantics-contract.md"
+    },
+    {
+      "path": "contracts/c14-authorization-capabilities-contract.md",
+      "sha256": "5a68851faea0e0616717748b470bbfe5b7dd2597fac9bced57b7c1697c8f2937",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/contracts/c14-authorization-capabilities-contract.md"
+    },
+    {
+      "path": "domains/ownership-map.json",
+      "sha256": "9857fbffe8a0cba2aae3e803438a7288b10f029d957915529b724cdba80f8910",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/domains/ownership-map.json"
+    },
+    {
+      "path": "application-interfaces/authority.json",
+      "sha256": "f6382f1fb512d33ac442d59f0bdc968f326aea770643431ac1053a1273065261",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/application-interfaces/authority.json"
+    },
+    {
+      "path": "governance/decision-closure/02-c14-authorization-capability-matrix.md",
+      "sha256": "52088d28e913146fad9ff5f6c42268af43c94fc8b5131a06b9a72777ba6b15d2",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/governance/decision-closure/02-c14-authorization-capability-matrix.md"
+    },
+    {
+      "path": "governance/decision-closure/c14-capability-matrix.json",
+      "sha256": "031b823c100dedcefa8f9d336cbfb617ae760576c35ed24096a3db98c3bcc98d",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/governance/decision-closure/c14-capability-matrix.json"
+    },
+    {
+      "path": "governance/decision-closure/c14-negative-test-matrix.json",
+      "sha256": "427040f6bbb33fff438ac452953d3706281818af65b30de3a016626554b5e92f",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/governance/decision-closure/c14-negative-test-matrix.json"
+    },
+    {
+      "path": "scripts/kernel/validate-semantic-kernel.mjs",
+      "sha256": "39742a0c0b232ccafbee9387d135ca89d9076b7a21667317e1e9763df59de648",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/scripts/kernel/validate-semantic-kernel.mjs"
+    },
+    {
+      "path": "kernel/schema/semantic-kernel.schema.json",
+      "sha256": "a0a829db7b6bf7a9f5604617c3d8df64e975c74855d7be4a0262871bed6d53ad",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/kernel/schema/semantic-kernel.schema.json"
+    },
+    {
+      "path": "kernel/capabilities.json",
+      "sha256": "c5ba8ca9de8e86ba51f78a59ce0406fd2c5137a931ed4ad83988f609eaeb3461",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/kernel/capabilities.json"
+    },
+    {
+      "path": "kernel/commands.json",
+      "sha256": "91ae49c8bffcf1e4be76188f18d8eb2b06eedd7a276e5c5a0970563ffdd92727",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/kernel/commands.json"
+    },
+    {
+      "path": "kernel/decision-tables.json",
+      "sha256": "bf4beb3da3ba76e2ba3466fe28934b78f39c83aff69b6dfd02cd5a196f93123b",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/kernel/decision-tables.json"
+    },
+    {
+      "path": "kernel/entities.json",
+      "sha256": "b0ace040e3f639e2c73953c7935c445526d09e88f28c5e0cc7e68ca5fc11689e",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/kernel/entities.json"
+    },
+    {
+      "path": "kernel/events.json",
+      "sha256": "98eacc6f7c6ec73e42dc39e98c25b9124218572f0ec86f9b44aa6d87ae2e11a8",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/kernel/events.json"
+    },
+    {
+      "path": "kernel/evidence.json",
+      "sha256": "3b0da62bcbd7e8bcf786a534b93999146ead8a200a2832dbdae604c7287ad900",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/kernel/evidence.json"
+    },
+    {
+      "path": "kernel/identifiers.json",
+      "sha256": "cb85ffc5927a8f29af15b3648d936862a52d302a763f86f1f34015cc97251bf4",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/kernel/identifiers.json"
+    },
+    {
+      "path": "kernel/invariants.json",
+      "sha256": "651b7331605f07756586cd43a7d8cb50cf5e48f56f85ea84ef30ce08165e69c0",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/kernel/invariants.json"
+    },
+    {
+      "path": "kernel/manifest.json",
+      "sha256": "78e4f14030639becca32a33aa5ea38ac7a434f19877139840d97e10ead9e03f7",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/kernel/manifest.json"
+    },
+    {
+      "path": "kernel/relationships.json",
+      "sha256": "84fac8ade7f8df06f3d6a7444256469a18b1f399fcf45e564dddb895fbbb4713",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/kernel/relationships.json"
+    },
+    {
+      "path": "kernel/state-machines.json",
+      "sha256": "6180ba1f6b1bfc9506736906cca4e47cc98d604a6cd7afd340f168c1462e13e2",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/kernel/state-machines.json"
+    },
+    {
+      "path": "kernel/states.json",
+      "sha256": "30237f294389d8c6d8f9621c4da30fd1357f07205e8a3091e8916bc210de06dc",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/kernel/states.json"
+    },
+    {
+      "path": "kernel/values.json",
+      "sha256": "fda608c1d0b435528767150b97a938ca70c2a728b632bff57796089c708f3c6f",
+      "url": "https://github.com/peteywee/teach-v2/blob/a77909814a031b21fb995818f98aad80a422d3cb/kernel/values.json"
+    }
+  ]
+}

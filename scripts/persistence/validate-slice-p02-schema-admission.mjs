@@ -1,10 +1,13 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { inspectAdmissionCriteria } from './admission-criteria.mjs';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 const text=(p)=>{try{return readFileSync(join(ROOT,p),'utf8');}catch(e){errors.push(`${p}: ${e.message}`);return '';}};
 
@@ -25,7 +28,7 @@ const c15=text('contracts/c15-data-isolation-privacy-contract.md');
 const find=(doc,id)=>(doc?.entries||[]).find(x=>x.id===id);
 
 if(authority?.version!=='1.0.0' || authority?.status!=='active') errors.push('SLICE-P02 admission: active Persistence Model 1.0.0 required');
-if(manifest?.version!=='0.16.0') errors.push('SLICE-P02 admission: K00 0.16.0 required');
+if(manifest?.version!=='0.17.0') errors.push('SLICE-P02 admission: K00 0.17.0 required');
 if(admission?.admission_id!=='TEACH-SLICE-P02-PHYSICAL-SCHEMA-ADMISSION' || admission?.version!=='1.0.0' || admission?.status!=='recorded' || admission?.issue!=='#34') errors.push('SLICE-P02 admission: admission identity/state mismatch');
 if(admission?.semantic_baseline_commit!=='cf425980c5f411144a37e1c1d3e259254d3e6e9b') errors.push('SLICE-P02 admission: exact post-owner-decision baseline required');
 if(plan?.plan_id!=='TEACH-SLICE-P02-MIGRATION-ACCEPTANCE-EVIDENCE-PLAN' || plan?.version!=='1.0.0' || plan?.status!=='recorded' || plan?.physical_schema_authorized!==false) errors.push('SLICE-P02 admission: evidence plan missing or over-authorizing');

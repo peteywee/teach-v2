@@ -1,0 +1,1128 @@
+{
+  "package_id": "TEACH-SEM-CAPABILITY-NAMES-2026-10-17",
+  "version": "0.1.1",
+  "state": "PROPOSED",
+  "baseline": "a77909814a031b21fb995818f98aad80a422d3cb",
+  "scope": "Canonical immutable capability name/type definitions only, not runtime authorization activation.",
+  "entries": [
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "Capability",
+      "kind": "value_object",
+      "definition": "A typed, dot-delimited action constant.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "CapabilityId"
+      ],
+      "lifecycle_note": "No independent business lifecycle. Registry candidate/approved status is governance metadata, not a product lifecycle.",
+      "authority_implications": [
+        "A constant identifies an action; possession or registration of the constant does not grant permission.",
+        "C14 alone defines the action meaning, assignment, scope, evaluation and denial semantics.",
+        "An unregistered or unauthorized protected operation fails closed.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "definition_sources": [
+        "contracts/c14-authorization-capabilities-contract.md#3-definitions",
+        "contracts/c01-canonical-semantics-contract.md#4-requirements:SEM-16,SEM-28"
+      ]
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "CapabilityId",
+      "kind": "identifier",
+      "definition": "The canonical string identifier of a Capability action constant, using the exact C14 capability vocabulary.",
+      "identifier": null,
+      "identifier_note": "This record defines an identifier type. Its own registry identity is id=CapabilityId; it does not have a second independently allocated business identifier.",
+      "value_type": "string",
+      "represents": "Capability",
+      "requires": [
+        "Capability"
+      ],
+      "validation": {
+        "pattern": "^[a-z]+\\.[a-z]+\\.[a-z_]+$",
+        "allowed_values_source": "kernel/capabilities.json"
+      },
+      "authority_implications": [
+        "A valid identifier string is not a capability grant.",
+        "C01 owns naming; C14 owns authorization semantics.",
+        "Unknown names fail closed.",
+        "The existing candidate status is unchanged."
+      ],
+      "definition_sources": [
+        "kernel/identifiers.json#CapabilityId",
+        "contracts/c14-authorization-capabilities-contract.md#3-definitions",
+        "governance/decision-closure/c14-capability-matrix.json#capability_identifier_grammar"
+      ]
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "identity.credential.authenticate",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation AuthenticateIdentity.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/0",
+        "operation_id": "AuthenticateIdentity",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "identity.session.issue",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation CreateApplicationSession.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/1",
+        "operation_id": "CreateApplicationSession",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "identity.credential.change",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation ChangeCredential.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/2",
+        "operation_id": "ChangeCredential",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "identity.identity.create",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation CreateIdentity.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/3",
+        "operation_id": "CreateIdentity",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "identity.invitation.create",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation InviteIdentity.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/4",
+        "operation_id": "InviteIdentity",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "identity.invitation.revoke",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation RevokeInvitation.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/5",
+        "operation_id": "RevokeInvitation",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "identity.invitation.accept",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation AcceptInvitation.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/6",
+        "operation_id": "AcceptInvitation",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "identity.token.revoke",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation RevokeSingleUseToken.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/7",
+        "operation_id": "RevokeSingleUseToken",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "identity.lifecycle.deactivate",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation DeactivateIdentity.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/8",
+        "operation_id": "DeactivateIdentity",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "identity.lifecycle.reactivate",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation ReactivateIdentity.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/9",
+        "operation_id": "ReactivateIdentity",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "identity.lifecycle.offboard",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation OffboardIdentity.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/10",
+        "operation_id": "OffboardIdentity",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "identity.session.revoke",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation RevokeApplicationSession.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/11",
+        "operation_id": "RevokeApplicationSession",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "organization.membership.create",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation CreateMembership.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/12",
+        "operation_id": "CreateMembership",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "organization.membership.deactivate",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation DeactivateMembership.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/13",
+        "operation_id": "DeactivateMembership",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "organization.membership.revoke",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation RevokeMembership.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/14",
+        "operation_id": "RevokeMembership",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "learning.assignment.create",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation AssignContent.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/15",
+        "operation_id": "AssignContent",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "learning.session.start",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation StartLearningSession.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/16",
+        "operation_id": "StartLearningSession",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "learning.progress.record",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation RecordProgressEvent.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/17",
+        "operation_id": "RecordProgressEvent",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "learning.session.complete",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation CompleteLearningSession.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/18",
+        "operation_id": "CompleteLearningSession",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "content.pack.publish",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation PublishContentPack.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/19",
+        "operation_id": "PublishContentPack",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "certification.credential.issue",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation IssueCertification.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/20",
+        "operation_id": "IssueCertification",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "certification.credential.revoke",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation RevokeCertification.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/21",
+        "operation_id": "RevokeCertification",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "transaction.reconciliation.resolve",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation ReconcileExternalEffect.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/22",
+        "operation_id": "ReconcileExternalEffect",
+        "operation_kind": "command"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "identity.session.read",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation ReadCurrentSession.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/23",
+        "operation_id": "ReadCurrentSession",
+        "operation_kind": "query"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "organization.membership.read_self",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation ListOwnMemberships.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/24",
+        "operation_id": "ListOwnMemberships",
+        "operation_kind": "query"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "learning.assignment.read_self",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation ListOwnAssignments.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/25",
+        "operation_id": "ListOwnAssignments",
+        "operation_kind": "query"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "content.pack.read_assigned",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation ReadAssignedContentVersion.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/26",
+        "operation_id": "ReadAssignedContentVersion",
+        "operation_kind": "query"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "learning.state.read_self",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation ReadOwnLearnerState.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/27",
+        "operation_id": "ReadOwnLearnerState",
+        "operation_kind": "query"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "certification.credential.read_self",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation ListOwnCertifications.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/28",
+        "operation_id": "ListOwnCertifications",
+        "operation_kind": "query"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "organization.team.read",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation ListTeam.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/29",
+        "operation_id": "ListTeam",
+        "operation_kind": "query"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "learning.state.read_team",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation ReadTeamMemberLearnerState.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/30",
+        "operation_id": "ReadTeamMemberLearnerState",
+        "operation_kind": "query"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "identity.invitation.read",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation ListInvitations.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/31",
+        "operation_id": "ListInvitations",
+        "operation_kind": "query"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "certification.credential.verify",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation VerifyCertification.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/32",
+        "operation_id": "VerifyCertification",
+        "operation_kind": "query"
+      }
+    },
+    {
+      "status": "candidate",
+      "owning_domain": "Authorization",
+      "relationships": [],
+      "lifecycle": null,
+      "registration_authority": "C01",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "id": "audit.event.read",
+      "kind": "capability",
+      "definition": "The canonical Capability action constant for the C14 operation ReadAuditEvents.",
+      "identifier": "CapabilityId",
+      "requires": [
+        "Capability",
+        "CapabilityId"
+      ],
+      "authority_implications": [
+        "Naming only: no actor, bundle, membership, principal or runtime grant is created.",
+        "The referenced C14 operation row and registered specification govern every authorization meaning and dependency.",
+        "Conditional and blocked operations remain conditional or blocked.",
+        "This candidate cannot authorize active-contract or merged-implementation use."
+      ],
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/33",
+        "operation_id": "ReadAuditEvents",
+        "operation_kind": "query"
+      }
+    }
+  ]
+}

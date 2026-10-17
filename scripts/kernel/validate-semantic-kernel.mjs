@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { inspectCapabilityAdmission } from './capability-admission.mjs';
+import { inspectSemanticDependencyClosure } from './semantic-dependency-closure.mjs';
 
 const ROOT = resolve(process.cwd());
 const K = join(ROOT, 'kernel');
@@ -15,7 +17,7 @@ const names = ['entities.json','values.json','identifiers.json','relationships.j
 const docs = Object.fromEntries(names.map(n => [n, load(n)]));
 if (manifest) {
   if (manifest.kernel_id !== 'TEACH-K00') errors.push('manifest.json: kernel_id must be TEACH-K00');
-  if (manifest.version !== '0.16.0') errors.push('manifest.json: version must be 0.16.0');
+  if (manifest.version !== '0.17.0') errors.push('manifest.json: version must be 0.17.0');
   if (manifest.canonical_format !== 'json') errors.push('manifest.json: canonical_format must be json');
   for (const n of ['entities','values','identifiers','relationships','states','state_machines','invariants','decision_tables','capabilities','commands','events','evidence','schema']) {
     if (!manifest.files?.[n]) errors.push(`manifest.json: missing file mapping ${n}`);
@@ -34,7 +36,7 @@ function collect(file) {
     else if (!allIds.has(e.id)) allIds.set(e.id,file);
   }
 }
-for (const f of ['entities.json','values.json','identifiers.json','relationships.json','states.json','state-machines.json','invariants.json','decision-tables.json','commands.json','events.json']) collect(f);
+for (const f of ['entities.json','values.json','identifiers.json','relationships.json','states.json','state-machines.json','invariants.json','decision-tables.json','capabilities.json','commands.json','events.json']) collect(f);
 const ids = new Set((docs['identifiers.json']?.entries || []).map(x => x.id));
 const entityIds = new Set((docs['entities.json']?.entries || []).map(x => x.id));
 for (const e of docs['entities.json']?.entries || []) {
@@ -59,7 +61,7 @@ for (const r of docs['relationships.json']?.entries || []) {
     'PasswordResetTokenBelongsToIdentity','InvitationOwnedByIdentity'
   ]);
   const expectedStatus = persistencePromotedRelationships.has(r.id) ? 'approved' : 'candidate';
-  if (r.status !== expectedStatus) errors.push(`relationships.json: ${r.id} must be ${expectedStatus} in K00 0.16.0`);
+  if (r.status !== expectedStatus) errors.push(`relationships.json: ${r.id} must be ${expectedStatus} in K00 0.17.0`);
 }
 const expectedRelationshipIds = new Set([
   'AssignmentReferencesContentPack',
@@ -187,13 +189,13 @@ if (!membershipStatus || JSON.stringify(membershipStatus.values) !== JSON.string
 const persistencePromotedIdentifiers = new Set(['IdentityId','OrganizationId','ApplicationSessionId','ContentPackId','LearningSessionId','CertificationId','IdempotencyKey','RequestId','CredentialId','AssignmentId','ProgressEventId']);
 for (const id of persistencePromotedIdentifiers) {
   const x=(docs['identifiers.json']?.entries||[]).find(v=>v.id===id);
-  if (x?.status!=='approved') errors.push(`identifiers.json: ${id} must be approved in K00 0.16.0`);
+  if (x?.status!=='approved') errors.push(`identifiers.json: ${id} must be approved in K00 0.17.0`);
 }
 for (const id of ['IdentityStatus','ApplicationSessionStatus','LearningSessionStatus']) {
   const x=stateSetMap.get(id);
-  if (x?.status!=='approved') errors.push(`states.json: ${id} must be approved in K00 0.16.0`);
+  if (x?.status!=='approved') errors.push(`states.json: ${id} must be approved in K00 0.17.0`);
 }
-for (const id of ['CapabilityId','MembershipId','LocationId']) {
+for (const id of ['MembershipId','LocationId']) {
   const x=(docs['identifiers.json']?.entries||[]).find(v=>v.id===id);
   if (x?.status!=='candidate') errors.push(`identifiers.json: excluded ${id} must remain candidate`);
 }
@@ -364,48 +366,22 @@ if (manifest?.rules?.event_registration_requires_explicit_contract_semantics !==
 
 
 
-// SEM-36 (C01 1.8.0): an approved entry MUST NOT depend on a candidate entry.
-// Explicit owner-directed holds are enumerated by ID; anything else fails.
-const MEMBERSHIP_HOLD_EXCEPTION = new Set([
-  // Owner-directed hold 2026-10-04: Membership stays candidate pending OQ-TEN-1.
-  // CreateMembership, DeactivateMembership, RevokeMembership are approved with
-  // this documented exception. See Membership.promotion_hold in entities.json.
-  'CreateMembership', 'DeactivateMembership', 'RevokeMembership',
-]);
-const statusById = new Map();
-for (const [file, key] of [['entities.json','entity'],['commands.json','command'],['events.json','event'],['identifiers.json','identifier'],['values.json','value']]) {
-  for (const e of docs[file]?.entries || []) statusById.set(e.id, e.status);
-}
-function depRefs(e) {
-  const refs = [];
-  if (Array.isArray(e.requires)) refs.push(...e.requires);
-  if (e.from) refs.push(e.from);
-  if (Array.isArray(e.to)) refs.push(...e.to); else if (e.to) refs.push(e.to);
-  if (e.entity) refs.push(e.entity);
-  if (e.emitted_by) refs.push(e.emitted_by);
-  if (Array.isArray(e.scope)) refs.push(...e.scope);
-  if (e.identifier) refs.push(e.identifier);
-  return refs;
-}
-for (const [file, entries] of [['commands.json', docs['commands.json']?.entries || []], ['events.json', docs['events.json']?.entries || []]]) {
-  for (const e of entries) {
-    if (e.status !== 'approved') continue;
-    for (const ref of depRefs(e)) {
-      const st = statusById.get(ref);
-      if (st === undefined) continue; // unknown concept: promotion gate's concern, not SEM-36's
-      if (st !== 'approved' && !MEMBERSHIP_HOLD_EXCEPTION.has(e.id)) {
-        errors.push(`${file}: ${e.id} approved but depends on candidate ${ref} (SEM-36)`);
-      }
-    }
-  }
-}
+// Owner-approved exact name/type admission is separate from runtime authority.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
+
+// All entry collections participate, including the 34 registered capabilities.
+const closure = inspectSemanticDependencyClosure(docs);
+errors.push(...closure.errors);
+console.log(`SEM-36: checked ${closure.approvedEntries} approved entries / ${closure.checkedReferences} semantic references`);
+console.log(`SEM-36 owner-directed hold exceptions: ${closure.exceptions.length}`);
+for (const exception of closure.exceptions) console.log(`- ${exception}`);
 
 if (errors.length) {
   console.error(`Semantic kernel FAILED (${errors.length} problem${errors.length===1?'':'s'}):`);
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
-console.log('Semantic kernel PASS: TEACH-K00 0.13.0');
+console.log(`Semantic kernel PASS: ${manifest.kernel_id} ${manifest.version}`);
 console.log(`Entities: ${(docs['entities.json']?.entries || []).length}`);
 console.log(`Identifiers: ${(docs['identifiers.json']?.entries || []).length}`);
 console.log(`Relationships: ${(docs['relationships.json']?.entries || []).length}`);

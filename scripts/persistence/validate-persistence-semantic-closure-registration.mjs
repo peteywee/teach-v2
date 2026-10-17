@@ -1,9 +1,12 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 
 const m=load('kernel/manifest.json');
@@ -18,7 +21,7 @@ const promotedStates=['IdentityStatus','ApplicationSessionStatus','LearningSessi
 const promotedMachines=['IdentityStateMachine','ApplicationSessionStateMachine','LearningSessionStateMachine'];
 const promotedRelationships=['CredentialBelongsToIdentity','IdentityHasApplicationSession','AssignmentTargetsIdentity','AssignmentReferencesContentPack','IdentityHasLearningSession','LearningSessionUsesAssignment','ProgressEventBelongsToLearningSession','CertificationBelongsToIdentity','CertificationReferencesContentPack','CertificationObservedByIdentity'];
 
-if (m?.version!=='0.16.0') errors.push(`semantic closure registration: expected K00 0.16.0, found ${m?.version}`);
+if (m?.version!=='0.17.0') errors.push(`semantic closure registration: expected K00 0.17.0, found ${m?.version}`);
 for (const id of promotedIds) if ((ids?.entries||[]).find(x=>x.id===id)?.status!=='approved') errors.push(`semantic closure registration: ${id} must be approved`);
 for (const id of promotedStates) if ((states?.entries||[]).find(x=>x.id===id)?.status!=='approved') errors.push(`semantic closure registration: ${id} must be approved`);
 for (const id of promotedMachines) if ((machines?.entries||[]).find(x=>x.id===id)?.status!=='approved') errors.push(`semantic closure registration: ${id} must be approved`);
@@ -36,7 +39,11 @@ for (const id of ['CredentialId','AssignmentId','ProgressEventId']) {
   }
   if(!(reg?.explicitly_not_promoted||[]).some(x=>x.id===id)) errors.push(`semantic closure registration: historical exclusion for ${id} must be preserved`);
 }
-for (const id of ['CapabilityId','MembershipId','LocationId']) {
+// CapabilityId is a later exact owner-approved name/type admission, not an issue #17 promotion.
+const capabilityId=(ids?.entries||[]).find(x=>x.id==='CapabilityId');
+if(capabilityId?.status!=='approved' || capabilityId?.promotion?.package_id!=='TEACH-SEM-CAPABILITY-NAMES-2026-10-17' || capabilityId?.promotion?.package_version!=='0.1.1') errors.push('semantic closure registration: later CapabilityId requires exact name/type admission');
+if(!(reg?.explicitly_not_promoted||[]).some(x=>x.id==='CapabilityId')) errors.push('semantic closure registration: historical CapabilityId exclusion must be preserved');
+for (const id of ['MembershipId','LocationId']) {
   if ((ids?.entries||[]).find(x=>x.id===id)?.status!=='candidate') errors.push(`semantic closure registration: excluded ${id} must remain candidate`);
 }
 for (const id of ['MembershipStatus','EvidenceState']) {
@@ -62,7 +69,7 @@ if (errors.length) {
   process.exit(1);
 }
 console.log('Persistence semantic closure registration PASS');
-console.log('Historical promotion: K00 0.13.0 -> 0.14.0; current K00: 0.16.0');
+console.log('Historical promotion: K00 0.13.0 -> 0.14.0; current K00: 0.17.0');
 console.log('Promotions: 8 identifiers + 3 state sets + 3 state machines + 10 relationships = 24');
 console.log('Current relationships: 15 approved / 8 candidate');
 console.log('Historical commands/events: unchanged; later identifier approval: issue #46');

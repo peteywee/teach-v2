@@ -1,9 +1,12 @@
 #!/usr/bin/env node
+import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { inspectAdmissionCriteria } from './admission-criteria.mjs';
 const ROOT=resolve(process.cwd());
 const errors=[];
+// Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
+errors.push(...inspectCapabilityAdmission(ROOT).errors);
 const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 
 const authority=load('persistence/authority.json');
@@ -20,7 +23,7 @@ const rel=load('kernel/relationships.json');
 
 const find=(doc,id)=>(doc?.entries||[]).find(x=>x.id===id);
 if(authority?.version!=='1.0.0' || authority?.status!=='active') errors.push('SLICE-P01 admission: active Persistence Model 1.0.0 required');
-if(manifest?.version!=='0.16.0') errors.push('SLICE-P01 admission: K00 0.16.0 required');
+if(manifest?.version!=='0.17.0') errors.push('SLICE-P01 admission: K00 0.17.0 required');
 if(admission?.admission_id!=='TEACH-SLICE-P01-PHYSICAL-SCHEMA-ADMISSION' || admission?.version!=='2.0.0' || admission?.status!=='recorded' || admission?.issue!=='#26') errors.push('SLICE-P01 admission: current admission identity/state mismatch');
 if(admission?.semantic_baseline_commit!=='d6a6e33db95752174445806ef81d51147f265f9c') errors.push('SLICE-P01 admission: exact post-promotion baseline required');
 if(historical?.version!=='1.0.0' || historical?.decision!=='BLOCK' || historical?.issue!=='#22' || historical?.historical!==true) errors.push('SLICE-P01 admission: historical BLOCK evidence not preserved');
@@ -48,7 +51,7 @@ if(errors.length){
 }
 console.log('SLICE-P01 PHYSICAL-SCHEMA ADMISSION PASS');
 console.log('Decision: ADMIT');
-console.log('K00: 0.16.0');
+console.log('K00: 0.17.0');
 console.log('All 8 admission criteria: PROVEN');
 console.log('SLICE-P01 admission remains PROVEN; current total admissions: 2');
 console.log('Implementation/migration authoring authorized: true');

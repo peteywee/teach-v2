@@ -1,0 +1,174 @@
+{
+  "registration_id": "TEACH-SEM-CAPABILITY-NAMES-2026-10-17",
+  "version": "0.1.1",
+  "status": "recorded",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "approved_on": "2026-10-17",
+  "approval_record": "domains/capabilities/owner-approval.json",
+  "package_sha256": "6d02a94d16cbc94b209500dc111be15862e6738fa63920ae6bd711f6c0dd3b51",
+  "source_baseline_commit": "a77909814a031b21fb995818f98aad80a422d3cb",
+  "implementation_baseline_commit": "c4cecbfbe7f12a4e77d4d26bc3222a7d08fb0183",
+  "kernel_version": "0.17.0",
+  "ownership_map_version": "1.8.0",
+  "promoted_entries": [
+    {
+      "kind": "value_object",
+      "id": "Capability"
+    },
+    {
+      "kind": "identifier",
+      "id": "CapabilityId"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.credential.authenticate"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.session.issue"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.credential.change"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.identity.create"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.invitation.create"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.invitation.revoke"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.invitation.accept"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.token.revoke"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.lifecycle.deactivate"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.lifecycle.reactivate"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.lifecycle.offboard"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.session.revoke"
+    },
+    {
+      "kind": "capability",
+      "id": "organization.membership.create"
+    },
+    {
+      "kind": "capability",
+      "id": "organization.membership.deactivate"
+    },
+    {
+      "kind": "capability",
+      "id": "organization.membership.revoke"
+    },
+    {
+      "kind": "capability",
+      "id": "learning.assignment.create"
+    },
+    {
+      "kind": "capability",
+      "id": "learning.session.start"
+    },
+    {
+      "kind": "capability",
+      "id": "learning.progress.record"
+    },
+    {
+      "kind": "capability",
+      "id": "learning.session.complete"
+    },
+    {
+      "kind": "capability",
+      "id": "content.pack.publish"
+    },
+    {
+      "kind": "capability",
+      "id": "certification.credential.issue"
+    },
+    {
+      "kind": "capability",
+      "id": "certification.credential.revoke"
+    },
+    {
+      "kind": "capability",
+      "id": "transaction.reconciliation.resolve"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.session.read"
+    },
+    {
+      "kind": "capability",
+      "id": "organization.membership.read_self"
+    },
+    {
+      "kind": "capability",
+      "id": "learning.assignment.read_self"
+    },
+    {
+      "kind": "capability",
+      "id": "content.pack.read_assigned"
+    },
+    {
+      "kind": "capability",
+      "id": "learning.state.read_self"
+    },
+    {
+      "kind": "capability",
+      "id": "certification.credential.read_self"
+    },
+    {
+      "kind": "capability",
+      "id": "organization.team.read"
+    },
+    {
+      "kind": "capability",
+      "id": "learning.state.read_team"
+    },
+    {
+      "kind": "capability",
+      "id": "identity.invitation.read"
+    },
+    {
+      "kind": "capability",
+      "id": "certification.credential.verify"
+    },
+    {
+      "kind": "capability",
+      "id": "audit.event.read"
+    }
+  ],
+  "new_entries": 35,
+  "existing_candidate_completed": "CapabilityId",
+  "other_status_changes": 0,
+  "runtime_grants_created": false,
+  "runtime_activation_authorized": false,
+  "runtime_dependency_closure_proven": false,
+  "contract_changes": [],
+  "preserved_decisions": [
+    "Membership owner-directed hold",
+    "CERT-2 unresolved; issuance fails closed",
+    "C14 exact 34 operations and five bundles",
+    "All unrelated candidates, grants, principals and runtime admission gates"
+  ],
+  "retained_proposal_text": "The approved package is preserved byte-for-byte. Candidate-era authority_implications are retained verbatim as proposal provenance, not assertions about current status; only this explicit status overlay and promotion provenance establish local semantic approval. Naming/type approval does not authorize runtime use.",
+  "review_requirement": "The full implementation diff requires independent review before acceptance; no independent implementation review is claimed by this registration record."
+}

@@ -55,7 +55,12 @@ export function inspectConsolidationCoverage(root) {
         if(/^(?:validate|audit)-.*\.mjs$/.test(name)&&path!=='scripts/architecture/validate-whole-repository.mjs')validators.push(path);
       }
     }
-    if(JSON.stringify(validators.sort())!==JSON.stringify(coverage.baseline_umbrella_validators))fail('complete baseline standalone validator inventory required');
+    // Keep the historical 53-validator consolidation baseline immutable. The
+    // owner-approved capability-name/type batch adds exactly one live admission
+    // validator, executed by the unchanged authority stage's discovery loop.
+    const admittedValidators=['scripts/kernel/validate-capability-admission.mjs'];
+    const requiredValidators=[...coverage.baseline_umbrella_validators,...admittedValidators].sort();
+    if(JSON.stringify(validators.sort())!==JSON.stringify(requiredValidators))fail('complete baseline plus admitted capability standalone validator inventory required');
     for(const file of coverage.preserved_test_and_replay_files)if(hash(readFileSync(join(root,file.path)))!==file.sha256)fail(`preserved test/replay evidence changed: ${file.path}`);
     for(const producer of coverage.producer_command_mapping)for(const step of producer.steps)for(const item of step.coverage) {
       if(item.stages?.some(id=>!stages.has(id)))fail(`${producer.workflow}: mapped bounded stage missing`);
