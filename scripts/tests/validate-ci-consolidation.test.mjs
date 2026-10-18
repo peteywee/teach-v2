@@ -11,7 +11,7 @@ import { expectedPlan, inspectAuditPlan } from '../verification/self-audit-catal
 import { discoverFoundationTests, evaluateAuditReports, runAuditStage, sourceIdentity } from '../verification/development-self-audit.mjs';
 import { localDocumentGovernanceContext, resolveDocumentGovernanceContext, inspectDocumentGovernanceContext, documentGovernanceArgs } from '../verification/document-governance-context.mjs';
 import { inspectDevelopmentSelfAudit } from '../verification/validate-development-self-audit.mjs';
-import { inspectConsolidatedVerification, inspectConsolidationCoverage } from '../verification/consolidated-ci-evidence.mjs';
+import { inspectConsolidatedVerification, inspectConsolidationCoverage, reconstructHistoricalReplay } from '../verification/consolidated-ci-evidence.mjs';
 import { deriveWorkflowInventory, inspectClosureObserverText, inspectWorkflowText, closureObserverPath, closureObserverName } from '../verification/workflow-lifecycle-inventory.mjs';
 import { inspectProducerWorkflowWiring, inspectWorkflowLifecycles } from '../verification/validate-workflow-lifecycle.mjs';
 import { buildWorkflowReport, closeWorkflowReport, reportDigest, planWorkflowRecovery } from '../verification/workflow-lifecycle.mjs';
@@ -381,7 +381,7 @@ test('all 24 baseline obligations retain their identities, argv, discovery and b
     const stage = expectedPlan.stages.find(x => x.id === old.id);
     assert.ok(stage, old.id);
     const expected = structuredClone(old);
-    if (old.id === 'audit-regressions') expected.args.push('scripts/tests/validate-ci-consolidation.test.mjs');
+    if (old.id === 'audit-regressions') expected.args.push('scripts/tests/validate-ci-consolidation.test.mjs', 'scripts/tests/validate-replay-database-cleanup.test.mjs');
     assert.deepEqual(stage, expected, old.id);
   }
   assert.equal(expectedPlan.stages.length, 32);
@@ -548,7 +548,7 @@ test('all 13 foundation files and seven PostgreSQL suite bodies retain actual as
   const foundation = Object.keys(UNCHANGED_PROOF_FILES).filter(path => path.startsWith('src/modules/'));
   assert.equal(foundation.length, 13);
   for (const path of foundation) assert.ok(discoverFoundationTests(ROOT).includes(path), path);
-  for (const [path, digest] of Object.entries(UNCHANGED_PROOF_FILES)) assert.equal(hash(readFileSync(join(ROOT, path))), digest, path);
+  for (const [path, digest] of Object.entries(UNCHANGED_PROOF_FILES)) assert.equal(hash(reconstructHistoricalReplay(path, readFileSync(join(ROOT, path)))), digest, path);
   const scripts = JSON.parse(read('package.json')).scripts;
   for (const [name, command] of Object.entries(BASELINE_COMMANDS)) assert.equal(scripts[name], command, name);
 });
@@ -885,7 +885,7 @@ test('coverage manifest preserves all 44 original producer identities and 131 li
   assert.deepEqual(manifest.retained_stage_ids, BASELINE_STAGES.map(x => x.id));
   assert.deepEqual(manifest.added_stage_ids, additions.filter(x=>x[0]!=='demo-registration-regressions').map(x => x[0]));
   assert.deepEqual(manifest.baseline_umbrella_validators, BASELINE_VALIDATORS);
-  for (const row of manifest.preserved_test_and_replay_files) assert.equal(hash(readFileSync(join(ROOT, row.path))), row.sha256, row.path);
+  for (const row of manifest.preserved_test_and_replay_files) assert.equal(hash(reconstructHistoricalReplay(row.path, readFileSync(join(ROOT, row.path)))), row.sha256, row.path);
 });
 test('every old command has a real executable stage, validator, setup or complete test-inventory destination', () => {
   const manifest = JSON.parse(read(COVERAGE));
@@ -1007,3 +1007,13 @@ for(const [label,emit] of [
   ['worker error after report',worker=>{worker.emit('message',{});worker.emit('error',new Error('worker launch/runtime failure'));worker.emit('exit',0);}],
   ['duplicate report',worker=>{worker.emit('message',{});worker.emit('message',{});worker.emit('exit',0);}],
 ])test(`validator worker collector rejects ${label}`,async()=>{const worker=new EventEmitter();const promise=workerHelpers.awaitValidatorWorker(worker,1);emit(worker);await assert.rejects(promise,/worker/);});
+
+test('live coverage rejects a weakened or deleted bounded replay cleanup helper', () => {
+  mutateFixtureFile('scripts/db/replay-database-cleanup.mjs', file => writeFileSync(file, 'export async function dropReplayDatabase() {}\n'));
+  mutateFixtureFile('scripts/db/replay-database-cleanup.mjs', file => rmSync(file));
+});
+test('live coverage rejects restoring forced backend termination', () => {
+  mutateFixtureFile('scripts/db/verify-migration-replay.ts', (file, original) => {
+    writeFileSync(file, reconstructHistoricalReplay('scripts/db/verify-migration-replay.ts', original));
+  });
+});

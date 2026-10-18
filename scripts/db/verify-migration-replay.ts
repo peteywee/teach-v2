@@ -1,3 +1,4 @@
+import { dropReplayDatabase } from './replay-database-cleanup.mjs';
 import { assertIsolatedDatabaseTarget } from './isolated-database-target.mjs';
 import { createHash } from 'node:crypto';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
@@ -60,13 +61,7 @@ try {
 }
 
 async function dropDatabase(name: string): Promise<void> {
-  await admin.query(
-    `select pg_terminate_backend(pid)
-       from pg_stat_activity
-      where datname = $1 and pid <> pg_backend_pid()`,
-    [name],
-  );
-  await admin.query(`drop database if exists ${quoteIdent(name)}`);
+  await dropReplayDatabase(admin, name);
 }
 
 function quoteIdent(value: string): string {
