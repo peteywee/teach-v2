@@ -65,7 +65,7 @@ test('unchanged P01-P05 historical fixture retains its real baseline checks', ()
   const demoSources=Object.keys(DEMO_OWNER_ADAPTERS).flatMap(suffix => { const [owner,file]=suffix.split('/'); return [`src/modules/${owner}/infrastructure/persistence/${file}`,`src/modules/${owner}/infrastructure/persistence/demo-schema.ts`]; });
   const recipe=inspectRecipeRegistration(fixture);
   assert.deepEqual(recipe.errors,[]);
-  const recipeRemoved=['scripts/kernel/validate-demo-recipes-registration.mjs','scripts/persistence/validate-demo-recipes-physical-admission.mjs',...recipe.addedPaths,...DEMO_RECIPE_PHYSICAL_EVIDENCE,DEMO_RECIPE_PHYSICAL_ENVELOPE,DEMO_RECIPE_PHYSICAL_REVIEW,DEMO_RECIPE_MIGRATION,DEMO_RECIPE_SNAPSHOT];
+  const recipeRemoved=['persistence/physical-slices/demo-recipes/independent-successor-review.json','scripts/kernel/validate-demo-recipes-registration.mjs','scripts/persistence/validate-demo-recipes-physical-admission.mjs',...recipe.addedPaths,...DEMO_RECIPE_PHYSICAL_EVIDENCE,DEMO_RECIPE_PHYSICAL_ENVELOPE,DEMO_RECIPE_PHYSICAL_REVIEW,DEMO_RECIPE_MIGRATION,DEMO_RECIPE_SNAPSHOT];
   const removed=[...recipeRemoved,...demoSources,'src/bootstrap/demo/demo-persistence-schema.ts','drizzle/0005_demo_runtime_owner_storage.sql','drizzle/meta/0005_snapshot.json','persistence/physical-slices/demo-runtime/physical-successor.json','persistence/physical-slices/demo-runtime/independent-successor-review.json'];
   const paths=['scripts/db/run-demo-integration.ts',...recipe.revisedPaths,...physicalPaths,...removed,'drizzle/meta/_journal.json','drizzle.config.ts'];
   const originals=new Map(paths.map(path => [path,existsSync(join(fixture,path))?raw(path):null]));

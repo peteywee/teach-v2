@@ -38,8 +38,12 @@ export function inspectConsolidatedVerification(root) {
     const recipe = inspectRecipeRegistration(root);
     errors.push(...recipe.errors);
     const wrapper = readFileSync(join(root,'scripts/db/run-demo-integration.ts'),'utf8');
-    const historicalWrapper = recipe.present ? reconstructHistoricalDemoIntegration(wrapper) : wrapper;
-    if(createHash('sha256').update(historicalWrapper).digest('hex')!=='575b41278b354e0cfeb32a51f4b56f7719169772d19f4cdea5b83f2303222a62')fail('exact original isolated three-suite wrapper plus approved recipe guard suite required');
+    if(createHash('sha256').update(wrapper).digest('hex')!=='575b41278b354e0cfeb32a51f4b56f7719169772d19f4cdea5b83f2303222a62')fail('exact original isolated three-suite wrapper required');
+    if(recipe.present) {
+      const recipeStage=plan?.stages?.find(stage=>stage.id==='demo-recipe-postgres');
+      if(recipeStage?.command!=='node'||JSON.stringify(recipeStage?.args)!==JSON.stringify(['--import','tsx','scripts/db/run-demo-recipe-integration.ts'])||recipeStage?.timeout_ms!==25000)fail('exact separate bounded recipe PostgreSQL stage required');
+      if(createHash('sha256').update(readFileSync(join(root,'scripts/db/run-demo-recipe-integration.ts'))).digest('hex')!=='0ae8978b1762054b7bf0f8a94a2754492e29220e6e4297bf2fa6a85c8464b9f9')fail('exact separate isolated recipe guard wrapper required');
+    }
     if(recipe.present)for(const path of ['tests/demo/recipe-content.test.ts','tests/demo-web/recipe-api.test.mjs','tests/demo-web/recipes.test.mjs','scripts/tests/validate-demo-recipes-registration.mjs','scripts/tests/validate-demo-recipes-physical-successor.mjs'])if(!demoSource?.args.includes(path)||!existsSync(join(root,path)))fail(`bounded recipe successor regression must run in existing demo-source stage: ${path}`);
     if(!existsSync(join(root,'scripts/db/verify-demo-generation.mjs')))fail('demo generation proof required');
     const stages = [...workflow.matchAll(/^        run: node scripts\/verification\/run-self-audit\.mjs --stage ([a-z0-9-]+)$/gm)].map(match => match[1]);
@@ -149,11 +153,16 @@ export function preservedProofBytes(root,path){
  return old;
 }
 
-// Preserve every original isolation, cleanup and three-suite assertion. Only
-// the explicitly approved fourth recipe guard suite and truthful label differ.
+// Historical fixture projection only. Live CI requires the exact original
+// three-suite wrapper and runs the recipe guard as its own bounded stage.
 export function reconstructHistoricalDemoIntegration(current) {
+  const digest=value=>createHash('sha256').update(value).digest('hex');
+  const original='575b41278b354e0cfeb32a51f4b56f7719169772d19f4cdea5b83f2303222a62';
+  if(digest(current)===original)return current;
   const addition = "'tests/integration/demo/recipe-content-guard.test.ts',";
   const label = 'Demo migration, owner storage, recipe guard and application integration PASS in four separate disposable databases';
   if (current.split(addition).length !== 2 || current.split(label).length !== 2) throw Error('exact bounded recipe integration suite addition required');
-  return current.replace(addition, '').replace(label, 'Demo migration, owner storage and application integration PASS in three separate disposable databases');
+  const historical=current.replace(addition, '').replace(label, 'Demo migration, owner storage and application integration PASS in three separate disposable databases');
+  if(digest(historical)!==original)throw Error('exact original isolated three-suite wrapper required');
+  return historical;
 }

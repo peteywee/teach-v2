@@ -6,7 +6,11 @@ import { inspectRecipeRegistration, RECIPE_PACKAGE_SHA256, RECIPE_REGISTRATION_S
 
 export const DEMO_RECIPE_PHYSICAL_LANE = 'persistence/physical-slices/demo-recipes';
 export const DEMO_RECIPE_PHYSICAL_ENVELOPE = `${DEMO_RECIPE_PHYSICAL_LANE}/physical-successor.json`;
-export const DEMO_RECIPE_PHYSICAL_REVIEW = `${DEMO_RECIPE_PHYSICAL_LANE}/independent-successor-review.json`;
+export const DEMO_RECIPE_PHYSICAL_REVIEW = `${DEMO_RECIPE_PHYSICAL_LANE}/independent-scheduling-review.json`;
+// Preserve the prior genuine review at its original path. Scheduling changes
+// require a new independent review and may not rewrite that earlier verdict.
+const PREDECESSOR_REVIEW = `${DEMO_RECIPE_PHYSICAL_LANE}/independent-successor-review.json`;
+const PREDECESSOR_REVIEW_SHA256 = '758e0183ed2d1c8542a3f75f6a87795eb264f028900179243eadf4524ed3b0a7';
 export const DEMO_RECIPE_MIGRATION = 'drizzle/0006_demo_recipe_content_guard.sql';
 export const DEMO_RECIPE_SNAPSHOT = 'drizzle/meta/0006_snapshot.json';
 export const DEMO_RECIPE_JOURNAL = 'drizzle/meta/_journal.json';
@@ -15,7 +19,7 @@ export const DEMO_RECIPE_PHYSICAL_EVIDENCE = Object.freeze([
 ].map(name => `${DEMO_RECIPE_PHYSICAL_LANE}/${name}`));
 // Filled only from a genuine independent review. The envelope cannot provide
 // its own trust anchor. A missing/unsealed review always denies the successor.
-export const DEMO_RECIPE_PHYSICAL_REVIEW_SHA256 = '758e0183ed2d1c8542a3f75f6a87795eb264f028900179243eadf4524ed3b0a7';
+export const DEMO_RECIPE_PHYSICAL_REVIEW_SHA256 = 'acd0ecdba21f7fa7d348a4262b5a2c472101e7fc2f747066b0690b33139aab6f';
 export const DEMO_RECIPE_REVIEWED_SOURCE_PATHS = Object.freeze([
   'scripts/persistence/demo-recipes-physical-successor.mjs',
   'scripts/persistence/demo-recipes-physical-successor.d.mts',
@@ -33,6 +37,7 @@ export const DEMO_RECIPE_REVIEWED_SOURCE_PATHS = Object.freeze([
   'drizzle/meta/_journal.json',
   'tests/integration/demo/recipe-content-guard.test.ts',
   'scripts/db/run-demo-integration.ts',
+  'scripts/db/run-demo-recipe-integration.ts',
 ]);
 const BASELINE_SHA256 = '47f6d13618713d72de0a321d5edb1e0ad1a1551236f76d176073f5d023ed49d9';
 const PRIOR_JOURNAL_SHA256 = '412b21579a8deb58d06aaa6890e8bd34ce398ad9801b70d2196ea8332af83ddf';
@@ -127,11 +132,13 @@ export function inspectDemoRecipePhysicalSuccessor(root) {
     }
     equal(hash(raw('domains/demo-recipes/registration.json')), RECIPE_REGISTRATION_SHA256, 'recipe registration bytes differ');
     const envelope = json(DEMO_RECIPE_PHYSICAL_ENVELOPE);
+    equal(hash(raw(PREDECESSOR_REVIEW)), PREDECESSOR_REVIEW_SHA256, 'preserved predecessor independent review bytes differ');
     const review = existsSync(join(root, DEMO_RECIPE_PHYSICAL_REVIEW)) ? json(DEMO_RECIPE_PHYSICAL_REVIEW) : null;
     if (!review) fail('independent successor review missing');
     else {
       if (!DEMO_RECIPE_PHYSICAL_REVIEW_SHA256 || hash(raw(DEMO_RECIPE_PHYSICAL_REVIEW)) !== DEMO_RECIPE_PHYSICAL_REVIEW_SHA256) fail('independent successor review is unsealed or bytes changed');
       equal(review.reviewed_source_hashes, demoRecipeReviewedSourceHashes(root), 'exact independently reviewed gate, activation and test source hashes differ');
+      equal(review.predecessor_review, { path: PREDECESSOR_REVIEW, sha256: PREDECESSOR_REVIEW_SHA256 }, 'scheduling review must bind preserved predecessor review');
       equal(review.outcome, 'PASS', 'independent structural review must PASS');
       equal(review.source_edits_by_reviewer, false, 'reviewer cannot author candidate sources');
       if (typeof review.reviewer !== 'string' || !review.reviewer.trim()) fail('independent reviewer identity required');
@@ -171,7 +178,7 @@ export function inspectDemoRecipePhysicalSuccessor(root) {
       if (originalInventory.some(item => !item.isFile())) fail('original immutable package permits only regular files');
     }
     equal(envelope, buildDemoRecipePhysicalSuccessor(root), 'exact bounded successor envelope or live hashes differ');
-    const expectedNames = [...DEMO_RECIPE_PHYSICAL_EVIDENCE, DEMO_RECIPE_PHYSICAL_ENVELOPE, DEMO_RECIPE_PHYSICAL_REVIEW].map(path => path.slice(DEMO_RECIPE_PHYSICAL_LANE.length + 1)).sort();
+    const expectedNames = [...DEMO_RECIPE_PHYSICAL_EVIDENCE, DEMO_RECIPE_PHYSICAL_ENVELOPE, PREDECESSOR_REVIEW, DEMO_RECIPE_PHYSICAL_REVIEW].map(path => path.slice(DEMO_RECIPE_PHYSICAL_LANE.length + 1)).sort();
     const inventory = readdirSync(join(root, DEMO_RECIPE_PHYSICAL_LANE), { withFileTypes: true });
     equal(inventory.map(item => item.name).sort(), expectedNames, 'exact recipe physical evidence directory inventory required');
     if (inventory.some(item => !item.isFile())) fail('recipe physical evidence permits only regular files');
@@ -194,7 +201,7 @@ export function inspectDemoRecipePhysicalSuccessor(root) {
     if (!match || /\$\$/.test(match[1]) || /\b(?:CREATE|ALTER|DROP|TRUNCATE|GRANT|REVOKE|COPY|EXECUTE|INSERT|UPDATE|DELETE)\b/i.test(match[1].replace(/'(?:[^']|'')*'/g, ''))) fail('only reviewed content_guard_demo_version replacement is admitted');
     const admitted = errors.length === 0;
     return { errors, present: true, admitted, migrationCount: admitted ? 7 : null,
-      addedPaths: admitted ? [DEMO_RECIPE_MIGRATION, DEMO_RECIPE_SNAPSHOT, ...DEMO_RECIPE_PHYSICAL_EVIDENCE, DEMO_RECIPE_PHYSICAL_ENVELOPE, DEMO_RECIPE_PHYSICAL_REVIEW] : [],
+      addedPaths: admitted ? [DEMO_RECIPE_MIGRATION, DEMO_RECIPE_SNAPSHOT, ...DEMO_RECIPE_PHYSICAL_EVIDENCE, DEMO_RECIPE_PHYSICAL_ENVELOPE, PREDECESSOR_REVIEW, DEMO_RECIPE_PHYSICAL_REVIEW] : [],
       revisedPaths: admitted ? [DEMO_RECIPE_JOURNAL] : [], envelope };
   } catch (error) {
     fail(`missing or malformed successor evidence: ${error.message}`);

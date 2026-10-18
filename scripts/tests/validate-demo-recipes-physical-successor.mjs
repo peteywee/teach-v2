@@ -141,3 +141,10 @@ test('original package file contents and exact finite inventory remain immutable
   }
   mutate(`${base}/unapproved.json`, () => '{}', /original immutable package directory inventory differs/);
 });
+
+test('scheduling reseal preserves the prior genuine independent review at its exact original path', () => {
+  const prior = `${DEMO_RECIPE_PHYSICAL_LANE}/independent-successor-review.json`;
+  assert.equal(hash(raw(prior)), '758e0183ed2d1c8542a3f75f6a87795eb264f028900179243eadf4524ed3b0a7');
+  mutate(prior, text => text + '\n', /preserved predecessor independent review bytes differ/);
+  mutate(prior, null, /missing or malformed successor evidence/);
+});

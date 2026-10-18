@@ -299,6 +299,16 @@
       "timeout_ms": 25000
     },
     {
+      "id": "demo-recipe-postgres",
+      "command": "node",
+      "args": [
+        "--import",
+        "tsx",
+        "scripts/db/run-demo-recipe-integration.ts"
+      ],
+      "timeout_ms": 25000
+    },
+    {
       "id": "typecheck",
       "command": "pnpm",
       "args": [

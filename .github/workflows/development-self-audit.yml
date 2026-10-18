@@ -137,6 +137,9 @@ jobs:
       - name: Audit demo-postgres
         id: audit_demo_postgres
         run: node scripts/verification/run-self-audit.mjs --stage demo-postgres
+      - name: Audit demo-recipe-postgres
+        id: audit_demo_recipe_postgres
+        run: node scripts/verification/run-self-audit.mjs --stage demo-recipe-postgres
       - name: Audit typecheck
         id: audit_typecheck
         run: node scripts/verification/run-self-audit.mjs --stage typecheck

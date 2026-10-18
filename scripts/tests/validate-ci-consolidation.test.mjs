@@ -385,6 +385,7 @@ const additions = [
   ['demo-source-tests', 'node', ['--import', 'tsx', '--test', 'tests/demo/activation.test.ts', 'tests/demo/application.test.ts', 'tests/demo/content.test.ts', 'tests/demo/cookie.test.ts', 'tests/demo/http-application.test.ts', 'tests/demo/transport.test.ts', 'tests/demo-web/api.test.mjs', 'tests/demo-web/controller.test.mjs', 'tests/demo-web/views.test.mjs', 'scripts/tests/demo-route-inventory.mjs', 'scripts/tests/demo-storage-evidence.mjs', 'scripts/tests/demo-validator-predecessor.mjs', 'tests/demo/recipe-content.test.ts', 'tests/demo-web/recipe-api.test.mjs', 'tests/demo-web/recipes.test.mjs', 'scripts/tests/validate-demo-recipes-registration.mjs', 'scripts/tests/validate-demo-recipes-physical-successor.mjs']],
   ['demo-generation', 'node', ['scripts/db/verify-demo-generation.mjs']],
   ['demo-postgres', 'node', ['--import', 'tsx', 'scripts/db/run-demo-integration.ts']],
+  ['demo-recipe-postgres', 'node', ['--import', 'tsx', 'scripts/db/run-demo-recipe-integration.ts']],
   ['demo-registration-regressions', 'node', ['--test', '--test-name-pattern='+REGISTRATION_REMAINDER_PATTERN, 'scripts/tests/validate-demo-runtime-registration.mjs']],
   ['document-governance', 'node', ['scripts/docs/validate-document-metadata.mjs']],
   ['production-contract-decisions', 'node', ['scripts/release/validate-production-proof-contract-decisions.mjs']],
@@ -403,8 +404,8 @@ test('all 24 baseline obligations retain their identities, argv, discovery and b
     if(old.id.startsWith('validator-shard-'))expected.args[1]=expected.args[1].replace('/3','/14');
     assert.deepEqual(stage, expected, old.id);
   }
-  assert.equal(expectedPlan.stages.length, 47);
-  assert.equal(new Set(expectedPlan.stages.map(x => x.id)).size, 47);
+  assert.equal(expectedPlan.stages.length, 48);
+  assert.equal(new Set(expectedPlan.stages.map(x => x.id)).size, 48);
   assert.deepEqual(JSON.parse(read('verification/whole-repository/self-audit-plan.json')), expectedPlan);
   assert.equal(expectedPlan.shell_execution, false);
   assert.equal(expectedPlan.max_operation_ms, 25000);
@@ -590,7 +591,7 @@ function auditEvidence() {
   return { source, context, tests, planHash, reports };
 }
 const evaluate = f => evaluateAuditReports(expectedPlan, f.reports, f.source, f.planHash, f.tests, f.context);
-test('complete 31-stage source-bound evidence reconciles', () => assert.deepEqual(evaluate(auditEvidence()), []));
+test('complete 48-stage source-bound evidence reconciles', () => assert.deepEqual(evaluate(auditEvidence()), []));
 for (const [id] of additions) {
   for (const state of ['missing', 'BLOCKED', 'UNKNOWN', 'SKIPPED']) test(`${id} ${state} cannot disappear into a green aggregate`, () => {
     const f = auditEvidence();
@@ -903,7 +904,7 @@ test('coverage manifest preserves all 44 original producer identities and 131 li
   const baseline = manifest.producer_command_mapping.map(w => ({ workflow: w.workflow, name: w.name, steps: w.steps.map(s => ({ baseline_step_id: s.baseline_step_id, baseline_run: s.baseline_run })) }));
   assert.equal(hash(JSON.stringify(baseline)), '8406a3de9e42f7a72315acd0ca94b0369e0028c1e0f2f005b51b48b7313d94be', 'immutable baseline command/step coverage, not count alone');
   assert.deepEqual(manifest.retained_stage_ids, BASELINE_STAGES.map(x => x.id));
-  assert.deepEqual(manifest.added_stage_ids, additions.filter(x=>!['demo-registration-entry-regressions','demo-registration-regressions','validator-shard-13','validator-shard-14','demo-source-tests','demo-generation','demo-postgres','validator-shard-4','validator-shard-5','validator-shard-6','validator-shard-7','validator-shard-8','validator-shard-9','validator-shard-10','validator-shard-11','validator-shard-12'].includes(x[0])).map(x => x[0]));
+  assert.deepEqual(manifest.added_stage_ids, additions.filter(x=>!['demo-registration-entry-regressions','demo-registration-regressions','validator-shard-13','validator-shard-14','demo-source-tests','demo-generation','demo-postgres','demo-recipe-postgres','validator-shard-4','validator-shard-5','validator-shard-6','validator-shard-7','validator-shard-8','validator-shard-9','validator-shard-10','validator-shard-11','validator-shard-12'].includes(x[0])).map(x => x[0]));
   assert.deepEqual(manifest.baseline_umbrella_validators, BASELINE_VALIDATORS);
   for (const row of manifest.preserved_test_and_replay_files) assert.equal(hash(preservedProofBytes(ROOT, row.path)), row.sha256, row.path);
 });
@@ -1050,10 +1051,10 @@ test('real authority umbrella invokes exact physical validator with a five-secon
   assert.match(output.join('\n'),/physical-negative-control/);
 });
 
-for(const id of ['demo-source-tests','demo-generation','demo-postgres'])test(`live CI requires exact bounded ${id} proof`,()=>{
+for(const id of ['demo-source-tests','demo-generation','demo-postgres','demo-recipe-postgres'])test(`live CI requires exact bounded ${id} proof`,()=>{
  mutateFixtureFile('verification/whole-repository/self-audit-plan.json',(file,original)=>{const plan=JSON.parse(original);plan.stages=plan.stages.filter(stage=>stage.id!==id);writeFileSync(file,JSON.stringify(plan));},inspectConsolidatedVerification);
 });
-for(const path of ['scripts/db/run-demo-integration.ts','scripts/db/run-p05-prefix-integration.ts'])test(`live CI rejects weakened disposable integration wrapper ${path}`,()=>{
+for(const path of ['scripts/db/run-demo-integration.ts','scripts/db/run-demo-recipe-integration.ts','scripts/db/run-p05-prefix-integration.ts'])test(`live CI rejects weakened disposable integration wrapper ${path}`,()=>{
  mutateFixtureFile(path,file=>writeFileSync(file,'// omitted suite or prefix isolation\n'),inspectConsolidatedVerification);
 });
 
@@ -1142,7 +1143,32 @@ for (const path of ['tests/demo/recipe-content.test.ts', 'tests/demo-web/recipe-
     const plan=JSON.parse(original); const stage=plan.stages.find(row=>row.id==='demo-source-tests'); stage.args=stage.args.filter(arg=>arg!==path); writeFileSync(file,JSON.stringify(plan));
   }, inspectConsolidatedVerification);
 });
-test('recipe CI cannot omit or substitute fourth disposable PostgreSQL suite', () => {
-  mutateFixtureFile('scripts/db/run-demo-integration.ts', (file, original) => writeFileSync(file, original.toString().replace("'tests/integration/demo/recipe-content-guard.test.ts',", '')), inspectConsolidatedVerification);
-  mutateFixtureFile('scripts/db/run-demo-integration.ts', (file, original) => writeFileSync(file, original.toString().replace("'tests/integration/demo/recipe-content-guard.test.ts'", "'tests/integration/demo/application-runtime.test.ts'")), inspectConsolidatedVerification);
+test('recipe CI cannot omit or substitute the separate disposable PostgreSQL suite', () => {
+  mutateFixtureFile('scripts/db/run-demo-recipe-integration.ts', (file, original) => writeFileSync(file, original.toString().replace("'tests/integration/demo/recipe-content-guard.test.ts'", '')), inspectConsolidatedVerification);
+  mutateFixtureFile('scripts/db/run-demo-recipe-integration.ts', (file, original) => writeFileSync(file, original.toString().replace("'tests/integration/demo/recipe-content-guard.test.ts'", "'tests/integration/demo/application-runtime.test.ts'")), inspectConsolidatedVerification);
+});
+
+test('recipe scheduling split preserves all 43 unchanged PostgreSQL tests and both operation bounds', () => {
+  const original=read('scripts/db/run-demo-integration.ts');
+  const recipe=read('scripts/db/run-demo-recipe-integration.ts');
+  assert.equal(hash(original),'575b41278b354e0cfeb32a51f4b56f7719169772d19f4cdea5b83f2303222a62');
+  assert.equal(hash(recipe),'0ae8978b1762054b7bf0f8a94a2754492e29220e6e4297bf2fa6a85c8464b9f9');
+  const suites=source=>[...source.matchAll(/'((?:tests\/integration\/demo\/)[^']+\.test\.ts)'/g)].map(match=>match[1]);
+  assert.deepEqual(suites(original),['tests/integration/demo/migration-replay.test.ts','tests/integration/demo/postgres-owner-storage.test.ts','tests/integration/demo/application-runtime.test.ts']);
+  assert.deepEqual(suites(recipe),['tests/integration/demo/recipe-content-guard.test.ts']);
+  const sources=[
+    ['migration-replay',3,'ece39f11246877d9f4287cb035f09639cb5c767e44a1481e61b189b949278eaf'],
+    ['postgres-owner-storage',17,'9bfaae6387614501f8493dbd9adedfc2d14072e480a44a60e1ef6eb148cfbbd7'],
+    ['application-runtime',14,'8c3f3cf8a7ef98bffe1ea58c36b9b2371965dd57ada13247ed0f6da87d284f2c'],
+    ['recipe-content-guard',9,'327af6cf10cec3901f412852c744b6abb33b56898c13828ca85725afd50f984a'],
+  ];
+  for(const [name,count,digest] of sources){const source=read(`tests/integration/demo/${name}.test.ts`);assert.equal(hash(source),digest);assert.equal([...source.matchAll(/^test\(/gm)].length,count);}
+  assert.equal(sources.reduce((sum,[,count])=>sum+count,0),43);
+  for(const id of ['demo-postgres','demo-recipe-postgres'])assert.equal(expectedPlan.stages.find(stage=>stage.id===id).timeout_ms,25000);
+  for(const source of [original,recipe])assert.match(source,/stdio:'inherit',timeout:20000/);
+  assert.match(recipe,/teach_v2_demo_recipe_ci_/);
+});
+
+for(const id of ['demo-postgres','demo-recipe-postgres'])test(`split PostgreSQL stage ${id} cannot raise its operation ceiling`,()=>{
+  mutateFixtureFile('verification/whole-repository/self-audit-plan.json',(file,original)=>{const plan=JSON.parse(original);plan.stages.find(stage=>stage.id===id).timeout_ms=30000;writeFileSync(file,JSON.stringify(plan));},inspectConsolidatedVerification);
 });
