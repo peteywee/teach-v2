@@ -101,7 +101,8 @@ for(const mode of ['timeout','ordinary-exit'])test(`Linux bounded operation clea
 });
 
 // Exercise the actual CLI through OS pipes, not a mocked stream or direct file.
-// The original immediate-exit behavior must fail the same large-output control.
+// A second, deliberately deferred-write pair makes the immediate-exit control
+// deterministic: OS pipe scheduling alone does not guarantee truncation.
 for(const exitCode of [0,4])test(`self-audit CLI drains large stdout/stderr pipes and preserves child exit ${exitCode}`,()=>{
  const stdout='stdout-proof-'.repeat(50000)+'\n',stderr='stderr-proof-'.repeat(50000)+'\n';
  const f=fixture(`process.stdout.write(${JSON.stringify(stdout)});process.stderr.write(${JSON.stringify(stderr)});process.exitCode=${exitCode};`);
@@ -119,11 +120,18 @@ for(const exitCode of [0,4])test(`self-audit CLI drains large stdout/stderr pipe
   assert.equal(report.source_unchanged,true);assert.equal(report.timed_out,false);
   const source=readFileSync(cli,'utf8');
   assert.equal(source.split('process.exitCode = main();').length,2);
-  const immediate=source.replace('process.exitCode = main();','process.exit(main());')
+  const deferredWrites=`process.stdout.cork();process.stderr.cork();
+  setImmediate(()=>{process.stdout.uncork();process.stderr.uncork();});\n`;
+  const deferred=source.replace('process.exitCode = main();',deferredWrites+'process.exitCode = main();')
     .replace(/^#![^\n]*\n/,'')
     .replace(/from '(\.\/[^']+)'/g,(_,specifier)=>`from '${new URL(specifier,cli).href}'`);
+  const drained=spawnSync(process.execPath,['--input-type=module','--eval',deferred,'--','cli-control','--stage','pins'],options);
+  assert.equal(drained.error,undefined);assert.equal(drained.signal,null);assert.equal(drained.status,exitCode===0?0:1);
+  assert.equal(drained.stdout,stdout+checkpoint);assert.equal(drained.stderr,stderr);
+  const immediate=deferred.replace('process.exitCode = main();','process.exit(main());');
   const control=spawnSync(process.execPath,['--input-type=module','--eval',immediate,'--','cli-control','--stage','pins'],options);
   assert.equal(control.error,undefined);assert.equal(control.signal,null);assert.equal(control.status,exitCode===0?0:1);
-  assert.ok(control.stdout.length<stdout.length+checkpoint.length||control.stderr.length<stderr.length,'immediate-exit control must demonstrate truncated pipe output');
+  assert.equal(control.stdout,'','immediate exit must discard deferred stdout');
+  assert.equal(control.stderr,'','immediate exit must discard deferred stderr');
  } finally {f.cleanup();}
 });
