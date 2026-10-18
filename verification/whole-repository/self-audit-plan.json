@@ -16,6 +16,15 @@
       "timeout_ms": 25000
     },
     {
+      "id": "demo-registration-regressions",
+      "command": "node",
+      "args": [
+        "--test",
+        "scripts/tests/validate-demo-runtime-registration.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
       "id": "document-governance",
       "command": "node",
       "args": [

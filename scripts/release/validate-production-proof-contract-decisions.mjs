@@ -1,15 +1,18 @@
 #!/usr/bin/env node
+import { inspectDemoRuntimeRegistration, createHistoricalSourceReader } from '../kernel/demo-runtime-registration.mjs';
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const ROOT = resolve(process.cwd());
-const errors = [];
+const demo=inspectDemoRuntimeRegistration(ROOT);
+const readPredecessor=createHistoricalSourceReader(ROOT,demo.source);
+const errors = [...demo.errors];
 const load = (path) => {
-  try { return JSON.parse(readFileSync(join(ROOT, path), 'utf8')); }
+  try { return JSON.parse(readPredecessor(path)); }
   catch (error) { errors.push(`${path}: ${error.message}`); return null; }
 };
 const text = (path) => {
-  try { return readFileSync(join(ROOT, path), 'utf8'); }
+  try { return readPredecessor(path); }
   catch (error) { errors.push(`${path}: ${error.message}`); return ''; }
 };
 

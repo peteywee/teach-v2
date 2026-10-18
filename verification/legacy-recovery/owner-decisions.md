@@ -2,7 +2,7 @@
 
 Consulted V2 main: `6553eb465e469dc9e60368cde40d259f86262997`. Live-source projection and proposal packet; recommendations are not approvals.
 
-**9 unresolved contract questions / 1 explicitly blocking rows / 12 physical-shape placeholders / 70 candidate entries.** These inventories overlap. A nonblocking row can still block its dependent feature.
+**9 unresolved contract questions / 1 explicitly blocking rows / 12 physical-shape placeholders / 24 candidate entries.** These inventories overlap. A nonblocking row can still block its dependent feature.
 
 Five selected policy questions were registered separately through [issue #66](https://github.com/peteywee/teach-v2/issues/66): OQ-IDN-6, OQ-AUD-1, OQ-REL-1, OQ-REL-4, OQ-OBS-3. See [registration and review](../owner-decisions/2026-10-04/review.md). Runtime, deletion, analytics, provisioning and production remain gated.
 
@@ -87,24 +87,12 @@ Candidate is not approval. Every promotion requires the existing strict-nine aut
 
 ### kernel/decision-tables.json
 
-- DT-001
-- DT-002
 - DT-003
 - DT-004
-- DT-005
-- DT-006
-- DT-007
-- DT-008
 
 ### kernel/entities.json
 
-- AuditEvent
-- ContentBlock
 - Entitlement
-- LearnerState
-- LifecycleEvent
-- Location
-- Membership
 
 ### kernel/events.json
 
@@ -121,34 +109,11 @@ Candidate is not approval. Every promotion requires the existing strict-nine aut
 
 ### kernel/identifiers.json
 
-- AuditEventId
-- ContentBlockId
 - EntitlementId
-- LearnerStateId
-- LifecycleEventId
-- LocationId
-- MembershipId
 
 ### kernel/invariants.json
 
-- INV-001
-- INV-002
-- INV-003
-- INV-004
 - INV-005
-- INV-006
-- INV-007
-- INV-008
-- INV-009
-- INV-010
-- INV-011
-- INV-012
-- INV-013
-- INV-014
-- INV-015
-- INV-016
-- INV-017
-- INV-018
 - INV-019
 - INV-020
 - INV-021
@@ -156,29 +121,15 @@ Candidate is not approval. Every promotion requires the existing strict-nine aut
 
 ### kernel/relationships.json
 
-- ContentPackContainsContentBlock
 - EntitlementBelongsToOrganization
-- LearnerStateBelongsToIdentity
-- LearnerStateTracksContentPack
-- LifecycleEventReferencesIdentity
-- LocationBelongsToOrganization
-- MembershipLinksIdentityOrganization
-- MembershipMayScopeLocation
-
-### kernel/state-machines.json
-
-- MembershipStateMachine
 
 ### kernel/states.json
 
 - EvidenceState
-- MembershipStatus
 
 ### kernel/values.json
 
 - EmailAddress
-- ContentVersion
-- Timestamp
 - RequestId
 - IdempotencyKey
 

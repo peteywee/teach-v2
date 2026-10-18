@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-PROP-DCS-03",
   "class": "specification",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-05",
-  "updated_on": "2026-10-05",
+  "updated_on": "2026-10-17",
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
@@ -28,15 +28,16 @@
     "c15-data-lifecycle-matrix.json"
   ],
   "issue": "#68",
-  "effective_on": "2026-10-05",
+  "effective_on": "2026-10-17",
   "approval": {
     "state": "approved",
-    "approved_on": "2026-10-05",
-    "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "SYS-21 #75; manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
+    "approved_on": "2026-10-17",
+    "record": "domains/demo-runtime/owner-approval.json",
+    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82"
   },
   "supersedes": [
-    "TEACH-PROP-DCS-03@0.3.0"
+    "TEACH-PROP-DCS-03@0.3.0",
+    "TEACH-PROP-DCS-03@1.0.0"
   ]
 }
 -->
@@ -48,8 +49,8 @@ Registered on 2026-10-05 by the owner-approved r3.1 manifest under SYS-21 #75. T
 
 | Field | Value |
 | --- | --- |
-| Status | `proposed` — corrected owner draft; not legal advice; nothing here is authority until registered |
-| Owner decision | Approved in chat 2026-10-05 04:05 America/Chicago (decision sheet A–D). Registration PENDING under SYS-21 #75; this document stays `proposed` until it lands. |
+| Status | `active` logical authority; implementation conformance UNKNOWN; no route mounting or physical admission |
+| Owner decision | Prior #75 selections preserved except explicit #82 changes; exact demo approval in `domains/demo-runtime/owner-approval.json` |
 | Resolves if approved | `OQ-PRIV-1`, `OQ-PRIV-2`, `OQ-PRIV-3`, `OQ-PRIV-6`; registers the format half of `OQ-PRIV-4` |
 | Stays open | `OQ-PRIV-4` export deadline; `OQ-PRIV-5` deletion deadline (no value exists in any source) |
 | Issue | #68, read 2026-10-05. Its four deliverables map to: field/action/retention/hold matrix → §4 and §7; corrected anonymization proposal → §2 D-1 and §3; residual-linkage evidence → §4.2; per-class clocks and audit subject-deletion vs expiry → §4 and §2 D-6 |
@@ -293,3 +294,9 @@ Registration form: values are written into existing requirement text or the reso
 | 0.1.0 | 2026-10-05 | Corrected owner draft into a per-class, per-field lifecycle matrix (issue #68). |
 | 0.2.0 | 2026-10-05 | Revised on `6553eb4` (C15 still 1.0.3): read issue #68 and mapped its deliverables; added §4.2 residual-linkage evidence (L-1…L-7) and PRIV-X-11…14; narrowed-residual naming fixed (letter-suffixed IDs are not valid inventory IDs); owner chat approval recorded, registration pending #75. |
 | 0.3.0 | 2026-10-05 | Audit corrections: PRIV-18 removed — the C15 value is written into PRIV-12 (no new ID, finding 1); an unregistered record class is now retention UNKNOWN with automatic deletion BLOCKED instead of a one-year default (finding 6), with §5 constraint 6 and PRIV-X-15; registration-form note added to §10. |
+
+## Synthetic record disposition (#82)
+
+The registered matrix c15-data-lifecycle-matrix.json 1.1.0 adds exact DemoRun-scoped record classes and creation/deadline/terminal clocks. In this isolated milestone all synthetic records, CommandReceipt tombstones and reduced-resolution network prefixes use RETAIN_NO_AUTOMATED_DELETE. Close/reset/expiry revoke access, never delete, anonymize or rewind; no erasure promise is made. Prefixes are potentially identifying, not anonymous. Existing central one-year audit policy remains, but no purge executor is admitted. Ordinary non-demo policies and deletion blockers remain unchanged.
+
+Exact owner approval: `domains/demo-runtime/owner-approval.json`; immutable governing definitions: `domains/demo-runtime/proposal-0.1.0/demo-boundary.md` and `domains/demo-runtime/proposal-0.1.0/authority-and-audit.md`. No implementation success is claimed by this logical registration.

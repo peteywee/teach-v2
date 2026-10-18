@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C02",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-05",
-  "effective_on": "2026-10-05",
+  "updated_on": "2026-10-17",
+  "effective_on": "2026-10-17",
   "approval": {
     "state": "approved",
-    "approved_version": "1.1.0",
-    "approved_on": "2026-10-05",
-    "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner manifest-bound decision-closure r3.1 approval under SYS-21 #75; sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
+    "approved_version": "1.2.0",
+    "approved_on": "2026-10-17",
+    "record": "domains/demo-runtime/owner-approval.json",
+    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; SHA256SUMS sha256:a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -29,12 +29,24 @@
     "use": "reference only; does not govern and is not governed by this contract"
   },
   "supersedes": [
-    "TEACH-CON-C02@1.0.3"
+    "TEACH-CON-C02@1.0.3",
+    "TEACH-CON-C02@1.1.0"
   ],
   "superseded_by": null,
   "depends_on": [
     "contracts/"
-  ]
+  ],
+  "demo_runtime_registration": {
+    "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+    "approval_record": "domains/demo-runtime/owner-approval.json",
+    "issue": "#82",
+    "source_package": "domains/demo-runtime/proposal-0.1.0",
+    "sha256sums_sha256": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+    "semantic_authority_only": true,
+    "physical_schema_admission": false,
+    "runtime_activation": false,
+    "deployment_authority": false
+  }
 }
 -->
 
@@ -45,17 +57,17 @@
 | Contract ID        | C02                                                                                                                                                             |
 | Group              | C02 Automation & Agent Authority                                                                                                                                |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.1.0 |
+| Version | 1.2.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-05; manifest-bound decision-closure r3.1, SYS-21 #75; see `APPROVAL-RECORD.md` |
+| Approved by | Patrick Craven (owner), 2026-10-17; TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; see `domains/demo-runtime/owner-approval.json` |
 | Requirement prefix | `AGT`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New.                                                                                                                                                            |
-| Supersedes         | 1.0.3 |
+| Supersedes | 1.1.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-05 |
+| Last updated | 2026-10-17 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -83,7 +95,7 @@ Related contracts: C00, C01, C11, C14, C21, C23, C31, C51.
 
 | Term               | Meaning                                                                                                                                                                    |
 | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| HumanActor         | A person acting through an authenticated identity.                                                                                                                         |
+| HumanActor         | A person acting through an authenticated identity, including a constrained synthetic DemoPersona that does not identify the real visitor.                                                                                                                         |
 | RuntimeAgent       | An AI component operating as part of the Teach product.                                                                                                                    |
 | AutomationActor    | Deterministic software acting on its own schedule or trigger: scheduler, worker, background job, CLI, deployment automation.                                               |
 | DevelopmentAgent   | An AI assistant that helps build or maintain Teach. It is not part of the product.                                                                                         |
@@ -102,7 +114,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **AGT-6** — Every actor MUST be classified as exactly one of HumanActor, RuntimeAgent, AutomationActor, or DevelopmentAgent, and the types MUST NOT be conflated.
 - **AGT-7** — Execution type (human, AI, CLI, scheduler, worker, or internal application code) MUST NOT by itself confer authority.
 - **AGT-8** — Privileged activity by any actor MUST pass, in order: identity or execution identity, capability, scope, command, domain invariants, transaction, audit.
-- **AGT-9** — AutomationActor identities MUST be backend execution-principal records with explicit capabilities per principal, inventoried in `governance/automation-principals.json`; CI jobs are DevelopmentAgents, not product actors. No principal is grandfathered or provisioned by this registration. See `governance/decision-closure/02-c14-authorization-capability-matrix.md`. (OQ-AGT-1 resolved 2026-10-05).
+- **AGT-9** — AutomationActor identities MUST be backend execution-principal records with explicit capabilities per principal, inventoried in `governance/automation-principals.json`; CI jobs are DevelopmentAgents, not product actors. No principal is grandfathered. This revision admits only automation:demo-admission-v1 and automation:demo-expiry-v1 as specified by the approved demo package; all other principal adoption remains separate. See `governance/decision-closure/02-c14-authorization-capability-matrix.md`. (OQ-AGT-1 resolved 2026-10-05).
 - **AGT-10** — An actor MAY use a different transport than a human, but MUST cross the same authorization boundary, command boundary, domain invariants, transaction rules, and audit rules as a human performing the same command.
 - **AGT-11** — A RuntimeAgent or AutomationActor MUST NOT receive direct privileged database access as a substitute for domain commands; the migration runner governed by C21 is the only exception, and only for schema migration.
 - **AGT-12** — A RuntimeAgent MAY propose or attempt actions; whether an action is valid and authorized MUST be decided by Teach's deterministic logic, and agent output MUST NOT be accepted as authorization.
@@ -163,3 +175,13 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.1.0 | 2026-10-05 | Register OQ-AGT-1, OQ-AGT-2, OQ-AGT-3; preserve named residuals and existing requirement/acceptance IDs. Decision-closure r3.1 manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c; SYS-21 #75. | Patrick Craven (owner); ChatGPT (recorder) |
+
+## Registered demo runtime amendment (1.2.0)
+
+Exact owner-approved scope: `TEACH-DEMO-RUNTIME-2026-10-17@0.1.0`, SYS-21 [#82](https://github.com/peteywee/teach-v2/issues/82). Approval provenance: `domains/demo-runtime/owner-approval.json`; immutable source: `domains/demo-runtime/proposal-0.1.0/contract-amendments.md`. The addendum below is the approved revision, not an exception inferred by an implementer. It changes only its explicitly named demo behavior; ordinary/customer semantics and unrelated gates remain unchanged. Proposal labels in the immutable package preserve its pre-approval history; this registration supplies current authority. Physical schema admission, runtime activation and shared deployment remain separate.
+
+Add explicit demo applicability: the visitor+manager demo must satisfy C11–C15, C21–C23, C31–C33 and C41/C42 for every behavior it exposes, including reporting and replay for Identity, Membership, Assignment and DemoRun. Existing learner-only N/A rows do not waive a triggered requirement. Certification/deferred feature gates remain unchanged. Shared deployment still requires release proof.
+
+A visitor acting through a constrained synthetic demo persona is a HumanActor for command/audit classification, but the persona does not claim to identify the actual human visitor. Anonymous admission is a trigger executed only by the named demo-admission AutomationActor. Admit only the two named deterministic principal records, capability lists, scope rules and in-process dispatcher authentication described in demo-boundary.md. No DevelopmentAgent obtains product authority; arbitrary internal code does not inherit either principal. The expiry principal is a bounded named job, not blanket job adoption.
+
+Exact definitions and field constraints are incorporated from `domains/demo-runtime/proposal-0.1.0/demo-boundary.md`, `domains/demo-runtime/proposal-0.1.0/authority-and-audit.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.json`, and `domains/demo-runtime/proposal-0.1.0/transport-and-queries.json` with its referenced schemas. No definition beyond that approved package is introduced.

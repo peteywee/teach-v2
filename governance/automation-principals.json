@@ -1,0 +1,64 @@
+{
+  "version": "1.0.0",
+  "status": "REGISTERED_NOT_ACTIVATED",
+  "approval_record": "domains/demo-runtime/owner-approval.json",
+  "issue": "#82",
+  "principals": [
+    {
+      "actor_class": "AutomationActor",
+      "authentication_method": "IN_PROCESS_BOOT_VALIDATED_DISPATCHER",
+      "credential": null,
+      "owner": "Patrick Craven, Top Shelf Service LLC",
+      "approved_on": "2026-10-17",
+      "approval_record": "domains/demo-runtime/owner-approval.json",
+      "source": "domains/demo-runtime/proposal-0.1.0/demo-boundary.md",
+      "external_service_credential_provisioned": false,
+      "principal_id": "automation:demo-admission-v1",
+      "capabilities": [
+        "organization.demo.begin"
+      ],
+      "scope_class": "DEMO_NEW_RUN",
+      "scope_rule": "Fresh server-minted DEMO_ONLY run/organization/location allocation only; no existing or customer scope selector.",
+      "entry_command": "BeginDemoRun",
+      "allowed_internal_command_graph": [
+        "CreateDemoPersona",
+        "CreateMembership",
+        "PublishContentPack",
+        "AssignContent",
+        "CreateApplicationSession"
+      ],
+      "removal_condition": "Disable when registration, immutable manifest, physical admission, or isolated execution configuration is missing or contradictory.",
+      "runtime_activation_claimed": false
+    },
+    {
+      "actor_class": "AutomationActor",
+      "authentication_method": "IN_PROCESS_BOOT_VALIDATED_DISPATCHER",
+      "credential": null,
+      "owner": "Patrick Craven, Top Shelf Service LLC",
+      "approved_on": "2026-10-17",
+      "approval_record": "domains/demo-runtime/owner-approval.json",
+      "source": "domains/demo-runtime/proposal-0.1.0/demo-boundary.md",
+      "external_service_credential_provisioned": false,
+      "principal_id": "automation:demo-expiry-v1",
+      "capabilities": [
+        "organization.demo.close"
+      ],
+      "scope_class": "RECORD",
+      "record_type": "DemoRun",
+      "scope_rule": "Exact synthetic run with reached immutable deadline or terminal retry only; enumerate due run IDs and immutable scopes only, at most100 per batch.",
+      "entry_command": "CloseDemoRun",
+      "allowed_internal_command_graph": [
+        "RevokeDemoSessions",
+        "RevokeApplicationSession"
+      ],
+      "expiry_batch_limit": 100,
+      "removal_condition": "Disable when registration, immutable manifest, physical admission, or isolated execution configuration is missing or contradictory.",
+      "runtime_activation_claimed": false
+    }
+  ],
+  "resolution": "Immutable manifest validated at backend startup; a caller header, body, environment string or DevelopmentAgent cannot select or inherit a principal.",
+  "public_or_shared_deployment_authorized": false,
+  "arbitrary_internal_code_inherits_authority": false,
+  "physical_admission_required": true,
+  "activation_gate": "Semantic registration supplies no activation. Local isolated verification requires separately recorded exact-source registration review, per-slice physical ADMIT and environment-bound local verification configuration. Shared/public activation is not authorized."
+}

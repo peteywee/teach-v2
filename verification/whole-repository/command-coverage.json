@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "baseline_commit": "1c6065e1af5292abc2c8fdc75ee5a6e611b820bd",
   "scope": "all approved K00 commands; partial source/test traceability, not runtime conformance",
   "full_runtime_conformance": "UNKNOWN",
@@ -544,6 +544,92 @@
         "Atomic authoritative Assignment authorization and session mutation (#58), dependent on P06 #60",
         "Required runtime event/audit and protected operation registry are absent"
       ]
+    },
+    {
+      "command": "BeginDemoRun",
+      "owner": "Organization",
+      "authority_requirements": [],
+      "semantic_registration": "domains/demo-runtime/registration.json",
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "Independent exact-candidate semantic registration review",
+        "Per-slice physical admission and database replay",
+        "Owner command implementation, transaction-bound authority/audit and negative-path integration evidence",
+        "API mounting and end-to-end demo verification where routed"
+      ]
+    },
+    {
+      "command": "CreateDemoPersona",
+      "owner": "Identity",
+      "authority_requirements": [],
+      "semantic_registration": "domains/demo-runtime/registration.json",
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "Independent exact-candidate semantic registration review",
+        "Per-slice physical admission and database replay",
+        "Owner command implementation, transaction-bound authority/audit and negative-path integration evidence",
+        "API mounting and end-to-end demo verification where routed"
+      ]
+    },
+    {
+      "command": "SwitchDemoPersona",
+      "owner": "Identity",
+      "authority_requirements": [],
+      "semantic_registration": "domains/demo-runtime/registration.json",
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "Independent exact-candidate semantic registration review",
+        "Per-slice physical admission and database replay",
+        "Owner command implementation, transaction-bound authority/audit and negative-path integration evidence",
+        "API mounting and end-to-end demo verification where routed"
+      ]
+    },
+    {
+      "command": "CloseDemoRun",
+      "owner": "Organization",
+      "authority_requirements": [],
+      "semantic_registration": "domains/demo-runtime/registration.json",
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "Independent exact-candidate semantic registration review",
+        "Per-slice physical admission and database replay",
+        "Owner command implementation, transaction-bound authority/audit and negative-path integration evidence",
+        "API mounting and end-to-end demo verification where routed"
+      ]
+    },
+    {
+      "command": "RevokeDemoSessions",
+      "owner": "Identity",
+      "authority_requirements": [],
+      "semantic_registration": "domains/demo-runtime/registration.json",
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "Independent exact-candidate semantic registration review",
+        "Per-slice physical admission and database replay",
+        "Owner command implementation, transaction-bound authority/audit and negative-path integration evidence",
+        "API mounting and end-to-end demo verification where routed"
+      ]
     }
-  ]
+  ],
+  "semantic_registration": "domains/demo-runtime/registration.json"
 }

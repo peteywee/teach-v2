@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C01",
   "class": "contract",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-04",
-  "effective_on": "2026-10-03",
+  "updated_on": "2026-10-17",
+  "effective_on": "2026-10-17",
   "approval": {
     "state": "approved",
-    "approved_version": "1.8.0",
-    "approved_on": "2026-10-04",
-    "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner explicitly approved C01 1.8.0 dependency-closure rule (SEM-36) by direct owner direction on 2026-10-04"
+    "approved_version": "1.9.0",
+    "approved_on": "2026-10-17",
+    "record": "domains/demo-runtime/owner-approval.json",
+    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; SHA256SUMS sha256:a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,11 +28,25 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C01@1.7.0"],
+  "supersedes": [
+    "TEACH-CON-C01@1.7.0",
+    "TEACH-CON-C01@1.8.0"
+  ],
   "superseded_by": null,
   "depends_on": [
     "contracts/"
-  ]
+  ],
+  "demo_runtime_registration": {
+    "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+    "approval_record": "domains/demo-runtime/owner-approval.json",
+    "issue": "#82",
+    "source_package": "domains/demo-runtime/proposal-0.1.0",
+    "sha256sums_sha256": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+    "semantic_authority_only": true,
+    "physical_schema_admission": false,
+    "runtime_activation": false,
+    "deployment_authority": false
+  }
 }
 -->
 
@@ -43,17 +57,17 @@
 | Contract ID        | C01                                                                                                                                                             |
 | Group              | C01 Canonical Semantics (Semantic Kernel, K00)                                                                                                                  |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.8.0                                                                                                                                                           |
+| Version | 1.9.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-04 — C01 1.8.0 dependency-closure rule by direct owner direction |
+| Approved by | Patrick Craven (owner), 2026-10-17; TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; see `domains/demo-runtime/owner-approval.json` |
 | Requirement prefix | `SEM`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New. Also referred to as K00, the semantic kernel.                                                                                                              |
-| Supersedes         | C01 1.7.0 |
+| Supersedes | 1.8.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-04                                                                                                                                                      |
+| Last updated | 2026-10-17 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -218,3 +232,15 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.6.0   | 2026-10-04 | Defined event-admission semantics: audit records and state transitions do not implicitly create canonical domain events. GitHub issue #8. | Patrick Craven (owner approval) |
 | 1.7.0   | 2026-10-04 | Added `IdentityDeactivated`, `IdentityReactivated`, `MembershipRevoked` to the canonical event inventory; all three are now explicitly defined in their owning contracts (C11 IDN-22/IDN-23, C13 TEN-19) per SEM-35. | Patrick Craven (owner direction) |
 | 1.8.0   | 2026-10-04 | Added SEM-36: an approved semantic entry MUST NOT depend on a candidate entry (dependency-closure rule); the only exception is an explicit owner-directed hold recorded on the candidate entry, enumerated by the validator. | Patrick Craven (owner direction) |
+
+## Registered demo runtime amendment (1.9.0)
+
+Exact owner-approved scope: `TEACH-DEMO-RUNTIME-2026-10-17@0.1.0`, SYS-21 [#82](https://github.com/peteywee/teach-v2/issues/82). Approval provenance: `domains/demo-runtime/owner-approval.json`; immutable source: `domains/demo-runtime/proposal-0.1.0/contract-amendments.md`. The addendum below is the approved revision, not an exception inferred by an implementer. It changes only its explicitly named demo behavior; ordinary/customer semantics and unrelated gates remain unchanged. Proposal labels in the immutable package preserve its pre-approval history; this registration supplies current authority. Physical schema admission, runtime activation and shared deployment remain separate.
+
+Register exactly the typed entries in registry-proposal.json. PROMOTE retains prior definitions except the specified fields; REVISE changes only the stated definition/constraints/dependencies; ADD creates the exact new candidate and can promote only after owner approval of this package. Record package version/digest and transcript provenance. Remove the stale Membership OQ-TEN-1 hold only after the selected normalized shape and closure checks pass. Do not weaken SEM-36, add broad exceptions, promote unrelated entries or treat an agent-authored approved flag as evidence. Use typed references to disambiguate RequestId/IdempotencyKey identifiers from candidate values. No new canonical business event is created.
+
+Exact definitions and field constraints are incorporated from `domains/demo-runtime/proposal-0.1.0/demo-boundary.md`, `domains/demo-runtime/proposal-0.1.0/authority-and-audit.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.json`, and `domains/demo-runtime/proposal-0.1.0/transport-and-queries.json` with its referenced schemas. No definition beyond that approved package is introduced.
+
+### Exact demo capability identifier compatibility
+
+For the five capability names explicitly registered by `TEACH-DEMO-RUNTIME-2026-10-17@0.1.0`, C01 naming authority applies the following effective rule: a name MUST be a member of the exact approved `kernel/capabilities.json` vocabulary AND MUST either satisfy the unchanged ordinary `CapabilityId.validation.pattern` or equal exactly one of `identity.demo.persona.create`, `identity.demo.persona.switch`, `identity.demo.sessions.revoke`. These three literal alternatives take precedence over the ordinary three-segment pattern for these names only. The existing CapabilityId entry and pattern remain unchanged as predecessor authority; this registered C01 addendum supplies the finite effective compatibility rule. No other fourth-segment name, unknown capability or wildcard is admitted. Vocabulary membership does not grant a capability.

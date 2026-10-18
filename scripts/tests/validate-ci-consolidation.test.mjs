@@ -6,6 +6,7 @@ import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { runInNewContext } from 'node:vm';
+import { EventEmitter } from 'node:events';
 import { expectedPlan, inspectAuditPlan } from '../verification/self-audit-catalog.mjs';
 import { discoverFoundationTests, evaluateAuditReports, runAuditStage, sourceIdentity } from '../verification/development-self-audit.mjs';
 import { localDocumentGovernanceContext, resolveDocumentGovernanceContext, inspectDocumentGovernanceContext, documentGovernanceArgs } from '../verification/document-governance-context.mjs';
@@ -366,6 +367,7 @@ const UNCHANGED_PROOF_FILES = {
 };
 
 const additions = [
+  ['demo-registration-regressions', 'node', ['--test', 'scripts/tests/validate-demo-runtime-registration.mjs']],
   ['document-governance', 'node', ['scripts/docs/validate-document-metadata.mjs']],
   ['production-contract-decisions', 'node', ['scripts/release/validate-production-proof-contract-decisions.mjs']],
   ['drizzle-history', 'pnpm', ['exec', 'drizzle-kit', 'check']],
@@ -382,8 +384,8 @@ test('all 24 baseline obligations retain their identities, argv, discovery and b
     if (old.id === 'audit-regressions') expected.args.push('scripts/tests/validate-ci-consolidation.test.mjs');
     assert.deepEqual(stage, expected, old.id);
   }
-  assert.equal(expectedPlan.stages.length, 31);
-  assert.equal(new Set(expectedPlan.stages.map(x => x.id)).size, 31);
+  assert.equal(expectedPlan.stages.length, 32);
+  assert.equal(new Set(expectedPlan.stages.map(x => x.id)).size, 32);
   assert.deepEqual(JSON.parse(read('verification/whole-repository/self-audit-plan.json')), expectedPlan);
   assert.equal(expectedPlan.shell_execution, false);
   assert.equal(expectedPlan.max_operation_ms, 25000);
@@ -421,18 +423,111 @@ const admittedCases = [
   { name: 'capability admission: forged owner approval fails', script: 'scripts/kernel/validate-capability-admission.mjs', positive: false, pattern: 'exact recorded owner approval' },
   { name: 'capability admission: unrelated promotion fails', script: 'scripts/kernel/validate-capability-admission.mjs', positive: false, pattern: 'exact approved overlay' },
 ];
-test('all 215 unchanged baseline cases and the exact approved provenance-denial transition remain enforced', () => {
+// Exact finite successor diagnostics: a changed approved artifact is rejected
+// by its source-bound hash before the historical semantic checker is reached.
+// Original baseline declarations and all220case identities remain preserved.
+const demoCaseTransitions = [
+  {
+    "name": "sem36: approved event with null evidence fails",
+    "script": "scripts/kernel/validate-semantic-kernel.mjs",
+    "positive": false,
+    "pattern": "sem35_evidence|demo registration: exact approved overlay \\/ unrelated entries changed: kernel\\/events\\.json"
+  },
+  {
+    "name": "kernel: command missing definition fails",
+    "script": "scripts/kernel/validate-semantic-kernel.mjs",
+    "positive": false,
+    "pattern": "missing definition|demo registration: exact approved overlay \\/ unrelated entries changed: kernel\\/commands\\.json"
+  },
+  {
+    "name": "kernel: duplicate command id fails",
+    "script": "scripts/kernel/validate-semantic-kernel.mjs",
+    "positive": false,
+    "pattern": "duplicate id|demo registration: exact approved overlay \\/ unrelated entries changed: kernel\\/commands\\.json"
+  },
+  {
+    "name": "kernel: invalid status fails",
+    "script": "scripts/kernel/validate-semantic-kernel.mjs",
+    "positive": false,
+    "pattern": "invalid status|demo registration: exact approved overlay \\/ unrelated entries changed: kernel\\/events\\.json"
+  },
+  {
+    "name": "kernel: wrong manifest version fails",
+    "script": "scripts/kernel/validate-semantic-kernel.mjs",
+    "positive": false,
+    "pattern": "version must be|demo registration: exact metadata ancestry differs: kernel\\/manifest\\.json"
+  },
+  {
+    "name": "ownership: K00 concept missing from map fails",
+    "script": "scripts/domains/validate-domain-ownership.mjs",
+    "positive": false,
+    "pattern": "missing current K00 concept|demo registration: exact approved overlay \\/ unrelated entries changed: kernel\\/commands\\.json"
+  },
+  {
+    "name": "ownership: bad owner domain fails",
+    "script": "scripts/domains/validate-domain-ownership.mjs",
+    "positive": false,
+    "pattern": "not a registered domain|demo registration: exact metadata ancestry differs: domains\\/ownership-map\\.json"
+  },
+  {
+    "name": "command-event discovery: stale live pin fails",
+    "script": "scripts/domains/validate-command-event-discovery.mjs",
+    "positive": false,
+    "pattern": "expected K00|demo registration: exact metadata ancestry differs: kernel\\/manifest\\.json"
+  },
+  {
+    "name": "admission: authority criterion omission fails closed",
+    "script": "scripts/persistence/validate-slice-p05-schema-admission.mjs",
+    "positive": false,
+    "pattern": "Persistence Model must define the exact eight distinct|demo registration: registered authority file differs: persistence\\/authority\\.json"
+  },
+  {
+    "name": "closure: later approval without provenance fails",
+    "script": "scripts/persistence/validate-persistence-semantic-closure-registration.mjs",
+    "positive": false,
+    "pattern": "later AssignmentId approval requires issue #46|demo registration: exact approved overlay \\/ unrelated entries changed: kernel\\/identifiers\\.json"
+  },
+  {
+    "name": "closure: later capability approval requires precise provenance",
+    "script": "scripts/persistence/validate-persistence-semantic-closure-registration.mjs",
+    "positive": false,
+    "pattern": "later CapabilityId requires exact name\\/type admission|demo registration: exact approved overlay \\/ unrelated entries changed: kernel\\/identifiers\\.json"
+  },
+  {
+    "name": "owner policy: existing audit deletion guard cannot weaken",
+    "script": "scripts/verification/validate-owner-policy-registration.mjs",
+    "positive": false,
+    "pattern": "existing requirement meaning|demo registration: registered authority file differs: contracts\\/c23-audit-lifecycle-events-contract\\.md"
+  },
+  {
+    "name": "owner policy: malformed revision change-log header fails",
+    "script": "scripts/verification/validate-owner-policy-registration.mjs",
+    "positive": false,
+    "pattern": "complete revision change-log table|demo registration: registered authority file differs: contracts\\/c23-audit-lifecycle-events-contract\\.md"
+  },
+  {
+    "name": "capability admission: forged owner approval fails",
+    "script": "scripts/kernel/validate-capability-admission.mjs",
+    "positive": false,
+    "pattern": "exact recorded owner approval|demo registration: unchanged preceding source drift: domains\\/capabilities\\/owner-approval\\.json"
+  }
+];
+const withDemoDiagnostic = row => demoCaseTransitions.find(item=>item.name===row.name) ?? row;
+test('all baseline case guarantees retain exact finite successor diagnostics', () => {
   const cases = enumerateCases(read('scripts/tests/validate-validators.mjs'));
   assert.equal(new Set(cases.map(x => x.name)).size, cases.length, 'no duplicate case names');
   assert.deepEqual(BASELINE_CASES.find(x => x.name === admittedCaseTransition.before.name), admittedCaseTransition.before, 'historical denial remains frozen');
   for (const baseline of BASELINE_CASES) {
-    const expected = baseline.name === admittedCaseTransition.before.name ? admittedCaseTransition.after : baseline;
+    const expected = withDemoDiagnostic(baseline.name === admittedCaseTransition.before.name ? admittedCaseTransition.after : baseline);
     assert.deepEqual(cases.find(x => x.name === expected.name), expected, expected.name);
   }
 });
 test('complete 220-case catalog includes exactly the four approved checker and admission additions', () => {
   const cases = enumerateCases(read('scripts/tests/validate-validators.mjs'));
-  const expected = [...BASELINE_CASES.map(row => row.name === admittedCaseTransition.before.name ? admittedCaseTransition.after : row), ...admittedCases];
+  const expected = [...BASELINE_CASES.map(row => row.name === admittedCaseTransition.before.name ? admittedCaseTransition.after : row), ...admittedCases].map(withDemoDiagnostic);
+  assert.equal(demoCaseTransitions.length,14);
+  assert.equal(new Set(demoCaseTransitions.map(row=>row.name)).size,14);
+  for(const row of demoCaseTransitions)assert.equal(row.positive,false);
   const byName = (a, b) => a.name.localeCompare(b.name);
   assert.equal(expected.length, 220);
   assert.deepEqual(cases.sort(byName), expected.sort(byName));
@@ -514,6 +609,7 @@ function gitFixture({ realValidator = false } = {}) {
   write('.gitignore', 'verification/generated/\n');
   write('verification/whole-repository/self-audit-plan.json', JSON.stringify(expectedPlan, null, 2) + '\n');
   write('src/modules/example/domain/a.test.ts', '// fixture inventory\n');
+  if (realValidator) for (const path of ['scripts/kernel/demo-runtime-registration.mjs','scripts/kernel/semantic-dependency-closure.mjs']) write(path, read(path));
   write('scripts/docs/validate-document-metadata.mjs', realValidator ? read('scripts/docs/validate-document-metadata.mjs') : `import {readFileSync,writeFileSync,existsSync} from 'node:fs';\nconst p='verification/generated/control.json';const c=existsSync(p)?JSON.parse(readFileSync(p)):{};writeFileSync('verification/generated/argv.json',JSON.stringify({argv:process.argv.slice(2),legacyBase:process.env.DOC_GOV_BASE_REF??null}));if(c.corrupt_event)writeFileSync(c.corrupt_event,'{invalid');process.exit(c.exit??0);\n`);
   const metadata = { doc_id: 'FIXTURE-001', class: 'governance-policy', version: '1.0.0', status: 'draft', owner: 'VerificationEvidence', created_on: '2026-10-01', updated_on: '2026-10-10' };
   const document = (meta = metadata, body = 'original') => '<!--tos-doc\n' + JSON.stringify(meta) + '\n-->\n' + body + '\n';
@@ -787,7 +883,7 @@ test('coverage manifest preserves all 44 original producer identities and 131 li
   const baseline = manifest.producer_command_mapping.map(w => ({ workflow: w.workflow, name: w.name, steps: w.steps.map(s => ({ baseline_step_id: s.baseline_step_id, baseline_run: s.baseline_run })) }));
   assert.equal(hash(JSON.stringify(baseline)), '8406a3de9e42f7a72315acd0ca94b0369e0028c1e0f2f005b51b48b7313d94be', 'immutable baseline command/step coverage, not count alone');
   assert.deepEqual(manifest.retained_stage_ids, BASELINE_STAGES.map(x => x.id));
-  assert.deepEqual(manifest.added_stage_ids, additions.map(x => x[0]));
+  assert.deepEqual(manifest.added_stage_ids, additions.filter(x=>x[0]!=='demo-registration-regressions').map(x => x[0]));
   assert.deepEqual(manifest.baseline_umbrella_validators, BASELINE_VALIDATORS);
   for (const row of manifest.preserved_test_and_replay_files) assert.equal(hash(readFileSync(join(ROOT, row.path))), row.sha256, row.path);
 });
@@ -863,6 +959,51 @@ test('live coverage rejects an unreviewed extra standalone validator', () => {
   const path = join(structuralRoot, 'scripts/kernel/validate-unreviewed-admission.mjs');
   try {
     writeFileSync(path, '// Unreviewed inventory addition.\n');
-    assert.match(inspectConsolidationCoverage(structuralRoot).join('\n'), /complete baseline plus admitted capability standalone validator inventory/);
+    assert.match(inspectConsolidationCoverage(structuralRoot).join('\n'), /complete baseline plus exact admitted standalone validator inventory/);
   } finally { rmSync(path); }
 });
+
+test('live coverage requires the exact demo registration validator and bounded mutation stage', () => {
+  mutateFixtureFile('scripts/kernel/validate-demo-runtime-registration.mjs', file => rmSync(file));
+  mutateFixtureFile('verification/whole-repository/self-audit-plan.json', (file, original) => { const plan=JSON.parse(original); plan.stages=plan.stages.filter(stage=>stage.id!=='demo-registration-regressions'); writeFileSync(file,JSON.stringify(plan)); }, inspectConsolidatedVerification);
+});
+
+// Exercise the real worker collector/merger without running or weakening cases.
+const workerHarnessSource=read('scripts/tests/validate-validators.mjs');
+const workerHelperStart=workerHarnessSource.indexOf('function awaitValidatorWorker(');
+const workerHelperEnd=workerHarnessSource.indexOf('if (isMainThread && shardTotal <= 16)',workerHelperStart);
+assert.ok(workerHelperStart>0&&workerHelperEnd>workerHelperStart);
+const workerHelpers=runInNewContext(`${workerHarnessSource.slice(workerHelperStart,workerHelperEnd)}; ({awaitValidatorWorker,mergeValidatorWorkers});`,{createHash});
+const workerNames=enumerateCases(workerHarnessSource).map(row=>row.name);
+const workerReports=()=>[1,4].map(index=>({inventoryNames:[...workerNames],inventoryCount:workerNames.length,results:workerNames.flatMap((name,ordinal)=>ordinal%6===index-1?[{name,ordinal,ok:true,detail:'fixture outcome'}]:[])}));
+test('two isolated worker partitions preserve exact catalog and ordered shard outcomes',()=>{
+  const reports=workerReports();reports[1].results[0].ok=false;
+  const result=workerHelpers.mergeValidatorWorkers(reports,1,3);
+  assert.equal(result.results.length,74);assert.equal(result.results.filter(row=>!row.ok).length,1);
+  assert.deepEqual(Array.from(result.results,row=>row.ordinal),workerNames.flatMap((_,ordinal)=>ordinal%3===0?[ordinal]:[]));
+  assert.match(workerHarnessSource,/Promise\.allSettled\(pending\)/);
+});
+for(const [label,mutate] of [
+  ['missing report',reports=>reports.pop()],
+  ['extra report',reports=>reports.push(reports[0])],
+  ['both catalogs omit a case',reports=>{for(const report of reports){report.inventoryNames.pop();report.inventoryCount--;}}],
+  ['catalog mismatch',reports=>reports[1].inventoryNames.reverse()],
+  ['omitted result',reports=>reports[0].results.pop()],
+  ['duplicated result',reports=>reports[0].results.push(reports[0].results[0])],
+  ['wrong worker partition',reports=>{const first=reports[0].results[0];reports[0].results[0]=reports[1].results[0];reports[1].results[0]=first;}],
+  ['changed case name',reports=>reports[0].results[0].name='invented case'],
+  ['nonboolean pass',reports=>reports[0].results[0].ok='true'],
+  ['missing diagnostic',reports=>delete reports[0].results[0].detail],
+])test(`validator worker merger rejects ${label}`,()=>{const reports=workerReports();mutate(reports);assert.throws(()=>workerHelpers.mergeValidatorWorkers(reports,1,3),/worker/);});
+test('worker result cannot pass before ordinary exit and retains failing case outcomes',async()=>{
+  const worker=new EventEmitter();let completed=false;
+  const report={results:[{ok:false}]};const promise=workerHelpers.awaitValidatorWorker(worker,1).then(value=>{completed=true;return value;});
+  worker.emit('message',report);await Promise.resolve();assert.equal(completed,false);
+  worker.emit('exit',0);assert.equal(await promise,report);
+});
+for(const [label,emit] of [
+  ['no report',worker=>worker.emit('exit',0)],
+  ['nonzero exit',worker=>{worker.emit('message',{});worker.emit('exit',1);}],
+  ['worker error after report',worker=>{worker.emit('message',{});worker.emit('error',new Error('worker launch/runtime failure'));worker.emit('exit',0);}],
+  ['duplicate report',worker=>{worker.emit('message',{});worker.emit('message',{});worker.emit('exit',0);}],
+])test(`validator worker collector rejects ${label}`,async()=>{const worker=new EventEmitter();const promise=workerHelpers.awaitValidatorWorker(worker,1);emit(worker);await assert.rejects(promise,/worker/);});

@@ -2,6 +2,7 @@
 // command authorization registry, or permission to execute shared migrations.
 export const stageCatalog = Object.freeze([
   ['authority', 'node', ['scripts/architecture/validate-whole-repository.mjs']],
+  ['demo-registration-regressions', 'node', ['--test', 'scripts/tests/validate-demo-runtime-registration.mjs']],
   ['document-governance', 'node', ['scripts/docs/validate-document-metadata.mjs']],
   ['production-contract-decisions', 'node', ['scripts/release/validate-production-proof-contract-decisions.mjs']],
   ['pins', 'node', ['scripts/packaging/validate-apply-guards.mjs', 'pins']],

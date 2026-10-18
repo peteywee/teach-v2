@@ -40,9 +40,14 @@ export function currentFacts(root) {
 }
 export function runBounded(command,args,{root,timeoutMs=25000,env=process.env}={}) {
   if(!Number.isInteger(timeoutMs)||timeoutMs<1||timeoutMs>25000) throw new RangeError('audit operation bound must be 1..25000ms');
-  const started=new Date(),result=spawnSync(command,args,{cwd:root,env,encoding:'utf8',timeout:timeoutMs,killSignal:'SIGKILL',shell:false,maxBuffer:8*1024*1024});
+  // Linux CI gives each operation its own process group. A worker thread may
+  // own subprocesses, so killing only the direct child can leave them alive.
+  const grouped=process.platform==='linux';
+  const started=new Date(),result=spawnSync(command,args,{cwd:root,env,encoding:'utf8',timeout:timeoutMs,killSignal:'SIGKILL',shell:false,detached:grouped,maxBuffer:8*1024*1024});
+  let cleanupError=null;
+  if(grouped&&Number.isInteger(result.pid)&&result.pid>0)try{process.kill(-result.pid,'SIGKILL');}catch(error){if(error.code!=='ESRCH')cleanupError=error.code||'PROCESS_GROUP_CLEANUP_FAILED';}
   return {started_at:started.toISOString(),finished_at:new Date().toISOString(),duration_ms:Date.now()-started.getTime(),exit_code:result.status,
-    timed_out:result.error?.code==='ETIMEDOUT',execution_error:result.error?.code||null,stdout:result.stdout||'',stderr:result.stderr||''};
+    timed_out:result.error?.code==='ETIMEDOUT',execution_error:result.error?.code||cleanupError||null,stdout:result.stdout||'',stderr:result.stderr||''};
 }
 export function runAuditStage(root,id,{expectedSha=process.env.AUDIT_EXPECTED_SHA,env=process.env}={}) {
   const planPath=join(root,'verification/whole-repository/self-audit-plan.json'),planText=readFileSync(planPath,'utf8'),plan=JSON.parse(planText);

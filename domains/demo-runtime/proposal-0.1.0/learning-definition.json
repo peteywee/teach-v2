@@ -1,0 +1,1587 @@
+{
+  "artifact_id": "TEACH-DEMO-RUNTIME-2026-10-17-LEARNING-DEFINITION",
+  "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+  "status": "PROPOSAL_ONLY_NOT_SOURCE_AUTHORITY",
+  "baseline": {
+    "repo": "peteywee/teach-v2",
+    "commit": "9bc80df3efa0199e16d98d681c9cf8a8fd0bd10a",
+    "tree": "771867f1dbb47e277f90158a9f25b504bb786510"
+  },
+  "family_convention": "Exact kernel JSON filename stems; queries and interface revisions are separate, not invented kernel families.",
+  "entries": [
+    {
+      "family": "values",
+      "id": "ContentVersion",
+      "change": "PROMOTE",
+      "owning_domain": "Content",
+      "definition": "Immutable exact version and digest of one ContentPack, never a latest/range selector.",
+      "requires": [],
+      "fields": {
+        "version": "strict SemVer 2.0 string, 1..38 UTF-8 bytes",
+        "digest": "sha256: followed by exactly 64 lowercase hexadecimal digits"
+      },
+      "constraints": [
+        "Every reference also binds ContentPackId; the owning pack binds exactly one organization.",
+        "Exact string equality includes prerelease and build metadata; SemVer precedence is not identity.",
+        "Digest is SHA-256 of canonical schema payload bytes, not of arbitrary JSON serialization."
+      ]
+    },
+    {
+      "family": "entities",
+      "id": "ContentPack",
+      "change": "REVISE",
+      "owning_domain": "Content",
+      "definition": "A stable organization-owned content identity with create-only immutable published versions. This package permits only synthetic copies in a per-run demo organization; it selects no customer catalog policy.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        }
+      ],
+      "fields": {
+        "id": "ContentPackId",
+        "organizationId": "OrganizationId, non-null immutable",
+        "versions": "nonempty append-only collection of exact version payloads",
+        "versionPayload": "canonical schema 1.0.0 described in canonical_content_schema"
+      },
+      "constraints": [
+        "No persisted draft, retired, approved-by-customer, or mutable publication state.",
+        "PublishContentPack validates and creates a previously absent immutable version; a new version never changes an existing one.",
+        "A parent identity record plus immutable version rows may represent this one entity; no new ContentPackVersion entity or identifier is introduced."
+      ]
+    },
+    {
+      "family": "entities",
+      "id": "ContentBlock",
+      "change": "PROMOTE",
+      "owning_domain": "Content",
+      "definition": "Addressable ordered required instructional step inside an exact ContentPack version.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "ContentBlockId"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "fields": {
+        "id": "ContentBlockId, unique within exact content version",
+        "kind": "literal SINGLE_CHOICE",
+        "instruction": "plain text, 1..4000 Unicode scalar values",
+        "prompt": "plain text, 1..1000 Unicode scalar values",
+        "options": "ordered array of 2..5 distinct nonempty plain-text strings, each <=500 Unicode scalar values",
+        "expectedOptionIndex": "integer, 0 <= value < options.length",
+        "feedback": "ordered array of nonempty plain-text strings, exactly one per option, each <=2000 Unicode scalar values"
+      },
+      "constraints": [
+        "Array position supplies required order; no optional/skip/branching steps.",
+        "No HTML, URLs, scripts, media, embedded customer claims, scores or dynamic/provider content.",
+        "All block identities resolve only within their exact pack/version; index alone is never content identity."
+      ]
+    },
+    {
+      "family": "identifiers",
+      "id": "ContentBlockId",
+      "change": "PROMOTE",
+      "owning_domain": "Content",
+      "definition": "Opaque identifier of a ContentBlock, resolved within an exact immutable ContentPack version.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        }
+      ],
+      "fields": {
+        "valueType": "opaque-id"
+      },
+      "constraints": [
+        "Does not confer access; authoritative lookup requires pack identity/version/digest."
+      ]
+    },
+    {
+      "family": "relationships",
+      "id": "ContentPackContainsContentBlock",
+      "change": "PROMOTE",
+      "owning_domain": "Content",
+      "definition": "Each published exact pack version contains exactly 3 uniquely identified ordered ContentBlocks.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "fields": {
+        "from": "ContentPack",
+        "to": "ContentBlock",
+        "cardinality": "one-to-many"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ]
+    },
+    {
+      "family": "relationships",
+      "id": "ContentPackBelongsToOrganization",
+      "change": "ADD",
+      "owning_domain": "Content",
+      "definition": "Every ContentPack belongs to exactly one immutable organization; synthetic demo publication and reads never cross it.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "fields": {
+        "from": "ContentPack",
+        "to": "Organization",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ]
+    },
+    {
+      "family": "values",
+      "id": "ContentResponseEvaluation",
+      "change": "ADD",
+      "owning_domain": "Content",
+      "definition": "Versioned deterministic per-response feedback from the Content teaching engine; not a score, competence certification, or progress aggregate.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "ContentBlockId"
+        }
+      ],
+      "fields": {
+        "engineVersion": "strict SemVer, exactly 1.0.0 in this package",
+        "blockId": "ContentBlockId",
+        "selectedOptionIndex": "integer in the authored option range",
+        "matchesExpectedChoice": "boolean computed by server comparison with authored expectedOptionIndex",
+        "feedback": "exact authored feedback[selectedOptionIndex]"
+      },
+      "constraints": [
+        "Client may submit only blockId and selectedOptionIndex, never matchesExpectedChoice, feedback or engineVersion.",
+        "Engine(pack exact version, input, fixed seed 0) returns byte-identical canonical output; no randomness is used.",
+        "No pass/fail threshold, numeric score, accuracy aggregate, XP, rank, streak, mastery or certification inference."
+      ]
+    },
+    {
+      "family": "states",
+      "id": "AssignmentStatus",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "Eligibility state for the immutable first-slice Assignment.",
+      "requires": [],
+      "fields": {
+        "values": [
+          "ACTIVE"
+        ]
+      },
+      "constraints": [
+        "ACTIVE denotes assignment availability, not learner completion.",
+        "No inactive, revoked, completed, expired or reassigned Assignment state is admitted."
+      ]
+    },
+    {
+      "family": "state-machines",
+      "id": "AssignmentStateMachine",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "Create-only Assignment lifecycle: AssignContent creates ACTIVE and no transition exists.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "states",
+          "id": "AssignmentStatus"
+        },
+        {
+          "family": "commands",
+          "id": "AssignContent"
+        }
+      ],
+      "fields": {
+        "entity": "Assignment",
+        "state_set": "AssignmentStatus",
+        "initial_state": "ACTIVE",
+        "creation_command": "AssignContent",
+        "allowed_operations": [],
+        "transitions": [],
+        "terminal_states": []
+      },
+      "constraints": [
+        "No lifecycle transition or business event emission is implied.",
+        "Loss of current membership/grants denies use without rewriting historical Assignment."
+      ]
+    },
+    {
+      "family": "entities",
+      "id": "Assignment",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "One scoped assignable attempt of one exact published content version for one learner; repeated intentional assignments have different identities.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "AssignmentId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "states",
+          "id": "AssignmentStatus"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        }
+      ],
+      "fields": {
+        "id": "AssignmentId",
+        "identityId": "IdentityId, learner",
+        "organizationId": "OrganizationId, non-null",
+        "locationId": "LocationId, non-null and owned by organizationId",
+        "contentPackId": "ContentPackId",
+        "contentVersion": "ContentVersion",
+        "status": "AssignmentStatus = ACTIVE",
+        "assignedAt": "Timestamp, server-generated"
+      },
+      "constraints": [
+        "All fields immutable after creation. Issuing actor and request identity live in the atomic required audit/lifecycle records, not a duplicate assignment actor field.",
+        "No uniqueness constraint on (learner, scope, content version): a fresh deliberate AssignContent key creates a distinct AssignmentId. At most 10 Assignments total per DemoRun (initial plus 9 manager-created); quota rejection is PRECONDITION_FAILED before any effect.",
+        "One Assignment has at most one LearningSession for this demo slice; assigning again creates the next attempt.",
+        "A granted assignment does not itself grant Membership, capability, or content ownership."
+      ]
+    },
+    {
+      "family": "relationships",
+      "id": "AssignmentBelongsToOrganization",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "Each Assignment has exactly one organization matching the owning content organization and resolved learner membership.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "fields": {
+        "from": "Assignment",
+        "to": "Organization",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ]
+    },
+    {
+      "family": "relationships",
+      "id": "AssignmentScopesLocation",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "Each Assignment has exactly one non-null location in its organization; current actor and learner authority must include that location.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        }
+      ],
+      "fields": {
+        "from": "Assignment",
+        "to": "Location",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ]
+    },
+    {
+      "family": "relationships",
+      "id": "AssignmentReferencesContentVersion",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "Each Assignment pins exact ContentVersion and ContentPackId forever.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        }
+      ],
+      "fields": {
+        "from": "Assignment",
+        "to": "ContentPack",
+        "cardinality": "many-to-one",
+        "binding": "exact immutable ContentVersion value (version,digest) within the referenced ContentPack"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner.",
+        "Endpoint is ContentPack entity, not the ContentVersion value object; composite reference binds its immutable version value."
+      ]
+    },
+    {
+      "family": "relationships",
+      "id": "LearningSessionUsesAssignment",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "Every LearningSession references exactly one Assignment, and an Assignment has zero or one session in this admitted demo slice.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        }
+      ],
+      "fields": {
+        "from": "LearningSession",
+        "to": "Assignment",
+        "cardinality": "one-to-one"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ]
+    },
+    {
+      "family": "entities",
+      "id": "LearningSession",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "One persisted bounded learner attempt for one immutable Assignment; session identity and scope derive from that Assignment.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "LearningSessionId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "identifiers",
+          "id": "AssignmentId"
+        },
+        {
+          "family": "states",
+          "id": "LearningSessionStatus"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        }
+      ],
+      "fields": {
+        "id": "LearningSessionId",
+        "identityId": "IdentityId, equal to assignment learner",
+        "assignmentId": "AssignmentId, non-null unique",
+        "status": "LearningSessionStatus",
+        "startedAt": "Timestamp, immutable server time",
+        "completedAt": "Timestamp|null; null iff ACTIVE"
+      },
+      "constraints": [
+        "Existing ACTIVE -> COMPLETED state machine is preserved, with exactly one terminal transition.",
+        "Organization, location and content version are obtained through immutable Assignment, not duplicated ungoverned scope columns.",
+        "A composite assignment/learner reference prevents a session from pointing at another learner assignment.",
+        "Complete only after one accepted persisted response exists for every ordered required block; match correctness is not a completion gate."
+      ]
+    },
+    {
+      "family": "entities",
+      "id": "ProgressEvent",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "Append-only accepted learner response plus server evaluation bound to an exact LearningSession and assigned ContentVersion.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "ProgressEventId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LearningSessionId"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "values",
+          "id": "ContentResponseEvaluation"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        }
+      ],
+      "fields": {
+        "id": "ProgressEventId",
+        "learningSessionId": "LearningSessionId",
+        "contentPackId": "ContentPackId, resolved from session Assignment",
+        "contentVersion": "ContentVersion, resolved from session Assignment",
+        "eventSchemaVersion": "literal 1.0.0",
+        "sequence": "integer 1..3, equal to required block position+1",
+        "evaluation": "ContentResponseEvaluation",
+        "recordedAt": "Timestamp, server time"
+      },
+      "constraints": [
+        "No event lifecycle/status field exists; absence is an explicit P08 decision.",
+        "Unique (learningSessionId, evaluation.blockId) and (learningSessionId, sequence); one accepted response per block per session.",
+        "Server validates requested block is the next unrecorded block and recomputes evaluation from the pinned content; wrong authored-answer match is still an accepted response.",
+        "No UPDATE or DELETE via application roles. No arbitrary JSON event variants or candidate business-event emission."
+      ]
+    },
+    {
+      "family": "relationships",
+      "id": "ProgressEventReferencesContentVersion",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "Every ProgressEvent records exact ContentVersion plus ContentPackId equal to its session Assignment.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        }
+      ],
+      "fields": {
+        "from": "ProgressEvent",
+        "to": "ContentPack",
+        "cardinality": "many-to-one",
+        "binding": "exact immutable ContentVersion value (version,digest) within the referenced ContentPack"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner.",
+        "Endpoint is ContentPack entity, not the ContentVersion value object; composite reference binds its immutable version value."
+      ]
+    },
+    {
+      "family": "relationships",
+      "id": "ProgressEventReferencesContentBlock",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "Every ProgressEvent targets one ContentBlock inside its exact assigned ContentVersion.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "fields": {
+        "from": "ProgressEvent",
+        "to": "ContentBlock",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ]
+    },
+    {
+      "family": "entities",
+      "id": "LearnerState",
+      "change": "PROMOTE",
+      "owning_domain": "Learning",
+      "definition": "Read-time deterministic projection of one learner Assignment and its persisted session/events, never a second mutable source of progress.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "LearnerStateId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "identifiers",
+          "id": "AssignmentId"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "states",
+          "id": "LearningSessionStatus"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "identifiers",
+          "id": "LearningSessionId"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentBlockId"
+        },
+        {
+          "family": "values",
+          "id": "ContentResponseEvaluation"
+        }
+      ],
+      "fields": {
+        "id": "LearnerStateId",
+        "projectionVersion": "literal 1.0.0",
+        "identityId": "IdentityId",
+        "assignmentId": "AssignmentId",
+        "contentPackId": "ContentPackId",
+        "contentVersion": "ContentVersion",
+        "session": "null or {learningSessionId:LearningSessionId,status:LearningSessionStatus,startedAt:Timestamp,completedAt:Timestamp|null}",
+        "recordedBlockCount": "integer count of canonical persisted ProgressEvents for this session",
+        "requiredBlockCount": "integer length of pinned content blocks",
+        "nextBlockId": "ContentBlockId|null",
+        "responses": "self-read only: canonical recorded evaluations in sequence; omitted in manager DTO"
+      },
+      "constraints": [
+        "Zero/empty means no persisted evidence; completedAt exists only after canonical session completion.",
+        "No independent LearnerState table, write command, cached authority, percentage, score or cross-version progress carry-over.",
+        "Separate AssignmentId means separate attempt and separately displayed outcome, even for identical content."
+      ]
+    },
+    {
+      "family": "identifiers",
+      "id": "LearnerStateId",
+      "change": "PROMOTE",
+      "owning_domain": "Learning",
+      "definition": "Stable opaque identity of an exact assignment-scoped learner-state projection version.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "identifiers",
+          "id": "AssignmentId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        }
+      ],
+      "fields": {
+        "valueType": "opaque-id",
+        "derivation": "ls_ + lowercase SHA256 of canonical JSON array [\"LearnerState\",\"1.0.0\",organizationId,locationId,identityId,assignmentId]"
+      },
+      "constraints": [
+        "Not stored as a mutable state row and never accepted as authority."
+      ]
+    },
+    {
+      "family": "relationships",
+      "id": "LearnerStateBelongsToIdentity",
+      "change": "PROMOTE",
+      "owning_domain": "Learning",
+      "definition": "Each projected state is for exactly one learner resolved from its Assignment.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        }
+      ],
+      "fields": {
+        "from": "LearnerState",
+        "to": "Identity",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ]
+    },
+    {
+      "family": "relationships",
+      "id": "LearnerStateTracksContentPack",
+      "change": "PROMOTE",
+      "owning_domain": "Learning",
+      "definition": "Each projected state tracks the ContentPack referenced by its one immutable Assignment.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        }
+      ],
+      "fields": {
+        "from": "LearnerState",
+        "to": "ContentPack",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ]
+    },
+    {
+      "family": "relationships",
+      "id": "LearnerStateUsesAssignment",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "One projection is computed per Assignment and projection version; repeated assignments never collapse together.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        }
+      ],
+      "fields": {
+        "from": "LearnerState",
+        "to": "Assignment",
+        "cardinality": "one-to-one-per-projection-version"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ]
+    },
+    {
+      "family": "relationships",
+      "id": "LearnerStateReferencesContentVersion",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "The projection is pinned to exactly the ContentVersion of its Assignment; newer publication cannot change history.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "fields": {
+        "from": "LearnerState",
+        "to": "ContentPack",
+        "cardinality": "many-to-one",
+        "binding": "exact immutable ContentVersion value (version,digest) within the referenced ContentPack"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner.",
+        "Endpoint is ContentPack entity, not the ContentVersion value object; composite reference binds its immutable version value."
+      ]
+    },
+    {
+      "family": "invariants",
+      "id": "INV-015",
+      "change": "PROMOTE",
+      "owning_domain": "Content",
+      "definition": "Only valid content can be published/assigned; a published content identity+version never changes in place.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "fields": {
+        "name": "PublishedContentVersionIsImmutable",
+        "requirements": [
+          "CNT-3",
+          "CNT-4",
+          "CNT-6"
+        ],
+        "failure_behavior": "Reject invalid or in-place mutation; require new version."
+      },
+      "constraints": [
+        "Validation includes schema/version/digest/unique block IDs and owner-scope binding."
+      ]
+    },
+    {
+      "family": "invariants",
+      "id": "INV-016",
+      "change": "PROMOTE",
+      "owning_domain": "Content",
+      "definition": "Content existence or possession of a content ID does not grant access; assignment and authorization are independent required facts.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        }
+      ],
+      "fields": {
+        "name": "ContentExistenceDoesNotGrantAccess",
+        "requirements": [
+          "CNT-9",
+          "CNT-10"
+        ],
+        "failure_behavior": "Non-disclosing denial."
+      },
+      "constraints": [
+        "Current grant plus ACTIVE own Assignment are required; ID possession is never sufficient."
+      ]
+    },
+    {
+      "family": "invariants",
+      "id": "INV-017",
+      "change": "PROMOTE",
+      "owning_domain": "Learning",
+      "definition": "Learning progress events are accepted only in ACTIVE sessions; COMPLETED is terminal.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "states",
+          "id": "LearningSessionStatus"
+        }
+      ],
+      "fields": {
+        "name": "LearningSessionMutationRequiresActiveState",
+        "requirements": [
+          "LRN-3"
+        ],
+        "failure_behavior": "Reject post-completion or unregistered transition/event."
+      },
+      "constraints": [
+        "Serialize append and completion on the same session; no new append after completion."
+      ]
+    },
+    {
+      "family": "invariants",
+      "id": "INV-018",
+      "change": "PROMOTE",
+      "owning_domain": "Learning",
+      "definition": "Real learning progress derives from persisted canonical learner events/state with content identity/version; client-only values cannot be authoritative progress.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "fields": {
+        "name": "LearningProgressIsServerAuthoritative",
+        "requirements": [
+          "LRN-4",
+          "LRN-5",
+          "LRN-6",
+          "LRN-10",
+          "LRN-11"
+        ],
+        "failure_behavior": "Do not record/display client-only progress as real."
+      },
+      "constraints": [
+        "Deterministic server evaluation and read projection use only persisted evidence bound to immutable content; no client success field or numerical score."
+      ]
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-009",
+      "change": "ADD",
+      "owning_domain": "Content",
+      "definition": "ContentPublicationValidation: deterministic validation and immutable version collision decision.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        }
+      ],
+      "fields": {
+        "name": "ContentPublicationValidation",
+        "inputs": [
+          "declaredSchemaSupported:boolean",
+          "canonicalPayloadValid:boolean",
+          "organizationMatches:boolean",
+          "suppliedDigestMatches:boolean",
+          "existingVersionDigest:null|string",
+          "requestedDigest:string"
+        ],
+        "rules": [
+          {
+            "when": "Any input unknown, malformed, or one of the first four booleans false",
+            "outcome": "REJECT_INVALID_REQUEST"
+          },
+          {
+            "when": "All first four true and existingVersionDigest == null",
+            "outcome": "CREATE_IMMUTABLE_PUBLICATION"
+          },
+          {
+            "when": "All first four true and existingVersionDigest == requestedDigest",
+            "outcome": "RETURN_EXISTING_NO_EFFECT"
+          },
+          {
+            "when": "All first four true and existingVersionDigest != null and != requestedDigest",
+            "outcome": "REJECT_CONFLICT"
+          }
+        ],
+        "default": "REJECT_INVALID_REQUEST"
+      },
+      "constraints": [
+        "Caller authority/current demo run admission are checked by Authorization before this Content-owned table.",
+        "No approval claim, draft state or external publication effect is created."
+      ]
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-010",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "LearningResponseAndCompletionGate: deterministic new-write admission after current authorization and receipt handling.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        },
+        {
+          "family": "states",
+          "id": "LearningSessionStatus"
+        },
+        {
+          "family": "values",
+          "id": "ContentResponseEvaluation"
+        }
+      ],
+      "fields": {
+        "name": "LearningResponseAndCompletionGate",
+        "inputs": [
+          "operation:RecordProgressEvent|CompleteLearningSession",
+          "sessionStatus:LearningSessionStatus",
+          "contentValid:boolean",
+          "RecordProgressEvent only: blockExists:boolean, blockAlreadyRecorded:boolean, requestedSequence:integer, expectedNextSequence:integer, optionIndexValid:boolean",
+          "CompleteLearningSession only: recordedRequiredCount:integer, requiredCount:integer"
+        ],
+        "rules": [
+          {
+            "priority": 1,
+            "when": "Operation, sessionStatus, contentValid or operation-required inputs unknown/malformed; content invalid; or session not ACTIVE",
+            "outcome": "REJECT_NO_WRITE"
+          },
+          {
+            "priority": 2,
+            "when": "RecordProgressEvent and (blockExists == false or optionIndexValid == false)",
+            "outcome": "REJECT_INVALID_REQUEST"
+          },
+          {
+            "priority": 3,
+            "when": "RecordProgressEvent and (blockAlreadyRecorded == true or requestedSequence != expectedNextSequence)",
+            "outcome": "REJECT_CONFLICT"
+          },
+          {
+            "priority": 4,
+            "when": "RecordProgressEvent and blockExists and optionIndexValid and not blockAlreadyRecorded and requestedSequence == expectedNextSequence",
+            "outcome": "EVALUATE_AND_APPEND"
+          },
+          {
+            "priority": 5,
+            "when": "CompleteLearningSession and requiredCount == 3 and recordedRequiredCount == 3",
+            "outcome": "TRANSITION_COMPLETED"
+          },
+          {
+            "priority": 6,
+            "when": "CompleteLearningSession and requiredCount == 3 and 0 <= recordedRequiredCount < 3",
+            "outcome": "REJECT_PRECONDITION_FAILED"
+          }
+        ],
+        "default": "REJECT_NO_WRITE"
+      },
+      "constraints": [
+        "Recorded count is recomputed from unique persisted event rows inside the locked transaction; never accepted from client.",
+        "No comparison to matchesExpectedChoice in completion eligibility.",
+        "Rules are first-match in priority order. Only the inputs for the selected operation are required; unused operation inputs are absent, not unknown failures."
+      ]
+    },
+    {
+      "family": "commands",
+      "id": "PublishContentPack",
+      "change": "REVISE",
+      "owning_domain": "Content",
+      "definition": "Creates one validated immutable published content version through the admitted synthetic demo control plane.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "capabilities",
+          "id": "content.pack.publish"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        }
+      ],
+      "fields": {
+        "input": "canonical content payload, expected digest; scope/actor from admitted demo control-plane context",
+        "output": "ContentPackId + exact ContentVersion + publishedAt",
+        "idempotency": "SERVER_DERIVED immutable (organizationId, contentPackId, exact version); identical digest returns existing, different digest conflicts"
+      },
+      "constraints": [
+        "Only automation:demo-admission-v1 in BeginDemoRun fresh-run transaction may publish the frozen synthetic template. No mounted route and no general customer publisher capability; no DevelopmentAgent runtime grant.",
+        "First successful creation appends required publication AuditEvent in same transaction."
+      ]
+    },
+    {
+      "family": "commands",
+      "id": "AssignContent",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "Creates a distinct exact-version Assignment for a learner within current authorized scope.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "capabilities",
+          "id": "learning.assignment.create"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdempotencyKey"
+        }
+      ],
+      "fields": {
+        "input": "selected organizationId,locationId,target IdentityId,ContentPackId,exact ContentVersion; client IdempotencyKey",
+        "output": "Assignment DTO with new AssignmentId",
+        "idempotency": "CLIENT_SUPPLIED; exact-key replay returns original; same key/different payload rejects; new deliberate key creates distinct Assignment"
+      },
+      "constraints": [
+        "Ordinary manager calls require current direct-report intersection and scoped manager capability (existing org_admin policy is unchanged but receives no demo grant). The only other caller is automation:demo-admission-v1 through BeginDemoRun fresh-run orchestration for exactly the initial synthetic assignment, under the parent package explicit internal policy, never manager impersonation. Exact content owner equals selected organization.",
+        "Assignment + receipt + required AuditEvent + Assignment creation LifecycleEvent are atomic. At most 10 total assignments per DemoRun; a fresh command at cap returns PRECONDITION_FAILED before side effects. Exact-key replay is resolved before quota, so replay at cap returns its original effect.",
+        "The admission orchestrator supplies an explicit IdempotencyKey as caller to AssignContent; no server-default fallback or secret/session result enters the receipt. Namespace uses canonical actor reference (human identity or exact admitted principal), never an assumed human identity for AutomationActor."
+      ]
+    },
+    {
+      "family": "commands",
+      "id": "StartLearningSession",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "Creates the sole LearningSession for one authorized Assignment.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        },
+        {
+          "family": "capabilities",
+          "id": "learning.session.start"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdempotencyKey"
+        }
+      ],
+      "fields": {
+        "input": "scope selector, AssignmentId, client IdempotencyKey; no learner ID or session ID",
+        "output": "LearningSession DTO",
+        "idempotency": "CLIENT_SUPPLIED; same-key replay original; independent key against already-started Assignment conflicts"
+      },
+      "constraints": [
+        "Current LOCATION learner grant and own-assignment binding, not membership-skipping SELF.",
+        "Session + receipt + required start AuditEvent are atomic; no candidate LearningSessionStarted emission."
+      ]
+    },
+    {
+      "family": "commands",
+      "id": "RecordProgressEvent",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "Validates and appends one server-evaluated learner response while its session is ACTIVE.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "values",
+          "id": "ContentResponseEvaluation"
+        },
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        },
+        {
+          "family": "capabilities",
+          "id": "learning.progress.record"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdempotencyKey"
+        }
+      ],
+      "fields": {
+        "input": "scope selector,LearningSessionId,ContentBlockId,selectedOptionIndex,client IdempotencyKey",
+        "output": "ProgressEvent DTO including server evaluation and current session progress facts",
+        "idempotency": "CLIENT_SUPPLIED; receipt replay never inserts a new learner event"
+      },
+      "constraints": [
+        "Current LOCATION learner grant and own-session binding.",
+        "Session row lock orders progress vs completion; validate next block, evaluate server-side, persist event and receipt in same transaction.",
+        "Success audit is not required by default; do not emit candidate ProgressRecorded."
+      ]
+    },
+    {
+      "family": "commands",
+      "id": "CompleteLearningSession",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "Transitions one ACTIVE session to COMPLETED after all required responses are persisted.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "capabilities",
+          "id": "learning.session.complete"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        }
+      ],
+      "fields": {
+        "input": "scope selector and LearningSessionId; no claimed completion count, correctness or key",
+        "output": "canonical COMPLETED session DTO",
+        "idempotency": "STATE_GUARDED; second completion returns CONFLICT with no second success effect"
+      },
+      "constraints": [
+        "Current LOCATION learner grant and own-session binding; lock same session as event append.",
+        "All ordered block responses must already be persisted; correctness is not the gate.",
+        "Session transition and required completion AuditEvent are atomic; no candidate LearningSessionCompleted emission."
+      ]
+    },
+    {
+      "family": "state-machines",
+      "id": "LearningSessionStateMachine",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "Existing ACTIVE -> COMPLETED lifecycle with exact required-response completion guard, and no candidate business-event emissions.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "states",
+          "id": "LearningSessionStatus"
+        },
+        {
+          "family": "commands",
+          "id": "StartLearningSession"
+        },
+        {
+          "family": "commands",
+          "id": "RecordProgressEvent"
+        },
+        {
+          "family": "commands",
+          "id": "CompleteLearningSession"
+        }
+      ],
+      "fields": {
+        "initial_state": "ACTIVE",
+        "creation_command": "StartLearningSession",
+        "creation_event": null,
+        "allowed_operations": [
+          {
+            "state": "ACTIVE",
+            "command": "RecordProgressEvent"
+          }
+        ],
+        "transitions": [
+          {
+            "from": "ACTIVE",
+            "to": "COMPLETED",
+            "command": "CompleteLearningSession",
+            "guard": "All ordered required responses persisted"
+          }
+        ],
+        "terminal_states": [
+          "COMPLETED"
+        ]
+      },
+      "constraints": [
+        "Remove creation_event/operation.event/transition.event references to still-candidate events, rather than promote events from audit obligations."
+      ]
+    }
+  ],
+  "external_required_entries": [
+    {
+      "family": "entities",
+      "id": "CommandReceipt",
+      "source_status": "absent"
+    },
+    {
+      "family": "entities",
+      "id": "DemoRun",
+      "source_status": "absent"
+    },
+    {
+      "family": "entities",
+      "id": "Location",
+      "source_status": "candidate"
+    },
+    {
+      "family": "identifiers",
+      "id": "LocationId",
+      "source_status": "candidate"
+    },
+    {
+      "family": "values",
+      "id": "Timestamp",
+      "source_status": "candidate"
+    }
+  ],
+  "unchanged_approved_dependencies": [
+    {
+      "family": "capabilities",
+      "id": "content.pack.publish"
+    },
+    {
+      "family": "capabilities",
+      "id": "learning.assignment.create"
+    },
+    {
+      "family": "capabilities",
+      "id": "learning.progress.record"
+    },
+    {
+      "family": "capabilities",
+      "id": "learning.session.complete"
+    },
+    {
+      "family": "capabilities",
+      "id": "learning.session.start"
+    },
+    {
+      "family": "entities",
+      "id": "Identity"
+    },
+    {
+      "family": "entities",
+      "id": "Organization"
+    },
+    {
+      "family": "identifiers",
+      "id": "AssignmentId"
+    },
+    {
+      "family": "identifiers",
+      "id": "ContentPackId"
+    },
+    {
+      "family": "identifiers",
+      "id": "IdempotencyKey"
+    },
+    {
+      "family": "identifiers",
+      "id": "IdentityId"
+    },
+    {
+      "family": "identifiers",
+      "id": "LearningSessionId"
+    },
+    {
+      "family": "identifiers",
+      "id": "OrganizationId"
+    },
+    {
+      "family": "identifiers",
+      "id": "ProgressEventId"
+    },
+    {
+      "family": "identifiers",
+      "id": "RequestId"
+    },
+    {
+      "family": "states",
+      "id": "LearningSessionStatus"
+    }
+  ],
+  "canonical_content_schema": {
+    "schemaVersion": "1.0.0",
+    "fields": {
+      "schemaVersion": "literal 1.0.0",
+      "contentPackId": "ContentPackId",
+      "organizationId": "OrganizationId",
+      "version": "strict SemVer 2.0 string <=128 bytes",
+      "title": "plain text 1..160 Unicode scalar values",
+      "blocks": "ordered exactly 3 ContentBlock definitions"
+    },
+    "additionalProperties": false,
+    "canonicalization": "UTF-8 canonical JSON: lexicographic object keys, array order retained, no whitespace, integer decimal encoding, reject floats/duplicate keys/lone surrogates; strings preserved (no hidden normalization); SHA-256 over entire canonical payload, which excludes digest/publication metadata. All permitted payload values fit this restricted canonicalization.",
+    "maxCanonicalBytes": 65536,
+    "publishedMetadata": {
+      "digest": "ContentVersion.digest",
+      "publishedAt": "Timestamp",
+      "publishedBy": "audit record actor, not duplicated mutable payload field"
+    }
+  },
+  "query_definitions": [
+    {
+      "id": "ListOwnAssignments",
+      "owning_domain": "Learning",
+      "capability": "learning.assignment.read_self",
+      "matrix_pointer": "/operations/25",
+      "route_pointer": "/routes/18",
+      "input": "organizationId,locationId selectors; limit default 20 max 50; optional opaque cursor",
+      "output": "ordered Assignment DTOs with content title, exact reference, session summary or null; nextCursor|null",
+      "predicate": "current LOCATION learner grant; assignment.identityId == authenticated identity; scope exact"
+    },
+    {
+      "id": "ReadAssignedContentVersion",
+      "owning_domain": "Content",
+      "capability": "content.pack.read_assigned",
+      "matrix_pointer": "/operations/26",
+      "route_pointer": "/routes/19",
+      "input": "organizationId,locationId,contentPackId,exact contentVersion string",
+      "output": "exact version/digest and public teaching payload: title, blocks id/kind/instruction/prompt/options only",
+      "predicate": "current LOCATION learner grant and current ACTIVE own Assignment for exact version through Learning owner read; never return expectedOptionIndex or feedback before response"
+    },
+    {
+      "id": "ReadOwnLearnerState",
+      "owning_domain": "Learning",
+      "capability": "learning.state.read_self",
+      "matrix_pointer": "/operations/27",
+      "route_pointer": "/routes/23",
+      "input": "organizationId,locationId; optional AssignmentId; limit default 20 max 50, cursor",
+      "output": "LearnerState projections including own recorded response/evaluation and next unrecorded block",
+      "predicate": "current LOCATION learner grant and exact authenticated learner; no client learnerId"
+    },
+    {
+      "id": "ReadTeamMemberLearnerState",
+      "owning_domain": "Learning",
+      "capability": "learning.state.read_team",
+      "matrix_pointer": "/operations/30",
+      "route_pointer": "/routes/16",
+      "input": "organizationId,locationId,target identityId; optional AssignmentId; limit default 20 max 50,cursor",
+      "output": "separate per-assignment LearnerState DTOs: exact content/title, requiredBlockCount,recordedBlockCount,session status,times; no choices,correctness fields or aggregate score",
+      "predicate": "same authoritative current visibility as ListTeam (manager direct reports intersected with scope; org_admin organization membership); this demo grants only manager, never org_admin"
+    }
+  ],
+  "interface_changes": {
+    "revise": [
+      "ContentReadInterface: authorize exact immutable pack/version read by Learning in same transaction context; stable published facts plus validated payload.",
+      "OrganizationAuthorityReadInterface: add Learning and Content as consumers of current scoped membership/report/grant facts as required.",
+      "AuditAppendInterface: parent shared package must admit finite typed publication/assignment/session audit targets."
+    ],
+    "add": [
+      "LearningAssignmentReadInterface: Content consumes current own-ACTIVE-assignment exact-version eligibility, scoped under caller transaction/snapshot.",
+      "Content and Learning owner application-query boundaries for the four existing policy operations above."
+    ]
+  },
+  "c14_required_revisions": [
+    {
+      "pointer": "/operations/15",
+      "id": "AssignContent",
+      "change": "Define synthetic organization-owned content availability and exact fresh-key repeat semantics; grants stay current manager/org_admin policy. Add only the exact initial-assignment internal invocation from automation:demo-admission-v1 in BeginDemoRun fresh-run context; no impersonation or general automation assignment grant."
+    },
+    {
+      "pointer": "/operations/16",
+      "id": "StartLearningSession",
+      "change": "LOCATION scope plus own-assignment target, not SELF membership skip; one session per assignment; audit only, no candidate event."
+    },
+    {
+      "pointer": "/operations/17",
+      "id": "RecordProgressEvent",
+      "change": "LOCATION scope plus own-session target; canonical response success not audited by default; no candidate event emission."
+    },
+    {
+      "pointer": "/operations/18",
+      "id": "CompleteLearningSession",
+      "change": "LOCATION scope plus own-session target; all required responses persisted; state guarded; audit only."
+    },
+    {
+      "pointer": "/operations/19",
+      "id": "PublishContentPack",
+      "change": "UNROUTED, no general customer grants; allow only package-defined current demo control-plane principal/run and synthetic organization-owned manifest. Exact bounded principal definition belongs to parent package."
+    }
+  ],
+  "persistence_requirements": {
+    "P06": "Fresh ADMIT required; Assignment immutable fields, exact content and scope FKs, repeat semantics, receipt/audit/lifecycle atomicity.",
+    "P05": "New migration/registration adds authoritative Assignment FK, at-most-one-session-per-assignment constraint and timestamps; preserve non-null REQUIRED_ONE_ASSIGNMENT. Do not edit prior migrations.",
+    "P08": "Fresh ADMIT required; canonical payload with no lifecycle column, immutable exact version and block binding, unique session/block and sequence, response/completion ordering, replay evidence.",
+    "Content": "New finite content storage admission; ContentPack identity+organization and immutable version payload rows, no separate content-version entity.",
+    "LearnerState": "Read projection only; no table admission.",
+    "external_shared": "Parent supplies CommandReceipt, AuditEvent/LifecycleEvent storage, current scope authority, DemoRun and controlled synthetic provisioner. Add LifecycleEventReferencesAssignment (AuditLifecycle) and finite audit target definitions there."
+  },
+  "retry_policy": {
+    "operations": [
+      "AssignContent",
+      "StartLearningSession",
+      "RecordProgressEvent"
+    ],
+    "key_source": "CLIENT_SUPPLIED",
+    "namespace": [
+      "canonical authenticated actor reference and class (human identity or explicitly admitted automation principal)",
+      "organizationId",
+      "locationId",
+      "operation",
+      "key"
+    ],
+    "key_shape": "parent CommandReceipt canonical IdempotencyKey",
+    "payload_binding": "canonical validated semantic request including immutable targets/scope, excluding requestId; SHA-256 digest",
+    "replay_horizon": "24 hours from first committed effect, additionally bounded by current live DemoRun and current authorization",
+    "after_horizon": "Reject CONFLICT; never treat previously used key as fresh. Keep receipt/key/digest tombstone; no purge admitted.",
+    "atomicity": "effect + receipt + required audit/lifecycle in same transaction",
+    "secret_rule": "No application-session bearer, cookie, token, password, credential proof or secret stored in receipt",
+    "receipt_precedence": "Current authorization first. Matching committed receipt may replay recorded success without a new event even after session completion. New event submissions still require ACTIVE."
+  },
+  "run_limits": {
+    "assignments": 10,
+    "sessions": 10,
+    "required_blocks_per_pack": 3,
+    "progress_events": 30,
+    "quota_error": "409 PRECONDITION_FAILED",
+    "quota_ordering": "Current authority, existing receipt replay, then transactionally serialized per-run quota and effect. Authority reads and quota locks occur through DemoRun owner boundary, not foreign-table imports."
+  },
+  "boundary": "Synthetic disconnected-from-production run only. No source/contracts modified; no approval/promotion/admission/execution/deployment performed. Customer ownership/catalog/publication, certification, scores, providers and privacy expiry executors remain unadmitted.",
+  "synthetic_content_template": {
+    "note": "This is a template, not a published schema instance. During admitted provision, generate fresh canonical ContentPackId/ContentBlockIds, bind current synthetic OrganizationId, render the exact canonical schema, validate and compute digest before PublishContentPack. Do not substitute literal template markers for IDs.",
+    "schemaVersion": "1.0.0",
+    "version": "1.0.0",
+    "title": "Demo Caf\u00e9: A clear team handoff",
+    "blocks_template": [
+      {
+        "kind": "SINGLE_CHOICE",
+        "instruction": "This fictional Demo Caf\u00e9 workflow is sample teaching material, not a customer policy. Before handing over an order, compare both the ticket name and the item with the person collecting it. If either is unclear, pause and ask the shift lead rather than guessing.",
+        "prompt": "Two collection tickets have similar names. What should you check before handing over the order?",
+        "options": [
+          "Only the first letter of the name.",
+          "Both the ticket name and the item.",
+          "Whichever order was prepared first."
+        ],
+        "expectedOptionIndex": 1,
+        "feedback": [
+          "A first letter does not distinguish these tickets. Compare both the full ticket name and the item before the handoff.",
+          "Exactly: checking both fields makes the handoff clear and gives you a reason to pause if either does not match.",
+          "Preparation order does not identify the correct recipient. Compare the ticket name and item instead."
+        ]
+      },
+      {
+        "kind": "SINGLE_CHOICE",
+        "instruction": "If a requested change does not match the current ticket, pause the handoff. Read back the requested change and ask the shift lead to confirm the ticket. Do not invent a resolution or mark the task finished while the difference remains unresolved.",
+        "prompt": "The person collecting the order asks for a change that is not on the ticket. What is the next step?",
+        "options": [
+          "Pause, read back the change, and ask the shift lead to confirm the ticket.",
+          "Guess what the person meant and hand over the order.",
+          "Mark the task finished without mentioning the change."
+        ],
+        "expectedOptionIndex": 0,
+        "feedback": [
+          "That is the sample workflow: pause, make the requested change explicit, and get the ticket confirmed before finishing the handoff.",
+          "Guessing leaves two different versions of the request. Read it back and obtain confirmation instead.",
+          "An unresolved difference should stay visible. Pause and get confirmation rather than recording a finished handoff."
+        ]
+      },
+      {
+        "kind": "SINGLE_CHOICE",
+        "instruction": "When passing an unresolved task to another teammate, state the ticket reference, what is unresolved and the next action. Ask the teammate to acknowledge the handoff. The task is not complete merely because someone mentioned it.",
+        "prompt": "Your shift is ending while a ticket change is awaiting confirmation. What makes the handoff clear?",
+        "options": [
+          "Leave without mentioning the unfinished ticket.",
+          "Say only that something needs checking.",
+          "Give the ticket reference, unresolved change and next action, then get acknowledgment."
+        ],
+        "expectedOptionIndex": 2,
+        "feedback": [
+          "The next teammate needs the unresolved task and its next action. Make the handoff explicit before leaving.",
+          "A vague reminder does not identify the task or the next action. Include both and get acknowledgment.",
+          "Exactly: the reference, issue, next action and acknowledgment make ownership clear without pretending the task is already finished."
+        ]
+      }
+    ]
+  }
+}

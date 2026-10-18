@@ -132,7 +132,7 @@
     {
       "id": "ContentPackContainsContentBlock",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "ContentPack",
       "to": "ContentBlock",
       "cardinality": "one-to-many",
@@ -145,7 +145,32 @@
       ],
       "does_not_grant": [
         "content_access"
-      ]
+      ],
+      "definition": "Each published exact pack version contains exactly 3 uniquely identified ordered ContentBlocks.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "CredentialBelongsToIdentity",
@@ -242,7 +267,7 @@
     {
       "id": "LearnerStateBelongsToIdentity",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "LearnerState",
       "to": "Identity",
       "cardinality": "many-to-one",
@@ -256,12 +281,33 @@
       "does_not_grant": [
         "membership",
         "authorization"
-      ]
+      ],
+      "definition": "Each projected state is for exactly one learner resolved from its Assignment.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        }
+      ],
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "LearnerStateTracksContentPack",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "LearnerState",
       "to": "ContentPack",
       "cardinality": "many-to-one",
@@ -275,7 +321,28 @@
       ],
       "does_not_grant": [
         "content_access"
-      ]
+      ],
+      "definition": "Each projected state tracks the ContentPack referenced by its one immutable Assignment.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        }
+      ],
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "LearningSessionUsesAssignment",
@@ -283,7 +350,7 @@
       "status": "approved",
       "from": "LearningSession",
       "to": "Assignment",
-      "cardinality": "many-to-one",
+      "cardinality": "one-to-one",
       "owning_domain": "Learning",
       "authority_contracts": [
         "C32"
@@ -298,12 +365,37 @@
         "C32"
       ],
       "promotion_issue": "#17",
-      "promoted_on": "2026-10-04"
+      "promoted_on": "2026-10-04",
+      "definition": "Every LearningSession references exactly one Assignment, and an Assignment has zero or one session in this admitted demo slice.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        }
+      ],
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "LifecycleEventReferencesIdentity",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "LifecycleEvent",
       "to": "Identity",
       "cardinality": "many-to-one-when-identity-lifecycle",
@@ -317,12 +409,30 @@
       ],
       "does_not_grant": [
         "identity_authority"
-      ]
+      ],
+      "definition": "LifecycleEventReferencesIdentity",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LifecycleEvent"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        }
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "LocationBelongsToOrganization",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "Location",
       "to": "Organization",
       "cardinality": "many-to-one",
@@ -336,12 +446,30 @@
       "does_not_grant": [
         "capability",
         "entitlement"
-      ]
+      ],
+      "definition": "LocationBelongsToOrganization",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Location"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "MembershipLinksIdentityOrganization",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "Membership",
       "to": [
         "Identity",
@@ -359,12 +487,34 @@
         "capability",
         "entitlement",
         "manager_authority"
-      ]
+      ],
+      "definition": "MembershipLinksIdentityOrganization",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "MembershipMayScopeLocation",
       "kind": "relationship",
-      "status": "candidate",
+      "status": "approved",
       "from": "Membership",
       "to": "Location",
       "cardinality": "many-to-zero-or-one",
@@ -378,7 +528,25 @@
       "does_not_grant": [
         "capability",
         "manager_authority"
-      ]
+      ],
+      "definition": "MembershipMayScopeLocation",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        }
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "ProgressEventBelongsToLearningSession",
@@ -533,6 +701,906 @@
       ],
       "promotion_issue": "#40",
       "promoted_on": "2026-10-04"
+    },
+    {
+      "id": "DemoRunOwnsOrganization",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "DemoRunOwnsOrganization",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "from": "DemoRun",
+      "to": "Organization",
+      "cardinality": "one-to-one",
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "DemoRunScopesLocation",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "DemoRunScopesLocation",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        }
+      ],
+      "from": "DemoRun",
+      "to": "Location",
+      "cardinality": "one-to-one",
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "DemoPersonaRepresentsIdentity",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Identity",
+      "definition": "DemoPersonaRepresentsIdentity",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        }
+      ],
+      "from": "DemoPersona",
+      "to": "Identity",
+      "cardinality": "one-to-one",
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "DemoPersonaBelongsToRun",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Identity",
+      "definition": "DemoPersona belongs to Run",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        }
+      ],
+      "from": "DemoPersona",
+      "to": "DemoRun",
+      "cardinality": "two-to-one with unique persona kind",
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "MembershipGrantBelongsToMembership",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "MembershipGrant belongs to Membership",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "MembershipGrant"
+        },
+        {
+          "family": "entities",
+          "id": "Membership"
+        }
+      ],
+      "from": "MembershipGrant",
+      "to": "Membership",
+      "cardinality": "many-to-one",
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "ReportingRelationshipHasManager",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "ReportingRelationshipHasManager",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        }
+      ],
+      "from": "ReportingRelationship",
+      "to": "Identity",
+      "cardinality": "many-to-one",
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "ReportingRelationshipHasLearner",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "ReportingRelationshipHasLearner",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        }
+      ],
+      "from": "ReportingRelationship",
+      "to": "Identity",
+      "cardinality": "many-to-one",
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "ReportingRelationshipBelongsToOrganization",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "ReportingRelationship belongs to Organization",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "from": "ReportingRelationship",
+      "to": "Organization",
+      "cardinality": "many-to-one",
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "ReportingRelationshipScopesLocation",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "ReportingRelationshipScopesLocation",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        }
+      ],
+      "from": "ReportingRelationship",
+      "to": "Location",
+      "cardinality": "many-to-one",
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "AuditEventBelongsToOrganization",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "AuditLifecycle",
+      "definition": "AuditEvent belongs to Organization",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "AuditEvent"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "from": "AuditEvent",
+      "to": "Organization",
+      "cardinality": "many-to-zero-or-one; successful tenant mutation requires one",
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "AuditEventMayScopeLocation",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "AuditLifecycle",
+      "definition": "AuditEventMayScopeLocation",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "AuditEvent"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        }
+      ],
+      "from": "AuditEvent",
+      "to": "Location",
+      "cardinality": "many-to-zero-or-one",
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "LifecycleEventReferencesMembership",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "AuditLifecycle",
+      "definition": "LifecycleEvent references Membership",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LifecycleEvent"
+        },
+        {
+          "family": "entities",
+          "id": "Membership"
+        }
+      ],
+      "from": "LifecycleEvent",
+      "to": "Membership",
+      "cardinality": "many-to-one-when-membership",
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "LifecycleEventReferencesAssignment",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "AuditLifecycle",
+      "definition": "LifecycleEvent references Assignment",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LifecycleEvent"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        }
+      ],
+      "from": "LifecycleEvent",
+      "to": "Assignment",
+      "cardinality": "many-to-one-when-assignment",
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "LifecycleEventReferencesDemoRun",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "AuditLifecycle",
+      "definition": "LifecycleEvent references DemoRun",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LifecycleEvent"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        }
+      ],
+      "from": "LifecycleEvent",
+      "to": "DemoRun",
+      "cardinality": "many-to-one-when-demo-run",
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "CommandReceiptBelongsToActor",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "TransactionControl",
+      "definition": "Receipt belongs to one finite typed HumanActor or admitted AutomationActor; actor type is part of uniqueness.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "DemoExecutionPrincipal"
+        },
+        {
+          "family": "values",
+          "id": "CommandActor"
+        }
+      ],
+      "from": "CommandReceipt",
+      "to": [
+        "Identity",
+        "DemoExecutionPrincipal"
+      ],
+      "cardinality": "many-to-exactly-one tagged actor",
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "CommandReceiptBelongsToOrganization",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "TransactionControl",
+      "definition": "CommandReceipt belongs to Organization",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "from": "CommandReceipt",
+      "to": "Organization",
+      "cardinality": "many-to-one",
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "CommandReceiptScopesLocation",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "TransactionControl",
+      "definition": "CommandReceiptScopesLocation",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        }
+      ],
+      "from": "CommandReceipt",
+      "to": "Location",
+      "cardinality": "many-to-one",
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "AuditEventHasActor",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "AuditLifecycle",
+      "definition": "Audit actor is one declared finite attribution variant.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "AuditEvent"
+        },
+        {
+          "family": "values",
+          "id": "AuditActor"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "DemoExecutionPrincipal"
+        }
+      ],
+      "from": "AuditEvent",
+      "to": [
+        "Identity",
+        "DemoExecutionPrincipal"
+      ],
+      "cardinality": "one tagged target or explicit unresolved denial with no referenced entity",
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "AuditEventTargetsRecord",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "AuditLifecycle",
+      "definition": "Audit target is one finite typed record variant or unresolved denial.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "AuditEvent"
+        },
+        {
+          "family": "values",
+          "id": "AuditTarget"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        },
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "entities",
+          "id": "MembershipGrant"
+        },
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        }
+      ],
+      "from": "AuditEvent",
+      "to": [
+        "Identity",
+        "ApplicationSession",
+        "Organization",
+        "Location",
+        "Membership",
+        "MembershipGrant",
+        "ReportingRelationship",
+        "DemoRun",
+        "ContentPack",
+        "Assignment",
+        "LearningSession"
+      ],
+      "cardinality": "one tagged target or explicit unresolved denial with no referenced entity",
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "ContentPackBelongsToOrganization",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Content",
+      "definition": "Every ContentPack belongs to exactly one immutable organization; synthetic demo publication and reads never cross it.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "from": "ContentPack",
+      "to": "Organization",
+      "cardinality": "many-to-one",
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "AssignmentBelongsToOrganization",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Learning",
+      "definition": "Each Assignment has exactly one organization matching the owning content organization and resolved learner membership.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "from": "Assignment",
+      "to": "Organization",
+      "cardinality": "many-to-one",
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "AssignmentScopesLocation",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Learning",
+      "definition": "Each Assignment has exactly one non-null location in its organization; current actor and learner authority must include that location.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        }
+      ],
+      "from": "Assignment",
+      "to": "Location",
+      "cardinality": "many-to-one",
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "AssignmentReferencesContentVersion",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Learning",
+      "definition": "Each Assignment pins exact ContentVersion and ContentPackId forever.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        }
+      ],
+      "from": "Assignment",
+      "to": "ContentPack",
+      "cardinality": "many-to-one",
+      "binding": "exact immutable ContentVersion value (version,digest) within the referenced ContentPack",
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner.",
+        "Endpoint is ContentPack entity, not the ContentVersion value object; composite reference binds its immutable version value."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "ProgressEventReferencesContentVersion",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Learning",
+      "definition": "Every ProgressEvent records exact ContentVersion plus ContentPackId equal to its session Assignment.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        }
+      ],
+      "from": "ProgressEvent",
+      "to": "ContentPack",
+      "cardinality": "many-to-one",
+      "binding": "exact immutable ContentVersion value (version,digest) within the referenced ContentPack",
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner.",
+        "Endpoint is ContentPack entity, not the ContentVersion value object; composite reference binds its immutable version value."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "ProgressEventReferencesContentBlock",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Learning",
+      "definition": "Every ProgressEvent targets one ContentBlock inside its exact assigned ContentVersion.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "from": "ProgressEvent",
+      "to": "ContentBlock",
+      "cardinality": "many-to-one",
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "LearnerStateUsesAssignment",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Learning",
+      "definition": "One projection is computed per Assignment and projection version; repeated assignments never collapse together.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        }
+      ],
+      "from": "LearnerState",
+      "to": "Assignment",
+      "cardinality": "one-to-one-per-projection-version",
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "LearnerStateReferencesContentVersion",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Learning",
+      "definition": "The projection is pinned to exactly the ContentVersion of its Assignment; newer publication cannot change history.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "from": "LearnerState",
+      "to": "ContentPack",
+      "cardinality": "many-to-one",
+      "binding": "exact immutable ContentVersion value (version,digest) within the referenced ContentPack",
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner.",
+        "Endpoint is ContentPack entity, not the ContentVersion value object; composite reference binds its immutable version value."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     }
   ],
   "version": "0.16.0",

@@ -3,12 +3,12 @@ import {join} from 'node:path';
 import {createHash} from 'node:crypto';
 const digest=text=>createHash('sha256').update(text).digest('hex');
 const cells=line=>line.trim().split('|').slice(1,-1).map(x=>x.trim());
-export function scanContractQuestions(root) {
+export function scanContractQuestions(root, readContract = path => readFileSync(join(root,path),'utf8')) {
  const unresolved=[],resolved=[],sources={},ids=new Set();
  const files=readdirSync(join(root,'contracts')).filter(x=>/^c\d\d-.*\.md$/.test(x)).sort();
  if(files.length!==23)throw new Error('exact active contract inventory required');
  for(const file of files){
-  const path=`contracts/${file}`,text=readFileSync(join(root,path),'utf8');sources[path]=digest(text);
+  const path=`contracts/${file}`,text=readContract(path);sources[path]=digest(text);
   const metadata=text.match(/<!--tos-doc\s*([\s\S]*?)\s*-->/);if(!metadata)throw new Error(`${path}: contract metadata required`);
   const doc=JSON.parse(metadata[1]);if(doc.status!=='active')throw new Error(`${path}: active owner authority required`);
   const start=text.indexOf('## 6. Open Questions'),end=text.indexOf('\n## 7.',start);

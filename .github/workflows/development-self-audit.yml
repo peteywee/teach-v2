@@ -50,6 +50,9 @@ jobs:
       - name: Audit authority
         id: audit_authority
         run: node scripts/verification/run-self-audit.mjs --stage authority
+      - name: Audit demo-registration-regressions
+        id: audit_demo_registration_regressions
+        run: node scripts/verification/run-self-audit.mjs --stage demo-registration-regressions
       - name: Audit document-governance
         id: audit_document_governance
         run: node scripts/verification/run-self-audit.mjs --stage document-governance

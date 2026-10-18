@@ -24,6 +24,8 @@ export function inspectConsolidatedVerification(root) {
     if (checkouts.length !== 1 || !/^          fetch-depth: 0$/m.test(checkouts[0]) || [...checkouts[0].matchAll(/^          fetch-depth:/gm)].length !== 1) fail('full-history credential-free document checkout required');
     if (inspectWorkflowText(path,workflow).length !== 1) fail('one explicit producer job required');
     if (!workflow.includes("node-version: '20.20.2'") || !workflow.includes('pnpm@12.8.1') || !workflow.includes('run: pnpm install --frozen-lockfile\n') || !workflow.includes('image: postgres:17.11-alpine') || !workflow.includes("TEACH_ISOLATED_DB: '1'") || !workflow.includes('timeout-minutes: 15')) fail('pinned runtime and isolated PostgreSQL required');
+    const demoRegression=plan?.stages?.find(stage=>stage.id==='demo-registration-regressions');
+    if(demoRegression?.command!=='node'||JSON.stringify(demoRegression?.args)!==JSON.stringify(['--test','scripts/tests/validate-demo-runtime-registration.mjs'])||demoRegression?.timeout_ms!==25000)fail('exact bounded demo registration mutation suite must run in CI');
     const stages = [...workflow.matchAll(/^        run: node scripts\/verification\/run-self-audit\.mjs --stage ([a-z0-9-]+)$/gm)].map(match => match[1]);
     if (JSON.stringify(stages) !== JSON.stringify(plan?.stages?.map(stage => stage.id))) fail('complete ordered checkpoint workflow required');
     const identity = plan?.stages?.find(stage => stage.id === 'postgres-identity-commands');
@@ -58,9 +60,9 @@ export function inspectConsolidationCoverage(root) {
     // Keep the historical 53-validator consolidation baseline immutable. The
     // owner-approved capability-name/type batch adds exactly one live admission
     // validator, executed by the unchanged authority stage's discovery loop.
-    const admittedValidators=['scripts/kernel/validate-capability-admission.mjs'];
+    const admittedValidators=['scripts/kernel/validate-capability-admission.mjs','scripts/kernel/validate-demo-runtime-registration.mjs'];
     const requiredValidators=[...coverage.baseline_umbrella_validators,...admittedValidators].sort();
-    if(JSON.stringify(validators.sort())!==JSON.stringify(requiredValidators))fail('complete baseline plus admitted capability standalone validator inventory required');
+    if(JSON.stringify(validators.sort())!==JSON.stringify(requiredValidators))fail('complete baseline plus exact admitted standalone validator inventory required');
     for(const file of coverage.preserved_test_and_replay_files)if(hash(readFileSync(join(root,file.path)))!==file.sha256)fail(`preserved test/replay evidence changed: ${file.path}`);
     for(const producer of coverage.producer_command_mapping)for(const step of producer.steps)for(const item of step.coverage) {
       if(item.stages?.some(id=>!stages.has(id)))fail(`${producer.workflow}: mapped bounded stage missing`);

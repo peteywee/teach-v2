@@ -27,7 +27,9 @@ const fail = (docs, pattern) => {
 };
 const live = Object.fromEntries(Object.keys(families).map(file => [file,
   JSON.parse(readFileSync(new URL(`../../kernel/${file}`, import.meta.url), 'utf8'))]));
-const heldMembership = live['entities.json'].entries.find(item => item.id === 'Membership');
+const source = JSON.parse(readFileSync(new URL('../../domains/demo-runtime/source-baseline.json', import.meta.url), 'utf8'));
+const historicalEntities = JSON.parse(source.files['kernel/entities.json']);
+const heldMembership = historicalEntities.entries.find(item => item.id === 'Membership');
 function runKernel(overrides = {}) {
   // Exercise the real CLI while changing only its in-memory read results.
   // No candidate is promoted, no registry file is written, and child changes
@@ -53,26 +55,23 @@ const holdFixture = (command = 'CreateMembership') => fixture(
   ['entities.json', structuredClone(heldMembership)],
 );
 
-test('SEM-36: every current approved entry passes with exactly three recorded edges', () => {
+test('SEM-36: every current approved entry passes without historical hold exceptions', () => {
   const before = JSON.stringify(live);
   const result = inspectSemanticDependencyClosure(live);
   assert.deepEqual(result.errors, []);
-  assert.equal(result.approvedEntries, 120);
-  assert.equal(result.checkedReferences, 147);
-  assert.deepEqual(result.exceptions, ['CreateMembership', 'DeactivateMembership', 'RevokeMembership'].map(id =>
-    `commands.json: ${id}.requires -> Membership: owner-directed Membership hold OQ-TEN-1 / C13 / #14 (SEM-36)`));
+  assert.equal(result.approvedEntries, 236);
+  assert.equal(result.checkedReferences, 583);
+  assert.deepEqual(result.exceptions, []);
   assert.equal(JSON.stringify(live), before, 'validation must not mutate registry data');
 });
 
-test('SEM-36 CLI: all approved entries and each exact hold are visibly enumerated', () => {
+test('SEM-36 CLI: current approved closure and absence of holds are visibly enumerated', () => {
   const result = runKernel();
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /SEM-36: checked 120 approved entries \/ 147 semantic references/);
-  assert.match(result.stdout, /SEM-36 owner-directed hold exceptions: 3/);
-  for (const id of ['CreateMembership', 'DeactivateMembership', 'RevokeMembership']) {
-    assert.match(result.stdout, new RegExp(`${id}\\.requires -> Membership:.*OQ-TEN-1`));
-  }
-  assert.match(result.stdout, /Semantic kernel PASS: TEACH-K00 0\.17\.0/);
+  assert.match(result.stdout, /SEM-36: checked 236 approved entries \/ 583 semantic references/);
+  assert.match(result.stdout, /SEM-36 owner-directed hold exceptions: 0/);
+  assert.doesNotMatch(result.stdout, /requires -> Membership:.*OQ-TEN-1/);
+  assert.match(result.stdout, /Semantic kernel PASS: TEACH-K00 0\.18\.0/);
 });
 
 test('SEM-36 CLI: malformed live-entry references fail through actual checker wiring', () => {
@@ -90,6 +89,7 @@ test('SEM-36 CLI: malformed live-entry references fail through actual checker wi
 test('SEM-36 CLI: a forged value-object kind cannot conceal a candidate identifier', () => {
   const identifiers = structuredClone(live['identifiers.json']);
   identifiers.entries.find(item => item.id === 'LocationId').kind = 'value_object';
+  identifiers.entries.find(item => item.id === 'LocationId').status = 'candidate';
   const values = structuredClone(live['values.json']);
   values.entries.push(entry('LocationId', 'identifier'));
   const relationships = structuredClone(live['relationships.json']);
@@ -327,3 +327,27 @@ for (const field of ['requires', 'from', 'to', 'entity', 'emitted_by', 'scope'])
     }
   });
 }
+
+for (const [file, kind] of Object.entries(families)) {
+  test(`SEM-36: explicit ${file} reference cannot resolve a homonym in another family`, () => {
+    const family = file.slice(0, -5);
+    const other = family === 'values' ? 'identifiers.json' : 'values.json';
+    const docs = fixture(
+      ['commands.json', entry('Source', 'command', 'approved', { requires: [{ family, id: 'Shared' }] })],
+      [file, entry('Shared', kind, 'candidate')],
+      [other, entry('Shared', families[other], 'approved')],
+    );
+    fail(docs, /depends on candidate/);
+    docs[file].entries.find(item => item.id === 'Shared').status = 'approved';
+    assert.deepEqual(inspectSemanticDependencyClosure(docs).errors, []);
+    docs[file].entries = docs[file].entries.filter(item => item.id !== 'Shared');
+    fail(docs, /unregistered dependency/);
+  });
+}
+test('SEM-36: explicit references reject unknown families, extra keys and malformed IDs', () => {
+  for (const ref of [
+    { family: 'unknown', id: 'Shared' }, { family: 'entities.json', id: 'Shared' },
+    { family: 'entities', id: ' Shared' }, { family: 'entities', id: 'Shared', approved: true },
+    { family: 'entities' }, { id: 'Shared' },
+  ]) fail(fixture(['commands.json', entry('Source', 'command', 'approved', { requires: [ref] })]), /cannot be established/);
+});

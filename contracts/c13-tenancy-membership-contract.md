@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C13",
   "class": "contract",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-04",
-  "effective_on": "2026-10-03",
+  "updated_on": "2026-10-17",
+  "effective_on": "2026-10-17",
   "approval": {
     "state": "approved",
-    "approved_version": "1.5.0",
-    "approved_on": "2026-10-04",
-    "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner explicitly approved C13 1.3.0 canonical lifecycle event definition (MembershipRevoked) by direct owner direction on 2026-10-04"
+    "approved_version": "1.6.0",
+    "approved_on": "2026-10-17",
+    "record": "domains/demo-runtime/owner-approval.json",
+    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; SHA256SUMS sha256:a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,11 +28,25 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": ["TEACH-CON-C13@1.2.0"],
+  "supersedes": [
+    "TEACH-CON-C13@1.2.0",
+    "TEACH-CON-C13@1.5.0"
+  ],
   "superseded_by": null,
   "depends_on": [
     "contracts/"
-  ]
+  ],
+  "demo_runtime_registration": {
+    "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+    "approval_record": "domains/demo-runtime/owner-approval.json",
+    "issue": "#82",
+    "source_package": "domains/demo-runtime/proposal-0.1.0",
+    "sha256sums_sha256": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+    "semantic_authority_only": true,
+    "physical_schema_admission": false,
+    "runtime_activation": false,
+    "deployment_authority": false
+  }
 }
 -->
 
@@ -43,17 +57,17 @@
 | Contract ID        | C13                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.5.0                                                                                                                                                           |
+| Version | 1.6.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-04 — C13 1.3.0 canonical lifecycle event definition by direct owner direction |
+| Approved by | Patrick Craven (owner), 2026-10-17; TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; see `domains/demo-runtime/owner-approval.json` |
 | Requirement prefix | `TEN`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/tenancy.json` (tenancy half); capability resolution moves to C14.                                   |
-| Supersedes         | C13 1.2.0 |
+| Supersedes | 1.5.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-04                                                                                                                                                      |
+| Last updated | 2026-10-17 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -83,7 +97,7 @@ Related contracts: C00, C11, C14, C15, C63.
 
 | Term                   | Meaning                                                                                   |
 | ---------------------- | ----------------------------------------------------------------------------------------- |
-| Organization           | The customer and security boundary.                                                       |
+| Organization           | The organization security boundary; DEMO_ONLY marks only a fresh immutable synthetic run organization, never a customer authorization shortcut.                                                       |
 | Location               | A workplace scope beneath exactly one organization.                                       |
 | Membership             | The record that an identity belongs to an organization and, where applicable, a location. |
 | Entitlement            | Organization-owned local resource/plan access state. It may restrict capability effect but cannot create a capability. |
@@ -167,3 +181,15 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.1.0   | 2026-10-03 | Organization owns Entitlement/local entitlement state; provider reconciliation must cross the Organization command boundary. GitHub issue #2. | Patrick Craven (owner approval) |
 | 1.2.0   | 2026-10-03 | Approved MembershipStatus state machine ACTIVE→INACTIVE→REVOKED and corrected TEN-10 `deleted` wording to `revoked`. GitHub issue #4. | Patrick Craven (owner approval) |
 | 1.3.0   | 2026-10-04 | Defined the canonical lifecycle event for membership revocation: TEN-19 requires `MembershipRevoked` on `INACTIVE -> REVOKED`; no event is emitted out of terminal `REVOKED`. | Patrick Craven (owner direction) |
+
+## Registered demo runtime amendment (1.6.0)
+
+Exact owner-approved scope: `TEACH-DEMO-RUNTIME-2026-10-17@0.1.0`, SYS-21 [#82](https://github.com/peteywee/teach-v2/issues/82). Approval provenance: `domains/demo-runtime/owner-approval.json`; immutable source: `domains/demo-runtime/proposal-0.1.0/contract-amendments.md`. The addendum below is the approved revision, not an exception inferred by an implementer. It changes only its explicitly named demo behavior; ordinary/customer semantics and unrelated gates remain unchanged. Proposal labels in the immutable package preserve its pre-approval history; this registration supplies current authority. Physical schema admission, runtime activation and shared deployment remain separate.
+
+Admit exact normal Membership/Location shape and immutable demo grant/reporting records defined here. Add DEMO_ONLY as an immutable synthetic organization classification, never a customer authorization shortcut. BeginDemoRun is the sole demo allocation writer and cannot target existing organizations. Register five new command/capability rows, demo_visitor bundle, named principals, DEMO_NEW_RUN and exact demo-record scope rules. All internal operations remain unrouted and ungrantable.
+
+For DEMO_ONLY organizations bound one-to-one to DemoRun, step 6 evaluates the Organization-owned database-current run availability projection: ACTIVE status, deadline, fixed operation allowlist. Missing or contradictory inputs deny. Availability restricts existing capability effect and grants nothing. No Entitlement instance is created; non-demo entitlement rules remain unchanged.
+
+StartLearningSession, RecordProgressEvent and CompleteLearningSession are LOCATION plus mandatory SELF-target binding, not baseline SELF bundle operations. Every mutation revalidates current actor Membership/grants and exact assignment/session under the transaction fence. DT-002 and DT-008 are reconciled to registered evaluation order and explicit selector meaning. The demo allowlist denies extra ordinary manager/self capabilities at the server. Expiry cleanup uses a separately specified exact-record terminalization policy so it can revoke expired access without requiring live visitor authority.
+
+Exact definitions and field constraints are incorporated from `domains/demo-runtime/proposal-0.1.0/demo-boundary.md`, `domains/demo-runtime/proposal-0.1.0/authority-and-audit.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.json`, and `domains/demo-runtime/proposal-0.1.0/transport-and-queries.json` with its referenced schemas. No definition beyond that approved package is introduced.

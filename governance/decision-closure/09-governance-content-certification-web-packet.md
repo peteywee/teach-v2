@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-PROP-DCS-09",
   "class": "specification",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-05",
-  "updated_on": "2026-10-05",
+  "updated_on": "2026-10-17",
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
@@ -34,15 +34,16 @@
   "remains_unknown": [
     "OQ-CERT-2"
   ],
-  "effective_on": "2026-10-05",
+  "effective_on": "2026-10-17",
   "approval": {
     "state": "approved",
-    "approved_on": "2026-10-05",
-    "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "SYS-21 #75; manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
+    "approved_on": "2026-10-17",
+    "record": "domains/demo-runtime/owner-approval.json",
+    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82"
   },
   "supersedes": [
-    "TEACH-PROP-DCS-09@0.2.0"
+    "TEACH-PROP-DCS-09@0.2.0",
+    "TEACH-PROP-DCS-09@1.0.0"
   ]
 }
 -->
@@ -83,20 +84,20 @@ Owner-supplied: JSON canonical, checked in CI, with generated Markdown.
 | CI rule 3 | No two active entries overlap the same `location` |
 | Initial content | `{"entries": []}` — no compatibility code exists at baseline (no CNT-5 adapters, no V1 shims) |
 
-## 3. OQ-SYS-5 — learner-demo applicability (SYS-29)
+## 3. OQ-SYS-5 — visitor and manager demo applicability (SYS-29)
 
 Owner-supplied: approve an explicit applicability matrix. Shared deployment still requires release proof.
 
-| Contract | Applicable to learner demo | Fail-closed only (must deny, need not function) | Not applicable (reason) |
+| Contract | Applicable to visitor and manager demo | Fail-closed only (must deny, need not function) | Not applicable (reason) |
 | --- | --- | --- | --- |
 | C11 | IDN-1, IDN-4, IDN-5, IDN-6, IDN-14, IDN-16, IDN-21 | IDN-2, IDN-3 (OAuth off); IDN-30 (PIN off); IDN-20, IDN-24–IDN-28 (invitations); IDN-12, IDN-13, IDN-17–IDN-19 (manager/offboard) | — |
 | C12 | SES-1 – SES-20 | — | — |
-| C13 | TEN-1 – TEN-10, TEN-13, TEN-14, TEN-15, TEN-18 | TEN-16, TEN-17 (entitlement) | TEN-11, TEN-12 (reporting: manager demo) |
+| C13 | TEN-1 – TEN-15, TEN-18 | TEN-16, TEN-17 (entitlement) | — |
 | C14 | AUTHZ-1 – AUTHZ-21 for every operation the demo exposes | All unexposed operations (registry denies) | — |
 | C15 | PRIV-1 – PRIV-9, PRIV-13, PRIV-14, PRIV-16, PRIV-17 | — | PRIV-10, PRIV-11, PRIV-12, PRIV-15 (no export/deletion/retention executor in demo; demo makes no privacy promise) |
 | C21 | MIG-1 – MIG-8, MIG-11 – MIG-14 | — | MIG-9, MIG-10 until a shared environment holds non-reconstructable data |
 | C22 | TXN-1 – TXN-5 | — | TXN-6 – TXN-16 (no external effects in demo) |
-| C23 | AUD-1 – AUD-6, AUD-8, AUD-9, AUD-11 (policy only); AUD-7 for Identity | — | AUD-10 (no audit-read UI in learner demo) |
+| C23 | AUD-1 – AUD-6, AUD-8, AUD-9, AUD-11 (policy only); AUD-7 for Identity, Membership, Assignment and DemoRun | — | AUD-10 (no audit-read UI in learner demo) |
 
 Constraint: "not applicable" never permits the opposite behavior; it means the requirement's trigger does not occur in the demo. If it occurs, the requirement applies.
 
@@ -175,3 +176,7 @@ Owner-supplied list is complete for V2: **sign in, start assigned content, recor
 | --- | --- | --- |
 | 0.1.0 | 2026-10-05 | Initial proposed packet. |
 | 0.2.0 | 2026-10-05 | Revised on `6553eb4`: OQ-CERT-1 registered by #74 as CERT-13 (C34 1.2.0); remaining targets C00 1.0.3 → 1.1.0, C31 1.1.0 → 1.2.0, C34 1.2.0 → 1.3.0, C42 1.0.3 → 1.1.0; narrowed-residual naming fixed; owner chat approval recorded, registration pending #75. |
+
+## Registered synthetic demo applicability amendment
+
+SYS-21 #82 registers `TEACH-DEMO-RUNTIME-2026-10-17@0.1.0`, exactly as approved in `domains/demo-runtime/owner-approval.json`. C31, C32 and C33 apply to every exposed teaching, learning and manager behavior; C41/C42 apply to transport and actual browser outcomes. TEN-11/TEN-12 reporting and AUD-7 replay for Identity, Membership, Assignment and DemoRun are triggered, not learner-only N/A exclusions. Certification and deferred-feature gates are unchanged; shared deployment still requires release proof. This amendment does not claim runtime verification.

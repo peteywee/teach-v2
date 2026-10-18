@@ -3,6 +3,7 @@ import { isDeepStrictEqual } from 'node:util';
 // C01 1.8.0 SEM-36 / SEM-AC-25. These are entry-level semantic references,
 // not identifier/represents completeness, prose, or nested transition states.
 const dependencyFields = ['requires', 'from', 'to', 'entity', 'emitted_by', 'scope'];
+const typedFamilies = new Set(['entities', 'identifiers', 'values', 'relationships', 'states', 'state-machines', 'invariants', 'decision-tables', 'commands', 'events', 'capabilities']);
 // Existing invariant scope labels describe the rule's area, not a K00 entry.
 // Keep this interpretation local to that registry, rather than treating every
 // unknown scope string as permission to skip dependency closure.
@@ -46,6 +47,12 @@ function references(file, entry, byId, errors) {
       // closure PASS without a registered interpretation. Do not extract
       // invented concepts from prose or arbitrary nested object keys.
       if (raw === undefined || raw === null || typeof raw === 'string' && !raw.trim()) continue;
+      if (field === 'requires' && raw && !Array.isArray(raw) && typeof raw === 'object' &&
+          Object.keys(raw).length === 2 && typedFamilies.has(raw.family) &&
+          typeof raw.id === 'string' && /^[A-Za-z][A-Za-z0-9_.:-]*$/.test(raw.id)) {
+        refs.push({ ref: raw.id, family: raw.family });
+        continue;
+      }
       const ref = typeof raw === 'string' ? raw.trim() : null;
       if (ref !== null && byId.has(ref)) { refs.push(ref); continue; }
       if (ref !== null && field === 'scope' && file === 'invariants.json' && invariantScopeLabels.has(ref)) continue;
@@ -53,7 +60,11 @@ function references(file, entry, byId, errors) {
       const location = `${file}: ${entry.id}.${field}${Array.isArray(value) ? `[${index}]` : ''}`;
       errors.push(`${location}: dependency closure cannot be established for this representation (SEM-36)`);
     }
-    return [...new Set(refs)].map(ref => ({ field, ref }));
+    const unique = new Map(refs.map(ref => {
+      const reference = typeof ref === 'string' ? { field, ref } : { field, ...ref };
+      return [JSON.stringify(reference), reference];
+    }));
+    return [...unique.values()];
   });
 }
 
@@ -75,11 +86,11 @@ export function inspectSemanticDependencyClosure(docs) {
     if (visited.has(item)) continue;
     visited.add(item);
     const { file, entry } = item;
-    for (const { field, ref } of references(file, entry, byId, errors)) {
+    for (const { field, ref, family } of references(file, entry, byId, errors)) {
       checkedReferences++;
-      const families = referenceFamilies(file, field);
+      const families = family ? new Set([`${family}.json`]) : referenceFamilies(file, field);
       const targets = (byId.get(ref) || []).filter(target => !families || families.has(target.file));
-      const label = `${file}: ${entry.id}.${field} -> ${ref}`;
+      const label = `${file}: ${entry.id}.${field} -> ${family ? `${family}:` : ''}${ref}`;
       if (targets.length !== 1) {
         const detail = targets.length ? `ambiguous dependency (${targets.map(x => `${x.file}:${x.entry.status}`).join(', ')})` : 'unregistered dependency';
         errors.push(`${label}: ${detail} (SEM-36)`);

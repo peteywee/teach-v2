@@ -1,3 +1,4 @@
+import { inspectDemoRuntimeRegistration, createHistoricalSourceReader } from '../kernel/demo-runtime-registration.mjs';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { requiredAdmissionCriteria } from './admission-criteria.mjs';
@@ -8,13 +9,16 @@ const config={
 };
 export function inspectFutureAdmission(root,slice) {
   const c=config[slice]; if(!c) return ['future admission: unregistered slice'];
-  const errors=[],fail=message=>errors.push(`${slice} admission: ${message}`);
+  const demo=inspectDemoRuntimeRegistration(root);
+  const predecessor=createHistoricalSourceReader(root,demo.source);
+  const errors=[...demo.errors],fail=message=>errors.push(`${slice} admission: ${message}`);
   const load=path=>{try{return JSON.parse(readFileSync(join(root,path),'utf8'));}catch(error){fail(`${path}: ${error.message}`);return null;}};
   const plan=load(`persistence/physical-slices/${c.lane}/admission-evidence-plan.json`),admission=load(`persistence/physical-slices/${c.lane}/admission.json`);
-  const authority=load('persistence/authority.json'),entities=load('kernel/entities.json'),ids=load('kernel/identifiers.json'),relationships=load('kernel/relationships.json'),ownership=load('domains/ownership-map.json'),arch=load('architecture/authority.json');
+  const authority=load('persistence/authority.json'),entities=load('kernel/entities.json'),ids=load('kernel/identifiers.json'),relationships=JSON.parse(predecessor('kernel/relationships.json')),ownership=load('domains/ownership-map.json'),arch=load('architecture/authority.json');
   const find=(registry,id)=>(registry?.entries||[]).find(x=>x.id===id);
   if(find(entities,c.entity)?.status!=='approved' || find(entities,c.entity)?.owning_domain!==c.owner || find(ids,c.identifier)?.status!=='approved' || find(ids,c.identifier)?.represents!==c.entity || find(ids,c.identifier)?.owning_domain!==c.owner) fail('approved canonical entity/identifier/owner required');
   if(!(ownership?.entries||[]).some(x=>x.kind==='entity' && x.id===c.entity && x.decision_state==='approved' && x.proposed_owner===c.owner) || !arch?.topology?.runtime_domain_modules?.includes(c.owner)) fail('approved ownership and runtime module required');
+  // This validator proves the retained BLOCK decision, not a new physical admission.
   const refs=(relationships?.entries||[]).filter(x=>x.status==='approved' && x.from===c.entity && x.owning_domain===c.owner).map(x=>x.id).sort();
   if(JSON.stringify(refs)!==JSON.stringify([...c.refs].sort()) || JSON.stringify(plan?.registered_relationships)!==JSON.stringify(c.refs)) fail('exact approved relationship inventory required');
   if(plan?.version!=='0.1.0' || plan?.status!=='recorded' || plan?.slice!==`SLICE-${slice}` || plan?.owning_module!==c.owner || JSON.stringify(plan?.records)!==JSON.stringify([c.entity])) fail('exact recorded evidence plan required');

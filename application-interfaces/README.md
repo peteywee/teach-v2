@@ -2,19 +2,23 @@
 {
   "doc_id": "TEACH-APPLICATION-INTERFACES",
   "class": "specification",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-04",
-  "updated_on": "2026-10-04",
+  "updated_on": "2026-10-17",
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
     "commit": "a756951703f11b5e5bcd02eef5eac3a56e3eb5c0",
     "purpose": "pre-application-interface-discovery baseline"
   },
-  "governed_by": ["TEACH-ARCHITECTURE","TEACH-CON-C01","TEACH-CON-C41"]
+  "governed_by": [
+    "TEACH-ARCHITECTURE",
+    "TEACH-CON-C01",
+    "TEACH-CON-C41"
+  ]
 }
 -->
 
@@ -30,12 +34,14 @@ It does not choose persistence schemas, HTTP route inventory, physical package p
 
 `proposed.json` and `DECISION-PACKET.md` define the recommended logical Application Interface boundary.
 
-Status remains `proposed`. Persistence Model remains blocked until explicit owner approval of this layer.
+These proposal and discovery artifacts preserve historical evidence; the active logical authority is registered separately below.
 
 ## Active Application Interface authority
 
-Owner approval: GitHub issue #15.
+Initial owner approval: GitHub issue #15. Demo revision approval: `domains/demo-runtime/owner-approval.json`, SYS-21 #82.
 
-The active authority is `application-interfaces/authority.json` version `1.0.0`.
+The active authority is `application-interfaces/authority.json` version `1.1.0`.
 
 Persistence Model is now dependency-ready for discovery. Persistence tables, physical repositories, migrations, HTTP transport schemas, physical package paths, and unresolved candidate semantics remain outside this approval.
+
+The exact demo revision adds five owner commands, seven protected owner queries and transaction-bound owner read/audit/lifecycle/receipt ports. Concrete wire schemas and logical field constraints are bound to the approved immutable package; no physical table, live route or deployment is admitted here.

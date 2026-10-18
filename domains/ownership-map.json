@@ -1,6 +1,6 @@
 {
   "map_id": "TEACH-DOMAIN-OWNERSHIP",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
@@ -134,7 +134,14 @@
       "authority_contracts": [
         "C32",
         "C33"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "command",
@@ -165,7 +172,14 @@
       "authority_contracts": [
         "C32",
         "C33"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "command",
@@ -175,7 +189,14 @@
       "authority_contracts": [
         "C11",
         "C12"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "command",
@@ -194,7 +215,14 @@
       "proposed_owner": "Organization",
       "authority_contracts": [
         "C13"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "command",
@@ -251,7 +279,14 @@
       "authority_contracts": [
         "C31",
         "C41"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "command",
@@ -280,7 +315,14 @@
       "authority_contracts": [
         "C32",
         "C33"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "command",
@@ -337,7 +379,14 @@
       "authority_contracts": [
         "C32",
         "C33"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "decision_table",
@@ -348,7 +397,14 @@
         "C02",
         "C14",
         "C41"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "decision_table",
@@ -357,7 +413,14 @@
       "proposed_owner": "Authorization",
       "authority_contracts": [
         "C14"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "decision_table",
@@ -385,7 +448,14 @@
       "proposed_owner": "Governance",
       "authority_contracts": [
         "C01"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "decision_table",
@@ -394,7 +464,14 @@
       "proposed_owner": "Governance",
       "authority_contracts": [
         "C01"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "decision_table",
@@ -404,7 +481,14 @@
       "authority_contracts": [
         "C00",
         "C01"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "decision_table",
@@ -415,7 +499,14 @@
         "C13",
         "C14",
         "C41"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "entity",
@@ -435,7 +526,14 @@
       "authority_contracts": [
         "C32",
         "C33"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "entity",
@@ -444,7 +542,14 @@
       "proposed_owner": "AuditLifecycle",
       "authority_contracts": [
         "C23"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "entity",
@@ -462,7 +567,14 @@
       "proposed_owner": "Content",
       "authority_contracts": [
         "C31"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "entity",
@@ -471,7 +583,14 @@
       "proposed_owner": "Content",
       "authority_contracts": [
         "C31"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "entity",
@@ -505,7 +624,14 @@
       "authority_contracts": [
         "C11",
         "C12"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "entity",
@@ -524,7 +650,14 @@
       "authority_contracts": [
         "C32",
         "C33"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "entity",
@@ -534,7 +667,14 @@
       "authority_contracts": [
         "C32",
         "C33"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "entity",
@@ -543,7 +683,14 @@
       "proposed_owner": "AuditLifecycle",
       "authority_contracts": [
         "C23"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "entity",
@@ -552,7 +699,14 @@
       "proposed_owner": "Organization",
       "authority_contracts": [
         "C13"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "entity",
@@ -561,7 +715,14 @@
       "proposed_owner": "Organization",
       "authority_contracts": [
         "C13"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "entity",
@@ -570,7 +731,14 @@
       "proposed_owner": "Organization",
       "authority_contracts": [
         "C13"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "entity",
@@ -589,7 +757,14 @@
       "authority_contracts": [
         "C32",
         "C33"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "entity",
@@ -769,7 +944,14 @@
       "proposed_owner": "AuditLifecycle",
       "authority_contracts": [
         "C23"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "identifier",
@@ -800,7 +982,14 @@
       "proposed_owner": "Content",
       "authority_contracts": [
         "C31"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "identifier",
@@ -874,7 +1063,14 @@
       "authority_contracts": [
         "C32",
         "C33"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "identifier",
@@ -893,7 +1089,14 @@
       "proposed_owner": "AuditLifecycle",
       "authority_contracts": [
         "C23"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "identifier",
@@ -902,7 +1105,14 @@
       "proposed_owner": "Organization",
       "authority_contracts": [
         "C13"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "identifier",
@@ -911,7 +1121,14 @@
       "proposed_owner": "Organization",
       "authority_contracts": [
         "C13"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "identifier",
@@ -979,7 +1196,14 @@
       "authority_contracts": [
         "C00",
         "C01"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "invariant",
@@ -989,7 +1213,14 @@
       "authority_contracts": [
         "C00",
         "C14"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "invariant",
@@ -998,7 +1229,14 @@
       "proposed_owner": "Governance",
       "authority_contracts": [
         "C01"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "invariant",
@@ -1007,7 +1245,14 @@
       "proposed_owner": "Governance",
       "authority_contracts": [
         "C01"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "invariant",
@@ -1026,7 +1271,14 @@
       "proposed_owner": "TransactionControl",
       "authority_contracts": [
         "C22"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "invariant",
@@ -1037,7 +1289,14 @@
         "C22",
         "C32",
         "C34"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "invariant",
@@ -1047,7 +1306,14 @@
       "authority_contracts": [
         "C22",
         "C34"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "invariant",
@@ -1057,7 +1323,14 @@
       "authority_contracts": [
         "C13",
         "C15"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "invariant",
@@ -1067,7 +1340,14 @@
       "authority_contracts": [
         "C13",
         "C14"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "invariant",
@@ -1077,7 +1357,14 @@
       "authority_contracts": [
         "C13",
         "C14"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "invariant",
@@ -1086,7 +1373,14 @@
       "proposed_owner": "Authorization",
       "authority_contracts": [
         "C14"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "invariant",
@@ -1095,7 +1389,14 @@
       "proposed_owner": "Authorization",
       "authority_contracts": [
         "C14"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "invariant",
@@ -1104,7 +1405,14 @@
       "proposed_owner": "Authorization",
       "authority_contracts": [
         "C14"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "invariant",
@@ -1113,7 +1421,14 @@
       "proposed_owner": "Content",
       "authority_contracts": [
         "C31"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "invariant",
@@ -1123,7 +1438,14 @@
       "authority_contracts": [
         "C31",
         "C14"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "invariant",
@@ -1132,7 +1454,14 @@
       "proposed_owner": "Learning",
       "authority_contracts": [
         "C32"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "invariant",
@@ -1141,7 +1470,14 @@
       "proposed_owner": "Learning",
       "authority_contracts": [
         "C32"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "invariant",
@@ -1243,7 +1579,14 @@
       "proposed_owner": "Content",
       "authority_contracts": [
         "C31"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "relationship",
@@ -1291,7 +1634,14 @@
       "proposed_owner": "Learning",
       "authority_contracts": [
         "C32"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "relationship",
@@ -1301,7 +1651,14 @@
       "authority_contracts": [
         "C31",
         "C32"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "relationship",
@@ -1310,7 +1667,14 @@
       "proposed_owner": "Learning",
       "authority_contracts": [
         "C32"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "relationship",
@@ -1320,7 +1684,14 @@
       "authority_contracts": [
         "C11",
         "C23"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "relationship",
@@ -1329,7 +1700,14 @@
       "proposed_owner": "Organization",
       "authority_contracts": [
         "C13"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "relationship",
@@ -1338,7 +1716,14 @@
       "proposed_owner": "Organization",
       "authority_contracts": [
         "C13"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "relationship",
@@ -1347,7 +1732,14 @@
       "proposed_owner": "Organization",
       "authority_contracts": [
         "C13"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "relationship",
@@ -1396,7 +1788,14 @@
       "authority_contracts": [
         "C01",
         "C32"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "state_machine",
@@ -1406,7 +1805,14 @@
       "authority_contracts": [
         "C01",
         "C13"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "state_machine",
@@ -1507,7 +1913,14 @@
       ],
       "notes": [
         "Approved lifecycle: ACTIVE -> INACTIVE -> REVOKED; REVOKED terminal; DELETED is not MembershipStatus."
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "state_set",
@@ -1536,7 +1949,14 @@
       "proposed_owner": "Content",
       "authority_contracts": [
         "C31"
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "value_object",
@@ -1581,7 +2001,14 @@
       ],
       "notes": [
         "Shared immutable time value; proposed semantic owner is AuditLifecycle while consumers may reference it."
-      ]
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "kind": "relationship",
@@ -1980,14 +2407,1165 @@
         "C01",
         "C14"
       ]
+    },
+    {
+      "kind": "entity",
+      "id": "DemoRun",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "identifier",
+      "id": "DemoRunId",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "entity",
+      "id": "DemoPersona",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "identifier",
+      "id": "DemoPersonaId",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "entity",
+      "id": "MembershipGrant",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "identifier",
+      "id": "MembershipGrantId",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "entity",
+      "id": "ReportingRelationship",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "identifier",
+      "id": "ReportingRelationshipId",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "entity",
+      "id": "CommandReceipt",
+      "decision_state": "approved",
+      "proposed_owner": "TransactionControl",
+      "authority_contracts": [
+        "C22"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "identifier",
+      "id": "CommandReceiptId",
+      "decision_state": "approved",
+      "proposed_owner": "TransactionControl",
+      "authority_contracts": [
+        "C22"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "entity",
+      "id": "DemoExecutionPrincipal",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "identifier",
+      "id": "DemoExecutionPrincipalId",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "state_set",
+      "id": "DemoRunStatus",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "value_object",
+      "id": "DemoPersonaKind",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "value_object",
+      "id": "DemoOrganizationClass",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "value_object",
+      "id": "DemoRunCloseReason",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "value_object",
+      "id": "AdmissionNetworkPrefix",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "value_object",
+      "id": "CapabilityBundle",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "value_object",
+      "id": "DemoAvailability",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "value_object",
+      "id": "AuditActor",
+      "decision_state": "approved",
+      "proposed_owner": "AuditLifecycle",
+      "authority_contracts": [
+        "C23"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "value_object",
+      "id": "AuditTarget",
+      "decision_state": "approved",
+      "proposed_owner": "AuditLifecycle",
+      "authority_contracts": [
+        "C23"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "value_object",
+      "id": "AuditResult",
+      "decision_state": "approved",
+      "proposed_owner": "AuditLifecycle",
+      "authority_contracts": [
+        "C23"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "value_object",
+      "id": "LifecycleSnapshot",
+      "decision_state": "approved",
+      "proposed_owner": "AuditLifecycle",
+      "authority_contracts": [
+        "C23"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "DemoRunOwnsOrganization",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "DemoRunScopesLocation",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "DemoPersonaRepresentsIdentity",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "DemoPersonaBelongsToRun",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "MembershipGrantBelongsToMembership",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "ReportingRelationshipHasManager",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "ReportingRelationshipHasLearner",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "ReportingRelationshipBelongsToOrganization",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "ReportingRelationshipScopesLocation",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "AuditEventBelongsToOrganization",
+      "decision_state": "approved",
+      "proposed_owner": "AuditLifecycle",
+      "authority_contracts": [
+        "C23"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "AuditEventMayScopeLocation",
+      "decision_state": "approved",
+      "proposed_owner": "AuditLifecycle",
+      "authority_contracts": [
+        "C23"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "LifecycleEventReferencesMembership",
+      "decision_state": "approved",
+      "proposed_owner": "AuditLifecycle",
+      "authority_contracts": [
+        "C23"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "LifecycleEventReferencesAssignment",
+      "decision_state": "approved",
+      "proposed_owner": "AuditLifecycle",
+      "authority_contracts": [
+        "C23"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "LifecycleEventReferencesDemoRun",
+      "decision_state": "approved",
+      "proposed_owner": "AuditLifecycle",
+      "authority_contracts": [
+        "C23"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "CommandReceiptBelongsToActor",
+      "decision_state": "approved",
+      "proposed_owner": "TransactionControl",
+      "authority_contracts": [
+        "C22"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "CommandReceiptBelongsToOrganization",
+      "decision_state": "approved",
+      "proposed_owner": "TransactionControl",
+      "authority_contracts": [
+        "C22"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "CommandReceiptScopesLocation",
+      "decision_state": "approved",
+      "proposed_owner": "TransactionControl",
+      "authority_contracts": [
+        "C22"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "AuditEventHasActor",
+      "decision_state": "approved",
+      "proposed_owner": "AuditLifecycle",
+      "authority_contracts": [
+        "C23"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "AuditEventTargetsRecord",
+      "decision_state": "approved",
+      "proposed_owner": "AuditLifecycle",
+      "authority_contracts": [
+        "C23"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "command",
+      "id": "BeginDemoRun",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "capability",
+      "id": "organization.demo.begin",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "command",
+      "id": "CreateDemoPersona",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "capability",
+      "id": "identity.demo.persona.create",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "command",
+      "id": "SwitchDemoPersona",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "capability",
+      "id": "identity.demo.persona.switch",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "command",
+      "id": "CloseDemoRun",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "capability",
+      "id": "organization.demo.close",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "command",
+      "id": "RevokeDemoSessions",
+      "decision_state": "approved",
+      "proposed_owner": "Identity",
+      "authority_contracts": [
+        "C11",
+        "C12"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "capability",
+      "id": "identity.demo.sessions.revoke",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "state_machine",
+      "id": "DemoRunStateMachine",
+      "decision_state": "approved",
+      "proposed_owner": "Organization",
+      "authority_contracts": [
+        "C13"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "decision_table",
+      "id": "DT-011",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "decision_table",
+      "id": "DT-012",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "decision_table",
+      "id": "DT-013",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "ContentPackBelongsToOrganization",
+      "decision_state": "approved",
+      "proposed_owner": "Content",
+      "authority_contracts": [
+        "C31"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "value_object",
+      "id": "ContentResponseEvaluation",
+      "decision_state": "approved",
+      "proposed_owner": "Content",
+      "authority_contracts": [
+        "C31"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "state_set",
+      "id": "AssignmentStatus",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "state_machine",
+      "id": "AssignmentStateMachine",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "AssignmentBelongsToOrganization",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "AssignmentScopesLocation",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "AssignmentReferencesContentVersion",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "ProgressEventReferencesContentVersion",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "ProgressEventReferencesContentBlock",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "LearnerStateUsesAssignment",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "relationship",
+      "id": "LearnerStateReferencesContentVersion",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "decision_table",
+      "id": "DT-009",
+      "decision_state": "approved",
+      "proposed_owner": "Content",
+      "authority_contracts": [
+        "C31"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "decision_table",
+      "id": "DT-010",
+      "decision_state": "approved",
+      "proposed_owner": "Learning",
+      "authority_contracts": [
+        "C32",
+        "C33"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "kind": "value_object",
+      "id": "CommandActor",
+      "decision_state": "approved",
+      "proposed_owner": "Authorization",
+      "authority_contracts": [
+        "C01",
+        "C14"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     }
   ],
   "approval": {
     "state": "approved",
     "approved_on": "2026-10-17",
     "owner": "Patrick Craven, Top Shelf Service LLC",
-    "record": "domains/capabilities/owner-approval.json",
-    "basis": "TEACH-SEM-CAPABILITY-NAMES-2026-10-17@0.1.1: exactly 35 added Authorization ownership assignments; all existing assignments preserved."
+    "record": "domains/demo-runtime/owner-approval.json",
+    "issue": "#82",
+    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0: exact 131-entry successor; one existing owner retained per concept."
   },
   "approval_history": [
     {
@@ -1997,6 +3575,13 @@
       "issue": "#40",
       "basis": "Owner-approved SLICE-P03 relationship ownership/scope decisions",
       "record": "persistence/physical-slices/identity-tokens/registration.json"
+    },
+    {
+      "state": "approved",
+      "approved_on": "2026-10-17",
+      "owner": "Patrick Craven, Top Shelf Service LLC",
+      "record": "domains/capabilities/owner-approval.json",
+      "basis": "TEACH-SEM-CAPABILITY-NAMES-2026-10-17@0.1.1: exactly 35 added Authorization ownership assignments; all existing assignments preserved."
     }
   ],
   "capability_name_registration": {
@@ -2156,5 +3741,674 @@
     "runtime_grants_created": false,
     "runtime_activation_authorized": false,
     "record": "domains/capabilities/registration.json"
+  },
+  "demo_runtime_registration": {
+    "registration_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+    "version": "0.1.0",
+    "approval_record": "domains/demo-runtime/owner-approval.json",
+    "package_sha256": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+    "source_baseline_commit": "14ca8c409993c9e57077d9705db022d3bfd26b1a",
+    "source_baseline_tree": "771867f1dbb47e277f90158a9f25b504bb786510",
+    "issue": "#82",
+    "registered_entries": [
+      {
+        "family": "entities",
+        "id": "Location",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "identifiers",
+        "id": "LocationId",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "entities",
+        "id": "Membership",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "identifiers",
+        "id": "MembershipId",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "entities",
+        "id": "AuditEvent",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "identifiers",
+        "id": "AuditEventId",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "entities",
+        "id": "LifecycleEvent",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "identifiers",
+        "id": "LifecycleEventId",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "values",
+        "id": "Timestamp",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "states",
+        "id": "MembershipStatus",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "state-machines",
+        "id": "MembershipStateMachine",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "LocationBelongsToOrganization",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "MembershipLinksIdentityOrganization",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "MembershipMayScopeLocation",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "LifecycleEventReferencesIdentity",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-001",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-002",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-003",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-004",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-006",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-007",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-008",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-009",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-010",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-011",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-012",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-013",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-014",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-001",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-002",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-005",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-006",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-007",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-008",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "entities",
+        "id": "DemoRun",
+        "change": "ADD"
+      },
+      {
+        "family": "identifiers",
+        "id": "DemoRunId",
+        "change": "ADD"
+      },
+      {
+        "family": "entities",
+        "id": "DemoPersona",
+        "change": "ADD"
+      },
+      {
+        "family": "identifiers",
+        "id": "DemoPersonaId",
+        "change": "ADD"
+      },
+      {
+        "family": "entities",
+        "id": "MembershipGrant",
+        "change": "ADD"
+      },
+      {
+        "family": "identifiers",
+        "id": "MembershipGrantId",
+        "change": "ADD"
+      },
+      {
+        "family": "entities",
+        "id": "ReportingRelationship",
+        "change": "ADD"
+      },
+      {
+        "family": "identifiers",
+        "id": "ReportingRelationshipId",
+        "change": "ADD"
+      },
+      {
+        "family": "entities",
+        "id": "CommandReceipt",
+        "change": "ADD"
+      },
+      {
+        "family": "identifiers",
+        "id": "CommandReceiptId",
+        "change": "ADD"
+      },
+      {
+        "family": "entities",
+        "id": "DemoExecutionPrincipal",
+        "change": "ADD"
+      },
+      {
+        "family": "identifiers",
+        "id": "DemoExecutionPrincipalId",
+        "change": "ADD"
+      },
+      {
+        "family": "states",
+        "id": "DemoRunStatus",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "DemoPersonaKind",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "DemoOrganizationClass",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "DemoRunCloseReason",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "AdmissionNetworkPrefix",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "CapabilityBundle",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "DemoAvailability",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "AuditActor",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "AuditTarget",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "AuditResult",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "LifecycleSnapshot",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "DemoRunOwnsOrganization",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "DemoRunScopesLocation",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "DemoPersonaRepresentsIdentity",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "DemoPersonaBelongsToRun",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "MembershipGrantBelongsToMembership",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "ReportingRelationshipHasManager",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "ReportingRelationshipHasLearner",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "ReportingRelationshipBelongsToOrganization",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "ReportingRelationshipScopesLocation",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "AuditEventBelongsToOrganization",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "AuditEventMayScopeLocation",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "LifecycleEventReferencesMembership",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "LifecycleEventReferencesAssignment",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "LifecycleEventReferencesDemoRun",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "CommandReceiptBelongsToActor",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "CommandReceiptBelongsToOrganization",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "CommandReceiptScopesLocation",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "AuditEventHasActor",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "AuditEventTargetsRecord",
+        "change": "ADD"
+      },
+      {
+        "family": "commands",
+        "id": "BeginDemoRun",
+        "change": "ADD"
+      },
+      {
+        "family": "capabilities",
+        "id": "organization.demo.begin",
+        "change": "ADD"
+      },
+      {
+        "family": "commands",
+        "id": "CreateDemoPersona",
+        "change": "ADD"
+      },
+      {
+        "family": "capabilities",
+        "id": "identity.demo.persona.create",
+        "change": "ADD"
+      },
+      {
+        "family": "commands",
+        "id": "SwitchDemoPersona",
+        "change": "ADD"
+      },
+      {
+        "family": "capabilities",
+        "id": "identity.demo.persona.switch",
+        "change": "ADD"
+      },
+      {
+        "family": "commands",
+        "id": "CloseDemoRun",
+        "change": "ADD"
+      },
+      {
+        "family": "capabilities",
+        "id": "organization.demo.close",
+        "change": "ADD"
+      },
+      {
+        "family": "commands",
+        "id": "RevokeDemoSessions",
+        "change": "ADD"
+      },
+      {
+        "family": "capabilities",
+        "id": "identity.demo.sessions.revoke",
+        "change": "ADD"
+      },
+      {
+        "family": "state-machines",
+        "id": "DemoRunStateMachine",
+        "change": "ADD"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-011",
+        "change": "ADD"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-012",
+        "change": "ADD"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-013",
+        "change": "ADD"
+      },
+      {
+        "family": "entities",
+        "id": "Identity",
+        "change": "REVISE"
+      },
+      {
+        "family": "entities",
+        "id": "Organization",
+        "change": "REVISE"
+      },
+      {
+        "family": "commands",
+        "id": "CreateApplicationSession",
+        "change": "REVISE"
+      },
+      {
+        "family": "commands",
+        "id": "CreateMembership",
+        "change": "REVISE"
+      },
+      {
+        "family": "values",
+        "id": "ContentVersion",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "entities",
+        "id": "ContentPack",
+        "change": "REVISE"
+      },
+      {
+        "family": "entities",
+        "id": "ContentBlock",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "identifiers",
+        "id": "ContentBlockId",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "ContentPackContainsContentBlock",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "ContentPackBelongsToOrganization",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "ContentResponseEvaluation",
+        "change": "ADD"
+      },
+      {
+        "family": "states",
+        "id": "AssignmentStatus",
+        "change": "ADD"
+      },
+      {
+        "family": "state-machines",
+        "id": "AssignmentStateMachine",
+        "change": "ADD"
+      },
+      {
+        "family": "entities",
+        "id": "Assignment",
+        "change": "REVISE"
+      },
+      {
+        "family": "relationships",
+        "id": "AssignmentBelongsToOrganization",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "AssignmentScopesLocation",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "AssignmentReferencesContentVersion",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "LearningSessionUsesAssignment",
+        "change": "REVISE"
+      },
+      {
+        "family": "entities",
+        "id": "LearningSession",
+        "change": "REVISE"
+      },
+      {
+        "family": "entities",
+        "id": "ProgressEvent",
+        "change": "REVISE"
+      },
+      {
+        "family": "relationships",
+        "id": "ProgressEventReferencesContentVersion",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "ProgressEventReferencesContentBlock",
+        "change": "ADD"
+      },
+      {
+        "family": "entities",
+        "id": "LearnerState",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "identifiers",
+        "id": "LearnerStateId",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "LearnerStateBelongsToIdentity",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "LearnerStateTracksContentPack",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "LearnerStateUsesAssignment",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "LearnerStateReferencesContentVersion",
+        "change": "ADD"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-015",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-016",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-017",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-018",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-009",
+        "change": "ADD"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-010",
+        "change": "ADD"
+      },
+      {
+        "family": "commands",
+        "id": "PublishContentPack",
+        "change": "REVISE"
+      },
+      {
+        "family": "commands",
+        "id": "AssignContent",
+        "change": "REVISE"
+      },
+      {
+        "family": "commands",
+        "id": "StartLearningSession",
+        "change": "REVISE"
+      },
+      {
+        "family": "commands",
+        "id": "RecordProgressEvent",
+        "change": "REVISE"
+      },
+      {
+        "family": "commands",
+        "id": "CompleteLearningSession",
+        "change": "REVISE"
+      },
+      {
+        "family": "state-machines",
+        "id": "LearningSessionStateMachine",
+        "change": "REVISE"
+      },
+      {
+        "family": "values",
+        "id": "CommandActor",
+        "change": "ADD"
+      }
+    ],
+    "runtime_activation_authorized": false,
+    "physical_admission_performed": false,
+    "record": "domains/demo-runtime/registration.json"
   }
 }

@@ -74,3 +74,27 @@ test('caller expected SHA mismatch prevents command execution',()=>{const f=fixt
 test('dirty source checkpoint remains UNKNOWN even when command passes',()=>{const f=fixture();try{f.write('untracked.txt','changed');assert.equal(runAuditStage(f.root,'pins',{expectedSha:null}).report.state,'UNKNOWN');}finally{f.cleanup();}});
 test('mid-check source mutation blocks checkpoint despite exit zero',()=>{const f=fixture('import {writeFileSync} from "node:fs";writeFileSync("src/modules/example/domain/a.test.ts","changed");');try{const r=runAuditStage(f.root,'pins',{expectedSha:null}).report;assert.equal(r.exit_code,0);assert.equal(r.source_unchanged,false);assert.equal(r.state,'BLOCKED');}finally{f.cleanup();}});
 test('actual child failure creates blocked retained checkpoint',()=>{const f=fixture('process.exit(4)');try{const r=runAuditStage(f.root,'pins',{expectedSha:null}).report;assert.equal(r.exit_code,4);assert.equal(r.state,'BLOCKED');}finally{f.cleanup();}});
+
+for(const mode of ['timeout','ordinary-exit'])test(`Linux bounded operation cleans worker-owned child on ${mode}`,{skip:process.platform!=='linux'},async()=>{
+ const dir=mkdtempSync(join(tmpdir(),'teach-owned-process-group-')),pidPath=join(dir,'child.pid');
+ let childPid;
+ try {
+  const childCode="process.send('ready');setInterval(()=>{},1000);";
+  const workerCode=`const {parentPort}=require('node:worker_threads');const {spawn}=require('node:child_process');const child=spawn(process.execPath,['-e',${JSON.stringify(childCode)}],{stdio:['ignore','ignore','ignore','ipc']});child.once('message',()=>parentPort.postMessage(child.pid));setInterval(()=>{},1000);`;
+  const parentCode=`const {Worker}=require('node:worker_threads');const {writeFileSync}=require('node:fs');const worker=new Worker(${JSON.stringify(workerCode)},{eval:true});worker.once('message',pid=>{writeFileSync(${JSON.stringify(pidPath)},String(pid));${mode==='ordinary-exit'?"worker.terminate().then(()=>process.exit(0));":"setInterval(()=>{},1000);"}});`;
+  const result=runBounded(process.execPath,['-e',parentCode],{root:dir,timeoutMs:500});
+  childPid=Number(readFileSync(pidPath,'utf8'));assert.ok(Number.isInteger(childPid)&&childPid>1);
+  assert.equal(result.timed_out,mode==='timeout');
+  if(mode==='ordinary-exit'){assert.equal(result.exit_code,0);assert.equal(result.execution_error,null);}
+  else assert.equal(result.execution_error,'ETIMEDOUT');
+  assert.ok(result.duration_ms<2000);
+  await new Promise(resolve=>setTimeout(resolve,30));
+  let state;
+  try{state=readFileSync(`/proc/${childPid}/stat`,'utf8').match(/\)\s+([A-Z])/)[1];}
+  catch(error){if(error.code!=='ENOENT')throw error;}
+  assert.ok(state===undefined||state==='Z'||state==='X',`owned child remains executable in state ${state}`);
+ } finally {
+  if(Number.isInteger(childPid))try{process.kill(childPid,'SIGKILL');}catch(error){if(error.code!=='ESRCH')throw error;}
+  rmSync(dir,{recursive:true,force:true});
+ }
+});

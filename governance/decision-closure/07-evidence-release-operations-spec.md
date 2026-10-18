@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-PROP-DCS-07",
   "class": "specification",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-05",
-  "updated_on": "2026-10-05",
+  "updated_on": "2026-10-17",
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
@@ -40,15 +40,16 @@
   "confirms_recommendation": [
     "OQ-OBS-1"
   ],
-  "effective_on": "2026-10-05",
+  "effective_on": "2026-10-17",
   "approval": {
     "state": "approved",
-    "approved_on": "2026-10-05",
-    "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "SYS-21 #75; manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
+    "approved_on": "2026-10-17",
+    "record": "domains/demo-runtime/owner-approval.json",
+    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82"
   },
   "supersedes": [
-    "TEACH-PROP-DCS-07@0.3.0"
+    "TEACH-PROP-DCS-07@0.3.0",
+    "TEACH-PROP-DCS-07@1.0.0"
   ]
 }
 -->
@@ -60,8 +61,8 @@ Registered on 2026-10-05 by the owner-approved r3.1 manifest under SYS-21 #75. T
 
 | Field | Value |
 | --- | --- |
-| Status | `proposed` |
-| Owner decision | Approved in chat 2026-10-05 04:05 America/Chicago (decision sheet A–D). Registration PENDING under SYS-21 #75; this document stays `proposed` until it lands. |
+| Status | `active` logical authority; implementation conformance UNKNOWN; no route mounting or physical admission |
+| Owner decision | Prior #75 selections preserved except explicit #82 changes; exact demo approval in `domains/demo-runtime/owner-approval.json` |
 | Resolves if approved | `OQ-EVD-1`, `OQ-EVD-3`, `OQ-REL-3`, `OQ-MIG-3`, `OQ-MIG-4`, `OQ-OBS-2`, `OQ-AUD-2`, `OQ-AUD-3` |
 | Split (supplied part registers, value stays open) | `OQ-EVD-2` (duration, archive location), `OQ-TXN-2` (email and OAuth providers) |
 | Owner confirmation needed | `OQ-OBS-1` (Sentry recommendation; alert destination unknown) |
@@ -152,7 +153,7 @@ Plus an HTTP probe: `GET https://<project>.supabase.co/rest/v1/identity_identiti
 
 ## 6. OQ-AUD-2 and OQ-AUD-3 — audit history and denial records
 
-**AUD-2 (owner-supplied):** Identity, Membership, Assignment, Certification are reconstructable. Requirement: every state transition of those entities appends a LifecycleEvent in the same transaction; a replay test folds the events for each entity and must equal the current row's lifecycle fields. Projections (team lists, dashboards) are rebuilt from canonical state, never treated as canonical.
+**AUD-2 (owner-supplied):** Identity, Membership, Assignment, DemoRun and Certification are reconstructable. Requirement: every state transition of those entities appends a LifecycleEvent in the same transaction; a replay test folds the events for each entity and must equal the current row's lifecycle fields. Projections (team lists, dashboards) are rebuilt from canonical state, never treated as canonical.
 
 **AUD-3 (owner-supplied classes; engineering-proposed limits):**
 
@@ -165,7 +166,7 @@ Plus an HTTP probe: `GET https://<project>.supabase.co/rest/v1/identity_identiti
 | `ORIGIN` (403 CSRF) | Yes | operation, origin class (missing / null / foreign), request ID |
 | `VALIDATION` (400) and plain 401 with no session | **No** | — |
 
-Deduplication: one row per (actor or IP prefix, class, operation, 5-minute bucket) with a `count`. Cap: 100 rows per actor per hour; beyond the cap the counter increments in memory and one overflow row is written per hour. Denial records follow the 1-year audit retention and the AUD-4 immutability rule.
+Deduplication: one row per (actor or IP prefix, class, operation, 5-minute bucket) using an immutable insert-only uniqueness key, without updating a stored audit-row count. Cap: 100 rows per actor per hour; beyond the cap the counter increments in memory and one overflow row is written per hour. Denial records follow the 1-year audit retention and the AUD-4 immutability rule.
 
 ## 7. OQ-REL-3 — deployed smoke test (REL-8)
 
@@ -244,3 +245,9 @@ Registers now: in scope = email delivery and OAuth sign-in; payments disabled. R
 | 0.1.0 | 2026-10-05 | Initial proposed specification; adds Supabase default-exposure release blocker. |
 | 0.2.0 | 2026-10-05 | Revised on `6553eb4`: added the closure-observer change from #74 (PR runs skipped, not BLOCKED) and its EVD-14 constraint; all target contract versions re-checked unchanged; narrowed-residual naming fixed; owner chat approval (including Sentry confirmation) recorded, registration pending #75. |
 | 0.3.0 | 2026-10-05 | Audit correction: Supabase premise reworded — exposure is project-specific (opt-in default for new projects from 2026-05-30, enforced on existing projects 2026-10-30) and must be proven by readback from the target project; release blocker kept, with an explicit readback table (finding 5). |
+
+## Exact synthetic audit and replay (#82)
+
+For the synthetic scope, Identity, Membership, Assignment and DemoRun lifecycle snapshots are finite, versioned, append-only, transaction-bound and replay exactly to current lifecycle fields. No candidate business event is promoted. AuditActor/AuditTarget unions and redacted fields are exactly those in the approved authority-and-audit.md. Denial dedup uses an immutable insert-only unique key per five-minute bucket, not mutation of an audit row counter; 100 rows/actor/hour and one overflow row/hour remain. This package creates no audit purge, production permission or verification evidence.
+
+Exact owner approval: `domains/demo-runtime/owner-approval.json`; immutable governing definitions: `domains/demo-runtime/proposal-0.1.0/demo-boundary.md` and `domains/demo-runtime/proposal-0.1.0/authority-and-audit.md`. No implementation success is claimed by this logical registration.

@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-PROP-DCS-04",
   "class": "specification",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-05",
-  "updated_on": "2026-10-05",
+  "updated_on": "2026-10-17",
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
@@ -26,15 +26,16 @@
     "OQ-SES-6",
     "OQ-SES-7"
   ],
-  "effective_on": "2026-10-05",
+  "effective_on": "2026-10-17",
   "approval": {
     "state": "approved",
-    "approved_on": "2026-10-05",
-    "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "SYS-21 #75; manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
+    "approved_on": "2026-10-17",
+    "record": "domains/demo-runtime/owner-approval.json",
+    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82"
   },
   "supersedes": [
-    "TEACH-PROP-DCS-04@0.3.0"
+    "TEACH-PROP-DCS-04@0.3.0",
+    "TEACH-PROP-DCS-04@1.0.0"
   ]
 }
 -->
@@ -46,8 +47,8 @@ Registered on 2026-10-05 by the owner-approved r3.1 manifest under SYS-21 #75. T
 
 | Field | Value |
 | --- | --- |
-| Status | `proposed` — no cookie, origin, DNS, Vercel or route setting is changed or authorized by this document |
-| Owner decision | Approved in chat 2026-10-05 04:05 America/Chicago (decision sheet A–D). Registration PENDING under SYS-21 #75; this document stays `proposed` until it lands. |
+| Status | `active` logical authority; implementation conformance UNKNOWN; no route mounting or physical admission |
+| Owner decision | Prior #75 selections preserved except explicit #82 changes; exact demo approval in `domains/demo-runtime/owner-approval.json` |
 | Resolves if approved | `OQ-SES-1` (SES-5), `OQ-SES-2` (SES-6), `OQ-SES-5` (SES-18), `OQ-SES-6` (SES-19), `OQ-SES-7` |
 | Owner confirmations needed | `OQ-SES-1` and `OQ-SES-2` are **recommendations** in the register. Approving this document is the confirmation. Rejecting either sends that row back to the owner with these values preserved. |
 | Already binding (not changed here) | SES-3 32-byte credential; SES-8 v1 verifier; SES-11 12 h absolute / 30 min idle; OQ-REL-1 Vercel + Supabase |
@@ -200,3 +201,9 @@ No count limit. Every session expires by SES-11 and can be revoked individually 
 | 0.1.0 | 2026-10-05 | Initial proposed session/transport specification from recorded SES answers and recommendations. |
 | 0.2.0 | 2026-10-05 | Re-checked on `6553eb4`: C12 still 1.1.0 with OQ-SES-1/2/5/6/7 open; no content change. Owner chat approval (including confirmation of the SES-1/SES-2 recommendations) recorded; registration pending #75. |
 | 0.3.0 | 2026-10-05 | Audit corrections: HSTS no longer sets `includeSubDomains` (finding 7); SES-AC-15…24 renamed TRS-1…10 and no acceptance IDs are appended to C12 (finding 1). |
+
+## Synthetic session applicability (#82)
+
+BeginDemoRun and SwitchDemoPersona are exact additional internal callers of CreateApplicationSession only after their approved synthetic admission proof. All existing cookie/verifier/rotation/Origin/revocation rules remain. The immutable 60-minute run deadline is an additional fence on every demo session request, including SELF, not a replacement lifetime. Switch canonically revokes all active run sessions and issues one counterpart only after transaction commit. At most 100 lifetime issuances per run are counted authoritatively by Identity under the run lock. Rejection preserves the current session; close/expiry remains available. Normal sessions are never silently replaced by anonymous entry; no secret is replay-stored or automatically reissued.
+
+Exact owner approval: `domains/demo-runtime/owner-approval.json`; immutable governing definitions: `domains/demo-runtime/proposal-0.1.0/demo-boundary.md` and `domains/demo-runtime/proposal-0.1.0/authority-and-audit.md`. No implementation success is claimed by this logical registration.

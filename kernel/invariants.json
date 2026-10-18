@@ -4,7 +4,7 @@
     {
       "id": "INV-001",
       "kind": "invariant",
-      "status": "candidate",
+      "status": "approved",
       "name": "SingleAuthoritativeOwnerPerMutableFact",
       "scope": "system",
       "owning_domain": "Governance",
@@ -19,12 +19,24 @@
         "SEM-20"
       ],
       "assertion": "Every mutable authoritative fact has exactly one owning contract/domain and exactly one permitted writer; foreign domains request change through the owner boundary.",
-      "failure_behavior": "Reject direct foreign-owner mutation."
+      "failure_behavior": "Reject direct foreign-owner mutation.",
+      "definition": "Every mutable authoritative fact has exactly one owning contract/domain and exactly one permitted writer; foreign domains request change through the owner boundary.",
+      "requires": [],
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "INV-002",
       "kind": "invariant",
-      "status": "candidate",
+      "status": "approved",
       "name": "UnknownAuthorityFailsClosed",
       "scope": "security",
       "owning_domain": "Authorization",
@@ -39,12 +51,24 @@
         "AUTHZ-5"
       ],
       "assertion": "Unknown, unavailable, ambiguous, or unregistered authority never becomes permission.",
-      "failure_behavior": "Deny before protected handler or side effect."
+      "failure_behavior": "Deny before protected handler or side effect.",
+      "definition": "Unknown, unavailable, ambiguous, or unregistered authority never becomes permission.",
+      "requires": [],
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "INV-003",
       "kind": "invariant",
-      "status": "candidate",
+      "status": "approved",
       "name": "CandidateSemanticsAreNotImplementationAuthority",
       "scope": "semantic-kernel",
       "owning_domain": "Governance",
@@ -58,12 +82,24 @@
         "SEM-30"
       ],
       "assertion": "A candidate semantic entry cannot authorize merged implementation and cannot become approved without explicit owner approval.",
-      "failure_behavior": "Block merge/activation."
+      "failure_behavior": "Block merge/activation.",
+      "definition": "A candidate semantic entry cannot authorize merged implementation and cannot become approved without explicit owner approval.",
+      "requires": [],
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "INV-004",
       "kind": "invariant",
-      "status": "candidate",
+      "status": "approved",
       "name": "CanonicalStateClosedWorld",
       "scope": "lifecycle",
       "owning_domain": "Governance",
@@ -76,7 +112,19 @@
         "SEM-32"
       ],
       "assertion": "Canonical state values and lifecycle transitions are closed sets; an unregistered state or transition is invalid.",
-      "failure_behavior": "Reject transition and persistence."
+      "failure_behavior": "Reject transition and persistence.",
+      "definition": "Canonical state values and lifecycle transitions are closed sets; an unregistered state or transition is invalid.",
+      "requires": [],
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "INV-005",
@@ -102,7 +150,7 @@
     {
       "id": "INV-006",
       "kind": "invariant",
-      "status": "candidate",
+      "status": "approved",
       "name": "IdempotencyKeyPayloadBinding",
       "scope": "transaction-control",
       "owning_domain": "TransactionControl",
@@ -114,12 +162,24 @@
         "TXN-4"
       ],
       "assertion": "The same idempotency key with the same payload yields the same final state/response; the same key with a different payload is rejected.",
-      "failure_behavior": "Reject mismatched reuse with zero side effect."
+      "failure_behavior": "Reject mismatched reuse with zero side effect.",
+      "definition": "The same idempotency key with the same payload yields the same final state/response; the same key with a different payload is rejected.",
+      "requires": [],
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "INV-007",
       "kind": "invariant",
-      "status": "candidate",
+      "status": "approved",
       "name": "RetryDoesNotDuplicateAuthoritativeEffects",
       "scope": "transaction-control",
       "owning_domain": "TransactionControl",
@@ -134,12 +194,24 @@
         "CERT-10"
       ],
       "assertion": "Retry or concurrent replay cannot create duplicate authoritative effects.",
-      "failure_behavior": "Return/reconcile the original effect."
+      "failure_behavior": "Return/reconcile the original effect.",
+      "definition": "Retry or concurrent replay cannot create duplicate authoritative effects.",
+      "requires": [],
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "INV-008",
       "kind": "invariant",
-      "status": "candidate",
+      "status": "approved",
       "name": "AtomicMultiWriteOutcome",
       "scope": "transaction-control",
       "owning_domain": "TransactionControl",
@@ -152,12 +224,24 @@
         "CERT-9"
       ],
       "assertion": "Operations required to succeed together commit atomically; no partial result is observable.",
-      "failure_behavior": "Rollback the unit."
+      "failure_behavior": "Rollback the unit.",
+      "definition": "Operations required to succeed together commit atomically; no partial result is observable.",
+      "requires": [],
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "INV-009",
       "kind": "invariant",
-      "status": "candidate",
+      "status": "approved",
       "name": "TenantBoundaryIsAuthoritative",
       "scope": "organization",
       "owning_domain": "Organization",
@@ -174,12 +258,24 @@
         "PRIV-3"
       ],
       "assertion": "Protected reads and writes cannot cross authoritative organization/location scope.",
-      "failure_behavior": "Non-disclosing denial; zero foreign-tenant mutation."
+      "failure_behavior": "Non-disclosing denial; zero foreign-tenant mutation.",
+      "definition": "Protected reads and writes cannot cross authoritative organization/location scope.",
+      "requires": [],
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "INV-010",
       "kind": "invariant",
-      "status": "candidate",
+      "status": "approved",
       "name": "MembershipScopeUsesDatabaseCurrentState",
       "scope": "organization",
       "owning_domain": "Organization",
@@ -194,12 +290,24 @@
         "AUTHZ-10"
       ],
       "assertion": "Membership/scope authority is resolved from current authoritative records on each protected request; inactive/revoked membership confers no scope.",
-      "failure_behavior": "Deny."
+      "failure_behavior": "Deny.",
+      "definition": "Membership/scope authority is resolved from current authoritative records on each protected request; inactive/revoked membership confers no scope.",
+      "requires": [],
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "INV-011",
       "kind": "invariant",
-      "status": "candidate",
+      "status": "approved",
       "name": "ClientInputCannotCreateAuthority",
       "scope": "authorization",
       "owning_domain": "Authorization",
@@ -213,12 +321,24 @@
         "AUTHZ-17"
       ],
       "assertion": "Client-supplied IDs, headers, path/query/body values, frontend state, and JWT claims cannot establish tenant, target, or authorization authority.",
-      "failure_behavior": "Resolve server-side authority or deny."
+      "failure_behavior": "Resolve server-side authority or deny.",
+      "definition": "Client-supplied IDs, headers, path/query/body values, frontend state, and JWT claims cannot establish tenant, target, or authorization authority.",
+      "requires": [],
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "INV-012",
       "kind": "invariant",
-      "status": "candidate",
+      "status": "approved",
       "name": "ProtectedOperationsDefaultDeny",
       "scope": "authorization",
       "owning_domain": "Authorization",
@@ -233,12 +353,24 @@
         "AUTHZ-6"
       ],
       "assertion": "Every protected operation is registered exactly once to one capability; absence from the registry is denial.",
-      "failure_behavior": "Fail CI/startup or deny request."
+      "failure_behavior": "Fail CI/startup or deny request.",
+      "definition": "Every protected operation is registered exactly once to one capability; absence from the registry is denial.",
+      "requires": [],
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "INV-013",
       "kind": "invariant",
-      "status": "candidate",
+      "status": "approved",
       "name": "EntitlementCannotCreateCapability",
       "scope": "authorization",
       "owning_domain": "Authorization",
@@ -250,12 +382,24 @@
         "AUTHZ-21"
       ],
       "assertion": "Entitlement may restrict capability effect but cannot create a capability and is read-only to authorization.",
-      "failure_behavior": "Deny unauthorized effect; reject authorization-owned entitlement mutation."
+      "failure_behavior": "Deny unauthorized effect; reject authorization-owned entitlement mutation.",
+      "definition": "Entitlement may restrict capability effect but cannot create a capability and is read-only to authorization.",
+      "requires": [],
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "INV-014",
       "kind": "invariant",
-      "status": "candidate",
+      "status": "approved",
       "name": "DeniedProtectedMutationHasNoSideEffect",
       "scope": "authorization",
       "owning_domain": "Authorization",
@@ -267,12 +411,24 @@
         "AUTHZ-15"
       ],
       "assertion": "A denied protected mutation produces no state change or external side effect except explicitly permitted audit.",
-      "failure_behavior": "Zero mutation/external effect."
+      "failure_behavior": "Zero mutation/external effect.",
+      "definition": "A denied protected mutation produces no state change or external side effect except explicitly permitted audit.",
+      "requires": [],
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "INV-015",
       "kind": "invariant",
-      "status": "candidate",
+      "status": "approved",
       "name": "PublishedContentVersionIsImmutable",
       "scope": "content",
       "owning_domain": "Content",
@@ -285,12 +441,33 @@
         "CNT-6"
       ],
       "assertion": "Only valid content can be published/assigned; a published content identity+version never changes in place.",
-      "failure_behavior": "Reject invalid or in-place mutation; require new version."
+      "failure_behavior": "Reject invalid or in-place mutation; require new version.",
+      "definition": "Only valid content can be published/assigned; a published content identity+version never changes in place.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "constraints": [
+        "Validation includes schema/version/digest/unique block IDs and owner-scope binding."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "INV-016",
       "kind": "invariant",
-      "status": "candidate",
+      "status": "approved",
       "name": "ContentExistenceDoesNotGrantAccess",
       "scope": "content",
       "owning_domain": "Content",
@@ -303,12 +480,33 @@
         "CNT-10"
       ],
       "assertion": "Content existence or possession of a content ID does not grant access; assignment and authorization are independent required facts.",
-      "failure_behavior": "Non-disclosing denial."
+      "failure_behavior": "Non-disclosing denial.",
+      "definition": "Content existence or possession of a content ID does not grant access; assignment and authorization are independent required facts.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        }
+      ],
+      "constraints": [
+        "Current grant plus ACTIVE own Assignment are required; ID possession is never sufficient."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "INV-017",
       "kind": "invariant",
-      "status": "candidate",
+      "status": "approved",
       "name": "LearningSessionMutationRequiresActiveState",
       "scope": "learning",
       "owning_domain": "Learning",
@@ -319,12 +517,37 @@
         "LRN-3"
       ],
       "assertion": "Learning progress events are accepted only in ACTIVE sessions; COMPLETED is terminal.",
-      "failure_behavior": "Reject post-completion or unregistered transition/event."
+      "failure_behavior": "Reject post-completion or unregistered transition/event.",
+      "definition": "Learning progress events are accepted only in ACTIVE sessions; COMPLETED is terminal.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "states",
+          "id": "LearningSessionStatus"
+        }
+      ],
+      "constraints": [
+        "Serialize append and completion on the same session; no new append after completion."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "INV-018",
       "kind": "invariant",
-      "status": "candidate",
+      "status": "approved",
       "name": "LearningProgressIsServerAuthoritative",
       "scope": "learning",
       "owning_domain": "Learning",
@@ -339,7 +562,32 @@
         "LRN-11"
       ],
       "assertion": "Real learning progress derives from persisted canonical learner events/state with content identity/version; client-only values cannot be authoritative progress.",
-      "failure_behavior": "Do not record/display client-only progress as real."
+      "failure_behavior": "Do not record/display client-only progress as real.",
+      "definition": "Real learning progress derives from persisted canonical learner events/state with content identity/version; client-only values cannot be authoritative progress.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "constraints": [
+        "Deterministic server evaluation and read projection use only persisted evidence bound to immutable content; no client success field or numerical score."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "INV-019",
