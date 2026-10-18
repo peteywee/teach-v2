@@ -1,0 +1,33 @@
+{
+  "reuse_id": "TEACH-LEGACY-UI-H02",
+  "baseline": {
+    "commit": "acd320375849bb596857842abecdfa679689b0d9",
+    "tree": "27fb4e94d125952887101615343f3c52cfb90b1d"
+  },
+  "source": {
+    "repository": "peteywee/teach",
+    "commit": "99162f17eace95238160f20c03e0b47af2c77fcd",
+    "path": "brand/brand/TopShelfService_Logo_Trace.svg",
+    "git_blob": "d649cab26bc6a07a7455ca8aa77a12687a856550",
+    "sha256": "1cf758e284d37d6f26dac3e519307ed848a138bdf95de958c60f88adc684229d",
+    "bytes": 28841
+  },
+  "preserved_original": "docs/legacy-ui-reuse/TopShelfService_Logo_Trace.svg",
+  "served_representation": {
+    "file": "src/web/demo/views.mjs",
+    "constant": "legacyBrandIllustration",
+    "sha256": "a6b74027f0abe6ae9f522dac9f4486e89f7f0912da982311032be0085ad43d25",
+    "transformations": [
+      "Remove the redundant XML namespace attribute for inline HTML SVG.",
+      "Add aria-hidden=\"true\" and focusable=\"false\" on the root."
+    ],
+    "geometry_and_colors": "Unchanged; all original inner SVG bytes preserved.",
+    "network_assets_added": 0
+  },
+  "rights": "User requested reuse of their preserved legacy assets for this local-only work. No independent authorship or third-party rights clearance is claimed. No external publication is authorized.",
+  "guidance_source": {
+    "commit": "79fdce5cc3b207750888e5c2c1c198159ad17077",
+    "path": "apps/web/src/app/(app)/learn/[courseId]/page.tsx",
+    "reuse": "On-request help pattern only; newly authored navigation guidance, no legacy help engine, answer hints or evaluation rules."
+  }
+}

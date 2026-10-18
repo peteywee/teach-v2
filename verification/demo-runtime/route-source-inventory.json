@@ -118,8 +118,8 @@
     "src/web/demo/assets.json": "e17024f7dfc5c7978af159e6370f58379068c42686b4aa63d39f654e6238a1c4",
     "src/web/demo/controller.mjs": "4c76f655b8405c01865b68e0c57e50143ebc200654e61770797809640468e8dc",
     "src/web/demo/index.html": "63806ab9d35adb581b59b9383237d0dda15e3aa162ea5dc922000682094b8866",
-    "src/web/demo/styles.css": "53fc83fec14518b10caddc72c5bfa29f5c21aacd1bb37cd541d5ee6a19d0f9e6",
-    "src/web/demo/views.mjs": "62686f104c658c0761cf32bbbcb77104bd26eaa3871ffd749c16a581a1649b29",
+    "src/web/demo/styles.css": "6d665fee7909be3effa374111f475bae18730b61a090366375a92cc7b34829d2",
+    "src/web/demo/views.mjs": "d8830b79e7d1e9b6dab8d587546d713f2490c7be27841e2cb0ac3c9dcc580d6d",
     "src/web/demo/wire-contract.mjs": "1ef60e6d05cace24e45175583c98c172d9954c16a1e3adaa118e53b74d94d257"
   },
   "routes": [
