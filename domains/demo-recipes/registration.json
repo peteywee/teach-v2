@@ -1,0 +1,119 @@
+{
+  "registration_id": "TEACH-DEMO-RECIPES-2026-10-18",
+  "version": "0.1.1",
+  "state": "REGISTERED_BOUNDED_CONTENT_AND_GUARD_ONLY",
+  "package_id": "TEACH-DEMO-RECIPES-2026-10-18",
+  "package_version": "0.1.1",
+  "package_sha256sums_digest": "b5f80daf1d94ecbccb1a01f3e58be3fc98d32564567b1cf03fd5c639eb435255",
+  "source_baseline_commit": "2ad83bfce7d5c460f9f5f383a36491d9188de916",
+  "source_baseline_tree": "75e7e88a85ccb9145767e70c35f620f15e9fbd31",
+  "source_baseline_sha256": "369990712fa57e7d73a3eb294a50c6b455ddccf901b37bfeda591170f753516b",
+  "approval_record": "domains/demo-recipes/owner-approval.json",
+  "approval_sha256": "a7d5d653bdfd6d3d34c43189b4c265fa663e880662d51064d59b48888a25177c",
+  "immutable_proposal": "domains/demo-recipes/proposal-0.1.1",
+  "issue": "#88",
+  "issue_url": "https://github.com/peteywee/teach-v2/issues/88",
+  "registered_on": "2026-10-18",
+  "predecessor_registration": {
+    "path": "domains/demo-runtime/registration.json",
+    "sha256": "b94cf7c7c9bab35ad2454470295ae2b04b8814bd0ac55c282cdd3dd6df67218d",
+    "package_sha256sums_digest": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a"
+  },
+  "contracts": [
+    {
+      "contract": "C31",
+      "path": "contracts/c31-content-teaching-engine-contract.md",
+      "from": "1.3.0",
+      "to": "1.4.0",
+      "superseded_copy": "contracts/superseded/c31-content-teaching-engine-contract-1.3.0.md",
+      "before_sha256": "f87767300bd8816b38a5b9a5e84610f349eec803d09d16406d0ad037afd7fa74",
+      "after_sha256": "a6faa3aa61015a1bde940a9a21ed652f06ede7c95612497bdf4074f5e4dfd60d",
+      "superseded_sha256": "02d51fa1d4fea256170cbd4394bb761be9617ecffafb7046b170fd228c395f7d"
+    },
+    {
+      "contract": "C41",
+      "path": "contracts/c41-api-boundary-contract.md",
+      "from": "1.2.0",
+      "to": "1.3.0",
+      "superseded_copy": "contracts/superseded/c41-api-boundary-contract-1.2.0.md",
+      "before_sha256": "2f627be9fb0675eeb0169b066976ae88bf3e79dfee14d76e2ddb4c99178ac81b",
+      "after_sha256": "191759a7f20862f5e4dafdc81a13b80987d29fcb3cc0d20fd5bb4754a088d71a",
+      "superseded_sha256": "950d5903256222f27ddcc726ba2e5fb369d66257edaa4c40beebef4986b20ead"
+    },
+    {
+      "contract": "C42",
+      "path": "contracts/c42-web-client-boundary-contract.md",
+      "from": "1.2.0",
+      "to": "1.3.0",
+      "superseded_copy": "contracts/superseded/c42-web-client-boundary-contract-1.2.0.md",
+      "before_sha256": "545b96ca42401ce35a30151b3b805ed0b7cc5603f45399d6a8b6328a413bdb36",
+      "after_sha256": "9a4e47b396a7867175abaf18eabb8ff290486c050fbdf5d9ac3f08730dac512e",
+      "superseded_sha256": "55a1658200b3e840997a4fd9b77affc71f23655cba6a56fa873289c2c261a57a"
+    }
+  ],
+  "authority_file_hashes": {
+    "contracts/c31-content-teaching-engine-contract.md": "a6faa3aa61015a1bde940a9a21ed652f06ede7c95612497bdf4074f5e4dfd60d",
+    "contracts/c41-api-boundary-contract.md": "191759a7f20862f5e4dafdc81a13b80987d29fcb3cc0d20fd5bb4754a088d71a",
+    "contracts/c42-web-client-boundary-contract.md": "9a4e47b396a7867175abaf18eabb8ff290486c050fbdf5d9ac3f08730dac512e",
+    "contracts/README.md": "52cfc226f6c94d948c860086f76b5b005c7b22d4285b1b4efa794df3e2166000",
+    "contracts/APPROVAL-RECORD.md": "992c4c4c592f98c6c0aed7a426328d7788c832d8332d89997a74a4eca0325ef2",
+    "contracts/superseded/c31-content-teaching-engine-contract-1.3.0.md": "02d51fa1d4fea256170cbd4394bb761be9617ecffafb7046b170fd228c395f7d",
+    "contracts/superseded/c41-api-boundary-contract-1.2.0.md": "950d5903256222f27ddcc726ba2e5fb369d66257edaa4c40beebef4986b20ead",
+    "contracts/superseded/c42-web-client-boundary-contract-1.2.0.md": "55a1658200b3e840997a4fd9b77affc71f23655cba6a56fa873289c2c261a57a",
+    "kernel/content-schema-reference-successor.json": "4d1a61727f434c1536514cffdb388648d13ad0306b1e0940e4764a16c9868101"
+  },
+  "evidence_hashes": {
+    "domains/demo-recipes/README.md": "8d36695ca548c9d31b3f76a9d7ebe25a0c93b381238eb09b59cbe0832a44cd8f",
+    "domains/demo-recipes/owner-approval.json": "a7d5d653bdfd6d3d34c43189b4c265fa663e880662d51064d59b48888a25177c",
+    "domains/demo-recipes/source-baseline.json": "369990712fa57e7d73a3eb294a50c6b455ddccf901b37bfeda591170f753516b"
+  },
+  "exact_content_schema_versions": [
+    "1.0.0",
+    "1.1.0"
+  ],
+  "exact_public_content_schema_versions": [
+    "1.0.0",
+    "1.1.0"
+  ],
+  "new_synthetic_template_version": "1.1.0",
+  "recipe_count": 3,
+  "new_semantic_entries": 0,
+  "new_tables": 0,
+  "new_migrations": 1,
+  "new_routes": 0,
+  "new_capabilities": 0,
+  "api_route_count": 15,
+  "served_asset_path_count": 7,
+  "independent_verification": "NOT_ESTABLISHED_BY_REGISTRATION",
+  "implementation_conformance": "UNKNOWN",
+  "runtime_activation_authorized": false,
+  "physical_admission_performed": false,
+  "shared_or_production_execution_authorized": false,
+  "hosting_authorized": false,
+  "spending_authorized": false,
+  "live_database_changes_authorized": false,
+  "meaning": "Exact bounded content/read/UI and additive strict guard registration only. Independent physical review/admission, implementation evidence and local activation remain separate gates.",
+  "preserved_predecessor_proposal": {
+    "path": "domains/demo-recipes/proposal-0.1.0",
+    "version": "0.1.0",
+    "sha256sums_digest": "51e6cec2b309ca3a14c9ef5f1b8b9f6603c53ec3c4d350602996cf1b6c07b539"
+  },
+  "schema_reference_projection": {
+    "path": "kernel/content-schema-reference-successor.json",
+    "sha256": "4d1a61727f434c1536514cffdb388648d13ad0306b1e0940e4764a16c9868101"
+  },
+  "physical_extension": {
+    "allowed_migration_count": 1,
+    "target_function": "public.content_guard_demo_version",
+    "exact_content_schema_versions": [
+      "1.0.0",
+      "1.1.0"
+    ],
+    "independent_review_required": true,
+    "separate_physical_admission_required": true,
+    "execution_scope": "DISPOSABLE_LOCAL_ONLY",
+    "historical_migrations_immutable": true,
+    "new_database_or_table_authorized": false,
+    "live_data_changes_authorized": false
+  }
+}

@@ -271,7 +271,12 @@
         "tests/demo-web/views.test.mjs",
         "scripts/tests/demo-route-inventory.mjs",
         "scripts/tests/demo-storage-evidence.mjs",
-        "scripts/tests/demo-validator-predecessor.mjs"
+        "scripts/tests/demo-validator-predecessor.mjs",
+        "tests/demo/recipe-content.test.ts",
+        "tests/demo-web/recipe-api.test.mjs",
+        "tests/demo-web/recipes.test.mjs",
+        "scripts/tests/validate-demo-recipes-registration.mjs",
+        "scripts/tests/validate-demo-recipes-physical-successor.mjs"
       ],
       "timeout_ms": 25000
     },

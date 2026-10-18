@@ -50,6 +50,21 @@ test('every nested required Begin audit failure rolls back all scoped records an
   }
 });
 
+test('recipe references are persisted in the same immutable ContentPack and browsing saves no learning records',async()=>{
+  const v=visitor();await v.call('BeginDemoRun');const a=(await v.call('ListOwnAssignments')).items[0].assignment;
+  const params={contentPackId:a.contentPackId,contentVersion:a.contentVersion.version};
+  const pack=await v.call('ReadAssignedContentVersion',{},params);
+  assert.equal(pack.schemaVersion,'1.1.0');assert.equal(pack.recipes.length,3);assert.equal(pack.blocks.length,3);
+  assert.ok(pack.recipes.every((r:any)=>r.title.startsWith('Fictional sample:')&&r.reference==='General handoff practice'));
+  assert.deepEqual(pack.contentVersion,a.contentVersion);
+  const persisted=(await pool.query('SELECT canonical_json,digest FROM content_pack_versions WHERE content_pack_id=$1 AND version=$2',[a.contentPackId,a.contentVersion.version])).rows[0];
+  assert.deepEqual(JSON.parse(persisted.canonical_json).recipes,pack.recipes);assert.equal(persisted.digest,a.contentVersion.digest);
+  assert.deepEqual(await v.call('ReadAssignedContentVersion',{},params),pack);
+  assert.equal(await count('learning_sessions'),0);assert.equal(await count('learning_progress_events'),0);
+  const other=visitor();await other.call('BeginDemoRun');await assert.rejects(other.call('ReadAssignedContentVersion',{},params),code('NOT_FOUND'));
+  await v.call('SwitchDemoPersona',{...v.scope,persona:'MANAGER'});await assert.rejects(v.call('ReadAssignedContentVersion',{},params),code('FORBIDDEN'));
+});
+
 test('concurrent identical start and response requests persist one effect and original receipt',async()=>{
   const v=visitor();await v.call('BeginDemoRun');const a=(await v.call('ListOwnAssignments')).items[0].assignment;
   const started=await Promise.all(Array.from({length:8},()=>v.call('StartLearningSession',{assignmentId:a.id},{},'parallel_start_12345')));

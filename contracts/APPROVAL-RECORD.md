@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-17",
+  "updated_on": "2026-10-18",
   "effective_on": "2026-10-03",
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -17,7 +17,18 @@
   },
   "depends_on": [
     "contracts/"
-  ]
+  ],
+  "demo_recipes_registration": {
+    "package": "TEACH-DEMO-RECIPES-2026-10-18@0.1.1",
+    "approval_record": "domains/demo-recipes/owner-approval.json",
+    "issue": "#88",
+    "source_package": "domains/demo-recipes/proposal-0.1.1",
+    "sha256sums_sha256": "b5f80daf1d94ecbccb1a01f3e58be3fc98d32564567b1cf03fd5c639eb435255",
+    "semantic_authority_only": true,
+    "physical_schema_admission": false,
+    "runtime_activation": false,
+    "deployment_authority": false
+  }
 }
 -->
 
@@ -25,8 +36,8 @@
 
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
-- Last updated: 2026-10-05
-- Contract package version: `0.19.0`
+- Last updated: 2026-10-18
+- Contract package version: `0.20.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -474,3 +485,18 @@ Patrick Craven explicitly approved `approve decision-closure manifest sha256:ff7
 Owner approval: `domains/demo-runtime/owner-approval.json`. Approved package: `TEACH-DEMO-RUNTIME-2026-10-17@0.1.0`; SHA-256 of SHA256SUMS: `a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a`. SYS-21 issue: https://github.com/peteywee/teach-v2/issues/82.
 
 Registers only the exact contract, semantic and application-interface revisions in the approved immutable package. The approval includes registration and local isolated implementation after admission checks; it does not establish physical admission or runtime evidence, nor authorize shared deployment. Prior approvals remain historical evidence. The revision/version and preservation manifest is `governance/decision-closure/demo-runtime-registration.json`.
+
+
+## Part 27 — Bounded fictional recipe successor registration (#88)
+
+Owner approval: `domains/demo-recipes/owner-approval.json`, preserving both the original question/approval and the corrective 0.1.1 question/owner response `approve` with their conversation message identifiers. Scope: `TEACH-DEMO-RECIPES-2026-10-18@0.1.1`, SYS-21 https://github.com/peteywee/teach-v2/issues/88. Recorded SHA-256 of SHA256SUMS: `b5f80daf1d94ecbccb1a01f3e58be3fc98d32564567b1cf03fd5c639eb435255`. This digest seals the approved named scope; it was not displayed in the preserved approval exchange.
+
+| Contract | From | To | Approved bounded change |
+| --- | --- | --- | --- |
+| C31 | 1.3.0 | 1.4.0 | Content/schema/template 1.1.0: three immutable fictional read-only recipe children; retain 1.0.0 |
+| C41 | 1.2.0 | 1.3.0 | Existing ReadAssignedContentVersion admits exact PublicContent 1.1.0; no new route |
+| C42 | 1.2.0 | 1.3.0 | Connected read-only kitchen, recipe book and detail views; general handoff practice remains unchanged |
+
+Preserved predecessor copies and before/after hashes are listed in `domains/demo-recipes/registration.json`. Original runtime package/registration, lesson, answers, feedback, scoring, permissions, fifteen API routes and seven served asset paths remain unchanged. The approval excludes hosting, spending, live-database changes, new semantic entities or physical tables, customer approval claims and recipe-specific grading. Registration is not independent review or runtime evidence; existing admission and separate local activation authority remain required.
+
+The owner subsequently approved the 0.1.1 correction: one additive strict `content_guard_demo_version` successor migration, tested only in the disposable local database. The original 0.1.0 source package remains immutable. This correction permits no new database/table, no historical migration edits and no live-data changes. Independent physical review/admission is separate. C31 also records the finite kernel schema-reference projection; canonical concept identities and all original registry entries remain unchanged.

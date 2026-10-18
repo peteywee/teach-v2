@@ -68,3 +68,55 @@ export function newDemoContent(organizationId: string, makeId: () => string): Va
     })),
   });
 }
+
+// Additive local successor candidate. The registered 1.0.0 template and factory
+// above remain unchanged; these fictional samples add reference content only.
+const recipeTemplate = [
+  {
+    title: 'Fictional sample: Orchard bowl',
+    station: 'Assembly',
+    servings: 1,
+    ingredients: ['1 cup prepared grains', '2 spoonfuls diced apple', '1 spoonful pumpkin seeds'],
+    steps: [
+      'Place the prepared grains in the sample bowl.',
+      'Arrange the apple and pumpkin seeds on top.',
+      'Compare the sample item and ticket name before the practice handoff.',
+    ],
+    reference: 'General handoff practice',
+  },
+  {
+    title: 'Fictional sample: Garden wrap',
+    station: 'Assembly',
+    servings: 1,
+    ingredients: ['1 flatbread', '2 spoonfuls bean spread', '1 handful sliced vegetables'],
+    steps: [
+      'Lay out the sample flatbread and add the bean spread.',
+      'Place the sliced vegetables in the center and fold the flatbread.',
+      'Read back any sample ticket change before the practice handoff.',
+    ],
+    reference: 'General handoff practice',
+  },
+  {
+    title: 'Fictional sample: Citrus cooler',
+    station: 'Beverage',
+    servings: 2,
+    ingredients: ['2 cups sparkling water', '2 spoonfuls orange juice', '2 orange slices'],
+    steps: [
+      'Divide the sample sparkling water and orange juice between two glasses.',
+      'Stir each sample drink and add an orange slice.',
+      'Pass on any unresolved sample ticket question with its reference and next action.',
+    ],
+    reference: 'General handoff practice',
+  },
+] as const;
+
+export function newRecipeDemoContent(organizationId: string, makeId: () => string): ValidatedContent {
+  const original = newDemoContent(organizationId, makeId);
+  return validateContent({
+    ...original.content, schemaVersion: '1.1.0', version: '1.1.0',
+    recipes: recipeTemplate.map(recipe => ({
+      id: makeId(), title: recipe.title, station: recipe.station, servings: recipe.servings,
+      ingredients: [...recipe.ingredients], steps: [...recipe.steps], reference: recipe.reference,
+    })),
+  });
+}

@@ -20,6 +20,9 @@ const mutateLatest = (dir, mutate) => {
   const value = json(dir, path); mutate(value); write(dir, path, value);
 };
 const latestSql = (dir) => `drizzle/${json(dir, journalPath).entries.at(-1).tag}.sql`;
+// FK probes still target the latest table-authoring migration, not the later
+// function-only recipe guard. This keeps the original structural property.
+const latestTableSql = (dir) => `drizzle/${json(dir, journalPath).entries.filter(entry => entry.tag !== '0006_demo_recipe_content_guard').at(-1).tag}.sql`;
 // The seal is an additional oracle, not a replacement for these four properties.
 // Original check declarations and their structural expectations remain unchanged.
 const pairedSealDenials = new Map([
@@ -45,32 +48,28 @@ function check(name, mutate, pattern = null, structuralOnly = false) {
     cpSync(ROOT, dir, { recursive: true, filter: (src) => !/(?:^|\/)\.git(?:\/|$)|(?:^|\/)node_modules(?:\/|$)/.test(src) });
     mutate(dir);
     if (pairedSealDenials.has(name)) {
-      // Execute the current pure validator on the current mutated inputs, before
-      // checking the distinct live admission denial. A removed structural rule
-      // cannot be hidden by a passing hash guard.
-      const properties = inspectMigrationHistory(dir);
-      if (pattern) assert.match(properties.join('\n'), pattern);
-      else assert.deepEqual(properties, []);
-      if (structuralOnly) {
-        // P05's original derived-total property uses exact predecessor inputs
-        // with all CURRENT validator scripts, never archived validator logic.
-        const historical = mkdtempSync(join(tmpdir(), 'p05-structural-property-'));
-        try {
-          // The exact pre-registration source is already pinned by the approved
-          // package. A post-registration input would (correctly) seal the totals.
-          const commit = '14ca8c409993c9e57077d9705db022d3bfd26b1a';
-          const tree = '771867f1dbb47e277f90158a9f25b504bb786510';
-          assert.equal(execFileSync('git', ['rev-parse', '--verify', `${commit}^{tree}`], {cwd: ROOT, encoding: 'utf8', timeout: 2000}).trim(), tree);
-          const archive = join(historical, 'input.tar');
-          execFileSync('git', ['archive', '--format=tar', `--output=${archive}`, commit], {cwd: ROOT, timeout: 5000});
-          execFileSync('tar', ['-xf', archive, '-C', historical], {timeout: 5000}); rmSync(archive);
-          rmSync(join(historical, 'scripts'), {recursive: true}); cpSync(join(ROOT, 'scripts'), join(historical, 'scripts'), {recursive: true});
-          mutate(historical); assert.deepEqual(inspectMigrationHistory(historical), []); assert.deepEqual(inspectLearningImplementation(historical), []);
-        }
-        finally { rmSync(historical, { recursive: true, force: true }); }
-      }
+      // Original structural properties are exercised on exact P05 predecessor
+      // inputs with CURRENT validators. The current recipe lane is deliberately
+      // stricter: a source/review-sealed seventh migration cannot be broadened.
+      const historical = mkdtempSync(join(tmpdir(), 'p05-structural-property-'));
+      try {
+        const commit = '14ca8c409993c9e57077d9705db022d3bfd26b1a';
+        const tree = '771867f1dbb47e277f90158a9f25b504bb786510';
+        assert.equal(execFileSync('git', ['rev-parse', '--verify', `${commit}^{tree}`], {cwd: ROOT, encoding: 'utf8', timeout: 2000}).trim(), tree);
+        const archive = join(historical, 'input.tar');
+        execFileSync('git', ['archive', '--format=tar', `--output=${archive}`, commit], {cwd: ROOT, timeout: 5000});
+        execFileSync('tar', ['-xf', archive, '-C', historical], {timeout: 5000}); rmSync(archive);
+        rmSync(join(historical, 'scripts'), {recursive: true}); cpSync(join(ROOT, 'scripts'), join(historical, 'scripts'), {recursive: true});
+        mutate(historical);
+        const properties = inspectMigrationHistory(historical);
+        if (pattern) assert.match(properties.join('\n'), pattern); else assert.deepEqual(properties, []);
+        if (structuralOnly) assert.deepEqual(inspectLearningImplementation(historical), []);
+      } finally { rmSync(historical, { recursive: true, force: true }); }
+      // Both independent current oracles must deny, not just the old source seal.
+      const currentProperties = inspectMigrationHistory(dir);
+      assert.ok(currentProperties.length > 0, 'current recipe physical mutation must remain fail-closed');
       assert.equal(exactCurrentDenial(runPins(dir), pairedSealDenials.get(name), dir), true, 'exact current admission denial required separately from structural property');
-      console.log(`PASS ${name} [PAIRED current structural property${structuralOnly ? ' + exact pre-registration P05 inputs 14ca8c4/current validator' : ''} + current admission]`);
+      console.log(`PASS ${name} [PAIRED exact pre-registration P05 inputs/current validator + current recipe structural denial + current admission]`);
       return;
     }
     if (structuralOnly) {
@@ -99,7 +98,7 @@ function check(name, mutate, pattern = null, structuralOnly = false) {
 check('clean repaired history passes', () => {});
 check('original P04 missing journal entry fails', (dir) => mutateJournal(dir, (v) => v.entries.pop()), /SQL file .* is not journaled/);
 check('original P04 stale identities FK fails', (dir) => {
-  const path = latestSql(dir);
+  const path = latestTableSql(dir);
   const source = readFileSync(join(dir, path), 'utf8');
   assert.ok(source.includes('REFERENCES "public"."identity_identities"'));
   writeFileSync(join(dir, path), source.replace('REFERENCES "public"."identity_identities"', 'REFERENCES "identities"'));
@@ -122,7 +121,7 @@ check('snapshot foreign-key column drift fails', (dir) => mutateLatest(dir, (v) 
   Object.values(v.tables['public.identity_credentials'].foreignKeys)[0].columnsTo = ['unknown'];
 }), /missing target column public\.identity_identities\.unknown/);
 check('SQL foreign-key column drift fails', (dir) => {
-  const path = latestSql(dir);
+  const path = latestTableSql(dir);
   const source = readFileSync(join(dir, path), 'utf8');
   assert.ok(source.includes('REFERENCES "public"."identity_identities"("id")'));
   writeFileSync(join(dir, path), source.replace('REFERENCES "public"."identity_identities"("id")', 'REFERENCES "public"."identity_identities"("unknown")'));

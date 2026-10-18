@@ -382,7 +382,7 @@ const additions = [
   ['validator-shard-5', 'node', ['scripts/tests/validate-validators.mjs', '--shard=5/14']],
   ['validator-shard-6', 'node', ['scripts/tests/validate-validators.mjs', '--shard=6/14']],
 
-  ['demo-source-tests', 'node', ['--import', 'tsx', '--test', 'tests/demo/activation.test.ts', 'tests/demo/application.test.ts', 'tests/demo/content.test.ts', 'tests/demo/cookie.test.ts', 'tests/demo/http-application.test.ts', 'tests/demo/transport.test.ts', 'tests/demo-web/api.test.mjs', 'tests/demo-web/controller.test.mjs', 'tests/demo-web/views.test.mjs', 'scripts/tests/demo-route-inventory.mjs', 'scripts/tests/demo-storage-evidence.mjs', 'scripts/tests/demo-validator-predecessor.mjs']],
+  ['demo-source-tests', 'node', ['--import', 'tsx', '--test', 'tests/demo/activation.test.ts', 'tests/demo/application.test.ts', 'tests/demo/content.test.ts', 'tests/demo/cookie.test.ts', 'tests/demo/http-application.test.ts', 'tests/demo/transport.test.ts', 'tests/demo-web/api.test.mjs', 'tests/demo-web/controller.test.mjs', 'tests/demo-web/views.test.mjs', 'scripts/tests/demo-route-inventory.mjs', 'scripts/tests/demo-storage-evidence.mjs', 'scripts/tests/demo-validator-predecessor.mjs', 'tests/demo/recipe-content.test.ts', 'tests/demo-web/recipe-api.test.mjs', 'tests/demo-web/recipes.test.mjs', 'scripts/tests/validate-demo-recipes-registration.mjs', 'scripts/tests/validate-demo-recipes-physical-successor.mjs']],
   ['demo-generation', 'node', ['scripts/db/verify-demo-generation.mjs']],
   ['demo-postgres', 'node', ['--import', 'tsx', 'scripts/db/run-demo-integration.ts']],
   ['demo-registration-regressions', 'node', ['--test', '--test-name-pattern='+REGISTRATION_REMAINDER_PATTERN, 'scripts/tests/validate-demo-runtime-registration.mjs']],
@@ -562,7 +562,7 @@ test('all 53 baseline validators remain in the live umbrella discovery domain', 
   }
   assert.equal(BASELINE_VALIDATORS.length, 53);
   for (const path of BASELINE_VALIDATORS) assert.ok(live.includes(path), path);
-  assert.deepEqual(live.sort(), [...BASELINE_VALIDATORS, 'scripts/kernel/validate-capability-admission.mjs', 'scripts/kernel/validate-demo-runtime-registration.mjs', 'scripts/persistence/validate-demo-physical-admission.mjs'].sort());
+  assert.deepEqual(live.sort(), [...BASELINE_VALIDATORS, 'scripts/kernel/validate-capability-admission.mjs', 'scripts/kernel/validate-demo-runtime-registration.mjs', 'scripts/persistence/validate-demo-physical-admission.mjs', 'scripts/kernel/validate-demo-recipes-registration.mjs', 'scripts/persistence/validate-demo-recipes-physical-admission.mjs'].sort());
 });
 test('all 13 foundation files and seven PostgreSQL suite bodies retain actual assertions', () => {
   const foundation = Object.keys(UNCHANGED_PROOF_FILES).filter(path => path.startsWith('src/modules/'));
@@ -629,7 +629,7 @@ function gitFixture({ realValidator = false } = {}) {
   write('.gitignore', 'verification/generated/\n');
   write('verification/whole-repository/self-audit-plan.json', JSON.stringify(expectedPlan, null, 2) + '\n');
   write('src/modules/example/domain/a.test.ts', '// fixture inventory\n');
-  if (realValidator) for (const path of ['scripts/kernel/demo-runtime-registration.mjs','scripts/kernel/semantic-dependency-closure.mjs','scripts/kernel/demo-physical-successor.mjs','scripts/persistence/demo-admission-evidence.mjs','scripts/persistence/admission-criteria.mjs']) write(path, read(path));
+  if (realValidator) for (const path of ['scripts/kernel/demo-recipes-registration.mjs','scripts/kernel/demo-runtime-registration.mjs','scripts/kernel/semantic-dependency-closure.mjs','scripts/kernel/demo-physical-successor.mjs','scripts/persistence/demo-admission-evidence.mjs','scripts/persistence/admission-criteria.mjs']) write(path, read(path));
   write('scripts/docs/validate-document-metadata.mjs', realValidator ? read('scripts/docs/validate-document-metadata.mjs') : `import {readFileSync,writeFileSync,existsSync} from 'node:fs';\nconst p='verification/generated/control.json';const c=existsSync(p)?JSON.parse(readFileSync(p)):{};writeFileSync('verification/generated/argv.json',JSON.stringify({argv:process.argv.slice(2),legacyBase:process.env.DOC_GOV_BASE_REF??null}));if(c.corrupt_event)writeFileSync(c.corrupt_event,'{invalid');process.exit(c.exit??0);\n`);
   const metadata = { doc_id: 'FIXTURE-001', class: 'governance-policy', version: '1.0.0', status: 'draft', owner: 'VerificationEvidence', created_on: '2026-10-01', updated_on: '2026-10-10' };
   const document = (meta = metadata, body = 'original') => '<!--tos-doc\n' + JSON.stringify(meta) + '\n-->\n' + body + '\n';
@@ -1044,7 +1044,7 @@ test('real authority umbrella invokes exact physical validator with a five-secon
     process:{cwd:()=>ROOT,execPath:process.execPath,exit:code=>{throw new Error(`expected umbrella exit ${code}`);}},
     console:{error:message=>output.push(message),log:message=>output.push(message)},
   },{timeout:2000}),/expected umbrella exit 1/);
-  assert.equal(calls.length,56);
+  assert.equal(calls.length,58);
   const physical=calls.find(call=>call.args[0]==='scripts/persistence/validate-demo-physical-admission.mjs');
   assert.equal(physical.command,process.execPath); assert.equal(physical.options.timeout,5000);
   assert.match(output.join('\n'),/physical-negative-control/);
@@ -1131,4 +1131,18 @@ test('pinned Node test runner executes exact registration partitions without par
   // This executable control is why pure RegExp.test(name) is not sufficient.
   assert.equal(run('^(?!all 131 exact registered entries reject partial approval and deletion$)').length,17);
  }finally{rmSync(dir,{recursive:true,force:true});}
+});
+
+
+test('recipe CI extension keeps both exact successor gates in the unchanged authority umbrella', () => {
+  for (const path of ['scripts/kernel/validate-demo-recipes-registration.mjs', 'scripts/persistence/validate-demo-recipes-physical-admission.mjs']) mutateFixtureFile(path, file => rmSync(file));
+});
+for (const path of ['tests/demo/recipe-content.test.ts', 'tests/demo-web/recipe-api.test.mjs', 'tests/demo-web/recipes.test.mjs', 'scripts/tests/validate-demo-recipes-registration.mjs', 'scripts/tests/validate-demo-recipes-physical-successor.mjs']) test(`recipe CI cannot omit existing-stage regression ${path}`, () => {
+  mutateFixtureFile('verification/whole-repository/self-audit-plan.json', (file, original) => {
+    const plan=JSON.parse(original); const stage=plan.stages.find(row=>row.id==='demo-source-tests'); stage.args=stage.args.filter(arg=>arg!==path); writeFileSync(file,JSON.stringify(plan));
+  }, inspectConsolidatedVerification);
+});
+test('recipe CI cannot omit or substitute fourth disposable PostgreSQL suite', () => {
+  mutateFixtureFile('scripts/db/run-demo-integration.ts', (file, original) => writeFileSync(file, original.toString().replace("'tests/integration/demo/recipe-content-guard.test.ts',", '')), inspectConsolidatedVerification);
+  mutateFixtureFile('scripts/db/run-demo-integration.ts', (file, original) => writeFileSync(file, original.toString().replace("'tests/integration/demo/recipe-content-guard.test.ts'", "'tests/integration/demo/application-runtime.test.ts'")), inspectConsolidatedVerification);
 });

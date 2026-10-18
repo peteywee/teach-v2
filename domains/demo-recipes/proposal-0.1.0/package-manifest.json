@@ -1,0 +1,55 @@
+{
+  "package_id": "TEACH-DEMO-RECIPES-2026-10-18",
+  "version": "0.1.0",
+  "state": "PROPOSED_SOURCE_PACKAGE_NOT_SELF_AUTHORIZING",
+  "created_on": "2026-10-18",
+  "source_commit": "2ad83bfce7d5c460f9f5f383a36491d9188de916",
+  "source_tree": "75e7e88a85ccb9145767e70c35f620f15e9fbd31",
+  "impact_issue": "https://github.com/peteywee/teach-v2/issues/88",
+  "approval_token": "TEACH-DEMO-RECIPES-2026-10-18@0.1.0",
+  "approval_and_registration": "Recorded separately outside this immutable source package; these artifacts do not approve, register, admit, activate, publish, or deploy themselves.",
+  "canonical_content_lineage": {
+    "owner": "Content",
+    "predecessor_version": "1.0.0",
+    "successor_version": "1.1.0",
+    "successor_schema": "content-schema-1.1.0.json",
+    "successor_public_projection": "public-content-schema-1.1.0.json",
+    "synthetic_template": "synthetic-content-template-1.1.0.json",
+    "template_version": "1.1.0",
+    "predecessor_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+    "predecessor_source": "domains/demo-runtime/proposal-0.1.0",
+    "predecessor_schema_handling": "Read and validate unchanged exact immutable 1.0.0 content as an earlier version of the same canonical schema, not as legacy import."
+  },
+  "proposed_contract_revisions": [
+    {
+      "contract": "TEACH-CON-C31",
+      "from": "1.3.0",
+      "to": "1.4.0"
+    },
+    {
+      "contract": "TEACH-CON-C41",
+      "from": "1.2.0",
+      "to": "1.3.0"
+    },
+    {
+      "contract": "TEACH-CON-C42",
+      "from": "1.2.0",
+      "to": "1.3.0"
+    }
+  ],
+  "no_new_entities": true,
+  "no_new_tables": true,
+  "no_new_migrations": true,
+  "no_new_api_operations": true,
+  "api_route_count_unchanged": 15,
+  "served_asset_paths_unchanged": 7,
+  "external_publication_authorized_by_package": false,
+  "runtime_activation_authorized_by_package": false,
+  "artifact_files": [
+    "README.md",
+    "content-schema-1.1.0.json",
+    "public-content-schema-1.1.0.json",
+    "synthetic-content-template-1.1.0.json",
+    "package-manifest.json"
+  ]
+}

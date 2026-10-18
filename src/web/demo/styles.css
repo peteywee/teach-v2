@@ -30,3 +30,5 @@ a.quiet{display:inline-flex;align-items:center;padding:12px 16px;border-radius:1
 .navigation-help li{padding-left:3px;margin-bottom:14px;overflow-wrap:anywhere}
 .navigation-help strong{color:var(--text);font-weight:600}
 @media(forced-colors:active){.navigation-help{border-color:ButtonText}.navigation-help summary::marker{color:ButtonText}}
+
+.recipe-filters{display:grid;gap:8px;max-width:560px}.recipe-filters label{margin:0}.recipe-filters select{max-width:100%;min-width:0}.recipe-filters button{justify-self:start}.recipe-detail ul,.recipe-detail ol{padding-left:24px}.recipe-detail li{margin:12px 0;overflow-wrap:anywhere}.recipe-detail h2{margin-top:24px}.recipe-reference{margin:22px 0}.recipe-reference p{margin-bottom:18px}

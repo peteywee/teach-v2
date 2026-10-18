@@ -1,0 +1,19 @@
+{
+  "plan_id": "TEACH-DEMO-RECIPE-GUARD-VERIFICATION-2026-10-18",
+  "package": "TEACH-DEMO-RECIPES-2026-10-18@0.1.1",
+  "authoring_state": "UNDER_TEST",
+  "runtime_proof": "NOT_RUN",
+  "runtime_activation": "BLOCKED",
+  "local_disposable_database_testing_authorized": true,
+  "shared_or_production_migration_execution_authorized": false,
+  "live_database_changes_authorized": false,
+  "checks": [
+    "Independent source review binds exact registration, package, immutable predecessors, appended journal, migration and unchanged schema snapshot.",
+    "All original six migrations, six snapshots, original runtime registration/package, nine physical paths and original physical admission/review evidence remain byte-identical.",
+    "The seventh migration replaces only content_guard_demo_version, with exact 1.0.0 and 1.1.0 allowlist and no new table/database or data rewrite.",
+    "Fresh disposable PostgreSQL replay and upgrade from populated six-migration state preserve old immutable versions and accept valid exact new versions.",
+    "PostgreSQL rejects unsupported schema versions, missing/extra fields, wrong recipe counts/bounds, duplicate IDs, malformed canonical JSON, unsafe text/URLs/media and tenant mismatch.",
+    "Original backend-only privileges, trigger attachments, canonical digest/size constraints and immutable update/delete protection remain enforced.",
+    "Mutation tests reject missing or forged review, source/evidence hash drift, additional migration, changed journal prefix, changed predecessor, schema expansion and symlink substitution."
+  ]
+}

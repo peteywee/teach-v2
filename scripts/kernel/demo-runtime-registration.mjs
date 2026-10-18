@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 import { inspectSemanticDependencyClosure } from './semantic-dependency-closure.mjs';
 import { DEMO_PHYSICAL_ENVELOPE, inspectDemoPhysicalSuccessor } from './demo-physical-successor.mjs';
+import { inspectRecipeRegistration } from './demo-recipes-registration.mjs';
 
 export const DEMO_PACKAGE_ID = 'TEACH-DEMO-RUNTIME-2026-10-17';
 export const DEMO_PACKAGE_SHA256 = 'a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a';
@@ -255,9 +256,15 @@ export function inspectDemoRuntimeRegistration(root) {
     equal(registration.package_sha256, DEMO_PACKAGE_SHA256, 'registered package digest differs');
     equal(registration.state, 'REGISTERED_SEMANTICS_ONLY', 'registration must remain semantics-only');
     for (const flag of ['runtime_activation_authorized', 'physical_admission_performed', 'shared_or_production_execution_authorized']) equal(registration[flag], false, `registration cannot authorize ${flag}`);
+    // The bounded recipe successor proves all current bytes and retained exact
+    // predecessor bytes before the old source-bound authority checks may use them.
+    const recipeSuccessor = inspectRecipeRegistration(root);
+    errors.push(...recipeSuccessor.errors);
+    const recipeRevisions = new Set(recipeSuccessor.revisedPaths);
     const expectedFiles = new Set([
       ...Object.keys(source.files), ...Object.keys(registration.authority_file_hashes ?? {}),
       ...Object.keys(EVIDENCE_HASHES), ...[...seen, 'SHA256SUMS'].map(name => `${DEMO_PROPOSAL}/${name}`),
+      ...recipeSuccessor.addedPaths,
     ]);
     errors.push(...inspectActiveAuthorityInventory(root, expectedFiles));
     const overlay = buildDemoKernelOverlay(source, proposal);
@@ -287,7 +294,10 @@ export function inspectDemoRuntimeRegistration(root) {
       if (!/^(contracts|domains|kernel|application-interfaces|governance|persistence)\/[A-Za-z0-9_./-]+$/.test(path) || path.includes('..') || !/^[a-f0-9]{64}$/.test(digest)) {
         errors.push(`demo registration: invalid authority hash target ${path}`); continue;
       }
-      equal(hash(raw(path)), digest, `registered authority file differs: ${path}`);
+      // Original reviewed pins remain unchanged. A verified successor replaces
+      // only its exact five paths, while independently sealing their new bytes.
+      const registeredBytes = recipeRevisions.has(path) ? recipeSuccessor.predecessorFiles[path] : raw(path);
+      equal(hash(registeredBytes), digest, `registered authority file differs: ${path}`);
     }
     const closure = inspectSemanticDependencyClosure(docs);
     errors.push(...closure.errors);
@@ -321,7 +331,7 @@ export function inspectDemoRuntimeRegistration(root) {
         equal(normalize(current), normalize(source.files[path]), `unchanged preceding source drift: ${path}`);
       } else equal(hash(current), digest, `unchanged preceding source drift: ${path}`);
     }
-    return { errors, registered: true, registeredEntries: 131, closure, source, proposal, physicalSuccessor };
+    return { errors, registered: true, registeredEntries: 131, closure, source, proposal, physicalSuccessor, recipeSuccessor };
   } catch (error) {
     errors.push(`demo registration: missing or malformed evidence: ${error.message}`);
     return { errors, registered: true };

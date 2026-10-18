@@ -1,0 +1,36 @@
+{
+  "projection_id": "TEACH-DEMO-RECIPES-CONTENT-SCHEMA-REFERENCE",
+  "version": "0.1.1",
+  "status": "approved",
+  "package": "TEACH-DEMO-RECIPES-2026-10-18@0.1.1",
+  "approval_record": "domains/demo-recipes/owner-approval.json",
+  "authority_contract": "TEACH-CON-C31@1.4.0",
+  "issue": "#88",
+  "owner": "Content",
+  "target": {
+    "path": "kernel/entities.json",
+    "entry": "ContentPack",
+    "field": "fields.versionPayload"
+  },
+  "predecessor_text": "canonical schema 1.0.0 described in canonical_content_schema",
+  "predecessor_registry_sha256": "cd90fbe900ed6501260851fb5544af80f5d8b2ada3febe1af05860ce65566769",
+  "effective_interpretation": "An immutable ContentPack version payload conforming to exact canonical Content schema 1.0.0 or 1.1.0; exact version identity and digest remain unchanged.",
+  "exact_schema_references": [
+    {
+      "version": "1.0.0",
+      "path": "domains/demo-runtime/proposal-0.1.0/learning-definition.json",
+      "pointer": "/canonical_content_schema"
+    },
+    {
+      "version": "1.1.0",
+      "path": "domains/demo-recipes/proposal-0.1.1/content-schema-1.1.0.json",
+      "pointer": ""
+    }
+  ],
+  "original_registry_entries_modified": false,
+  "new_concepts": [],
+  "identity_owner_relationships_dependencies_unchanged": true,
+  "physical_admission_granted": false,
+  "runtime_activation_authorized": false,
+  "meaning": "A finite schema-reference projection inside the existing kernel, not another semantic registry, alias, new concept, ownership change, physical admission or activation grant. Other fields and all original entries remain exact."
+}

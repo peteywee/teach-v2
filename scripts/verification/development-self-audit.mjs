@@ -5,6 +5,7 @@ import { readFileSync, readdirSync, existsSync, mkdirSync, writeFileSync } from 
 import { join } from 'node:path';
 import { deriveOwnerDecisionInventory } from './owner-decision-inventory.mjs';
 import { createHistoricalSourceReader } from '../kernel/demo-runtime-registration.mjs';
+import { inspectRecipeRegistration } from '../kernel/demo-recipes-registration.mjs';
 import { resolveDocumentGovernanceContext, inspectDocumentGovernanceContext, documentGovernanceArgs } from './document-governance-context.mjs';
 import { inspectAuditPlan } from './self-audit-catalog.mjs';
 
@@ -34,10 +35,15 @@ export function currentFacts(root) {
   const ownerRegistration=load('verification/owner-decisions/2026-10-04/registration.json');
   // Preserve the historical decision packet without presenting its former
   // physical questions as current. The reader validates the exact successor
-  // before exposing only these two immutable predecessor plan bytes.
+  // before exposing only these two immutable predecessor plan bytes. The
+  // separately verified finite recipe successor preserves the exact original
+  // contract bytes for this historical packet, never for current owner facts.
   const historical=createHistoricalSourceReader(root);
+  const recipe=inspectRecipeRegistration(root);
+  if(recipe.errors.length)throw new Error('current recipe successor must verify before historical question projection: '+recipe.errors.join('; '));
+  const readContract=path=>recipe.present&&Object.hasOwn(recipe.predecessorFiles,path)?recipe.predecessorFiles[path]:readFileSync(join(root,path),'utf8');
   const readInventory=path=>['persistence/physical-slices/assignment/admission-evidence-plan.json','persistence/physical-slices/progress-event/admission-evidence-plan.json'].includes(path)?historical(path):readFileSync(join(root,path),'utf8');
-  const packetInventory=deriveOwnerDecisionInventory(root,ownerInventory.consulted_v2_baseline,readInventory);
+  const packetInventory=deriveOwnerDecisionInventory(root,ownerInventory.consulted_v2_baseline,readInventory,readContract);
   if(JSON.stringify(ownerInventory)!==JSON.stringify(packetInventory))throw new Error('owner decision inventory drift');
   return { kernel_version:load('kernel/manifest.json').version,ownership_version:load('domains/ownership-map.json').version,
     policy_baselines:{architecture:load('architecture/authority.json').baseline_commit,application:load('application-interfaces/authority.json').baseline_commit,persistence:load('persistence/authority.json').baseline_commit},

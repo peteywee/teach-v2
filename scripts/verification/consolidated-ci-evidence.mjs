@@ -1,3 +1,4 @@
+import { inspectRecipeRegistration } from '../kernel/demo-recipes-registration.mjs';
 import {REGISTRATION_ENTRY_PATTERN,REGISTRATION_REMAINDER_PATTERN} from './validator-partitions.mjs';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -34,9 +35,12 @@ export function inspectConsolidatedVerification(root) {
     if(physicalRegression?.command!=='node'||JSON.stringify(physicalRegression?.args)!==JSON.stringify(['--test','scripts/tests/validate-development-self-audit.test.mjs','scripts/tests/validate-ci-consolidation.test.mjs','scripts/tests/validate-demo-physical-successor.mjs','scripts/tests/validate-replay-database-cleanup.test.mjs'])||physicalRegression?.timeout_ms!==25000||!existsSync(join(root,'scripts/tests/validate-demo-physical-successor.mjs')))fail('exact bounded physical successor mutation suite must run in CI');
     const demoSource=plan?.stages?.find(stage=>stage.id==='demo-source-tests');
     for(const path of demoSource?.args?.filter(arg=>/^(?:tests|scripts)\//.test(arg))||[])if(!existsSync(join(root,path)))fail(`required demo test missing: ${path}`);
-    for(const [path,sha]of [['scripts/db/run-demo-integration.ts','575b41278b354e0cfeb32a51f4b56f7719169772d19f4cdea5b83f2303222a62']]){
-      if(createHash('sha256').update(readFileSync(join(root,path))).digest('hex')!==sha)fail('exact isolated three-suite demo integration wrapper required');
-    }
+    const recipe = inspectRecipeRegistration(root);
+    errors.push(...recipe.errors);
+    const wrapper = readFileSync(join(root,'scripts/db/run-demo-integration.ts'),'utf8');
+    const historicalWrapper = recipe.present ? reconstructHistoricalDemoIntegration(wrapper) : wrapper;
+    if(createHash('sha256').update(historicalWrapper).digest('hex')!=='575b41278b354e0cfeb32a51f4b56f7719169772d19f4cdea5b83f2303222a62')fail('exact original isolated three-suite wrapper plus approved recipe guard suite required');
+    if(recipe.present)for(const path of ['tests/demo/recipe-content.test.ts','tests/demo-web/recipe-api.test.mjs','tests/demo-web/recipes.test.mjs','scripts/tests/validate-demo-recipes-registration.mjs','scripts/tests/validate-demo-recipes-physical-successor.mjs'])if(!demoSource?.args.includes(path)||!existsSync(join(root,path)))fail(`bounded recipe successor regression must run in existing demo-source stage: ${path}`);
     if(!existsSync(join(root,'scripts/db/verify-demo-generation.mjs')))fail('demo generation proof required');
     const stages = [...workflow.matchAll(/^        run: node scripts\/verification\/run-self-audit\.mjs --stage ([a-z0-9-]+)$/gm)].map(match => match[1]);
     if (JSON.stringify(stages) !== JSON.stringify(plan?.stages?.map(stage => stage.id))) fail('complete ordered checkpoint workflow required');
@@ -104,7 +108,9 @@ export function inspectConsolidationCoverage(root) {
     // Keep the historical 53-validator consolidation baseline immutable. The
     // Exact admitted successors add capability names, demo semantics, and the
     // reviewed physical gate, all executed by the unchanged authority loop.
-    const admittedValidators=['scripts/kernel/validate-capability-admission.mjs','scripts/kernel/validate-demo-runtime-registration.mjs','scripts/persistence/validate-demo-physical-admission.mjs'];
+    const recipe = inspectRecipeRegistration(root); errors.push(...recipe.errors);
+    const admittedValidators=['scripts/kernel/validate-capability-admission.mjs','scripts/kernel/validate-demo-runtime-registration.mjs','scripts/persistence/validate-demo-physical-admission.mjs',
+      ...(recipe.present && recipe.errors.length===0 ? ['scripts/kernel/validate-demo-recipes-registration.mjs','scripts/persistence/validate-demo-recipes-physical-admission.mjs'] : [])];
     const requiredValidators=[...coverage.baseline_umbrella_validators,...admittedValidators].sort();
     if(JSON.stringify(validators.sort())!==JSON.stringify(requiredValidators))fail('complete baseline plus exact admitted standalone validator inventory required');
     if(hash(readFileSync(join(root,'scripts/db/replay-database-cleanup.mjs')))!=='54c2027a98ce883aa9f1a892a11b165eabe56353028a23c63cbf495a4887b388')fail('reviewed bounded replay cleanup helper identity required');
@@ -141,4 +147,13 @@ export function preservedProofBytes(root,path){
  const expected=old.replace('readFileSync, rmSync','readFileSync, readdirSync, rmSync').replace("  rmSync(join(dir, '0004_slice_p05_learning_session.sql'));\n  rmSync(join(dir, 'meta/0004_snapshot.json'));", "  for (const name of readdirSync(dir)) if (/^\\d{4}_/.test(name) && Number(name.slice(0,4)) >= 4) rmSync(join(dir,name));\n  for (const name of readdirSync(join(dir,'meta'))) if (/^\\d{4}_/.test(name) && Number(name.slice(0,4)) >= 4) rmSync(join(dir,'meta',name));").replace("join(root, 'drizzle.config.ts')","join(root, 'drizzle.p05.config.ts')");
  if(current!==expected||createHash('sha256').update(readFileSync(join(root,'drizzle.p05.config.ts'))).digest('hex')!=='b4ff41891077f5647a041a6ec1690b6407ce07841eb3eb9d670065036076f377')throw Error('exact historical generation prefix setup and unchanged assertions required');
  return old;
+}
+
+// Preserve every original isolation, cleanup and three-suite assertion. Only
+// the explicitly approved fourth recipe guard suite and truthful label differ.
+export function reconstructHistoricalDemoIntegration(current) {
+  const addition = "'tests/integration/demo/recipe-content-guard.test.ts',";
+  const label = 'Demo migration, owner storage, recipe guard and application integration PASS in four separate disposable databases';
+  if (current.split(addition).length !== 2 || current.split(label).length !== 2) throw Error('exact bounded recipe integration suite addition required');
+  return current.replace(addition, '').replace(label, 'Demo migration, owner storage and application integration PASS in three separate disposable databases');
 }

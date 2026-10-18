@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C31",
   "class": "contract",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-17",
-  "effective_on": "2026-10-17",
+  "updated_on": "2026-10-18",
+  "effective_on": "2026-10-18",
   "approval": {
     "state": "approved",
-    "approved_version": "1.3.0",
-    "approved_on": "2026-10-17",
-    "record": "domains/demo-runtime/owner-approval.json",
-    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; SHA256SUMS sha256:a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a"
+    "approved_version": "1.4.0",
+    "approved_on": "2026-10-18",
+    "record": "domains/demo-recipes/owner-approval.json",
+    "basis": "TEACH-DEMO-RECIPES-2026-10-18@0.1.1; SYS-21 #88; bounded content/read/UI successor; SHA256SUMS sha256:b5f80daf1d94ecbccb1a01f3e58be3fc98d32564567b1cf03fd5c639eb435255"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -30,7 +30,8 @@
   },
   "supersedes": [
     "TEACH-CON-C31@1.1.0",
-    "TEACH-CON-C31@1.2.0"
+    "TEACH-CON-C31@1.2.0",
+    "TEACH-CON-C31@1.3.0"
   ],
   "superseded_by": null,
   "depends_on": [
@@ -46,6 +47,17 @@
     "physical_schema_admission": false,
     "runtime_activation": false,
     "deployment_authority": false
+  },
+  "demo_recipes_registration": {
+    "package": "TEACH-DEMO-RECIPES-2026-10-18@0.1.1",
+    "approval_record": "domains/demo-recipes/owner-approval.json",
+    "issue": "#88",
+    "source_package": "domains/demo-recipes/proposal-0.1.1",
+    "sha256sums_sha256": "b5f80daf1d94ecbccb1a01f3e58be3fc98d32564567b1cf03fd5c639eb435255",
+    "semantic_authority_only": true,
+    "physical_schema_admission": false,
+    "runtime_activation": false,
+    "deployment_authority": false
   }
 }
 -->
@@ -57,17 +69,17 @@
 | Contract ID        | C31                                                                                                                                                             |
 | Group              | C30 Product Semantics                                                                                                                                           |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.3.0 |
+| Version | 1.4.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by | Patrick Craven (owner), 2026-10-17; TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; see `domains/demo-runtime/owner-approval.json` |
+| Approved by | Patrick Craven (owner), 2026-10-18; TEACH-DEMO-RECIPES-2026-10-18@0.1.1; SYS-21 #88; see `domains/demo-recipes/owner-approval.json` |
 | Requirement prefix | `CNT`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/content-engine.json`.                                                                               |
-| Supersedes | 1.2.0 |
+| Supersedes | 1.3.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated | 2026-10-17 |
+| Last updated | 2026-10-18 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -141,13 +153,13 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 | Item                         | State                    | Detail                                                                                                                                                                                                                                                |
 | ---------------------------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Target codebase              | verified (limited scope) | `peteywee/teach-v2` default branch `main`, verified through governance baseline commit `292e8da9123987e9d94f09669c7bc6b6d43c4320` on 2026-10-03. The repository contains the contract/governance foundation; application implementation remains not yet built.                                |
+| Target codebase | verified (limited scope) | Source-bound predecessor is `peteywee/teach-v2` main `2ad83bfce7d5c460f9f5f383a36491d9188de916`, inspected 2026-10-18. This registration does not establish current implementation or runtime conformance. |
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
-| Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
-| Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
+| Implementation conformance | unknown | Not established by this registration. Current implementation tests, independent review and runtime evidence are separate source-bound records. |
+| Acceptance cases implemented | unknown | Registration specifies required cases; it does not establish executed test or browser evidence for the current candidate. |
 | Blocking open questions      | 0 open | Only unresolved question rows govern blocking; registration is not implementation evidence |
-| Owner approval               | declared | 1.2.0 owner approval recorded in APPROVAL-RECORD.md under #75; runtime implementation conformance remains UNKNOWN |
-| Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
+| Owner approval | declared | 1.4.0 bounded recipe successor approval recorded in APPROVAL-RECORD.md under #88; independent review and runtime implementation conformance are not established by registration |
+| Independent review | not established by registration | No independent-review verdict is issued here. Any later review must bind the actual successor candidate and preserve its limitations. |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
 ## 8. Change Log
@@ -163,6 +175,8 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.2.0 | 2026-10-05 | Register OQ-CNT-2, OQ-CNT-3; preserve named residuals and existing requirement/acceptance IDs. Decision-closure r3.1 manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c; SYS-21 #75. | Patrick Craven (owner); ChatGPT (recorder) |
+| 1.3.0 | 2026-10-17 | Exact synthetic demo runtime package registration under SYS-21 #82; original incorporated definitions preserved below. | Patrick Craven (owner); ChatGPT (recorder) |
+| 1.4.0 | 2026-10-18 | Bounded three-recipe content/read/UI successor under SYS-21 #88; preserve original learning, routes, permissions and activation gates. | Patrick Craven (owner); ChatGPT (recorder) |
 
 ## Registered demo runtime amendment (1.3.0)
 
@@ -173,3 +187,20 @@ Admit only the canonical synthetic content and learning definitions in learning-
 Single-choice teaching responses are server-evaluated against authored answer data. Per-response answer-match feedback is not XP, mastery, rank, certification or an aggregate score. Completion is permitted only when all ordered required responses are recorded; correctness is not a completion gate. One session per Assignment; new practice requires an explicit new Assignment. Maximum ten assignments and thirty accepted response events per run. Session completion stays terminal; manager reads persisted state and cannot edit learning events.
 
 Exact definitions and field constraints are incorporated from `domains/demo-runtime/proposal-0.1.0/demo-boundary.md`, `domains/demo-runtime/proposal-0.1.0/authority-and-audit.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.json`, and `domains/demo-runtime/proposal-0.1.0/transport-and-queries.json` with its referenced schemas. No definition beyond that approved package is introduced.
+
+
+## Registered bounded recipe successor (1.4.0)
+
+Exact owner-approved scope: `TEACH-DEMO-RECIPES-2026-10-18@0.1.1`, SYS-21 [#88](https://github.com/peteywee/teach-v2/issues/88). Approval provenance: `domains/demo-recipes/owner-approval.json`; exact source schemas and template: `domains/demo-recipes/proposal-0.1.1/`. This bounded successor overrides only the content/read/UI additions stated below. All original package definitions, authority, admission and activation gates otherwise remain controlling. The original package and its registration remain immutable. Registration proves neither independent review nor runtime behavior and authorizes no hosting, spending or live-database changes.
+
+Admit canonical Content schema exact version `1.1.0` and synthetic template exact version `1.1.0`, retaining validation and read support for exact immutable `1.0.0` packs. The `recipes` array has exactly three immutable fictional reference records inside the existing organization-owned ContentPack version JSON. These are child values, not new entities, tables or ownership domains. Each record has exactly `id`, `title`, `station`, `servings`, `ingredients`, `steps`, `reference`: unique recipe ID; fictional-sample title of at most 160 Unicode scalars; station at most 80; integer servings 1 through 100; 1 through 30 ingredient text items of at most 500 scalars; 1 through 20 step text items of at most 2000 scalars; and reference text at most 1000 scalars. Exact identifier/text rules and required-field constraints are defined by `content-schema-1.1.0.json`. Existing plain-text safety, canonicalization, 64 KiB canonical pack bound and SHA-256 exact-version binding apply unchanged.
+
+The original three SINGLE_CHOICE blocks, their ordered options, expected answers, feedback and completion/participation meaning remain unchanged except for fresh run-scoped identifiers. Browsing recipes records no progress, mastery or scoring. The only practice destination is the existing general handoff lesson, never a recipe-specific graded challenge. New admissions select the registered successor template only after registration, independent review and existing admission/activation gates pass. Prior published versions remain immutable and readable; no customer approval or real recipe licensing claim is created.
+
+Acceptance coverage preserves CNT-AC-1 through CNT-AC-9 and adds cases for both exact schema versions, extra/missing recipe fields, duplicate recipe IDs, malformed bounds, unsafe text, digest mismatch, frozen published data and original lesson byte-equivalence apart from fresh identifiers. These are required cases, not an assertion of executed evidence.
+
+### Additive guard and bounded registry projection correction (0.1.1)
+
+The approved 0.1.1 revision corrects the earlier no-migration assumption. Exactly one additive migration may replace the existing `content_guard_demo_version` function with strict support for both exact schema versions. Historical migrations and existing table identities remain unchanged. This permits no new database, table, column, schema namespace, ownership or live-data change. Independent exact-source physical review and disposable-local admission are required before executing the successor migration.
+
+`kernel/content-schema-reference-successor.json` records the finite effective interpretation of `ContentPack.fields.versionPayload`: canonical Content schema exact `1.0.0` or `1.1.0`, resolved through the explicitly bound original/successor schema references. The original 131-entry registration remains byte-exact; no concept identity, owning domain, relationship, dependency or lifecycle changes. This is an explicit schema-reference projection within the one kernel, not a parallel registry or an open-ended schema-version allowance.
