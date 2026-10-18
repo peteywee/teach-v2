@@ -1,8 +1,10 @@
+import {VALIDATOR_PARTITION_COUNT,validatorPartitionOrdinals} from './validator-partitions.mjs';
 import { spawnSync, execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { deriveOwnerDecisionInventory } from './owner-decision-inventory.mjs';
+import { createHistoricalSourceReader } from '../kernel/demo-runtime-registration.mjs';
 import { resolveDocumentGovernanceContext, inspectDocumentGovernanceContext, documentGovernanceArgs } from './document-governance-context.mjs';
 import { inspectAuditPlan } from './self-audit-catalog.mjs';
 
@@ -30,7 +32,13 @@ export function currentFacts(root) {
   const ownerInventory=load('verification/legacy-recovery/owner-decisions.json');
   const liveOwnerInventory=deriveOwnerDecisionInventory(root,ownerInventory.consulted_v2_baseline);
   const ownerRegistration=load('verification/owner-decisions/2026-10-04/registration.json');
-  if(JSON.stringify(ownerInventory)!==JSON.stringify(liveOwnerInventory))throw new Error('owner decision inventory drift');
+  // Preserve the historical decision packet without presenting its former
+  // physical questions as current. The reader validates the exact successor
+  // before exposing only these two immutable predecessor plan bytes.
+  const historical=createHistoricalSourceReader(root);
+  const readInventory=path=>['persistence/physical-slices/assignment/admission-evidence-plan.json','persistence/physical-slices/progress-event/admission-evidence-plan.json'].includes(path)?historical(path):readFileSync(join(root,path),'utf8');
+  const packetInventory=deriveOwnerDecisionInventory(root,ownerInventory.consulted_v2_baseline,readInventory);
+  if(JSON.stringify(ownerInventory)!==JSON.stringify(packetInventory))throw new Error('owner decision inventory drift');
   return { kernel_version:load('kernel/manifest.json').version,ownership_version:load('domains/ownership-map.json').version,
     policy_baselines:{architecture:load('architecture/authority.json').baseline_commit,application:load('application-interfaces/authority.json').baseline_commit,persistence:load('persistence/authority.json').baseline_commit},
     registries,owner_decisions:{...liveOwnerInventory.totals,unresolved_recommendations_approved:false,registered_policy_selections:ownerRegistration.records.filter(x=>x.state==='CONFIRMED').length,policy_implementation_conformance:'UNKNOWN'},commands:{total:ledger.commands.length,partial:ledger.commands.filter(x=>x.state==='PARTIAL').length,blocked:ledger.commands.filter(x=>x.state==='BLOCKED').length},
@@ -91,7 +99,7 @@ export function evaluateAuditReports(plan,reports,source,planHash,foundationTest
     if(r.full_runtime_conformance!=='UNKNOWN'||r.runtime_activation!=='BLOCKED'||r.shared_or_production_execution_authorized!==false)errors.push(`${stage.id}: development evidence cannot authorize runtime/production`);
   }
   const shards=plan.stages.filter(x=>x.id.startsWith('validator-shard-')).map(stage=>reports.find(x=>x?.stage===stage.id)?.validator_shard);
-  if(shards.length!==3||shards.some((s,i)=>!s||s.total!==3||s.index!==i+1||!Number.isInteger(s.inventory)||s.inventory<1||!Number.isInteger(s.selected)||s.selected<1||s.inventory!==shards[0]?.inventory||!/^[a-f0-9]{64}$/.test(s.digest||'')||s.digest!==shards[0]?.digest)||shards.reduce((n,s)=>n+(s?.selected||0),0)!==shards[0]?.inventory)errors.push('validator shards must cover one complete identical inventory');
+  if(shards.length!==VALIDATOR_PARTITION_COUNT||shards.some((s,i)=>!s||s.total!==VALIDATOR_PARTITION_COUNT||s.selected!==validatorPartitionOrdinals(i+1).length||s.index!==i+1||s.inventory!==220||!Number.isInteger(s.selected)||s.selected<1||s.inventory!==shards[0]?.inventory||!/^[a-f0-9]{64}$/.test(s.digest||'')||s.digest!=='36faf791bb97dd1a99c2c985316d2ee1f123c00be3c1b525db4a040876a2a923')||shards.reduce((n,s)=>n+(s?.selected||0),0)!==shards[0]?.inventory)errors.push('validator shards must cover one complete identical inventory');
   return errors;
 }
 export function finishAudit(root,{expectedSha=process.env.AUDIT_EXPECTED_SHA,env=process.env}={}) {

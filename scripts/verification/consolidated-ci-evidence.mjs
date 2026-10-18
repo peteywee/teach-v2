@@ -1,4 +1,5 @@
-import { readFileSync, readdirSync } from 'node:fs';
+import {REGISTRATION_ENTRY_PATTERN,REGISTRATION_REMAINDER_PATTERN} from './validator-partitions.mjs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join } from 'node:path';
 import { renderConsolidatedProducerWorkflow } from './self-audit-workflow.mjs';
@@ -24,8 +25,19 @@ export function inspectConsolidatedVerification(root) {
     if (checkouts.length !== 1 || !/^          fetch-depth: 0$/m.test(checkouts[0]) || [...checkouts[0].matchAll(/^          fetch-depth:/gm)].length !== 1) fail('full-history credential-free document checkout required');
     if (inspectWorkflowText(path,workflow).length !== 1) fail('one explicit producer job required');
     if (!workflow.includes("node-version: '20.20.2'") || !workflow.includes('pnpm@12.8.1') || !workflow.includes('run: pnpm install --frozen-lockfile\n') || !workflow.includes('image: postgres:17.11-alpine') || !workflow.includes("TEACH_ISOLATED_DB: '1'") || !workflow.includes('timeout-minutes: 15')) fail('pinned runtime and isolated PostgreSQL required');
-    const demoRegression=plan?.stages?.find(stage=>stage.id==='demo-registration-regressions');
-    if(demoRegression?.command!=='node'||JSON.stringify(demoRegression?.args)!==JSON.stringify(['--test','scripts/tests/validate-demo-runtime-registration.mjs'])||demoRegression?.timeout_ms!==25000)fail('exact bounded demo registration mutation suite must run in CI');
+    for(const [id,pattern] of [['demo-registration-entry-regressions',REGISTRATION_ENTRY_PATTERN],['demo-registration-regressions',REGISTRATION_REMAINDER_PATTERN]]){
+      const demoRegression=plan?.stages?.find(stage=>stage.id===id);
+      if(demoRegression?.command!=='node'||JSON.stringify(demoRegression?.args)!==JSON.stringify(['--test','--test-name-pattern='+pattern,'scripts/tests/validate-demo-runtime-registration.mjs'])||demoRegression?.timeout_ms!==25000)fail('exact bounded demo registration mutation suite must run in CI');
+    }
+    if(createHash('sha256').update(readFileSync(join(root,'scripts/tests/validate-demo-runtime-registration.mjs'))).digest('hex')!=='0aec40789483d97aafbeaa69846037de42b7f2f8a71c34979cd74aac8ce5a639')fail('original seventeen registration test declarations must remain exact');
+    const physicalRegression=plan?.stages?.find(stage=>stage.id==='audit-regressions');
+    if(physicalRegression?.command!=='node'||JSON.stringify(physicalRegression?.args)!==JSON.stringify(['--test','scripts/tests/validate-development-self-audit.test.mjs','scripts/tests/validate-ci-consolidation.test.mjs','scripts/tests/validate-demo-physical-successor.mjs','scripts/tests/validate-replay-database-cleanup.test.mjs'])||physicalRegression?.timeout_ms!==25000||!existsSync(join(root,'scripts/tests/validate-demo-physical-successor.mjs')))fail('exact bounded physical successor mutation suite must run in CI');
+    const demoSource=plan?.stages?.find(stage=>stage.id==='demo-source-tests');
+    for(const path of demoSource?.args?.filter(arg=>/^(?:tests|scripts)\//.test(arg))||[])if(!existsSync(join(root,path)))fail(`required demo test missing: ${path}`);
+    for(const [path,sha]of [['scripts/db/run-demo-integration.ts','575b41278b354e0cfeb32a51f4b56f7719169772d19f4cdea5b83f2303222a62']]){
+      if(createHash('sha256').update(readFileSync(join(root,path))).digest('hex')!==sha)fail('exact isolated three-suite demo integration wrapper required');
+    }
+    if(!existsSync(join(root,'scripts/db/verify-demo-generation.mjs')))fail('demo generation proof required');
     const stages = [...workflow.matchAll(/^        run: node scripts\/verification\/run-self-audit\.mjs --stage ([a-z0-9-]+)$/gm)].map(match => match[1]);
     if (JSON.stringify(stages) !== JSON.stringify(plan?.stages?.map(stage => stage.id))) fail('complete ordered checkpoint workflow required');
     const identity = plan?.stages?.find(stage => stage.id === 'postgres-identity-commands');
@@ -72,7 +84,15 @@ export function inspectConsolidationCoverage(root) {
     const coverage=JSON.parse(text),plan=JSON.parse(readFileSync(join(root,'verification/whole-repository/self-audit-plan.json'),'utf8'));
     const stages=new Map(plan.stages.map(stage=>[stage.id,stage]));
     const scripts=JSON.parse(readFileSync(join(root,'package.json'),'utf8')).scripts;
-    if(hash(JSON.stringify(scripts))!=='03f9365e2abc0a7a14f1c3d09d8b60a29461d57835197f9502a66ec2072cc4b7')fail('preserved package command aliases required for all baseline logical checks');
+    // One finite engineering successor preserves the old P05 assertions by
+    // running them against their exact immutable prefix, not the extended head.
+    // Normalize only that byte-reviewed wrapper; every other old alias stays exact.
+    const baselineScripts={...scripts};
+    if(scripts['test:p05:integration']==='node --import tsx scripts/db/run-p05-prefix-integration.ts'){
+      if(hash(readFileSync(join(root,'scripts/db/run-p05-prefix-integration.ts')))!=='76873a320520bc157b46c96e334d6e3140be2e3de07163b753e8509dfe48259d')fail('exact isolated historical P05 prefix wrapper required');
+      baselineScripts['test:p05:integration']='node --import tsx --test tests/integration/learning/learning-session-repository.test.ts';
+    }
+    if(hash(JSON.stringify(baselineScripts))!=='03f9365e2abc0a7a14f1c3d09d8b60a29461d57835197f9502a66ec2072cc4b7')fail('preserved package command aliases required for all baseline logical checks');
     const validators=[];
     for(const dir of readdirSync(join(root,'scripts'),{withFileTypes:true})) {
       if(!dir.isDirectory()||['tests','packaging','release'].includes(dir.name))continue;
@@ -82,13 +102,14 @@ export function inspectConsolidationCoverage(root) {
       }
     }
     // Keep the historical 53-validator consolidation baseline immutable. The
-    // owner-approved capability-name/type batch adds exactly one live admission
-    // validator, executed by the unchanged authority stage's discovery loop.
-    const admittedValidators=['scripts/kernel/validate-capability-admission.mjs','scripts/kernel/validate-demo-runtime-registration.mjs'];
+    // Exact admitted successors add capability names, demo semantics, and the
+    // reviewed physical gate, all executed by the unchanged authority loop.
+    const admittedValidators=['scripts/kernel/validate-capability-admission.mjs','scripts/kernel/validate-demo-runtime-registration.mjs','scripts/persistence/validate-demo-physical-admission.mjs'];
     const requiredValidators=[...coverage.baseline_umbrella_validators,...admittedValidators].sort();
     if(JSON.stringify(validators.sort())!==JSON.stringify(requiredValidators))fail('complete baseline plus exact admitted standalone validator inventory required');
     if(hash(readFileSync(join(root,'scripts/db/replay-database-cleanup.mjs')))!=='54c2027a98ce883aa9f1a892a11b165eabe56353028a23c63cbf495a4887b388')fail('reviewed bounded replay cleanup helper identity required');
-    for(const file of coverage.preserved_test_and_replay_files)if(hash(reconstructHistoricalReplay(file.path,readFileSync(join(root,file.path))))!==file.sha256)fail(`preserved test/replay evidence changed: ${file.path}`);
+    if(hash(preservedProofBytes(root,'scripts/db/verify-slice-p05-generation.mjs'))!=='49869bd439098981b2df581dbae1d505e46af5a3c4dd07a1d1b780e034de32ce')fail('historical generator assertions must remain exact');
+    for(const file of coverage.preserved_test_and_replay_files)if(hash(preservedProofBytes(root,file.path))!==file.sha256)fail(`preserved test/replay evidence changed: ${file.path}`);
     for(const producer of coverage.producer_command_mapping)for(const step of producer.steps)for(const item of step.coverage) {
       if(item.stages?.some(id=>!stages.has(id)))fail(`${producer.workflow}: mapped bounded stage missing`);
       if(item.kind==='bounded_stage') {
@@ -106,4 +127,18 @@ export function inspectConsolidationCoverage(root) {
     }
   } catch(error) { fail(error.message); }
   return errors;
+}
+
+// Keep the original P05 proof and assertions cryptographically intact. Only the
+// finite historical-prefix setup changes for generation against the new head.
+export function preservedProofBytes(root,path){
+ const current=readFileSync(join(root,path),'utf8');
+ if(path!=='scripts/db/verify-slice-p05-generation.mjs')return reconstructHistoricalReplay(path,current);
+ const source=JSON.parse(readFileSync(join(root,'domains/demo-runtime/source-baseline.json'),'utf8')).files;
+ const old=source[path];
+ if(createHash('sha256').update(old).digest('hex')!=='49869bd439098981b2df581dbae1d505e46af5a3c4dd07a1d1b780e034de32ce')throw Error('immutable historical generation proof required');
+ if(current===old)return current;
+ const expected=old.replace('readFileSync, rmSync','readFileSync, readdirSync, rmSync').replace("  rmSync(join(dir, '0004_slice_p05_learning_session.sql'));\n  rmSync(join(dir, 'meta/0004_snapshot.json'));", "  for (const name of readdirSync(dir)) if (/^\\d{4}_/.test(name) && Number(name.slice(0,4)) >= 4) rmSync(join(dir,name));\n  for (const name of readdirSync(join(dir,'meta'))) if (/^\\d{4}_/.test(name) && Number(name.slice(0,4)) >= 4) rmSync(join(dir,'meta',name));").replace("join(root, 'drizzle.config.ts')","join(root, 'drizzle.p05.config.ts')");
+ if(current!==expected||createHash('sha256').update(readFileSync(join(root,'drizzle.p05.config.ts'))).digest('hex')!=='b4ff41891077f5647a041a6ec1690b6407ce07841eb3eb9d670065036076f377')throw Error('exact historical generation prefix setup and unchanged assertions required');
+ return old;
 }

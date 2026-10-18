@@ -1,4 +1,4 @@
-import { inspectDemoRuntimeRegistration, createHistoricalSourceReader } from '../kernel/demo-runtime-registration.mjs';
+import { createPersistenceEvidenceContext } from '../persistence/demo-storage-evidence.mjs';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { resolve, join, dirname } from 'node:path';
 import { inspectConsolidatedVerification } from '../verification/consolidated-ci-evidence.mjs';
@@ -7,9 +7,17 @@ import { inspectCommandCoverage } from './command-coverage-evidence.mjs';
 import { inspectAssignmentAdmission } from '../persistence/assignment-admission-evidence.mjs';
 
 export function inspectRepositoryIntegration(root) {
-  const demo=inspectDemoRuntimeRegistration(root);
-  const predecessor=createHistoricalSourceReader(root,demo.source);
-  const errors=[...demo.errors];
+  let persistence;
+  try { persistence=createPersistenceEvidenceContext(root); }
+  catch(error) { return [`repository integration: unverified persistence evidence: ${error.message}`]; }
+  const errors=[...persistence.errors];
+  // A marker or claimed ADMIT is insufficient: only independently reviewed
+  // current storage may use these exact two tables at these exact locations.
+  const admittedDemo=persistence.extended && persistence.errors.length===0;
+  const admittedFutureTable=(path,table)=>admittedDemo &&
+    ['learning_assignments','learning_progress_events'].includes(table.replace(/^public\./,'')) &&
+    ['src/modules/learning/infrastructure/persistence/demo-schema.ts',
+     'drizzle/0005_demo_runtime_owner_storage.sql','drizzle/meta/0005_snapshot.json'].includes(path);
   const fail=(message)=>errors.push(`repository integration: ${message}`);
   const load=(path)=>{try{return JSON.parse(readFileSync(join(root,path),'utf8'));}catch(error){fail(`${path}: ${error.message}`);return null;}};
   const text=(path)=>{try{return readFileSync(join(root,path),'utf8');}catch(error){fail(`${path}: ${error.message}`);return '';}};
@@ -44,24 +52,29 @@ export function inspectRepositoryIntegration(root) {
     }
     if(/\bpgTable\s*\(/.test(source) && /assignment|certification|progress.event/i.test(path)) fail(`${path}: future physical schema has no ADMIT authority`);
     for(const match of source.matchAll(/\bpgTable\s*\(\s*['"]([^'"]+)['"]/g)) {
-      if(/assignment|certification|progress.?event/i.test(match[1])) fail(`${path}: future physical table has no ADMIT authority`);
+      if(/assignment|certification|progress.?event/i.test(match[1]) && !admittedFutureTable(path,match[1])) fail(`${path}: future physical table has no ADMIT authority`);
     }
   }
   for(const path of walk('drizzle')) {
     if(path.endsWith('.sql')) {
       for(const match of text(path).matchAll(/CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(?:"?public"?\.)?"?([a-z_][a-z0-9_]*)/gi)) {
-        if(/assignment|certification|progress.?event/i.test(match[1])) fail(`${path}: future migration table has no ADMIT authority`);
+        if(/assignment|certification|progress.?event/i.test(match[1]) && !admittedFutureTable(path,match[1])) fail(`${path}: future migration table has no ADMIT authority`);
       }
     }
     if(/_snapshot\.json$/.test(path)) for(const table of Object.keys(load(path)?.tables||{})) {
-      if(/assignment|certification|progress.?event/i.test(table)) fail(`${path}: future snapshot table has no ADMIT authority`);
+      if(/assignment|certification|progress.?event/i.test(table) && !admittedFutureTable(path,table)) fail(`${path}: future snapshot table has no ADMIT authority`);
     }
   }
   const composition=text('src/bootstrap/learning-persistence-schema.ts');
   if(/Repository|\.insert\(|\.update\(|\.delete\(/.test(composition)) fail('build-time schema composition cannot activate runtime persistence');
-  const queue=load('persistence/physical-slices/queue-post-p05.json');
-  // Retained future queue is still BLOCK; prove its preceding relationship inventory separately from live exact semantic closure.
-  const relationships=JSON.parse(predecessor('kernel/relationships.json'));
+  // Preserve the original BLOCK queue assertions against hash-verified history
+  // only after the exact live successor and actual storage pass above. Current
+  // P06/P08 admission remains independently checked, never inferred from history.
+  let queue=null, relationships=null;
+  try {
+    queue=JSON.parse(persistence.read('persistence/physical-slices/queue-post-p05.json'));
+    relationships=JSON.parse(persistence.read('kernel/relationships.json'));
+  } catch(error) { fail(`historical queue evidence: ${error.message}`); }
   const ids=load('kernel/identifiers.json');
   const entities=load('kernel/entities.json');
   if(queue?.version!=='1.2.0' || !Array.isArray(queue?.slices) || queue.slices.length!==3 ||
@@ -81,9 +94,9 @@ export function inspectRepositoryIntegration(root) {
   const databasePaths=['scripts/db/migrate.ts',...walk('scripts/db').filter(x=>/^scripts\/db\/verify-.*-replay\.ts$/.test(x)),...walk('tests/integration').filter(x=>x.endsWith('.test.ts'))];
   for(const path of databasePaths) {
     const source=text(path);
-    const guard=source.indexOf('assertIsolatedDatabaseTarget(process.env.DATABASE_URL)');
+    const guard=source.search(/\bassertIsolatedDatabaseTarget\s*\(\s*process\.env\.DATABASE_URL\s*\)/);
     const pool=source.search(/new\s+(?:pg\.)?Pool\s*\(/);
-    if(!source.includes('import { assertIsolatedDatabaseTarget }') || guard<0 || pool<0 || guard>pool) fail(`${path}: isolated target guard must run before any Pool`);
+    if(!/\bimport\s*\{\s*assertIsolatedDatabaseTarget\s*\}\s*from\s*['"][^'"]*isolated-database-target\.mjs['"]/.test(source) || guard<0 || pool<0 || guard>pool) fail(`${path}: isolated target guard must run before any Pool`);
   }
   errors.push(...inspectConsolidatedVerification(root));
   errors.push(...inspectAssignmentAdmission(root), ...inspectFutureAdmission(root,'P07'), ...inspectFutureAdmission(root,'P08'), ...inspectCommandCoverage(root));

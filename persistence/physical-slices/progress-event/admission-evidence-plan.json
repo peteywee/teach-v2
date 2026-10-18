@@ -1,41 +1,41 @@
 {
   "plan_id": "TEACH-SLICE-P08-ADMISSION-EVIDENCE-PLAN",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "status": "recorded",
-  "baseline_commit": "1c6065e1af5292abc2c8fdc75ee5a6e611b820bd",
+  "updated_on": "2026-10-17",
+  "issue": "#82",
   "slice": "SLICE-P08",
   "owning_module": "Learning",
   "records": [
     "ProgressEvent"
   ],
-  "registered_relationships": [
-    "ProgressEventBelongsToLearningSession"
-  ],
+  "demo_physical_successor": {
+    "record": "persistence/physical-slices/demo-runtime/physical-successor.json",
+    "phase": "AUTHORING_UNDER_TEST",
+    "evidence_proof": "UNDER_TEST",
+    "runtime_proof": "NOT_RUN",
+    "shared_or_production_migration_execution_authorized": false
+  },
+  "physical_schema_authorized": true,
+  "implementation_authorized": true,
+  "migration_authoring_authorized": true,
   "runtime_activation": "BLOCKED",
-  "shape_decision": "UNKNOWN",
-  "lifecycle_decision": "UNKNOWN",
-  "protected_scope_decision": "UNKNOWN",
-  "content_version_decision": "UNKNOWN",
+  "shared_or_production_migration_execution_authorized": false,
+  "reviewed_plan": "persistence/physical-slices/demo-runtime/admission-evidence-plan.json",
+  "reviewed_plan_sha256": "3193cbd993d91956bac089c944eb8def2c15bdcf5dd8af866657867915728170",
+  "shape_decision": "APPROVED_EXACT_DEMO_PACKAGE",
+  "lifecycle_decision": "APPROVED_EXACT_DEMO_PACKAGE",
+  "protected_scope_decision": "APPROVED_EXACT_DEMO_PACKAGE",
+  "content_version_decision": "APPROVED_EXACT_DEMO_PACKAGE",
+  "unresolved_gates": [],
+  "evidence_proof": "UNDER_TEST",
+  "runtime_proof": "NOT_RUN",
   "required_evidence": [
-    "two independent empty-database replays yield the same full-schema fingerprint",
-    "P07-to-P08 upgrade matches the empty-database fingerprint",
-    "every event binds exact authoritative content-version and LearningSession identity",
-    "learner-only authoritative scope; wrong learner, manager and unavailable authorization deny without inserting",
-    "duplicate and concurrent events follow explicit idempotency key source, changed-payload rejection and retention horizon",
-    "event append and required audit or progress mutation commit atomically; failure rolls back partial writes",
-    "session completion and event append contention obey an explicitly approved ordering policy",
-    "persisted events reconstruct progress under approved derivation; sample values are not conformance proof",
-    "foreign-module direct persistence access is rejected; no transport/offline or runtime activation"
-  ],
-  "unresolved_gates": [
-    "ContentVersion remains candidate; C31 OQ-CNT-1 representation is unselected",
-    "Canonical event payload and retry/reconciliation horizon have not been selected",
-    "Learning runtime authorization remains blocked under issue #58",
-    "C13 membership scope and C14 capability vocabulary remain unresolved",
-    "C32 OQ-LRN-2 derivation and OQ-LRN-3 carryover remain unknown; do not invent mastery or XP rules"
-  ],
-  "physical_schema_authorized": false,
-  "implementation_authorized": false,
-  "migration_authoring_authorized": false,
-  "shared_or_production_migration_execution_authorized": false
+    "Exact reviewed aggregate plan is controlling, including all negative/race/rollback/privilege oracles.",
+    "Two empty databases and actual empty P05-head upgrade converge; populated orphan P05 upgrade rejects atomically with data/journal unchanged.",
+    "P01-P05 migration SQL and original snapshots remain byte-immutable.",
+    "Current authority after all locks, atomic effect/audit/lifecycle/receipt, immutable retained history and exact scoped identity/content binding.",
+    "P07 Certification remains BLOCK; no fabricated P07 upgrade prerequisite.",
+    "Supabase Data API and shared/production execution are NOT_RUN and out of scope."
+  ]
 }

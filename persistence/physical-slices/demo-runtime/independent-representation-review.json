@@ -1,0 +1,28 @@
+{
+  "review_id": "TEACH-DEMO-PHYSICAL-ADMISSION-INDEPENDENT-2026-10-17",
+  "reviewer": "/root/review_demo_physical_admission",
+  "reviewed_at": "2026-10-17T20:47:33Z",
+  "scope": "Physical representation and admission evidence plan only; not SQL execution or runtime conformance",
+  "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+  "package_sha256sums_digest": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+  "baseline_tree": "771867f1dbb47e277f90158a9f25b504bb786510",
+  "mapping_sha256": "5cac3a47dc4ac22085fc262c14a89a5f4e9586d7b4dc0004b5ca084bf34c7ae4",
+  "evidence_plan_sha256": "3193cbd993d91956bac089c944eb8def2c15bdcf5dd8af866657867915728170",
+  "outcome": "PASS_WITH_PREREQUISITES",
+  "unresolved_mapping_blockers": [],
+  "required_before_physical_authoring": [
+    "Exact package semantic registration must receive independent PASS against its exact registered candidate.",
+    "Fresh automated physical ADMIT must resolve every field, relationship, state and owner against that independently passed registration, including revised P05 cardinality and former P06/P08 blocks.",
+    "The reviewed mapping and plan digests must remain exact; any material change requires re-review."
+  ],
+  "verified_read_only": [
+    "All 16 package files match SHA256SUMS and supplied package digest.",
+    "Baseline tree exactly matches; all five prior migration SQL files and six prior metadata files match recorded hashes.",
+    "14 new tables plus P05 extension, 108 columns, owners and typed dependencies are source-bound; no extra entity, lifecycle, infrastructure table or customer policy.",
+    "Scoped references, immutable history, fail-closed populated P05 upgrade, audit dedup, receipt semantics and isolation/fault/race oracles align with exact package and preserved baseline."
+  ],
+  "runtime_proof": "NOT_RUN",
+  "migration_execution_proof": "NOT_RUN",
+  "shared_or_production_execution_authorized": false,
+  "source_edits_by_reviewer": false
+}

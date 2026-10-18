@@ -3,6 +3,7 @@ import { readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { inspectRepositoryIntegration } from './repository-integration-evidence.mjs';
+import { inspectDemoStorageEvidence } from '../persistence/demo-storage-evidence.mjs';
 
 const root=resolve(process.cwd());
 const errors=inspectRepositoryIntegration(root);
@@ -23,4 +24,7 @@ for(const path of scripts) {
 if(errors.length){console.error(`WHOLE-REPOSITORY AUDIT FAILED (${errors.length})\n${errors.join('\n')}`);process.exit(1);}
 console.log(`WHOLE-REPOSITORY AUDIT PASS: ${scripts.length} standalone authority/admission validators`);
 console.log('PROVEN: module/layer dependency checks, Application-owned repository ports, isolated execution entry guards, future queue/admission reconciliation');
-console.log('BLOCK: P06/P07/P08 admission; UNKNOWN: all-command runtime authorization/audit/orchestration conformance; BLOCKED: shared/production execution');
+const storage=inspectDemoStorageEvidence(root);
+console.log(storage.extended && storage.errors.length===0
+  ? 'ADMIT: exact demo P05 extension/P06 Assignment/P08 ProgressEvent authoring only; UNDER_TEST: current storage proof; BLOCK: P07 Certification; UNKNOWN: all-command runtime authorization/audit/orchestration conformance; BLOCKED: shared/production execution'
+  : 'BLOCK: P06/P07/P08 admission; UNKNOWN: all-command runtime authorization/audit/orchestration conformance; BLOCKED: shared/production execution');

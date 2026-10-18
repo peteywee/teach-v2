@@ -16,10 +16,21 @@
       "timeout_ms": 25000
     },
     {
+      "id": "demo-registration-entry-regressions",
+      "command": "node",
+      "args": [
+        "--test",
+        "--test-name-pattern=^all 131 exact registered entries reject partial approval and deletion$",
+        "scripts/tests/validate-demo-runtime-registration.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
       "id": "demo-registration-regressions",
       "command": "node",
       "args": [
         "--test",
+        "--test-name-pattern=^(?:exact demo successor proves 131 entries, 236 approved, 583 references and no holds|every family rejects extra entries and unrelated status promotions|typed references cannot substitute a candidate homonym or wrong family|Membership promotion removes only old hold and cannot promote candidate business events|baseline bytes, exact owner evidence and proposal files are immutable|registration inventory, activation scope and authority hash allowlist cannot be forged|manifest ancestry and exact one-owner assignments remain closed|current immutable historical evidence is checked live, never hidden by baseline reads|every registered changed authority file remains byte-bound to reviewed registration|envelope collisions never rename ContentPack or replace LifecycleSnapshot definition|actual kernel, admission and historical discovery CLIs reject changed live authority|only three exact approved four-segment names extend baseline grammar|frozen proposal directory rejects unexpected files and nested directories|historical physical criterion order remains non-authoritative without allowing changed evidence|active authority roots reject unregistered files, subdirectories and symlinks|validator harness never accepts expected stderr followed by timeout, signal or launch failure)$",
         "scripts/tests/validate-demo-runtime-registration.mjs"
       ],
       "timeout_ms": 25000
@@ -89,7 +100,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=1/3"
+        "--shard=1/14"
       ],
       "timeout_ms": 25000
     },
@@ -98,7 +109,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=2/3"
+        "--shard=2/14"
       ],
       "timeout_ms": 25000
     },
@@ -107,7 +118,106 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=3/3"
+        "--shard=3/14"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-4",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=4/14"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-5",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=5/14"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-6",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=6/14"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-7",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=7/14"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-8",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=8/14"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-9",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=9/14"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-10",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=10/14"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-11",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=11/14"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-12",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=12/14"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-13",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=13/14"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-14",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=14/14"
       ],
       "timeout_ms": 25000
     },
@@ -118,6 +228,7 @@
         "--test",
         "scripts/tests/validate-development-self-audit.test.mjs",
         "scripts/tests/validate-ci-consolidation.test.mjs",
+        "scripts/tests/validate-demo-physical-successor.mjs",
         "scripts/tests/validate-replay-database-cleanup.test.mjs"
       ],
       "timeout_ms": 25000
@@ -139,6 +250,46 @@
         "scripts/tests/validate-workflow-lifecycle.test.mjs",
         "scripts/tests/validate-workflow-lifecycle-wiring.test.mjs",
         "scripts/tests/validate-workflow-lifecycle-readback.test.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-source-tests",
+      "command": "node",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "tests/demo/activation.test.ts",
+        "tests/demo/application.test.ts",
+        "tests/demo/content.test.ts",
+        "tests/demo/cookie.test.ts",
+        "tests/demo/http-application.test.ts",
+        "tests/demo/transport.test.ts",
+        "tests/demo-web/api.test.mjs",
+        "tests/demo-web/controller.test.mjs",
+        "tests/demo-web/views.test.mjs",
+        "scripts/tests/demo-route-inventory.mjs",
+        "scripts/tests/demo-storage-evidence.mjs",
+        "scripts/tests/demo-validator-predecessor.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-generation",
+      "command": "node",
+      "args": [
+        "scripts/db/verify-demo-generation.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-postgres",
+      "command": "node",
+      "args": [
+        "--import",
+        "tsx",
+        "scripts/db/run-demo-integration.ts"
       ],
       "timeout_ms": 25000
     },

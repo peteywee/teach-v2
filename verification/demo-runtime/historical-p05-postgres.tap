@@ -1,0 +1,76 @@
+TAP version 13
+# Subtest: persists ACTIVE with one required Assignment reference and canonical Identity FK
+ok 1 - persists ACTIVE with one required Assignment reference and canonical Identity FK
+  ---
+  duration_ms: 29.720337
+  ...
+# Subtest: missing Identity is rejected by the physical FK
+ok 2 - missing Identity is rejected by the physical FK
+  ---
+  duration_ms: 9.137942
+  ...
+# Subtest: database rejects assignment_id=null
+ok 3 - database rejects assignment_id=null
+  ---
+  duration_ms: 5.7875
+  ...
+# Subtest: database rejects assignment_id=""
+ok 4 - database rejects assignment_id=""
+  ---
+  duration_ms: 7.368083
+  ...
+# Subtest: database rejects assignment_id="  "
+ok 5 - database rejects assignment_id="  "
+  ---
+  duration_ms: 7.195774
+  ...
+# Subtest: repository and database both reject COMPLETED ingress
+ok 6 - repository and database both reject COMPLETED ingress
+  ---
+  duration_ms: 6.83619
+  ...
+# Subtest: cross-Identity reads and completion disclose nothing and do no mutation
+ok 7 - cross-Identity reads and completion disclose nothing and do no mutation
+  ---
+  duration_ms: 14.708265
+  ...
+# Subtest: completion is terminal; duplicate start cannot overwrite or reopen
+ok 8 - completion is terminal; duplicate start cannot overwrite or reopen
+  ---
+  duration_ms: 12.278018
+  ...
+# Subtest: unlisted lifecycle updates are rejected at the database boundary
+ok 9 - unlisted lifecycle updates are rejected at the database boundary
+  ---
+  duration_ms: 16.977458
+  ...
+# Subtest: Identity, Assignment, and session ID cannot be reassigned
+ok 10 - Identity, Assignment, and session ID cannot be reassigned
+  ---
+  duration_ms: 14.511697
+  ...
+# Subtest: 16 concurrent completions produce exactly one successful mutation
+ok 11 - 16 concurrent completions produce exactly one successful mutation
+  ---
+  duration_ms: 43.172997
+  ...
+# Subtest: failed LearningSession completion preserves ACTIVE and immutable references
+ok 12 - failed LearningSession completion preserves ACTIVE and immutable references
+  ---
+  duration_ms: 8.175822
+  ...
+# Subtest: completion captures scope before a row-lock wait and cannot redirect to another learner
+ok 13 - completion captures scope before a row-lock wait and cannot redirect to another learner
+  ---
+  duration_ms: 11.868441
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 524.348571
+Historical P05 integration PASS against exact five-migration prefix; current demo head is separately tested

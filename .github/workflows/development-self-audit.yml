@@ -50,6 +50,9 @@ jobs:
       - name: Audit authority
         id: audit_authority
         run: node scripts/verification/run-self-audit.mjs --stage authority
+      - name: Audit demo-registration-entry-regressions
+        id: audit_demo_registration_entry_regressions
+        run: node scripts/verification/run-self-audit.mjs --stage demo-registration-entry-regressions
       - name: Audit demo-registration-regressions
         id: audit_demo_registration_regressions
         run: node scripts/verification/run-self-audit.mjs --stage demo-registration-regressions
@@ -83,6 +86,39 @@ jobs:
       - name: Audit validator-shard-3
         id: audit_validator_shard_3
         run: node scripts/verification/run-self-audit.mjs --stage validator-shard-3
+      - name: Audit validator-shard-4
+        id: audit_validator_shard_4
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-4
+      - name: Audit validator-shard-5
+        id: audit_validator_shard_5
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-5
+      - name: Audit validator-shard-6
+        id: audit_validator_shard_6
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-6
+      - name: Audit validator-shard-7
+        id: audit_validator_shard_7
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-7
+      - name: Audit validator-shard-8
+        id: audit_validator_shard_8
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-8
+      - name: Audit validator-shard-9
+        id: audit_validator_shard_9
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-9
+      - name: Audit validator-shard-10
+        id: audit_validator_shard_10
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-10
+      - name: Audit validator-shard-11
+        id: audit_validator_shard_11
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-11
+      - name: Audit validator-shard-12
+        id: audit_validator_shard_12
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-12
+      - name: Audit validator-shard-13
+        id: audit_validator_shard_13
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-13
+      - name: Audit validator-shard-14
+        id: audit_validator_shard_14
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-14
       - name: Audit audit-regressions
         id: audit_audit_regressions
         run: node scripts/verification/run-self-audit.mjs --stage audit-regressions
@@ -92,6 +128,15 @@ jobs:
       - name: Audit lifecycle-regressions
         id: audit_lifecycle_regressions
         run: node scripts/verification/run-self-audit.mjs --stage lifecycle-regressions
+      - name: Audit demo-source-tests
+        id: audit_demo_source_tests
+        run: node scripts/verification/run-self-audit.mjs --stage demo-source-tests
+      - name: Audit demo-generation
+        id: audit_demo_generation
+        run: node scripts/verification/run-self-audit.mjs --stage demo-generation
+      - name: Audit demo-postgres
+        id: audit_demo_postgres
+        run: node scripts/verification/run-self-audit.mjs --stage demo-postgres
       - name: Audit typecheck
         id: audit_typecheck
         run: node scripts/verification/run-self-audit.mjs --stage typecheck

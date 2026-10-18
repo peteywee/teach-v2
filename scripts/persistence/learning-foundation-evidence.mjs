@@ -1,15 +1,17 @@
+import { createPersistenceEvidenceContext } from './demo-storage-evidence.mjs';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { inspectMigrationHistory } from '../packaging/migration-history-guards.mjs';
 import { inspectLearningImplementation } from './learning-implementation-evidence.mjs';
 
-// This validates the current Domain/Application-only checkpoint. It does not
+// This validates the immutable historical Domain/Application-only checkpoint. It does not
 // manufacture runtime or PostgreSQL proof from recorded claims or test doubles.
 export function inspectLearningFoundation(root) {
-  const errors = [];
+  const persistence = createPersistenceEvidenceContext(root);
+  const errors = [...persistence.errors];
   const fail = (message) => errors.push(`SLICE-P05 foundation: ${message}`);
   const load = (path) => {
-    try { return JSON.parse(readFileSync(join(root, path), 'utf8')); }
+    try { return JSON.parse(persistence.read(path)); }
     catch (error) { fail(`${path}: ${error.message}`); return null; }
   };
   const foundation = load('persistence/physical-slices/learning-session/foundation.json');
@@ -65,6 +67,8 @@ export function inspectLearningFoundation(root) {
     for (const path of learning) {
       const source = readFileSync(join(root, path), 'utf8');
       const admittedPhysicalPaths = ['src/modules/learning/infrastructure/persistence/schema.ts', 'src/modules/learning/infrastructure/persistence/postgres-learning-session-repository.ts'];
+      // The exact current owner extension is verified independently above.
+      if (persistence.extended && persistence.errors.length === 0) admittedPhysicalPaths.push('src/modules/learning/infrastructure/persistence/demo-schema.ts', 'src/modules/learning/infrastructure/persistence/postgres-demo-learning.ts');
       if (!admittedPhysicalPaths.includes(path) && (path.includes('/infrastructure/') || /\bpgTable\s*\(|from\s+['"](?:drizzle-orm(?:\/[^'"]*)?|pg)['"]|\bclass\s+Postgres\w*Repository\b/.test(source))) {
         fail(`physical Learning implementation cannot be covered by foundation-only evidence: ${path}`);
       }

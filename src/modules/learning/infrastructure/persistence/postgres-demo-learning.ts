@@ -1,0 +1,19 @@
+import type {LearningPort,Assignment,LearningSession,Progress} from '../../application/ports/demo-learning.js';
+import type {Scope} from '../../../organization/application/ports/demo-organization.js';
+type Query={query<T>(text:string,values?:readonly unknown[]):Promise<T[]>};
+const assignmentFields='id,identity_id AS "identityId",organization_id AS "organizationId",location_id AS "locationId",content_pack_id AS "contentPackId",json_build_object(\'version\',content_version,\'digest\',content_digest) AS "contentVersion",assigned_at AS "assignedAt",status';
+const sessionFields='id,identity_id AS "identityId",assignment_id AS "assignmentId",status,started_at AS "startedAt",completed_at AS "completedAt"';
+const progressFields='id,learning_session_id AS "learningSessionId",content_pack_id AS "contentPackId",json_build_object(\'version\',content_version,\'digest\',content_digest) AS "contentVersion",event_schema_version AS "eventSchemaVersion",sequence,evaluation,recorded_at AS "recordedAt"';
+export class PostgresDemoLearning implements LearningPort {
+ constructor(private readonly db:Query){}
+ async countAssignments(s:Scope){const [r]=await this.db.query<{n:number}>('SELECT count(*)::int AS n FROM learning_assignments WHERE organization_id=$1 AND location_id=$2',[s.organizationId,s.locationId]);return r!.n;}
+ async createAssignment(v:Assignment){await this.db.query('INSERT INTO learning_assignments(id,identity_id,organization_id,location_id,content_pack_id,content_version,content_digest,assigned_at,status) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)',[v.id,v.identityId,v.organizationId,v.locationId,v.contentPackId,v.contentVersion.version,v.contentVersion.digest,v.assignedAt,v.status]);}
+ async getAssignment(id:string,s:Scope){const [r]=await this.db.query<Assignment>(`SELECT ${assignmentFields} FROM learning_assignments WHERE id=$1 AND organization_id=$2 AND location_id=$3 FOR UPDATE`,[id,s.organizationId,s.locationId]);return r??null;}
+ async listAssignments(id:string,s:Scope){return this.db.query<Assignment>(`SELECT ${assignmentFields} FROM learning_assignments WHERE identity_id=$1 AND organization_id=$2 AND location_id=$3 ORDER BY assigned_at,id FOR SHARE`,[id,s.organizationId,s.locationId]);}
+ async createSession(v:LearningSession){await this.db.query('INSERT INTO learning_sessions(id,identity_id,assignment_id,status,started_at,completed_at) VALUES($1,$2,$3,$4,$5,$6)',[v.id,v.identityId,v.assignmentId,v.status,v.startedAt,v.completedAt]);}
+ async getSession(id:string){const [r]=await this.db.query<LearningSession>(`SELECT ${sessionFields} FROM learning_sessions WHERE id=$1 FOR UPDATE`,[id]);return r??null;}
+ async getSessionByAssignment(id:string){const [r]=await this.db.query<LearningSession>(`SELECT ${sessionFields} FROM learning_sessions WHERE assignment_id=$1 FOR UPDATE`,[id]);return r??null;}
+ async listProgress(id:string){return this.db.query<Progress>(`SELECT ${progressFields} FROM learning_progress_events WHERE learning_session_id=$1 ORDER BY sequence FOR SHARE`,[id]);}
+ async appendProgress(v:Progress){await this.db.query('INSERT INTO learning_progress_events(id,learning_session_id,content_pack_id,content_version,content_digest,event_schema_version,sequence,evaluation,recorded_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8::jsonb,$9)',[v.id,v.learningSessionId,v.contentPackId,v.contentVersion.version,v.contentVersion.digest,v.eventSchemaVersion,v.sequence,JSON.stringify(v.evaluation),v.recordedAt]);}
+ async completeSession(id:string,now:Date){const [r]=await this.db.query<LearningSession>(`UPDATE learning_sessions SET status='COMPLETED',completed_at=$2 WHERE id=$1 AND status='ACTIVE' RETURNING ${sessionFields}`,[id,now]);if(!r)throw Error('LearningSession transition failed');return r;}
+}

@@ -1,0 +1,111 @@
+TAP version 13
+# deterministic full-schema fingerprint 5d8fa0c4ae790fce9971afecf18d98bcde5a448f5f93eb254ceda5dadeb1f0bd
+# Subtest: two fresh replays and actual empty P05-head upgrade converge without changing prior migration bytes
+ok 1 - two fresh replays and actual empty P05-head upgrade converge without changing prior migration bytes
+  ---
+  duration_ms: 421.001299
+  ...
+# Subtest: populated P05 orphan upgrade fails atomically without fabrication, deletion or journal changes
+ok 2 - populated P05 orphan upgrade fails atomically without fabrication, deletion or journal changes
+  ---
+  duration_ms: 83.872518
+  ...
+# Subtest: late migration failure rolls back all DDL and preserves prior database for recovery
+ok 3 - late migration failure rolls back all DDL and preserves prior database for recovery
+  ---
+  duration_ms: 217.670684
+  ...
+# Subtest: owner ports scope complete records and rollback a composed transaction
+ok 4 - owner ports scope complete records and rollback a composed transaction
+  ---
+  duration_ms: 138.52141
+  ...
+# Subtest: canonical session owner is nested in the outer transaction, never independently committed
+ok 5 - canonical session owner is nested in the outer transaction, never independently committed
+  ---
+  duration_ms: 20.499093
+  ...
+# Subtest: immutable scope, exact assignment binding and ordered authored progress are enforced in PostgreSQL
+ok 6 - immutable scope, exact assignment binding and ordered authored progress are enforced in PostgreSQL
+  ---
+  duration_ms: 46.369093
+  ...
+# Subtest: assignment quota is atomic at the last slot under run locking
+ok 7 - assignment quota is atomic at the last slot under run locking
+  ---
+  duration_ms: 46.364897
+  ...
+# Subtest: receipt key lock serializes missing keys and rollback releases the lock
+ok 8 - receipt key lock serializes missing keys and rollback releases the lock
+  ---
+  duration_ms: 18.644767
+  ...
+# Subtest: every application table is backend-only with RLS enabled and no browser policies
+ok 9 - every application table is backend-only with RLS enabled and no browser policies
+  ---
+  duration_ms: 21.578978
+  ...
+# Subtest: last lifetime session issuance slot is serialized and close remains available at cap
+ok 10 - last lifetime session issuance slot is serialized and close remains available at cap
+  ---
+  duration_ms: 360.950335
+  ...
+# Subtest: database denial dedup preserves operation and class, null-safe unknown subject, and immutable history
+ok 11 - database denial dedup preserves operation and class, null-safe unknown subject, and immutable history
+  ---
+  duration_ms: 9.84595
+  ...
+# Subtest: same-scope read fence blocks close until read transaction commits
+ok 12 - same-scope read fence blocks close until read transaction commits
+  ---
+  duration_ms: 33.22995
+  ...
+# Subtest: finite content and composite scope references reject tampered versions and cross-tenant rows
+ok 13 - finite content and composite scope references reject tampered versions and cross-tenant rows
+  ---
+  duration_ms: 43.568184
+  ...
+# Subtest: lifecycle snapshots are exact current owner rows with gapless immutable history
+ok 14 - lifecycle snapshots are exact current owner rows with gapless immutable history
+  ---
+  duration_ms: 40.869322
+  ...
+# Subtest: receipt codecs retain only exact effects and require actor membership in exact scope
+ok 15 - receipt codecs retain only exact effects and require actor membership in exact scope
+  ---
+  duration_ms: 39.348104
+  ...
+# Subtest: audit unions validate actor and scoped targets, without inventing progress-success audit
+ok 16 - audit unions validate actor and scoped targets, without inventing progress-success audit
+  ---
+  duration_ms: 35.720501
+  ...
+# Subtest: admission and credential-abuse audit retain distinct IPv6 prefix widths
+ok 17 - admission and credential-abuse audit retain distinct IPv6 prefix widths
+  ---
+  duration_ms: 6.821779
+  ...
+# Subtest: denial hourly cap is100 immutable rows plus one overflow with no counter rewrite
+ok 18 - denial hourly cap is100 immutable rows plus one overflow with no counter rewrite
+  ---
+  duration_ms: 145.22428
+  ...
+# Subtest: the last network-prefix admission slot accepts one complete transaction and rolls the loser back
+ok 19 - the last network-prefix admission slot accepts one complete transaction and rolls the loser back
+  ---
+  duration_ms: 111.142799
+  ...
+# Subtest: retained orphan scopes count toward global-hour and lifetime admission bounds
+ok 20 - retained orphan scopes count toward global-hour and lifetime admission bounds
+  ---
+  duration_ms: 920.091738
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2409.057532

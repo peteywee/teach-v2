@@ -1,33 +1,31 @@
 {
   "queue_id": "TEACH-SLICE-QUEUE-POST-P05",
-  "version": "1.2.0",
-  "updated_on": "2026-10-04",
+  "version": "2.0.0",
+  "updated_on": "2026-10-17",
   "baseline_commit": "1c6065e1af5292abc2c8fdc75ee5a6e611b820bd",
-  "readiness_kind": "dependency discovery and admission gates; not implementation authorization",
+  "readiness_kind": "Exact admitted demo physical authoring; runtime proof under test",
   "slices": [
     {
       "slice": "P06",
       "entity": "Assignment",
       "domain": "Learning",
-      "status": "GATE_REQUIRED",
-      "admission_decision": "BLOCK",
-      "implementation_authorized": false,
-      "migration_authoring_authorized": false,
+      "status": "ADMITTED",
+      "admission_decision": "ADMIT",
+      "implementation_authorized": true,
+      "migration_authoring_authorized": true,
       "identifier": "AssignmentId",
       "relationships": [
         "AssignmentTargetsIdentity",
         "AssignmentReferencesContentPack"
       ],
       "evidence_plan": "persistence/physical-slices/assignment/admission-evidence-plan.json",
-      "blockers": [
-        "unselected Assignment lifecycle/shape",
-        "candidate ContentVersion and unselected content version representation",
-        "missing authoritative Content read",
-        "unresolved protected membership/capability scope",
-        "missing atomic audit append"
-      ],
+      "blockers": [],
       "owner_gate": "#60",
-      "runtime_followup": "#58"
+      "runtime_followup": "#58",
+      "runtime_activation": "BLOCKED",
+      "evidence_proof": "UNDER_TEST",
+      "runtime_proof": "NOT_RUN",
+      "shared_or_production_migration_execution_authorized": false
     },
     {
       "slice": "P07",
@@ -54,20 +52,28 @@
       "slice": "P08",
       "entity": "ProgressEvent",
       "domain": "Learning",
-      "status": "GATE_REQUIRED",
-      "admission_decision": "BLOCK",
-      "implementation_authorized": false,
-      "migration_authoring_authorized": false,
+      "status": "ADMITTED",
+      "admission_decision": "ADMIT",
+      "implementation_authorized": true,
+      "migration_authoring_authorized": true,
       "identifier": "ProgressEventId",
       "relationships": [
         "ProgressEventBelongsToLearningSession"
       ],
       "evidence_plan": "persistence/physical-slices/progress-event/admission-evidence-plan.json",
-      "blockers": [
-        "candidate ContentVersion and unselected canonical event payload/version binding",
-        "unproven Learning runtime authorization and retry/no-duplicate policy"
-      ],
-      "admission_record": "persistence/physical-slices/progress-event/admission.json"
+      "blockers": [],
+      "admission_record": "persistence/physical-slices/progress-event/admission.json",
+      "runtime_activation": "BLOCKED",
+      "evidence_proof": "UNDER_TEST",
+      "runtime_proof": "NOT_RUN",
+      "shared_or_production_migration_execution_authorized": false
     }
-  ]
+  ],
+  "demo_physical_successor": {
+    "record": "persistence/physical-slices/demo-runtime/physical-successor.json",
+    "phase": "AUTHORING_UNDER_TEST",
+    "evidence_proof": "UNDER_TEST",
+    "runtime_proof": "NOT_RUN",
+    "shared_or_production_migration_execution_authorized": false
+  }
 }

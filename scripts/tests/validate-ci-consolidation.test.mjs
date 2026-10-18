@@ -1,17 +1,18 @@
+import {VALIDATOR_PARTITION_COUNT,validatorPartitionOrdinals,validatorPartitionForOrdinal,assertValidatorInventory,WHOLE_REPOSITORY_CONTROLS,REGISTRATION_TEST_NAMES,REGISTRATION_ENTRY_PATTERN,REGISTRATION_REMAINDER_PATTERN} from '../verification/validator-partitions.mjs';
 import assert from 'node:assert/strict';
 import { after, test } from 'node:test';
 import { createHash } from 'node:crypto';
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { runInNewContext } from 'node:vm';
 import { EventEmitter } from 'node:events';
 import { expectedPlan, inspectAuditPlan } from '../verification/self-audit-catalog.mjs';
 import { discoverFoundationTests, evaluateAuditReports, runAuditStage, sourceIdentity } from '../verification/development-self-audit.mjs';
 import { localDocumentGovernanceContext, resolveDocumentGovernanceContext, inspectDocumentGovernanceContext, documentGovernanceArgs } from '../verification/document-governance-context.mjs';
 import { inspectDevelopmentSelfAudit } from '../verification/validate-development-self-audit.mjs';
-import { inspectConsolidatedVerification, inspectConsolidationCoverage, reconstructHistoricalReplay } from '../verification/consolidated-ci-evidence.mjs';
+import { inspectConsolidatedVerification, inspectConsolidationCoverage, preservedProofBytes, reconstructHistoricalReplay } from '../verification/consolidated-ci-evidence.mjs';
 import { deriveWorkflowInventory, inspectClosureObserverText, inspectWorkflowText, closureObserverPath, closureObserverName } from '../verification/workflow-lifecycle-inventory.mjs';
 import { inspectProducerWorkflowWiring, inspectWorkflowLifecycles } from '../verification/validate-workflow-lifecycle.mjs';
 import { buildWorkflowReport, closeWorkflowReport, reportDigest, planWorkflowRecovery } from '../verification/workflow-lifecycle.mjs';
@@ -367,7 +368,24 @@ const UNCHANGED_PROOF_FILES = {
 };
 
 const additions = [
-  ['demo-registration-regressions', 'node', ['--test', 'scripts/tests/validate-demo-runtime-registration.mjs']],
+  ['validator-shard-13', 'node', ['scripts/tests/validate-validators.mjs', '--shard=13/14']],
+  ['validator-shard-14', 'node', ['scripts/tests/validate-validators.mjs', '--shard=14/14']],
+  ['demo-registration-entry-regressions', 'node', ['--test', '--test-name-pattern='+REGISTRATION_ENTRY_PATTERN, 'scripts/tests/validate-demo-runtime-registration.mjs']],
+  ['validator-shard-7', 'node', ['scripts/tests/validate-validators.mjs', '--shard=7/14']],
+  ['validator-shard-8', 'node', ['scripts/tests/validate-validators.mjs', '--shard=8/14']],
+  ['validator-shard-9', 'node', ['scripts/tests/validate-validators.mjs', '--shard=9/14']],
+  ['validator-shard-10', 'node', ['scripts/tests/validate-validators.mjs', '--shard=10/14']],
+  ['validator-shard-11', 'node', ['scripts/tests/validate-validators.mjs', '--shard=11/14']],
+  ['validator-shard-12', 'node', ['scripts/tests/validate-validators.mjs', '--shard=12/14']],
+
+  ['validator-shard-4', 'node', ['scripts/tests/validate-validators.mjs', '--shard=4/14']],
+  ['validator-shard-5', 'node', ['scripts/tests/validate-validators.mjs', '--shard=5/14']],
+  ['validator-shard-6', 'node', ['scripts/tests/validate-validators.mjs', '--shard=6/14']],
+
+  ['demo-source-tests', 'node', ['--import', 'tsx', '--test', 'tests/demo/activation.test.ts', 'tests/demo/application.test.ts', 'tests/demo/content.test.ts', 'tests/demo/cookie.test.ts', 'tests/demo/http-application.test.ts', 'tests/demo/transport.test.ts', 'tests/demo-web/api.test.mjs', 'tests/demo-web/controller.test.mjs', 'tests/demo-web/views.test.mjs', 'scripts/tests/demo-route-inventory.mjs', 'scripts/tests/demo-storage-evidence.mjs', 'scripts/tests/demo-validator-predecessor.mjs']],
+  ['demo-generation', 'node', ['scripts/db/verify-demo-generation.mjs']],
+  ['demo-postgres', 'node', ['--import', 'tsx', 'scripts/db/run-demo-integration.ts']],
+  ['demo-registration-regressions', 'node', ['--test', '--test-name-pattern='+REGISTRATION_REMAINDER_PATTERN, 'scripts/tests/validate-demo-runtime-registration.mjs']],
   ['document-governance', 'node', ['scripts/docs/validate-document-metadata.mjs']],
   ['production-contract-decisions', 'node', ['scripts/release/validate-production-proof-contract-decisions.mjs']],
   ['drizzle-history', 'pnpm', ['exec', 'drizzle-kit', 'check']],
@@ -381,11 +399,12 @@ test('all 24 baseline obligations retain their identities, argv, discovery and b
     const stage = expectedPlan.stages.find(x => x.id === old.id);
     assert.ok(stage, old.id);
     const expected = structuredClone(old);
-    if (old.id === 'audit-regressions') expected.args.push('scripts/tests/validate-ci-consolidation.test.mjs', 'scripts/tests/validate-replay-database-cleanup.test.mjs');
+    if (old.id === 'audit-regressions') expected.args.push('scripts/tests/validate-ci-consolidation.test.mjs', 'scripts/tests/validate-demo-physical-successor.mjs', 'scripts/tests/validate-replay-database-cleanup.test.mjs');
+    if(old.id.startsWith('validator-shard-'))expected.args[1]=expected.args[1].replace('/3','/14');
     assert.deepEqual(stage, expected, old.id);
   }
-  assert.equal(expectedPlan.stages.length, 32);
-  assert.equal(new Set(expectedPlan.stages.map(x => x.id)).size, 32);
+  assert.equal(expectedPlan.stages.length, 47);
+  assert.equal(new Set(expectedPlan.stages.map(x => x.id)).size, 47);
   assert.deepEqual(JSON.parse(read('verification/whole-repository/self-audit-plan.json')), expectedPlan);
   assert.equal(expectedPlan.shell_execution, false);
   assert.equal(expectedPlan.max_operation_ms, 25000);
@@ -543,14 +562,15 @@ test('all 53 baseline validators remain in the live umbrella discovery domain', 
   }
   assert.equal(BASELINE_VALIDATORS.length, 53);
   for (const path of BASELINE_VALIDATORS) assert.ok(live.includes(path), path);
+  assert.deepEqual(live.sort(), [...BASELINE_VALIDATORS, 'scripts/kernel/validate-capability-admission.mjs', 'scripts/kernel/validate-demo-runtime-registration.mjs', 'scripts/persistence/validate-demo-physical-admission.mjs'].sort());
 });
 test('all 13 foundation files and seven PostgreSQL suite bodies retain actual assertions', () => {
   const foundation = Object.keys(UNCHANGED_PROOF_FILES).filter(path => path.startsWith('src/modules/'));
   assert.equal(foundation.length, 13);
   for (const path of foundation) assert.ok(discoverFoundationTests(ROOT).includes(path), path);
-  for (const [path, digest] of Object.entries(UNCHANGED_PROOF_FILES)) assert.equal(hash(reconstructHistoricalReplay(path, readFileSync(join(ROOT, path)))), digest, path);
+  for (const [path, digest] of Object.entries(UNCHANGED_PROOF_FILES)) assert.equal(hash(preservedProofBytes(ROOT, path)), digest, path);
   const scripts = JSON.parse(read('package.json')).scripts;
-  for (const [name, command] of Object.entries(BASELINE_COMMANDS)) assert.equal(scripts[name], command, name);
+  for (const [name, command] of Object.entries(BASELINE_COMMANDS)) assert.equal(name==='test:p05:integration'&&scripts[name]==='node --import tsx scripts/db/run-p05-prefix-integration.ts'?'node --import tsx --test tests/integration/learning/learning-session-repository.test.ts':scripts[name], command, name);
 });
 
 function auditEvidence() {
@@ -564,7 +584,7 @@ function auditEvidence() {
     ...(stage.dynamic_input ? { input_context: structuredClone(context), input_context_error: null } : {}),
     runtime: { node: 'v20.20.2', platform: 'linux' }, started_at: '2026-10-17T12:00:00.000Z', finished_at: '2026-10-17T12:00:00.010Z', duration_ms: 10,
     exit_code: 0, timed_out: false, execution_error: null, stdout_sha256: hash('out'), stderr_sha256: hash(''),
-    ...(stage.id.startsWith('validator-shard-') ? { validator_shard: { inventory: 216, index: Number(stage.id.at(-1)), total: 3, selected: 72, digest: hash('inventory') } } : {}),
+    ...(stage.id.startsWith('validator-shard-') ? { validator_shard: { inventory: 220, index: Number(stage.id.split('-').at(-1)), total: 14, selected: validatorPartitionOrdinals(Number(stage.id.split('-').at(-1))).length, digest: '36faf791bb97dd1a99c2c985316d2ee1f123c00be3c1b525db4a040876a2a923' } } : {}),
     full_runtime_conformance: 'UNKNOWN', runtime_activation: 'BLOCKED', shared_or_production_execution_authorized: false,
   }));
   return { source, context, tests, planHash, reports };
@@ -609,7 +629,7 @@ function gitFixture({ realValidator = false } = {}) {
   write('.gitignore', 'verification/generated/\n');
   write('verification/whole-repository/self-audit-plan.json', JSON.stringify(expectedPlan, null, 2) + '\n');
   write('src/modules/example/domain/a.test.ts', '// fixture inventory\n');
-  if (realValidator) for (const path of ['scripts/kernel/demo-runtime-registration.mjs','scripts/kernel/semantic-dependency-closure.mjs']) write(path, read(path));
+  if (realValidator) for (const path of ['scripts/kernel/demo-runtime-registration.mjs','scripts/kernel/semantic-dependency-closure.mjs','scripts/kernel/demo-physical-successor.mjs','scripts/persistence/demo-admission-evidence.mjs','scripts/persistence/admission-criteria.mjs']) write(path, read(path));
   write('scripts/docs/validate-document-metadata.mjs', realValidator ? read('scripts/docs/validate-document-metadata.mjs') : `import {readFileSync,writeFileSync,existsSync} from 'node:fs';\nconst p='verification/generated/control.json';const c=existsSync(p)?JSON.parse(readFileSync(p)):{};writeFileSync('verification/generated/argv.json',JSON.stringify({argv:process.argv.slice(2),legacyBase:process.env.DOC_GOV_BASE_REF??null}));if(c.corrupt_event)writeFileSync(c.corrupt_event,'{invalid');process.exit(c.exit??0);\n`);
   const metadata = { doc_id: 'FIXTURE-001', class: 'governance-policy', version: '1.0.0', status: 'draft', owner: 'VerificationEvidence', created_on: '2026-10-01', updated_on: '2026-10-10' };
   const document = (meta = metadata, body = 'original') => '<!--tos-doc\n' + JSON.stringify(meta) + '\n-->\n' + body + '\n';
@@ -883,9 +903,9 @@ test('coverage manifest preserves all 44 original producer identities and 131 li
   const baseline = manifest.producer_command_mapping.map(w => ({ workflow: w.workflow, name: w.name, steps: w.steps.map(s => ({ baseline_step_id: s.baseline_step_id, baseline_run: s.baseline_run })) }));
   assert.equal(hash(JSON.stringify(baseline)), '8406a3de9e42f7a72315acd0ca94b0369e0028c1e0f2f005b51b48b7313d94be', 'immutable baseline command/step coverage, not count alone');
   assert.deepEqual(manifest.retained_stage_ids, BASELINE_STAGES.map(x => x.id));
-  assert.deepEqual(manifest.added_stage_ids, additions.filter(x=>x[0]!=='demo-registration-regressions').map(x => x[0]));
+  assert.deepEqual(manifest.added_stage_ids, additions.filter(x=>!['demo-registration-entry-regressions','demo-registration-regressions','validator-shard-13','validator-shard-14','demo-source-tests','demo-generation','demo-postgres','validator-shard-4','validator-shard-5','validator-shard-6','validator-shard-7','validator-shard-8','validator-shard-9','validator-shard-10','validator-shard-11','validator-shard-12'].includes(x[0])).map(x => x[0]));
   assert.deepEqual(manifest.baseline_umbrella_validators, BASELINE_VALIDATORS);
-  for (const row of manifest.preserved_test_and_replay_files) assert.equal(hash(reconstructHistoricalReplay(row.path, readFileSync(join(ROOT, row.path)))), row.sha256, row.path);
+  for (const row of manifest.preserved_test_and_replay_files) assert.equal(hash(preservedProofBytes(ROOT, row.path)), row.sha256, row.path);
 });
 test('every old command has a real executable stage, validator, setup or complete test-inventory destination', () => {
   const manifest = JSON.parse(read(COVERAGE));
@@ -1007,6 +1027,45 @@ for(const [label,emit] of [
   ['worker error after report',worker=>{worker.emit('message',{});worker.emit('error',new Error('worker launch/runtime failure'));worker.emit('exit',0);}],
   ['duplicate report',worker=>{worker.emit('message',{});worker.emit('message',{});worker.emit('exit',0);}],
 ])test(`validator worker collector rejects ${label}`,async()=>{const worker=new EventEmitter();const promise=workerHelpers.awaitValidatorWorker(worker,1);emit(worker);await assert.rejects(promise,/worker/);});
+test('live coverage requires physical validator slot 56 and its bounded mutation invocation', () => {
+  mutateFixtureFile('scripts/persistence/validate-demo-physical-admission.mjs', file => rmSync(file));
+  mutateFixtureFile('scripts/tests/validate-demo-physical-successor.mjs', file => rmSync(file), inspectConsolidatedVerification);
+  mutateFixtureFile('verification/whole-repository/self-audit-plan.json', (file, original) => {
+    const plan=JSON.parse(original); plan.stages.find(stage=>stage.id==='audit-regressions').args.pop(); writeFileSync(file,JSON.stringify(plan));
+  }, inspectConsolidatedVerification);
+});
+
+test('real authority umbrella invokes exact physical validator with a five-second bound and propagates failure', () => {
+  const source=read('scripts/architecture/validate-whole-repository.mjs').replace(/^#!.*\n/,'').replace(/^import .*;\n/gm,'');
+  const calls=[], output=[];
+  assert.throws(()=>runInNewContext(source, {
+    readdirSync, join, resolve, inspectRepositoryIntegration:()=>[],
+    spawnSync:(command,args,options)=>{calls.push({command,args,options});return args[0]==='scripts/persistence/validate-demo-physical-admission.mjs'?{status:1,stderr:'physical-negative-control'}:{status:0};},
+    process:{cwd:()=>ROOT,execPath:process.execPath,exit:code=>{throw new Error(`expected umbrella exit ${code}`);}},
+    console:{error:message=>output.push(message),log:message=>output.push(message)},
+  },{timeout:2000}),/expected umbrella exit 1/);
+  assert.equal(calls.length,56);
+  const physical=calls.find(call=>call.args[0]==='scripts/persistence/validate-demo-physical-admission.mjs');
+  assert.equal(physical.command,process.execPath); assert.equal(physical.options.timeout,5000);
+  assert.match(output.join('\n'),/physical-negative-control/);
+});
+
+for(const id of ['demo-source-tests','demo-generation','demo-postgres'])test(`live CI requires exact bounded ${id} proof`,()=>{
+ mutateFixtureFile('verification/whole-repository/self-audit-plan.json',(file,original)=>{const plan=JSON.parse(original);plan.stages=plan.stages.filter(stage=>stage.id!==id);writeFileSync(file,JSON.stringify(plan));},inspectConsolidatedVerification);
+});
+for(const path of ['scripts/db/run-demo-integration.ts','scripts/db/run-p05-prefix-integration.ts'])test(`live CI rejects weakened disposable integration wrapper ${path}`,()=>{
+ mutateFixtureFile(path,file=>writeFileSync(file,'// omitted suite or prefix isolation\n'),inspectConsolidatedVerification);
+});
+
+test('historical generator setup successor preserves original proof bytes and every assertion',()=>{
+ const path='scripts/db/verify-slice-p05-generation.mjs';
+ const old=preservedProofBytes(ROOT,path),current=read(path);
+ assert.equal(hash(old),'49869bd439098981b2df581dbae1d505e46af5a3c4dd07a1d1b780e034de32ce');
+ assert.equal(hash(current),'d701f495b486a2d23be21228865db2b87b69ff23d8d3e04ff188bf4521a66da1');
+ assert.equal(current.slice(current.indexOf('  const sql =')),old.slice(old.indexOf('  const sql =')));
+ mutateFixtureFile(path,file=>writeFileSync(file,current.replace('assert.equal(','console.log(')));
+ mutateFixtureFile('drizzle.p05.config.ts',file=>writeFileSync(file,'export default {};\n'));
+});
 
 test('live coverage rejects a weakened or deleted bounded replay cleanup helper', () => {
   mutateFixtureFile('scripts/db/replay-database-cleanup.mjs', file => writeFileSync(file, 'export async function dropReplayDatabase() {}\n'));
@@ -1016,4 +1075,60 @@ test('live coverage rejects restoring forced backend termination', () => {
   mutateFixtureFile('scripts/db/verify-migration-replay.ts', (file, original) => {
     writeFileSync(file, reconstructHistoricalReplay('scripts/db/verify-migration-replay.ts', original));
   });
+});
+
+test('fourteen bounded partitions isolate both whole-audit controls and retain every original ordinal exactly once',()=>{
+ const all=Array.from({length:220},(_,i)=>i), partitions=Array.from({length:14},(_,i)=>validatorPartitionOrdinals(i+1));
+ assert.deepEqual(partitions.flat().sort((a,b)=>a-b),all);
+ assert.equal(new Set(partitions.flat()).size,220);
+ assert.deepEqual(partitions[12],[152]);assert.deepEqual(partitions[13],[153]);
+ for(let i=0;i<12;i++)assert.deepEqual(partitions[i],all.filter(n=>n%12===i&&n!==152&&n!==153));
+ const stages=expectedPlan.stages.filter(s=>s.id.startsWith('validator-shard-'));
+ assert.deepEqual(stages.map(s=>s.args[1]),Array.from({length:14},(_,i)=>`--shard=${i+1}/14`));
+ for(const ordinal of [-1,220,NaN,1.5,'152'])assert.throws(()=>validatorPartitionForOrdinal(ordinal),/exact validator ordinal/);
+ for(const index of [0,15,NaN,1.5,'13'])assert.throws(()=>validatorPartitionOrdinals(index),/exact validator partition/);
+});
+test('dedicated controls cannot be renamed, moved, omitted or duplicated behind the catalog digest',()=>{
+ const names=[...workerNames];assert.doesNotThrow(()=>assertValidatorInventory(names));
+ for(const mutate of [a=>a.pop(),a=>a.push(a[0]),a=>[a[152],a[153]]=[a[153],a[152]],a=>a[152]='unreviewed control']){
+  const changed=[...names];mutate(changed);assert.throws(()=>assertValidatorInventory(changed),/exact original/);
+ }
+ assert.deepEqual(WHOLE_REPOSITORY_CONTROLS.map(row=>[row.ordinal,row.name,row.partition]),[[152,'whole audit: every standalone gate passes',13],[153,'whole audit: an otherwise untriggered historical validator fails',14]]);
+});
+test('registration split executes exactly one plus sixteen unchanged test declarations',()=>{
+ const source=read('scripts/tests/validate-demo-runtime-registration.mjs');
+ assert.equal(hash(source),'0aec40789483d97aafbeaa69846037de42b7f2f8a71c34979cd74aac8ce5a639');
+ const names=[...source.matchAll(/^test\('([^']+)'/gm)].map(match=>match[1]);assert.equal(names.length,17);assert.deepEqual(names,REGISTRATION_TEST_NAMES);
+ const stages=expectedPlan.stages.filter(stage=>['demo-registration-entry-regressions','demo-registration-regressions'].includes(stage.id));
+ const selected=stages.map(stage=>names.filter(name=>new RegExp(stage.args[1].slice('--test-name-pattern='.length)).test(name)));
+ assert.deepEqual(selected.map(rows=>rows.length),[1,16]);
+ assert.deepEqual([...selected.flat()].sort(),[...names].sort());assert.equal(new Set(selected.flat()).size,17);
+});
+
+test('actual fourteen-partition harness selection executes each declared ordinal in its exact one stage',()=>{
+ const start=workerHarnessSource.indexOf('function test(name, script, mutate, expect)'),end=workerHarnessSource.indexOf('// ---------------------------------------------------------------------------\n// Semantic kernel:',start);
+ assert.ok(start>0&&end>start);
+ assert.match(workerHarnessSource,/if \(shardTotal !== VALIDATOR_PARTITION_COUNT\) \{/);
+ for(let index=1;index<=14;index++){
+  const results=[],context={inventoryNames:[],inventoryCount:0,shardTotal:14,shardIndex:index,VALIDATOR_PARTITION_COUNT,validatorPartitionForOrdinal,predecessorCases:[],scratch:()=>'/unused-pure-fixture',rmSync:()=>{},results,runValidator:()=>({exit:0,output:'',ordinaryProcessExit:true}),validatorResultMatches:()=>true};
+  const execute=runInNewContext(workerHarnessSource.slice(start,end)+'; test;',context);
+  for(const name of workerNames)execute(name,'unused-script',()=>{},{pass:true});
+  assert.deepEqual(results.map(row=>row.ordinal),validatorPartitionOrdinals(index));
+  assert.deepEqual(results.map(row=>row.name),validatorPartitionOrdinals(index).map(ordinal=>workerNames[ordinal]));
+  assert.equal(context.inventoryCount,220);
+ }
+});
+
+test('pinned Node test runner executes exact registration partitions without parent-suite leakage',()=>{
+ const dir=mkdtempSync(join(tmpdir(),'registration-selector-')),file=join(dir,'selectors.test.mjs');
+ try{
+  writeFileSync(file,"import {test} from 'node:test';\n"+REGISTRATION_TEST_NAMES.map(name=>`test(${JSON.stringify(name)},()=>console.log('EXECUTED:'+${JSON.stringify(JSON.stringify(name))}));`).join('\n')+'\n');
+  const {NODE_TEST_CONTEXT:parentTestContext,...childEnvironment}=process.env;
+  const run=pattern=>{const out=execFileSync(process.execPath,['--test','--test-reporter=tap','--test-name-pattern='+pattern,file],{env:childEnvironment,encoding:'utf8',timeout:5000});return [...out.matchAll(/^# EXECUTED:(.+)$/gm)].map(match=>JSON.parse(match[1]));};
+  assert.deepEqual(run(REGISTRATION_ENTRY_PATTERN),[REGISTRATION_TEST_NAMES[1]]);
+  assert.deepEqual(run(REGISTRATION_REMAINDER_PATTERN),REGISTRATION_TEST_NAMES.filter((_,index)=>index!==1));
+  // The former tempting negative-lookahead selector matches the parent suite.
+  // This executable control is why pure RegExp.test(name) is not sufficient.
+  assert.equal(run('^(?!all 131 exact registered entries reject partial approval and deletion$)').length,17);
+ }finally{rmSync(dir,{recursive:true,force:true});}
 });

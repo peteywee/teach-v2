@@ -4,7 +4,7 @@
 /teach-v2-document-governance-*.patch
 /teach-v2-document-governance-*.sha256
 /teach-v2-document-governance-*/
-node_modules/
+node_modules
 dist/
 .env
 .env.*

@@ -1,9 +1,10 @@
+import {VALIDATOR_PARTITION_COUNT,validatorPartitionOrdinals,validatorPartitionForOrdinal,assertValidatorInventory,WHOLE_REPOSITORY_CONTROLS} from '../verification/validator-partitions.mjs';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { mkdtempSync,mkdirSync,writeFileSync,readFileSync,rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { execFileSync } from 'node:child_process';
+import { execFileSync,spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { localDocumentGovernanceContext } from '../verification/document-governance-context.mjs';
 import { expectedPlan,inspectAuditPlan } from '../verification/self-audit-catalog.mjs';
@@ -28,7 +29,7 @@ function evidence(){
  ...(stage.dynamic_input?{input_context:structuredClone(documentContext),input_context_error:null}:{}),
  command:[stage.command,...stage.args,...(stage.discover_tests?tests:[])],runtime:{node:'v20.20.2',platform:'linux'},
  started_at:'2026-10-05T02:00:00.000Z',finished_at:'2026-10-05T02:00:00.010Z',duration_ms:10,exit_code:0,timed_out:false,execution_error:null,stdout_sha256:hash('out'),stderr_sha256:hash(''),
- ...(stage.id.startsWith('validator-shard-')?{validator_shard:{inventory:186,index:Number(stage.id.at(-1)),total:3,selected:62,digest:hash('inventory')}}:{}),
+ ...(stage.id.startsWith('validator-shard-')?{validator_shard:{inventory:220,index:Number(stage.id.split('-').at(-1)),total:14,selected:validatorPartitionOrdinals(Number(stage.id.split('-').at(-1))).length,digest:'36faf791bb97dd1a99c2c985316d2ee1f123c00be3c1b525db4a040876a2a923'}}:{}),
  full_runtime_conformance:'UNKNOWN',runtime_activation:'BLOCKED',shared_or_production_execution_authorized:false}));
  return {source,tests,planHash,reports,documentContext};
 }
@@ -97,4 +98,32 @@ for(const mode of ['timeout','ordinary-exit'])test(`Linux bounded operation clea
   if(Number.isInteger(childPid))try{process.kill(childPid,'SIGKILL');}catch(error){if(error.code!=='ESRCH')throw error;}
   rmSync(dir,{recursive:true,force:true});
  }
+});
+
+// Exercise the actual CLI through OS pipes, not a mocked stream or direct file.
+// The original immediate-exit behavior must fail the same large-output control.
+for(const exitCode of [0,4])test(`self-audit CLI drains large stdout/stderr pipes and preserves child exit ${exitCode}`,()=>{
+ const stdout='stdout-proof-'.repeat(50000)+'\n',stderr='stderr-proof-'.repeat(50000)+'\n';
+ const f=fixture(`process.stdout.write(${JSON.stringify(stdout)});process.stderr.write(${JSON.stringify(stderr)});process.exitCode=${exitCode};`);
+ try {
+  const cli=new URL('../verification/run-self-audit.mjs',import.meta.url);
+  const env={...process.env};
+  for(const key of Object.keys(env))if(key.startsWith('GITHUB_')||key.startsWith('AUDIT_')||key==='NODE_TEST_CONTEXT')delete env[key];
+  const options={cwd:f.root,env,encoding:'utf8',timeout:10000,maxBuffer:8*1024*1024,stdio:['ignore','pipe','pipe']};
+  const result=spawnSync(process.execPath,[cli.pathname,'--stage','pins'],options);
+  const report=JSON.parse(readFileSync(join(f.root,'verification/generated/self-audit/pins.json'),'utf8'));
+  const checkpoint=`SELF-AUDIT CHECKPOINT pins: ${exitCode===0?'PROVEN':'BLOCKED'}; source ${report.source.source_sha}; bounded evidence saved\n`;
+  assert.equal(result.error,undefined);assert.equal(result.signal,null);assert.equal(result.status,exitCode===0?0:1);
+  assert.equal(result.stdout,stdout+checkpoint);assert.equal(result.stderr,stderr);
+  assert.equal(report.exit_code,exitCode);assert.equal(report.stdout_sha256,hash(stdout));assert.equal(report.stderr_sha256,hash(stderr));
+  assert.equal(report.source_unchanged,true);assert.equal(report.timed_out,false);
+  const source=readFileSync(cli,'utf8');
+  assert.equal(source.split('process.exitCode = main();').length,2);
+  const immediate=source.replace('process.exitCode = main();','process.exit(main());')
+    .replace(/^#![^\n]*\n/,'')
+    .replace(/from '(\.\/[^']+)'/g,(_,specifier)=>`from '${new URL(specifier,cli).href}'`);
+  const control=spawnSync(process.execPath,['--input-type=module','--eval',immediate,'--','cli-control','--stage','pins'],options);
+  assert.equal(control.error,undefined);assert.equal(control.signal,null);assert.equal(control.status,exitCode===0?0:1);
+  assert.ok(control.stdout.length<stdout.length+checkpoint.length||control.stderr.length<stderr.length,'immediate-exit control must demonstrate truncated pipe output');
+ } finally {f.cleanup();}
 });

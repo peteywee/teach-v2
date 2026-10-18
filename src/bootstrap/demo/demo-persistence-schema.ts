@@ -1,0 +1,18 @@
+// Build-time owner-reference composition; this module exports no repository/write API.
+export * from '../../modules/transaction-control/infrastructure/persistence/schema.js';
+export * from '../../modules/identity/infrastructure/persistence/schema.js';
+export * from '../../modules/identity/infrastructure/persistence/token-schema.js';
+export * from '../../modules/identity/infrastructure/persistence/credential-schema.js';
+import { identities } from '../../modules/identity/infrastructure/persistence/schema.js';
+import { defineDemoOrganizationTables } from '../../modules/organization/infrastructure/persistence/demo-schema.js';
+import { defineDemoPersonaTable } from '../../modules/identity/infrastructure/persistence/demo-schema.js';
+import { defineDemoContentTables } from '../../modules/content/infrastructure/persistence/demo-schema.js';
+import { defineDemoLearningTables } from '../../modules/learning/infrastructure/persistence/demo-schema.js';
+import { defineDemoAuditTables } from '../../modules/audit-lifecycle/infrastructure/persistence/demo-schema.js';
+import { defineDemoReceiptTable } from '../../modules/transaction-control/infrastructure/persistence/demo-schema.js';
+export const {organizations,locations,runs,memberships,grants,reporting}=defineDemoOrganizationTables(identities.id);
+export const personas=defineDemoPersonaTable(identities.id,runs.id);
+export const {packs,versions}=defineDemoContentTables(organizations.id);
+export const {assignments,sessions,progress}=defineDemoLearningTables({identityId:identities.id,organizationId:organizations.id,locationId:locations.id,locationOrganizationId:locations.organizationId,membershipIdentityId:memberships.identityId,membershipOrganizationId:memberships.organizationId,membershipLocationId:memberships.locationId,packId:packs.id,packOrganizationId:packs.organizationId,versionPackId:versions.contentPackId,version:versions.version,digest:versions.digest});
+export const {audit,lifecycle}=defineDemoAuditTables(organizations.id,locations.id,locations.organizationId);
+export const receipts=defineDemoReceiptTable(organizations.id,locations.id,locations.organizationId);

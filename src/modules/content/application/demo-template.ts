@@ -1,0 +1,70 @@
+import { validateContent, type ValidatedContent } from '../domain/demo-content.js';
+
+// Exact frozen synthetic_content_template from the approved package. IDs and scope
+// are intentionally generated at admission, never reused literal template markers.
+const template = {
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "title": "Demo Café: A clear team handoff",
+  "blocks_template": [
+    {
+      "kind": "SINGLE_CHOICE",
+      "instruction": "This fictional Demo Café workflow is sample teaching material, not a customer policy. Before handing over an order, compare both the ticket name and the item with the person collecting it. If either is unclear, pause and ask the shift lead rather than guessing.",
+      "prompt": "Two collection tickets have similar names. What should you check before handing over the order?",
+      "options": [
+        "Only the first letter of the name.",
+        "Both the ticket name and the item.",
+        "Whichever order was prepared first."
+      ],
+      "expectedOptionIndex": 1,
+      "feedback": [
+        "A first letter does not distinguish these tickets. Compare both the full ticket name and the item before the handoff.",
+        "Exactly: checking both fields makes the handoff clear and gives you a reason to pause if either does not match.",
+        "Preparation order does not identify the correct recipient. Compare the ticket name and item instead."
+      ]
+    },
+    {
+      "kind": "SINGLE_CHOICE",
+      "instruction": "If a requested change does not match the current ticket, pause the handoff. Read back the requested change and ask the shift lead to confirm the ticket. Do not invent a resolution or mark the task finished while the difference remains unresolved.",
+      "prompt": "The person collecting the order asks for a change that is not on the ticket. What is the next step?",
+      "options": [
+        "Pause, read back the change, and ask the shift lead to confirm the ticket.",
+        "Guess what the person meant and hand over the order.",
+        "Mark the task finished without mentioning the change."
+      ],
+      "expectedOptionIndex": 0,
+      "feedback": [
+        "That is the sample workflow: pause, make the requested change explicit, and get the ticket confirmed before finishing the handoff.",
+        "Guessing leaves two different versions of the request. Read it back and obtain confirmation instead.",
+        "An unresolved difference should stay visible. Pause and get confirmation rather than recording a finished handoff."
+      ]
+    },
+    {
+      "kind": "SINGLE_CHOICE",
+      "instruction": "When passing an unresolved task to another teammate, state the ticket reference, what is unresolved and the next action. Ask the teammate to acknowledge the handoff. The task is not complete merely because someone mentioned it.",
+      "prompt": "Your shift is ending while a ticket change is awaiting confirmation. What makes the handoff clear?",
+      "options": [
+        "Leave without mentioning the unfinished ticket.",
+        "Say only that something needs checking.",
+        "Give the ticket reference, unresolved change and next action, then get acknowledgment."
+      ],
+      "expectedOptionIndex": 2,
+      "feedback": [
+        "The next teammate needs the unresolved task and its next action. Make the handoff explicit before leaving.",
+        "A vague reminder does not identify the task or the next action. Include both and get acknowledgment.",
+        "Exactly: the reference, issue, next action and acknowledgment make ownership clear without pretending the task is already finished."
+      ]
+    }
+  ]
+} as const;
+
+export function newDemoContent(organizationId: string, makeId: () => string): ValidatedContent {
+  return validateContent({
+    schemaVersion: template.schemaVersion, contentPackId: makeId(), organizationId,
+    version: template.version, title: template.title,
+    blocks: template.blocks_template.map(block => ({
+      id: makeId(), kind: block.kind, instruction: block.instruction, prompt: block.prompt,
+      options: [...block.options], expectedOptionIndex: block.expectedOptionIndex, feedback: [...block.feedback],
+    })),
+  });
+}

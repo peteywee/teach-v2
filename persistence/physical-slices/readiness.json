@@ -1,10 +1,10 @@
 {
   "readiness_id": "TEACH-FIRST-PHYSICAL-SLICE-READINESS",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "status": "recorded",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-04",
-  "updated_on": "2026-10-04",
+  "updated_on": "2026-10-17",
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
@@ -32,7 +32,7 @@
     "p04_retrospective_validation_issue": "#48",
     "p04_repair_verification_commit": "ff2287b7d4818151803d8db38a91951f42b22742",
     "slice_p05_implementation_issue": "#51",
-    "slice_p05_verification_source_commit": "923bb733069dbe610f04577a49bd9dc0c386a8f2"
+    "historical_slice_p05_verification_source_commit": "923bb733069dbe610f04577a49bd9dc0c386a8f2"
   },
   "admission_rule": "ADMIT only when every semantic dependency and every shape-affecting owner decision required by the physical schema is approved. Missing, candidate, UNKNOWN, BLOCKED, or contradictory evidence fails closed.",
   "current_physical_slice_admissions": [
@@ -97,16 +97,53 @@
         "LearningSession"
       ],
       "owning_module": "Learning",
-      "admission": "persistence/physical-slices/learning-session/admission.json@1.2.0",
+      "admission": "persistence/physical-slices/learning-session/admission.json@2.0.0",
       "status": "ADMITTED",
       "implementation_authorized": true,
       "migration_authoring_authorized": true,
       "shared_or_production_migration_execution_authorized": false,
       "implementation_state": "IMPLEMENTED",
-      "implementation": "persistence/physical-slices/learning-session/implementation.json@1.0.0"
+      "implementation": "persistence/physical-slices/learning-session/implementation.json@2.0.0",
+      "admission_version": "2.0.0",
+      "implementation_version": "2.0.0",
+      "implementation_evidence": "UNDER_TEST",
+      "runtime_activation": "BLOCKED",
+      "evidence_proof": "UNDER_TEST"
+    },
+    {
+      "id": "SLICE-P06",
+      "name": "Assignment persistence",
+      "records": [
+        "Assignment"
+      ],
+      "owning_module": "Learning",
+      "admission": "persistence/physical-slices/assignment/admission.json@1.0.0",
+      "status": "ADMITTED",
+      "implementation_authorized": true,
+      "migration_authoring_authorized": true,
+      "shared_or_production_migration_execution_authorized": false,
+      "implementation_state": "IMPLEMENTED",
+      "evidence_proof": "UNDER_TEST",
+      "runtime_activation": "BLOCKED"
+    },
+    {
+      "id": "SLICE-P08",
+      "name": "ProgressEvent persistence",
+      "records": [
+        "ProgressEvent"
+      ],
+      "owning_module": "Learning",
+      "admission": "persistence/physical-slices/progress-event/admission.json@1.0.0",
+      "status": "ADMITTED",
+      "implementation_authorized": true,
+      "migration_authoring_authorized": true,
+      "shared_or_production_migration_execution_authorized": false,
+      "implementation_state": "IMPLEMENTED",
+      "evidence_proof": "UNDER_TEST",
+      "runtime_activation": "BLOCKED"
     }
   ],
-  "current_admitted_slice_count": 5,
+  "current_admitted_slice_count": 7,
   "candidate_slices": [
     {
       "id": "SLICE-P01",
@@ -265,14 +302,14 @@
         "LearningSessionId is approved",
         "LearningSessionStatus and LearningSessionStateMachine are approved",
         "IdentityHasLearningSession is approved one-to-many",
-        "LearningSessionUsesAssignment is approved many-to-one"
+        "Each LearningSession requires exactly one Assignment; each Assignment has zero-or-one LearningSession under the approved demo revision"
       ],
       "blockers_removed_by_architecture": [
         "Architecture 1.0.0 names Learning as a runtime domain module",
         "src/modules/learning establishes the source boundary without physical persistence implementation"
       ],
       "admission_issue": "#47",
-      "admission_version": "1.2.0",
+      "admission_version": "2.0.0",
       "implementation_authorized": true,
       "migration_authoring_authorized": true,
       "shared_or_production_migration_execution_authorized": false,
@@ -282,33 +319,39 @@
         "Assignment presence does not grant authorization; C32 LRN-2 remains controlling"
       ],
       "blockers_removed_by_admission": [
-        "All eight Persistence Model 1.0.0 admission criteria are PROVEN against P05 registration 1.0.0 and exact pre-decision main"
+        "All eight physical admission criteria are PROVEN for the exact registered demo package; executed implementation proof remains separate and UNDER_TEST"
       ],
       "admitted_on": "2026-10-04",
-      "implementation_version": "1.0.0",
-      "implementation_evidence": "PROVEN",
+      "implementation_version": "2.0.0",
+      "implementation_evidence": "UNDER_TEST",
       "runtime_activation": "BLOCKED",
-      "implementation_verification_commit": "923bb733069dbe610f04577a49bd9dc0c386a8f2",
-      "schema_fingerprint": "26b0bd492ffb498e90594a9c560b187764b8f5f604cada0de2f9a133825c06a0"
+      "admission": "persistence/physical-slices/learning-session/admission.json@2.0.0",
+      "implementation": "persistence/physical-slices/learning-session/implementation.json@2.0.0",
+      "evidence_proof": "UNDER_TEST",
+      "historical_verification": {
+        "implementation_verification_commit": "923bb733069dbe610f04577a49bd9dc0c386a8f2",
+        "schema_fingerprint": "26b0bd492ffb498e90594a9c560b187764b8f5f604cada0de2f9a133825c06a0"
+      }
     }
   ],
   "narrowed_next_lane": {
-    "preferred_slice": "SLICE-P05",
-    "reason": "P05 physical storage is proven at its verification source; runtime activation awaits authoritative Assignment authorization and atomicity proof.",
+    "preferred_slice": "EXACT_DEMO_RUNTIME",
+    "reason": "Semantic registration and independently reviewed physical representation permit exact isolated authoring; runtime proof is under test.",
     "owner_decisions_required": [],
     "physical_implementation_authorized": true,
-    "next_required_gate": "Prove authoritative Assignment authorization and atomic authorization-plus-insert before runtime activation",
+    "next_required_gate": "Exact real PostgreSQL migration, authorization, race, rollback, privilege and runtime conformance evidence",
     "semantic_promotions_required": [],
     "runtime_activation": "BLOCKED"
   },
   "implementation_guard": {
-    "tables_generated": 8,
-    "migrations_generated": 5,
-    "repositories_generated": 8,
+    "tables_generated": 22,
+    "migrations_generated": 6,
+    "repositories_generated": 14,
     "physical_schema_authorized": true,
     "shared_or_production_migration_execution_authorized": false,
     "full_relational_schema_authorized": false,
-    "implemented_slice_count": 5
+    "implemented_slice_count": 7,
+    "evidence_proof": "UNDER_TEST"
   },
   "evidence_states": {
     "persistence_authority": "PROVEN",
@@ -340,8 +383,8 @@
     "slice_p04_implementation": "PROVEN",
     "slice_p05_schema_admission": "PROVEN",
     "slice_p05_relationship_nullability": "PROVEN",
-    "slice_p05_module_foundation": "PROVEN",
-    "slice_p05_implementation": "PROVEN",
+    "slice_p05_module_foundation": "HISTORICAL_PROVEN",
+    "slice_p05_implementation": "UNDER_TEST",
     "slice_p05_owner_decision": "PROVEN",
     "slice_p04_migration_history": "PROVEN",
     "slice_p04_migration_determinism": "PROVEN",
@@ -349,13 +392,42 @@
     "slice_p04_postgres_integration": "PROVEN",
     "slice_p04_review_findings": "PROVEN",
     "slice_p05_runtime_activation": "BLOCKED",
-    "slice_p05_assignment_authorization": "UNKNOWN",
-    "slice_p05_atomic_authorization_insert": "PENDING",
+    "slice_p05_assignment_authorization": "UNDER_TEST",
+    "slice_p05_atomic_authorization_insert": "UNDER_TEST",
+    "slice_p05_pinned_drizzle_generation": "UNDER_TEST",
+    "slice_p05_postgres_integration": "UNDER_TEST",
+    "slice_p05_migration_determinism": "UNDER_TEST",
+    "slice_p05_p04_upgrade_replay": "UNDER_TEST",
+    "slice_p05_concurrent_completion": "UNDER_TEST",
+    "slice_p05_assignment_existence": "UNDER_TEST",
+    "demo_physical_admission": "PROVEN",
+    "demo_runtime": "UNDER_TEST",
+    "slice_p06_schema_admission": "PROVEN",
+    "slice_p08_schema_admission": "PROVEN"
+  },
+  "demo_physical_successor": {
+    "record": "persistence/physical-slices/demo-runtime/physical-successor.json",
+    "phase": "AUTHORING_UNDER_TEST",
+    "evidence_proof": "UNDER_TEST",
+    "runtime_proof": "NOT_RUN",
+    "shared_or_production_migration_execution_authorized": false
+  },
+  "historical_implementation_guard": {
+    "tables_generated": 8,
+    "migrations_generated": 5,
+    "repositories_generated": 8,
+    "physical_schema_authorized": true,
+    "shared_or_production_migration_execution_authorized": false,
+    "full_relational_schema_authorized": false,
+    "implemented_slice_count": 5
+  },
+  "historical_evidence_states": {
+    "slice_p05_implementation": "PROVEN",
+    "slice_p05_module_foundation": "PROVEN",
     "slice_p05_pinned_drizzle_generation": "PROVEN",
     "slice_p05_postgres_integration": "PROVEN",
     "slice_p05_migration_determinism": "PROVEN",
     "slice_p05_p04_upgrade_replay": "PROVEN",
-    "slice_p05_concurrent_completion": "PROVEN",
-    "slice_p05_assignment_existence": "UNKNOWN"
+    "slice_p05_concurrent_completion": "PROVEN"
   }
 }

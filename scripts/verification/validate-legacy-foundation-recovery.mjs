@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import {createHistoricalSourceReader} from '../kernel/demo-runtime-registration.mjs';
 import {readFileSync,existsSync} from 'node:fs';
 import {resolve,join} from 'node:path';
 import {createHash} from 'node:crypto';
@@ -12,7 +13,9 @@ const hash=text=>createHash('sha256').update(text).digest('hex');
 const base='verification/legacy-recovery/';
 try {
  const inventory=json(base+'owner-decisions.json');
- check(JSON.stringify(inventory)===JSON.stringify(deriveOwnerDecisionInventory(root,inventory.consulted_v2_baseline)),'live owner inventory drift');
+ const historical=createHistoricalSourceReader(root);
+ const readInventory=path=>['persistence/physical-slices/assignment/admission-evidence-plan.json','persistence/physical-slices/progress-event/admission-evidence-plan.json'].includes(path)?historical(path):read(path);
+ check(JSON.stringify(inventory)===JSON.stringify(deriveOwnerDecisionInventory(root,inventory.consulted_v2_baseline,readInventory)),'live owner inventory drift');
  const packet=json(base+'decision-packet.json'),ids=inventory.unresolved_contract_questions.map(x=>x.id);
  check(packet.state==='PROPOSED'&&packet.owner_approval_recorded===false&&packet.resolution_authorized===false&&packet.runtime_activation==='BLOCKED'&&packet.shared_or_production_execution_authorized===false,'recommendations cannot grant authority');
  check(packet.recommendations.length===ids.length&&new Set(packet.recommendations.map(x=>x.id)).size===ids.length&&ids.every(id=>packet.recommendations.some(x=>x.id===id)),'exact complete recommendation inventory required');

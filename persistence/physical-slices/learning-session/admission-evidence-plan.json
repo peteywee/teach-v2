@@ -1,31 +1,41 @@
 {
   "plan_id": "TEACH-SLICE-P05-ADMISSION-EVIDENCE-PLAN",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "status": "recorded",
-  "issue": "#47",
-  "baseline_commit": "971b77faad88c4be5119324b5c324b56d0a78055",
+  "updated_on": "2026-10-17",
+  "issue": "#82",
   "slice": "SLICE-P05",
   "owning_module": "Learning",
   "records": [
     "LearningSession"
   ],
-  "physical_schema_authorized": false,
+  "demo_physical_successor": {
+    "record": "persistence/physical-slices/demo-runtime/physical-successor.json",
+    "phase": "AUTHORING_UNDER_TEST",
+    "evidence_proof": "UNDER_TEST",
+    "runtime_proof": "NOT_RUN",
+    "shared_or_production_migration_execution_authorized": false
+  },
+  "physical_schema_authorized": true,
+  "implementation_authorized": true,
+  "migration_authoring_authorized": true,
+  "runtime_activation": "BLOCKED",
+  "shared_or_production_migration_execution_authorized": false,
+  "reviewed_plan": "persistence/physical-slices/demo-runtime/admission-evidence-plan.json",
+  "reviewed_plan_sha256": "3193cbd993d91956bac089c944eb8def2c15bdcf5dd8af866657867915728170",
+  "shape_decision": "APPROVED_EXACT_DEMO_PACKAGE",
+  "lifecycle_decision": "APPROVED_EXACT_DEMO_PACKAGE",
+  "protected_scope_decision": "APPROVED_EXACT_DEMO_PACKAGE",
+  "content_version_decision": "APPROVED_EXACT_DEMO_PACKAGE",
+  "unresolved_gates": [],
+  "evidence_proof": "UNDER_TEST",
+  "runtime_proof": "NOT_RUN",
   "required_evidence": [
-    "empty-database migration replay is deterministic",
-    "P04-to-P05 upgrade replay is deterministic",
-    "LearningSession belongs to exactly one Identity under C32 LRN-1 and approved IdentityHasLearningSession (one-to-many)",
-    "LearningSession references exactly one Assignment via approved LearningSessionUsesAssignment (many-to-one); owner decision P05-D01 REQUIRED_ONE_ASSIGNMENT requires a non-null physical Assignment reference",
-    "LearningSessionStatus is ACTIVE or COMPLETED (approved state set)",
-    "ACTIVE to COMPLETED is the only allowed transition (OQ-LRN-1 resolved)",
-    "protected reads/writes are predicated by authoritative IdentityId",
-    "Learning source module boundary exists under src/modules/learning before implementation authorization",
-    "foreign modules cannot directly write Learning-owned LearningSession persistence"
-  ],
-  "constraints": [
-    "P05 physical implementation may begin only after automated schema admission proves ADMIT against registration.json@1.0.0",
-    "LearningSession assignment_id must be required/non-null; no absent-Assignment state is authorized",
-    "no ProgressEvent persistence (separate slice)",
-    "no Assignment persistence in P05 (Assignment is referenced, not owned/implemented by this slice)",
-    "no shared or production migration execution"
+    "Exact reviewed aggregate plan is controlling, including all negative/race/rollback/privilege oracles.",
+    "Two empty databases and actual empty P05-head upgrade converge; populated orphan P05 upgrade rejects atomically with data/journal unchanged.",
+    "P01-P05 migration SQL and original snapshots remain byte-immutable.",
+    "Current authority after all locks, atomic effect/audit/lifecycle/receipt, immutable retained history and exact scoped identity/content binding.",
+    "P07 Certification remains BLOCK; no fabricated P07 upgrade prerequisite.",
+    "Supabase Data API and shared/production execution are NOT_RUN and out of scope."
   ]
 }

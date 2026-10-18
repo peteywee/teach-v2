@@ -31,7 +31,7 @@
     "validate:slice-p04": "node scripts/persistence/validate-slice-p04-implementation-boundary.mjs",
     "check:slice-p04": "pnpm typecheck && pnpm test:p04 && node scripts/persistence/validate-slice-p04-schema-admission.mjs && pnpm validate:slice-p04",
     "test:p05:foundation": "node --import tsx --test src/modules/learning/domain/learning-session.test.ts src/modules/learning/application/learning-session-service.test.ts",
-    "test:p05:integration": "node --import tsx --test tests/integration/learning/learning-session-repository.test.ts",
+    "test:p05:integration": "node --import tsx scripts/db/run-p05-prefix-integration.ts",
     "db:verify-p05-replay": "node --import tsx scripts/db/verify-slice-p05-migration-replay.ts",
     "db:verify-p05-generation": "node scripts/db/verify-slice-p05-generation.mjs",
     "validate:slice-p05": "node scripts/persistence/validate-slice-p05-implementation-boundary.mjs",

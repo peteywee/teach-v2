@@ -1,54 +1,70 @@
 {
-  "version": "0.1.0",
+  "version": "1.0.0",
   "status": "recorded",
   "baseline_commit": "1c6065e1af5292abc2c8fdc75ee5a6e611b820bd",
   "slice": "SLICE-P08",
-  "physical_schema_authorized": false,
-  "implementation_authorized": false,
-  "migration_authoring_authorized": false,
+  "physical_schema_authorized": true,
+  "implementation_authorized": true,
+  "migration_authoring_authorized": true,
   "shared_or_production_migration_execution_authorized": false,
   "admission_id": "TEACH-SLICE-P08-SCHEMA-ADMISSION",
-  "decision": "BLOCK",
+  "decision": "ADMIT",
   "criteria": [
     {
       "criterion": "entity is approved",
       "state": "PROVEN",
-      "evidence": "kernel/entities.json: approved Learning-owned ProgressEvent"
+      "evidence": "persistence/physical-slices/demo-runtime/representation.proposed.json; independent-representation-review.json; semantic-independent-review.json; admission-evidence-plan.json; fresh typed dependency and immutable-history evaluation"
     },
     {
       "criterion": "canonical identifier is approved",
       "state": "PROVEN",
-      "evidence": "kernel/identifiers.json: canonical approved ProgressEventId"
+      "evidence": "persistence/physical-slices/demo-runtime/representation.proposed.json; independent-representation-review.json; semantic-independent-review.json; admission-evidence-plan.json; fresh typed dependency and immutable-history evaluation"
     },
     {
       "criterion": "every persisted lifecycle state set is approved",
-      "state": "UNKNOWN",
-      "evidence": "No event payload or append-only physical shape has been selected; absence of a lifecycle field must be an explicit admission decision"
+      "state": "PROVEN",
+      "evidence": "persistence/physical-slices/demo-runtime/representation.proposed.json; independent-representation-review.json; semantic-independent-review.json; admission-evidence-plan.json; fresh typed dependency and immutable-history evaluation"
     },
     {
       "criterion": "every relationship/cardinality encoded by the schema is approved",
-      "state": "UNKNOWN",
-      "evidence": "Registered logical relationships exist; requiredness, version binding and physical encoding remain undecided"
+      "state": "PROVEN",
+      "evidence": "persistence/physical-slices/demo-runtime/representation.proposed.json; independent-representation-review.json; semantic-independent-review.json; admission-evidence-plan.json; fresh typed dependency and immutable-history evaluation"
     },
     {
       "criterion": "no blocking open question changes the record shape",
-      "state": "UNKNOWN",
-      "evidence": "Canonical event payload, ContentVersion binding, replay key source/retention and completion-versus-append ordering remain undecided"
+      "state": "PROVEN",
+      "evidence": "persistence/physical-slices/demo-runtime/representation.proposed.json; independent-representation-review.json; semantic-independent-review.json; admission-evidence-plan.json; fresh typed dependency and immutable-history evaluation"
     },
     {
       "criterion": "owning module is explicit",
       "state": "PROVEN",
-      "evidence": "Domain Ownership Map and Architecture name Learning"
+      "evidence": "persistence/physical-slices/demo-runtime/representation.proposed.json; independent-representation-review.json; semantic-independent-review.json; admission-evidence-plan.json; fresh typed dependency and immutable-history evaluation"
     },
     {
       "criterion": "protected ownership/scope fields are derivable from approved semantics",
-      "state": "UNKNOWN",
-      "evidence": "Authoritative learner-only scope and session Assignment authorization are unproven; manager progress writes must be denied"
+      "state": "PROVEN",
+      "evidence": "persistence/physical-slices/demo-runtime/representation.proposed.json; independent-representation-review.json; semantic-independent-review.json; admission-evidence-plan.json; fresh typed dependency and immutable-history evaluation"
     },
     {
       "criterion": "migration and acceptance evidence plan exists",
       "state": "PROVEN",
-      "evidence": "progress-event/admission-evidence-plan.json@0.1.0 defines replay and negative/runtime evidence"
+      "evidence": "persistence/physical-slices/demo-runtime/representation.proposed.json; independent-representation-review.json; semantic-independent-review.json; admission-evidence-plan.json; fresh typed dependency and immutable-history evaluation"
     }
-  ]
+  ],
+  "updated_on": "2026-10-17",
+  "issue": "#82",
+  "demo_physical_successor": {
+    "record": "persistence/physical-slices/demo-runtime/physical-successor.json",
+    "phase": "AUTHORING_UNDER_TEST",
+    "evidence_proof": "UNDER_TEST",
+    "runtime_proof": "NOT_RUN",
+    "shared_or_production_migration_execution_authorized": false
+  },
+  "runtime_activation": "BLOCKED",
+  "blockers": [],
+  "evidence_proof": "UNDER_TEST",
+  "runtime_proof": "NOT_RUN",
+  "physical_gate": "persistence/physical-slices/demo-runtime/admission.json",
+  "next_required_gate": "Complete real PostgreSQL and runtime evidence; this admission authorizes isolated authoring, not an unproved runtime PASS",
+  "full_relational_schema_authorized": false
 }

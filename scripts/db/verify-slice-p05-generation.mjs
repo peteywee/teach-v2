@@ -1,19 +1,19 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, relative, resolve } from 'node:path';
 const root = resolve(process.cwd());
 const dir = mkdtempSync(join(tmpdir(), 'p05-generated-'));
 try {
   cpSync(join(root, 'drizzle'), dir, { recursive: true });
-  rmSync(join(dir, '0004_slice_p05_learning_session.sql'));
-  rmSync(join(dir, 'meta/0004_snapshot.json'));
+  for (const name of readdirSync(dir)) if (/^\d{4}_/.test(name) && Number(name.slice(0,4)) >= 4) rmSync(join(dir,name));
+  for (const name of readdirSync(join(dir,'meta'))) if (/^\d{4}_/.test(name) && Number(name.slice(0,4)) >= 4) rmSync(join(dir,'meta',name));
   const journal = JSON.parse(readFileSync(join(dir, 'meta/_journal.json'), 'utf8'));
   journal.entries = journal.entries.filter((entry) => entry.idx < 4);
   writeFileSync(join(dir, 'meta/_journal.json'), JSON.stringify(journal));
   const config = join(dir, 'generation.config.ts');
-  writeFileSync(config, `import config from ${JSON.stringify(join(root, 'drizzle.config.ts'))};\nexport default { ...config, out: ${JSON.stringify(relative(root, dir))} };\n`);
+  writeFileSync(config, `import config from ${JSON.stringify(join(root, 'drizzle.p05.config.ts'))};\nexport default { ...config, out: ${JSON.stringify(relative(root, dir))} };\n`);
   execFileSync('pnpm', ['exec', 'drizzle-kit', 'generate', '--name', 'slice_p05_learning_session', '--config', config], { cwd: root, encoding: 'utf8', timeout: 25000, stdio: 'pipe' });
   const sql = readFileSync(join(root, 'drizzle/0004_slice_p05_learning_session.sql'), 'utf8');
   const marker = '\n--> statement-breakpoint\n-- P05 lifecycle guards';

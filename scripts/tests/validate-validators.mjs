@@ -13,6 +13,8 @@
 // Usage: node scripts/tests/validate-validators.mjs
 // Exit 0 = all tests pass. Exit 1 = at least one test failed.
 
+import {VALIDATOR_PARTITION_COUNT,validatorPartitionForOrdinal,assertValidatorInventory} from '../verification/validator-partitions.mjs';
+import {predecessorFixture,exactCurrentDenial,readPredecessorCases,PREDECESSOR_COMMIT,PREDECESSOR_TREE} from '../verification/demo-validator-predecessor.mjs';
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { cpSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -22,6 +24,7 @@ import { Worker, isMainThread, parentPort, workerData } from "node:worker_thread
 
 const ROOT = resolve(new URL(".", import.meta.url).pathname, "../..");
 const results = [];
+const predecessorCases=readPredecessorCases(ROOT).cases;
 const shardArg = process.argv.slice(2);
 if (shardArg.length > 1 || shardArg.length === 1 && !/^--shard=[1-9][0-9]*\/[1-9][0-9]*$/.test(shardArg[0])) throw new Error('only --shard=index/total is supported');
 const [requestedShardIndex, requestedShardTotal] = shardArg.length ? shardArg[0].slice(8).split('/').map(Number) : [1,1];
@@ -58,6 +61,8 @@ function mergeValidatorWorkers(reports, index, total) {
   return { names, results: reports.flatMap(report => report.results).sort((a,b) => a.ordinal-b.ordinal) };
 }
 if (isMainThread && shardTotal <= 16) {
+ // The reviewed fourteen-partition plan runs serially; aggregate controls are isolated.
+ if (shardTotal !== VALIDATOR_PARTITION_COUNT) {
   const pending = [shardIndex, shardIndex + shardTotal].map(index => {
     try { return awaitValidatorWorker(new Worker(new URL(import.meta.url), { workerData: { shardIndex: index, shardTotal: shardTotal * 2 } }), index); }
     catch (error) { return Promise.reject(error); }
@@ -67,11 +72,13 @@ if (isMainThread && shardTotal <= 16) {
     if (settled.some(result => result.status !== 'fulfilled')) throw settled.find(result => result.status === 'rejected').reason;
     const {names,results:merged}=mergeValidatorWorkers(settled.map(result=>result.value),shardIndex,shardTotal);
     let failures=0;
-    for (const row of merged) { console.log(`${row.ok ? 'PASS' : 'FAIL'}  ${row.name}`); if (!row.ok) { failures++; console.log(`      ${row.detail}`); } }
+    for (const row of merged) { console.log(`${row.ok ? 'PASS' : 'FAIL'}  ${row.name}${row.detail.startsWith('PAIRED ')?' [PAIRED predecessor inputs/current validator + current admission]':''}`); if (!row.ok) { failures++; console.log(`      ${row.detail}`); } }
     console.log(`\n${merged.length-failures}/${merged.length} negative-path tests passed.`);
     console.log(`Validator inventory: ${names.length}; shard: ${shardIndex}/${shardTotal}; selected: ${merged.length}; digest: ${createHash('sha256').update(JSON.stringify(names)).digest('hex')}`);
     process.exit(failures ? 1 : 0);
   } catch (error) { console.error(`Validator worker failure: ${error.message}`); process.exit(1); }
+}
+
 }
 
 // Cache only the immutable source snapshot, never a mutable test directory.
@@ -150,20 +157,30 @@ function validatorResultMatches(result, expect) {
 function test(name, script, mutate, expect) {
   inventoryNames.push(name);
   const ordinal=inventoryCount++;
-  if(ordinal % shardTotal !== shardIndex-1) return;
+  if(shardTotal===VALIDATOR_PARTITION_COUNT?validatorPartitionForOrdinal(ordinal)!==shardIndex:ordinal % shardTotal !== shardIndex-1) return;
   const dir = scratch();
   try {
     mutate(dir);
-    const r = runValidator(dir, script);
-    const ok = validatorResultMatches(r, expect);
+    const transition=predecessorCases.find(row=>row.name===name);
+    if(transition&&(transition.script!==script||transition.original_pattern!==(expect.pattern?.source??null)||transition.original_outcome!==(expect.pass?'PASS':'DENIAL')||transition.original_mutation_sha256!==createHash('sha256').update(mutate.toString()).digest('hex')))throw Error('exact original predecessor case declaration required');
+    if(transition?.current_seal_probe_path){const path=join(dir,transition.current_seal_probe_path);writeFileSync(path,readFileSync(path,'utf8')+'\n');}
+    const r = runValidator(dir, transition?.current_probe_script??script);
+    let ok = transition?exactCurrentDenial(r,transition.current_diagnostic,dir):validatorResultMatches(r, expect);
+    let property;
+    if(transition){
+      const predecessor=predecessorFixture(ROOT);
+      try{mutate(predecessor);property=runValidator(predecessor,script);ok=ok&&validatorResultMatches(property,expect);}
+      finally{rmSync(predecessor,{recursive:true,force:true});}
+    }
     let detail;
     if (expect.pass) {
-      detail = ok ? "passed as expected" : `expected pass, got exit ${r.exit}: ${r.output.slice(0, 200)}`;
+      detail = ok ? "passed as expected" : `expected pass, got exit ${r.exit}: ${r.output.slice(0, 1500)}`;
     } else {
       detail = ok
         ? `failed as expected (${expect.pattern})`
-        : `expected failure matching ${expect.pattern}, got exit ${r.exit}: ${r.output.slice(0, 300)}`;
+        : `expected failure matching ${expect.pattern}, got exit ${r.exit}: ${r.output.slice(0, 1500)}`;
     }
+    if(transition)detail=`PAIRED predecessor-input/current-validator property (${PREDECESSOR_COMMIT}/${PREDECESSOR_TREE}): ${validatorResultMatches(property,expect)?'PASS':'FAIL'}; current exact-seal denial: ${exactCurrentDenial(r,transition.current_diagnostic,dir)?'PASS':'FAIL'}; ${detail}${!validatorResultMatches(property,expect)?'\nProperty output: '+property.output.slice(0,1500):''}`;
     results.push({ name, ordinal, ok, detail });
   } finally {
     rmSync(dir, { recursive: true, force: true });
@@ -1208,11 +1225,12 @@ test('capability admission: unrelated promotion fails', 'scripts/kernel/validate
 // Report
 // ---------------------------------------------------------------------------
 
+assertValidatorInventory(inventoryNames);
 if (!isMainThread) { parentPort.postMessage({ results, inventoryNames, inventoryCount }); process.exit(0); }
 
 let failed = 0;
 for (const r of results) {
-  console.log(`${r.ok ? "PASS" : "FAIL"}  ${r.name}`);
+  console.log(`${r.ok ? "PASS" : "FAIL"}  ${r.name}${r.detail.startsWith("PAIRED ")?" [PAIRED predecessor inputs/current validator + current admission]":""}`);
   if (!r.ok) {
     failed++;
     console.log(`      ${r.detail}`);

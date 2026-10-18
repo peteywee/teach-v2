@@ -1,10 +1,12 @@
 #!/usr/bin/env node
+import { createPersistenceEvidenceContext } from './demo-storage-evidence.mjs';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, resolve, relative } from 'node:path';
 
 const ROOT = resolve(process.cwd());
-const errors = [];
-const load = (p) => JSON.parse(readFileSync(join(ROOT, p), 'utf8'));
+const persistence = createPersistenceEvidenceContext(ROOT);
+const errors = [...persistence.errors];
+const load = (p) => JSON.parse(persistence.read(p));
 const text = (p) => readFileSync(join(ROOT, p), 'utf8');
 
 const admission = load(

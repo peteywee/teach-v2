@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { createHistoricalSourceReader, inspectDemoRuntimeRegistration } from '../kernel/demo-runtime-registration.mjs';
-import {readFileSync,readdirSync} from 'node:fs';
+import {DEMO_ROUTE_INVENTORY,inspectDemoRouteInventory} from './demo-route-inventory.mjs';
+import {existsSync,readFileSync,readdirSync} from 'node:fs';
 import {resolve,join} from 'node:path';
 import {createHash} from 'node:crypto';
 import {scanContractQuestions} from './owner-decision-inventory.mjs';
@@ -40,10 +41,18 @@ try {
  for(const [text,tokens] of [[c11,['**IDN-30**','6 digits, 5 attempts, and a 15-minute lock','IDN-AC-23']],[c23,['**AUD-11**','one year, fixed centrally, with no tenant overrides','Audit deletion remains BLOCKED','AUD-AC-9']],[c52,['**REL-17**','24 hours after deployment/promotion','backward-compatible','**REL-18**','Supabase PostgreSQL','Vercel','REL-AC-10','REL-AC-11']],[c53,['**OBS-11**','90 days','provider default with a shorter horizon','OBS-AC-9']]])for(const token of tokens)check(text.includes(token),`policy/acceptance connection missing ${token}`);
  const ledger=read('contracts/APPROVAL-RECORD.md');check(ledger.includes('## Part 24 — Owner policy selections')&&[...selected.keys()].every(x=>ledger.includes(x)),'canonical owner ledger required');
  const index=read('contracts/README.md');for(const token of ['"version": "0.18.0"','- Package version: `0.18.0`','**391**','**267**','**9**','**1**'])check(index.includes(token),'current contract index totals required');
- const scan=json(base+'route-scan.json'),files=[];function walk(path){for(const entry of readdirSync(join(root,path),{withFileTypes:true})){const child=path+'/'+entry.name;if(entry.isDirectory())walk(child);else files.push(child);}}walk('src');files.sort();const hashes=Object.fromEntries(files.map(x=>[x,hash(read(x))]));
- check(JSON.stringify(scan.source_sha256)===JSON.stringify(hashes)&&scan.source_file_count===files.length,'route scan must cover exact current src inventory');
- const entries=files.filter(x=>/\/(?:app|pages)\/.*(?:route\.[cm]?[jt]sx?|api\/)|\/(?:routes|routers)\//.test(x)),hits=files.filter(x=>/\b(?:app|router)\.(?:get|post|put|patch|delete|route)\s*\(|\b(?:createServer|serve)\s*\(/.test(read(x)));
- check(entries.length===0&&hits.length===0&&scan.implemented_http_route_count===0&&scan.approved_boundary_exceptions.length===0&&scan.oq_api_1_resolved===false&&scan.runtime_route_inventory==='UNKNOWN'&&scan.deployment_inspected===false,'absent HTTP transport cannot approve routes or claim deployed inspection');
+ const scan=json(base+'route-scan.json');
+ if(existsSync(join(root,DEMO_ROUTE_INVENTORY))){
+  // Keep the zero-route scan as historical evidence, not a claim about new source.
+  const historical=Object.keys(scan.source_sha256);check(historical.length===scan.source_file_count&&historical.every(path=>hash(read(path))===scan.source_sha256[path]),'historical route scan must preserve every original source hash');
+  check(scan.implemented_http_route_count===0&&scan.approved_boundary_exceptions.length===0&&scan.oq_api_1_resolved===false&&scan.runtime_route_inventory==='UNKNOWN'&&scan.deployment_inspected===false,'original route scan cannot be rewritten as current proof');
+  check(inspectDemoRouteInventory(root,successor).length===0,inspectDemoRouteInventory(root,successor).join('; '));
+ }else{
+  const files=[];function walk(path){for(const entry of readdirSync(join(root,path),{withFileTypes:true})){const child=path+'/'+entry.name;if(entry.isDirectory())walk(child);else files.push(child);}}walk('src');files.sort();const hashes=Object.fromEntries(files.map(x=>[x,hash(read(x))]));
+  check(JSON.stringify(scan.source_sha256)===JSON.stringify(hashes)&&scan.source_file_count===files.length,'route scan must cover exact current src inventory');
+  const entries=files.filter(x=>/\/(?:app|pages)\/.*(?:route\.[cm]?[jt]sx?|api\/)|\/(?:routes|routers)\//.test(x)),hits=files.filter(x=>/\b(?:app|router)\.(?:get|post|put|patch|delete|route)\s*\(|\b(?:createServer|serve)\s*\(/.test(read(x)));
+  check(entries.length===0&&hits.length===0&&scan.implemented_http_route_count===0&&scan.approved_boundary_exceptions.length===0&&scan.oq_api_1_resolved===false&&scan.runtime_route_inventory==='UNKNOWN'&&scan.deployment_inspected===false,'absent HTTP transport cannot approve routes or claim deployed inspection');
+ }
  const c12=read('contracts/c12-application-sessions-contract.md');for(const token of ['ABSOLUTE_12H_IDLE_30M','SESSION_VERIFIER_V1_SHA256_256BIT'])check(c12.includes(token),'session expiry/verifier authority must remain unchanged');
  check(c11.includes('7 days')&&c11.includes('15 minutes')&&c11.includes('1 hour'),'token validity must remain separate from retention');
  console.log('PASS owner policy registration: 5 selected questions, 4 SYS-21 revisions, historical drafts preserved and later #75 registration checked; runtime/deletion/production BLOCKED');

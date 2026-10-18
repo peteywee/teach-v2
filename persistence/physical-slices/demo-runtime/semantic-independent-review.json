@@ -1,0 +1,87 @@
+{
+  "verdict": "PASS",
+  "scope": "Exact approved semantic registration, not physical ADMIT or runtime verification",
+  "reviewed_at_utc": "2026-10-17T21:02:43.458595+00:00",
+  "candidate_commit": "4d759924389590c9bda330008dbfc76291485200",
+  "candidate_tree": "5795b40203414a6751db4e44684b1151cf63903e",
+  "clean_worktree": true,
+  "registration_sha256": "b94cf7c7c9bab35ad2454470295ae2b04b8814bd0ac55c282cdd3dd6df67218d",
+  "approved_package_sha256sums": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+  "exact_changed_kernel_entries": 131,
+  "change_counts": {
+    "PROMOTE": 46,
+    "ADD": 70,
+    "REVISE": 15
+  },
+  "undeclared_or_removed_entries": 0,
+  "proposal_fields_match": true,
+  "live_approved_entries": 236,
+  "live_semantic_references": 583,
+  "live_holds": 0,
+  "reference_hold_evidence": "Fresh Node 20 registration CLI PASS at frozen source",
+  "verified_package_files": 16,
+  "verified_baseline_snapshot_files": 386,
+  "verified_authority_hashes": 67,
+  "CapabilityId_unchanged": true,
+  "product_routes_all_unmounted_unimplemented": 34,
+  "boundary_exceptions_all_unmounted": 3,
+  "owner_query_interfaces": 7,
+  "runtime_physical_source_unchanged": true,
+  "author_test_logs_hash_verified": {
+    "whole_repository": {
+      "status": "PASS",
+      "path": "/workspace/shared/teach-v2-demo-registration-final-audit.log",
+      "sha256": "59ba0053d09ce22775b938932a06b77bae05bb8eec75e88651633ad98afebe54"
+    },
+    "unit_tests": {
+      "status": "PASS",
+      "path": "/workspace/shared/teach-v2-demo-registration-all-unit-final.log",
+      "sha256": "aa167e11e02e9da695a3db2768ac792daef5d529b41ede9edf58309d4a026015"
+    },
+    "demo_mutations": {
+      "status": "PASS",
+      "path": "/workspace/shared/teach-v2-demo-registration-mutations-final.log",
+      "sha256": "774920840cb46a9fd8289b9de907327c9e24b3dad7f69b886e3bc91a164eaaf1"
+    },
+    "legacy_shard1": {
+      "status": "PASS",
+      "path": "/workspace/shared/teach-v2-demo-registration-shard1-final.log",
+      "sha256": "f214314f788e11fafdfd1a03bf89f0fed8b348eff9347253c0f69182c5ccc45b"
+    },
+    "legacy_shard2": {
+      "status": "PASS",
+      "path": "/workspace/shared/teach-v2-demo-registration-shard2-final.log",
+      "sha256": "49dc80a83ddfbca92a9e10f8eadbfc8d9fd2c966b69abfcd98326a98cf353547"
+    },
+    "legacy_shard3": {
+      "status": "PASS",
+      "path": "/workspace/shared/teach-v2-demo-registration-shard3-final.log",
+      "sha256": "128379019f9a5445219939a590f135213f03ae1bc0342660ccec06762fde0b1e"
+    },
+    "ci_consolidation": {
+      "status": "PASS",
+      "path": "/workspace/shared/teach-v2-demo-registration-ci-tests-final.log",
+      "sha256": "6a7017f80731150d2d19c740c88a09da87c56b17cc869a20f7dd68363cfb1624"
+    },
+    "typecheck": {
+      "status": "PASS",
+      "path": "/workspace/shared/teach-v2-demo-registration-typecheck.log",
+      "sha256": "8366207267355d3e3d5bf3bf6e8c94c5f93f6078c34f08973fa2b38cdda6cc92"
+    },
+    "document_history": {
+      "status": "PASS",
+      "path": "/workspace/shared/teach-v2-demo-registration-docs-final.log",
+      "sha256": "0f42419840a19a3f084e649d13709d81f9470a438d54d58a9459ec55577af2c3"
+    },
+    "apply_pins": {
+      "status": "PASS",
+      "path": "/workspace/shared/teach-v2-demo-registration-pins-final.log",
+      "sha256": "c2b5a7b2e16886927c0b98ac34f9bf14bc84e4268773f43a1ac35e7392790f70"
+    },
+    "staging": {
+      "status": "PASS",
+      "path": "/workspace/shared/teach-v2-demo-registration-staging-final.log",
+      "sha256": "bf5efa6838a3902113a34b877e327b37ab43cd76db8ea819cc0b48770d3f2abd"
+    }
+  }
+}
