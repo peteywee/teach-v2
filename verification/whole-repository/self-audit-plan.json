@@ -117,7 +117,8 @@
       "args": [
         "--test",
         "scripts/tests/validate-development-self-audit.test.mjs",
-        "scripts/tests/validate-ci-consolidation.test.mjs"
+        "scripts/tests/validate-ci-consolidation.test.mjs",
+        "scripts/tests/validate-replay-database-cleanup.test.mjs"
       ],
       "timeout_ms": 25000
     },

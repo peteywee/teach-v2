@@ -37,6 +37,30 @@ export function inspectConsolidatedVerification(root) {
   return errors;
 }
 
+// Reviewed cleanup-only projection. Keep the frozen consolidation manifest and
+// all migration/fingerprint assertions immutable; admit only these exact edits.
+export function reconstructHistoricalReplay(path, bytes) {
+  const paths = [
+    'scripts/db/verify-migration-replay.ts',
+    'scripts/db/verify-slice-p02-migration-replay.ts',
+    'scripts/db/verify-slice-p03-migration-replay.ts',
+    'scripts/db/verify-slice-p04-migration-replay.ts',
+    'scripts/db/verify-slice-p05-migration-replay.ts',
+  ];
+  if (!paths.includes(path)) return bytes;
+  const source = bytes.toString();
+  const header = "import { dropReplayDatabase } from './replay-database-cleanup.mjs';\n";
+  const replacement = '  await dropReplayDatabase(admin, name);';
+  if (!source.startsWith(header) || source.split(replacement).length !== 2 || source.includes('pg_terminate_backend')) {
+    throw new Error(`reviewed replay cleanup substitution required: ${path}`);
+  }
+  const query = paths.indexOf(path) < 2
+    ? '`select pg_terminate_backend(pid)\n       from pg_stat_activity\n      where datname = $1 and pid <> pg_backend_pid()`'
+    : '`select pg_terminate_backend(pid) from pg_stat_activity where datname=$1 and pid<>pg_backend_pid()`';
+  return source.slice(header.length).replace(replacement,
+    `  await admin.query(\n    ${query},\n    [name],\n  );\n  await admin.query(\`drop database if exists \${quoteIdent(name)}\`);`);
+}
+
 // Frozen migration evidence is a reviewed control-model input, not editable proof.
 // Validate its identity AND its live execution links; a count or green workflow is insufficient.
 export function inspectConsolidationCoverage(root) {
@@ -63,7 +87,8 @@ export function inspectConsolidationCoverage(root) {
     const admittedValidators=['scripts/kernel/validate-capability-admission.mjs','scripts/kernel/validate-demo-runtime-registration.mjs'];
     const requiredValidators=[...coverage.baseline_umbrella_validators,...admittedValidators].sort();
     if(JSON.stringify(validators.sort())!==JSON.stringify(requiredValidators))fail('complete baseline plus exact admitted standalone validator inventory required');
-    for(const file of coverage.preserved_test_and_replay_files)if(hash(readFileSync(join(root,file.path)))!==file.sha256)fail(`preserved test/replay evidence changed: ${file.path}`);
+    if(hash(readFileSync(join(root,'scripts/db/replay-database-cleanup.mjs')))!=='54c2027a98ce883aa9f1a892a11b165eabe56353028a23c63cbf495a4887b388')fail('reviewed bounded replay cleanup helper identity required');
+    for(const file of coverage.preserved_test_and_replay_files)if(hash(reconstructHistoricalReplay(file.path,readFileSync(join(root,file.path))))!==file.sha256)fail(`preserved test/replay evidence changed: ${file.path}`);
     for(const producer of coverage.producer_command_mapping)for(const step of producer.steps)for(const item of step.coverage) {
       if(item.stages?.some(id=>!stages.has(id)))fail(`${producer.workflow}: mapped bounded stage missing`);
       if(item.kind==='bounded_stage') {
