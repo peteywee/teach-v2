@@ -1,6 +1,4 @@
-import { inspectDemoRuntimeRegistration, createHistoricalSourceReader } from '../kernel/demo-runtime-registration.mjs';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { createPersistenceEvidenceContext } from './demo-storage-evidence.mjs';
 import { requiredAdmissionCriteria } from './admission-criteria.mjs';
 
 const config={
@@ -9,10 +7,10 @@ const config={
 };
 export function inspectFutureAdmission(root,slice) {
   const c=config[slice]; if(!c) return ['future admission: unregistered slice'];
-  const demo=inspectDemoRuntimeRegistration(root);
-  const predecessor=createHistoricalSourceReader(root,demo.source);
-  const errors=[...demo.errors],fail=message=>errors.push(`${slice} admission: ${message}`);
-  const load=path=>{try{return JSON.parse(readFileSync(join(root,path),'utf8'));}catch(error){fail(`${path}: ${error.message}`);return null;}};
+  const persistence=createPersistenceEvidenceContext(root);
+  const predecessor=persistence.read;
+  const errors=[...persistence.errors],fail=message=>errors.push(`${slice} admission: ${message}`);
+  const load=path=>{try{return JSON.parse(predecessor(path));}catch(error){fail(`${path}: ${error.message}`);return null;}};
   const plan=load(`persistence/physical-slices/${c.lane}/admission-evidence-plan.json`),admission=load(`persistence/physical-slices/${c.lane}/admission.json`);
   const authority=load('persistence/authority.json'),entities=load('kernel/entities.json'),ids=load('kernel/identifiers.json'),relationships=JSON.parse(predecessor('kernel/relationships.json')),ownership=load('domains/ownership-map.json'),arch=load('architecture/authority.json');
   const find=(registry,id)=>(registry?.entries||[]).find(x=>x.id===id);

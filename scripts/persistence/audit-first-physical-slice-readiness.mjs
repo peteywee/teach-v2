@@ -73,6 +73,6 @@ console.log('PROVEN: K00 0.17.0 semantic counts');
 console.log('PROVEN: P01-P04 implementation state');
 console.log('PROVEN: P05 REQUIRED_ONE_ASSIGNMENT owner decision');
 console.log('PROVEN: P05 LearningSession schema admission');
-console.log(`P05 physical verification: ${r?.evidence_states?.slice_p05_implementation}`);
-console.log('Artifact totals: 8 tables / 5 migrations / 8 repositories / 5 implemented slices');
+console.log(`Historical P05 physical verification: ${r?.evidence_states?.slice_p05_implementation}`);
+console.log('Historical artifact totals: 8 tables / 5 migrations / 8 repositories / 5 implemented slices');
 console.log('BLOCKED: shared/production migration execution');

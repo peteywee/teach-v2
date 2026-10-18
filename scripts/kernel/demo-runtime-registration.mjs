@@ -3,6 +3,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 import { inspectSemanticDependencyClosure } from './semantic-dependency-closure.mjs';
+import { DEMO_PHYSICAL_ENVELOPE, inspectDemoPhysicalSuccessor } from './demo-physical-successor.mjs';
 
 export const DEMO_PACKAGE_ID = 'TEACH-DEMO-RUNTIME-2026-10-17';
 export const DEMO_PACKAGE_SHA256 = 'a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a';
@@ -158,6 +159,13 @@ export function createHistoricalSourceReader(root, source) {
     'kernel/manifest.json', 'domains/ownership-map.json',
     ...Object.keys(registration.authority_file_hashes ?? {}),
   ] : []);
+  if (registered && existsSync(join(root, DEMO_PHYSICAL_ENVELOPE))) {
+    // Physical predecessors are available only after the complete current
+    // successor passes, never merely because a path appears in a manifest.
+    const verified = inspectDemoRuntimeRegistration(root);
+    if (verified.errors.length) throw new Error(verified.errors.join('\n'));
+    for (const path of verified.physicalSuccessor.revisedPaths) revised.add(path);
+  }
   return path => snapshot && revised.has(path) && Object.hasOwn(snapshot.files, path) ? snapshot.files[path] : readFileSync(join(root, path), 'utf8');
 }
 export function readHistoricalSource(root, path) { return createHistoricalSourceReader(root)(path); }
@@ -281,8 +289,24 @@ export function inspectDemoRuntimeRegistration(root) {
       }
       equal(hash(raw(path)), digest, `registered authority file differs: ${path}`);
     }
+    const closure = inspectSemanticDependencyClosure(docs);
+    errors.push(...closure.errors);
+    equal(closure.approvedEntries, 236, 'exact all-family 236 approved entries required');
+    equal(closure.checkedReferences, 583, 'exact all-family 583 semantic references required');
+    equal(closure.exceptions, [], 'current approved closure must have no historical Membership holds');
+    equal(docs['entities.json'].entries.find(entry => entry.id === 'Membership')?.promotion_hold, undefined, 'Membership hold must be removed after exact promotion');
+    // Ordering is intentional: this synchronous leaf receives verified live
+    // semantics and cannot call either admission orchestrator recursively.
+    const physicalSuccessor = inspectDemoPhysicalSuccessor(root, {
+      errors: [...errors], registered: true, registeredEntries: 131, closure, source, proposal,
+    });
+    errors.push(...physicalSuccessor.errors);
+    const physicalRevisions = new Set(physicalSuccessor.revisedPaths);
     for (const [path, digest] of Object.entries(packageSource.files)) {
       if (Object.hasOwn(overlay, path) || Object.hasOwn(metadata, path) || Object.hasOwn(registeredAuthority ?? {}, path)) continue;
+      // Only nine independently reviewed, byte-exact successors can replace
+      // live predecessor hashes. Retained source hashes were checked above.
+      if (physicalRevisions.has(path)) continue;
       const current = raw(path);
       // Criterion order has never been admission authority: retain the
       // existing positive control while every row, evidence value and all
@@ -297,13 +321,7 @@ export function inspectDemoRuntimeRegistration(root) {
         equal(normalize(current), normalize(source.files[path]), `unchanged preceding source drift: ${path}`);
       } else equal(hash(current), digest, `unchanged preceding source drift: ${path}`);
     }
-    const closure = inspectSemanticDependencyClosure(docs);
-    errors.push(...closure.errors);
-    equal(closure.approvedEntries, 236, 'exact all-family 236 approved entries required');
-    equal(closure.checkedReferences, 583, 'exact all-family 583 semantic references required');
-    equal(closure.exceptions, [], 'current approved closure must have no historical Membership holds');
-    equal(docs['entities.json'].entries.find(entry => entry.id === 'Membership')?.promotion_hold, undefined, 'Membership hold must be removed after exact promotion');
-    return { errors, registered: true, registeredEntries: 131, closure, source, proposal };
+    return { errors, registered: true, registeredEntries: 131, closure, source, proposal, physicalSuccessor };
   } catch (error) {
     errors.push(`demo registration: missing or malformed evidence: ${error.message}`);
     return { errors, registered: true };

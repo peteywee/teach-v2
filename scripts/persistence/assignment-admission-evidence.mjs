@@ -1,11 +1,11 @@
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { createPersistenceEvidenceContext } from './demo-storage-evidence.mjs';
 import { requiredAdmissionCriteria } from './admission-criteria.mjs';
 
 export function inspectAssignmentAdmission(root) {
-  const errors=[];
+  const persistence=createPersistenceEvidenceContext(root);
+  const errors=[...persistence.errors];
   const fail=(message)=>errors.push(`P06 admission: ${message}`);
-  const load=(path)=>{try{return JSON.parse(readFileSync(join(root,path),'utf8'));}catch(error){fail(`${path}: ${error.message}`);return null;}};
+  const load=(path)=>{try{return JSON.parse(persistence.read(path));}catch(error){fail(`${path}: ${error.message}`);return null;}};
   const plan=load('persistence/physical-slices/assignment/admission-evidence-plan.json');
   const admission=load('persistence/physical-slices/assignment/admission.json');
   const entities=load('kernel/entities.json');

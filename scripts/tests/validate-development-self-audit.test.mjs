@@ -28,7 +28,7 @@ function evidence(){
  ...(stage.dynamic_input?{input_context:structuredClone(documentContext),input_context_error:null}:{}),
  command:[stage.command,...stage.args,...(stage.discover_tests?tests:[])],runtime:{node:'v20.20.2',platform:'linux'},
  started_at:'2026-10-05T02:00:00.000Z',finished_at:'2026-10-05T02:00:00.010Z',duration_ms:10,exit_code:0,timed_out:false,execution_error:null,stdout_sha256:hash('out'),stderr_sha256:hash(''),
- ...(stage.id.startsWith('validator-shard-')?{validator_shard:{inventory:186,index:Number(stage.id.at(-1)),total:3,selected:62,digest:hash('inventory')}}:{}),
+ ...(stage.id.startsWith('validator-shard-')?{validator_shard:{inventory:220,index:Number(stage.id.split('-').at(-1)),total:12,selected:Number(stage.id.split('-').at(-1))<=4?19:18,digest:'36faf791bb97dd1a99c2c985316d2ee1f123c00be3c1b525db4a040876a2a923'}}:{}),
  full_runtime_conformance:'UNKNOWN',runtime_activation:'BLOCKED',shared_or_production_execution_authorized:false}));
  return {source,tests,planHash,reports,documentContext};
 }

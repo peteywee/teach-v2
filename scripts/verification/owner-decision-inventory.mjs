@@ -28,11 +28,11 @@ export function scanContractQuestions(root, readContract = path => readFileSync(
  }
  return {unresolved,resolved,sources};
 }
-export function deriveOwnerDecisionInventory(root,baselineCommit) {
+export function deriveOwnerDecisionInventory(root,baselineCommit,readPhysicalSource=path=>readFileSync(join(root,path),'utf8')) {
  if(!/^[a-f0-9]{40}$/.test(baselineCommit))throw new Error('consulted V2 baseline SHA required');
  const questions=scanContractQuestions(root),sources={...questions.sources},physical=[];
  for(const [slice,lane] of [['P06','assignment'],['P07','certification'],['P08','progress-event']]){
-  const path=`persistence/physical-slices/${lane}/admission-evidence-plan.json`,text=readFileSync(join(root,path),'utf8'),plan=JSON.parse(text);sources[path]=digest(text);
+  const path=`persistence/physical-slices/${lane}/admission-evidence-plan.json`,text=readPhysicalSource(path),plan=JSON.parse(text);sources[path]=digest(text);
   for(const [field,value] of Object.entries(plan).filter(([key])=>key.endsWith('_decision')))if(value==='UNKNOWN')physical.push({id:`${slice}.${field}`,slice,field,owner:plan.owning_module,source:path,state:'UNKNOWN',issue:plan.issue??'#63'});
  }
  const semantic=[];

@@ -1,0 +1,2048 @@
+{
+  "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+  "issue": "#82",
+  "status": "PROPOSED_PHYSICAL_MAPPING_NOT_ADMITTED",
+  "package_sha256sums_digest": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+  "baseline_tree": "771867f1dbb47e277f90158a9f25b504bb786510",
+  "tables": [
+    {
+      "table": "organization_organizations",
+      "entity": "Organization",
+      "owner": "Organization",
+      "fields": {
+        "id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "OrganizationId"
+          },
+          "definition": "authority-and-audit.md#Organization.id"
+        },
+        "classification": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "DemoOrganizationClass"
+          },
+          "definition": "authority-and-audit.md#Organization.classification"
+        },
+        "created_at": {
+          "postgres_type": "timestamptz",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "authority-and-audit.md#Organization.created_at"
+        }
+      },
+      "source": "authority-and-audit.md",
+      "semantic_dependencies": [
+        {
+          "family": "entities",
+          "id": "Organization"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "values",
+          "id": "DemoOrganizationClass"
+        }
+      ],
+      "constraints": [
+        "Primary key id; classification exactly DEMO_ONLY; immutable/no deletion."
+      ],
+      "relationship_constraints": []
+    },
+    {
+      "table": "organization_locations",
+      "entity": "Location",
+      "owner": "Organization",
+      "fields": {
+        "id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "LocationId"
+          },
+          "definition": "authority-and-audit.md#Location.id"
+        },
+        "organization_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "OrganizationId"
+          },
+          "definition": "authority-and-audit.md#Location.organization_id"
+        },
+        "created_at": {
+          "postgres_type": "timestamptz",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "authority-and-audit.md#Location.created_at"
+        }
+      },
+      "source": "authority-and-audit.md",
+      "semantic_dependencies": [
+        {
+          "family": "entities",
+          "id": "Location"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "relationships",
+          "id": "LocationBelongsToOrganization"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        }
+      ],
+      "constraints": [
+        "Primary key id; FK organization_id; unique (id,organization_id); immutable/no deletion."
+      ],
+      "relationship_constraints": [
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "LocationBelongsToOrganization"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        }
+      ]
+    },
+    {
+      "table": "organization_demo_runs",
+      "entity": "DemoRun",
+      "owner": "Organization",
+      "fields": {
+        "id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "DemoRunId"
+          },
+          "definition": "demo-boundary.md#DemoRun.id"
+        },
+        "organization_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "OrganizationId"
+          },
+          "definition": "demo-boundary.md#DemoRun.organization_id"
+        },
+        "location_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "LocationId"
+          },
+          "definition": "demo-boundary.md#DemoRun.location_id"
+        },
+        "status": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "states",
+            "id": "DemoRunStatus"
+          },
+          "definition": "demo-boundary.md#DemoRun.status"
+        },
+        "created_at": {
+          "postgres_type": "timestamptz",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "demo-boundary.md#DemoRun.created_at"
+        },
+        "expires_at": {
+          "postgres_type": "timestamptz",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "demo-boundary.md#DemoRun.expires_at"
+        },
+        "closed_at": {
+          "postgres_type": "timestamptz",
+          "nullable": true,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "demo-boundary.md#DemoRun.closed_at"
+        },
+        "close_reason": {
+          "postgres_type": "text",
+          "nullable": true,
+          "authority": {
+            "family": "values",
+            "id": "DemoRunCloseReason"
+          },
+          "definition": "demo-boundary.md#DemoRun.close_reason"
+        },
+        "admission_prefix": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "AdmissionNetworkPrefix"
+          },
+          "definition": "demo-boundary.md#DemoRun.admission_prefix"
+        }
+      },
+      "source": "demo-boundary.md",
+      "semantic_dependencies": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "identifiers",
+          "id": "DemoRunId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        },
+        {
+          "family": "states",
+          "id": "DemoRunStatus"
+        },
+        {
+          "family": "state-machines",
+          "id": "DemoRunStateMachine"
+        },
+        {
+          "family": "values",
+          "id": "DemoRunCloseReason"
+        },
+        {
+          "family": "values",
+          "id": "AdmissionNetworkPrefix"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "relationships",
+          "id": "DemoRunOwnsOrganization"
+        },
+        {
+          "family": "relationships",
+          "id": "DemoRunScopesLocation"
+        }
+      ],
+      "constraints": [
+        "Unique organization_id and location_id; composite location/organization FK; exactly 60 minute deadline; finite UTC timestamps; status ACTIVE/CLOSED/EXPIRED; initial ACTIVE; terminal reason/timestamp coherent; only ACTIVE to terminal; immutable scope/timing/prefix; no deletion.",
+        "Admission global advisory transaction lock; count every retained run: rolling hour prefix <=10, global <=100, lifetime <=1000; no partial rows."
+      ],
+      "relationship_constraints": [
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "DemoRunOwnsOrganization"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "DemoRunScopesLocation"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        }
+      ]
+    },
+    {
+      "table": "identity_demo_personas",
+      "entity": "DemoPersona",
+      "owner": "Identity",
+      "fields": {
+        "id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "DemoPersonaId"
+          },
+          "definition": "demo-boundary.md#DemoPersona.id"
+        },
+        "identity_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "IdentityId"
+          },
+          "definition": "demo-boundary.md#DemoPersona.identity_id"
+        },
+        "demo_run_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "DemoRunId"
+          },
+          "definition": "demo-boundary.md#DemoPersona.demo_run_id"
+        },
+        "kind": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "DemoPersonaKind"
+          },
+          "definition": "demo-boundary.md#DemoPersona.kind"
+        },
+        "created_at": {
+          "postgres_type": "timestamptz",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "demo-boundary.md#DemoPersona.created_at"
+        }
+      },
+      "source": "demo-boundary.md",
+      "semantic_dependencies": [
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "identifiers",
+          "id": "DemoPersonaId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "identifiers",
+          "id": "DemoRunId"
+        },
+        {
+          "family": "values",
+          "id": "DemoPersonaKind"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "relationships",
+          "id": "DemoPersonaRepresentsIdentity"
+        },
+        {
+          "family": "relationships",
+          "id": "DemoPersonaBelongsToRun"
+        }
+      ],
+      "constraints": [
+        "Unique identity_id; unique (demo_run_id,kind); kind LEARNER/MANAGER; FK Identity and DemoRun; new Identity only; immutable/no deletion; no credential."
+      ],
+      "relationship_constraints": [
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "DemoPersonaRepresentsIdentity"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "DemoPersonaBelongsToRun"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        }
+      ]
+    },
+    {
+      "table": "organization_memberships",
+      "entity": "Membership",
+      "owner": "Organization",
+      "fields": {
+        "id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "MembershipId"
+          },
+          "definition": "authority-and-audit.md#Membership.id"
+        },
+        "identity_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "IdentityId"
+          },
+          "definition": "authority-and-audit.md#Membership.identity_id"
+        },
+        "organization_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "OrganizationId"
+          },
+          "definition": "authority-and-audit.md#Membership.organization_id"
+        },
+        "location_id": {
+          "postgres_type": "text",
+          "nullable": true,
+          "authority": {
+            "family": "identifiers",
+            "id": "LocationId"
+          },
+          "definition": "authority-and-audit.md#Membership.location_id"
+        },
+        "status": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "states",
+            "id": "MembershipStatus"
+          },
+          "definition": "authority-and-audit.md#Membership.status"
+        },
+        "created_at": {
+          "postgres_type": "timestamptz",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "authority-and-audit.md#Membership.created_at"
+        },
+        "updated_at": {
+          "postgres_type": "timestamptz",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "authority-and-audit.md#Membership.updated_at"
+        }
+      },
+      "source": "authority-and-audit.md",
+      "semantic_dependencies": [
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "identifiers",
+          "id": "MembershipId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        },
+        {
+          "family": "states",
+          "id": "MembershipStatus"
+        },
+        {
+          "family": "state-machines",
+          "id": "MembershipStateMachine"
+        },
+        {
+          "family": "relationships",
+          "id": "MembershipLinksIdentityOrganization"
+        },
+        {
+          "family": "relationships",
+          "id": "MembershipMayScopeLocation"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        }
+      ],
+      "constraints": [
+        "FK Identity, Organization, composite Location/Organization; unique nulls-not-distinct (identity_id,organization_id,location_id); immutable endpoints/createdAt; status follows registered machine; creation and transitions require lifecycle append transaction.",
+        "Demo membership identity must bind exact run and non-null location.",
+        "DELETE forbidden, including inactive/revoked history; no retargeting of identity/scope."
+      ],
+      "relationship_constraints": [
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "MembershipLinksIdentityOrganization"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "MembershipMayScopeLocation"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        }
+      ]
+    },
+    {
+      "table": "organization_membership_grants",
+      "entity": "MembershipGrant",
+      "owner": "Organization",
+      "fields": {
+        "id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "MembershipGrantId"
+          },
+          "definition": "authority-and-audit.md#MembershipGrant.id"
+        },
+        "membership_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "MembershipId"
+          },
+          "definition": "authority-and-audit.md#MembershipGrant.membership_id"
+        },
+        "bundle": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "CapabilityBundle"
+          },
+          "definition": "authority-and-audit.md#MembershipGrant.bundle"
+        },
+        "created_at": {
+          "postgres_type": "timestamptz",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "authority-and-audit.md#MembershipGrant.created_at"
+        }
+      },
+      "source": "authority-and-audit.md",
+      "semantic_dependencies": [
+        {
+          "family": "entities",
+          "id": "MembershipGrant"
+        },
+        {
+          "family": "identifiers",
+          "id": "MembershipGrantId"
+        },
+        {
+          "family": "identifiers",
+          "id": "MembershipId"
+        },
+        {
+          "family": "values",
+          "id": "CapabilityBundle"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "relationships",
+          "id": "MembershipGrantBelongsToMembership"
+        }
+      ],
+      "constraints": [
+        "FK Membership; unique (membership_id,bundle); enum supports learner, observer, manager, org_admin, demo_visitor; self never issued. Demo-specific guard restricts exact learner or manager plus demo_visitor by fixed persona. Immutable/no deletion."
+      ],
+      "relationship_constraints": [
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "MembershipGrantBelongsToMembership"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        }
+      ]
+    },
+    {
+      "table": "organization_reporting_relationships",
+      "entity": "ReportingRelationship",
+      "owner": "Organization",
+      "fields": {
+        "id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "ReportingRelationshipId"
+          },
+          "definition": "authority-and-audit.md#ReportingRelationship.id"
+        },
+        "organization_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "OrganizationId"
+          },
+          "definition": "authority-and-audit.md#ReportingRelationship.organization_id"
+        },
+        "location_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "LocationId"
+          },
+          "definition": "authority-and-audit.md#ReportingRelationship.location_id"
+        },
+        "manager_identity_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "IdentityId"
+          },
+          "definition": "authority-and-audit.md#ReportingRelationship.manager_identity_id"
+        },
+        "learner_identity_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "IdentityId"
+          },
+          "definition": "authority-and-audit.md#ReportingRelationship.learner_identity_id"
+        },
+        "created_at": {
+          "postgres_type": "timestamptz",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "authority-and-audit.md#ReportingRelationship.created_at"
+        }
+      },
+      "source": "authority-and-audit.md",
+      "semantic_dependencies": [
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        },
+        {
+          "family": "identifiers",
+          "id": "ReportingRelationshipId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "relationships",
+          "id": "ReportingRelationshipHasManager"
+        },
+        {
+          "family": "relationships",
+          "id": "ReportingRelationshipHasLearner"
+        },
+        {
+          "family": "relationships",
+          "id": "ReportingRelationshipBelongsToOrganization"
+        },
+        {
+          "family": "relationships",
+          "id": "ReportingRelationshipScopesLocation"
+        }
+      ],
+      "constraints": [
+        "Distinct endpoints; composite exact-scope FK both Memberships; active endpoint checks at insert; exactly fixed MANAGER to LEARNER in same run; unique scope/endpoints; immutable/no deletion."
+      ],
+      "relationship_constraints": [
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "ReportingRelationshipHasManager"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "ReportingRelationshipHasLearner"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "ReportingRelationshipBelongsToOrganization"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "ReportingRelationshipScopesLocation"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        }
+      ]
+    },
+    {
+      "table": "audit_events",
+      "entity": "AuditEvent",
+      "owner": "AuditLifecycle",
+      "fields": {
+        "id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "AuditEventId"
+          },
+          "definition": "authority-and-audit.md#AuditEvent.id"
+        },
+        "occurred_at": {
+          "postgres_type": "timestamptz",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "authority-and-audit.md#AuditEvent.occurred_at"
+        },
+        "request_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "RequestId"
+          },
+          "definition": "authority-and-audit.md#AuditEvent.request_id"
+        },
+        "idempotency_key": {
+          "postgres_type": "text",
+          "nullable": true,
+          "authority": {
+            "family": "identifiers",
+            "id": "IdempotencyKey"
+          },
+          "definition": "authority-and-audit.md#AuditEvent.idempotency_key"
+        },
+        "actor_class": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "AuditActor"
+          },
+          "definition": "authority-and-audit.md#AuditEvent.actor_class"
+        },
+        "actor_reference": {
+          "postgres_type": "text",
+          "nullable": true,
+          "authority": {
+            "family": "values",
+            "id": "AuditActor"
+          },
+          "definition": "authority-and-audit.md#AuditEvent.actor_reference"
+        },
+        "action": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "entities",
+            "id": "AuditEvent"
+          },
+          "definition": "authority-and-audit.md#AuditEvent.action"
+        },
+        "result": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "AuditResult"
+          },
+          "definition": "authority-and-audit.md#AuditEvent.result"
+        },
+        "target_type": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "AuditTarget"
+          },
+          "definition": "authority-and-audit.md#AuditEvent.target_type"
+        },
+        "target_id": {
+          "postgres_type": "text",
+          "nullable": true,
+          "authority": {
+            "family": "values",
+            "id": "AuditTarget"
+          },
+          "definition": "authority-and-audit.md#AuditEvent.target_id"
+        },
+        "target_version": {
+          "postgres_type": "text",
+          "nullable": true,
+          "authority": {
+            "family": "values",
+            "id": "AuditTarget"
+          },
+          "definition": "authority-and-audit.md#AuditEvent.target_version"
+        },
+        "target_digest": {
+          "postgres_type": "text",
+          "nullable": true,
+          "authority": {
+            "family": "values",
+            "id": "AuditTarget"
+          },
+          "definition": "authority-and-audit.md#AuditEvent.target_digest"
+        },
+        "organization_id": {
+          "postgres_type": "text",
+          "nullable": true,
+          "authority": {
+            "family": "identifiers",
+            "id": "OrganizationId"
+          },
+          "definition": "authority-and-audit.md#AuditEvent.organization_id"
+        },
+        "location_id": {
+          "postgres_type": "text",
+          "nullable": true,
+          "authority": {
+            "family": "identifiers",
+            "id": "LocationId"
+          },
+          "definition": "authority-and-audit.md#AuditEvent.location_id"
+        },
+        "denial_class": {
+          "postgres_type": "text",
+          "nullable": true,
+          "authority": {
+            "family": "entities",
+            "id": "AuditEvent"
+          },
+          "definition": "authority-and-audit.md#AuditEvent.denial_class"
+        },
+        "ip_prefix": {
+          "postgres_type": "text",
+          "nullable": true,
+          "authority": {
+            "family": "entities",
+            "id": "AuditEvent"
+          },
+          "definition": "contracts/c23-audit-lifecycle-events-contract.md#AUD-8 and governance/decision-closure/07-evidence-release-operations-spec.md#6"
+        },
+        "dedup_bucket_start": {
+          "postgres_type": "timestamptz",
+          "nullable": true,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "authority-and-audit.md#AuditEvent.dedup_bucket_start"
+        },
+        "overflow_bucket_start": {
+          "postgres_type": "timestamptz",
+          "nullable": true,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "authority-and-audit.md#AuditEvent.overflow_bucket_start"
+        }
+      },
+      "source": "authority-and-audit.md",
+      "semantic_dependencies": [
+        {
+          "family": "entities",
+          "id": "AuditEvent"
+        },
+        {
+          "family": "identifiers",
+          "id": "AuditEventId"
+        },
+        {
+          "family": "values",
+          "id": "AuditActor"
+        },
+        {
+          "family": "values",
+          "id": "AuditTarget"
+        },
+        {
+          "family": "values",
+          "id": "AuditResult"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdempotencyKey"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "relationships",
+          "id": "AuditEventHasActor"
+        },
+        {
+          "family": "relationships",
+          "id": "AuditEventTargetsRecord"
+        },
+        {
+          "family": "relationships",
+          "id": "AuditEventBelongsToOrganization"
+        },
+        {
+          "family": "relationships",
+          "id": "AuditEventMayScopeLocation"
+        }
+      ],
+      "constraints": [
+        "Finite flattened AuditActor and AuditTarget unions; no arbitrary JSON; exact successful action allowlist; denial metadata allowlist; scoped location FK; append-only/no deletion.",
+        "Denial dedup unique NULLS NOT DISTINCT typed actor or normalized IP prefix + denial class + attempted operation + five-minute bucket; action records the declared attempted operation for DENIED, DENIAL_OVERFLOW for overflow. No target/scope in key. At most 100 actor/IP-prefix rows per hour and one overflow per hour; insert-only; protected denial audit failure never permits request.",
+        "Nullable Organization FK and composite (location_id,organization_id) Location FK. For SUCCEEDED tenant mutations every resolved typed target must exist and agree with exact scope; ContentPack requires exact version/digest. DENIED targets follow class-specific redaction and may be UNRESOLVED; foreign denied target is not required to belong to actor scope. HumanActor references real Identity; automation uses the two admitted principal IDs only. UNRESOLVED cannot store unvalidated target ID.",
+        "Audit network-prefix domain preserves C23/DCS-07 credential-abuse IPv4 /24 and IPv6 /48, distinct from DemoRun admission IPv6 /56. No raw IP/header/origin string; unavailable prefix is null."
+      ],
+      "relationship_constraints": [
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "AuditEventHasActor"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "AuditEventTargetsRecord"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "AuditEventBelongsToOrganization"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "AuditEventMayScopeLocation"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        }
+      ]
+    },
+    {
+      "table": "lifecycle_events",
+      "entity": "LifecycleEvent",
+      "owner": "AuditLifecycle",
+      "fields": {
+        "id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "LifecycleEventId"
+          },
+          "definition": "authority-and-audit.md#LifecycleEvent.id"
+        },
+        "occurred_at": {
+          "postgres_type": "timestamptz",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "authority-and-audit.md#LifecycleEvent.occurred_at"
+        },
+        "request_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "RequestId"
+          },
+          "definition": "authority-and-audit.md#LifecycleEvent.request_id"
+        },
+        "owner_command": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "entities",
+            "id": "LifecycleEvent"
+          },
+          "definition": "authority-and-audit.md#LifecycleEvent.owner_command"
+        },
+        "organization_id": {
+          "postgres_type": "text",
+          "nullable": true,
+          "authority": {
+            "family": "identifiers",
+            "id": "OrganizationId"
+          },
+          "definition": "authority-and-audit.md#LifecycleEvent.organization_id"
+        },
+        "location_id": {
+          "postgres_type": "text",
+          "nullable": true,
+          "authority": {
+            "family": "identifiers",
+            "id": "LocationId"
+          },
+          "definition": "authority-and-audit.md#LifecycleEvent.location_id"
+        },
+        "aggregate_type": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "entities",
+            "id": "LifecycleEvent"
+          },
+          "definition": "authority-and-audit.md#LifecycleEvent.aggregate_type"
+        },
+        "aggregate_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "entities",
+            "id": "LifecycleEvent"
+          },
+          "definition": "authority-and-audit.md#LifecycleEvent.aggregate_id"
+        },
+        "sequence": {
+          "postgres_type": "integer",
+          "nullable": false,
+          "authority": {
+            "family": "entities",
+            "id": "LifecycleEvent"
+          },
+          "definition": "authority-and-audit.md#LifecycleEvent.sequence"
+        },
+        "previous_state": {
+          "postgres_type": "jsonb",
+          "nullable": true,
+          "authority": {
+            "family": "values",
+            "id": "LifecycleSnapshot"
+          },
+          "definition": "authority-and-audit.md#LifecycleEvent.previous_state"
+        },
+        "next_state": {
+          "postgres_type": "jsonb",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "LifecycleSnapshot"
+          },
+          "definition": "authority-and-audit.md#LifecycleEvent.next_state"
+        }
+      },
+      "source": "authority-and-audit.md",
+      "semantic_dependencies": [
+        {
+          "family": "entities",
+          "id": "LifecycleEvent"
+        },
+        {
+          "family": "identifiers",
+          "id": "LifecycleEventId"
+        },
+        {
+          "family": "values",
+          "id": "LifecycleSnapshot"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "relationships",
+          "id": "LifecycleEventReferencesIdentity"
+        },
+        {
+          "family": "relationships",
+          "id": "LifecycleEventReferencesMembership"
+        },
+        {
+          "family": "relationships",
+          "id": "LifecycleEventReferencesAssignment"
+        },
+        {
+          "family": "relationships",
+          "id": "LifecycleEventReferencesDemoRun"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        }
+      ],
+      "constraints": [
+        "Finite version1 Identity/Membership/Assignment/DemoRun snapshot union; exactly expected fields; sequence >0; unique aggregate/sequence; previous snapshot equals last next; starts creation; append-only/no deletion; exact current aggregate readback.",
+        "Nullable Organization FK and composite (location_id,organization_id) Location FK; non-null location requires organization. Typed aggregate existence and exact organization/location agreement validated against current owner record; no arbitrary target JSON."
+      ],
+      "relationship_constraints": [
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "LifecycleEventReferencesIdentity"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "LifecycleEventReferencesMembership"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "LifecycleEventReferencesAssignment"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "LifecycleEventReferencesDemoRun"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        }
+      ]
+    },
+    {
+      "table": "transaction_command_receipts",
+      "entity": "CommandReceipt",
+      "owner": "TransactionControl",
+      "fields": {
+        "id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "CommandReceiptId"
+          },
+          "definition": "authority-and-audit.md#CommandReceipt.id"
+        },
+        "actor_class": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "CommandActor"
+          },
+          "definition": "authority-and-audit.md#CommandReceipt.actor_class"
+        },
+        "actor_reference": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "CommandActor"
+          },
+          "definition": "authority-and-audit.md#CommandReceipt.actor_reference"
+        },
+        "organization_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "OrganizationId"
+          },
+          "definition": "authority-and-audit.md#CommandReceipt.organization_id"
+        },
+        "location_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "LocationId"
+          },
+          "definition": "authority-and-audit.md#CommandReceipt.location_id"
+        },
+        "operation": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "entities",
+            "id": "CommandReceipt"
+          },
+          "definition": "authority-and-audit.md#CommandReceipt.operation"
+        },
+        "key": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "IdempotencyKey"
+          },
+          "definition": "authority-and-audit.md#CommandReceipt.key"
+        },
+        "canonical_payload_digest": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "entities",
+            "id": "CommandReceipt"
+          },
+          "definition": "authority-and-audit.md#CommandReceipt.canonical_payload_digest"
+        },
+        "response_schema_version": {
+          "postgres_type": "integer",
+          "nullable": false,
+          "authority": {
+            "family": "entities",
+            "id": "CommandReceipt"
+          },
+          "definition": "authority-and-audit.md#CommandReceipt.response_schema_version"
+        },
+        "response": {
+          "postgres_type": "jsonb",
+          "nullable": false,
+          "authority": {
+            "family": "entities",
+            "id": "CommandReceipt"
+          },
+          "definition": "authority-and-audit.md#CommandReceipt.response"
+        },
+        "created_at": {
+          "postgres_type": "timestamptz",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "authority-and-audit.md#CommandReceipt.created_at"
+        },
+        "replay_until": {
+          "postgres_type": "timestamptz",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "authority-and-audit.md#CommandReceipt.replay_until"
+        }
+      },
+      "source": "authority-and-audit.md",
+      "semantic_dependencies": [
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        },
+        {
+          "family": "identifiers",
+          "id": "CommandReceiptId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdempotencyKey"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "commands",
+          "id": "AssignContent"
+        },
+        {
+          "family": "commands",
+          "id": "StartLearningSession"
+        },
+        {
+          "family": "commands",
+          "id": "RecordProgressEvent"
+        },
+        {
+          "family": "values",
+          "id": "CommandActor"
+        },
+        {
+          "family": "relationships",
+          "id": "CommandReceiptBelongsToActor"
+        },
+        {
+          "family": "relationships",
+          "id": "CommandReceiptBelongsToOrganization"
+        },
+        {
+          "family": "relationships",
+          "id": "CommandReceiptScopesLocation"
+        }
+      ],
+      "constraints": [
+        "Unique typed actor/scope/operation/key; exactly three operations; digest 64 lowercase hex; schema1; exact DTO keys validated before append; replay_until=created_at+24 hours; current authorization before replay; immutable/no deletion.",
+        "FK organization_id to Organization and composite (location_id,organization_id) to Location. HumanActor actor_reference must reference active same-scope Membership under lock; AutomationActor is exactly automation:demo-admission-v1, AssignContent only, in fresh-run context. Actor and scope never retarget."
+      ],
+      "relationship_constraints": [
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "CommandReceiptBelongsToActor"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "CommandReceiptBelongsToOrganization"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "CommandReceiptScopesLocation"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        }
+      ]
+    },
+    {
+      "table": "content_packs",
+      "entity": "ContentPack",
+      "owner": "Content",
+      "fields": {
+        "id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "ContentPackId"
+          },
+          "definition": "learning-definition.md#ContentPack.id"
+        },
+        "organization_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "OrganizationId"
+          },
+          "definition": "learning-definition.md#ContentPack.organization_id"
+        }
+      },
+      "source": "learning-definition.md",
+      "semantic_dependencies": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        },
+        {
+          "family": "relationships",
+          "id": "ContentPackBelongsToOrganization"
+        }
+      ],
+      "constraints": [
+        "Primary key id; FK Organization; immutable/no deletion; stable content identity and exact owning organization."
+      ],
+      "relationship_constraints": [
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "ContentPackBelongsToOrganization"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        }
+      ]
+    },
+    {
+      "table": "content_pack_versions",
+      "entity": "ContentPack",
+      "owner": "Content",
+      "fields": {
+        "content_pack_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "ContentPackId"
+          },
+          "definition": "learning-definition.md#ContentPack.content_pack_id"
+        },
+        "version": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "ContentVersion"
+          },
+          "definition": "learning-definition.md#ContentPack.version"
+        },
+        "digest": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "ContentVersion"
+          },
+          "definition": "learning-definition.md#ContentPack.digest"
+        },
+        "canonical_json": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "entities",
+            "id": "ContentPack"
+          },
+          "definition": "learning-definition.md#ContentPack.canonical_json"
+        }
+      },
+      "source": "learning-definition.md",
+      "semantic_dependencies": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        },
+        {
+          "family": "relationships",
+          "id": "ContentPackContainsContentBlock"
+        }
+      ],
+      "constraints": [
+        "Primary key (content_pack_id,version); FK ContentPack; unique (content_pack_id,version,digest); <=65536 UTF8 bytes; strict version, sha256-prefixed digest; canonical JSON validated by owner engine; immutable/no deletion.",
+        "No extra ContentPackVersion entity; no publication status or invented timestamp."
+      ],
+      "relationship_constraints": [
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "ContentPackContainsContentBlock"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        }
+      ]
+    },
+    {
+      "table": "learning_assignments",
+      "entity": "Assignment",
+      "owner": "Learning",
+      "fields": {
+        "id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "AssignmentId"
+          },
+          "definition": "learning-definition.md#Assignment.id"
+        },
+        "identity_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "IdentityId"
+          },
+          "definition": "learning-definition.md#Assignment.identity_id"
+        },
+        "organization_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "OrganizationId"
+          },
+          "definition": "learning-definition.md#Assignment.organization_id"
+        },
+        "location_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "LocationId"
+          },
+          "definition": "learning-definition.md#Assignment.location_id"
+        },
+        "content_pack_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "ContentPackId"
+          },
+          "definition": "learning-definition.md#Assignment.content_pack_id"
+        },
+        "content_version": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "ContentVersion"
+          },
+          "definition": "learning-definition.md#Assignment.content_version"
+        },
+        "content_digest": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "ContentVersion"
+          },
+          "definition": "learning-definition.md#Assignment.content_digest"
+        },
+        "assigned_at": {
+          "postgres_type": "timestamptz",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "learning-definition.md#Assignment.assigned_at"
+        },
+        "status": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "states",
+            "id": "AssignmentStatus"
+          },
+          "definition": "learning-definition.md#Assignment.status"
+        }
+      },
+      "source": "learning-definition.md",
+      "semantic_dependencies": [
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "identifiers",
+          "id": "AssignmentId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "states",
+          "id": "AssignmentStatus"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "relationships",
+          "id": "AssignmentTargetsIdentity"
+        },
+        {
+          "family": "relationships",
+          "id": "AssignmentBelongsToOrganization"
+        },
+        {
+          "family": "relationships",
+          "id": "AssignmentScopesLocation"
+        },
+        {
+          "family": "relationships",
+          "id": "AssignmentReferencesContentPack"
+        },
+        {
+          "family": "relationships",
+          "id": "AssignmentReferencesContentVersion"
+        },
+        {
+          "family": "state-machines",
+          "id": "AssignmentStateMachine"
+        }
+      ],
+      "constraints": [
+        "FK Identity, exact-scope Membership, Organization/Location, ContentPack organization and exact version/digest; status ACTIVE only; immutable/no deletion; unique (id,identity_id); no learner/content uniqueness; ten assignments/run under run lock."
+      ],
+      "relationship_constraints": [
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "AssignmentTargetsIdentity"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "AssignmentBelongsToOrganization"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "AssignmentScopesLocation"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "AssignmentReferencesContentPack"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "AssignmentReferencesContentVersion"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        }
+      ]
+    },
+    {
+      "table": "learning_sessions",
+      "entity": "LearningSession",
+      "owner": "Learning",
+      "fields": {
+        "id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "LearningSessionId"
+          },
+          "definition": "learning-definition.md#LearningSession.id"
+        },
+        "identity_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "IdentityId"
+          },
+          "definition": "learning-definition.md#LearningSession.identity_id"
+        },
+        "assignment_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "AssignmentId"
+          },
+          "definition": "learning-definition.md#LearningSession.assignment_id"
+        },
+        "status": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "states",
+            "id": "LearningSessionStatus"
+          },
+          "definition": "learning-definition.md#LearningSession.status"
+        },
+        "started_at": {
+          "postgres_type": "timestamptz",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "learning-definition.md#LearningSession.started_at"
+        },
+        "completed_at": {
+          "postgres_type": "timestamptz",
+          "nullable": true,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "learning-definition.md#LearningSession.completed_at"
+        }
+      },
+      "source": "learning-definition.md",
+      "semantic_dependencies": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "identifiers",
+          "id": "LearningSessionId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "identifiers",
+          "id": "AssignmentId"
+        },
+        {
+          "family": "states",
+          "id": "LearningSessionStatus"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "relationships",
+          "id": "IdentityHasLearningSession"
+        },
+        {
+          "family": "relationships",
+          "id": "LearningSessionUsesAssignment"
+        },
+        {
+          "family": "state-machines",
+          "id": "LearningSessionStateMachine"
+        }
+      ],
+      "constraints": [
+        "Append P05 started_at/completed_at only; unique assignment_id; composite Assignment/Identity FK; preserves ACTIVE to COMPLETED only; completion timestamp iff completed; startedAt immutable; completion requires three persisted responses.",
+        "Existing P05 rows without authoritative Assignment cannot be fabricated or deleted: migration fails closed until prior approved data reconciliation; actual isolated preceding migration head is empty.",
+        "DELETE forbidden, including already-completed history; no new mutable identity, scope or assignment endpoints."
+      ],
+      "relationship_constraints": [
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "IdentityHasLearningSession"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "LearningSessionUsesAssignment"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        }
+      ]
+    },
+    {
+      "table": "learning_progress_events",
+      "entity": "ProgressEvent",
+      "owner": "Learning",
+      "fields": {
+        "id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "ProgressEventId"
+          },
+          "definition": "learning-definition.md#ProgressEvent.id"
+        },
+        "learning_session_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "LearningSessionId"
+          },
+          "definition": "learning-definition.md#ProgressEvent.learning_session_id"
+        },
+        "content_pack_id": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "identifiers",
+            "id": "ContentPackId"
+          },
+          "definition": "learning-definition.md#ProgressEvent.content_pack_id"
+        },
+        "content_version": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "ContentVersion"
+          },
+          "definition": "learning-definition.md#ProgressEvent.content_version"
+        },
+        "content_digest": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "ContentVersion"
+          },
+          "definition": "learning-definition.md#ProgressEvent.content_digest"
+        },
+        "event_schema_version": {
+          "postgres_type": "text",
+          "nullable": false,
+          "authority": {
+            "family": "entities",
+            "id": "ProgressEvent"
+          },
+          "definition": "learning-definition.md#ProgressEvent.event_schema_version"
+        },
+        "sequence": {
+          "postgres_type": "integer",
+          "nullable": false,
+          "authority": {
+            "family": "entities",
+            "id": "ProgressEvent"
+          },
+          "definition": "learning-definition.md#ProgressEvent.sequence"
+        },
+        "evaluation": {
+          "postgres_type": "jsonb",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "ContentResponseEvaluation"
+          },
+          "definition": "learning-definition.md#ProgressEvent.evaluation"
+        },
+        "recorded_at": {
+          "postgres_type": "timestamptz",
+          "nullable": false,
+          "authority": {
+            "family": "values",
+            "id": "Timestamp"
+          },
+          "definition": "learning-definition.md#ProgressEvent.recorded_at"
+        }
+      },
+      "source": "learning-definition.md",
+      "semantic_dependencies": [
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "identifiers",
+          "id": "ProgressEventId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LearningSessionId"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "values",
+          "id": "ContentResponseEvaluation"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "relationships",
+          "id": "ProgressEventBelongsToLearningSession"
+        },
+        {
+          "family": "relationships",
+          "id": "ProgressEventReferencesContentVersion"
+        },
+        {
+          "family": "relationships",
+          "id": "ProgressEventReferencesContentBlock"
+        }
+      ],
+      "constraints": [
+        "FK LearningSession and exact ContentVersion; session assignment binding checked; schema1.0.0; sequence1..3; unique session/sequence and session/evaluation.blockId; finite exact evaluation object; ordered next response; append-only/no deletion; server-evaluated feedback verified."
+      ],
+      "relationship_constraints": [
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "ProgressEventBelongsToLearningSession"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "ProgressEventReferencesContentVersion"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        },
+        {
+          "authority": {
+            "family": "relationships",
+            "id": "ProgressEventReferencesContentBlock"
+          },
+          "enforcement": "Composite foreign key or constraint trigger where actor/target tagged union requires dynamic target; exact-scope owner locking read in caller transaction for current-state predicates."
+        }
+      ]
+    }
+  ],
+  "prior_migration_sha256": {
+    "0000_slice_p01_reconciliation.sql": "c372f6ed790e8adb38a2e1b3102f11c4addd284acd274e1da3add4d23ef64c2c",
+    "0001_odd_photon.sql": "e151cdc4b7c1a040aac0bd4769b4033dd130cb0b5eb0835ccde95729cea26994",
+    "0002_quick_venus.sql": "76f4f620023d2310d5147b8764bc9f275cbff4d4faf4c8c4975bbeb0dc6a65e2",
+    "0003_slice_p04_credential.sql": "3396caa659e905d87ab8a3f92759e7d5bda72eecae27d275fd12cd8e4d284fef",
+    "0004_slice_p05_learning_session.sql": "dda0c34f193797f0ad9a3fb5916500ff1038da0cf7701d63a4d8e6b193cca0b4"
+  },
+  "excluded": [
+    "Certification/P07",
+    "LearnerState table",
+    "business-event bus",
+    "customer provisioning",
+    "new credentials",
+    "shared or production execution"
+  ],
+  "migration_sequence": [
+    "0005_demo_runtime_owner_storage"
+  ],
+  "application_constraints": [
+    "One PostgreSQL transaction encompasses all owner ports; run lock before current authority/session/learning locks; DB current clock after lock; no foreign owner writes.",
+    "Canonical session repository remains sole session create/authenticate/revocation implementation.",
+    "Browser roles have no table access; application writes to append-only data reject even if UPDATE privilege accidentally granted."
+  ],
+  "prior_metadata_sha256": {
+    "0000_snapshot.json": "5eed3d787030128b2f3e8b8143876b8d281c499ea400eca6894ac5252220342b",
+    "0001_snapshot.json": "e06ec42503506c35104c8b480c76cbd2ebb90b343f46dc8e0121dc16acb2917c",
+    "0002_snapshot.json": "9068d5373d54e0de0f1d634454ed7c0fe5e7d3aab01409881d6427c488d349bf",
+    "0003_snapshot.json": "1dae012c1aba442d6eea4a2394cb310a2d11c070ce96a5ed83196dbeec40903f",
+    "0004_snapshot.json": "7c5efbc30c0f6bd27964ea4a3b291c64aa5da2c0cbd94b77d7c55db58068f6cb",
+    "_journal.json": "6fd7072b2da573cdb2e2fd25b07c2c3e94de693f177cb626cbac2685d57671ee"
+  },
+  "existing_history_guards": [
+    "Identity/ApplicationSession DELETE forbidden for any identity with a DemoPersona binding; no new raw session fields or alternate lifecycle writer.",
+    "P05 LearningSession DELETE forbidden; populated orphan upgrade fails atomically without fabricated assignments/timestamps."
+  ]
+}

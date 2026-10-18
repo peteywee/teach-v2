@@ -1,10 +1,12 @@
 #!/usr/bin/env node
+import { createPersistenceEvidenceContext } from './demo-storage-evidence.mjs';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 
 const ROOT=resolve(process.cwd());
-const errors=[];
-const load=(p)=>JSON.parse(readFileSync(join(ROOT,p),'utf8'));
+const persistence=createPersistenceEvidenceContext(ROOT);
+const errors=[...persistence.errors];
+const load=(p)=>JSON.parse(persistence.read(p));
 const text=(p)=>readFileSync(join(ROOT,p),'utf8');
 
 const admission=load('persistence/physical-slices/identity-session/admission.json');
@@ -15,7 +17,7 @@ const identityRepo=text('src/modules/identity/infrastructure/persistence/postgre
 const sessionRepo=text('src/modules/identity/infrastructure/persistence/postgres-application-session-repository.ts');
 const sessionDomain=text('src/modules/identity/domain/application-session.ts');
 const migration=text('drizzle/0001_odd_photon.sql');
-const drizzleConfig=text('drizzle.config.ts');
+const drizzleConfig=text(persistence.extended ? 'drizzle.p05.config.ts' : 'drizzle.config.ts');
 
 if(admission?.version!=='1.0.0' || admission?.decision!=='ADMIT' || admission?.implementation_authorized!==true) errors.push('SLICE-P02 implementation: active ADMIT authority missing');
 if(readiness?.version!=='1.3.0' || readiness?.current_physical_slice_admissions?.find(x=>x.id==='SLICE-P02')?.implementation_state!=='IMPLEMENTED') errors.push('SLICE-P02 implementation: readiness 1.3.0 IMPLEMENTED state required');

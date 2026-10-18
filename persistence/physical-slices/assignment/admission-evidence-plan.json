@@ -1,46 +1,41 @@
 {
   "plan_id": "TEACH-SLICE-P06-ADMISSION-EVIDENCE-PLAN",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "status": "recorded",
-  "issue": "#60",
-  "baseline_commit": "045114b9a211bce4485f7d3acd88230e8448e1e9",
+  "updated_on": "2026-10-17",
+  "issue": "#82",
   "slice": "SLICE-P06",
   "owning_module": "Learning",
-  "records": ["Assignment"],
-  "physical_schema_authorized": false,
-  "implementation_authorized": false,
-  "migration_authoring_authorized": false,
+  "records": [
+    "Assignment"
+  ],
+  "demo_physical_successor": {
+    "record": "persistence/physical-slices/demo-runtime/physical-successor.json",
+    "phase": "AUTHORING_UNDER_TEST",
+    "evidence_proof": "UNDER_TEST",
+    "runtime_proof": "NOT_RUN",
+    "shared_or_production_migration_execution_authorized": false
+  },
+  "physical_schema_authorized": true,
+  "implementation_authorized": true,
+  "migration_authoring_authorized": true,
   "runtime_activation": "BLOCKED",
   "shared_or_production_migration_execution_authorized": false,
-  "shape_decision": "UNKNOWN",
-  "lifecycle_decision": "UNKNOWN",
-  "protected_scope_decision": "UNKNOWN",
-  "content_version_decision": "UNKNOWN",
-  "registered_relationships": ["AssignmentTargetsIdentity", "AssignmentReferencesContentPack"],
+  "reviewed_plan": "persistence/physical-slices/demo-runtime/admission-evidence-plan.json",
+  "reviewed_plan_sha256": "3193cbd993d91956bac089c944eb8def2c15bdcf5dd8af866657867915728170",
+  "shape_decision": "APPROVED_EXACT_DEMO_PACKAGE",
+  "lifecycle_decision": "APPROVED_EXACT_DEMO_PACKAGE",
+  "protected_scope_decision": "APPROVED_EXACT_DEMO_PACKAGE",
+  "content_version_decision": "APPROVED_EXACT_DEMO_PACKAGE",
+  "unresolved_gates": [],
+  "evidence_proof": "UNDER_TEST",
+  "runtime_proof": "NOT_RUN",
   "required_evidence": [
-    "two independent empty-database replays produce identical full-schema fingerprints",
-    "P05-to-P06 upgrade replay matches the empty-database fingerprint",
-    "exact authoritative assigned content-version binding is proven; ContentPackId possession does not grant access",
-    "authoritative manager capability and learner organization/location scope are resolved before writes",
-    "missing, unassigned, wrong-scope, unavailable, and changed authorization deny without inserting an Assignment or LearningSession",
-    "required audit append commits atomically with Assignment mutation; audit failure rolls back all writes",
-    "duplicate and concurrent assignment behavior follows an explicitly approved policy",
-    "foreign-module direct persistence writes and imports are rejected",
-    "runtime start binds authoritative Assignment authorization and LearningSession insertion atomically as required by issue #58"
-  ],
-  "unresolved_gates": [
-    "ContentVersion is candidate; content version scheme and physical binding are not selected (C31 OQ-CNT-1, C32 LRN-2)",
-    "ContentPack storage and authoritative ContentReadInterface are absent",
-    "Assignment lifecycle, mutation, requiredness, and uniqueness/retry shape have not been selected",
-    "Membership scope and capability vocabulary remain gated; MGR-2/5/7 cannot be replaced by client assertions",
-    "same-transaction audit append infrastructure is absent (C23, APP-7)"
-  ],
-  "constraints": [
-    "This is an evidence plan; it admits no physical schema",
-    "Only a subsequent automated ADMIT evaluation may authorize physical authoring",
-    "No candidate semantic promotion is performed by this plan",
-    "Do not invent Assignment lifecycle states, capability names, or content-version representation",
-    "Do not weaken P05 REQUIRED_ONE_ASSIGNMENT or equate non-null assignment_id with authorization",
-    "No Certification, ProgressEvent, transport routes, runtime activation, or shared/production execution"
+    "Exact reviewed aggregate plan is controlling, including all negative/race/rollback/privilege oracles.",
+    "Two empty databases and actual empty P05-head upgrade converge; populated orphan P05 upgrade rejects atomically with data/journal unchanged.",
+    "P01-P05 migration SQL and original snapshots remain byte-immutable.",
+    "Current authority after all locks, atomic effect/audit/lifecycle/receipt, immutable retained history and exact scoped identity/content binding.",
+    "P07 Certification remains BLOCK; no fabricated P07 upgrade prerequisite.",
+    "Supabase Data API and shared/production execution are NOT_RUN and out of scope."
   ]
 }

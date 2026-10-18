@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { inspectMigrationHistory } from '../packaging/migration-history-guards.mjs';
 import { inspectLearningImplementation } from '../persistence/learning-implementation-evidence.mjs';
+import { exactCurrentDenial } from '../verification/demo-validator-predecessor.mjs';
 
 const ROOT = resolve(new URL('.', import.meta.url).pathname, '../..');
 const json = (dir, path) => JSON.parse(readFileSync(join(dir, path), 'utf8'));
@@ -19,6 +20,23 @@ const mutateLatest = (dir, mutate) => {
   const value = json(dir, path); mutate(value); write(dir, path, value);
 };
 const latestSql = (dir) => `drizzle/${json(dir, journalPath).entries.at(-1).tag}.sql`;
+// The seal is an additional oracle, not a replacement for these four properties.
+// Original check declarations and their structural expectations remain unchanged.
+const pairedSealDenials = new Map([
+  ['empty journal fails', 'demo physical admission: original journal prefix must remain immutable'],
+  ['readiness migration count drift fails', 'demo physical successor: exact nine-path successor envelope or original/live hashes differ'],
+  ['readiness table count drift fails', 'demo physical successor: exact nine-path successor envelope or original/live hashes differ'],
+  ['valid appended history passes without hardcoded totals', 'demo physical successor: exact nine-path successor envelope or original/live hashes differ'],
+]);
+function runPins(dir) {
+  try {
+    return {exit: 0, ordinaryProcessExit: true, output: execFileSync(process.execPath, [join(dir, 'scripts/packaging/validate-apply-guards.mjs'), 'pins'], {
+      cwd: dir, encoding: 'utf8', timeout: 5000, stdio: ['ignore', 'pipe', 'pipe'],
+    })};
+  } catch (error) {
+    return {exit: error.status, ordinaryProcessExit: Number.isInteger(error.status) && !error.signal, output: `${error.stdout ?? ''}${error.stderr ?? ''}`};
+  }
+}
 let count = 0;
 let failed = 0;
 function check(name, mutate, pattern = null, structuralOnly = false) {
@@ -26,6 +44,35 @@ function check(name, mutate, pattern = null, structuralOnly = false) {
   try {
     cpSync(ROOT, dir, { recursive: true, filter: (src) => !/(?:^|\/)\.git(?:\/|$)|(?:^|\/)node_modules(?:\/|$)/.test(src) });
     mutate(dir);
+    if (pairedSealDenials.has(name)) {
+      // Execute the current pure validator on the current mutated inputs, before
+      // checking the distinct live admission denial. A removed structural rule
+      // cannot be hidden by a passing hash guard.
+      const properties = inspectMigrationHistory(dir);
+      if (pattern) assert.match(properties.join('\n'), pattern);
+      else assert.deepEqual(properties, []);
+      if (structuralOnly) {
+        // P05's original derived-total property uses exact predecessor inputs
+        // with all CURRENT validator scripts, never archived validator logic.
+        const historical = mkdtempSync(join(tmpdir(), 'p05-structural-property-'));
+        try {
+          // The exact pre-registration source is already pinned by the approved
+          // package. A post-registration input would (correctly) seal the totals.
+          const commit = '14ca8c409993c9e57077d9705db022d3bfd26b1a';
+          const tree = '771867f1dbb47e277f90158a9f25b504bb786510';
+          assert.equal(execFileSync('git', ['rev-parse', '--verify', `${commit}^{tree}`], {cwd: ROOT, encoding: 'utf8', timeout: 2000}).trim(), tree);
+          const archive = join(historical, 'input.tar');
+          execFileSync('git', ['archive', '--format=tar', `--output=${archive}`, commit], {cwd: ROOT, timeout: 5000});
+          execFileSync('tar', ['-xf', archive, '-C', historical], {timeout: 5000}); rmSync(archive);
+          rmSync(join(historical, 'scripts'), {recursive: true}); cpSync(join(ROOT, 'scripts'), join(historical, 'scripts'), {recursive: true});
+          mutate(historical); assert.deepEqual(inspectMigrationHistory(historical), []); assert.deepEqual(inspectLearningImplementation(historical), []);
+        }
+        finally { rmSync(historical, { recursive: true, force: true }); }
+      }
+      assert.equal(exactCurrentDenial(runPins(dir), pairedSealDenials.get(name), dir), true, 'exact current admission denial required separately from structural property');
+      console.log(`PASS ${name} [PAIRED current structural property${structuralOnly ? ' + exact pre-registration P05 inputs 14ca8c4/current validator' : ''} + current admission]`);
+      return;
+    }
     if (structuralOnly) {
       // A hypothetical valid journal append proves structure and derived totals,
       // not new physical authoring authority. The paired live-guard case below

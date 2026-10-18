@@ -1,10 +1,12 @@
 #!/usr/bin/env node
+import { createPersistenceEvidenceContext } from './demo-storage-evidence.mjs';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const ROOT=resolve(process.cwd());
-const errors=[];
-const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
+const persistence=createPersistenceEvidenceContext(ROOT);
+const errors=[...persistence.errors];
+const load=(p)=>{try{return JSON.parse(persistence.read(p));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 const text=(p)=>{try{return readFileSync(join(ROOT,p),'utf8');}catch(e){errors.push(`${p}: ${e.message}`);return '';}};
 
 const admission=load('persistence/physical-slices/identity-credentials/admission.json');
@@ -14,7 +16,7 @@ const migration=text('drizzle/0003_slice_p04_credential.sql');
 const schema=text('src/modules/identity/infrastructure/persistence/credential-schema.ts');
 const repo=text('src/modules/identity/infrastructure/persistence/postgres-credential-repository.ts');
 const domain=text('src/modules/identity/domain/credential.ts');
-const config=text('drizzle.config.ts');
+const config=text(persistence.extended ? 'drizzle.p05.config.ts' : 'drizzle.config.ts');
 
 if(admission?.version!=='1.1.0' || admission?.decision!=='ADMIT' || admission?.implementation_authorized!==true || admission?.migration_authoring_authorized!==true) errors.push('SLICE-P04 implementation: active ADMIT authority missing');
 if(!config.includes("./src/modules/identity/infrastructure/persistence/credential-schema.ts")) errors.push('SLICE-P04 implementation: Drizzle config must include Credential schema');

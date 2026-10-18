@@ -1,0 +1,91 @@
+{
+  "status": "PLANNED_NOT_EXECUTED",
+  "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+  "issue": "#82",
+  "database": "isolated loopback disposable PostgreSQL17 only",
+  "checks": [
+    "Two independent empty replays",
+    "Upgrade replay from actual immutable P05 head; migration/metadata original hashes unchanged",
+    "Exact expected tables, columns, FKs, indexes, checks and trigger inventory",
+    "Scoped identity/persona/membership/report/content/assignment mismatches reject",
+    "Immutable grants/endpoints/classification/content/assignment/progress/audit/lifecycle/receipt UPDATE DELETE reject",
+    "Atomic admission prefix/global/lifetime bound under concurrent connections",
+    "Current run/session/membership authority lock ordering versus switch/close/revoke",
+    "Required audit/lifecycle append faults rollback entire transaction at every admitted command",
+    "Receipt same-key/mismatched-key/replay horizon/race isolation",
+    "Assignment/start/progress/completion race and persisted projection readback",
+    "Run expiry/terminal retry/session historical cap/reset retained state",
+    "Browser role SELECT and DML denial; owner foreign writes unreachable from owner ports",
+    "Lifecycle snapshots reproduce current Identity/Membership/Assignment/DemoRun values",
+    "No raw secrets in rows/audit/receipt/test artifacts",
+    "Populated actual-head P05 orphan fixture: new migration rejects, transaction rolls back all DDL, existing row bytes and migration journal remain unchanged. Original SQL plus metadata hashes unchanged.",
+    "Local disposable NOLOGIN browser-role SELECT/INSERT/UPDATE/DELETE probes over every application table; sequence/function ACL and pg_default_acl inventory; RLS enabled with no browser policies as baseline requires. No new persistent credential.",
+    "Supabase Data API/project settings/HTTP probe: NOT_RUN, explicitly outside this isolated local admission, never equivalent to deployment readiness."
+  ],
+  "result": "UNKNOWN",
+  "isolation": "PostgreSQL READ COMMITTED with explicit row and transaction advisory locks; no stale transaction timestamp used for access deadlines.",
+  "lock_order": [
+    "Admission-only advisory lock serializes counts plus run insertion.",
+    "For existing run: resolve non-authoritative persona association, SELECT DemoRun FOR UPDATE, then obtain clock_timestamp().",
+    "Lock current Identity then ApplicationSession, exact Membership and grant/report supporting records, then Assignment/LearningSession, then scoped receipt and audit append.",
+    "After ALL required Identity/session/Membership/target locks, sample clock_timestamp() again at protected-operation linearization and revalidate immutable deadline/session lifetimes. A downstream wait cannot reuse the earlier run-lock timestamp.",
+    "Hold all row locks until commit, including protected read result retrieval. Revalidate all authority after fence acquisition.",
+    "Expiry locks exact due run, obtains fresh clock, and invokes canonical Identity revocation; no user-current-session prerequisite."
+  ],
+  "race_oracles": [
+    "At prefix9/global99/total999 admission contenders, one final slot commits and the other returns bound failure with no partial rows.",
+    "At nine assignments and 99 lifetime sessions, independent last-slot contenders serialize to at most10 and100; session cap failure retains existing session; Close still succeeds.",
+    "Same key identical payload contenders yield original DTO and one effect/receipt/audit; different payload yields 422 with unchanged state.",
+    "Same-key response replay after completion returns original DTO only with current authorization; revoked/expired current authority denies before receipt; expired replay horizon409 retains tombstone.",
+    "Append versus completion: incomplete completion first rejects leaving ACTIVE then append may succeed; final append first permits one completion; no new append after completed.",
+    "Switch/close/session-revoke versus protected mutation and protected read: operation holding first run fence may complete; operation acquiring after revoked/terminal fence must deny without data/effect.",
+    "Deadline reached while blocked before lock acquisition: post-lock clock denies despite earlier request time.",
+    "Begin and Switch committed response loss never retries or reconstructs secret; durable effect readable only via actually available cookie.",
+    "Hold a downstream Identity or Membership lock until run deadline passes while contender already holds run lock; release downstream lock; contender rechecks DB time after all locks and denies without effect/data."
+  ],
+  "append_failure_matrix": {
+    "BeginDemoRun": [
+      "DemoRun lifecycle",
+      "CreateDemoPersona learner Identity lifecycle/audit",
+      "CreateDemoPersona manager Identity lifecycle/audit",
+      "CreateMembership learner lifecycle/audit",
+      "CreateMembership manager lifecycle/audit",
+      "PublishContentPack audit",
+      "AssignContent lifecycle/audit/receipt",
+      "CreateApplicationSession audit",
+      "BeginDemoRun audit"
+    ],
+    "AssignContent": [
+      "Assignment lifecycle",
+      "AssignContent audit",
+      "CommandReceipt"
+    ],
+    "StartLearningSession": [
+      "StartLearningSession audit",
+      "CommandReceipt"
+    ],
+    "RecordProgressEvent": [
+      "ProgressEvent",
+      "CommandReceipt"
+    ],
+    "CompleteLearningSession": [
+      "CompleteLearningSession audit"
+    ],
+    "SwitchDemoPersona": [
+      "each RevokeApplicationSession audit",
+      "CreateApplicationSession audit",
+      "SwitchDemoPersona audit"
+    ],
+    "CloseDemoRun": [
+      "each RevokeApplicationSession audit",
+      "RevokeDemoSessions audit",
+      "DemoRun lifecycle",
+      "CloseDemoRun audit"
+    ],
+    "RevokeApplicationSession": [
+      "RevokeApplicationSession audit"
+    ]
+  },
+  "append_failure_oracle": "Inject failure at each named append stage; compare all owned table rows before/after. Any failure rolls back outer transaction, preserves prior valid session, and cannot issue a cookie. Final-stage Begin failure leaves zero scope/persona/grant/report/content/assignment/session/history rows.",
+  "recovery": "Transactional DDL rejection preserves prior database; failed application transaction rolls back all owner effects. Retain state/history. Rollback of compatible code does not revert schema or delete data; no destructive down migration. Restore only through separately authorized backup/restore process."
+}

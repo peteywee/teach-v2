@@ -1,13 +1,15 @@
+import { createPersistenceEvidenceContext } from './demo-storage-evidence.mjs';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { inspectAdmissionCriteria } from './admission-criteria.mjs';
 import { inspectMigrationHistory } from '../packaging/migration-history-guards.mjs';
 
 export function inspectLearningImplementation(root) {
-  const errors = [];
+  const persistence = createPersistenceEvidenceContext(root);
+  const errors = [...persistence.errors];
   const fail = (message) => errors.push(`SLICE-P05 implementation: ${message}`);
   const load = (path) => {
-    try { return JSON.parse(readFileSync(join(root, path), 'utf8')); }
+    try { return JSON.parse(persistence.read(path)); }
     catch (error) { fail(`${path}: ${error.message}`); return null; }
   };
   const text = (path) => {
@@ -57,7 +59,7 @@ export function inspectLearningImplementation(root) {
   const repository = text('src/modules/learning/infrastructure/persistence/postgres-learning-session-repository.ts');
   const composition = text('src/bootstrap/learning-persistence-schema.ts');
   const migration = text('drizzle/0004_slice_p05_learning_session.sql');
-  if (!composition.includes('defineLearningSessionTable(identities.id)') || !text('drizzle.config.ts').includes('./src/bootstrap/learning-persistence-schema.ts')) fail('owner-reference schema composition missing');
+  if (!composition.includes('defineLearningSessionTable(identities.id)') || !text(persistence.extended ? 'drizzle.p05.config.ts' : 'drizzle.config.ts').includes('./src/bootstrap/learning-persistence-schema.ts')) fail('owner-reference schema composition missing');
   for (const required of ["pgTable('learning_sessions'", "text('assignment_id').notNull()", "foreignKey({ name: 'learning_session_identity_fk'"]) if (!schema.includes(required)) fail(`schema missing ${required}`);
   for (const required of ["eq(this.table.identityId, scope.identityId)", "eq(this.table.status, 'ACTIVE')", ".set({ status: 'COMPLETED' })"]) if (!repository.includes(required)) fail(`repository scope/atomic completion missing ${required}`);
   for (const required of ['CREATE TABLE "learning_sessions"','REFERENCES "public"."identity_identities"("id")','learning_guard_session_write','BEFORE INSERT OR UPDATE ON "learning_sessions"','LearningSession references are immutable','LearningSession allows only ACTIVE to COMPLETED']) if (!migration.includes(required)) fail(`migration missing ${required}`);
@@ -71,7 +73,8 @@ export function inspectLearningImplementation(root) {
       if (path.startsWith('src/modules/learning/') && /(?:identity|organization|authorization|content|certification|transaction-control)\/infrastructure\//.test(body)) fail(`Learning imports foreign Infrastructure: ${path}`);
     }
     const actual = {
-      tables: Object.keys(load(`drizzle/meta/${String((journal?.entries?.length ?? 1) - 1).padStart(4, '0')}_snapshot.json`)?.tables ?? {}).length, migration_files: journal?.entries?.length,
+      // Historical implementation totals stop at P05; current inventory is separately checked above.
+      tables: Object.keys((persistence.extended ? snapshot : load(`drizzle/meta/${String((journal?.entries?.length ?? 1) - 1).padStart(4, '0')}_snapshot.json`))?.tables ?? {}).length, migration_files: persistence.extended ? journal?.entries?.filter(entry => entry.idx <= 4).length : journal?.entries?.length,
       repositories: files.filter((path) => !path.endsWith('.test.ts')).reduce((n, path) => n + [...text(path).matchAll(/\bexport\s+class\s+Postgres[A-Za-z0-9_]*Repository\b/g)].length, 0),
       implemented_slices: readiness?.current_physical_slice_admissions?.filter((item) => ['PROVEN','IMPLEMENTED'].includes(item.implementation_state)).length,
     };

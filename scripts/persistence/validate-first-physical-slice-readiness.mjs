@@ -70,9 +70,9 @@ if(errors.length){
 
 console.log('Post-closure physical slice readiness PASS');
 console.log('K00: 0.17.0');
-console.log('Implemented artifacts: P01-P05; acceptance evidence is recorded separately');
+console.log('Historical implemented artifacts: P01-P05; acceptance evidence is recorded separately');
 console.log('P05 LearningSession schema admission: ADMIT / PROVEN');
 console.log('P05 Assignment reference: REQUIRED / NON-NULL');
 console.log('P05 physical implementation/migration authoring: AUTHORIZED');
-console.log('Artifact totals: 8/5/8/5; runtime activation remains BLOCKED');
+console.log('Historical artifact totals: 8/5/8/5; runtime activation remains BLOCKED');
 console.log('Shared/production migration execution: BLOCKED');

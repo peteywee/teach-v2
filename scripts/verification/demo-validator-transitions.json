@@ -1,0 +1,1051 @@
+{
+  "version": 1,
+  "purpose": "Paired predecessor structural properties using current validator code, plus exact current admission denials. Original declarations/outcomes are unchanged.",
+  "predecessor_commit": "b90dbe9d75867eb1ca8f578cd5dda826b1a30ec4",
+  "predecessor_tree": "3081b387488b063580fecec73eb1df20a2d70a07",
+  "cases": [
+    {
+      "name": "invariant discovery: wrong proposal id fails",
+      "script": "scripts/domains/validate-invariant-discovery.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "wrong id",
+      "original_mutation_sha256": "16d743cfb01c8659ee7a9ca473a0f398833a0541382a679332388de08c890b53",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: domains/invariants/proposed.json"
+    },
+    {
+      "name": "decision-table discovery: wrong proposal id fails",
+      "script": "scripts/domains/validate-decision-table-discovery.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "wrong id",
+      "original_mutation_sha256": "cc36c1c5ccf4369fa8f751f2762b895447a639a4d9c70603c1496f118194f928",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: domains/decisions/proposed.json"
+    },
+    {
+      "name": "state discovery: wrong proposal id fails",
+      "script": "scripts/domains/validate-state-discovery.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "wrong id",
+      "original_mutation_sha256": "fa20583bf7b714ddcc512a52262688249b2bd16747bafa4df3c376997d415797",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: domains/states/proposed.json"
+    },
+    {
+      "name": "relationship discovery: wrong proposal id fails",
+      "script": "scripts/domains/validate-relationships.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "wrong id",
+      "original_mutation_sha256": "4bb78a0447eefd199ef52fe509806d943811a322c36cde46579ae8ab740aebdf",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: domains/relationships/proposed.json"
+    },
+    {
+      "name": "dependency concepts: wrong lifecycle version fails",
+      "script": "scripts/domains/validate-dependency-concepts.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "version must be",
+      "original_mutation_sha256": "244a0aedbb0a7de13a378df06b5a9960c23cbcf79a672dc3d9687493a44bc38e",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: domains/dependencies/lifecycle-registration.json"
+    },
+    {
+      "name": "dependency lifecycle: wrong command closure count fails",
+      "script": "scripts/domains/validate-dependency-lifecycle-discovery.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "command closure",
+      "original_mutation_sha256": "7f4ecb505ce9d304660ea15a045d16581efbfb02054a093349707b2d82631e81",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: domains/dependencies/lifecycle-registration.json"
+    },
+    {
+      "name": "slice-p01 implementation: unauthorized admission fails",
+      "script": "scripts/persistence/validate-slice-p01-implementation-boundary.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "active ADMIT authority missing",
+      "original_mutation_sha256": "6620a6d9ac5f48300ec668189719ceae4b55f4be3ed86754f2b2d8bb1e673fcb",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/transaction-control/admission.json"
+    },
+    {
+      "name": "slice-p02 decisions: wrong verifier selection fails",
+      "script": "scripts/persistence/validate-slice-p02-owner-decisions.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "P02-D01 must be SESSION_VERIFIER_V1_SHA256_256BIT",
+      "original_mutation_sha256": "5784ea36477929e3a6e6bc7091fae0a5d4667cc4a4b6f3f46cfb70c170a00423",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-session/registration.json"
+    },
+    {
+      "name": "slice-p02 decisions: cross-Identity authorization flag false fails",
+      "script": "scripts/persistence/validate-slice-p02-owner-decisions.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "ownership\\/scope decision drifted",
+      "original_mutation_sha256": "313f9feea6915006a6289db0a956e3bce9712125f7ce11dc59b9dba29c76e1bc",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-session/registration.json"
+    },
+    {
+      "name": "slice-p02 decisions: missing cross-Identity authorization flag fails",
+      "script": "scripts/persistence/validate-slice-p02-owner-decisions.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "ownership\\/scope decision drifted",
+      "original_mutation_sha256": "0fb826ac986b85c1140159a9a575545306ce41d9ff9eace47efe36810febb2d2",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-session/registration.json"
+    },
+    {
+      "name": "slice-p02 admission: blocked decision fails",
+      "script": "scripts/persistence/validate-slice-p02-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "ADMIT authorization mismatch",
+      "original_mutation_sha256": "d35e67351ebda89e94d48f903de13fd4caf49ea143e6aaff190457b339b04e98",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-session/admission.json"
+    },
+    {
+      "name": "slice-p02 admission: optional session owner fails",
+      "script": "scripts/persistence/validate-slice-p02-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "exact owner-approved ownership\\/scope decision required",
+      "original_mutation_sha256": "7af4f29b8c46d85b0131cb43041f5daba1da75fde75d32fea6263a11a327b92b",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-session/registration.json"
+    },
+    {
+      "name": "slice-p02 implementation: unauthorized admission fails",
+      "script": "scripts/persistence/validate-slice-p02-implementation-boundary.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "active ADMIT authority missing",
+      "original_mutation_sha256": "d35e67351ebda89e94d48f903de13fd4caf49ea143e6aaff190457b339b04e98",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-session/admission.json"
+    },
+    {
+      "name": "slice-p03 admission: blocked decision fails",
+      "script": "scripts/persistence/validate-slice-p03-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "ADMIT authorization mismatch",
+      "original_mutation_sha256": "3a2f3333c494d47a8f16c6c358407ee83e0017a5832d6ecb99074989e76773f5",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-tokens/admission.json"
+    },
+    {
+      "name": "slice-p03 admission: optional owner fails",
+      "script": "scripts/persistence/validate-slice-p03-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "exact #40 scope rules required",
+      "original_mutation_sha256": "1953846fb3e33540dd8956c05b450bf774319d25b825cf891bc80e0d57c8703c",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-tokens/registration.json"
+    },
+    {
+      "name": "slice-p03 implementation: unauthorized admission fails",
+      "script": "scripts/persistence/validate-slice-p03-implementation-boundary.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "active ADMIT authority missing",
+      "original_mutation_sha256": "3a2f3333c494d47a8f16c6c358407ee83e0017a5832d6ecb99074989e76773f5",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-tokens/admission.json"
+    },
+    {
+      "name": "slice-p04 admission: blocked decision fails",
+      "script": "scripts/persistence/validate-slice-p04-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "ADMIT authorization mismatch",
+      "original_mutation_sha256": "433b113fdfba4e256607848d22416159ed183dd7acbad94eacd14b1bcd02beec",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-credentials/admission.json"
+    },
+    {
+      "name": "slice-p04 admission: UNKNOWN criterion fails",
+      "script": "scripts/persistence/validate-slice-p04-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "all eight Persistence Model criteria must be PROVEN",
+      "original_mutation_sha256": "5657879ee33652d825226920b51e4c474143142d55bf3ad10b226abb73d326f2",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-credentials/admission.json"
+    },
+    {
+      "name": "slice-p04 implementation: stale identities FK fails",
+      "script": "scripts/persistence/validate-slice-p04-implementation-boundary.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "Credential FK must target public\\.identity_identities",
+      "original_mutation_sha256": "a532fe1e97a0b4728f8cb8043ead1f71b9c24e98ca406abd37da7ba8e1b86a6f",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical admission: historical migration changed: 0003_slice_p04_credential.sql"
+    },
+    {
+      "name": "slice-p04 implementation: missing journal entry fails",
+      "script": "scripts/persistence/validate-slice-p04-implementation-boundary.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "authoritative Drizzle journal must include idx 3",
+      "original_mutation_sha256": "b0b9fe45589d6faefc777f01451a9347df2fb2abfd659a752b1863da936bd89d",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical admission: original journal prefix must remain immutable"
+    },
+    {
+      "name": "slice-p05 decisions: optional Assignment reference fails",
+      "script": "scripts/persistence/validate-slice-p05-owner-decisions.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "P05-D01 must be REQUIRED_ONE_ASSIGNMENT",
+      "original_mutation_sha256": "5e8608365b6a3776e8b745286b1746dc57734805d3727ded92c430c540d90427",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/learning-session/registration.json"
+    },
+    {
+      "name": "slice-p05 decisions: registration cannot authorize implementation directly",
+      "script": "scripts/persistence/validate-slice-p05-owner-decisions.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "registration must authorize admission rerun only",
+      "original_mutation_sha256": "26ed1b95fdfb6e986c836d54908d5fb50b70c26e4c3e4ae7515b52894fe4cd3a",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/learning-session/registration.json"
+    },
+    {
+      "name": "slice-p05 admission: blocked decision fails",
+      "script": "scripts/persistence/validate-slice-p05-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "ADMIT authorization mismatch",
+      "original_mutation_sha256": "0e10581bc1d2ac0b72208040e723e374d215647371bbef4bdad3ee7ffa0474f8",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "slice-p05 admission: nullable Assignment reference fails",
+      "script": "scripts/persistence/validate-slice-p05-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "exact REQUIRED_ONE_ASSIGNMENT owner decision required",
+      "original_mutation_sha256": "0458019a5fe81ff267b81636d099fba29caf8dc807be3f7e2820530551299f66",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/learning-session/registration.json"
+    },
+    {
+      "name": "slice-p05 admission: UNKNOWN criterion cannot pass",
+      "script": "scripts/persistence/validate-slice-p05-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "all eight Persistence Model criteria must be PROVEN",
+      "original_mutation_sha256": "9454ee8286eaa3a388aebd61b62088b5db3d4d83b1d84337b7654896c320e1ee",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "slice-p01 admission: empty criteria fails",
+      "script": "scripts/persistence/validate-slice-p01-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "exactly eight distinct",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/transaction-control/admission.json"
+    },
+    {
+      "name": "slice-p01 admission: duplicate criteria fails",
+      "script": "scripts/persistence/validate-slice-p01-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "duplicate criterion",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/transaction-control/admission.json"
+    },
+    {
+      "name": "slice-p01 admission: missing criterion fails",
+      "script": "scripts/persistence/validate-slice-p01-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "missing criterion",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/transaction-control/admission.json"
+    },
+    {
+      "name": "slice-p01 admission: unknown criterion fails",
+      "script": "scripts/persistence/validate-slice-p01-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "unknown criterion",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/transaction-control/admission.json"
+    },
+    {
+      "name": "slice-p01 admission: blank evidence fails",
+      "script": "scripts/persistence/validate-slice-p01-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "non-blank evidence",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/transaction-control/admission.json"
+    },
+    {
+      "name": "slice-p01 admission: missing evidence fails",
+      "script": "scripts/persistence/validate-slice-p01-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "non-blank evidence",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/transaction-control/admission.json"
+    },
+    {
+      "name": "slice-p01 admission: malformed criterion fails",
+      "script": "scripts/persistence/validate-slice-p01-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "criterion must be an object",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/transaction-control/admission.json"
+    },
+    {
+      "name": "slice-p02 admission: empty criteria fails",
+      "script": "scripts/persistence/validate-slice-p02-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "exactly eight distinct",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-session/admission.json"
+    },
+    {
+      "name": "slice-p02 admission: duplicate criteria fails",
+      "script": "scripts/persistence/validate-slice-p02-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "duplicate criterion",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-session/admission.json"
+    },
+    {
+      "name": "slice-p02 admission: missing criterion fails",
+      "script": "scripts/persistence/validate-slice-p02-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "missing criterion",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-session/admission.json"
+    },
+    {
+      "name": "slice-p02 admission: unknown criterion fails",
+      "script": "scripts/persistence/validate-slice-p02-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "unknown criterion",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-session/admission.json"
+    },
+    {
+      "name": "slice-p02 admission: blank evidence fails",
+      "script": "scripts/persistence/validate-slice-p02-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "non-blank evidence",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-session/admission.json"
+    },
+    {
+      "name": "slice-p02 admission: missing evidence fails",
+      "script": "scripts/persistence/validate-slice-p02-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "non-blank evidence",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-session/admission.json"
+    },
+    {
+      "name": "slice-p02 admission: malformed criterion fails",
+      "script": "scripts/persistence/validate-slice-p02-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "criterion must be an object",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-session/admission.json"
+    },
+    {
+      "name": "slice-p03 admission: empty criteria fails",
+      "script": "scripts/persistence/validate-slice-p03-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "exactly eight distinct",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-tokens/admission.json"
+    },
+    {
+      "name": "slice-p03 admission: duplicate criteria fails",
+      "script": "scripts/persistence/validate-slice-p03-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "duplicate criterion",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-tokens/admission.json"
+    },
+    {
+      "name": "slice-p03 admission: missing criterion fails",
+      "script": "scripts/persistence/validate-slice-p03-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "missing criterion",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-tokens/admission.json"
+    },
+    {
+      "name": "slice-p03 admission: unknown criterion fails",
+      "script": "scripts/persistence/validate-slice-p03-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "unknown criterion",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-tokens/admission.json"
+    },
+    {
+      "name": "slice-p03 admission: blank evidence fails",
+      "script": "scripts/persistence/validate-slice-p03-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "non-blank evidence",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-tokens/admission.json"
+    },
+    {
+      "name": "slice-p03 admission: missing evidence fails",
+      "script": "scripts/persistence/validate-slice-p03-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "non-blank evidence",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-tokens/admission.json"
+    },
+    {
+      "name": "slice-p03 admission: malformed criterion fails",
+      "script": "scripts/persistence/validate-slice-p03-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "criterion must be an object",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-tokens/admission.json"
+    },
+    {
+      "name": "slice-p04 admission: empty criteria fails",
+      "script": "scripts/persistence/validate-slice-p04-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "exactly eight distinct",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-credentials/admission.json"
+    },
+    {
+      "name": "slice-p04 admission: duplicate criteria fails",
+      "script": "scripts/persistence/validate-slice-p04-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "duplicate criterion",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-credentials/admission.json"
+    },
+    {
+      "name": "slice-p04 admission: missing criterion fails",
+      "script": "scripts/persistence/validate-slice-p04-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "missing criterion",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-credentials/admission.json"
+    },
+    {
+      "name": "slice-p04 admission: unknown criterion fails",
+      "script": "scripts/persistence/validate-slice-p04-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "unknown criterion",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-credentials/admission.json"
+    },
+    {
+      "name": "slice-p04 admission: blank evidence fails",
+      "script": "scripts/persistence/validate-slice-p04-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "non-blank evidence",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-credentials/admission.json"
+    },
+    {
+      "name": "slice-p04 admission: missing evidence fails",
+      "script": "scripts/persistence/validate-slice-p04-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "non-blank evidence",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-credentials/admission.json"
+    },
+    {
+      "name": "slice-p04 admission: malformed criterion fails",
+      "script": "scripts/persistence/validate-slice-p04-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "criterion must be an object",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/identity-credentials/admission.json"
+    },
+    {
+      "name": "slice-p05 admission: empty criteria fails",
+      "script": "scripts/persistence/validate-slice-p05-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "exactly eight distinct",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "slice-p05 admission: duplicate criteria fails",
+      "script": "scripts/persistence/validate-slice-p05-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "duplicate criterion",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "slice-p05 admission: missing criterion fails",
+      "script": "scripts/persistence/validate-slice-p05-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "missing criterion",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "slice-p05 admission: unknown criterion fails",
+      "script": "scripts/persistence/validate-slice-p05-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "unknown criterion",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "slice-p05 admission: blank evidence fails",
+      "script": "scripts/persistence/validate-slice-p05-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "non-blank evidence",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "slice-p05 admission: missing evidence fails",
+      "script": "scripts/persistence/validate-slice-p05-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "non-blank evidence",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "slice-p05 admission: malformed criterion fails",
+      "script": "scripts/persistence/validate-slice-p05-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "criterion must be an object",
+      "original_mutation_sha256": "e90675fcdd286f6683454051ce9da49f463c7e849e7eba4f1092ef0d0f8d8d20",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "slice-p05 admission: reordered complete criteria pass",
+      "script": "scripts/persistence/validate-slice-p05-schema-admission.mjs",
+      "original_outcome": "PASS",
+      "original_pattern": null,
+      "original_mutation_sha256": "646ddc0829d2470f9a44779e3c0fb16643a9b8b4bb4498eb3aba8f88dff0ee40",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "pins: duplicate admission criterion fails",
+      "script": "scripts/packaging/validate-apply-guards.mjs pins",
+      "original_outcome": "DENIAL",
+      "original_pattern": "duplicate criterion",
+      "original_mutation_sha256": "d7b2c776cf1df73dfe2fe8eea22ce8663de9b026e17946aa69800f87bbead46a",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "foundation: runtime activation fails",
+      "script": "scripts/persistence/validate-slice-p05-foundation.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "runtime activation must remain BLOCKED",
+      "original_mutation_sha256": "2685c66272acecb2769574c654b63c01facd3a879889d4692c0215f6f380dbf4",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/learning-session/foundation.json"
+    },
+    {
+      "name": "foundation: physical persistence proof fails",
+      "script": "scripts/persistence/validate-slice-p05-foundation.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "physical_persistence must remain PENDING",
+      "original_mutation_sha256": "2685c66272acecb2769574c654b63c01facd3a879889d4692c0215f6f380dbf4",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/learning-session/foundation.json"
+    },
+    {
+      "name": "foundation: Assignment adapter proof fails",
+      "script": "scripts/persistence/validate-slice-p05-foundation.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "authoritative_assignment_authorization_adapter must remain UNKNOWN",
+      "original_mutation_sha256": "2685c66272acecb2769574c654b63c01facd3a879889d4692c0215f6f380dbf4",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/learning-session/foundation.json"
+    },
+    {
+      "name": "foundation: atomic insert proof fails",
+      "script": "scripts/persistence/validate-slice-p05-foundation.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "atomic_authorization_and_insert must remain PENDING",
+      "original_mutation_sha256": "2685c66272acecb2769574c654b63c01facd3a879889d4692c0215f6f380dbf4",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/learning-session/foundation.json"
+    },
+    {
+      "name": "foundation: concurrent completion proof fails",
+      "script": "scripts/persistence/validate-slice-p05-foundation.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "postgresql_concurrent_completion must remain PENDING",
+      "original_mutation_sha256": "2685c66272acecb2769574c654b63c01facd3a879889d4692c0215f6f380dbf4",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/learning-session/foundation.json"
+    },
+    {
+      "name": "foundation: production authorization fails",
+      "script": "scripts/persistence/validate-slice-p05-foundation.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "shared\\/production migration execution must remain unauthorized",
+      "original_mutation_sha256": "2685c66272acecb2769574c654b63c01facd3a879889d4692c0215f6f380dbf4",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/learning-session/foundation.json"
+    },
+    {
+      "name": "foundation: table totals fails",
+      "script": "scripts/persistence/validate-slice-p05-foundation.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "tables totals must match actual artifacts",
+      "original_mutation_sha256": "2685c66272acecb2769574c654b63c01facd3a879889d4692c0215f6f380dbf4",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/learning-session/foundation.json"
+    },
+    {
+      "name": "foundation: migration totals fails",
+      "script": "scripts/persistence/validate-slice-p05-foundation.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "migration_files totals must match actual artifacts",
+      "original_mutation_sha256": "2685c66272acecb2769574c654b63c01facd3a879889d4692c0215f6f380dbf4",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/learning-session/foundation.json"
+    },
+    {
+      "name": "foundation: repository totals fails",
+      "script": "scripts/persistence/validate-slice-p05-foundation.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "repositories totals must match actual artifacts",
+      "original_mutation_sha256": "2685c66272acecb2769574c654b63c01facd3a879889d4692c0215f6f380dbf4",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/learning-session/foundation.json"
+    },
+    {
+      "name": "foundation: slice totals fails",
+      "script": "scripts/persistence/validate-slice-p05-foundation.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "implemented physical slice count",
+      "original_mutation_sha256": "2685c66272acecb2769574c654b63c01facd3a879889d4692c0215f6f380dbf4",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/learning-session/foundation.json"
+    },
+    {
+      "name": "foundation: wrong owner decision fails",
+      "script": "scripts/persistence/validate-slice-p05-foundation.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "Assignment owner decision mismatch",
+      "original_mutation_sha256": "2685c66272acecb2769574c654b63c01facd3a879889d4692c0215f6f380dbf4",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/learning-session/foundation.json"
+    },
+    {
+      "name": "foundation: missing verification source fails",
+      "script": "scripts/persistence/validate-slice-p05-foundation.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "exact baseline and verification source",
+      "original_mutation_sha256": "2685c66272acecb2769574c654b63c01facd3a879889d4692c0215f6f380dbf4",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/learning-session/foundation.json"
+    },
+    {
+      "name": "foundation: missing admission reference fails",
+      "script": "scripts/persistence/validate-slice-p05-foundation.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "separate ADMIT admission",
+      "original_mutation_sha256": "2685c66272acecb2769574c654b63c01facd3a879889d4692c0215f6f380dbf4",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/learning-session/foundation.json"
+    },
+    {
+      "name": "foundation: missing checkpoint fails closed",
+      "script": "scripts/persistence/validate-slice-p05-foundation.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "foundation.json:.*ENOENT",
+      "original_mutation_sha256": "17b8d7cac04dc76174b32d8f3bfc4c6633993537f341ab82f507bc41c52b5b30",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: missing or malformed evidence: ENOENT: no such file or directory, open '<fixture>/persistence/physical-slices/learning-session/foundation.json'"
+    },
+    {
+      "name": "foundation: contradictory P05 readiness fails",
+      "script": "scripts/persistence/validate-slice-p05-foundation.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "P05 readiness must remain admitted",
+      "original_mutation_sha256": "d1a1e3de1b202f3d87758351f3d838f5f60e60a90ced399056adf02cc99ca4e8",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "foundation: matching invented repository counts still fail actual artifacts",
+      "script": "scripts/persistence/validate-slice-p05-foundation.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "repositories totals must match actual artifacts",
+      "original_mutation_sha256": "b9d5367b58bf3d3806d0076ca4e336145ba3ed43011b2b4a0a1eea2bbf7c02e9",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "pins: forged foundation authorization fails",
+      "script": "scripts/packaging/validate-apply-guards.mjs pins",
+      "original_outcome": "DENIAL",
+      "original_pattern": "runtime activation must remain BLOCKED",
+      "original_mutation_sha256": "1704b0f496364d1db63a9f526398e4dd44929b6023e70dbbfa362e1d3da85dd3",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/learning-session/foundation.json"
+    },
+    {
+      "name": "p05 physical evidence: runtime activation fails",
+      "script": "scripts/persistence/validate-slice-p05-implementation-boundary.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "runtime activation must remain BLOCKED",
+      "original_mutation_sha256": "5f2a24fc42ba303d3eea8624e18c420d1c01cc46d16320f9a2bf701c285d5755",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "p05 physical evidence: production execution fails",
+      "script": "scripts/persistence/validate-slice-p05-implementation-boundary.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "shared\\/production migration execution must remain blocked",
+      "original_mutation_sha256": "5f2a24fc42ba303d3eea8624e18c420d1c01cc46d16320f9a2bf701c285d5755",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "p05 physical evidence: invented Assignment existence fails",
+      "script": "scripts/persistence/validate-slice-p05-implementation-boundary.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "must not claim existence",
+      "original_mutation_sha256": "5f2a24fc42ba303d3eea8624e18c420d1c01cc46d16320f9a2bf701c285d5755",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "p05 physical evidence: nullable Assignment reference fails",
+      "script": "scripts/persistence/validate-slice-p05-implementation-boundary.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "must not claim existence",
+      "original_mutation_sha256": "5f2a24fc42ba303d3eea8624e18c420d1c01cc46d16320f9a2bf701c285d5755",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "p05 physical evidence: invented Assignment authorization fails",
+      "script": "scripts/persistence/validate-slice-p05-implementation-boundary.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "explicit runtime blockers",
+      "original_mutation_sha256": "5f2a24fc42ba303d3eea8624e18c420d1c01cc46d16320f9a2bf701c285d5755",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "p05 physical evidence: invented atomic authorization fails",
+      "script": "scripts/persistence/validate-slice-p05-implementation-boundary.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "explicit runtime blockers",
+      "original_mutation_sha256": "5f2a24fc42ba303d3eea8624e18c420d1c01cc46d16320f9a2bf701c285d5755",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "p05 physical evidence: repository total drift fails",
+      "script": "scripts/persistence/validate-slice-p05-implementation-boundary.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "totals must match actual artifacts",
+      "original_mutation_sha256": "5f2a24fc42ba303d3eea8624e18c420d1c01cc46d16320f9a2bf701c285d5755",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "p05 physical evidence: inconsistent verification state fails",
+      "script": "scripts/persistence/validate-slice-p05-implementation-boundary.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "all physical verification fields",
+      "original_mutation_sha256": "5f2a24fc42ba303d3eea8624e18c420d1c01cc46d16320f9a2bf701c285d5755",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "p05 implementation: no ADMIT means no authoring",
+      "script": "scripts/persistence/validate-slice-p05-implementation-boundary.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "active ADMIT authority required",
+      "original_mutation_sha256": "0f359503f2b18face6af29c6242eb06d8a1d6cf89adac755ef80d4ec34c2e41e",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "p05 implementation: wrong Identity FK target fails",
+      "script": "scripts/persistence/validate-slice-p05-implementation-boundary.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "FK must reference canonical Identity",
+      "original_mutation_sha256": "497cbc32e8274ff48f3075088d9c8efce9f26e0d1034ae2f633fda4f03310ff6",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical admission: historical metadata changed: 0004_snapshot.json"
+    },
+    {
+      "name": "P01 decision packet: missing preserved implementation fails",
+      "script": "scripts/persistence/validate-transactioncontrol-first-slice-decision-packet.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "readiness must preserve SLICE-P01",
+      "original_mutation_sha256": "449b7cd5d98ba8f520c7a6b2f42baff39b030cce9ef10f18bfc48ddbd5c96c7b",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "closure: historical promotion set drift fails",
+      "script": "scripts/persistence/validate-persistence-semantic-closure-registration.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "exact historical identifiers promotion set",
+      "original_mutation_sha256": "33939357f1a878bab44d90597a04a2e58e80a4579dbb7c367210b76359221c05",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/semantic-closure/registration.json"
+    },
+    {
+      "name": "integration: queue READY without admission fails",
+      "script": "scripts/architecture/validate-repository-integration.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "queue must preserve admission BLOCK",
+      "original_mutation_sha256": "8204209390b14eb4ce9aad2ea5bf7424a0555f131fcf11c9ce05f2fbac1c2f90",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "repository integration: unverified persistence evidence: demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "integration: invented relationship count fails",
+      "script": "scripts/architecture/validate-repository-integration.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "queue relationship set must match",
+      "original_mutation_sha256": "5f8b43234c01f601daeb84f1416f1bde3903dcbb53624f2e0aa74961558765bf",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "repository integration: unverified persistence evidence: demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "P06: premature ADMIT fails",
+      "script": "scripts/persistence/validate-slice-p06-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "current P06 decision must be BLOCK",
+      "original_mutation_sha256": "4556ec17b30383a8f8f1189688f70a0d2e4e66148fa66b865069afc883dfc72f",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ",
+      "current_seal_probe_path": "persistence/physical-slices/assignment/admission.json"
+    },
+    {
+      "name": "P06: unknown criteria cannot become PROVEN",
+      "script": "scripts/persistence/validate-slice-p06-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "four PROVEN and four UNKNOWN",
+      "original_mutation_sha256": "fc87ad78ff86dbd156f779013e0f21ab1d2c3ef0c696ba20cb9c91097e8cfa2f",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ",
+      "current_seal_probe_path": "persistence/physical-slices/assignment/admission.json"
+    },
+    {
+      "name": "P06: authoring while BLOCKED fails",
+      "script": "scripts/persistence/validate-slice-p06-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "implementation_authorized must remain false",
+      "original_mutation_sha256": "412bccfaf096ebd1cda6dcdc1cba3d80799d0269cdb97d4aae2ddf159ad9e744",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ",
+      "current_seal_probe_path": "persistence/physical-slices/assignment/admission-evidence-plan.json"
+    },
+    {
+      "name": "P06: incomplete acceptance evidence fails",
+      "script": "scripts/persistence/validate-slice-p06-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "complete migration\\/version\\/scope\\/audit\\/atomicity evidence",
+      "original_mutation_sha256": "6b953a537b5c0e64a830c488a252b061aa639af3f5245450100be3e2d5138c9a",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "p07: premature ADMIT fails",
+      "script": "scripts/persistence/validate-slice-p07-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "current admission decision must be BLOCK",
+      "original_mutation_sha256": "ff744baea6bd2e5b6e4039d2ffd302debcae659d2bfb8dd0301f2676a03304bf",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/certification/admission.json"
+    },
+    {
+      "name": "p07: invented lifecycle fails",
+      "script": "scripts/persistence/validate-slice-p07-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "lifecycle_decision remains UNKNOWN",
+      "original_mutation_sha256": "ba3130496a8ee95e344e0e84d7173f60e73222e5e495f8c2f2243dc9484537d1",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/certification/admission-evidence-plan.json"
+    },
+    {
+      "name": "p07: unknown criteria cannot be PROVEN",
+      "script": "scripts/persistence/validate-slice-p07-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "four PROVEN and four UNKNOWN",
+      "original_mutation_sha256": "b11f594fb45e9e5872b53e2a5c136ce7cf781e0f1c586e252ee93a064c3d5cf1",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/certification/admission.json"
+    },
+    {
+      "name": "p07: migration authoring forbidden while blocked",
+      "script": "scripts/persistence/validate-slice-p07-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "migration_authoring_authorized must remain false",
+      "original_mutation_sha256": "1b4cf69b7188afa2250ab4b444bf7dbece3b7e4537685efc1c38192b93447f1e",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/certification/admission-evidence-plan.json"
+    },
+    {
+      "name": "p07: required evidence cannot be omitted",
+      "script": "scripts/persistence/validate-slice-p07-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "complete replay, scope, version, audit and contention",
+      "original_mutation_sha256": "01b4600b34639929ce623c88ec2a1c016fc50d5676bae5d8f97cd54e6152f18b",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/certification/admission-evidence-plan.json"
+    },
+    {
+      "name": "p07: exact logical relationships required",
+      "script": "scripts/persistence/validate-slice-p07-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "exact approved relationship inventory",
+      "original_mutation_sha256": "0bfb39f5e637473f5e9e785e52d4566f2a72d3b1061a4a6e9baaedfba3b5879f",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: persistence/physical-slices/certification/admission-evidence-plan.json"
+    },
+    {
+      "name": "p08: premature ADMIT fails",
+      "script": "scripts/persistence/validate-slice-p08-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "current admission decision must be BLOCK",
+      "original_mutation_sha256": "ff744baea6bd2e5b6e4039d2ffd302debcae659d2bfb8dd0301f2676a03304bf",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ",
+      "current_seal_probe_path": "persistence/physical-slices/progress-event/admission.json"
+    },
+    {
+      "name": "p08: invented lifecycle fails",
+      "script": "scripts/persistence/validate-slice-p08-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "lifecycle_decision remains UNKNOWN",
+      "original_mutation_sha256": "ba3130496a8ee95e344e0e84d7173f60e73222e5e495f8c2f2243dc9484537d1",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "p08: unknown criteria cannot be PROVEN",
+      "script": "scripts/persistence/validate-slice-p08-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "four PROVEN and four UNKNOWN",
+      "original_mutation_sha256": "b11f594fb45e9e5872b53e2a5c136ce7cf781e0f1c586e252ee93a064c3d5cf1",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ",
+      "current_seal_probe_path": "persistence/physical-slices/progress-event/admission.json"
+    },
+    {
+      "name": "p08: migration authoring forbidden while blocked",
+      "script": "scripts/persistence/validate-slice-p08-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "migration_authoring_authorized must remain false",
+      "original_mutation_sha256": "1b4cf69b7188afa2250ab4b444bf7dbece3b7e4537685efc1c38192b93447f1e",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ",
+      "current_seal_probe_path": "persistence/physical-slices/progress-event/admission-evidence-plan.json"
+    },
+    {
+      "name": "p08: required evidence cannot be omitted",
+      "script": "scripts/persistence/validate-slice-p08-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "complete replay, scope, version, audit and contention",
+      "original_mutation_sha256": "01b4600b34639929ce623c88ec2a1c016fc50d5676bae5d8f97cd54e6152f18b",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "p08: exact logical relationships required",
+      "script": "scripts/persistence/validate-slice-p08-schema-admission.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "exact approved relationship inventory",
+      "original_mutation_sha256": "0bfb39f5e637473f5e9e785e52d4566f2a72d3b1061a4a6e9baaedfba3b5879f",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "integration: future table cannot enter existing migration",
+      "script": "scripts/architecture/validate-repository-integration.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "future migration table has no ADMIT authority",
+      "original_mutation_sha256": "9f58d8ced138b2e0af3617f7b84cb8d58176a182dcbda673456cf815a8de2a8c",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "repository integration: unverified persistence evidence: demo physical admission: historical migration changed: 0004_slice_p05_learning_session.sql"
+    },
+    {
+      "name": "integration: future snapshot table cannot precede admission",
+      "script": "scripts/architecture/validate-repository-integration.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "future snapshot table has no ADMIT authority",
+      "original_mutation_sha256": "941ec974e870fbc40eef3a980e4644b9a1d69a7a05403e169f6fbf6d9e696967",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "repository integration: unverified persistence evidence: demo physical admission: historical metadata changed: 0004_snapshot.json"
+    },
+    {
+      "name": "integration: missing future evidence plan fails",
+      "script": "scripts/architecture/validate-repository-integration.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "evidence plan is required",
+      "original_mutation_sha256": "1b34e6e88efd334e01b4fa1fb208901df0c1c93ffb836961667fbd6207f64043",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "repository integration: unverified persistence evidence: demo physical successor: exact nine-path successor envelope or original/live hashes differ"
+    },
+    {
+      "name": "recovery: newly added question cannot escape projection",
+      "script": "scripts/verification/validate-legacy-foundation-recovery.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "live owner inventory drift",
+      "original_mutation_sha256": "c08f0369bf4c92b7404f8cc3e24940746fe5283ed7d042eda846431092646528",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: registered authority file differs: contracts/c00-system-authority-contract.md"
+    },
+    {
+      "name": "decision closure: registered policy and 24 denial regressions pass",
+      "script": "scripts/tests/validate-decision-closure.test.mjs",
+      "original_outcome": "PASS",
+      "original_pattern": null,
+      "original_mutation_sha256": "dec7a076dec41531da7f2d40bd4b896e27d45dd09ecd541190941bf88e6de894",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "demo registration: unchanged preceding source drift: governance/decision-closure/registration.json",
+      "current_probe_script": "scripts/verification/validate-decision-closure.mjs",
+      "current_seal_probe_path": "governance/decision-closure/registration.json"
+    },
+    {
+      "name": "owner policy: new route source invalidates empty scan",
+      "script": "scripts/verification/validate-owner-policy-registration.mjs",
+      "original_outcome": "DENIAL",
+      "original_pattern": "route scan must cover exact current src inventory",
+      "original_mutation_sha256": "4dbde1db58e03c2f7f240e5facfca53e5fe9a243e087106a61bffec21cd0311e",
+      "property_input": "EXACT_PREDECESSOR_WITH_CURRENT_VALIDATOR_SCRIPTS",
+      "current_diagnostic": "owner registration: demo route inventory: exact current route source inventory or hashes differ"
+    }
+  ]
+}
