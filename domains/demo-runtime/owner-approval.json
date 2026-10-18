@@ -1,0 +1,44 @@
+{
+  "approval_id": "TEACH-DEMO-RUNTIME-OWNER-APPROVAL-2026-10-17",
+  "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+  "package_version": "0.1.0",
+  "package_sha256": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+  "recorded_on": "2026-10-17",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "source": "Exact owner conversation supplied as trusted transcript history; validator verifies recorded bytes, not independent speaker authentication.",
+  "question": {
+    "message_id": "Sentinel_5e8f951ef6d081919d7f7e55476465c8",
+    "speaker": "assistant",
+    "text": "The complete demo runtime package passed independent review. One bundled approval is needed to move from preview screens to connected implementation:\n\n1. Approve TEACH-DEMO-RUNTIME-2026-10-17@0.1.0, exactly as attached, for registration and local isolated implementation after admission checks pass. Each visitor gets fictional learner/manager personas and isolated content; responses and completion are saved and visible to the manager. Visits expire after 60 minutes. Reset starts fresh without deleting prior history. Completion means recorded participation, not certification.\n2. Authorize the required governance issue and governance-only branch/draft PR in public peteywee/teach-v2.\n\nThis does not authorize merging, deployment, real-customer provisioning, or security-setting changes. Approve both? UI testing continues meanwhile."
+  },
+  "clarification": {
+    "message_id": "Sentinel_4ac13a5e32fc819195e3fb3994e1bc91",
+    "speaker": "assistant",
+    "text": "Next is connecting the verified screens to saved learner progress, the manager view, and isolated demo sessions.\n\nBefore I proceed, does ‘next’ approve both items above: the exact TEACH-DEMO-RUNTIME-2026-10-17@0.1.0 package for local implementation, and its public governance issue/draft PR? No merge or deployment is included."
+  },
+  "response": {
+    "message_id": "Sentinel_e891e0426cfc819181fb9af1b3d1f6dd",
+    "speaker": "owner",
+    "text": "yes you have approval to do all and create the pr you can skip the draft and just to check the reviews initiate the entire life cycle"
+  },
+  "approved_scope": [
+    "Exact named package semantic/interface registration",
+    "Local isolated synthetic implementation after admission checks pass",
+    "Required public SYS-21 governance issue",
+    "Ready PR rather than draft; review, merge and post-merge lifecycle for this demo work"
+  ],
+  "excluded_scope": [
+    "Deployment",
+    "Security-setting changes",
+    "Production credentials",
+    "Real-customer provisioning",
+    "Physical data deletion",
+    "Semantics outside the exact approved package"
+  ],
+  "sys21_issue": {
+    "number": 82,
+    "url": "https://github.com/peteywee/teach-v2/issues/82",
+    "created_at": "2026-10-17T20:38:55Z",
+    "preceded_active_revision": true
+  }
+}

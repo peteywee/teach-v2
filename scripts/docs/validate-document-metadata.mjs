@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { inspectDemoRuntimeRegistration, DEMO_PROPOSAL } from '../kernel/demo-runtime-registration.mjs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
@@ -44,7 +45,8 @@ function gitShow(ref, path) {
   catch { return null; }
 }
 
-const errors = [];
+const demoRegistration=inspectDemoRuntimeRegistration(ROOT);
+const errors = [...demoRegistration.errors];
 const docs = [];
 for (const r of governedRoots) {
   const abs = join(ROOT, r);
@@ -60,6 +62,13 @@ for (const abs of docs) {
   // to retrofit governed-document metadata. Its governed wrapper is adjacent.
   if (path === 'domains/capabilities/proposal-0.1.1/README.md') {
     if (createHash('sha256').update(text).digest('hex') !== '614fafb66d90df7cab78474c68cd6f1b17afdfca426e557c9c16d497eae9a161') errors.push(`${path}: immutable reviewed exhibit differs`);
+    continue;
+  }
+  // Exact16-file frozen proposal is checksum-bound by the successor verifier.
+  if (path.startsWith(DEMO_PROPOSAL + '/') && demoRegistration.registered) {
+    const filename=path.slice(DEMO_PROPOSAL.length+1);
+    const known=['README.md','admission-and-verification.md','authority-and-audit.md','contract-amendments.md','decision-and-scope.md','demo-boundary.md','learning-definition.md'].includes(filename);
+    if (!known) errors.push(`${path}: unexpected immutable proposal document`);
     continue;
   }
   let m;

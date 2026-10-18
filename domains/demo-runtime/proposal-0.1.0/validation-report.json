@@ -1,0 +1,36 @@
+{
+  "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+  "status": "PASS",
+  "scope": "proposal structure, exact baseline entry hashes, typed approval-dependency closure and declared non-activation only; not full semantic correctness/runtime/admission evidence",
+  "entry_count": 131,
+  "changes": {
+    "PROMOTE": 46,
+    "ADD": 70,
+    "REVISE": 15
+  },
+  "typed_dependency_edges": 366,
+  "route_count": 15,
+  "query_count": 7,
+  "negative_checks": [
+    {
+      "case": "reject_missing_dependency",
+      "result": "PASS"
+    },
+    {
+      "case": "reject_wrong_family_same_name",
+      "result": "PASS"
+    },
+    {
+      "case": "reject_duplicate_entry",
+      "result": "PASS"
+    },
+    {
+      "case": "reject_self_approved_source_status",
+      "result": "PASS"
+    }
+  ],
+  "errors": [],
+  "runtime": "NOT_RUN",
+  "owner_approval": "NOT_RECORDED",
+  "active_source_modified": false
+}

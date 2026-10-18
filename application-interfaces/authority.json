@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-04",
-  "updated_on": "2026-10-04",
+  "updated_on": "2026-10-17",
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
@@ -95,9 +95,12 @@
         "ReactivateIdentity",
         "RevokeApplicationSession",
         "RevokeInvitation",
-        "RevokeSingleUseToken"
+        "RevokeSingleUseToken",
+        "CreateDemoPersona",
+        "SwitchDemoPersona",
+        "RevokeDemoSessions"
       ],
-      "command_count": 12
+      "command_count": 15
     },
     {
       "module": "Learning",
@@ -116,9 +119,11 @@
       "commands": [
         "CreateMembership",
         "DeactivateMembership",
-        "RevokeMembership"
+        "RevokeMembership",
+        "BeginDemoRun",
+        "CloseDemoRun"
       ],
-      "command_count": 3
+      "command_count": 5
     },
     {
       "module": "TransactionControl",
@@ -164,7 +169,8 @@
         "AUD-1",
         "AUD-2",
         "AUD-3"
-      ]
+      ],
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md"
     },
     {
       "id": "ObservabilitySinkInterface",
@@ -197,6 +203,28 @@
         "TXN-14",
         "TXN-16"
       ]
+    },
+    {
+      "id": "LifecycleAppendInterface",
+      "owner": "AuditLifecycle",
+      "consumers": [
+        "Identity",
+        "Organization",
+        "Learning"
+      ],
+      "direction": "owning command transaction -> AuditLifecycle",
+      "purpose": "Append finite versioned immutable lifecycle snapshots with sequence under the aggregate lock; replay equals current fields.",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md"
+    },
+    {
+      "id": "CommandReceiptInterface",
+      "owner": "TransactionControl",
+      "consumers": [
+        "Learning"
+      ],
+      "direction": "already-authorized owning command transaction -> TransactionControl",
+      "purpose": "Exact CLIENT_SUPPLIED receipt for AssignContent, StartLearningSession and RecordProgressEvent; current authority before replay, exact payload binding, 24-hour horizon and retained tombstones. No secrets, key-only lookup or route.",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md"
     }
   ],
   "owner_read_interfaces": [
@@ -210,12 +238,15 @@
         "Authorization"
       ],
       "facts": [
-        "Identity existence/status and other owner-approved identity facts required by the consuming operation"
+        "Identity existence/status and other owner-approved identity facts required by the consuming operation",
+        "Immutable DemoPersona binding, current Identity and sessions for the exact run",
+        "Authoritative total historical ApplicationSession issuance count for the exact run under its owner lock; cap 100 including initial, revoked and expired sessions"
       ],
       "rules": [
         "Read-only to consumers",
         "No caller-supplied authority",
-        "Scope constraints remain applicable"
+        "Scope constraints remain applicable",
+        "Only Identity creates or canonically revokes sessions; no foreign writes"
       ]
     },
     {
@@ -223,15 +254,20 @@
       "owner": "Organization",
       "consumers": [
         "Identity",
-        "Authorization"
+        "Authorization",
+        "Content",
+        "Learning"
       ],
       "facts": [
-        "Membership, organization/location scope, entitlement and other owner-approved organization facts"
+        "Membership, organization/location scope, entitlement and other owner-approved organization facts",
+        "Database-current Membership, immutable grants, exact scope and direct reporting relationship",
+        "DEMO_ONLY classification and bound DemoRun availability"
       ],
       "rules": [
         "Read-only to consumers",
         "Database-current state for protected authorization",
-        "No foreign mutation"
+        "No foreign mutation",
+        "Transaction-bound locking variant holds the DemoRun fence until caller commit; no foreign mutation"
       ]
     },
     {
@@ -241,11 +277,57 @@
         "Learning"
       ],
       "facts": [
-        "ContentPack existence/version/publication facts required by assignment/learning operations"
+        "Published canonical exact-version ContentPack, digest, schema and authored evaluation data for Learning"
       ],
       "rules": [
         "Read-only to Learning",
-        "Candidate content lifecycle semantics remain non-authoritative"
+        "Exact synthetic definitions are registered; unrelated candidate lifecycle semantics remain non-authoritative"
+      ]
+    },
+    {
+      "id": "DemoRunAuthorityReadInterface",
+      "owner": "Organization",
+      "consumers": [
+        "Identity",
+        "Authorization",
+        "Content",
+        "Learning"
+      ],
+      "facts": [
+        "Finite live-run, immutable scope, fixed-persona association and expiry facts"
+      ],
+      "rules": [
+        "No broad cross-tenant enumeration",
+        "Database-current locking variant holds run fence through caller commit",
+        "ListExpiredDemoRuns is a separate expiry-principal-only query, limit 100"
+      ]
+    },
+    {
+      "id": "LearningAssignmentReadInterface",
+      "owner": "Learning",
+      "consumers": [
+        "Content"
+      ],
+      "facts": [
+        "Current ACTIVE Assignment with exact learner, organization, location, ContentPack version and digest"
+      ],
+      "rules": [
+        "Resolve current own assignment before returning public assigned content",
+        "No foreign writes or broad assignment enumeration"
+      ]
+    },
+    {
+      "id": "LearningStateReadInterface",
+      "owner": "Learning",
+      "consumers": [
+        "Interfaces"
+      ],
+      "facts": [
+        "Read-time per-assignment LearnerState projection v1.0.0"
+      ],
+      "rules": [
+        "Apply Organization current direct-report/scope predicate within query, never after returning all learners",
+        "Manager result omits selections, answer-match feedback and scores; self result uses exact own projection"
       ]
     }
   ],
@@ -278,6 +360,55 @@
       "forbidden": [
         "direct Identity write to Membership persistence"
       ]
+    },
+    {
+      "use_case": "BeginDemoRun",
+      "coordinator": "Organization application layer",
+      "steps": [
+        "Authenticate exact named admission dispatcher, exact Origin and empty input; transactionally enforce prefix/global/retained-run capacity",
+        "Allocate fresh DEMO_ONLY organization, location and run only",
+        "Invoke CreateDemoPersona twice and CreateMembership twice; create only fixed grants and direct reporting edge",
+        "Invoke frozen-template PublishContentPack, initial AssignContent and learner CreateApplicationSession through owner commands",
+        "Append required finite audit and lifecycle facts; commit all or roll back all; set cookie only after commit"
+      ],
+      "forbidden": [
+        "Existing/customer scope allocation",
+        "Foreign repository writes",
+        "Credential creation",
+        "Precommit cookie or secret replay"
+      ]
+    },
+    {
+      "use_case": "SwitchDemoPersona",
+      "coordinator": "Identity application layer",
+      "steps": [
+        "Lock run and revalidate current demo session, explicit exact scope, current grants and live deadline",
+        "Resolve fixed counterpart only; same persona conflicts",
+        "Read authoritative Identity issuance count under run fence; cap 100 preserves existing session",
+        "Canonically revoke all ACTIVE run sessions; invoke CreateApplicationSession for counterpart",
+        "Append audit; commit atomically; set cookie after commit"
+      ],
+      "forbidden": [
+        "Run deadline renewal",
+        "Alternate revocation writer",
+        "Automatic retry or stored session secret"
+      ]
+    },
+    {
+      "use_case": "CloseDemoRun",
+      "coordinator": "Organization application layer",
+      "steps": [
+        "Visitor derives exact run from live session and scope, or named expiry dispatcher resolves exactly one due run",
+        "Lock run; terminalize ACTIVE to CLOSED/USER_EXIT or EXPIRED/EXPIRED",
+        "Invoke Identity RevokeDemoSessions which invokes canonical session revocation",
+        "Append one terminal audit/lifecycle result and commit atomically",
+        "Internal terminal retry preserves original terminal result with no duplicate writes; revoked visitor cookie still denies"
+      ],
+      "forbidden": [
+        "Deletion/anonymization",
+        "Terminal rewinds",
+        "Foreign session writes"
+      ]
     }
   ],
   "command_context": {
@@ -300,24 +431,301 @@
   },
   "result_boundary": {
     "transport_neutral": true,
-    "exact_http_error_envelope": "deferred: OQ-API-2 / Transport Interfaces",
-    "exact_http_status_mapping": "deferred: Transport Interfaces",
-    "response_schema": "deferred: Transport Interfaces"
+    "exact_http_error_envelope": "governance/decision-closure/api-error-envelope.schema.json",
+    "exact_http_status_mapping": "governance/decision-closure/api-boundary-manifest.json",
+    "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json"
   },
   "deferred": [
     "physical package/directory layout",
     "repository interfaces tied to tables",
     "database schema/indexes/migrations",
-    "HTTP method/path inventory",
     "frontend hooks/components",
     "provider SDK choice",
     "candidate event integration",
     "message broker/event bus"
   ],
   "authority_id": "TEACH-APPLICATION-INTERFACES",
-  "approved_on": "2026-10-04",
-  "approval_issue": "#15",
-  "baseline_commit": "ddbebebb1a85485f55216e20c67a2f38865e59e7",
-  "source_proposal": "application-interfaces/proposed.json@0.1.0",
-  "next_stage": "Persistence Model"
+  "approved_on": "2026-10-17",
+  "approval_issue": "#82",
+  "baseline_commit": "14ca8c409993c9e57077d9705db022d3bfd26b1a",
+  "source_proposal": "domains/demo-runtime/proposal-0.1.0",
+  "next_stage": "Persistence Model",
+  "approval_record": "domains/demo-runtime/owner-approval.json",
+  "demo_runtime_registration": {
+    "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+    "approval_record": "domains/demo-runtime/owner-approval.json",
+    "issue": "#82",
+    "source_package": "domains/demo-runtime/proposal-0.1.0",
+    "sha256sums_sha256": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+    "semantic_authority_only": true,
+    "physical_schema_admission": false,
+    "runtime_activation": false,
+    "deployment_authority": false
+  },
+  "supersedes": "TEACH-APPLICATION-INTERFACES@1.0.0",
+  "owner_query_interfaces": [
+    {
+      "id": "ReadCurrentSession",
+      "owning_domain": "Identity",
+      "input": "presented cookie only; no identity selector",
+      "output": "CurrentSession",
+      "predicate": "current Identity/ApplicationSession + live DemoRun; capability data is presentation only",
+      "source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/CurrentSession"
+    },
+    {
+      "id": "ListOwnMemberships",
+      "owning_domain": "Organization",
+      "input": "presented cookie only",
+      "output": "Memberships",
+      "predicate": "current identity only, ACTIVE memberships; scopes read from database",
+      "source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/Memberships"
+    },
+    {
+      "id": "ListTeam",
+      "owning_domain": "Organization",
+      "input": "explicit organization/location; limit20 default,max50;cursor max512",
+      "output": "Team",
+      "predicate": "current manager capability plus exact direct-report scope; no arbitrary people or public profiles",
+      "source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/Team"
+    },
+    {
+      "id": "ListOwnAssignments",
+      "owning_domain": "Learning",
+      "capability": "learning.assignment.read_self",
+      "matrix_pointer": "/operations/25",
+      "route_pointer": "/routes/18",
+      "input": "organizationId,locationId selectors; limit default 20 max 50; optional opaque cursor",
+      "output": "ordered Assignment DTOs with content title, exact reference, session summary or null; nextCursor|null",
+      "predicate": "current LOCATION learner grant; assignment.identityId == authenticated identity; scope exact",
+      "source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/Assignments"
+    },
+    {
+      "id": "ReadAssignedContentVersion",
+      "owning_domain": "Content",
+      "capability": "content.pack.read_assigned",
+      "matrix_pointer": "/operations/26",
+      "route_pointer": "/routes/19",
+      "input": "organizationId,locationId,contentPackId,exact contentVersion string",
+      "output": "exact version/digest and public teaching payload: title, blocks id/kind/instruction/prompt/options only",
+      "predicate": "current LOCATION learner grant and current ACTIVE own Assignment for exact version through Learning owner read; never return expectedOptionIndex or feedback before response",
+      "source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/PublicContent"
+    },
+    {
+      "id": "ReadOwnLearnerState",
+      "owning_domain": "Learning",
+      "capability": "learning.state.read_self",
+      "matrix_pointer": "/operations/27",
+      "route_pointer": "/routes/23",
+      "input": "organizationId,locationId; optional AssignmentId; limit default 20 max 50, cursor",
+      "output": "LearnerState projections including own recorded response/evaluation and next unrecorded block",
+      "predicate": "current LOCATION learner grant and exact authenticated learner; no client learnerId",
+      "source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/OwnStates"
+    },
+    {
+      "id": "ReadTeamMemberLearnerState",
+      "owning_domain": "Learning",
+      "capability": "learning.state.read_team",
+      "matrix_pointer": "/operations/30",
+      "route_pointer": "/routes/16",
+      "input": "organizationId,locationId,target identityId; optional AssignmentId; limit default 20 max 50,cursor",
+      "output": "separate per-assignment LearnerState DTOs: exact content/title, requiredBlockCount,recordedBlockCount,session status,times; no choices,correctness fields or aggregate score",
+      "predicate": "same authoritative current visibility as ListTeam (manager direct reports intersected with scope; org_admin organization membership); this demo grants only manager, never org_admin",
+      "source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/TeamStates"
+    }
+  ],
+  "internal_query_interfaces": [
+    {
+      "id": "ListExpiredDemoRuns",
+      "owner": "Organization",
+      "principal": "automation:demo-expiry-v1",
+      "scope": "due DEMO_ONLY runs only",
+      "limit": 100,
+      "output": "DemoRunId+immutable organization/location/deadline; no content/learner data"
+    }
+  ],
+  "demo_command_definitions": [
+    {
+      "family": "commands",
+      "id": "BeginDemoRun",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "Exact command definition in demo-boundary.md, section Five new commands.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        },
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "entities",
+          "id": "MembershipGrant"
+        },
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        },
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        }
+      ],
+      "fields": {
+        "capability": "organization.demo.begin",
+        "definition_source": "demo-boundary.md"
+      },
+      "constraints": [
+        "No external/shared activation, no foreign repository writes, no customer or deletion authority."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/demo-boundary.md"
+    },
+    {
+      "family": "commands",
+      "id": "CreateDemoPersona",
+      "change": "ADD",
+      "owning_domain": "Identity",
+      "definition": "Exact command definition in demo-boundary.md, section Five new commands.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        }
+      ],
+      "fields": {
+        "capability": "identity.demo.persona.create",
+        "definition_source": "demo-boundary.md"
+      },
+      "constraints": [
+        "No external/shared activation, no foreign repository writes, no customer or deletion authority."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/demo-boundary.md"
+    },
+    {
+      "family": "commands",
+      "id": "SwitchDemoPersona",
+      "change": "ADD",
+      "owning_domain": "Identity",
+      "definition": "Exact command definition in demo-boundary.md, section Five new commands.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        }
+      ],
+      "fields": {
+        "capability": "identity.demo.persona.switch",
+        "definition_source": "demo-boundary.md"
+      },
+      "constraints": [
+        "No external/shared activation, no foreign repository writes, no customer or deletion authority.",
+        "At most100 lifetime ApplicationSessions per run, including initial/revoked/expired records; authoritative Identity count under run lock. At cap409 PRECONDITION_FAILED without mutation; close remains allowed."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/demo-boundary.md"
+    },
+    {
+      "family": "commands",
+      "id": "CloseDemoRun",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "Exact command definition in demo-boundary.md, section Five new commands.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        }
+      ],
+      "fields": {
+        "capability": "organization.demo.close",
+        "definition_source": "demo-boundary.md"
+      },
+      "constraints": [
+        "No external/shared activation, no foreign repository writes, no customer or deletion authority."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/demo-boundary.md"
+    },
+    {
+      "family": "commands",
+      "id": "RevokeDemoSessions",
+      "change": "ADD",
+      "owning_domain": "Identity",
+      "definition": "Exact command definition in demo-boundary.md, section Five new commands.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        }
+      ],
+      "fields": {
+        "capability": "identity.demo.sessions.revoke",
+        "definition_source": "demo-boundary.md"
+      },
+      "constraints": [
+        "No external/shared activation, no foreign repository writes, no customer or deletion authority."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/demo-boundary.md"
+    }
+  ],
+  "transport_boundary": "Exact methods/paths and schemas registered in governance/decision-closure/api-boundary-manifest.json; mounting requires separate admission and implementation proof."
 }

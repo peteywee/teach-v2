@@ -1,7 +1,6 @@
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
+import { inspectDemoRuntimeRegistration, createHistoricalSourceReader } from './demo-runtime-registration.mjs';
 import { inspectSemanticDependencyClosure } from './semantic-dependency-closure.mjs';
 
 export const PACKAGE_ID = 'TEACH-SEM-CAPABILITY-NAMES-2026-10-17';
@@ -43,7 +42,13 @@ export function inspectAdmissionSchema(value, schema, path = '$') {
 export function inspectCapabilityAdmission(root) {
   const errors = [];
   const equal = (a, b, label) => { if (!isDeepStrictEqual(a, b)) errors.push(`capability admission: ${label}`); };
-  const raw = path => readFileSync(join(root, path), 'utf8');
+  // The historical name/type package is still proved in full against its
+  // exact retained successor baseline. Current sources independently pass the
+  // exact approved demo overlay before any historical read is considered.
+  const successor = inspectDemoRuntimeRegistration(root);
+  errors.push(...successor.errors);
+  if (errors.length) return { errors };
+  const raw = createHistoricalSourceReader(root, successor.source);
   const json = path => JSON.parse(raw(path));
   try {
     const sums = raw(`${PROPOSAL}/SHA256SUMS`);

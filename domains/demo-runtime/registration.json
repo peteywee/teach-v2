@@ -1,0 +1,749 @@
+{
+  "registration_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+  "version": "0.1.0",
+  "state": "REGISTERED_SEMANTICS_ONLY",
+  "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+  "package_version": "0.1.0",
+  "package_sha256": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+  "source_baseline_commit": "14ca8c409993c9e57077d9705db022d3bfd26b1a",
+  "source_baseline_tree": "771867f1dbb47e277f90158a9f25b504bb786510",
+  "approval_record": "domains/demo-runtime/owner-approval.json",
+  "issue": "#82",
+  "issue_url": "https://github.com/peteywee/teach-v2/issues/82",
+  "registered_on": "2026-10-17",
+  "registered_entries": [
+    {
+      "family": "entities",
+      "id": "Location",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "identifiers",
+      "id": "LocationId",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "entities",
+      "id": "Membership",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "identifiers",
+      "id": "MembershipId",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "entities",
+      "id": "AuditEvent",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "identifiers",
+      "id": "AuditEventId",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "entities",
+      "id": "LifecycleEvent",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "identifiers",
+      "id": "LifecycleEventId",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "values",
+      "id": "Timestamp",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "states",
+      "id": "MembershipStatus",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "state-machines",
+      "id": "MembershipStateMachine",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "relationships",
+      "id": "LocationBelongsToOrganization",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "relationships",
+      "id": "MembershipLinksIdentityOrganization",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "relationships",
+      "id": "MembershipMayScopeLocation",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "relationships",
+      "id": "LifecycleEventReferencesIdentity",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-001",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-002",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-003",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-004",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-006",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-007",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-008",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-009",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-010",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-011",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-012",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-013",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-014",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-001",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-002",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-005",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-006",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-007",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-008",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "entities",
+      "id": "DemoRun",
+      "change": "ADD"
+    },
+    {
+      "family": "identifiers",
+      "id": "DemoRunId",
+      "change": "ADD"
+    },
+    {
+      "family": "entities",
+      "id": "DemoPersona",
+      "change": "ADD"
+    },
+    {
+      "family": "identifiers",
+      "id": "DemoPersonaId",
+      "change": "ADD"
+    },
+    {
+      "family": "entities",
+      "id": "MembershipGrant",
+      "change": "ADD"
+    },
+    {
+      "family": "identifiers",
+      "id": "MembershipGrantId",
+      "change": "ADD"
+    },
+    {
+      "family": "entities",
+      "id": "ReportingRelationship",
+      "change": "ADD"
+    },
+    {
+      "family": "identifiers",
+      "id": "ReportingRelationshipId",
+      "change": "ADD"
+    },
+    {
+      "family": "entities",
+      "id": "CommandReceipt",
+      "change": "ADD"
+    },
+    {
+      "family": "identifiers",
+      "id": "CommandReceiptId",
+      "change": "ADD"
+    },
+    {
+      "family": "entities",
+      "id": "DemoExecutionPrincipal",
+      "change": "ADD"
+    },
+    {
+      "family": "identifiers",
+      "id": "DemoExecutionPrincipalId",
+      "change": "ADD"
+    },
+    {
+      "family": "states",
+      "id": "DemoRunStatus",
+      "change": "ADD"
+    },
+    {
+      "family": "values",
+      "id": "DemoPersonaKind",
+      "change": "ADD"
+    },
+    {
+      "family": "values",
+      "id": "DemoOrganizationClass",
+      "change": "ADD"
+    },
+    {
+      "family": "values",
+      "id": "DemoRunCloseReason",
+      "change": "ADD"
+    },
+    {
+      "family": "values",
+      "id": "AdmissionNetworkPrefix",
+      "change": "ADD"
+    },
+    {
+      "family": "values",
+      "id": "CapabilityBundle",
+      "change": "ADD"
+    },
+    {
+      "family": "values",
+      "id": "DemoAvailability",
+      "change": "ADD"
+    },
+    {
+      "family": "values",
+      "id": "AuditActor",
+      "change": "ADD"
+    },
+    {
+      "family": "values",
+      "id": "AuditTarget",
+      "change": "ADD"
+    },
+    {
+      "family": "values",
+      "id": "AuditResult",
+      "change": "ADD"
+    },
+    {
+      "family": "values",
+      "id": "LifecycleSnapshot",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "DemoRunOwnsOrganization",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "DemoRunScopesLocation",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "DemoPersonaRepresentsIdentity",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "DemoPersonaBelongsToRun",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "MembershipGrantBelongsToMembership",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "ReportingRelationshipHasManager",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "ReportingRelationshipHasLearner",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "ReportingRelationshipBelongsToOrganization",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "ReportingRelationshipScopesLocation",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "AuditEventBelongsToOrganization",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "AuditEventMayScopeLocation",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "LifecycleEventReferencesMembership",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "LifecycleEventReferencesAssignment",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "LifecycleEventReferencesDemoRun",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "CommandReceiptBelongsToActor",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "CommandReceiptBelongsToOrganization",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "CommandReceiptScopesLocation",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "AuditEventHasActor",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "AuditEventTargetsRecord",
+      "change": "ADD"
+    },
+    {
+      "family": "commands",
+      "id": "BeginDemoRun",
+      "change": "ADD"
+    },
+    {
+      "family": "capabilities",
+      "id": "organization.demo.begin",
+      "change": "ADD"
+    },
+    {
+      "family": "commands",
+      "id": "CreateDemoPersona",
+      "change": "ADD"
+    },
+    {
+      "family": "capabilities",
+      "id": "identity.demo.persona.create",
+      "change": "ADD"
+    },
+    {
+      "family": "commands",
+      "id": "SwitchDemoPersona",
+      "change": "ADD"
+    },
+    {
+      "family": "capabilities",
+      "id": "identity.demo.persona.switch",
+      "change": "ADD"
+    },
+    {
+      "family": "commands",
+      "id": "CloseDemoRun",
+      "change": "ADD"
+    },
+    {
+      "family": "capabilities",
+      "id": "organization.demo.close",
+      "change": "ADD"
+    },
+    {
+      "family": "commands",
+      "id": "RevokeDemoSessions",
+      "change": "ADD"
+    },
+    {
+      "family": "capabilities",
+      "id": "identity.demo.sessions.revoke",
+      "change": "ADD"
+    },
+    {
+      "family": "state-machines",
+      "id": "DemoRunStateMachine",
+      "change": "ADD"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-011",
+      "change": "ADD"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-012",
+      "change": "ADD"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-013",
+      "change": "ADD"
+    },
+    {
+      "family": "entities",
+      "id": "Identity",
+      "change": "REVISE"
+    },
+    {
+      "family": "entities",
+      "id": "Organization",
+      "change": "REVISE"
+    },
+    {
+      "family": "commands",
+      "id": "CreateApplicationSession",
+      "change": "REVISE"
+    },
+    {
+      "family": "commands",
+      "id": "CreateMembership",
+      "change": "REVISE"
+    },
+    {
+      "family": "values",
+      "id": "ContentVersion",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "entities",
+      "id": "ContentPack",
+      "change": "REVISE"
+    },
+    {
+      "family": "entities",
+      "id": "ContentBlock",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "identifiers",
+      "id": "ContentBlockId",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "relationships",
+      "id": "ContentPackContainsContentBlock",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "relationships",
+      "id": "ContentPackBelongsToOrganization",
+      "change": "ADD"
+    },
+    {
+      "family": "values",
+      "id": "ContentResponseEvaluation",
+      "change": "ADD"
+    },
+    {
+      "family": "states",
+      "id": "AssignmentStatus",
+      "change": "ADD"
+    },
+    {
+      "family": "state-machines",
+      "id": "AssignmentStateMachine",
+      "change": "ADD"
+    },
+    {
+      "family": "entities",
+      "id": "Assignment",
+      "change": "REVISE"
+    },
+    {
+      "family": "relationships",
+      "id": "AssignmentBelongsToOrganization",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "AssignmentScopesLocation",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "AssignmentReferencesContentVersion",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "LearningSessionUsesAssignment",
+      "change": "REVISE"
+    },
+    {
+      "family": "entities",
+      "id": "LearningSession",
+      "change": "REVISE"
+    },
+    {
+      "family": "entities",
+      "id": "ProgressEvent",
+      "change": "REVISE"
+    },
+    {
+      "family": "relationships",
+      "id": "ProgressEventReferencesContentVersion",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "ProgressEventReferencesContentBlock",
+      "change": "ADD"
+    },
+    {
+      "family": "entities",
+      "id": "LearnerState",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "identifiers",
+      "id": "LearnerStateId",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "relationships",
+      "id": "LearnerStateBelongsToIdentity",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "relationships",
+      "id": "LearnerStateTracksContentPack",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "relationships",
+      "id": "LearnerStateUsesAssignment",
+      "change": "ADD"
+    },
+    {
+      "family": "relationships",
+      "id": "LearnerStateReferencesContentVersion",
+      "change": "ADD"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-015",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-016",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-017",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-018",
+      "change": "PROMOTE"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-009",
+      "change": "ADD"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-010",
+      "change": "ADD"
+    },
+    {
+      "family": "commands",
+      "id": "PublishContentPack",
+      "change": "REVISE"
+    },
+    {
+      "family": "commands",
+      "id": "AssignContent",
+      "change": "REVISE"
+    },
+    {
+      "family": "commands",
+      "id": "StartLearningSession",
+      "change": "REVISE"
+    },
+    {
+      "family": "commands",
+      "id": "RecordProgressEvent",
+      "change": "REVISE"
+    },
+    {
+      "family": "commands",
+      "id": "CompleteLearningSession",
+      "change": "REVISE"
+    },
+    {
+      "family": "state-machines",
+      "id": "LearningSessionStateMachine",
+      "change": "REVISE"
+    },
+    {
+      "family": "values",
+      "id": "CommandActor",
+      "change": "ADD"
+    }
+  ],
+  "kernel_version": "0.18.0",
+  "ownership_map_version": "1.9.0",
+  "application_interface_version": "1.1.0",
+  "persistence_model_version": "1.1.0",
+  "runtime_activation_authorized": false,
+  "physical_admission_performed": false,
+  "shared_or_production_execution_authorized": false,
+  "meaning": "Exact semantic/interface registration only. Local isolated implementation remains gated by independent registration review and physical per-slice admission; no runtime or demo completion claimed.",
+  "immutable_proposal": "domains/demo-runtime/proposal-0.1.0",
+  "authority_file_hashes": {
+    "application-interfaces/APPROVAL-RECORD.md": "c2cadd3dce32ec9f93a32ecaffc14979a981fe81c5429cfb3711975f38a7a98d",
+    "application-interfaces/README.md": "c7eb1cb33af506c733422d5167914204266a5012fcd3b411960c315e4fe46d80",
+    "application-interfaces/authority.json": "62bbebf13ed55cbc13eddcc6921054b9a52052f2e56b881a528ede485e71aa64",
+    "application-interfaces/superseded/authority-1.0.0.json": "f6382f1fb512d33ac442d59f0bdc968f326aea770643431ac1053a1273065261",
+    "contracts/APPROVAL-RECORD.md": "9310c4ded9522d35555984e95fa3f47d9538e982f67c58fd67e5f5312c03176f",
+    "contracts/README.md": "d687139bdbb4591f23935017852f6c5b9bfe78969f59246956f8f129be80db50",
+    "contracts/c00-system-authority-contract.md": "7b484b01884888c851c7f6a30446a42e3ae5800704f305769c325d1a0568fa9c",
+    "contracts/c01-canonical-semantics-contract.md": "0244af89de80ff3e37182ef92e376e5c50dc602461d34361138bcbda91ed2a0d",
+    "contracts/c02-automation-agent-authority-contract.md": "ff6c05e75cb7937fcee1d7c40a7d52632882b8707c1c74d4b6c663444e90c983",
+    "contracts/c11-identity-credentials-contract.md": "427075d4a295af18db733b760f0db6bbee0928ae79676b5baf7ebadbe40717b4",
+    "contracts/c12-application-sessions-contract.md": "cf531f7a23886ac5de8979b4ec6c495c17d55dc4adf213710fadceb054ecd713",
+    "contracts/c13-tenancy-membership-contract.md": "94dfc0d34143450a406acf58ab980677cdd3035fb4783197ccae008d5f32a84d",
+    "contracts/c14-authorization-capabilities-contract.md": "044a6d1fb6e2df6f82cc6b833588a9f8a72d81e63873c032fda33af8029be17f",
+    "contracts/c15-data-isolation-privacy-contract.md": "6a7cd14bde6c718768b138d0429db6264fdd3cc281f8149ba3461460cb4ff242",
+    "contracts/c22-transaction-idempotency-reconciliation-contract.md": "fa13f148923f7679d661b113caf1dd52998f12e01d80bb94143b3c714467de36",
+    "contracts/c23-audit-lifecycle-events-contract.md": "79bf1ff741d737b4c704a5b7f91086f6278c5c286df965f8e2fb48ec3da9ffa1",
+    "contracts/c31-content-teaching-engine-contract.md": "f87767300bd8816b38a5b9a5e84610f349eec803d09d16406d0ad037afd7fa74",
+    "contracts/c32-learning-sessions-progress-contract.md": "dfeea7d5d025716f25d9a0883b3e856607e407c145220e611094fb26365dee35",
+    "contracts/c33-manager-operations-contract.md": "f3db6cd66654b4765fffe35e6641f9d78fff8c1e1864d7ad4b57dde7c3b91b7a",
+    "contracts/c41-api-boundary-contract.md": "2f627be9fb0675eeb0169b066976ae88bf3e79dfee14d76e2ddb4c99178ac81b",
+    "contracts/c42-web-client-boundary-contract.md": "545b96ca42401ce35a30151b3b805ed0b7cc5603f45399d6a8b6328a413bdb36",
+    "contracts/superseded/c00-system-authority-contract-1.1.0.md": "777adbd237c6d2c855a58c716acd6878d0f910a3bb9c260d1bd0d368460571eb",
+    "contracts/superseded/c01-canonical-semantics-contract-1.8.0.md": "18fed838c3750f9f13b34d9a4bdc113ea758de93466fb6a922e68ead935b86a6",
+    "contracts/superseded/c02-automation-agent-authority-contract-1.1.0.md": "d0fe7fc2a3b78cd4feca6ba6c97240683100e7483bac0dbcda6a37abcc3a30a3",
+    "contracts/superseded/c11-identity-credentials-contract-1.6.0.md": "472ca8ec1be5ded140b040ce6b4aab32b26ba4651aad50a911a6082c30a8f728",
+    "contracts/superseded/c12-application-sessions-contract-1.2.0.md": "8a73c97c6eb52f2fade6055017400b1ab5b37e7413e49b69f36852073fd235d6",
+    "contracts/superseded/c13-tenancy-membership-contract-1.5.0.md": "9ecaead900324acd4ecbdf14dbb408f5e67f403b445b13cb21a0d0df33b701aa",
+    "contracts/superseded/c14-authorization-capabilities-contract-1.3.0.md": "092c5a44d2facf37c9cbc90371f9a3cafd3686635e186900ae4634f64666ab04",
+    "contracts/superseded/c15-data-isolation-privacy-contract-1.1.0.md": "a0d2d8b4c97fcacf6c3899fa4009275bf667e9871521801eb84c2cab3b22678e",
+    "contracts/superseded/c22-transaction-idempotency-reconciliation-contract-1.3.0.md": "cc7d6919c697db13dd5cb3d7b53b20248f0bdd35d62054f1800c1dc3d9fe59fa",
+    "contracts/superseded/c23-audit-lifecycle-events-contract-1.2.0.md": "2771d94df5764d96d5acbda192c41118abd9b9f8ac2c7779ccb842e460210737",
+    "contracts/superseded/c31-content-teaching-engine-contract-1.2.0.md": "f6b82358d7c3aeefa05f03bdc3627457fb33a215eb5611e28733bb6d50347c4b",
+    "contracts/superseded/c32-learning-sessions-progress-contract-1.3.0.md": "b397ccbc83c2a493ed74c4503ea7d3046893174061815f84e8d7b5c470c0f1cf",
+    "contracts/superseded/c33-manager-operations-contract-1.2.0.md": "20914ea8450c390c737432eeae839d942a12ef38639a8d4d86874710c47b8fc1",
+    "contracts/superseded/c41-api-boundary-contract-1.1.0.md": "946db7559904e8e7d9f289c60fab7735c738816b55e42819b1243096fdf39a7b",
+    "contracts/superseded/c42-web-client-boundary-contract-1.1.0.md": "6711beaf77aab46a422b10cf567a154b098590b25c52601d2c84e5cabdc4af3e",
+    "domains/README.md": "9397166cba091df30eb34988cc6e4055f6fe6cf2ec47ed9e0e11c7059c2ef5dd",
+    "domains/demo-runtime/README.md": "c4f1df26ec10327ffa1b0e82831051cb821ba12cd8b8e750f4e9e755eda9d2a8",
+    "domains/superseded/README-1.6.0.md": "c63673782013075cf665647b54a343c5f63c88ccc58032cc1da9af09aa2852e2",
+    "governance/automation-principals.json": "a814059a41fcd07419d43cdb4824c11cc4adfbd9b91b49edf28908a0934a40d6",
+    "governance/decision-closure/02-c14-authorization-capability-matrix.md": "772beed3d900fb714e56f3986b4ebf0b07667cb3731824237f4cd937e3dc0500",
+    "governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md": "42e52b3933449917d0186ee93d5eb5485be334ae3868f024a780b4fae99c2868",
+    "governance/decision-closure/04-session-transport-security-spec.md": "668f659e90a57cbe1bb9a8127e33a195c3e3b6ac90f0e1f77d1667c9d2e740d8",
+    "governance/decision-closure/05-api-boundary-manifest.md": "a33f72ecd29ae9777bcd2d136e421ac6b699dcdc56e9805e55c7990f2b61589c",
+    "governance/decision-closure/07-evidence-release-operations-spec.md": "a0018831136b2d09920a92f67baf30715b794ae27477dace4045dca9a88fadde",
+    "governance/decision-closure/09-governance-content-certification-web-packet.md": "2edd6ae46829c0d696c243708ef4be50cf672cbded6f972a5d6b030242fd33da",
+    "governance/decision-closure/api-boundary-manifest.json": "d671edaa5f31c0ed3d1ef019b4f48a8e974ae9b181ba0096a4ffa0fb6af87346",
+    "governance/decision-closure/c14-capability-matrix.json": "e837cab122d46f4b26f5be927428d22300ec79a80d090a3c70cb7856cd35d665",
+    "governance/decision-closure/c14-negative-test-matrix.json": "1af0c9e479d428d5a39f6951e09b226d8dc9719b4ee5886c20bbc85b92071392",
+    "governance/decision-closure/c15-data-lifecycle-matrix.json": "8229815ce3a2ca38707d8188700f85856759432e708a892905857be03ca8eb45",
+    "governance/decision-closure/demo-runtime-registration.json": "20f6f61bd288ccd00c673415fc2191f399cd058ad3119c0533150813e6bd1ef3",
+    "governance/decision-closure/superseded/02-c14-authorization-capability-matrix-1.0.0.md": "0c345f24c6bd33152406bd8111b651d92598234880f1ad8b3e3fef05cb7554ce",
+    "governance/decision-closure/superseded/03-c15-data-lifecycle-privacy-matrix-1.0.0.md": "94a3c82d64e5f5e13bb97d2206e7ce99306c93979c61d2df0f9af38055894bf7",
+    "governance/decision-closure/superseded/04-session-transport-security-spec-1.0.0.md": "d20f651e30d9afeddcdd2eab1e08d1082ffbf9d2dace0caa98d834f5ad787d66",
+    "governance/decision-closure/superseded/05-api-boundary-manifest-1.0.0.md": "697fa456bdf281ddf8e9756fc6fbda898066423265c1b1c5e32986e2e8a67916",
+    "governance/decision-closure/superseded/07-evidence-release-operations-spec-1.0.0.md": "ca60ad9cb2d5596d8a4a6e3c7d8cd61dba390480ad0e0036c5a9633714fddaf8",
+    "governance/decision-closure/superseded/09-governance-content-certification-web-packet-1.0.0.md": "cadece3f6523483109445f8595035137aee29046da4100efabef48ce92fd5ecf",
+    "governance/decision-closure/superseded/api-boundary-manifest-0.2.0.json": "ffd76450a80fd2f6cd816b4c81ec6e36dbc9c4257e30e95c8a786dcdd71c146b",
+    "governance/decision-closure/superseded/c14-capability-matrix-0.2.0.json": "031b823c100dedcefa8f9d336cbfb617ae760576c35ed24096a3db98c3bcc98d",
+    "governance/decision-closure/superseded/c14-negative-test-matrix-0.2.0.json": "427040f6bbb33fff438ac452953d3706281818af65b30de3a016626554b5e92f",
+    "governance/decision-closure/superseded/c15-data-lifecycle-matrix-0.1.0.json": "f537ba306a59a0e3fd1e777f9708edc4319d32dfcc53dbc27133b014de0e90f7",
+    "kernel/README.md": "e7db68379a6c9f09c076c504e68686b8536e0f4f6e238e1be2ce29172a50e302",
+    "kernel/superseded/README-0.17.0.md": "e0b8874e5a3ad75ee21567fb293f3fb3d2e1ca339bacda5f4be272fb2aa656ac",
+    "persistence/README.md": "52de7575c0ec42f7123071ebf639fdb8080c5cbb04bf095322760680062568e7",
+    "persistence/authority.json": "109618d05a4c4b14a18bda33a8296d608fb64b2c60985acfbcb04e7725974aee",
+    "persistence/superseded/README-1.0.0.md": "09ac95d649c956e52e7995efa132119794315c1c850a589e6c5a22fc00384f6b",
+    "persistence/superseded/authority-1.0.0.json": "49adb616385a009e726b7d5afc9b5bf67c695c8353197c39654b565e73fe2a6a"
+  }
+}

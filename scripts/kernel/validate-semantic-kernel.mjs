@@ -1,14 +1,19 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { inspectDemoRuntimeRegistration, createHistoricalSourceReader } from './demo-runtime-registration.mjs';
 import { inspectCapabilityAdmission } from './capability-admission.mjs';
 import { inspectSemanticDependencyClosure } from './semantic-dependency-closure.mjs';
 
 const ROOT = resolve(process.cwd());
 const K = join(ROOT, 'kernel');
 const errors = [];
+const demo = inspectDemoRuntimeRegistration(ROOT);
+errors.push(...demo.errors);
+const historicalRead = createHistoricalSourceReader(ROOT, demo.source);
+if (demo.registered) console.log('Historical K00 0.17 proof follows; live successor is separately checked against the exact approved 131-entry overlay.');
 const load = (name) => {
-  try { return JSON.parse(readFileSync(join(K, name), 'utf8')); }
+  try { return JSON.parse(historicalRead(`kernel/${name}`)); }
   catch (e) { errors.push(`${name}: ${e.message}`); return null; }
 };
 
@@ -263,7 +268,7 @@ for (const f of ['entities.json','identifiers.json','values.json','states.json',
 }
 const contractTextCache = new Map();
 function contractText(path) {
-  if (!contractTextCache.has(path)) contractTextCache.set(path, readFileSync(join(ROOT,path),'utf8'));
+  if (!contractTextCache.has(path)) contractTextCache.set(path, historicalRead(path));
   return contractTextCache.get(path);
 }
 for (const c of docs['commands.json']?.entries || []) {
@@ -370,7 +375,8 @@ if (manifest?.rules?.event_registration_requires_explicit_contract_semantics !==
 errors.push(...inspectCapabilityAdmission(ROOT).errors);
 
 // All entry collections participate, including the 34 registered capabilities.
-const closure = inspectSemanticDependencyClosure(docs);
+const liveDocs = demo.registered ? Object.fromEntries(names.map(name => [name, JSON.parse(readFileSync(join(K, name), 'utf8'))])) : docs;
+const closure = inspectSemanticDependencyClosure(liveDocs);
 errors.push(...closure.errors);
 console.log(`SEM-36: checked ${closure.approvedEntries} approved entries / ${closure.checkedReferences} semantic references`);
 console.log(`SEM-36 owner-directed hold exceptions: ${closure.exceptions.length}`);
@@ -381,12 +387,12 @@ if (errors.length) {
   for (const e of errors) console.error(`- ${e}`);
   process.exit(1);
 }
-console.log(`Semantic kernel PASS: ${manifest.kernel_id} ${manifest.version}`);
-console.log(`Entities: ${(docs['entities.json']?.entries || []).length}`);
-console.log(`Identifiers: ${(docs['identifiers.json']?.entries || []).length}`);
-console.log(`Relationships: ${(docs['relationships.json']?.entries || []).length}`);
-console.log(`State machines: ${(docs['state-machines.json']?.entries || []).length}`);
-console.log(`Invariants: ${(docs['invariants.json']?.entries || []).length}`);
-console.log(`Decision tables: ${(docs['decision-tables.json']?.entries || []).length}`);
-console.log(`Commands: ${(docs['commands.json']?.entries || []).length}`);
-console.log(`Events: ${(docs['events.json']?.entries || []).length}`);
+console.log(`Semantic kernel PASS: ${manifest.kernel_id} ${demo.registered ? JSON.parse(readFileSync(join(K, 'manifest.json'), 'utf8')).version : manifest.version}`);
+console.log(`Entities: ${(liveDocs['entities.json']?.entries || []).length}`);
+console.log(`Identifiers: ${(liveDocs['identifiers.json']?.entries || []).length}`);
+console.log(`Relationships: ${(liveDocs['relationships.json']?.entries || []).length}`);
+console.log(`State machines: ${(liveDocs['state-machines.json']?.entries || []).length}`);
+console.log(`Invariants: ${(liveDocs['invariants.json']?.entries || []).length}`);
+console.log(`Decision tables: ${(liveDocs['decision-tables.json']?.entries || []).length}`);
+console.log(`Commands: ${(liveDocs['commands.json']?.entries || []).length}`);
+console.log(`Events: ${(liveDocs['events.json']?.entries || []).length}`);

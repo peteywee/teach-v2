@@ -11,16 +11,40 @@
     {
       "id": "ContentVersion",
       "kind": "value_object",
-      "status": "candidate",
-      "definition": "Immutable content-version identity used to bind learning evidence to exact content semantics.",
-      "owning_domain": "Content"
+      "status": "approved",
+      "definition": "Immutable exact version and digest of one ContentPack, never a latest/range selector.",
+      "owning_domain": "Content",
+      "requires": [],
+      "version": "strict SemVer 2.0 string, 1..38 UTF-8 bytes",
+      "digest": "sha256: followed by exactly 64 lowercase hexadecimal digits",
+      "constraints": [
+        "Every reference also binds ContentPackId; the owning pack binds exactly one organization.",
+        "Exact string equality includes prerelease and build metadata; SemVer precedence is not identity.",
+        "Digest is SHA-256 of canonical schema payload bytes, not of arbitrary JSON serialization."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "Timestamp",
       "kind": "value_object",
-      "status": "candidate",
-      "definition": "Canonical point-in-time value.",
-      "owning_domain": "AuditLifecycle"
+      "status": "approved",
+      "definition": "Finite UTC point in time, serialized as ISO-8601 Z and stored as timestamptz; no lifecycle policy inferred.",
+      "owning_domain": "AuditLifecycle",
+      "requires": [],
+      "representation": "finite UTC timestamp",
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "RequestId",
@@ -69,6 +93,372 @@
         "package_version": "0.1.1",
         "approval_record": "domains/capabilities/owner-approval.json",
         "promoted_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "DemoPersonaKind",
+      "kind": "value_object",
+      "status": "approved",
+      "owning_domain": "Identity",
+      "definition": "Exactly one fixed synthetic slot within a visit, not an arbitrary role grant.",
+      "requires": [],
+      "values": [
+        "LEARNER",
+        "MANAGER"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "DemoOrganizationClass",
+      "kind": "value_object",
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "Immutable synthetic-only organization classification; no normal customer construction enabled.",
+      "requires": [],
+      "values": [
+        "DEMO_ONLY"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "DemoRunCloseReason",
+      "kind": "value_object",
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "Reason for an immutable terminal demo state.",
+      "requires": [],
+      "values": [
+        "USER_EXIT",
+        "EXPIRED"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "AdmissionNetworkPrefix",
+      "kind": "value_object",
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "Trusted-peer reduced-resolution /24 IPv4 or /56 IPv6 network identifier, or SHARED_UNKNOWN; not anonymous and never authority.",
+      "requires": [],
+      "retention": "RETAIN_NO_AUTOMATED_DELETE",
+      "purpose": "bounded admission counts only",
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "CapabilityBundle",
+      "kind": "value_object",
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "definition": "Immutable named capability set from the exact C14 matrix; interpretation lives in Authorization.",
+      "requires": [
+        {
+          "family": "values",
+          "id": "Capability"
+        }
+      ],
+      "values": [
+        "self",
+        "learner",
+        "observer",
+        "manager",
+        "org_admin",
+        "demo_visitor"
+      ],
+      "self_grantable": false,
+      "demo_visitor": [
+        "identity.demo.persona.switch",
+        "organization.demo.close"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "DemoAvailability",
+      "kind": "value_object",
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "Database-current read projection that can only restrict demo capability effect.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "states",
+          "id": "DemoRunStatus"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        }
+      ],
+      "inputs": [
+        "status",
+        "immutable expiresAt",
+        "current server time",
+        "operation allowlist"
+      ],
+      "allow": "ACTIVE and now < expiresAt and operation allowed",
+      "missing": "DENY",
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "AuditActor",
+      "kind": "value_object",
+      "status": "approved",
+      "owning_domain": "AuditLifecycle",
+      "definition": "Finite actor attribution union, including non-authoritative unauthenticated denial metadata.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "DemoExecutionPrincipal"
+        }
+      ],
+      "variants": [
+        "HumanActor(identityId)",
+        "AutomationActor(executionPrincipalId)",
+        "UNAUTHENTICATED_DENIAL(ipPrefix|null)"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "AuditTarget",
+      "kind": "value_object",
+      "status": "approved",
+      "owning_domain": "AuditLifecycle",
+      "definition": "Finite typed target union; no arbitrary JSON or secret-bearing target.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        },
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "entities",
+          "id": "MembershipGrant"
+        },
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        }
+      ],
+      "variants": [
+        "Identity",
+        "ApplicationSession",
+        "Organization",
+        "Location",
+        "Membership",
+        "MembershipGrant",
+        "ReportingRelationship",
+        "DemoRun",
+        "ContentPack(version,digest)",
+        "Assignment",
+        "LearningSession",
+        "UNRESOLVED"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "AuditResult",
+      "kind": "value_object",
+      "status": "approved",
+      "owning_domain": "AuditLifecycle",
+      "definition": "Finite outcome representation, not evidence of successful work by itself.",
+      "requires": [],
+      "values": [
+        "SUCCEEDED",
+        "DENIED",
+        "OVERFLOW"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "LifecycleSnapshot",
+      "kind": "value_object",
+      "status": "approved",
+      "owning_domain": "AuditLifecycle",
+      "definition": "Finite full-state replay payload for one owner aggregate, version1.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        }
+      ],
+      "variants": [
+        "Identity",
+        "Membership",
+        "Assignment",
+        "DemoRun"
+      ],
+      "schema_version": 1,
+      "fields": {
+        "definition": "authority-and-audit.md"
+      },
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "ContentResponseEvaluation",
+      "kind": "value_object",
+      "status": "approved",
+      "owning_domain": "Content",
+      "definition": "Versioned deterministic per-response feedback from the Content teaching engine; not a score, competence certification, or progress aggregate.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "ContentBlockId"
+        }
+      ],
+      "engineVersion": "strict SemVer, exactly 1.0.0 in this package",
+      "blockId": "ContentBlockId",
+      "selectedOptionIndex": "integer in the authored option range",
+      "matchesExpectedChoice": "boolean computed by server comparison with authored expectedOptionIndex",
+      "feedback": "exact authored feedback[selectedOptionIndex]",
+      "constraints": [
+        "Client may submit only blockId and selectedOptionIndex, never matchesExpectedChoice, feedback or engineVersion.",
+        "Engine(pack exact version, input, fixed seed 0) returns byte-identical canonical output; no randomness is used.",
+        "No pass/fail threshold, numeric score, accuracy aggregate, XP, rank, streak, mastery or certification inference."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "CommandActor",
+      "kind": "value_object",
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "definition": "Finite authenticated command actor: HumanActor Identity or one exact admitted AutomationActor execution principal. Never unauthenticated denial metadata.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "DemoExecutionPrincipal"
+        }
+      ],
+      "variants": [
+        "HumanActor(identityId)",
+        "AutomationActor(executionPrincipalId)"
+      ],
+      "namespace": "actorClass + canonical typed ID",
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
       }
     }
   ]

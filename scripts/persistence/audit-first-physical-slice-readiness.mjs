@@ -1,14 +1,17 @@
 #!/usr/bin/env node
+import { createHistoricalSourceReader } from '../kernel/demo-runtime-registration.mjs';
 import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { inspectLearningImplementation } from './learning-implementation-evidence.mjs';
 
 const ROOT=resolve(process.cwd());
+// Historical prerequisite proof; inspectCapabilityAdmission validates the exact live successor first.
+const readPredecessor=createHistoricalSourceReader(ROOT);
 const errors=[];
 // Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
 errors.push(...inspectCapabilityAdmission(ROOT).errors);
-const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
+const load=(p)=>{try{return JSON.parse(readPredecessor(p));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 
 const m=load('kernel/manifest.json');
 const commands=load('kernel/commands.json');

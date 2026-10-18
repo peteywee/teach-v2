@@ -148,12 +148,11 @@
       ],
       "initial_state": "ACTIVE",
       "creation_command": "StartLearningSession",
-      "creation_event": "LearningSessionStarted",
+      "creation_event": null,
       "allowed_operations": [
         {
           "state": "ACTIVE",
-          "command": "RecordProgressEvent",
-          "event": "ProgressRecorded"
+          "command": "RecordProgressEvent"
         }
       ],
       "transitions": [
@@ -161,7 +160,7 @@
           "from": "ACTIVE",
           "to": "COMPLETED",
           "command": "CompleteLearningSession",
-          "event": "LearningSessionCompleted"
+          "guard": "All ordered required responses persisted"
         }
       ],
       "terminal_states": [
@@ -172,12 +171,45 @@
         "OQ-LRN-1 resolved"
       ],
       "promotion_issue": "#17",
-      "promoted_on": "2026-10-04"
+      "promoted_on": "2026-10-04",
+      "definition": "Existing ACTIVE -> COMPLETED lifecycle with exact required-response completion guard, and no candidate business-event emissions.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "states",
+          "id": "LearningSessionStatus"
+        },
+        {
+          "family": "commands",
+          "id": "StartLearningSession"
+        },
+        {
+          "family": "commands",
+          "id": "RecordProgressEvent"
+        },
+        {
+          "family": "commands",
+          "id": "CompleteLearningSession"
+        }
+      ],
+      "constraints": [
+        "Remove creation_event/operation.event/transition.event references to still-candidate events, rather than promote events from audit obligations."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "MembershipStateMachine",
       "kind": "state_machine",
-      "status": "candidate",
+      "status": "approved",
       "entity": "Membership",
       "state_set": "MembershipStatus",
       "owning_domain": "Organization",
@@ -187,13 +219,13 @@
       ],
       "initial_state": "ACTIVE",
       "creation_command": "CreateMembership",
-      "creation_event": "MembershipCreated",
+      "creation_event": null,
       "transitions": [
         {
           "from": "ACTIVE",
           "to": "INACTIVE",
           "command": "DeactivateMembership",
-          "event": "MembershipDeactivated"
+          "event": null
         },
         {
           "from": "INACTIVE",
@@ -204,7 +236,45 @@
       ],
       "terminal_states": [
         "REVOKED"
-      ]
+      ],
+      "definition": "MembershipStateMachine",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "states",
+          "id": "MembershipStatus"
+        },
+        {
+          "family": "commands",
+          "id": "CreateMembership"
+        },
+        {
+          "family": "commands",
+          "id": "DeactivateMembership"
+        },
+        {
+          "family": "commands",
+          "id": "RevokeMembership"
+        },
+        {
+          "family": "events",
+          "id": "MembershipRevoked"
+        }
+      ],
+      "constraints": [
+        "Every creation/transition appends a LifecycleEvent in the same transaction; no candidate MembershipCreated/MembershipDeactivated business events are emitted.",
+        "Remove stale OQ-TEN-1 hold only after exact package approval and closure."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "PasswordResetTokenStateMachine",
@@ -328,6 +398,100 @@
         "IDN-11",
         "IDN-26"
       ]
+    },
+    {
+      "id": "DemoRunStateMachine",
+      "kind": "state_machine",
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "Visit lifecycle is ACTIVE to CLOSED or EXPIRED; no reopening.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "states",
+          "id": "DemoRunStatus"
+        },
+        {
+          "family": "commands",
+          "id": "BeginDemoRun"
+        },
+        {
+          "family": "commands",
+          "id": "CloseDemoRun"
+        }
+      ],
+      "initial_state": "ACTIVE",
+      "creation_command": "BeginDemoRun",
+      "transitions": [
+        {
+          "from": "ACTIVE",
+          "to": "CLOSED",
+          "command": "CloseDemoRun",
+          "condition": "authorized visitor exit"
+        },
+        {
+          "from": "ACTIVE",
+          "to": "EXPIRED",
+          "command": "CloseDemoRun",
+          "condition": "named expiry principal and now >= immutable deadline"
+        }
+      ],
+      "terminal_states": [
+        "CLOSED",
+        "EXPIRED"
+      ],
+      "business_events": [],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      },
+      "entity": "DemoRun",
+      "state_set": "DemoRunStatus"
+    },
+    {
+      "id": "AssignmentStateMachine",
+      "kind": "state_machine",
+      "status": "approved",
+      "owning_domain": "Learning",
+      "definition": "Create-only Assignment lifecycle: AssignContent creates ACTIVE and no transition exists.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "states",
+          "id": "AssignmentStatus"
+        },
+        {
+          "family": "commands",
+          "id": "AssignContent"
+        }
+      ],
+      "entity": "Assignment",
+      "state_set": "AssignmentStatus",
+      "initial_state": "ACTIVE",
+      "creation_command": "AssignContent",
+      "allowed_operations": [],
+      "transitions": [],
+      "terminal_states": [],
+      "constraints": [
+        "No lifecycle transition or business event emission is implied.",
+        "Loss of current membership/grants denies use without rewriting historical Assignment."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     }
   ]
 }

@@ -39,7 +39,20 @@
       "default_outcome": "DENY",
       "failure_behavior": "No protected handler/domain side effect executes before all gates pass.",
       "kind": "decision_table",
-      "status": "candidate"
+      "status": "approved",
+      "definition": "PrivilegedCommandGate",
+      "requires": [],
+      "constraints": [
+        "Retain baseline definition except exact DT002/DT008 corrections in decision-and-scope.md and contract-amendments.md.",
+        "Default deny. New demo branches are separately defined in DT011/DT012/DT013."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "DT-002",
@@ -60,6 +73,7 @@
       ],
       "inputs": [
         "session_valid",
+        "identity_active",
         "membership_active",
         "scope_valid",
         "capability_present",
@@ -68,15 +82,23 @@
       ],
       "rules": [
         {
-          "when": "session_valid=false",
+          "when": "session_valid=false or identity_active=false",
           "outcome": "DENY_401"
         },
         {
-          "when": "session_valid=true and (membership_active=false or capability_present=false)",
+          "when": "session_valid=true and identity_active=true and membership_active=false",
           "outcome": "DENY_403"
         },
         {
-          "when": "session_valid=true and membership_active=true and capability_present=true and (scope_valid=false or target_visible=false)",
+          "when": "session_valid=true and identity_active=true and membership_active=true and scope_valid=false",
+          "outcome": "DENY_403"
+        },
+        {
+          "when": "session_valid=true and identity_active=true and membership_active=true and scope_valid=true and capability_present=false",
+          "outcome": "DENY_403"
+        },
+        {
+          "when": "session_valid=true and identity_active=true and membership_active=true and scope_valid=true and capability_present=true and target_visible=false",
           "outcome": "DENY_404_NON_DISCLOSING"
         },
         {
@@ -84,14 +106,27 @@
           "outcome": "DENY_403"
         },
         {
-          "when": "all authority checks pass",
+          "when": "all authority checks pass and entitlement_allows=true",
           "outcome": "ALLOW"
         }
       ],
       "default_outcome": "DENY_404_NON_DISCLOSING",
       "failure_behavior": "Denied outcomes produce no mutation or external side effect except permitted audit.",
       "kind": "decision_table",
-      "status": "candidate"
+      "status": "approved",
+      "definition": "AuthorizationOutcome",
+      "requires": [],
+      "constraints": [
+        "Retain baseline definition except exact DT002/DT008 corrections in decision-and-scope.md and contract-amendments.md.",
+        "Default deny. New demo branches are separately defined in DT011/DT012/DT013."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "DT-003",
@@ -228,7 +263,20 @@
       "default_outcome": "REJECT",
       "failure_behavior": "Unknown or candidate semantics never silently become implementation authority.",
       "kind": "decision_table",
-      "status": "candidate"
+      "status": "approved",
+      "definition": "SemanticAdmission",
+      "requires": [],
+      "constraints": [
+        "Retain baseline definition except exact DT002/DT008 corrections in decision-and-scope.md and contract-amendments.md.",
+        "Default deny. New demo branches are separately defined in DT011/DT012/DT013."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "DT-006",
@@ -262,7 +310,20 @@
       "default_outcome": "REJECT",
       "failure_behavior": "Unregistered state or transition cannot be persisted.",
       "kind": "decision_table",
-      "status": "candidate"
+      "status": "approved",
+      "definition": "LifecycleTransitionGate",
+      "requires": [],
+      "constraints": [
+        "Retain baseline definition except exact DT002/DT008 corrections in decision-and-scope.md and contract-amendments.md.",
+        "Default deny. New demo branches are separately defined in DT011/DT012/DT013."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "DT-007",
@@ -300,7 +361,20 @@
       "default_outcome": "REJECT_DIRECT_WRITE",
       "failure_behavior": "Foreign-domain direct mutation is forbidden.",
       "kind": "decision_table",
-      "status": "candidate"
+      "status": "approved",
+      "definition": "CrossDomainMutationGate",
+      "requires": [],
+      "constraints": [
+        "Retain baseline definition except exact DT002/DT008 corrections in decision-and-scope.md and contract-amendments.md.",
+        "Default deny. New demo branches are separately defined in DT011/DT012/DT013."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "DT-008",
@@ -322,7 +396,8 @@
       ],
       "inputs": [
         "input_schema_valid",
-        "client_scope_claim_present",
+        "required_scope_selector_present",
+        "client_authority_claim_present",
         "server_scope_resolved",
         "target_scope_resolved"
       ],
@@ -332,22 +407,335 @@
           "outcome": "REJECT_INPUT_NO_SIDE_EFFECT"
         },
         {
+          "when": "required_scope_selector_present=false",
+          "outcome": "DENY"
+        },
+        {
           "when": "server_scope_resolved=false or target_scope_resolved=false",
           "outcome": "DENY"
         },
         {
-          "when": "client_scope_claim_present=true",
-          "outcome": "IGNORE_CLIENT_AUTHORITY_AND_USE_SERVER_SCOPE"
+          "when": "client_authority_claim_present=true",
+          "outcome": "IGNORE_CLIENT_AUTHORITY_AND_VALIDATE_REQUIRED_SELECTOR_SERVER_SIDE"
         },
         {
-          "when": "all server-side checks pass",
+          "when": "all server-side checks pass and required scope selector is validated",
           "outcome": "CONTINUE"
         }
       ],
       "default_outcome": "DENY",
-      "failure_behavior": "Client-supplied authority claims never define tenant or target scope.",
+      "failure_behavior": "The required explicit scope tuple is a selector validated against database-current authority; client authority claims never grant tenant or target access.",
       "kind": "decision_table",
-      "status": "candidate"
+      "status": "approved",
+      "definition": "ProtectedInputBoundary",
+      "requires": [],
+      "constraints": [
+        "Retain baseline definition except exact DT002/DT008 corrections in decision-and-scope.md and contract-amendments.md.",
+        "Default deny. New demo branches are separately defined in DT011/DT012/DT013."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "DT-011",
+      "kind": "decision_table",
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "definition": "DemoAdmissionGate",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "values",
+          "id": "DemoAvailability"
+        }
+      ],
+      "inputs": [
+        "exactOrigin",
+        "namedAdmissionPrincipal",
+        "freshServerMintedScope",
+        "noLivePresentingSession",
+        "rateWithinLimit",
+        "capacityWithinLimit",
+        "allDependencyProofs"
+      ],
+      "rules": [
+        {
+          "when": "any input missing,false,unknown,contradictory",
+          "outcome": "DENY"
+        },
+        {
+          "when": "all inputs true",
+          "outcome": "ALLOW only existing governed command path"
+        }
+      ],
+      "default_outcome": "DENY",
+      "constraints": [
+        "Explicit pre-run allocation and exact expired-record close policies are distinct; no generic availability bypass."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "DT-012",
+      "kind": "decision_table",
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "definition": "DemoPersonaTransitionGate",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "values",
+          "id": "DemoAvailability"
+        }
+      ],
+      "inputs": [
+        "validSession",
+        "liveRun",
+        "matchingTuple",
+        "demoVisitorCapability",
+        "fixedCounterpart",
+        "runLock",
+        "sessionRevalidation"
+      ],
+      "rules": [
+        {
+          "when": "any input missing,false,unknown,contradictory",
+          "outcome": "DENY"
+        },
+        {
+          "when": "all inputs true",
+          "outcome": "ALLOW only existing governed command path"
+        }
+      ],
+      "default_outcome": "DENY",
+      "constraints": [
+        "Explicit pre-run allocation and exact expired-record close policies are distinct; no generic availability bypass."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "DT-013",
+      "kind": "decision_table",
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "definition": "DemoRunAvailabilityGate",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "values",
+          "id": "DemoAvailability"
+        }
+      ],
+      "inputs": [
+        "personaRunBinding",
+        "ACTIVEstatus",
+        "serverNowBeforeDeadline",
+        "fixedOperationAllowlist"
+      ],
+      "rules": [
+        {
+          "when": "any input missing,false,unknown,contradictory",
+          "outcome": "DENY"
+        },
+        {
+          "when": "all inputs true",
+          "outcome": "ALLOW only existing governed command path"
+        }
+      ],
+      "default_outcome": "DENY",
+      "constraints": [
+        "Explicit pre-run allocation and exact expired-record close policies are distinct; no generic availability bypass."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "DT-009",
+      "kind": "decision_table",
+      "status": "approved",
+      "owning_domain": "Content",
+      "definition": "ContentPublicationValidation: deterministic validation and immutable version collision decision.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        }
+      ],
+      "name": "ContentPublicationValidation",
+      "inputs": [
+        "declaredSchemaSupported:boolean",
+        "canonicalPayloadValid:boolean",
+        "organizationMatches:boolean",
+        "suppliedDigestMatches:boolean",
+        "existingVersionDigest:null|string",
+        "requestedDigest:string"
+      ],
+      "rules": [
+        {
+          "when": "Any input unknown, malformed, or one of the first four booleans false",
+          "outcome": "REJECT_INVALID_REQUEST"
+        },
+        {
+          "when": "All first four true and existingVersionDigest == null",
+          "outcome": "CREATE_IMMUTABLE_PUBLICATION"
+        },
+        {
+          "when": "All first four true and existingVersionDigest == requestedDigest",
+          "outcome": "RETURN_EXISTING_NO_EFFECT"
+        },
+        {
+          "when": "All first four true and existingVersionDigest != null and != requestedDigest",
+          "outcome": "REJECT_CONFLICT"
+        }
+      ],
+      "default": "REJECT_INVALID_REQUEST",
+      "constraints": [
+        "Caller authority/current demo run admission are checked by Authorization before this Content-owned table.",
+        "No approval claim, draft state or external publication effect is created."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "DT-010",
+      "kind": "decision_table",
+      "status": "approved",
+      "owning_domain": "Learning",
+      "definition": "LearningResponseAndCompletionGate: deterministic new-write admission after current authorization and receipt handling.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        },
+        {
+          "family": "states",
+          "id": "LearningSessionStatus"
+        },
+        {
+          "family": "values",
+          "id": "ContentResponseEvaluation"
+        }
+      ],
+      "name": "LearningResponseAndCompletionGate",
+      "inputs": [
+        "operation:RecordProgressEvent|CompleteLearningSession",
+        "sessionStatus:LearningSessionStatus",
+        "contentValid:boolean",
+        "RecordProgressEvent only: blockExists:boolean, blockAlreadyRecorded:boolean, requestedSequence:integer, expectedNextSequence:integer, optionIndexValid:boolean",
+        "CompleteLearningSession only: recordedRequiredCount:integer, requiredCount:integer"
+      ],
+      "rules": [
+        {
+          "priority": 1,
+          "when": "Operation, sessionStatus, contentValid or operation-required inputs unknown/malformed; content invalid; or session not ACTIVE",
+          "outcome": "REJECT_NO_WRITE"
+        },
+        {
+          "priority": 2,
+          "when": "RecordProgressEvent and (blockExists == false or optionIndexValid == false)",
+          "outcome": "REJECT_INVALID_REQUEST"
+        },
+        {
+          "priority": 3,
+          "when": "RecordProgressEvent and (blockAlreadyRecorded == true or requestedSequence != expectedNextSequence)",
+          "outcome": "REJECT_CONFLICT"
+        },
+        {
+          "priority": 4,
+          "when": "RecordProgressEvent and blockExists and optionIndexValid and not blockAlreadyRecorded and requestedSequence == expectedNextSequence",
+          "outcome": "EVALUATE_AND_APPEND"
+        },
+        {
+          "priority": 5,
+          "when": "CompleteLearningSession and requiredCount == 3 and recordedRequiredCount == 3",
+          "outcome": "TRANSITION_COMPLETED"
+        },
+        {
+          "priority": 6,
+          "when": "CompleteLearningSession and requiredCount == 3 and 0 <= recordedRequiredCount < 3",
+          "outcome": "REJECT_PRECONDITION_FAILED"
+        }
+      ],
+      "default": "REJECT_NO_WRITE",
+      "constraints": [
+        "Recorded count is recomputed from unique persisted event rows inside the locked transaction; never accepted from client.",
+        "No comparison to matchesExpectedChoice in completion eligibility.",
+        "Rules are first-match in priority order. Only the inputs for the selected operation are required; unused operation inputs are absent, not unknown failures."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     }
   ]
 }

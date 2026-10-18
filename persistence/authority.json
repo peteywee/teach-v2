@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-04",
-  "updated_on": "2026-10-04",
+  "updated_on": "2026-10-17",
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
@@ -14,7 +14,7 @@
     "persistence_discovery_version": "0.1.0"
   },
   "approval_required": false,
-  "scope": "logical persistence authority and schema-admission policy; not full relational schema",
+  "scope": "Logical persistence authority and schema-admission policy, including exact approved synthetic demo records; no new physical schema admission.",
   "technology_posture": {
     "current_schema_authority": "Drizzle migration history",
     "current_database": "PostgreSQL",
@@ -88,10 +88,16 @@
         "ApplicationSession",
         "Invitation",
         "SetupToken",
-        "PasswordResetToken"
+        "PasswordResetToken",
+        "DemoPersona"
       ],
-      "status": "MIXED",
-      "note": "Only Invitation, SetupToken, PasswordResetToken currently have approved identifier + approved lifecycle semantics; other approved Identity entities still carry candidate identifiers and/or state semantics."
+      "status": "LOGICAL_DEMO_CLOSURE_READY_PHYSICAL_ADMISSION_REQUIRED",
+      "note": "Exact fields, lifecycle, immutable bindings and typed dependencies are registered by TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; only this package synthetic scope is closed. Existing physical slice authority remains separate. Entitlement and unrelated semantics are not admitted.",
+      "definition_sources": [
+        "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+        "domains/demo-runtime/proposal-0.1.0/learning-definition.md",
+        "domains/demo-runtime/proposal-0.1.0/registry-proposal.json"
+      ]
     },
     {
       "module": "Organization",
@@ -99,10 +105,18 @@
         "Organization",
         "Membership",
         "Location",
-        "Entitlement"
+        "Entitlement",
+        "MembershipGrant",
+        "ReportingRelationship",
+        "DemoRun"
       ],
-      "status": "BLOCKED",
-      "note": "Organization is approved, but OrganizationId is candidate; Membership/Location/Entitlement remain candidate and OQ-TEN-1 holds Membership shape."
+      "status": "LOGICAL_DEMO_CLOSURE_READY_PHYSICAL_ADMISSION_REQUIRED",
+      "note": "Exact fields, lifecycle, immutable bindings and typed dependencies are registered by TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; only this package synthetic scope is closed. Existing physical slice authority remains separate. Entitlement and unrelated semantics are not admitted.",
+      "definition_sources": [
+        "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+        "domains/demo-runtime/proposal-0.1.0/learning-definition.md",
+        "domains/demo-runtime/proposal-0.1.0/registry-proposal.json"
+      ]
     },
     {
       "module": "Content",
@@ -110,8 +124,13 @@
         "ContentPack",
         "ContentBlock"
       ],
-      "status": "BLOCKED",
-      "note": "ContentPack approved but ContentPackId candidate; ContentBlock remains candidate; ContentPack relationships remain candidate."
+      "status": "LOGICAL_DEMO_CLOSURE_READY_PHYSICAL_ADMISSION_REQUIRED",
+      "note": "Exact fields, lifecycle, immutable bindings and typed dependencies are registered by TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; only this package synthetic scope is closed. Existing physical slice authority remains separate. Entitlement and unrelated semantics are not admitted.",
+      "definition_sources": [
+        "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+        "domains/demo-runtime/proposal-0.1.0/learning-definition.md",
+        "domains/demo-runtime/proposal-0.1.0/registry-proposal.json"
+      ]
     },
     {
       "module": "Learning",
@@ -121,8 +140,13 @@
         "ProgressEvent",
         "LearnerState"
       ],
-      "status": "BLOCKED",
-      "note": "Approved entities still use candidate identifiers and candidate relationships/state sets; LearnerState remains candidate."
+      "status": "LOGICAL_DEMO_CLOSURE_READY_PHYSICAL_ADMISSION_REQUIRED",
+      "note": "Exact fields, lifecycle, immutable bindings and typed dependencies are registered by TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; only this package synthetic scope is closed. Existing physical slice authority remains separate. Entitlement and unrelated semantics are not admitted.",
+      "definition_sources": [
+        "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+        "domains/demo-runtime/proposal-0.1.0/learning-definition.md",
+        "domains/demo-runtime/proposal-0.1.0/registry-proposal.json"
+      ]
     },
     {
       "module": "Certification",
@@ -130,7 +154,7 @@
         "Certification"
       ],
       "status": "BLOCKED",
-      "note": "Certification approved but CertificationId and relationships remain candidate; criteria/revocation semantic gaps remain."
+      "note": "Certification remains outside the demo; CERT-2 and P07 admission are unchanged."
     },
     {
       "module": "AuditLifecycle",
@@ -138,22 +162,33 @@
         "AuditEvent",
         "LifecycleEvent"
       ],
-      "status": "BLOCKED",
-      "note": "Both entities and identifiers remain candidate; C23 append-only requirements are binding but do not authorize record schema."
+      "status": "LOGICAL_DEMO_CLOSURE_READY_PHYSICAL_ADMISSION_REQUIRED",
+      "note": "Exact fields, lifecycle, immutable bindings and typed dependencies are registered by TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; only this package synthetic scope is closed. Existing physical slice authority remains separate. Entitlement and unrelated semantics are not admitted.",
+      "definition_sources": [
+        "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+        "domains/demo-runtime/proposal-0.1.0/learning-definition.md",
+        "domains/demo-runtime/proposal-0.1.0/registry-proposal.json"
+      ]
     },
     {
       "module": "TransactionControl",
       "owns": [
-        "ReconciliationRecord"
+        "ReconciliationRecord",
+        "CommandReceipt"
       ],
-      "status": "LOGICAL_RECORD_READY",
-      "note": "Entity, identifier, lifecycle state, and outcome vocabulary are approved; physical provider-specific detail remains data, not new semantics."
+      "status": "LOGICAL_DEMO_CLOSURE_READY_PHYSICAL_ADMISSION_REQUIRED",
+      "note": "Exact fields, lifecycle, immutable bindings and typed dependencies are registered by TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; only this package synthetic scope is closed. Existing physical slice authority remains separate. Entitlement and unrelated semantics are not admitted.",
+      "definition_sources": [
+        "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+        "domains/demo-runtime/proposal-0.1.0/learning-definition.md",
+        "domains/demo-runtime/proposal-0.1.0/registry-proposal.json"
+      ]
     },
     {
       "module": "Authorization",
       "owns": [],
       "status": "POLICY_ONLY",
-      "note": "Capabilities remain unregistered; Authorization consumes authoritative read models and does not acquire foreign persistence ownership."
+      "note": "Approved capability names, finite bundles and exactly two immutable in-process principal records; no mutable authorization-owned database store or foreign persistence authority."
     }
   ],
   "schema_admission_gate": {
@@ -183,7 +218,7 @@
         "InvitationId",
         "InvitationStatus"
       ],
-      "blocked_physical_relations": "No approved relationship currently authorizes target/identity foreign-key shape.",
+      "blocked_physical_relations": "Historical v1.0.0 note superseded by existing P01-P05 slice admissions where applicable; no additional physical shape is admitted by this logical revision.",
       "persistence_requirements": [
         "store only hashed acceptance secret, never raw token",
         "enforce expiry/consumption/revocation semantics transactionally",
@@ -198,7 +233,7 @@
         "SetupTokenId",
         "SingleUseTokenStatus"
       ],
-      "blocked_physical_relations": "Identity linkage/cardinality must not be invented from candidate or missing relationship authority.",
+      "blocked_physical_relations": "Historical v1.0.0 note superseded by existing P01-P05 slice admissions where applicable; no additional physical shape is admitted by this logical revision.",
       "persistence_requirements": [
         "store only cryptographic hash",
         "15-minute expiry is authoritative",
@@ -213,7 +248,7 @@
         "PasswordResetTokenId",
         "SingleUseTokenStatus"
       ],
-      "blocked_physical_relations": "Identity linkage/cardinality must not be invented from candidate or missing relationship authority.",
+      "blocked_physical_relations": "Historical v1.0.0 note superseded by existing P01-P05 slice admissions where applicable; no additional physical shape is admitted by this logical revision.",
       "persistence_requirements": [
         "store only cryptographic hash",
         "1-hour expiry is authoritative",
@@ -229,56 +264,188 @@
         "ReconciliationRecordStatus",
         "ExternalEffectOutcome"
       ],
-      "blocked_physical_relations": "Provider-specific detail/cardinality is not a new semantic subtype and exact field schema remains implementation design.",
+      "blocked_physical_relations": "Historical v1.0.0 note superseded by existing P01-P05 slice admissions where applicable; no additional physical shape is admitted by this logical revision.",
       "persistence_requirements": [
         "OPEN remains unresolved until canonical provider readback",
         "RESOLVED only with CONFIRMED_SUCCESS or CONFIRMED_NO_EFFECT",
         "unreadable provider state does not authorize retry"
       ]
+    },
+    {
+      "entity": "Location",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "Organization"
+    },
+    {
+      "entity": "Membership",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "Organization"
+    },
+    {
+      "entity": "AuditEvent",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "AuditLifecycle"
+    },
+    {
+      "entity": "LifecycleEvent",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "AuditLifecycle"
+    },
+    {
+      "entity": "DemoRun",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "Organization"
+    },
+    {
+      "entity": "DemoPersona",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "Identity"
+    },
+    {
+      "entity": "MembershipGrant",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "Organization"
+    },
+    {
+      "entity": "ReportingRelationship",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "Organization"
+    },
+    {
+      "entity": "CommandReceipt",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "TransactionControl"
+    },
+    {
+      "entity": "DemoExecutionPrincipal",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "Authorization"
+    },
+    {
+      "entity": "Identity",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "Identity"
+    },
+    {
+      "entity": "Organization",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "Organization"
+    },
+    {
+      "entity": "ContentPack",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/learning-definition.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "Content"
+    },
+    {
+      "entity": "ContentBlock",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/learning-definition.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "Content"
+    },
+    {
+      "entity": "Assignment",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/learning-definition.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "Learning"
+    },
+    {
+      "entity": "LearningSession",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/learning-definition.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "Learning"
+    },
+    {
+      "entity": "ProgressEvent",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/learning-definition.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "Learning"
+    },
+    {
+      "entity": "LearnerState",
+      "level": "LOGICAL_RECORD_ONLY",
+      "approved_package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/learning-definition.md",
+      "physical_admission": "REQUIRED_SEPARATE_PER_SLICE",
+      "owner": "Learning"
     }
   ],
   "blocked_schema_groups": [
     {
-      "id": "PER-B01",
+      "id": "PER-DEMO-PHYSICAL",
       "state": "BLOCKED",
-      "group": "strict-nine identifier closure",
-      "details": "Nine approved entities still use candidate identifiers."
+      "group": "new demo physical schema",
+      "details": "Exact approved logical definitions are dependency-closed. Every field/FK/enum/cardinality still requires its per-slice admission record, migration plan and acceptance evidence."
     },
     {
-      "id": "PER-B02",
+      "id": "PER-CERTIFICATION",
       "state": "BLOCKED",
-      "group": "relationship closure",
-      "details": "All 18 registered relationships remain candidate; no FK/cardinality may be treated as authoritative."
+      "group": "certification/P07",
+      "details": "Outside the demo; criteria and physical admission unchanged."
     },
     {
-      "id": "PER-B03",
+      "id": "PER-UNRELATED",
       "state": "BLOCKED",
-      "group": "organization model",
-      "details": "Membership, Location, and Entitlement remain candidate; Membership shape is held on OQ-TEN-1."
+      "group": "unrelated candidates/customer policy",
+      "details": "Entitlement, customer provisioning and non-package semantics remain blocked unless independently admitted."
     },
     {
-      "id": "PER-B04",
+      "id": "PER-DELETE",
       "state": "BLOCKED",
-      "group": "state closure",
-      "details": "IdentityStatus, ApplicationSessionStatus, LearningSessionStatus, and MembershipStatus remain candidate."
+      "group": "physical deletion",
+      "details": "All synthetic run history retained; no purge/anonymization/deletion authority."
     },
     {
-      "id": "PER-B05",
+      "id": "PER-SHARED",
       "state": "BLOCKED",
-      "group": "authorization persistence",
-      "details": "Capability registry is empty and C14 capability-list decision remains unresolved."
-    },
-    {
-      "id": "PER-B06",
-      "state": "BLOCKED",
-      "group": "privacy/retention",
-      "details": "C15 deletion/anonymization/retention questions remain unresolved."
-    },
-    {
-      "id": "PER-B07",
-      "state": "BLOCKED",
-      "group": "production migration recovery",
-      "details": "C21 backup mechanism and restore-proof policy remain unresolved for production migration execution."
+      "group": "shared/production execution",
+      "details": "No deployment or shared database execution authority granted by this registration."
     }
   ],
   "acceptance_targets": [
@@ -306,10 +473,21 @@
   ],
   "authority_id": "TEACH-PERSISTENCE-MODEL",
   "approved_on": "2026-10-04",
-  "approval_issue": "#16",
+  "approval_issue": "#82",
   "baseline_commit": "cf34fe2b79f938112beb7fedf5b498cba57c7d77",
   "source_proposal": "persistence/proposed.json@0.1.0",
-  "next_stage": "Persistence Semantic Closure",
+  "next_stage": "Per-slice physical admission for approved isolated demo",
   "full_relational_schema_status": "BLOCKED",
-  "migration_implementation_status": "BLOCKED"
+  "migration_implementation_status": "EXISTING_P01_P05_PRESERVED_DEMO_BLOCKED",
+  "approval_record": "domains/demo-runtime/owner-approval.json",
+  "approval_history": [
+    {
+      "version": "1.0.0",
+      "approval_issue": "#16",
+      "record": "persistence/APPROVAL-RECORD.md"
+    }
+  ],
+  "demo_runtime_registration": "domains/demo-runtime/registration.json",
+  "synthetic_disposition": "RETAIN_NO_AUTOMATED_DELETE",
+  "normal_customer_policy_changed": false
 }

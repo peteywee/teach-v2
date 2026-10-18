@@ -1,14 +1,27 @@
 import assert from 'node:assert/strict';
 import { test, after } from 'node:test';
 import { spawnSync } from 'node:child_process';
-import { cpSync, mkdtempSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
+import { cpSync, mkdtempSync, readFileSync, writeFileSync, rmSync, mkdirSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { join, resolve, dirname } from 'node:path';
 import { inspectCapabilityAdmission, inspectAdmissionSchema } from '../kernel/capability-admission.mjs';
 
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const fixture = mkdtempSync(join(tmpdir(), 'teach-capability-admission-'));
 for (const path of ['kernel','domains','contracts','application-interfaces','governance/decision-closure']) cpSync(join(root,path),join(fixture,path),{recursive:true});
+// Keep the prior admission's negative tests on its exact historical live
+// snapshot. The successor has its own mutation suite; neither proof replaces
+// the other or grants a blanket exemption to current authority files.
+const successorBaseline = join(root, 'domains/demo-runtime/source-baseline.json');
+if (existsSync(successorBaseline)) {
+  const historical = JSON.parse(readFileSync(successorBaseline, 'utf8'));
+  for (const [path, text] of Object.entries(historical.files)) {
+    if (!/^(kernel|domains|contracts|application-interfaces|governance\/decision-closure)\//.test(path)) continue;
+    mkdirSync(dirname(join(fixture, path)), { recursive: true });
+    writeFileSync(join(fixture, path), text);
+  }
+  rmSync(join(fixture, 'domains/demo-runtime'), { recursive: true, force: true });
+}
 after(() => rmSync(fixture,{recursive:true,force:true}));
 const read = path => readFileSync(join(fixture,path),'utf8');
 const json = path => JSON.parse(read(path));
@@ -29,7 +42,7 @@ const rejectedJson = (path, mutate, pattern) => rejected(path, text => {
 }, pattern);
 const cli = script => spawnSync(process.execPath,[join(root,script)],{cwd:fixture,encoding:'utf8',timeout:5000});
 
-test('exact owner-approved 36-entry overlay and all-family closure pass',()=>{
+test('historical exact owner-approved 36-entry overlay and all-family closure still pass',()=>{
   const result=inspectCapabilityAdmission(root);
   assert.deepEqual(result.errors,[]);
   assert.equal(result.promotedEntries,36);

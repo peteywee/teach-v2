@@ -1,0 +1,492 @@
+{
+  "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+  "status": "PROPOSED_NOT_APPROVED",
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/api/v1/session",
+      "operation": "ReadCurrentSession",
+      "capability": "identity.session.read",
+      "scope": "SELF",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED_NOT_APPROVED",
+      "success_status": 200,
+      "response_schema": "transport-schemas.json#/$defs/CurrentSession",
+      "request_body_schema": null,
+      "synthetic_runtime_allowlist_only": true
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/session",
+      "operation": "RevokeApplicationSession",
+      "capability": "identity.session.revoke",
+      "scope": "SELF",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED_NOT_APPROVED",
+      "success_status": 204,
+      "response_schema": null,
+      "request_body_schema": null,
+      "synthetic_runtime_allowlist_only": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/memberships",
+      "operation": "ListOwnMemberships",
+      "capability": "organization.membership.read_self",
+      "scope": "SELF",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED_NOT_APPROVED",
+      "success_status": 200,
+      "response_schema": "transport-schemas.json#/$defs/Memberships",
+      "request_body_schema": null,
+      "synthetic_runtime_allowlist_only": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/team",
+      "operation": "ListTeam",
+      "capability": "organization.team.read",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED_NOT_APPROVED",
+      "success_status": 200,
+      "response_schema": "transport-schemas.json#/$defs/Team",
+      "request_body_schema": null,
+      "synthetic_runtime_allowlist_only": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/team/{identityId}/learner-state",
+      "operation": "ReadTeamMemberLearnerState",
+      "capability": "learning.state.read_team",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED_NOT_APPROVED",
+      "success_status": 200,
+      "response_schema": "transport-schemas.json#/$defs/TeamStates",
+      "request_body_schema": null,
+      "synthetic_runtime_allowlist_only": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/assignments",
+      "operation": "AssignContent",
+      "capability": "learning.assignment.create",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": "Idempotency-Key",
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED_NOT_APPROVED",
+      "success_status": 201,
+      "response_schema": "transport-schemas.json#/$defs/Assignment",
+      "request_body_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "identityId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "contentPackId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "contentVersion": {
+            "$ref": "transport-schemas.json#/$defs/ContentVersion"
+          }
+        },
+        "required": [
+          "identityId",
+          "contentPackId",
+          "contentVersion"
+        ]
+      },
+      "synthetic_runtime_allowlist_only": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/assignments/mine",
+      "operation": "ListOwnAssignments",
+      "capability": "learning.assignment.read_self",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED_NOT_APPROVED",
+      "success_status": 200,
+      "response_schema": "transport-schemas.json#/$defs/Assignments",
+      "request_body_schema": null,
+      "synthetic_runtime_allowlist_only": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/content/{contentPackId}/versions/{contentVersion}",
+      "operation": "ReadAssignedContentVersion",
+      "capability": "content.pack.read_assigned",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED_NOT_APPROVED",
+      "success_status": 200,
+      "response_schema": "transport-schemas.json#/$defs/PublicContent",
+      "request_body_schema": null,
+      "synthetic_runtime_allowlist_only": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions",
+      "operation": "StartLearningSession",
+      "capability": "learning.session.start",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": "Idempotency-Key",
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED_NOT_APPROVED",
+      "success_status": 201,
+      "response_schema": "transport-schemas.json#/$defs/Session",
+      "request_body_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "assignmentId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": [
+          "assignmentId"
+        ]
+      },
+      "synthetic_runtime_allowlist_only": true,
+      "target_binding": "authenticated Identity only; never supplied learnerId"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions/{learningSessionId}/progress-events",
+      "operation": "RecordProgressEvent",
+      "capability": "learning.progress.record",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": "Idempotency-Key",
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED_NOT_APPROVED",
+      "success_status": 201,
+      "response_schema": "transport-schemas.json#/$defs/ProgressEvent",
+      "request_body_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "blockId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "selectedOptionIndex": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4
+          }
+        },
+        "required": [
+          "blockId",
+          "selectedOptionIndex"
+        ]
+      },
+      "synthetic_runtime_allowlist_only": true,
+      "target_binding": "authenticated Identity only; never supplied learnerId"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions/{learningSessionId}/complete",
+      "operation": "CompleteLearningSession",
+      "capability": "learning.session.complete",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED_NOT_APPROVED",
+      "success_status": 200,
+      "response_schema": "transport-schemas.json#/$defs/Session",
+      "request_body_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      },
+      "synthetic_runtime_allowlist_only": true,
+      "target_binding": "authenticated Identity only; never supplied learnerId"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/learner-state/mine",
+      "operation": "ReadOwnLearnerState",
+      "capability": "learning.state.read_self",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED_NOT_APPROVED",
+      "success_status": 200,
+      "response_schema": "transport-schemas.json#/$defs/OwnStates",
+      "request_body_schema": null,
+      "synthetic_runtime_allowlist_only": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/demo/start",
+      "operation": "BeginDemoRun",
+      "capability": "organization.demo.begin",
+      "scope": "DEMO_NEW_RUN",
+      "request_body_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      },
+      "response_schema": "transport-schemas.json#/$defs/CurrentSession",
+      "success_status": 201,
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED_NOT_APPROVED",
+      "cookie_only_session": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/demo/persona",
+      "operation": "SwitchDemoPersona",
+      "capability": "identity.demo.persona.switch",
+      "scope": "LOCATION",
+      "request_body_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "locationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "persona": {
+            "enum": [
+              "LEARNER",
+              "MANAGER"
+            ]
+          }
+        },
+        "required": [
+          "organizationId",
+          "locationId",
+          "persona"
+        ]
+      },
+      "response_schema": "transport-schemas.json#/$defs/CurrentSession",
+      "success_status": 200,
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED_NOT_APPROVED",
+      "cookie_only_session": true,
+      "target_binding": "live DemoRun resolved from current session; explicit tuple must match"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/demo/close",
+      "operation": "CloseDemoRun",
+      "capability": "organization.demo.close",
+      "scope": "LOCATION",
+      "request_body_schema": {
+        "$ref": "transport-schemas.json#/$defs/Scope"
+      },
+      "response_schema": null,
+      "success_status": 204,
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED_NOT_APPROVED",
+      "cookie_only_session": true,
+      "target_binding": "live DemoRun resolved from current session; explicit tuple must match"
+    }
+  ],
+  "queries": [
+    {
+      "id": "ReadCurrentSession",
+      "owning_domain": "Identity",
+      "input": "presented cookie only; no identity selector",
+      "output": "CurrentSession",
+      "predicate": "current Identity/ApplicationSession + live DemoRun; capability data is presentation only"
+    },
+    {
+      "id": "ListOwnMemberships",
+      "owning_domain": "Organization",
+      "input": "presented cookie only",
+      "output": "Memberships",
+      "predicate": "current identity only, ACTIVE memberships; scopes read from database"
+    },
+    {
+      "id": "ListTeam",
+      "owning_domain": "Organization",
+      "input": "explicit organization/location; limit20 default,max50;cursor max512",
+      "output": "Team",
+      "predicate": "current manager capability plus exact direct-report scope; no arbitrary people or public profiles"
+    },
+    {
+      "id": "ListOwnAssignments",
+      "owning_domain": "Learning",
+      "capability": "learning.assignment.read_self",
+      "matrix_pointer": "/operations/25",
+      "route_pointer": "/routes/18",
+      "input": "organizationId,locationId selectors; limit default 20 max 50; optional opaque cursor",
+      "output": "ordered Assignment DTOs with content title, exact reference, session summary or null; nextCursor|null",
+      "predicate": "current LOCATION learner grant; assignment.identityId == authenticated identity; scope exact"
+    },
+    {
+      "id": "ReadAssignedContentVersion",
+      "owning_domain": "Content",
+      "capability": "content.pack.read_assigned",
+      "matrix_pointer": "/operations/26",
+      "route_pointer": "/routes/19",
+      "input": "organizationId,locationId,contentPackId,exact contentVersion string",
+      "output": "exact version/digest and public teaching payload: title, blocks id/kind/instruction/prompt/options only",
+      "predicate": "current LOCATION learner grant and current ACTIVE own Assignment for exact version through Learning owner read; never return expectedOptionIndex or feedback before response"
+    },
+    {
+      "id": "ReadOwnLearnerState",
+      "owning_domain": "Learning",
+      "capability": "learning.state.read_self",
+      "matrix_pointer": "/operations/27",
+      "route_pointer": "/routes/23",
+      "input": "organizationId,locationId; optional AssignmentId; limit default 20 max 50, cursor",
+      "output": "LearnerState projections including own recorded response/evaluation and next unrecorded block",
+      "predicate": "current LOCATION learner grant and exact authenticated learner; no client learnerId"
+    },
+    {
+      "id": "ReadTeamMemberLearnerState",
+      "owning_domain": "Learning",
+      "capability": "learning.state.read_team",
+      "matrix_pointer": "/operations/30",
+      "route_pointer": "/routes/16",
+      "input": "organizationId,locationId,target identityId; optional AssignmentId; limit default 20 max 50,cursor",
+      "output": "separate per-assignment LearnerState DTOs: exact content/title, requiredBlockCount,recordedBlockCount,session status,times; no choices,correctness fields or aggregate score",
+      "predicate": "same authoritative current visibility as ListTeam (manager direct reports intersected with scope; org_admin organization membership); this demo grants only manager, never org_admin"
+    }
+  ],
+  "internal_only_commands": [
+    "CreateDemoPersona",
+    "RevokeDemoSessions",
+    "CreateApplicationSession",
+    "CreateMembership",
+    "PublishContentPack"
+  ],
+  "owner_interfaces": [
+    "DemoRunAuthorityReadInterface",
+    "OrganizationAuthorityReadInterface",
+    "IdentityAuthorityReadInterface",
+    "ContentReadInterface",
+    "LearningAssignmentReadInterface",
+    "LearningStateReadInterface",
+    "AuditAppendInterface",
+    "LifecycleAppendInterface",
+    "CommandReceiptInterface"
+  ],
+  "internal_queries": [
+    {
+      "id": "ListExpiredDemoRuns",
+      "owner": "Organization",
+      "principal": "automation:demo-expiry-v1",
+      "scope": "due DEMO_ONLY runs only",
+      "limit": 100,
+      "output": "DemoRunId+immutable organization/location/deadline; no content/learner data"
+    }
+  ],
+  "wire_rules": {
+    "additional_properties": false,
+    "all_protected_cache": "no-store",
+    "unsafe_content_type": "application/json",
+    "exact_origin_required": true,
+    "automatic_secret_issuance_retry": false,
+    "idempotency_header": "Idempotency-Key only where existing registered operation requires it",
+    "optional_query_parameters": [
+      "assignmentId",
+      "limit",
+      "cursor"
+    ],
+    "list_order": "assignedAt then AssignmentId; team/membership lists by stable ID",
+    "cursor": "base64url canonical last ordering tuple, validated syntax and ownership; it grants no authority",
+    "error_schema": "baseline-error-envelope.schema.json",
+    "rate_limit": {
+      "status": 429,
+      "code": "RATE_LIMITED",
+      "message": "Too many requests. Try again later.",
+      "retry_after": "only when a finite retry time is known"
+    },
+    "dependency_failure": {
+      "status": 503,
+      "code": "SERVICE_UNAVAILABLE",
+      "message": "Service unavailable."
+    },
+    "unknown_target": "same404body for absent/other-scope targets",
+    "unknown_or_expired_demo_session": "ordinary401body; no protected payload",
+    "idempotency_payload_conflict": {
+      "status": 422,
+      "code": "IDEMPOTENCY_KEY_REUSED",
+      "message": "This idempotency key was used with a different request."
+    },
+    "error_contract": "Byte-identical baseline-error-envelope.schema.json, including UUID-v4 requestId, fixed messages, constrained optional details/retryAfterSeconds and status map. Demo-specific explanation belongs in UI, not interpolated wire error."
+  },
+  "no_mount_authority": true,
+  "content_version_pattern_revision": {
+    "source": "governance/decision-closure/api-boundary-manifest.json#/content_version_pattern",
+    "reason": "Existing core-only regex contradicts already-selected strict SemVer2.0 with prerelease/build preservation. This is an explicit representation reconciliation, not a new semantic version policy.",
+    "proposed_pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?$",
+    "maximum_length": 38,
+    "path_encoding": "Percent-encode version path segment; decode once, validate full exact string, never normalize build/prerelease identity."
+  },
+  "demo_lifetime_limits": {
+    "minutes": 60,
+    "assignments": 10,
+    "learning_sessions": 10,
+    "progress_events": 30,
+    "application_sessions_including_history": 100,
+    "close_available_at_cap": true
+  }
+}

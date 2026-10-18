@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C11",
   "class": "contract",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-05",
-  "effective_on": "2026-10-05",
+  "updated_on": "2026-10-17",
+  "effective_on": "2026-10-17",
   "approval": {
     "state": "approved",
-    "approved_version": "1.6.0",
-    "approved_on": "2026-10-05",
-    "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner manifest-bound decision-closure r3.1 approval under SYS-21 #75; sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
+    "approved_version": "1.7.0",
+    "approved_on": "2026-10-17",
+    "record": "domains/demo-runtime/owner-approval.json",
+    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; SHA256SUMS sha256:a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -30,12 +30,24 @@
   },
   "supersedes": [
     "TEACH-CON-C11@1.3.0",
-    "TEACH-CON-C11@1.5.0"
+    "TEACH-CON-C11@1.5.0",
+    "TEACH-CON-C11@1.6.0"
   ],
   "superseded_by": null,
   "depends_on": [
     "contracts/"
-  ]
+  ],
+  "demo_runtime_registration": {
+    "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+    "approval_record": "domains/demo-runtime/owner-approval.json",
+    "issue": "#82",
+    "source_package": "domains/demo-runtime/proposal-0.1.0",
+    "sha256sums_sha256": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+    "semantic_authority_only": true,
+    "physical_schema_admission": false,
+    "runtime_activation": false,
+    "deployment_authority": false
+  }
 }
 -->
 
@@ -46,17 +58,17 @@
 | Contract ID        | C11                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.6.0 |
+| Version | 1.7.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by | Patrick Craven (owner), 2026-10-05; manifest-bound decision-closure r3.1, SYS-21 #75; see `APPROVAL-RECORD.md` |
+| Approved by | Patrick Craven (owner), 2026-10-17; TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; see `domains/demo-runtime/owner-approval.json` |
 | Requirement prefix | `IDN`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/identity-access.json` (identity half); session half moves to C12.                                   |
-| Supersedes | 1.5.0 |
+| Supersedes | 1.6.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated | 2026-10-05 |
+| Last updated | 2026-10-17 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -87,7 +99,7 @@ Related contracts: C00, C01, C12, C13, C14, C23.
 
 | Term             | Meaning                                                                                                                                                                                                                                                                          |
 | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Identity         | The single application record representing one human user.                                                                                                                                                                                                                       |
+| Identity         | The canonical application record representing an ordinary human user, or an explicitly bound fictional DemoPersona under the exact demo package; the latter does not identify the real visitor.                                                                                                                                                                                                                       |
 | Credential       | Anything that proves identity: a password, a PIN, an OAuth link, or a single-use token.                                                                                                                                                                                          |
 | Single-use token | An invitation, frontline setup, or password-reset token.                                                                                                                                                                                                                         |
 | Offboarded       | The result of the `OffboardIdentity` lifecycle operation: `IdentityOffboarded` is emitted, IdentityStatus is `INACTIVE`, authentication is disabled, sessions/tokens are revoked, and effective membership/grants are removed. It is distinct from `DELETED`. |
@@ -202,3 +214,15 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.3.0   | 2026-10-04 | Resolved invitation/single-use-token lifecycle semantics, token lifetimes, offboarded-email invitation rule, and cross-domain invitation acceptance boundary. GitHub issue #12. | Patrick Craven (owner approval) |
 | 1.4.0 | 2026-10-04 | Record owner-selected OQ-IDN-6 policy values, append requirement/acceptance cases and preserve prior version; SYS-21 #66. No runtime implementation or production permission. | Patrick Craven (owner selection) |
 | 1.6.0 | 2026-10-05 | Register OQ-IDN-7; preserve named residuals and existing requirement/acceptance IDs. Decision-closure r3.1 manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c; SYS-21 #75. | Patrick Craven (owner); ChatGPT (recorder) |
+
+## Registered demo runtime amendment (1.7.0)
+
+Exact owner-approved scope: `TEACH-DEMO-RUNTIME-2026-10-17@0.1.0`, SYS-21 [#82](https://github.com/peteywee/teach-v2/issues/82). Approval provenance: `domains/demo-runtime/owner-approval.json`; immutable source: `domains/demo-runtime/proposal-0.1.0/contract-amendments.md`. The addendum below is the approved revision, not an exception inferred by an implementer. It changes only its explicitly named demo behavior; ordinary/customer semantics and unrelated gates remain unchanged. Proposal labels in the immutable package preserve its pre-approval history; this registration supplies current authority. Physical schema admission, runtime activation and shared deployment remain separate.
+
+Extend Identity definition only for an explicitly bound DemoPersona. Ordinary human identities retain IDN-1 uniqueness, credential/linking and lifecycle requirements. CreateDemoPersona may create exactly the two fictional persona records of a fresh DemoRun without Credential; they cannot convert/link to real accounts, receive credentials/tokens/invitations, or gain non-demo memberships. CreateIdentity and its primary-credential meaning are unchanged.
+
+Add BeginDemoRun and SwitchDemoPersona as exact allowed internal callers of CreateApplicationSession after their own owner-approved synthetic admission proof. They still use C12's one cookie/verifier/session model, all current lifetimes, rotation, Origin and revocation requirements. Synthetic admission authenticates only possession of the constrained visit session, not a real-person identity. Failed commit sets no cookie; secrets are never replay-stored.
+
+Every session belonging to DemoPersona also requires the database-current run fence, including SELF requests. Immutable run deadline is an additional restriction, not a new session lifetime. Switch revokes outgoing/all remaining run sessions and issues a counterpart session atomically. RevokeDemoSessions coordinates the existing canonical revocation writer only. A normal session may not be silently replaced by anonymous demo entry. Enforce at most100 lifetime ApplicationSession issuances per run under the shared run lock using an Identity-owned authoritative count; rejection preserves the current session and close/expiry remain available.
+
+Exact definitions and field constraints are incorporated from `domains/demo-runtime/proposal-0.1.0/demo-boundary.md`, `domains/demo-runtime/proposal-0.1.0/authority-and-audit.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.json`, and `domains/demo-runtime/proposal-0.1.0/transport-and-queries.json` with its referenced schemas. No definition beyond that approved package is introduced.

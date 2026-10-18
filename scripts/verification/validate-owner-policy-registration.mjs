@@ -1,12 +1,14 @@
 #!/usr/bin/env node
+import { createHistoricalSourceReader, inspectDemoRuntimeRegistration } from '../kernel/demo-runtime-registration.mjs';
 import {readFileSync,readdirSync} from 'node:fs';
 import {resolve,join} from 'node:path';
 import {createHash} from 'node:crypto';
 import {scanContractQuestions} from './owner-decision-inventory.mjs';
 const root=resolve(process.cwd()),base='verification/owner-decisions/2026-10-04/';
-const read=path=>readFileSync(join(root,path),'utf8'),json=path=>JSON.parse(read(path)),hash=text=>createHash('sha256').update(text).digest('hex');
+const read=createHistoricalSourceReader(root),json=path=>JSON.parse(read(path)),hash=text=>createHash('sha256').update(text).digest('hex');
 const check=(condition,message)=>{if(!condition)throw new Error(`owner registration: ${message}`);};
 try {
+ const successor=inspectDemoRuntimeRegistration(root); if(successor.errors.length) throw new Error(successor.errors.join("\n"));
  const reg=json(base+'registration.json'),revisions=json(base+'contract-revisions.json'),questions=scanContractQuestions(root);
  check(reg.registration_id==='TEACH-OWNER-DECISION-RECONCILIATION-66'&&reg.issue==='#66'&&reg.status==='recorded'&&reg.owner==='Patrick Craven'&&reg.owner_local_date==='2026-10-04'&&reg.timezone==='America/Chicago','exact owner decision provenance required');
  const records=new Map(reg.records.map(x=>[x.id,x]));check(records.size===14&&reg.records.length===14,'exact classified question inventory required');

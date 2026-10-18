@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-05",
+  "updated_on": "2026-10-17",
   "effective_on": "2026-10-03",
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -26,7 +26,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-05
-- Contract package version: `0.18.0`
+- Contract package version: `0.19.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -468,3 +468,9 @@ Patrick Craven explicitly approved `approve decision-closure manifest sha256:ff7
 | C61 | 1.0.3 | 1.1.0 | OQ-ANL-1, OQ-ANL-2 | 2026-10-05 | Patrick Craven | #75 |
 | C62 | 1.0.3 | 1.1.0 | OQ-PWA-1 | 2026-10-05 | Patrick Craven | #75 |
 | C63 | 1.1.0 | 1.2.0 | OQ-BIL-1, OQ-BIL-2, OQ-BIL-3 (residual open) | 2026-10-05 | Patrick Craven | #75 |
+
+## Part 26 — Exact synthetic demo runtime package registration (#82)
+
+Owner approval: `domains/demo-runtime/owner-approval.json`. Approved package: `TEACH-DEMO-RUNTIME-2026-10-17@0.1.0`; SHA-256 of SHA256SUMS: `a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a`. SYS-21 issue: https://github.com/peteywee/teach-v2/issues/82.
+
+Registers only the exact contract, semantic and application-interface revisions in the approved immutable package. The approval includes registration and local isolated implementation after admission checks; it does not establish physical admission or runtime evidence, nor authorize shared deployment. Prior approvals remain historical evidence. The revision/version and preservation manifest is `governance/decision-closure/demo-runtime-registration.json`.

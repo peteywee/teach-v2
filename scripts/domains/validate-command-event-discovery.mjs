@@ -1,13 +1,15 @@
 #!/usr/bin/env node
+import { hasDemoRegistration, createHistoricalSourceReader } from '../kernel/demo-runtime-registration.mjs';
 import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
-import { readFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { resolve } from 'node:path';
 
 const ROOT=resolve(process.cwd());
 const errors=[];
 // Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
 errors.push(...inspectCapabilityAdmission(ROOT).errors);
-const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
+const historicalRead = createHistoricalSourceReader(ROOT);
+if (hasDemoRegistration(ROOT)) console.log('Historical discovery proof against verified pre-demo snapshot; exact current successor separately validated.');
+const load=(p)=>{try{return JSON.parse(historicalRead(p));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
 
 const proposal=load('domains/commands-events/proposed.json');
 const registration=load('domains/commands-events/command-registration.json');

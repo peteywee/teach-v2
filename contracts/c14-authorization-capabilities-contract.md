@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C14",
   "class": "contract",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-05",
-  "effective_on": "2026-10-05",
+  "updated_on": "2026-10-17",
+  "effective_on": "2026-10-17",
   "approval": {
     "state": "approved",
-    "approved_version": "1.3.0",
-    "approved_on": "2026-10-05",
-    "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner manifest-bound decision-closure r3.1 approval under SYS-21 #75; sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
+    "approved_version": "1.4.0",
+    "approved_on": "2026-10-17",
+    "record": "domains/demo-runtime/owner-approval.json",
+    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; SHA256SUMS sha256:a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -30,12 +30,24 @@
   },
   "supersedes": [
     "TEACH-CON-C14@1.0.3",
-    "TEACH-CON-C14@1.2.0"
+    "TEACH-CON-C14@1.2.0",
+    "TEACH-CON-C14@1.3.0"
   ],
   "superseded_by": null,
   "depends_on": [
     "contracts/"
-  ]
+  ],
+  "demo_runtime_registration": {
+    "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+    "approval_record": "domains/demo-runtime/owner-approval.json",
+    "issue": "#82",
+    "source_package": "domains/demo-runtime/proposal-0.1.0",
+    "sha256sums_sha256": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+    "semantic_authority_only": true,
+    "physical_schema_admission": false,
+    "runtime_activation": false,
+    "deployment_authority": false
+  }
 }
 -->
 
@@ -46,17 +58,17 @@
 | Contract ID        | C14                                                                                                                                                             |
 | Group              | C10 Trust & Security                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version            | 1.3.0 |
+| Version | 1.4.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-05; manifest-bound decision-closure r3.1, SYS-21 #75; see `APPROVAL-RECORD.md` |
+| Approved by | Patrick Craven (owner), 2026-10-17; TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; see `domains/demo-runtime/owner-approval.json` |
 | Requirement prefix | `AUTHZ`                                                                                                                                                         |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/tenancy.json` (capability resolution half); carries forward Gate A denial semantics.                |
-| Supersedes         | 1.2.0 |
+| Supersedes | 1.3.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-05 |
+| Last updated | 2026-10-17 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -112,7 +124,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **AUTHZ-16** — A target ID supplied by the client MUST NOT establish authorization; the target MUST be resolved and checked against actor scope.
 - **AUTHZ-17** — Every sensitive mutation MUST be evaluated with both actor scope and target scope.
 - **AUTHZ-18** — Every capability addition or change MUST ship with negative tests proving denial for actors that lack it, in the same change.
-- **AUTHZ-19** — The capability vocabulary and bundles MUST be the NEW_V2 matrix in the registered C14 specification and `c14-capability-matrix.json`: 34 operation capabilities, explicit self/learner/manager/org_admin bundles, and no imported legacy grants or cross-tenant platform capabilities. Evaluation, bootstrap exceptions, conditional/blocked grants and negative tests MUST follow that matrix. This registration does not promote the 34 capability identifiers into C01/K00; implementation remains BLOCKED until their semantic registration and all matrix dependencies pass. See `governance/decision-closure/02-c14-authorization-capability-matrix.md`. (OQ-AUTHZ-1 resolved 2026-10-05).
+- **AUTHZ-19** — The capability vocabulary and bundles MUST be the NEW_V2 matrix in the registered C14 specification and `c14-capability-matrix.json`: 39 operation capabilities, explicit self/learner/observer/manager/org_admin/demo_visitor bundles, and no imported legacy grants or cross-tenant platform capabilities. Evaluation, bootstrap exceptions, conditional/blocked grants and negative tests MUST follow that matrix. The prior 34 capability identifiers remain governed by their historical admission; exactly five demo capability names are registered by the approved demo package. All physical and runtime dependencies remain separate gates. See `governance/decision-closure/02-c14-authorization-capability-matrix.md`. (OQ-AUTHZ-1 resolved 2026-10-05).
 - **AUTHZ-20** — A role MUST NOT hold a cross-tenant capability. Owner approved NO_CROSS_TENANT_GRANTS on 2026-10-05: no cross-tenant platform grants exist; V1 platform_operator grants are not imported.
 - **AUTHZ-21** — Authorization MUST treat entitlement as a read-only input loaded from authoritative Organization-owned state; authorization code MUST NOT create or mutate entitlement state.
 
@@ -167,3 +179,15 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.1.0   | 2026-10-03 | C01 registers capability identifiers; C14 owns authorization semantics and consumes Organization-owned entitlement state read-only. GitHub issue #2. | Patrick Craven (owner approval) |
 | 1.3.0 | 2026-10-05 | Register OQ-AUTHZ-1; preserve named residuals and existing requirement/acceptance IDs. Decision-closure r3.1 manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c; SYS-21 #75. | Patrick Craven (owner); ChatGPT (recorder) |
+
+## Registered demo runtime amendment (1.4.0)
+
+Exact owner-approved scope: `TEACH-DEMO-RUNTIME-2026-10-17@0.1.0`, SYS-21 [#82](https://github.com/peteywee/teach-v2/issues/82). Approval provenance: `domains/demo-runtime/owner-approval.json`; immutable source: `domains/demo-runtime/proposal-0.1.0/contract-amendments.md`. The addendum below is the approved revision, not an exception inferred by an implementer. It changes only its explicitly named demo behavior; ordinary/customer semantics and unrelated gates remain unchanged. Proposal labels in the immutable package preserve its pre-approval history; this registration supplies current authority. Physical schema admission, runtime activation and shared deployment remain separate.
+
+Admit exact normal Membership/Location shape and immutable demo grant/reporting records defined here. Add DEMO_ONLY as an immutable synthetic organization classification, never a customer authorization shortcut. BeginDemoRun is the sole demo allocation writer and cannot target existing organizations. Register five new command/capability rows, demo_visitor bundle, named principals, DEMO_NEW_RUN and exact demo-record scope rules. All internal operations remain unrouted and ungrantable.
+
+For DEMO_ONLY organizations bound one-to-one to DemoRun, step 6 evaluates the Organization-owned database-current run availability projection: ACTIVE status, deadline, fixed operation allowlist. Missing or contradictory inputs deny. Availability restricts existing capability effect and grants nothing. No Entitlement instance is created; non-demo entitlement rules remain unchanged.
+
+StartLearningSession, RecordProgressEvent and CompleteLearningSession are LOCATION plus mandatory SELF-target binding, not baseline SELF bundle operations. Every mutation revalidates current actor Membership/grants and exact assignment/session under the transaction fence. DT-002 and DT-008 are reconciled to registered evaluation order and explicit selector meaning. The demo allowlist denies extra ordinary manager/self capabilities at the server. Expiry cleanup uses a separately specified exact-record terminalization policy so it can revoke expired access without requiring live visitor authority.
+
+Exact definitions and field constraints are incorporated from `domains/demo-runtime/proposal-0.1.0/demo-boundary.md`, `domains/demo-runtime/proposal-0.1.0/authority-and-audit.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.json`, and `domains/demo-runtime/proposal-0.1.0/transport-and-queries.json` with its referenced schemas. No definition beyond that approved package is introduced.

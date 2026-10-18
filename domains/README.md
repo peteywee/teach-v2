@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-DOMAIN-DISCOVERY",
   "class": "specification",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-04",
+  "updated_on": "2026-10-17",
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
@@ -16,14 +16,24 @@
   },
   "approval": {
     "state": "approved",
-    "approved_on": "2026-10-04",
+    "approved_on": "2026-10-17",
     "owner": "Patrick Craven, Top Shelf Service LLC",
-    "record": "contracts/APPROVAL-RECORD.md",
-    "issue": "#12"
+    "record": "domains/demo-runtime/owner-approval.json",
+    "issue": "#82",
+    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0 exact approved semantic registration"
   },
   "governed_by": [
     "TEACH-CON-C00",
     "TEACH-CON-C01"
+  ],
+  "approval_history": [
+    {
+      "state": "approved",
+      "approved_on": "2026-10-04",
+      "owner": "Patrick Craven, Top Shelf Service LLC",
+      "record": "contracts/APPROVAL-RECORD.md",
+      "issue": "#12"
+    }
   ]
 }
 -->
@@ -58,3 +68,8 @@ Domain Ownership Map `1.4.0` adds owner assignments for seven registered command
 Domain Ownership Map `1.5.0` adds ownership for four dependency entities and their four identifier types; GitHub issue #11.
 
 Domain Ownership Map `1.6.0` adds the four lifecycle state sets, four lifecycle state machines, and `RevokeInvitation`; existing ownership assignments are unchanged. GitHub issue #12.
+
+
+## Exact full-demo ownership successor
+
+Domain Ownership Map `1.9.0` records the approved TEACH-DEMO-RUNTIME-2026-10-17@0.1.0 package under issue #82. Its 131 typed entries retain one authoritative owner each; no runtime module or foreign repository writer is added. Prior discovery and approval files remain historical. The active registration and exact owner evidence are in `demo-runtime/`.

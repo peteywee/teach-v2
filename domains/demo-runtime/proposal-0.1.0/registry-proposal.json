@@ -1,0 +1,3920 @@
+{
+  "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+  "status": "PROPOSED_NOT_APPROVED",
+  "baseline_tree": "771867f1dbb47e277f90158a9f25b504bb786510",
+  "typed_reference_rule": "family:id. Included entries become dependencies only after explicit named-package approval; this file grants no authority.",
+  "entries": [
+    {
+      "family": "entities",
+      "id": "Location",
+      "change": "PROMOTE",
+      "owning_domain": "Organization",
+      "definition": "Workplace scope contained by an Organization.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "relationships",
+          "id": "LocationBelongsToOrganization"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        }
+      ],
+      "baseline_entry_sha256": "0c27c23ea8985d68ac4354cb9434dd21a86cc107edb89874cc9fdc9e7272c631",
+      "definition_source": "kernel/entities.json#Location",
+      "constraints": [
+        "Exact fields/cardinality/immutability are defined in authority-and-audit.md."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "identifiers",
+      "id": "LocationId",
+      "change": "PROMOTE",
+      "owning_domain": "Organization",
+      "definition": "LocationId",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Location"
+        }
+      ],
+      "baseline_entry_sha256": "a378321f6e2cbfc301417a6c7455090ca2046beae47de90773be1ec6dbb9a5ff",
+      "definition_source": "kernel/identifiers.json#LocationId",
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "entities",
+      "id": "Membership",
+      "change": "PROMOTE",
+      "owning_domain": "Organization",
+      "definition": "Relationship connecting an Identity to an Organization and optionally a Location.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "MembershipId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        },
+        {
+          "family": "states",
+          "id": "MembershipStatus"
+        },
+        {
+          "family": "state-machines",
+          "id": "MembershipStateMachine"
+        },
+        {
+          "family": "relationships",
+          "id": "MembershipLinksIdentityOrganization"
+        },
+        {
+          "family": "relationships",
+          "id": "MembershipMayScopeLocation"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        }
+      ],
+      "baseline_entry_sha256": "0aade5ae71231747acc34544630990bf2e2f7191a206f07480ebe9e2e325de5a",
+      "definition_source": "kernel/entities.json#Membership",
+      "constraints": [
+        "Exact fields/cardinality/immutability are defined in authority-and-audit.md."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "identifiers",
+      "id": "MembershipId",
+      "change": "PROMOTE",
+      "owning_domain": "Organization",
+      "definition": "MembershipId",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Membership"
+        }
+      ],
+      "baseline_entry_sha256": "d53438213b9d76daa507c2c1a1563d234702de1329e7dcffe6879ad0fb4906e0",
+      "definition_source": "kernel/identifiers.json#MembershipId",
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "entities",
+      "id": "AuditEvent",
+      "change": "PROMOTE",
+      "owning_domain": "AuditLifecycle",
+      "definition": "Immutable security or business audit fact.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "AuditEventId"
+        },
+        {
+          "family": "values",
+          "id": "AuditActor"
+        },
+        {
+          "family": "values",
+          "id": "AuditTarget"
+        },
+        {
+          "family": "values",
+          "id": "AuditResult"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdempotencyKey"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "relationships",
+          "id": "AuditEventHasActor"
+        },
+        {
+          "family": "relationships",
+          "id": "AuditEventTargetsRecord"
+        },
+        {
+          "family": "relationships",
+          "id": "AuditEventBelongsToOrganization"
+        },
+        {
+          "family": "relationships",
+          "id": "AuditEventMayScopeLocation"
+        }
+      ],
+      "baseline_entry_sha256": "60a2a8c5f69002657a2b949cc4790574f346113c0a62df9d449bdbc8e4b18f0b",
+      "definition_source": "kernel/entities.json#AuditEvent",
+      "constraints": [
+        "Exact fields/cardinality/immutability are defined in authority-and-audit.md."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "identifiers",
+      "id": "AuditEventId",
+      "change": "PROMOTE",
+      "owning_domain": "AuditLifecycle",
+      "definition": "AuditEventId",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "AuditEvent"
+        }
+      ],
+      "baseline_entry_sha256": "fc995ac16335dc691f4f7499b7d003d7beeffcd33254bb54f5307f9b0a16e323",
+      "definition_source": "kernel/identifiers.json#AuditEventId",
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "entities",
+      "id": "LifecycleEvent",
+      "change": "PROMOTE",
+      "owning_domain": "AuditLifecycle",
+      "definition": "Canonical record of a governed lifecycle transition.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "LifecycleEventId"
+        },
+        {
+          "family": "values",
+          "id": "LifecycleSnapshot"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "relationships",
+          "id": "LifecycleEventReferencesIdentity"
+        },
+        {
+          "family": "relationships",
+          "id": "LifecycleEventReferencesMembership"
+        },
+        {
+          "family": "relationships",
+          "id": "LifecycleEventReferencesAssignment"
+        },
+        {
+          "family": "relationships",
+          "id": "LifecycleEventReferencesDemoRun"
+        }
+      ],
+      "baseline_entry_sha256": "31df0bc889e28cb3e8103ad4d698b7ea5b609710b1980b07fa3dcd95ed762cc2",
+      "definition_source": "kernel/entities.json#LifecycleEvent",
+      "constraints": [
+        "Exact fields/cardinality/immutability are defined in authority-and-audit.md."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "identifiers",
+      "id": "LifecycleEventId",
+      "change": "PROMOTE",
+      "owning_domain": "AuditLifecycle",
+      "definition": "LifecycleEventId",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LifecycleEvent"
+        }
+      ],
+      "baseline_entry_sha256": "8364e897effc2640d0077aee42161a57704444bf6e094de99740ac36091ea703",
+      "definition_source": "kernel/identifiers.json#LifecycleEventId",
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "values",
+      "id": "Timestamp",
+      "change": "PROMOTE",
+      "owning_domain": "AuditLifecycle",
+      "definition": "Finite UTC point in time, serialized as ISO-8601 Z and stored as timestamptz; no lifecycle policy inferred.",
+      "requires": [],
+      "baseline_entry_sha256": "a937dbbeb22af7cb7d296e2d6d37350ae287aa021faf07ba54c42724b54cc08e",
+      "definition_source": "kernel/values.json#Timestamp",
+      "fields": {
+        "representation": "finite UTC timestamp"
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "states",
+      "id": "MembershipStatus",
+      "change": "PROMOTE",
+      "owning_domain": "Organization",
+      "definition": "MembershipStatus",
+      "requires": [],
+      "baseline_entry_sha256": "6308b766e051ce4c695f3251d52e37138d2c133c0500e3b66dda1ba901f75812",
+      "definition_source": "kernel/states.json#MembershipStatus",
+      "fields": {
+        "values": [
+          "ACTIVE",
+          "INACTIVE",
+          "REVOKED"
+        ]
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "state-machines",
+      "id": "MembershipStateMachine",
+      "change": "PROMOTE",
+      "owning_domain": "Organization",
+      "definition": "MembershipStateMachine",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "states",
+          "id": "MembershipStatus"
+        },
+        {
+          "family": "commands",
+          "id": "CreateMembership"
+        },
+        {
+          "family": "commands",
+          "id": "DeactivateMembership"
+        },
+        {
+          "family": "commands",
+          "id": "RevokeMembership"
+        },
+        {
+          "family": "events",
+          "id": "MembershipRevoked"
+        }
+      ],
+      "baseline_entry_sha256": "ec6f2414735090df3e2ddd221ef77f1305572b61cd6d9ba795cdf9f5b1cd7d46",
+      "definition_source": "kernel/state-machines.json#MembershipStateMachine",
+      "fields": {
+        "initial_state": "ACTIVE",
+        "creation_command": "CreateMembership",
+        "creation_event": null,
+        "transitions": [
+          {
+            "from": "ACTIVE",
+            "to": "INACTIVE",
+            "command": "DeactivateMembership",
+            "event": null
+          },
+          {
+            "from": "INACTIVE",
+            "to": "REVOKED",
+            "command": "RevokeMembership",
+            "event": "MembershipRevoked"
+          }
+        ],
+        "terminal_states": [
+          "REVOKED"
+        ]
+      },
+      "constraints": [
+        "Every creation/transition appends a LifecycleEvent in the same transaction; no candidate MembershipCreated/MembershipDeactivated business events are emitted.",
+        "Remove stale OQ-TEN-1 hold only after exact package approval and closure."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "LocationBelongsToOrganization",
+      "change": "PROMOTE",
+      "owning_domain": "Organization",
+      "definition": "LocationBelongsToOrganization",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Location"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "baseline_entry_sha256": "7c53508a9107b916423a0b7d57ac1f3d7b870b4a1e2b7b63427a8ef3f8df2f53",
+      "definition_source": "kernel/relationships.json#LocationBelongsToOrganization",
+      "fields": {
+        "from": "Location",
+        "to": "Organization",
+        "cardinality": "many-to-one"
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "MembershipLinksIdentityOrganization",
+      "change": "PROMOTE",
+      "owning_domain": "Organization",
+      "definition": "MembershipLinksIdentityOrganization",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "baseline_entry_sha256": "cae53b7ba930f221ad51f23193ebb3806a4b8b041fbf2c4176c9f2575a2a5e2d",
+      "definition_source": "kernel/relationships.json#MembershipLinksIdentityOrganization",
+      "fields": {
+        "from": "Membership",
+        "to": [
+          "Identity",
+          "Organization"
+        ],
+        "cardinality": "relationship-entity"
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "MembershipMayScopeLocation",
+      "change": "PROMOTE",
+      "owning_domain": "Organization",
+      "definition": "MembershipMayScopeLocation",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        }
+      ],
+      "baseline_entry_sha256": "cc9a56f1b93000008a3bd29a9d2a38b365ac3de6a0e5206ed4545ac659c5ab83",
+      "definition_source": "kernel/relationships.json#MembershipMayScopeLocation",
+      "fields": {
+        "from": "Membership",
+        "to": "Location",
+        "cardinality": "many-to-zero-or-one"
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "LifecycleEventReferencesIdentity",
+      "change": "PROMOTE",
+      "owning_domain": "AuditLifecycle",
+      "definition": "LifecycleEventReferencesIdentity",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LifecycleEvent"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        }
+      ],
+      "baseline_entry_sha256": "703479c9a0f4241e61312f87f5b14a416acf4459d4bc9fe076cdcdd5bac52de7",
+      "definition_source": "kernel/relationships.json#LifecycleEventReferencesIdentity",
+      "fields": {
+        "from": "LifecycleEvent",
+        "to": "Identity",
+        "cardinality": "many-to-one-when-identity-lifecycle"
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-001",
+      "change": "PROMOTE",
+      "owning_domain": "Governance",
+      "definition": "Every mutable authoritative fact has exactly one owning contract/domain and exactly one permitted writer; foreign domains request change through the owner boundary.",
+      "requires": [],
+      "baseline_entry_sha256": "03ae9de393778c172c015be8aa042dd8d4076c7cacbde2f72452f1e51861d913",
+      "definition_source": "kernel/invariants.json#INV-001",
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-002",
+      "change": "PROMOTE",
+      "owning_domain": "Authorization",
+      "definition": "Unknown, unavailable, ambiguous, or unregistered authority never becomes permission.",
+      "requires": [],
+      "baseline_entry_sha256": "d545efd071e5fbfedc20acb3c4ed171c9eb2b88b9d8e3ca27b83b064679d7b48",
+      "definition_source": "kernel/invariants.json#INV-002",
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-003",
+      "change": "PROMOTE",
+      "owning_domain": "Governance",
+      "definition": "A candidate semantic entry cannot authorize merged implementation and cannot become approved without explicit owner approval.",
+      "requires": [],
+      "baseline_entry_sha256": "7db0594861c9a7843277af68ecfda2d593a8563c134ba41c192bbad93ab3f057",
+      "definition_source": "kernel/invariants.json#INV-003",
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-004",
+      "change": "PROMOTE",
+      "owning_domain": "Governance",
+      "definition": "Canonical state values and lifecycle transitions are closed sets; an unregistered state or transition is invalid.",
+      "requires": [],
+      "baseline_entry_sha256": "f8c32e619d2b8943906d2c4092c66624591d9e5d83e52724fb12bf05a2e1bed0",
+      "definition_source": "kernel/invariants.json#INV-004",
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-006",
+      "change": "PROMOTE",
+      "owning_domain": "TransactionControl",
+      "definition": "The same idempotency key with the same payload yields the same final state/response; the same key with a different payload is rejected.",
+      "requires": [],
+      "baseline_entry_sha256": "0f548ad867203dff54e1a442943742852307fd6eade1d0506fb8bca006291dbc",
+      "definition_source": "kernel/invariants.json#INV-006",
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-007",
+      "change": "PROMOTE",
+      "owning_domain": "TransactionControl",
+      "definition": "Retry or concurrent replay cannot create duplicate authoritative effects.",
+      "requires": [],
+      "baseline_entry_sha256": "2f5fdc320656398c6adb5a2fe556e1348bcfb7b218f53bd70f356682378e1054",
+      "definition_source": "kernel/invariants.json#INV-007",
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-008",
+      "change": "PROMOTE",
+      "owning_domain": "TransactionControl",
+      "definition": "Operations required to succeed together commit atomically; no partial result is observable.",
+      "requires": [],
+      "baseline_entry_sha256": "1cd6e11a270dc44d11b575b7b0c87e1daa14b75a1e40c1f23aa0b7446b90d70d",
+      "definition_source": "kernel/invariants.json#INV-008",
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-009",
+      "change": "PROMOTE",
+      "owning_domain": "Organization",
+      "definition": "Protected reads and writes cannot cross authoritative organization/location scope.",
+      "requires": [],
+      "baseline_entry_sha256": "62da193acaf5b7788340fc915997be530712162b662402824ed2238d83b6ae9f",
+      "definition_source": "kernel/invariants.json#INV-009",
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-010",
+      "change": "PROMOTE",
+      "owning_domain": "Organization",
+      "definition": "Membership/scope authority is resolved from current authoritative records on each protected request; inactive/revoked membership confers no scope.",
+      "requires": [],
+      "baseline_entry_sha256": "788a1126d604d0814c570386f6c90d9a9205c42a9d97e1b3e907475506d250cd",
+      "definition_source": "kernel/invariants.json#INV-010",
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-011",
+      "change": "PROMOTE",
+      "owning_domain": "Authorization",
+      "definition": "Client-supplied IDs, headers, path/query/body values, frontend state, and JWT claims cannot establish tenant, target, or authorization authority.",
+      "requires": [],
+      "baseline_entry_sha256": "d3b80815882b462451fc1430ab4122aa558c25c0f736e01961f908bf08572d24",
+      "definition_source": "kernel/invariants.json#INV-011",
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-012",
+      "change": "PROMOTE",
+      "owning_domain": "Authorization",
+      "definition": "Every protected operation is registered exactly once to one capability; absence from the registry is denial.",
+      "requires": [],
+      "baseline_entry_sha256": "60ecbf4f295e40945750892a77e76948e8d74220ac2abda1f454fbe20783f35f",
+      "definition_source": "kernel/invariants.json#INV-012",
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-013",
+      "change": "PROMOTE",
+      "owning_domain": "Authorization",
+      "definition": "Entitlement may restrict capability effect but cannot create a capability and is read-only to authorization.",
+      "requires": [],
+      "baseline_entry_sha256": "ca4aa585fc19d242c04a0512bf2d1fa4f2d1316f91411350d6941b74cc001901",
+      "definition_source": "kernel/invariants.json#INV-013",
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-014",
+      "change": "PROMOTE",
+      "owning_domain": "Authorization",
+      "definition": "A denied protected mutation produces no state change or external side effect except explicitly permitted audit.",
+      "requires": [],
+      "baseline_entry_sha256": "e2cf873c4d3c6ef49db25b57d911aad76242a4dabb5997c8deda638818b27e8e",
+      "definition_source": "kernel/invariants.json#INV-014",
+      "constraints": [
+        "Preserve exact baseline assertion. Certification references do not activate certification; applicability is only admitted demo behavior."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-001",
+      "change": "PROMOTE",
+      "owning_domain": "Authorization",
+      "definition": "PrivilegedCommandGate",
+      "requires": [],
+      "baseline_entry_sha256": "f5058fd43d9f0abfca8af54ef938f30be7eb570f6a1af85df3d3c8e3731b352d",
+      "definition_source": "kernel/decision-tables.json#DT-001",
+      "constraints": [
+        "Retain baseline definition except exact DT002/DT008 corrections in decision-and-scope.md and contract-amendments.md.",
+        "Default deny. New demo branches are separately defined in DT011/DT012/DT013."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-002",
+      "change": "PROMOTE",
+      "owning_domain": "Authorization",
+      "definition": "AuthorizationOutcome",
+      "requires": [],
+      "baseline_entry_sha256": "f9ff989386b0018ed9ef92031a15e57b4e1831d0d40ad94d71cfd3178d0ef1e6",
+      "definition_source": "kernel/decision-tables.json#DT-002",
+      "constraints": [
+        "Retain baseline definition except exact DT002/DT008 corrections in decision-and-scope.md and contract-amendments.md.",
+        "Default deny. New demo branches are separately defined in DT011/DT012/DT013."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-005",
+      "change": "PROMOTE",
+      "owning_domain": "Governance",
+      "definition": "SemanticAdmission",
+      "requires": [],
+      "baseline_entry_sha256": "04363d84dcb9750a0187298ba6ad24636375f7bd03d07f9dd40eac38ebee3ca3",
+      "definition_source": "kernel/decision-tables.json#DT-005",
+      "constraints": [
+        "Retain baseline definition except exact DT002/DT008 corrections in decision-and-scope.md and contract-amendments.md.",
+        "Default deny. New demo branches are separately defined in DT011/DT012/DT013."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-006",
+      "change": "PROMOTE",
+      "owning_domain": "Governance",
+      "definition": "LifecycleTransitionGate",
+      "requires": [],
+      "baseline_entry_sha256": "8b782f1cbcc76bb5aab34340e0233301ad9431b5b2069ffd19152ff815d1165d",
+      "definition_source": "kernel/decision-tables.json#DT-006",
+      "constraints": [
+        "Retain baseline definition except exact DT002/DT008 corrections in decision-and-scope.md and contract-amendments.md.",
+        "Default deny. New demo branches are separately defined in DT011/DT012/DT013."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-007",
+      "change": "PROMOTE",
+      "owning_domain": "Governance",
+      "definition": "CrossDomainMutationGate",
+      "requires": [],
+      "baseline_entry_sha256": "3059158bb1ba03478fa281102aadb1e09097d5947f4d0472e83faaf8e95bc1a9",
+      "definition_source": "kernel/decision-tables.json#DT-007",
+      "constraints": [
+        "Retain baseline definition except exact DT002/DT008 corrections in decision-and-scope.md and contract-amendments.md.",
+        "Default deny. New demo branches are separately defined in DT011/DT012/DT013."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-008",
+      "change": "PROMOTE",
+      "owning_domain": "Authorization",
+      "definition": "ProtectedInputBoundary",
+      "requires": [],
+      "baseline_entry_sha256": "ee7517b37dc4968abeeb10548757fc3819171dcd387e2edc995e6c0ec94cea94",
+      "definition_source": "kernel/decision-tables.json#DT-008",
+      "constraints": [
+        "Retain baseline definition except exact DT002/DT008 corrections in decision-and-scope.md and contract-amendments.md.",
+        "Default deny. New demo branches are separately defined in DT011/DT012/DT013."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "entities",
+      "id": "DemoRun",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "One synthetic visitor visit with immutable owning organization/location and deadline; ACTIVE to CLOSED or EXPIRED only.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "DemoRunId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        },
+        {
+          "family": "states",
+          "id": "DemoRunStatus"
+        },
+        {
+          "family": "state-machines",
+          "id": "DemoRunStateMachine"
+        },
+        {
+          "family": "values",
+          "id": "DemoRunCloseReason"
+        },
+        {
+          "family": "values",
+          "id": "AdmissionNetworkPrefix"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "relationships",
+          "id": "DemoRunOwnsOrganization"
+        },
+        {
+          "family": "relationships",
+          "id": "DemoRunScopesLocation"
+        }
+      ],
+      "constraints": [
+        "Exact fields and limitations: demo-boundary.md / authority-and-audit.md."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "identifiers",
+      "id": "DemoRunId",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "Opaque typed identifier for DemoRun",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        }
+      ],
+      "fields": {
+        "value_type": "opaque-id"
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "entities",
+      "id": "DemoPersona",
+      "change": "ADD",
+      "owning_domain": "Identity",
+      "definition": "Immutable fictional learner or manager persona binding to exactly one Identity and one DemoRun, never a real-person account.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "DemoPersonaId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "identifiers",
+          "id": "DemoRunId"
+        },
+        {
+          "family": "values",
+          "id": "DemoPersonaKind"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "relationships",
+          "id": "DemoPersonaRepresentsIdentity"
+        },
+        {
+          "family": "relationships",
+          "id": "DemoPersonaBelongsToRun"
+        }
+      ],
+      "constraints": [
+        "Exact fields and limitations: demo-boundary.md / authority-and-audit.md."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "identifiers",
+      "id": "DemoPersonaId",
+      "change": "ADD",
+      "owning_domain": "Identity",
+      "definition": "Opaque typed identifier for DemoPersona",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        }
+      ],
+      "fields": {
+        "value_type": "opaque-id"
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "entities",
+      "id": "MembershipGrant",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "Immutable membership-to-bundle grant; effectiveness derives from current membership/identity/run, never a role string branch.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "MembershipGrantId"
+        },
+        {
+          "family": "identifiers",
+          "id": "MembershipId"
+        },
+        {
+          "family": "values",
+          "id": "CapabilityBundle"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "relationships",
+          "id": "MembershipGrantBelongsToMembership"
+        }
+      ],
+      "constraints": [
+        "Exact fields and limitations: demo-boundary.md / authority-and-audit.md."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "identifiers",
+      "id": "MembershipGrantId",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "Opaque typed identifier for MembershipGrant",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "MembershipGrant"
+        }
+      ],
+      "fields": {
+        "value_type": "opaque-id"
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "entities",
+      "id": "ReportingRelationship",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "Immutable direct manager-to-learner relationship at exact organization/location; narrows visibility only.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "ReportingRelationshipId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "relationships",
+          "id": "ReportingRelationshipHasManager"
+        },
+        {
+          "family": "relationships",
+          "id": "ReportingRelationshipHasLearner"
+        },
+        {
+          "family": "relationships",
+          "id": "ReportingRelationshipBelongsToOrganization"
+        },
+        {
+          "family": "relationships",
+          "id": "ReportingRelationshipScopesLocation"
+        }
+      ],
+      "constraints": [
+        "Exact fields and limitations: demo-boundary.md / authority-and-audit.md."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "identifiers",
+      "id": "ReportingRelationshipId",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "Opaque typed identifier for ReportingRelationship",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        }
+      ],
+      "fields": {
+        "value_type": "opaque-id"
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "entities",
+      "id": "CommandReceipt",
+      "change": "ADD",
+      "owning_domain": "TransactionControl",
+      "definition": "Immutable current-authority-scoped idempotency payload/response record for three admitted learning mutations; no credentials.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "CommandReceiptId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdempotencyKey"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "commands",
+          "id": "AssignContent"
+        },
+        {
+          "family": "commands",
+          "id": "StartLearningSession"
+        },
+        {
+          "family": "commands",
+          "id": "RecordProgressEvent"
+        },
+        {
+          "family": "values",
+          "id": "CommandActor"
+        },
+        {
+          "family": "relationships",
+          "id": "CommandReceiptBelongsToActor"
+        },
+        {
+          "family": "relationships",
+          "id": "CommandReceiptBelongsToOrganization"
+        },
+        {
+          "family": "relationships",
+          "id": "CommandReceiptScopesLocation"
+        }
+      ],
+      "constraints": [
+        "Exact fields and limitations: demo-boundary.md / authority-and-audit.md."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "identifiers",
+      "id": "CommandReceiptId",
+      "change": "ADD",
+      "owning_domain": "TransactionControl",
+      "definition": "Opaque typed identifier for CommandReceipt",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        }
+      ],
+      "fields": {
+        "value_type": "opaque-id"
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "entities",
+      "id": "DemoExecutionPrincipal",
+      "change": "ADD",
+      "owning_domain": "Authorization",
+      "definition": "One of two immutable named deterministic demo-only execution-principal configuration records; no browser-supplied principal.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "DemoExecutionPrincipalId"
+        },
+        {
+          "family": "capabilities",
+          "id": "organization.demo.begin"
+        },
+        {
+          "family": "capabilities",
+          "id": "organization.demo.close"
+        }
+      ],
+      "constraints": [
+        "Exact fields and limitations: demo-boundary.md / authority-and-audit.md."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "identifiers",
+      "id": "DemoExecutionPrincipalId",
+      "change": "ADD",
+      "owning_domain": "Authorization",
+      "definition": "Opaque typed identifier for DemoExecutionPrincipal",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoExecutionPrincipal"
+        }
+      ],
+      "fields": {
+        "value_type": "closed-name",
+        "allowed_values": [
+          "automation:demo-admission-v1",
+          "automation:demo-expiry-v1"
+        ]
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "states",
+      "id": "DemoRunStatus",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "Closed lifecycle state set for a synthetic visit.",
+      "requires": [],
+      "fields": {
+        "values": [
+          "ACTIVE",
+          "CLOSED",
+          "EXPIRED"
+        ]
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "values",
+      "id": "DemoPersonaKind",
+      "change": "ADD",
+      "owning_domain": "Identity",
+      "definition": "Exactly one fixed synthetic slot within a visit, not an arbitrary role grant.",
+      "requires": [],
+      "fields": {
+        "values": [
+          "LEARNER",
+          "MANAGER"
+        ]
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "values",
+      "id": "DemoOrganizationClass",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "Immutable synthetic-only organization classification; no normal customer construction enabled.",
+      "requires": [],
+      "fields": {
+        "values": [
+          "DEMO_ONLY"
+        ]
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "values",
+      "id": "DemoRunCloseReason",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "Reason for an immutable terminal demo state.",
+      "requires": [],
+      "fields": {
+        "values": [
+          "USER_EXIT",
+          "EXPIRED"
+        ]
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "values",
+      "id": "AdmissionNetworkPrefix",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "Trusted-peer reduced-resolution /24 IPv4 or /56 IPv6 network identifier, or SHARED_UNKNOWN; not anonymous and never authority.",
+      "requires": [],
+      "fields": {
+        "retention": "RETAIN_NO_AUTOMATED_DELETE",
+        "purpose": "bounded admission counts only"
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "values",
+      "id": "CapabilityBundle",
+      "change": "ADD",
+      "owning_domain": "Authorization",
+      "definition": "Immutable named capability set from the exact C14 matrix; interpretation lives in Authorization.",
+      "requires": [
+        {
+          "family": "values",
+          "id": "Capability"
+        }
+      ],
+      "fields": {
+        "values": [
+          "self",
+          "learner",
+          "observer",
+          "manager",
+          "org_admin",
+          "demo_visitor"
+        ],
+        "self_grantable": false,
+        "demo_visitor": [
+          "identity.demo.persona.switch",
+          "organization.demo.close"
+        ]
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "values",
+      "id": "DemoAvailability",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "Database-current read projection that can only restrict demo capability effect.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "states",
+          "id": "DemoRunStatus"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        }
+      ],
+      "fields": {
+        "inputs": [
+          "status",
+          "immutable expiresAt",
+          "current server time",
+          "operation allowlist"
+        ],
+        "allow": "ACTIVE and now < expiresAt and operation allowed",
+        "missing": "DENY"
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "values",
+      "id": "AuditActor",
+      "change": "ADD",
+      "owning_domain": "AuditLifecycle",
+      "definition": "Finite actor attribution union, including non-authoritative unauthenticated denial metadata.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "DemoExecutionPrincipal"
+        }
+      ],
+      "fields": {
+        "variants": [
+          "HumanActor(identityId)",
+          "AutomationActor(executionPrincipalId)",
+          "UNAUTHENTICATED_DENIAL(ipPrefix|null)"
+        ]
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "values",
+      "id": "AuditTarget",
+      "change": "ADD",
+      "owning_domain": "AuditLifecycle",
+      "definition": "Finite typed target union; no arbitrary JSON or secret-bearing target.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        },
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "entities",
+          "id": "MembershipGrant"
+        },
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        }
+      ],
+      "fields": {
+        "variants": [
+          "Identity",
+          "ApplicationSession",
+          "Organization",
+          "Location",
+          "Membership",
+          "MembershipGrant",
+          "ReportingRelationship",
+          "DemoRun",
+          "ContentPack(version,digest)",
+          "Assignment",
+          "LearningSession",
+          "UNRESOLVED"
+        ]
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "values",
+      "id": "AuditResult",
+      "change": "ADD",
+      "owning_domain": "AuditLifecycle",
+      "definition": "Finite outcome representation, not evidence of successful work by itself.",
+      "requires": [],
+      "fields": {
+        "values": [
+          "SUCCEEDED",
+          "DENIED",
+          "OVERFLOW"
+        ]
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "values",
+      "id": "LifecycleSnapshot",
+      "change": "ADD",
+      "owning_domain": "AuditLifecycle",
+      "definition": "Finite full-state replay payload for one owner aggregate, version1.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        }
+      ],
+      "fields": {
+        "variants": [
+          "Identity",
+          "Membership",
+          "Assignment",
+          "DemoRun"
+        ],
+        "schema_version": 1,
+        "definition": "authority-and-audit.md"
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "DemoRunOwnsOrganization",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "DemoRunOwnsOrganization",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "fields": {
+        "from": "DemoRun",
+        "to": "Organization",
+        "cardinality": "one-to-one"
+      },
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "DemoRunScopesLocation",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "DemoRunScopesLocation",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        }
+      ],
+      "fields": {
+        "from": "DemoRun",
+        "to": "Location",
+        "cardinality": "one-to-one"
+      },
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "DemoPersonaRepresentsIdentity",
+      "change": "ADD",
+      "owning_domain": "Identity",
+      "definition": "DemoPersonaRepresentsIdentity",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        }
+      ],
+      "fields": {
+        "from": "DemoPersona",
+        "to": "Identity",
+        "cardinality": "one-to-one"
+      },
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "DemoPersonaBelongsToRun",
+      "change": "ADD",
+      "owning_domain": "Identity",
+      "definition": "DemoPersona belongs to Run",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        }
+      ],
+      "fields": {
+        "from": "DemoPersona",
+        "to": "DemoRun",
+        "cardinality": "two-to-one with unique persona kind"
+      },
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "MembershipGrantBelongsToMembership",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "MembershipGrant belongs to Membership",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "MembershipGrant"
+        },
+        {
+          "family": "entities",
+          "id": "Membership"
+        }
+      ],
+      "fields": {
+        "from": "MembershipGrant",
+        "to": "Membership",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "ReportingRelationshipHasManager",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "ReportingRelationshipHasManager",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        }
+      ],
+      "fields": {
+        "from": "ReportingRelationship",
+        "to": "Identity",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "ReportingRelationshipHasLearner",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "ReportingRelationshipHasLearner",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        }
+      ],
+      "fields": {
+        "from": "ReportingRelationship",
+        "to": "Identity",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "ReportingRelationshipBelongsToOrganization",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "ReportingRelationship belongs to Organization",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "fields": {
+        "from": "ReportingRelationship",
+        "to": "Organization",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "ReportingRelationshipScopesLocation",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "ReportingRelationshipScopesLocation",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        }
+      ],
+      "fields": {
+        "from": "ReportingRelationship",
+        "to": "Location",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "AuditEventBelongsToOrganization",
+      "change": "ADD",
+      "owning_domain": "AuditLifecycle",
+      "definition": "AuditEvent belongs to Organization",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "AuditEvent"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "fields": {
+        "from": "AuditEvent",
+        "to": "Organization",
+        "cardinality": "many-to-zero-or-one; successful tenant mutation requires one"
+      },
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "AuditEventMayScopeLocation",
+      "change": "ADD",
+      "owning_domain": "AuditLifecycle",
+      "definition": "AuditEventMayScopeLocation",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "AuditEvent"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        }
+      ],
+      "fields": {
+        "from": "AuditEvent",
+        "to": "Location",
+        "cardinality": "many-to-zero-or-one"
+      },
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "LifecycleEventReferencesMembership",
+      "change": "ADD",
+      "owning_domain": "AuditLifecycle",
+      "definition": "LifecycleEvent references Membership",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LifecycleEvent"
+        },
+        {
+          "family": "entities",
+          "id": "Membership"
+        }
+      ],
+      "fields": {
+        "from": "LifecycleEvent",
+        "to": "Membership",
+        "cardinality": "many-to-one-when-membership"
+      },
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "LifecycleEventReferencesAssignment",
+      "change": "ADD",
+      "owning_domain": "AuditLifecycle",
+      "definition": "LifecycleEvent references Assignment",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LifecycleEvent"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        }
+      ],
+      "fields": {
+        "from": "LifecycleEvent",
+        "to": "Assignment",
+        "cardinality": "many-to-one-when-assignment"
+      },
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "LifecycleEventReferencesDemoRun",
+      "change": "ADD",
+      "owning_domain": "AuditLifecycle",
+      "definition": "LifecycleEvent references DemoRun",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LifecycleEvent"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        }
+      ],
+      "fields": {
+        "from": "LifecycleEvent",
+        "to": "DemoRun",
+        "cardinality": "many-to-one-when-demo-run"
+      },
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "CommandReceiptBelongsToActor",
+      "change": "ADD",
+      "owning_domain": "TransactionControl",
+      "definition": "Receipt belongs to one finite typed HumanActor or admitted AutomationActor; actor type is part of uniqueness.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "DemoExecutionPrincipal"
+        },
+        {
+          "family": "values",
+          "id": "CommandActor"
+        }
+      ],
+      "fields": {
+        "from": "CommandReceipt",
+        "to": [
+          "Identity",
+          "DemoExecutionPrincipal"
+        ],
+        "cardinality": "many-to-exactly-one tagged actor"
+      },
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "CommandReceiptBelongsToOrganization",
+      "change": "ADD",
+      "owning_domain": "TransactionControl",
+      "definition": "CommandReceipt belongs to Organization",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "fields": {
+        "from": "CommandReceipt",
+        "to": "Organization",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "CommandReceiptScopesLocation",
+      "change": "ADD",
+      "owning_domain": "TransactionControl",
+      "definition": "CommandReceiptScopesLocation",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        }
+      ],
+      "fields": {
+        "from": "CommandReceipt",
+        "to": "Location",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No authority grant. Same-run/same-organization constraints apply. Exact endpoints are immutable."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "AuditEventHasActor",
+      "change": "ADD",
+      "owning_domain": "AuditLifecycle",
+      "definition": "Audit actor is one declared finite attribution variant.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "AuditEvent"
+        },
+        {
+          "family": "values",
+          "id": "AuditActor"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "DemoExecutionPrincipal"
+        }
+      ],
+      "fields": {
+        "from": "AuditEvent",
+        "to": [
+          "Identity",
+          "DemoExecutionPrincipal"
+        ],
+        "cardinality": "one tagged target or explicit unresolved denial with no referenced entity"
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "AuditEventTargetsRecord",
+      "change": "ADD",
+      "owning_domain": "AuditLifecycle",
+      "definition": "Audit target is one finite typed record variant or unresolved denial.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "AuditEvent"
+        },
+        {
+          "family": "values",
+          "id": "AuditTarget"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        },
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "entities",
+          "id": "MembershipGrant"
+        },
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        }
+      ],
+      "fields": {
+        "from": "AuditEvent",
+        "to": [
+          "Identity",
+          "ApplicationSession",
+          "Organization",
+          "Location",
+          "Membership",
+          "MembershipGrant",
+          "ReportingRelationship",
+          "DemoRun",
+          "ContentPack",
+          "Assignment",
+          "LearningSession"
+        ],
+        "cardinality": "one tagged target or explicit unresolved denial with no referenced entity"
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "commands",
+      "id": "BeginDemoRun",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "Exact command definition in demo-boundary.md, section Five new commands.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        },
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "entities",
+          "id": "MembershipGrant"
+        },
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        },
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        }
+      ],
+      "fields": {
+        "capability": "organization.demo.begin",
+        "definition_source": "demo-boundary.md"
+      },
+      "constraints": [
+        "No external/shared activation, no foreign repository writes, no customer or deletion authority."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "capabilities",
+      "id": "organization.demo.begin",
+      "change": "ADD",
+      "owning_domain": "Authorization",
+      "definition": "Canonical action constant for BeginDemoRun",
+      "requires": [
+        {
+          "family": "values",
+          "id": "Capability"
+        },
+        {
+          "family": "identifiers",
+          "id": "CapabilityId"
+        },
+        {
+          "family": "commands",
+          "id": "BeginDemoRun"
+        }
+      ],
+      "fields": {
+        "identifier": "CapabilityId",
+        "registration_authority": "C01",
+        "policy_authority": "C14",
+        "internal_no_grant": false
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "commands",
+      "id": "CreateDemoPersona",
+      "change": "ADD",
+      "owning_domain": "Identity",
+      "definition": "Exact command definition in demo-boundary.md, section Five new commands.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        }
+      ],
+      "fields": {
+        "capability": "identity.demo.persona.create",
+        "definition_source": "demo-boundary.md"
+      },
+      "constraints": [
+        "No external/shared activation, no foreign repository writes, no customer or deletion authority."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "capabilities",
+      "id": "identity.demo.persona.create",
+      "change": "ADD",
+      "owning_domain": "Authorization",
+      "definition": "Canonical action constant for CreateDemoPersona",
+      "requires": [
+        {
+          "family": "values",
+          "id": "Capability"
+        },
+        {
+          "family": "identifiers",
+          "id": "CapabilityId"
+        },
+        {
+          "family": "commands",
+          "id": "CreateDemoPersona"
+        }
+      ],
+      "fields": {
+        "identifier": "CapabilityId",
+        "registration_authority": "C01",
+        "policy_authority": "C14",
+        "internal_no_grant": true
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "commands",
+      "id": "SwitchDemoPersona",
+      "change": "ADD",
+      "owning_domain": "Identity",
+      "definition": "Exact command definition in demo-boundary.md, section Five new commands.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        }
+      ],
+      "fields": {
+        "capability": "identity.demo.persona.switch",
+        "definition_source": "demo-boundary.md"
+      },
+      "constraints": [
+        "No external/shared activation, no foreign repository writes, no customer or deletion authority.",
+        "At most100 lifetime ApplicationSessions per run, including initial/revoked/expired records; authoritative Identity count under run lock. At cap409 PRECONDITION_FAILED without mutation; close remains allowed."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "capabilities",
+      "id": "identity.demo.persona.switch",
+      "change": "ADD",
+      "owning_domain": "Authorization",
+      "definition": "Canonical action constant for SwitchDemoPersona",
+      "requires": [
+        {
+          "family": "values",
+          "id": "Capability"
+        },
+        {
+          "family": "identifiers",
+          "id": "CapabilityId"
+        },
+        {
+          "family": "commands",
+          "id": "SwitchDemoPersona"
+        }
+      ],
+      "fields": {
+        "identifier": "CapabilityId",
+        "registration_authority": "C01",
+        "policy_authority": "C14",
+        "internal_no_grant": false
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "commands",
+      "id": "CloseDemoRun",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "Exact command definition in demo-boundary.md, section Five new commands.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        }
+      ],
+      "fields": {
+        "capability": "organization.demo.close",
+        "definition_source": "demo-boundary.md"
+      },
+      "constraints": [
+        "No external/shared activation, no foreign repository writes, no customer or deletion authority."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "capabilities",
+      "id": "organization.demo.close",
+      "change": "ADD",
+      "owning_domain": "Authorization",
+      "definition": "Canonical action constant for CloseDemoRun",
+      "requires": [
+        {
+          "family": "values",
+          "id": "Capability"
+        },
+        {
+          "family": "identifiers",
+          "id": "CapabilityId"
+        },
+        {
+          "family": "commands",
+          "id": "CloseDemoRun"
+        }
+      ],
+      "fields": {
+        "identifier": "CapabilityId",
+        "registration_authority": "C01",
+        "policy_authority": "C14",
+        "internal_no_grant": false
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "commands",
+      "id": "RevokeDemoSessions",
+      "change": "ADD",
+      "owning_domain": "Identity",
+      "definition": "Exact command definition in demo-boundary.md, section Five new commands.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        }
+      ],
+      "fields": {
+        "capability": "identity.demo.sessions.revoke",
+        "definition_source": "demo-boundary.md"
+      },
+      "constraints": [
+        "No external/shared activation, no foreign repository writes, no customer or deletion authority."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "capabilities",
+      "id": "identity.demo.sessions.revoke",
+      "change": "ADD",
+      "owning_domain": "Authorization",
+      "definition": "Canonical action constant for RevokeDemoSessions",
+      "requires": [
+        {
+          "family": "values",
+          "id": "Capability"
+        },
+        {
+          "family": "identifiers",
+          "id": "CapabilityId"
+        },
+        {
+          "family": "commands",
+          "id": "RevokeDemoSessions"
+        }
+      ],
+      "fields": {
+        "identifier": "CapabilityId",
+        "registration_authority": "C01",
+        "policy_authority": "C14",
+        "internal_no_grant": true
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "state-machines",
+      "id": "DemoRunStateMachine",
+      "change": "ADD",
+      "owning_domain": "Organization",
+      "definition": "Visit lifecycle is ACTIVE to CLOSED or EXPIRED; no reopening.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "states",
+          "id": "DemoRunStatus"
+        },
+        {
+          "family": "commands",
+          "id": "BeginDemoRun"
+        },
+        {
+          "family": "commands",
+          "id": "CloseDemoRun"
+        }
+      ],
+      "fields": {
+        "initial_state": "ACTIVE",
+        "creation_command": "BeginDemoRun",
+        "transitions": [
+          {
+            "from": "ACTIVE",
+            "to": "CLOSED",
+            "command": "CloseDemoRun",
+            "condition": "authorized visitor exit"
+          },
+          {
+            "from": "ACTIVE",
+            "to": "EXPIRED",
+            "command": "CloseDemoRun",
+            "condition": "named expiry principal and now >= immutable deadline"
+          }
+        ],
+        "terminal_states": [
+          "CLOSED",
+          "EXPIRED"
+        ],
+        "business_events": []
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-011",
+      "change": "ADD",
+      "owning_domain": "Authorization",
+      "definition": "DemoAdmissionGate",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "values",
+          "id": "DemoAvailability"
+        }
+      ],
+      "fields": {
+        "inputs": [
+          "exactOrigin",
+          "namedAdmissionPrincipal",
+          "freshServerMintedScope",
+          "noLivePresentingSession",
+          "rateWithinLimit",
+          "capacityWithinLimit",
+          "allDependencyProofs"
+        ],
+        "rules": [
+          {
+            "when": "any input missing,false,unknown,contradictory",
+            "outcome": "DENY"
+          },
+          {
+            "when": "all inputs true",
+            "outcome": "ALLOW only existing governed command path"
+          }
+        ],
+        "default_outcome": "DENY"
+      },
+      "constraints": [
+        "Explicit pre-run allocation and exact expired-record close policies are distinct; no generic availability bypass."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-012",
+      "change": "ADD",
+      "owning_domain": "Authorization",
+      "definition": "DemoPersonaTransitionGate",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "values",
+          "id": "DemoAvailability"
+        }
+      ],
+      "fields": {
+        "inputs": [
+          "validSession",
+          "liveRun",
+          "matchingTuple",
+          "demoVisitorCapability",
+          "fixedCounterpart",
+          "runLock",
+          "sessionRevalidation"
+        ],
+        "rules": [
+          {
+            "when": "any input missing,false,unknown,contradictory",
+            "outcome": "DENY"
+          },
+          {
+            "when": "all inputs true",
+            "outcome": "ALLOW only existing governed command path"
+          }
+        ],
+        "default_outcome": "DENY"
+      },
+      "constraints": [
+        "Explicit pre-run allocation and exact expired-record close policies are distinct; no generic availability bypass."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-013",
+      "change": "ADD",
+      "owning_domain": "Authorization",
+      "definition": "DemoRunAvailabilityGate",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "values",
+          "id": "DemoAvailability"
+        }
+      ],
+      "fields": {
+        "inputs": [
+          "personaRunBinding",
+          "ACTIVEstatus",
+          "serverNowBeforeDeadline",
+          "fixedOperationAllowlist"
+        ],
+        "rules": [
+          {
+            "when": "any input missing,false,unknown,contradictory",
+            "outcome": "DENY"
+          },
+          {
+            "when": "all inputs true",
+            "outcome": "ALLOW only existing governed command path"
+          }
+        ],
+        "default_outcome": "DENY"
+      },
+      "constraints": [
+        "Explicit pre-run allocation and exact expired-record close policies are distinct; no generic availability bypass."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "entities",
+      "id": "Identity",
+      "change": "REVISE",
+      "owning_domain": "Identity",
+      "definition": "Persistent representation of one human user or one explicitly constrained fictional DemoPersona. Synthetic personas never represent or merge with the visitor.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        }
+      ],
+      "baseline_entry_sha256": "699b4c85806c5280da9555c4362439823b0dc9408487300ea14f30beb7f092c1",
+      "definition_source": "kernel/entities.json#Identity",
+      "constraints": [
+        "Normal human uniqueness/credential rules remain unchanged. DemoPersona classification has immutable one-to-one binding."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "entities",
+      "id": "Organization",
+      "change": "REVISE",
+      "owning_domain": "Organization",
+      "definition": "Primary tenant/security boundary, including explicitly DEMO_ONLY synthetic organizations; no customer provisioning authorized.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        }
+      ],
+      "baseline_entry_sha256": "8723bf22fb8815529b0ec48cffba4f5781b46f21aef1c2c07397569df68303ed",
+      "definition_source": "kernel/entities.json#Organization",
+      "constraints": [
+        "Synthetic classification is immutable, bound one-to-one to DemoRun."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "commands",
+      "id": "CreateApplicationSession",
+      "change": "REVISE",
+      "owning_domain": "Identity",
+      "definition": "Creates the single canonical ApplicationSession after ordinary authentication or exact BeginDemoRun/SwitchDemoPersona proof.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        }
+      ],
+      "baseline_entry_sha256": "7e65bc0c9ff562ef3ffdb8e7eda6d06fe22dff454b20c3884b76748e7bdef8ad",
+      "definition_source": "kernel/commands.json#CreateApplicationSession",
+      "constraints": [
+        "Same existing random cookie/verifier/lifecycle; new allowed callers only, no alternate authentication token."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "commands",
+      "id": "CreateMembership",
+      "change": "REVISE",
+      "owning_domain": "Organization",
+      "definition": "Creates a membership linking an identity to an organization.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "baseline_entry_sha256": "1f837f226da9a6fe34e32b9a4ac5c3061dfe7485bc489ff42dbad53bd39d4920",
+      "definition_source": "kernel/commands.json#CreateMembership",
+      "constraints": [
+        "Existing callers preserved; BeginDemoRun permitted only for its fresh-run fixed persona scopes."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "values",
+      "id": "ContentVersion",
+      "change": "PROMOTE",
+      "owning_domain": "Content",
+      "definition": "Immutable exact version and digest of one ContentPack, never a latest/range selector.",
+      "requires": [],
+      "fields": {
+        "version": "strict SemVer 2.0 string, 1..38 UTF-8 bytes",
+        "digest": "sha256: followed by exactly 64 lowercase hexadecimal digits"
+      },
+      "constraints": [
+        "Every reference also binds ContentPackId; the owning pack binds exactly one organization.",
+        "Exact string equality includes prerelease and build metadata; SemVer precedence is not identity.",
+        "Digest is SHA-256 of canonical schema payload bytes, not of arbitrary JSON serialization."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "6724a26cd816f197672a35aefde8133c9121cbe17bc1547bad97f6a8c86fdbb9"
+    },
+    {
+      "family": "entities",
+      "id": "ContentPack",
+      "change": "REVISE",
+      "owning_domain": "Content",
+      "definition": "A stable organization-owned content identity with create-only immutable published versions. This package permits only synthetic copies in a per-run demo organization; it selects no customer catalog policy.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        }
+      ],
+      "fields": {
+        "id": "ContentPackId",
+        "organizationId": "OrganizationId, non-null immutable",
+        "versions": "nonempty append-only collection of exact version payloads",
+        "versionPayload": "canonical schema 1.0.0 described in canonical_content_schema"
+      },
+      "constraints": [
+        "No persisted draft, retired, approved-by-customer, or mutable publication state.",
+        "PublishContentPack validates and creates a previously absent immutable version; a new version never changes an existing one.",
+        "A parent identity record plus immutable version rows may represent this one entity; no new ContentPackVersion entity or identifier is introduced."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "62d3e1b27cb163865c5879f9259392d1a2ea3c024404280fd8bd78930bbeb243"
+    },
+    {
+      "family": "entities",
+      "id": "ContentBlock",
+      "change": "PROMOTE",
+      "owning_domain": "Content",
+      "definition": "Addressable ordered required instructional step inside an exact ContentPack version.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "ContentBlockId"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "fields": {
+        "id": "ContentBlockId, unique within exact content version",
+        "kind": "literal SINGLE_CHOICE",
+        "instruction": "plain text, 1..4000 Unicode scalar values",
+        "prompt": "plain text, 1..1000 Unicode scalar values",
+        "options": "ordered array of 2..5 distinct nonempty plain-text strings, each <=500 Unicode scalar values",
+        "expectedOptionIndex": "integer, 0 <= value < options.length",
+        "feedback": "ordered array of nonempty plain-text strings, exactly one per option, each <=2000 Unicode scalar values"
+      },
+      "constraints": [
+        "Array position supplies required order; no optional/skip/branching steps.",
+        "No HTML, URLs, scripts, media, embedded customer claims, scores or dynamic/provider content.",
+        "All block identities resolve only within their exact pack/version; index alone is never content identity."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "7199caa9adaee73cf9e116a8fc9f6fb5aae543256105de5a2738011d179a3b2c"
+    },
+    {
+      "family": "identifiers",
+      "id": "ContentBlockId",
+      "change": "PROMOTE",
+      "owning_domain": "Content",
+      "definition": "Opaque identifier of a ContentBlock, resolved within an exact immutable ContentPack version.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        }
+      ],
+      "fields": {
+        "valueType": "opaque-id"
+      },
+      "constraints": [
+        "Does not confer access; authoritative lookup requires pack identity/version/digest."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "4d02c8131bc738c93f24722cfd0087958eb9e072e19c5cfc831dfa1ca7bacbb6"
+    },
+    {
+      "family": "relationships",
+      "id": "ContentPackContainsContentBlock",
+      "change": "PROMOTE",
+      "owning_domain": "Content",
+      "definition": "Each published exact pack version contains exactly 3 uniquely identified ordered ContentBlocks.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "fields": {
+        "from": "ContentPack",
+        "to": "ContentBlock",
+        "cardinality": "one-to-many"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "d72aac22d2807f78eed0ab01a4a8774f95e7a814fb67783908f16601207199d9"
+    },
+    {
+      "family": "relationships",
+      "id": "ContentPackBelongsToOrganization",
+      "change": "ADD",
+      "owning_domain": "Content",
+      "definition": "Every ContentPack belongs to exactly one immutable organization; synthetic demo publication and reads never cross it.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "fields": {
+        "from": "ContentPack",
+        "to": "Organization",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "values",
+      "id": "ContentResponseEvaluation",
+      "change": "ADD",
+      "owning_domain": "Content",
+      "definition": "Versioned deterministic per-response feedback from the Content teaching engine; not a score, competence certification, or progress aggregate.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "ContentBlockId"
+        }
+      ],
+      "fields": {
+        "engineVersion": "strict SemVer, exactly 1.0.0 in this package",
+        "blockId": "ContentBlockId",
+        "selectedOptionIndex": "integer in the authored option range",
+        "matchesExpectedChoice": "boolean computed by server comparison with authored expectedOptionIndex",
+        "feedback": "exact authored feedback[selectedOptionIndex]"
+      },
+      "constraints": [
+        "Client may submit only blockId and selectedOptionIndex, never matchesExpectedChoice, feedback or engineVersion.",
+        "Engine(pack exact version, input, fixed seed 0) returns byte-identical canonical output; no randomness is used.",
+        "No pass/fail threshold, numeric score, accuracy aggregate, XP, rank, streak, mastery or certification inference."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "states",
+      "id": "AssignmentStatus",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "Eligibility state for the immutable first-slice Assignment.",
+      "requires": [],
+      "fields": {
+        "values": [
+          "ACTIVE"
+        ]
+      },
+      "constraints": [
+        "ACTIVE denotes assignment availability, not learner completion.",
+        "No inactive, revoked, completed, expired or reassigned Assignment state is admitted."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "state-machines",
+      "id": "AssignmentStateMachine",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "Create-only Assignment lifecycle: AssignContent creates ACTIVE and no transition exists.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "states",
+          "id": "AssignmentStatus"
+        },
+        {
+          "family": "commands",
+          "id": "AssignContent"
+        }
+      ],
+      "fields": {
+        "entity": "Assignment",
+        "state_set": "AssignmentStatus",
+        "initial_state": "ACTIVE",
+        "creation_command": "AssignContent",
+        "allowed_operations": [],
+        "transitions": [],
+        "terminal_states": []
+      },
+      "constraints": [
+        "No lifecycle transition or business event emission is implied.",
+        "Loss of current membership/grants denies use without rewriting historical Assignment."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "entities",
+      "id": "Assignment",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "One scoped assignable attempt of one exact published content version for one learner; repeated intentional assignments have different identities.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "AssignmentId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "states",
+          "id": "AssignmentStatus"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        }
+      ],
+      "fields": {
+        "id": "AssignmentId",
+        "identityId": "IdentityId, learner",
+        "organizationId": "OrganizationId, non-null",
+        "locationId": "LocationId, non-null and owned by organizationId",
+        "contentPackId": "ContentPackId",
+        "contentVersion": "ContentVersion",
+        "status": "AssignmentStatus = ACTIVE",
+        "assignedAt": "Timestamp, server-generated"
+      },
+      "constraints": [
+        "All fields immutable after creation. Issuing actor and request identity live in the atomic required audit/lifecycle records, not a duplicate assignment actor field.",
+        "No uniqueness constraint on (learner, scope, content version): a fresh deliberate AssignContent key creates a distinct AssignmentId. At most 10 Assignments total per DemoRun (initial plus 9 manager-created); quota rejection is PRECONDITION_FAILED before any effect.",
+        "One Assignment has at most one LearningSession for this demo slice; assigning again creates the next attempt.",
+        "A granted assignment does not itself grant Membership, capability, or content ownership."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "ad85affcf6b86cde544e0544a4e81183fac47177bcca4c486899846172a5b17d"
+    },
+    {
+      "family": "relationships",
+      "id": "AssignmentBelongsToOrganization",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "Each Assignment has exactly one organization matching the owning content organization and resolved learner membership.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
+      ],
+      "fields": {
+        "from": "Assignment",
+        "to": "Organization",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "AssignmentScopesLocation",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "Each Assignment has exactly one non-null location in its organization; current actor and learner authority must include that location.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        }
+      ],
+      "fields": {
+        "from": "Assignment",
+        "to": "Location",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "AssignmentReferencesContentVersion",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "Each Assignment pins exact ContentVersion and ContentPackId forever.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        }
+      ],
+      "fields": {
+        "from": "Assignment",
+        "to": "ContentPack",
+        "cardinality": "many-to-one",
+        "binding": "exact immutable ContentVersion value (version,digest) within the referenced ContentPack"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner.",
+        "Endpoint is ContentPack entity, not the ContentVersion value object; composite reference binds its immutable version value."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "LearningSessionUsesAssignment",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "Every LearningSession references exactly one Assignment, and an Assignment has zero or one session in this admitted demo slice.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        }
+      ],
+      "fields": {
+        "from": "LearningSession",
+        "to": "Assignment",
+        "cardinality": "one-to-one"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "0095e83e17ac6fe95594ea3d596213cb5cb5b14014e7c8d3bc50628dbc8017d9"
+    },
+    {
+      "family": "entities",
+      "id": "LearningSession",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "One persisted bounded learner attempt for one immutable Assignment; session identity and scope derive from that Assignment.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "LearningSessionId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "identifiers",
+          "id": "AssignmentId"
+        },
+        {
+          "family": "states",
+          "id": "LearningSessionStatus"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        }
+      ],
+      "fields": {
+        "id": "LearningSessionId",
+        "identityId": "IdentityId, equal to assignment learner",
+        "assignmentId": "AssignmentId, non-null unique",
+        "status": "LearningSessionStatus",
+        "startedAt": "Timestamp, immutable server time",
+        "completedAt": "Timestamp|null; null iff ACTIVE"
+      },
+      "constraints": [
+        "Existing ACTIVE -> COMPLETED state machine is preserved, with exactly one terminal transition.",
+        "Organization, location and content version are obtained through immutable Assignment, not duplicated ungoverned scope columns.",
+        "A composite assignment/learner reference prevents a session from pointing at another learner assignment.",
+        "Complete only after one accepted persisted response exists for every ordered required block; match correctness is not a completion gate."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "961f010a771b627f9de9d86e3b6615c4bbcb55d8b67982d86ca8151b1d73cb73"
+    },
+    {
+      "family": "entities",
+      "id": "ProgressEvent",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "Append-only accepted learner response plus server evaluation bound to an exact LearningSession and assigned ContentVersion.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "ProgressEventId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LearningSessionId"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "values",
+          "id": "ContentResponseEvaluation"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        }
+      ],
+      "fields": {
+        "id": "ProgressEventId",
+        "learningSessionId": "LearningSessionId",
+        "contentPackId": "ContentPackId, resolved from session Assignment",
+        "contentVersion": "ContentVersion, resolved from session Assignment",
+        "eventSchemaVersion": "literal 1.0.0",
+        "sequence": "integer 1..3, equal to required block position+1",
+        "evaluation": "ContentResponseEvaluation",
+        "recordedAt": "Timestamp, server time"
+      },
+      "constraints": [
+        "No event lifecycle/status field exists; absence is an explicit P08 decision.",
+        "Unique (learningSessionId, evaluation.blockId) and (learningSessionId, sequence); one accepted response per block per session.",
+        "Server validates requested block is the next unrecorded block and recomputes evaluation from the pinned content; wrong authored-answer match is still an accepted response.",
+        "No UPDATE or DELETE via application roles. No arbitrary JSON event variants or candidate business-event emission."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "9c43e827a612349992f8c9a4c884b588ab60c16d8bbcd6b5ac8a8fb484e0123e"
+    },
+    {
+      "family": "relationships",
+      "id": "ProgressEventReferencesContentVersion",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "Every ProgressEvent records exact ContentVersion plus ContentPackId equal to its session Assignment.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        }
+      ],
+      "fields": {
+        "from": "ProgressEvent",
+        "to": "ContentPack",
+        "cardinality": "many-to-one",
+        "binding": "exact immutable ContentVersion value (version,digest) within the referenced ContentPack"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner.",
+        "Endpoint is ContentPack entity, not the ContentVersion value object; composite reference binds its immutable version value."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "ProgressEventReferencesContentBlock",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "Every ProgressEvent targets one ContentBlock inside its exact assigned ContentVersion.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "fields": {
+        "from": "ProgressEvent",
+        "to": "ContentBlock",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "entities",
+      "id": "LearnerState",
+      "change": "PROMOTE",
+      "owning_domain": "Learning",
+      "definition": "Read-time deterministic projection of one learner Assignment and its persisted session/events, never a second mutable source of progress.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "LearnerStateId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "identifiers",
+          "id": "AssignmentId"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "states",
+          "id": "LearningSessionStatus"
+        },
+        {
+          "family": "values",
+          "id": "Timestamp"
+        },
+        {
+          "family": "identifiers",
+          "id": "LearningSessionId"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentBlockId"
+        },
+        {
+          "family": "values",
+          "id": "ContentResponseEvaluation"
+        }
+      ],
+      "fields": {
+        "id": "LearnerStateId",
+        "projectionVersion": "literal 1.0.0",
+        "identityId": "IdentityId",
+        "assignmentId": "AssignmentId",
+        "contentPackId": "ContentPackId",
+        "contentVersion": "ContentVersion",
+        "session": "null or {learningSessionId:LearningSessionId,status:LearningSessionStatus,startedAt:Timestamp,completedAt:Timestamp|null}",
+        "recordedBlockCount": "integer count of canonical persisted ProgressEvents for this session",
+        "requiredBlockCount": "integer length of pinned content blocks",
+        "nextBlockId": "ContentBlockId|null",
+        "responses": "self-read only: canonical recorded evaluations in sequence; omitted in manager DTO"
+      },
+      "constraints": [
+        "Zero/empty means no persisted evidence; completedAt exists only after canonical session completion.",
+        "No independent LearnerState table, write command, cached authority, percentage, score or cross-version progress carry-over.",
+        "Separate AssignmentId means separate attempt and separately displayed outcome, even for identical content."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "9dca9bf38cf4719bab5d1a23a568a996c2727a3e28c4cce9c7d73666d50ac4db"
+    },
+    {
+      "family": "identifiers",
+      "id": "LearnerStateId",
+      "change": "PROMOTE",
+      "owning_domain": "Learning",
+      "definition": "Stable opaque identity of an exact assignment-scoped learner-state projection version.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "identifiers",
+          "id": "AssignmentId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        }
+      ],
+      "fields": {
+        "valueType": "opaque-id",
+        "derivation": "ls_ + lowercase SHA256 of canonical JSON array [\"LearnerState\",\"1.0.0\",organizationId,locationId,identityId,assignmentId]"
+      },
+      "constraints": [
+        "Not stored as a mutable state row and never accepted as authority."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "d3dd8b2ac9e7a6844abe2ebae3a6041365bcd17371117c3df98e270f006d9a2f"
+    },
+    {
+      "family": "relationships",
+      "id": "LearnerStateBelongsToIdentity",
+      "change": "PROMOTE",
+      "owning_domain": "Learning",
+      "definition": "Each projected state is for exactly one learner resolved from its Assignment.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        }
+      ],
+      "fields": {
+        "from": "LearnerState",
+        "to": "Identity",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "aa38d886ab247f9af9a5a4b82bf68f8b09ade143983f628db16cb2b10652b0ff"
+    },
+    {
+      "family": "relationships",
+      "id": "LearnerStateTracksContentPack",
+      "change": "PROMOTE",
+      "owning_domain": "Learning",
+      "definition": "Each projected state tracks the ContentPack referenced by its one immutable Assignment.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        }
+      ],
+      "fields": {
+        "from": "LearnerState",
+        "to": "ContentPack",
+        "cardinality": "many-to-one"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "221d1b3e3096fae535f13e5848afaf0f52877b387b875cd8c8ddf280e7dbb521"
+    },
+    {
+      "family": "relationships",
+      "id": "LearnerStateUsesAssignment",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "One projection is computed per Assignment and projection version; repeated assignments never collapse together.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        }
+      ],
+      "fields": {
+        "from": "LearnerState",
+        "to": "Assignment",
+        "cardinality": "one-to-one-per-projection-version"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "relationships",
+      "id": "LearnerStateReferencesContentVersion",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "The projection is pinned to exactly the ContentVersion of its Assignment; newer publication cannot change history.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "fields": {
+        "from": "LearnerState",
+        "to": "ContentPack",
+        "cardinality": "many-to-one",
+        "binding": "exact immutable ContentVersion value (version,digest) within the referenced ContentPack"
+      },
+      "constraints": [
+        "No relationship grants capabilities, membership, publication, content access, or permission to mutate another owner.",
+        "Endpoint is ContentPack entity, not the ContentVersion value object; composite reference binds its immutable version value."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-015",
+      "change": "PROMOTE",
+      "owning_domain": "Content",
+      "definition": "Only valid content can be published/assigned; a published content identity+version never changes in place.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "fields": {
+        "name": "PublishedContentVersionIsImmutable",
+        "requirements": [
+          "CNT-3",
+          "CNT-4",
+          "CNT-6"
+        ],
+        "failure_behavior": "Reject invalid or in-place mutation; require new version."
+      },
+      "constraints": [
+        "Validation includes schema/version/digest/unique block IDs and owner-scope binding."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "eb0a23957cafbeabee39573d044706816317614da90a0d9c1e875d48800ef264"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-016",
+      "change": "PROMOTE",
+      "owning_domain": "Content",
+      "definition": "Content existence or possession of a content ID does not grant access; assignment and authorization are independent required facts.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        }
+      ],
+      "fields": {
+        "name": "ContentExistenceDoesNotGrantAccess",
+        "requirements": [
+          "CNT-9",
+          "CNT-10"
+        ],
+        "failure_behavior": "Non-disclosing denial."
+      },
+      "constraints": [
+        "Current grant plus ACTIVE own Assignment are required; ID possession is never sufficient."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "ca79115d16ebdcb4556b06acf6f706c8b9ef456c5223e03e6c7d3041780c3bf7"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-017",
+      "change": "PROMOTE",
+      "owning_domain": "Learning",
+      "definition": "Learning progress events are accepted only in ACTIVE sessions; COMPLETED is terminal.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "states",
+          "id": "LearningSessionStatus"
+        }
+      ],
+      "fields": {
+        "name": "LearningSessionMutationRequiresActiveState",
+        "requirements": [
+          "LRN-3"
+        ],
+        "failure_behavior": "Reject post-completion or unregistered transition/event."
+      },
+      "constraints": [
+        "Serialize append and completion on the same session; no new append after completion."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "c38a3789aa5f4faea9ff3ac094a415ec6e7afd78b1f73d7bdd4b951aea583589"
+    },
+    {
+      "family": "invariants",
+      "id": "INV-018",
+      "change": "PROMOTE",
+      "owning_domain": "Learning",
+      "definition": "Real learning progress derives from persisted canonical learner events/state with content identity/version; client-only values cannot be authoritative progress.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "fields": {
+        "name": "LearningProgressIsServerAuthoritative",
+        "requirements": [
+          "LRN-4",
+          "LRN-5",
+          "LRN-6",
+          "LRN-10",
+          "LRN-11"
+        ],
+        "failure_behavior": "Do not record/display client-only progress as real."
+      },
+      "constraints": [
+        "Deterministic server evaluation and read projection use only persisted evidence bound to immutable content; no client success field or numerical score."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "e1c16f96de2cf98d13b84b53628f83c8a0e8aebcb533804d83a0037c39889a3d"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-009",
+      "change": "ADD",
+      "owning_domain": "Content",
+      "definition": "ContentPublicationValidation: deterministic validation and immutable version collision decision.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        }
+      ],
+      "fields": {
+        "name": "ContentPublicationValidation",
+        "inputs": [
+          "declaredSchemaSupported:boolean",
+          "canonicalPayloadValid:boolean",
+          "organizationMatches:boolean",
+          "suppliedDigestMatches:boolean",
+          "existingVersionDigest:null|string",
+          "requestedDigest:string"
+        ],
+        "rules": [
+          {
+            "when": "Any input unknown, malformed, or one of the first four booleans false",
+            "outcome": "REJECT_INVALID_REQUEST"
+          },
+          {
+            "when": "All first four true and existingVersionDigest == null",
+            "outcome": "CREATE_IMMUTABLE_PUBLICATION"
+          },
+          {
+            "when": "All first four true and existingVersionDigest == requestedDigest",
+            "outcome": "RETURN_EXISTING_NO_EFFECT"
+          },
+          {
+            "when": "All first four true and existingVersionDigest != null and != requestedDigest",
+            "outcome": "REJECT_CONFLICT"
+          }
+        ],
+        "default": "REJECT_INVALID_REQUEST"
+      },
+      "constraints": [
+        "Caller authority/current demo run admission are checked by Authorization before this Content-owned table.",
+        "No approval claim, draft state or external publication effect is created."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "decision-tables",
+      "id": "DT-010",
+      "change": "ADD",
+      "owning_domain": "Learning",
+      "definition": "LearningResponseAndCompletionGate: deterministic new-write admission after current authorization and receipt handling.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        },
+        {
+          "family": "states",
+          "id": "LearningSessionStatus"
+        },
+        {
+          "family": "values",
+          "id": "ContentResponseEvaluation"
+        }
+      ],
+      "fields": {
+        "name": "LearningResponseAndCompletionGate",
+        "inputs": [
+          "operation:RecordProgressEvent|CompleteLearningSession",
+          "sessionStatus:LearningSessionStatus",
+          "contentValid:boolean",
+          "RecordProgressEvent only: blockExists:boolean, blockAlreadyRecorded:boolean, requestedSequence:integer, expectedNextSequence:integer, optionIndexValid:boolean",
+          "CompleteLearningSession only: recordedRequiredCount:integer, requiredCount:integer"
+        ],
+        "rules": [
+          {
+            "priority": 1,
+            "when": "Operation, sessionStatus, contentValid or operation-required inputs unknown/malformed; content invalid; or session not ACTIVE",
+            "outcome": "REJECT_NO_WRITE"
+          },
+          {
+            "priority": 2,
+            "when": "RecordProgressEvent and (blockExists == false or optionIndexValid == false)",
+            "outcome": "REJECT_INVALID_REQUEST"
+          },
+          {
+            "priority": 3,
+            "when": "RecordProgressEvent and (blockAlreadyRecorded == true or requestedSequence != expectedNextSequence)",
+            "outcome": "REJECT_CONFLICT"
+          },
+          {
+            "priority": 4,
+            "when": "RecordProgressEvent and blockExists and optionIndexValid and not blockAlreadyRecorded and requestedSequence == expectedNextSequence",
+            "outcome": "EVALUATE_AND_APPEND"
+          },
+          {
+            "priority": 5,
+            "when": "CompleteLearningSession and requiredCount == 3 and recordedRequiredCount == 3",
+            "outcome": "TRANSITION_COMPLETED"
+          },
+          {
+            "priority": 6,
+            "when": "CompleteLearningSession and requiredCount == 3 and 0 <= recordedRequiredCount < 3",
+            "outcome": "REJECT_PRECONDITION_FAILED"
+          }
+        ],
+        "default": "REJECT_NO_WRITE"
+      },
+      "constraints": [
+        "Recorded count is recomputed from unique persisted event rows inside the locked transaction; never accepted from client.",
+        "No comparison to matchesExpectedChoice in completion eligibility.",
+        "Rules are first-match in priority order. Only the inputs for the selected operation are required; unused operation inputs are absent, not unknown failures."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved"
+    },
+    {
+      "family": "commands",
+      "id": "PublishContentPack",
+      "change": "REVISE",
+      "owning_domain": "Content",
+      "definition": "Creates one validated immutable published content version through the admitted synthetic demo control plane.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "capabilities",
+          "id": "content.pack.publish"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        }
+      ],
+      "fields": {
+        "input": "canonical content payload, expected digest; scope/actor from admitted demo control-plane context",
+        "output": "ContentPackId + exact ContentVersion + publishedAt",
+        "idempotency": "SERVER_DERIVED immutable (organizationId, contentPackId, exact version); identical digest returns existing, different digest conflicts"
+      },
+      "constraints": [
+        "Only automation:demo-admission-v1 in BeginDemoRun fresh-run transaction may publish the frozen synthetic template. No mounted route and no general customer publisher capability; no DevelopmentAgent runtime grant.",
+        "First successful creation appends required publication AuditEvent in same transaction."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "9204d1ae4bbf8129a423c9f3a71778bbd1102f22ecc335bccc611a2a63e795fe"
+    },
+    {
+      "family": "commands",
+      "id": "AssignContent",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "Creates a distinct exact-version Assignment for a learner within current authorized scope.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "capabilities",
+          "id": "learning.assignment.create"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdempotencyKey"
+        }
+      ],
+      "fields": {
+        "input": "selected organizationId,locationId,target IdentityId,ContentPackId,exact ContentVersion; client IdempotencyKey",
+        "output": "Assignment DTO with new AssignmentId",
+        "idempotency": "CLIENT_SUPPLIED; exact-key replay returns original; same key/different payload rejects; new deliberate key creates distinct Assignment"
+      },
+      "constraints": [
+        "Ordinary manager calls require current direct-report intersection and scoped manager capability (existing org_admin policy is unchanged but receives no demo grant). The only other caller is automation:demo-admission-v1 through BeginDemoRun fresh-run orchestration for exactly the initial synthetic assignment, under the parent package explicit internal policy, never manager impersonation. Exact content owner equals selected organization.",
+        "Assignment + receipt + required AuditEvent + Assignment creation LifecycleEvent are atomic. At most 10 total assignments per DemoRun; a fresh command at cap returns PRECONDITION_FAILED before side effects. Exact-key replay is resolved before quota, so replay at cap returns its original effect.",
+        "The admission orchestrator supplies an explicit IdempotencyKey as caller to AssignContent; no server-default fallback or secret/session result enters the receipt. Namespace uses canonical actor reference (human identity or exact admitted principal), never an assumed human identity for AutomationActor."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "0d1c295629fbb86bb40291db25f7a6c9105d2991e71ae7dd8fbe1a73d4b6964a"
+    },
+    {
+      "family": "commands",
+      "id": "StartLearningSession",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "Creates the sole LearningSession for one authorized Assignment.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        },
+        {
+          "family": "capabilities",
+          "id": "learning.session.start"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdempotencyKey"
+        }
+      ],
+      "fields": {
+        "input": "scope selector, AssignmentId, client IdempotencyKey; no learner ID or session ID",
+        "output": "LearningSession DTO",
+        "idempotency": "CLIENT_SUPPLIED; same-key replay original; independent key against already-started Assignment conflicts"
+      },
+      "constraints": [
+        "Current LOCATION learner grant and own-assignment binding, not membership-skipping SELF.",
+        "Session + receipt + required start AuditEvent are atomic; no candidate LearningSessionStarted emission."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "42e099d1abd4ccaca0489066b7690d6beea2906935fb3c2442f7dfcffb0af52f"
+    },
+    {
+      "family": "commands",
+      "id": "RecordProgressEvent",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "Validates and appends one server-evaluated learner response while its session is ACTIVE.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "values",
+          "id": "ContentResponseEvaluation"
+        },
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        },
+        {
+          "family": "capabilities",
+          "id": "learning.progress.record"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdempotencyKey"
+        }
+      ],
+      "fields": {
+        "input": "scope selector,LearningSessionId,ContentBlockId,selectedOptionIndex,client IdempotencyKey",
+        "output": "ProgressEvent DTO including server evaluation and current session progress facts",
+        "idempotency": "CLIENT_SUPPLIED; receipt replay never inserts a new learner event"
+      },
+      "constraints": [
+        "Current LOCATION learner grant and own-session binding.",
+        "Session row lock orders progress vs completion; validate next block, evaluate server-side, persist event and receipt in same transaction.",
+        "Success audit is not required by default; do not emit candidate ProgressRecorded."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "41f90020998fb89201d4bcbdc4aec77ace7b5bef7bceb457c9eda354ff3c6063"
+    },
+    {
+      "family": "commands",
+      "id": "CompleteLearningSession",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "Transitions one ACTIVE session to COMPLETED after all required responses are persisted.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "capabilities",
+          "id": "learning.session.complete"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        }
+      ],
+      "fields": {
+        "input": "scope selector and LearningSessionId; no claimed completion count, correctness or key",
+        "output": "canonical COMPLETED session DTO",
+        "idempotency": "STATE_GUARDED; second completion returns CONFLICT with no second success effect"
+      },
+      "constraints": [
+        "Current LOCATION learner grant and own-session binding; lock same session as event append.",
+        "All ordered block responses must already be persisted; correctness is not the gate.",
+        "Session transition and required completion AuditEvent are atomic; no candidate LearningSessionCompleted emission."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "684978e8e1d7d9ecbd18cccc0ebe49c6e0c11da9f8f9fb07ed77488114f23aee"
+    },
+    {
+      "family": "state-machines",
+      "id": "LearningSessionStateMachine",
+      "change": "REVISE",
+      "owning_domain": "Learning",
+      "definition": "Existing ACTIVE -> COMPLETED lifecycle with exact required-response completion guard, and no candidate business-event emissions.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "states",
+          "id": "LearningSessionStatus"
+        },
+        {
+          "family": "commands",
+          "id": "StartLearningSession"
+        },
+        {
+          "family": "commands",
+          "id": "RecordProgressEvent"
+        },
+        {
+          "family": "commands",
+          "id": "CompleteLearningSession"
+        }
+      ],
+      "fields": {
+        "initial_state": "ACTIVE",
+        "creation_command": "StartLearningSession",
+        "creation_event": null,
+        "allowed_operations": [
+          {
+            "state": "ACTIVE",
+            "command": "RecordProgressEvent"
+          }
+        ],
+        "transitions": [
+          {
+            "from": "ACTIVE",
+            "to": "COMPLETED",
+            "command": "CompleteLearningSession",
+            "guard": "All ordered required responses persisted"
+          }
+        ],
+        "terminal_states": [
+          "COMPLETED"
+        ]
+      },
+      "constraints": [
+        "Remove creation_event/operation.event/transition.event references to still-candidate events, rather than promote events from audit obligations."
+      ],
+      "proposed_status_after_exact_owner_approval": "approved",
+      "baseline_entry_sha256": "256d04f79120f1b28eb8cd904ad2510bff159a14b17ab436b0a2e067a0b6c7a8"
+    },
+    {
+      "family": "values",
+      "id": "CommandActor",
+      "change": "ADD",
+      "owning_domain": "Authorization",
+      "definition": "Finite authenticated command actor: HumanActor Identity or one exact admitted AutomationActor execution principal. Never unauthenticated denial metadata.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "DemoExecutionPrincipal"
+        }
+      ],
+      "fields": {
+        "variants": [
+          "HumanActor(identityId)",
+          "AutomationActor(executionPrincipalId)"
+        ],
+        "namespace": "actorClass + canonical typed ID"
+      },
+      "proposed_status_after_exact_owner_approval": "approved"
+    }
+  ],
+  "excluded": [
+    "all canonical business-event candidates",
+    "RequestId value-object candidate",
+    "IdempotencyKey value-object candidate",
+    "Entitlement entity and billing",
+    "Certification/P07 and customer approval",
+    "general CreateOrganization/CreateLocation/grant/report administration"
+  ]
+}

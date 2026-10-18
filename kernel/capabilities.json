@@ -1262,6 +1262,166 @@
         "approval_record": "domains/capabilities/owner-approval.json",
         "promoted_on": "2026-10-17"
       }
+    },
+    {
+      "id": "organization.demo.begin",
+      "kind": "capability",
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "definition": "Canonical action constant for BeginDemoRun",
+      "requires": [
+        {
+          "family": "values",
+          "id": "Capability"
+        },
+        {
+          "family": "identifiers",
+          "id": "CapabilityId"
+        },
+        {
+          "family": "commands",
+          "id": "BeginDemoRun"
+        }
+      ],
+      "identifier": "CapabilityId",
+      "registration_authority": "C01",
+      "policy_authority": "C14",
+      "internal_no_grant": false,
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "identity.demo.persona.create",
+      "kind": "capability",
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "definition": "Canonical action constant for CreateDemoPersona",
+      "requires": [
+        {
+          "family": "values",
+          "id": "Capability"
+        },
+        {
+          "family": "identifiers",
+          "id": "CapabilityId"
+        },
+        {
+          "family": "commands",
+          "id": "CreateDemoPersona"
+        }
+      ],
+      "identifier": "CapabilityId",
+      "registration_authority": "C01",
+      "policy_authority": "C14",
+      "internal_no_grant": true,
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "identity.demo.persona.switch",
+      "kind": "capability",
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "definition": "Canonical action constant for SwitchDemoPersona",
+      "requires": [
+        {
+          "family": "values",
+          "id": "Capability"
+        },
+        {
+          "family": "identifiers",
+          "id": "CapabilityId"
+        },
+        {
+          "family": "commands",
+          "id": "SwitchDemoPersona"
+        }
+      ],
+      "identifier": "CapabilityId",
+      "registration_authority": "C01",
+      "policy_authority": "C14",
+      "internal_no_grant": false,
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "organization.demo.close",
+      "kind": "capability",
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "definition": "Canonical action constant for CloseDemoRun",
+      "requires": [
+        {
+          "family": "values",
+          "id": "Capability"
+        },
+        {
+          "family": "identifiers",
+          "id": "CapabilityId"
+        },
+        {
+          "family": "commands",
+          "id": "CloseDemoRun"
+        }
+      ],
+      "identifier": "CapabilityId",
+      "registration_authority": "C01",
+      "policy_authority": "C14",
+      "internal_no_grant": false,
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "identity.demo.sessions.revoke",
+      "kind": "capability",
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "definition": "Canonical action constant for RevokeDemoSessions",
+      "requires": [
+        {
+          "family": "values",
+          "id": "Capability"
+        },
+        {
+          "family": "identifiers",
+          "id": "CapabilityId"
+        },
+        {
+          "family": "commands",
+          "id": "RevokeDemoSessions"
+        }
+      ],
+      "identifier": "CapabilityId",
+      "registration_authority": "C01",
+      "policy_authority": "C14",
+      "internal_no_grant": true,
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     }
   ],
   "note": "Capability identifiers are registered here; C14 owns authorization meaning, assignment, scope, evaluation, and denial.",

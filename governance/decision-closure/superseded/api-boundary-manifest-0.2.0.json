@@ -1,0 +1,511 @@
+{
+ "x-document": {
+  "doc_id": "TEACH-PROP-DCS-05-DATA",
+  "class": "specification",
+  "version": "0.2.0",
+  "status": "proposed",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "created_on": "2026-10-05",
+  "updated_on": "2026-10-05"
+ },
+ "baseline_route_scan": {
+  "source": "verification/owner-decisions/2026-10-04/route-scan.json",
+  "implemented_http_route_count": 0
+ },
+ "canonical_origin": "https://t34ch.com",
+ "product_prefix": "/api/v1",
+ "path_parameter_pattern": "^[A-Za-z0-9_-]{1,128}$",
+ "path_parameter_pattern_state": "PROPOSED (kernel identifiers are typed opaque-id with no lexical format)",
+ "content_version_pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
+ "boundary_exceptions": [
+  {
+   "method": "GET",
+   "path": "/api/health",
+   "purpose": "process liveness (OBS-3)",
+   "authentication": "NONE",
+   "must_not": [
+    "read the database",
+    "return version, dependency or host details"
+   ],
+   "owner": "Observability",
+   "mounted": false,
+   "state": "PROPOSED",
+   "error_envelope": "EXEMPT_MINIMAL_STATUS_BODY",
+   "exact_bodies": {
+    "200": {
+     "status": "ok"
+    }
+   }
+  },
+  {
+   "method": "GET",
+   "path": "/api/ready",
+   "purpose": "dependency readiness (OBS-4)",
+   "authentication": "NONE",
+   "must_not": [
+    "name the failing dependency in the body",
+    "return connection strings or timings"
+   ],
+   "owner": "Observability",
+   "mounted": false,
+   "state": "PROPOSED",
+   "error_envelope": "EXEMPT_MINIMAL_STATUS_BODY",
+   "exact_bodies": {
+    "200": {
+     "status": "ready"
+    },
+    "503": {
+     "status": "not_ready"
+    }
+   }
+  },
+  {
+   "method": "GET",
+   "path": "/api/auth/callback/{provider}",
+   "purpose": "OAuth provider redirect target; path stays stable across API major versions because it is registered at the provider",
+   "authentication": "OAUTH_STATE_PKCE (bound to __Host-teach_oauth_flow)",
+   "operation": "AuthenticateIdentity",
+   "provider_allowlist": [],
+   "mounted": false,
+   "state": "BLOCKED_UNTIL_OQ-TXN-2_PROVIDER_SELECTED",
+   "must_not": [
+    "accept a provider not in provider_allowlist (404)",
+    "create a session without matching state and PKCE verifier",
+    "link by email match (OQ-IDN-4)"
+   ],
+   "error_envelope": "STANDARD_ENVELOPE"
+  }
+ ],
+ "not_api_routes": "Web pages and static assets served from the canonical origin are governed by C42, not this manifest. They MUST NOT perform state changes.",
+ "routes": [
+  {
+   "method": "POST",
+   "path": "/api/v1/session",
+   "operation": "AuthenticateIdentity",
+   "capability": "identity.credential.authenticate",
+   "scope": "BOOTSTRAP",
+   "authentication": "BOOTSTRAP_PROOF",
+   "origin_check": true,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "GET",
+   "path": "/api/v1/session",
+   "operation": "ReadCurrentSession",
+   "capability": "identity.session.read",
+   "scope": "SELF",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": false,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "DELETE",
+   "path": "/api/v1/session",
+   "operation": "RevokeApplicationSession",
+   "capability": "identity.session.revoke",
+   "scope": "SELF",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": true,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "DELETE",
+   "path": "/api/v1/sessions/{sessionId}",
+   "operation": "RevokeApplicationSession",
+   "capability": "identity.session.revoke",
+   "scope": "SELF",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": true,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "POST",
+   "path": "/api/v1/credential",
+   "operation": "ChangeCredential",
+   "capability": "identity.credential.change",
+   "scope": "SELF",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": true,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "POST",
+   "path": "/api/v1/credential/token-change",
+   "operation": "ChangeCredential",
+   "capability": "identity.credential.change",
+   "scope": "SELF",
+   "authentication": "BOOTSTRAP_PROOF",
+   "origin_check": true,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "POST",
+   "path": "/api/v1/invitations/accept",
+   "operation": "AcceptInvitation",
+   "capability": "identity.invitation.accept",
+   "scope": "BOOTSTRAP",
+   "authentication": "BOOTSTRAP_PROOF",
+   "origin_check": true,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "GET",
+   "path": "/api/v1/memberships",
+   "operation": "ListOwnMemberships",
+   "capability": "organization.membership.read_self",
+   "scope": "SELF",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": false,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "GET",
+   "path": "/api/v1/certifications/mine",
+   "operation": "ListOwnCertifications",
+   "capability": "certification.credential.read_self",
+   "scope": "SELF",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": false,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "POST",
+   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/invitations",
+   "operation": "InviteIdentity",
+   "capability": "identity.invitation.create",
+   "scope": "LOCATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": true,
+   "idempotency_key_header": "Idempotency-Key",
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "GET",
+   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/invitations",
+   "operation": "ListInvitations",
+   "capability": "identity.invitation.read",
+   "scope": "LOCATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": false,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "POST",
+   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/invitations/{invitationId}/revoke",
+   "operation": "RevokeInvitation",
+   "capability": "identity.invitation.revoke",
+   "scope": "LOCATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": true,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "POST",
+   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/tokens/{tokenId}/revoke",
+   "operation": "RevokeSingleUseToken",
+   "capability": "identity.token.revoke",
+   "scope": "LOCATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": true,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "POST",
+   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/members/{identityId}/offboard",
+   "operation": "OffboardIdentity",
+   "capability": "identity.lifecycle.offboard",
+   "scope": "LOCATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": true,
+   "idempotency_key_header": "Idempotency-Key",
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "POST",
+   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/memberships/{membershipId}/deactivate",
+   "operation": "DeactivateMembership",
+   "capability": "organization.membership.deactivate",
+   "scope": "LOCATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": true,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "GET",
+   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/team",
+   "operation": "ListTeam",
+   "capability": "organization.team.read",
+   "scope": "LOCATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": false,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "GET",
+   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/team/{identityId}/learner-state",
+   "operation": "ReadTeamMemberLearnerState",
+   "capability": "learning.state.read_team",
+   "scope": "LOCATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": false,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "POST",
+   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/assignments",
+   "operation": "AssignContent",
+   "capability": "learning.assignment.create",
+   "scope": "LOCATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": true,
+   "idempotency_key_header": "Idempotency-Key",
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "GET",
+   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/assignments/mine",
+   "operation": "ListOwnAssignments",
+   "capability": "learning.assignment.read_self",
+   "scope": "LOCATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": false,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "GET",
+   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/content/{contentPackId}/versions/{contentVersion}",
+   "operation": "ReadAssignedContentVersion",
+   "capability": "content.pack.read_assigned",
+   "scope": "LOCATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": false,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "POST",
+   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions",
+   "operation": "StartLearningSession",
+   "capability": "learning.session.start",
+   "scope": "SELF",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": true,
+   "idempotency_key_header": "Idempotency-Key",
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "POST",
+   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions/{learningSessionId}/progress-events",
+   "operation": "RecordProgressEvent",
+   "capability": "learning.progress.record",
+   "scope": "SELF",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": true,
+   "idempotency_key_header": "Idempotency-Key",
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "POST",
+   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions/{learningSessionId}/complete",
+   "operation": "CompleteLearningSession",
+   "capability": "learning.session.complete",
+   "scope": "SELF",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": true,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "GET",
+   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/learner-state/mine",
+   "operation": "ReadOwnLearnerState",
+   "capability": "learning.state.read_self",
+   "scope": "LOCATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": false,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "POST",
+   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/certifications",
+   "operation": "IssueCertification",
+   "capability": "certification.credential.issue",
+   "scope": "LOCATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": true,
+   "idempotency_key_header": "Idempotency-Key",
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "GET",
+   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/certifications/{certificationId}/verification",
+   "operation": "VerifyCertification",
+   "capability": "certification.credential.verify",
+   "scope": "LOCATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": false,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "POST",
+   "path": "/api/v1/organizations/{organizationId}/identities/{identityId}/deactivate",
+   "operation": "DeactivateIdentity",
+   "capability": "identity.lifecycle.deactivate",
+   "scope": "ORGANIZATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": true,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "POST",
+   "path": "/api/v1/organizations/{organizationId}/identities/{identityId}/reactivate",
+   "operation": "ReactivateIdentity",
+   "capability": "identity.lifecycle.reactivate",
+   "scope": "ORGANIZATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": true,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "POST",
+   "path": "/api/v1/organizations/{organizationId}/memberships/{membershipId}/revoke",
+   "operation": "RevokeMembership",
+   "capability": "organization.membership.revoke",
+   "scope": "ORGANIZATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": true,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "POST",
+   "path": "/api/v1/organizations/{organizationId}/certifications/{certificationId}/revoke",
+   "operation": "RevokeCertification",
+   "capability": "certification.credential.revoke",
+   "scope": "ORGANIZATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": true,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  },
+  {
+   "method": "GET",
+   "path": "/api/v1/organizations/{organizationId}/audit-events",
+   "operation": "ReadAuditEvents",
+   "capability": "audit.event.read",
+   "scope": "ORGANIZATION",
+   "authentication": "SESSION_COOKIE",
+   "origin_check": false,
+   "idempotency_key_header": null,
+   "mounted": false,
+   "implemented": false,
+   "state": "PROPOSED"
+  }
+ ],
+ "unrouted_operations": [
+  "CreateApplicationSession",
+  "CreateIdentity",
+  "CreateMembership",
+  "PublishContentPack",
+  "ReconcileExternalEffect"
+ ],
+ "deprecation_manifest": {
+  "path": "governance/api/deprecations.json",
+  "entries": [],
+  "sunset_period": "UNKNOWN (OQ-API-3 residual)",
+  "entry_shape": {
+   "method": "",
+   "path": "",
+   "deprecated_on": "ISO date",
+   "sunset_on": "ISO date",
+   "replacement": "method + path or null",
+   "reason": ""
+  },
+  "headers": {
+   "Deprecation": "RFC 9745 date form, from deprecated_on",
+   "Sunset": "RFC 8594 HTTP-date, from sunset_on",
+   "Link": "<replacement>; rel=\"successor-version\""
+  }
+ },
+ "error_envelope_scope": "All non-2xx /api/v1 responses and STANDARD_ENVELOPE exceptions; EXEMPT_MINIMAL_STATUS_BODY exceptions return only their exact_bodies."
+}

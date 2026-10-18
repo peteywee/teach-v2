@@ -1,6 +1,6 @@
 {
   "kernel_id": "TEACH-K00",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "status": "active",
   "canonical_format": "json",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -304,5 +304,674 @@
     "runtime_grants_created": false,
     "runtime_activation_authorized": false,
     "record": "domains/capabilities/registration.json"
+  },
+  "demo_runtime_registration": {
+    "registration_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+    "version": "0.1.0",
+    "approval_record": "domains/demo-runtime/owner-approval.json",
+    "package_sha256": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+    "source_baseline_commit": "14ca8c409993c9e57077d9705db022d3bfd26b1a",
+    "source_baseline_tree": "771867f1dbb47e277f90158a9f25b504bb786510",
+    "issue": "#82",
+    "registered_entries": [
+      {
+        "family": "entities",
+        "id": "Location",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "identifiers",
+        "id": "LocationId",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "entities",
+        "id": "Membership",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "identifiers",
+        "id": "MembershipId",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "entities",
+        "id": "AuditEvent",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "identifiers",
+        "id": "AuditEventId",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "entities",
+        "id": "LifecycleEvent",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "identifiers",
+        "id": "LifecycleEventId",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "values",
+        "id": "Timestamp",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "states",
+        "id": "MembershipStatus",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "state-machines",
+        "id": "MembershipStateMachine",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "LocationBelongsToOrganization",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "MembershipLinksIdentityOrganization",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "MembershipMayScopeLocation",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "LifecycleEventReferencesIdentity",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-001",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-002",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-003",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-004",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-006",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-007",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-008",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-009",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-010",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-011",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-012",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-013",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-014",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-001",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-002",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-005",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-006",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-007",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-008",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "entities",
+        "id": "DemoRun",
+        "change": "ADD"
+      },
+      {
+        "family": "identifiers",
+        "id": "DemoRunId",
+        "change": "ADD"
+      },
+      {
+        "family": "entities",
+        "id": "DemoPersona",
+        "change": "ADD"
+      },
+      {
+        "family": "identifiers",
+        "id": "DemoPersonaId",
+        "change": "ADD"
+      },
+      {
+        "family": "entities",
+        "id": "MembershipGrant",
+        "change": "ADD"
+      },
+      {
+        "family": "identifiers",
+        "id": "MembershipGrantId",
+        "change": "ADD"
+      },
+      {
+        "family": "entities",
+        "id": "ReportingRelationship",
+        "change": "ADD"
+      },
+      {
+        "family": "identifiers",
+        "id": "ReportingRelationshipId",
+        "change": "ADD"
+      },
+      {
+        "family": "entities",
+        "id": "CommandReceipt",
+        "change": "ADD"
+      },
+      {
+        "family": "identifiers",
+        "id": "CommandReceiptId",
+        "change": "ADD"
+      },
+      {
+        "family": "entities",
+        "id": "DemoExecutionPrincipal",
+        "change": "ADD"
+      },
+      {
+        "family": "identifiers",
+        "id": "DemoExecutionPrincipalId",
+        "change": "ADD"
+      },
+      {
+        "family": "states",
+        "id": "DemoRunStatus",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "DemoPersonaKind",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "DemoOrganizationClass",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "DemoRunCloseReason",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "AdmissionNetworkPrefix",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "CapabilityBundle",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "DemoAvailability",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "AuditActor",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "AuditTarget",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "AuditResult",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "LifecycleSnapshot",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "DemoRunOwnsOrganization",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "DemoRunScopesLocation",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "DemoPersonaRepresentsIdentity",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "DemoPersonaBelongsToRun",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "MembershipGrantBelongsToMembership",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "ReportingRelationshipHasManager",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "ReportingRelationshipHasLearner",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "ReportingRelationshipBelongsToOrganization",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "ReportingRelationshipScopesLocation",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "AuditEventBelongsToOrganization",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "AuditEventMayScopeLocation",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "LifecycleEventReferencesMembership",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "LifecycleEventReferencesAssignment",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "LifecycleEventReferencesDemoRun",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "CommandReceiptBelongsToActor",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "CommandReceiptBelongsToOrganization",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "CommandReceiptScopesLocation",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "AuditEventHasActor",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "AuditEventTargetsRecord",
+        "change": "ADD"
+      },
+      {
+        "family": "commands",
+        "id": "BeginDemoRun",
+        "change": "ADD"
+      },
+      {
+        "family": "capabilities",
+        "id": "organization.demo.begin",
+        "change": "ADD"
+      },
+      {
+        "family": "commands",
+        "id": "CreateDemoPersona",
+        "change": "ADD"
+      },
+      {
+        "family": "capabilities",
+        "id": "identity.demo.persona.create",
+        "change": "ADD"
+      },
+      {
+        "family": "commands",
+        "id": "SwitchDemoPersona",
+        "change": "ADD"
+      },
+      {
+        "family": "capabilities",
+        "id": "identity.demo.persona.switch",
+        "change": "ADD"
+      },
+      {
+        "family": "commands",
+        "id": "CloseDemoRun",
+        "change": "ADD"
+      },
+      {
+        "family": "capabilities",
+        "id": "organization.demo.close",
+        "change": "ADD"
+      },
+      {
+        "family": "commands",
+        "id": "RevokeDemoSessions",
+        "change": "ADD"
+      },
+      {
+        "family": "capabilities",
+        "id": "identity.demo.sessions.revoke",
+        "change": "ADD"
+      },
+      {
+        "family": "state-machines",
+        "id": "DemoRunStateMachine",
+        "change": "ADD"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-011",
+        "change": "ADD"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-012",
+        "change": "ADD"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-013",
+        "change": "ADD"
+      },
+      {
+        "family": "entities",
+        "id": "Identity",
+        "change": "REVISE"
+      },
+      {
+        "family": "entities",
+        "id": "Organization",
+        "change": "REVISE"
+      },
+      {
+        "family": "commands",
+        "id": "CreateApplicationSession",
+        "change": "REVISE"
+      },
+      {
+        "family": "commands",
+        "id": "CreateMembership",
+        "change": "REVISE"
+      },
+      {
+        "family": "values",
+        "id": "ContentVersion",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "entities",
+        "id": "ContentPack",
+        "change": "REVISE"
+      },
+      {
+        "family": "entities",
+        "id": "ContentBlock",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "identifiers",
+        "id": "ContentBlockId",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "ContentPackContainsContentBlock",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "ContentPackBelongsToOrganization",
+        "change": "ADD"
+      },
+      {
+        "family": "values",
+        "id": "ContentResponseEvaluation",
+        "change": "ADD"
+      },
+      {
+        "family": "states",
+        "id": "AssignmentStatus",
+        "change": "ADD"
+      },
+      {
+        "family": "state-machines",
+        "id": "AssignmentStateMachine",
+        "change": "ADD"
+      },
+      {
+        "family": "entities",
+        "id": "Assignment",
+        "change": "REVISE"
+      },
+      {
+        "family": "relationships",
+        "id": "AssignmentBelongsToOrganization",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "AssignmentScopesLocation",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "AssignmentReferencesContentVersion",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "LearningSessionUsesAssignment",
+        "change": "REVISE"
+      },
+      {
+        "family": "entities",
+        "id": "LearningSession",
+        "change": "REVISE"
+      },
+      {
+        "family": "entities",
+        "id": "ProgressEvent",
+        "change": "REVISE"
+      },
+      {
+        "family": "relationships",
+        "id": "ProgressEventReferencesContentVersion",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "ProgressEventReferencesContentBlock",
+        "change": "ADD"
+      },
+      {
+        "family": "entities",
+        "id": "LearnerState",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "identifiers",
+        "id": "LearnerStateId",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "LearnerStateBelongsToIdentity",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "LearnerStateTracksContentPack",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "relationships",
+        "id": "LearnerStateUsesAssignment",
+        "change": "ADD"
+      },
+      {
+        "family": "relationships",
+        "id": "LearnerStateReferencesContentVersion",
+        "change": "ADD"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-015",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-016",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-017",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "invariants",
+        "id": "INV-018",
+        "change": "PROMOTE"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-009",
+        "change": "ADD"
+      },
+      {
+        "family": "decision-tables",
+        "id": "DT-010",
+        "change": "ADD"
+      },
+      {
+        "family": "commands",
+        "id": "PublishContentPack",
+        "change": "REVISE"
+      },
+      {
+        "family": "commands",
+        "id": "AssignContent",
+        "change": "REVISE"
+      },
+      {
+        "family": "commands",
+        "id": "StartLearningSession",
+        "change": "REVISE"
+      },
+      {
+        "family": "commands",
+        "id": "RecordProgressEvent",
+        "change": "REVISE"
+      },
+      {
+        "family": "commands",
+        "id": "CompleteLearningSession",
+        "change": "REVISE"
+      },
+      {
+        "family": "state-machines",
+        "id": "LearningSessionStateMachine",
+        "change": "REVISE"
+      },
+      {
+        "family": "values",
+        "id": "CommandActor",
+        "change": "ADD"
+      }
+    ],
+    "runtime_activation_authorized": false,
+    "physical_admission_performed": false,
+    "record": "domains/demo-runtime/registration.json"
   }
 }

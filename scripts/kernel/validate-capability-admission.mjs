@@ -6,5 +6,5 @@ if (result.errors.length) {
   process.exit(1);
 }
 console.log(`Capability admission PASS: exact ${result.promotedEntries} approved name/type entries, ${result.capabilityNames} unchanged C14 names`);
-console.log('PROVEN: recorded owner approval, immutable proposal/source hashes, exact K00 0.17 / ownership 1.8 ancestry, all-family closure and three historical holds');
-console.log('BLOCKED: runtime activation; no grants, routes, APIs, migrations, principal or other candidate admissions');
+console.log('PROVEN: historical recorded owner approval, immutable proposal/source hashes, exact K00 0.17 / ownership 1.8 ancestry, all-family closure and three historical holds');
+console.log('This historical name/type proof grants no runtime authority; any registered successor must independently pass its exact approved overlay.');

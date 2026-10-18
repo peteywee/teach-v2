@@ -1,0 +1,216 @@
+{
+  "registration_id": "TEACH-DEMO-RUNTIME-CONTRACT-INTERFACE-REGISTRATION",
+  "version": "1.0.0",
+  "status": "active",
+  "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+  "approval_record": "domains/demo-runtime/owner-approval.json",
+  "issue": "#82",
+  "source_package": "domains/demo-runtime/proposal-0.1.0",
+  "sha256sums_sha256": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+  "semantic_authority_only": true,
+  "physical_schema_admission": false,
+  "runtime_activation": false,
+  "deployment_authority": false,
+  "contracts": [
+    {
+      "contract": "C01",
+      "path": "contracts/c01-canonical-semantics-contract.md",
+      "from_version": "1.8.0",
+      "to_version": "1.9.0",
+      "superseded_copy": "contracts/superseded/c01-canonical-semantics-contract-1.8.0.md",
+      "historical_body_sha256": "baddbabec96fcd024f7a4f4fda4db2a0a468baaf523889a75c8a98b64c57b85a"
+    },
+    {
+      "contract": "C00",
+      "path": "contracts/c00-system-authority-contract.md",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "superseded_copy": "contracts/superseded/c00-system-authority-contract-1.1.0.md",
+      "historical_body_sha256": "6d50f7b2fcbde9b1a298cd468985e4121f9e9dc1c3ee1155e953c4fc9d3b6fea"
+    },
+    {
+      "contract": "C02",
+      "path": "contracts/c02-automation-agent-authority-contract.md",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "superseded_copy": "contracts/superseded/c02-automation-agent-authority-contract-1.1.0.md",
+      "historical_body_sha256": "c24050bde8cde7f0ce2d2c1cb1b9c5988a66d94a6f9f1c9985dbd37796c873fe"
+    },
+    {
+      "contract": "C11",
+      "path": "contracts/c11-identity-credentials-contract.md",
+      "from_version": "1.6.0",
+      "to_version": "1.7.0",
+      "superseded_copy": "contracts/superseded/c11-identity-credentials-contract-1.6.0.md",
+      "historical_body_sha256": "ab435f7a87c77c0d9b5fe4582f32d2cb1c2ac53b2995801db97df75d83d3bceb"
+    },
+    {
+      "contract": "C12",
+      "path": "contracts/c12-application-sessions-contract.md",
+      "from_version": "1.2.0",
+      "to_version": "1.3.0",
+      "superseded_copy": "contracts/superseded/c12-application-sessions-contract-1.2.0.md",
+      "historical_body_sha256": "b75d3ab79f1b33cc8789c7e1c0346885bc03eafb8065e33ad58c8ec220c1feab"
+    },
+    {
+      "contract": "C13",
+      "path": "contracts/c13-tenancy-membership-contract.md",
+      "from_version": "1.5.0",
+      "to_version": "1.6.0",
+      "superseded_copy": "contracts/superseded/c13-tenancy-membership-contract-1.5.0.md",
+      "historical_body_sha256": "4271d59113e44f3080f460181d749c2d52c59b83bc30a6e5864941ec19e76593"
+    },
+    {
+      "contract": "C14",
+      "path": "contracts/c14-authorization-capabilities-contract.md",
+      "from_version": "1.3.0",
+      "to_version": "1.4.0",
+      "superseded_copy": "contracts/superseded/c14-authorization-capabilities-contract-1.3.0.md",
+      "historical_body_sha256": "fc5f623023fc24ab6af818e01fb195c14db7dbfa36318726ca57651c25288138"
+    },
+    {
+      "contract": "C15",
+      "path": "contracts/c15-data-isolation-privacy-contract.md",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "superseded_copy": "contracts/superseded/c15-data-isolation-privacy-contract-1.1.0.md",
+      "historical_body_sha256": "6de0f3e28d27220c72f3766e50b4e62ed1257642f6653f98dced03de4c1f1878"
+    },
+    {
+      "contract": "C22",
+      "path": "contracts/c22-transaction-idempotency-reconciliation-contract.md",
+      "from_version": "1.3.0",
+      "to_version": "1.4.0",
+      "superseded_copy": "contracts/superseded/c22-transaction-idempotency-reconciliation-contract-1.3.0.md",
+      "historical_body_sha256": "dacb6b0356fc8ca978cab32a22bba749bd1e3cfa83837400542dc94fd9e17b7c"
+    },
+    {
+      "contract": "C23",
+      "path": "contracts/c23-audit-lifecycle-events-contract.md",
+      "from_version": "1.2.0",
+      "to_version": "1.3.0",
+      "superseded_copy": "contracts/superseded/c23-audit-lifecycle-events-contract-1.2.0.md",
+      "historical_body_sha256": "f8d40a3d79666ba61ddcd9ec434bf4463d5cb902097f4a810a60c6d1d174bf47"
+    },
+    {
+      "contract": "C31",
+      "path": "contracts/c31-content-teaching-engine-contract.md",
+      "from_version": "1.2.0",
+      "to_version": "1.3.0",
+      "superseded_copy": "contracts/superseded/c31-content-teaching-engine-contract-1.2.0.md",
+      "historical_body_sha256": "5453ce5d79eeeb174c19cfe2656bdfaa6086601b9effade6807bff04683f05af"
+    },
+    {
+      "contract": "C32",
+      "path": "contracts/c32-learning-sessions-progress-contract.md",
+      "from_version": "1.3.0",
+      "to_version": "1.4.0",
+      "superseded_copy": "contracts/superseded/c32-learning-sessions-progress-contract-1.3.0.md",
+      "historical_body_sha256": "73527b325c7f61e75f529165e4f175bbdcbdcd33b026499747b9ff48e4dab246"
+    },
+    {
+      "contract": "C33",
+      "path": "contracts/c33-manager-operations-contract.md",
+      "from_version": "1.2.0",
+      "to_version": "1.3.0",
+      "superseded_copy": "contracts/superseded/c33-manager-operations-contract-1.2.0.md",
+      "historical_body_sha256": "dbf01568ac721ae671091d8a1fe19efa721f42c1e9f6cc453ad82a7922dd240c"
+    },
+    {
+      "contract": "C41",
+      "path": "contracts/c41-api-boundary-contract.md",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "superseded_copy": "contracts/superseded/c41-api-boundary-contract-1.1.0.md",
+      "historical_body_sha256": "11bdc20817649387dc38d2e4eed52a6d7c7912607f111c3bec891979d085d8ee"
+    },
+    {
+      "contract": "C42",
+      "path": "contracts/c42-web-client-boundary-contract.md",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "superseded_copy": "contracts/superseded/c42-web-client-boundary-contract-1.1.0.md",
+      "historical_body_sha256": "84b433cbbcb1da2bfc53aa85c54e5d10d80e40be5d4510ec9f5664cdc4f6a506"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "application-interfaces/authority.json",
+      "from_version": "1.0.0",
+      "superseded_copy": "application-interfaces/superseded/authority-1.0.0.json",
+      "historical_sha256": "f6382f1fb512d33ac442d59f0bdc968f326aea770643431ac1053a1273065261"
+    },
+    {
+      "path": "governance/decision-closure/api-boundary-manifest.json",
+      "from_version": "0.2.0",
+      "superseded_copy": "governance/decision-closure/superseded/api-boundary-manifest-0.2.0.json",
+      "historical_sha256": "ffd76450a80fd2f6cd816b4c81ec6e36dbc9c4257e30e95c8a786dcdd71c146b"
+    },
+    {
+      "path": "governance/decision-closure/c14-capability-matrix.json",
+      "from_version": "0.2.0",
+      "superseded_copy": "governance/decision-closure/superseded/c14-capability-matrix-0.2.0.json",
+      "historical_sha256": "031b823c100dedcefa8f9d336cbfb617ae760576c35ed24096a3db98c3bcc98d"
+    },
+    {
+      "path": "governance/decision-closure/c15-data-lifecycle-matrix.json",
+      "from_version": "0.1.0",
+      "superseded_copy": "governance/decision-closure/superseded/c15-data-lifecycle-matrix-0.1.0.json",
+      "historical_sha256": "f537ba306a59a0e3fd1e777f9708edc4319d32dfcc53dbc27133b014de0e90f7"
+    },
+    {
+      "path": "governance/decision-closure/c14-negative-test-matrix.json",
+      "from_version": "0.2.0",
+      "superseded_copy": "governance/decision-closure/superseded/c14-negative-test-matrix-0.2.0.json",
+      "historical_sha256": "427040f6bbb33fff438ac452953d3706281818af65b30de3a016626554b5e92f"
+    },
+    {
+      "path": "governance/decision-closure/09-governance-content-certification-web-packet.md",
+      "from_version": "1.0.0",
+      "superseded_copy": "governance/decision-closure/superseded/09-governance-content-certification-web-packet-1.0.0.md",
+      "original_sha256": "44dff2830ed304dacc2f7600467fadd9c8995831fdde6cfb12508d9bf67d68a2",
+      "historical_body_sha256": "6a480fdacc621e43e832ed89d1ffeab7a5c108eb93a0c92140def2b36a1546aa",
+      "archive_sha256": "cadece3f6523483109445f8595035137aee29046da4100efabef48ce92fd5ecf"
+    },
+    {
+      "path": "governance/decision-closure/02-c14-authorization-capability-matrix.md",
+      "from_version": "1.0.0",
+      "superseded_copy": "governance/decision-closure/superseded/02-c14-authorization-capability-matrix-1.0.0.md",
+      "original_sha256": "52088d28e913146fad9ff5f6c42268af43c94fc8b5131a06b9a72777ba6b15d2",
+      "historical_body_sha256": "c3d431b82e0e5a6017c41ada5c18111163d69fedfe3d0cc3c5080995779ba6bc",
+      "archive_sha256": "0c345f24c6bd33152406bd8111b651d92598234880f1ad8b3e3fef05cb7554ce"
+    },
+    {
+      "path": "governance/decision-closure/05-api-boundary-manifest.md",
+      "from_version": "1.0.0",
+      "superseded_copy": "governance/decision-closure/superseded/05-api-boundary-manifest-1.0.0.md",
+      "original_sha256": "22995b6893642fa0cab5067ee1e9057fe159239c9ee3e8e1bf61f6aeda8fb8d4",
+      "historical_body_sha256": "e1739e1e1d1a53de29f31149774234a560b985d1145bd8057b3b83b29ff29a63",
+      "archive_sha256": "697fa456bdf281ddf8e9756fc6fbda898066423265c1b1c5e32986e2e8a67916"
+    },
+    {
+      "path": "governance/decision-closure/03-c15-data-lifecycle-privacy-matrix.md",
+      "from_version": "1.0.0",
+      "superseded_copy": "governance/decision-closure/superseded/03-c15-data-lifecycle-privacy-matrix-1.0.0.md",
+      "original_sha256": "4012fe133c5a7c5f3e151fd94c30d97931ee27e5aad28da7c384800d09ff518a",
+      "historical_body_sha256": "37b7c11a95951d408261b4280386bf438e2922e6e74b5107099c15930ec9ead8",
+      "archive_sha256": "94a3c82d64e5f5e13bb97d2206e7ce99306c93979c61d2df0f9af38055894bf7"
+    },
+    {
+      "path": "governance/decision-closure/04-session-transport-security-spec.md",
+      "from_version": "1.0.0",
+      "superseded_copy": "governance/decision-closure/superseded/04-session-transport-security-spec-1.0.0.md",
+      "original_sha256": "35a9c5ffee0ade46e0708f90315983ccb2b5c532a663d8a4a478ce75791b06bd",
+      "historical_body_sha256": "5b2646d75f831e7faceb583b7e48efd3765bb9c6c6d7a0c89ec4f13a2a846dc9",
+      "archive_sha256": "d20f651e30d9afeddcdd2eab1e08d1082ffbf9d2dace0caa98d834f5ad787d66"
+    },
+    {
+      "path": "governance/decision-closure/07-evidence-release-operations-spec.md",
+      "from_version": "1.0.0",
+      "superseded_copy": "governance/decision-closure/superseded/07-evidence-release-operations-spec-1.0.0.md",
+      "original_sha256": "4828fb999b878e3a570967f07dd635d91343f5e25df7b7edc0a34a8ef840f37f",
+      "historical_body_sha256": "e7122d089676296ea1a781aa4a883d87a8ab38cc582468171aece6c818c8c5b3",
+      "archive_sha256": "ca60ad9cb2d5596d8a4a6e3c7d8cd61dba390480ad0e0036c5a9633714fddaf8"
+    }
+  ]
+}

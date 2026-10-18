@@ -4,6 +4,8 @@ import { execFileSync } from 'node:child_process';
 import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
+import { inspectMigrationHistory } from '../packaging/migration-history-guards.mjs';
+import { inspectLearningImplementation } from '../persistence/learning-implementation-evidence.mjs';
 
 const ROOT = resolve(new URL('.', import.meta.url).pathname, '../..');
 const json = (dir, path) => JSON.parse(readFileSync(join(dir, path), 'utf8'));
@@ -19,11 +21,20 @@ const mutateLatest = (dir, mutate) => {
 const latestSql = (dir) => `drizzle/${json(dir, journalPath).entries.at(-1).tag}.sql`;
 let count = 0;
 let failed = 0;
-function check(name, mutate, pattern = null) {
+function check(name, mutate, pattern = null, structuralOnly = false) {
   const dir = mkdtempSync(join(tmpdir(), 'migration-guard-'));
   try {
     cpSync(ROOT, dir, { recursive: true, filter: (src) => !/(?:^|\/)\.git(?:\/|$)|(?:^|\/)node_modules(?:\/|$)/.test(src) });
     mutate(dir);
+    if (structuralOnly) {
+      // A hypothetical valid journal append proves structure and derived totals,
+      // not new physical authoring authority. The paired live-guard case below
+      // must still reject this same unadmitted readiness/implementation change.
+      assert.deepEqual(inspectMigrationHistory(dir), []);
+      assert.deepEqual(inspectLearningImplementation(dir), []);
+      console.log(`PASS ${name}`);
+      return;
+    }
     let output = '';
     let status = 0;
     try {
@@ -75,7 +86,7 @@ check('readiness migration count drift fails', (dir) => {
 check('readiness table count drift fails', (dir) => {
   const value = json(dir, readinessPath); value.implementation_guard.tables_generated++; write(dir, readinessPath, value);
 }, /readiness table count .* differs from final snapshot count/);
-check('valid appended history passes without hardcoded totals', (dir) => {
+const appendStructuralHistory = (dir) => {
   const journal = json(dir, journalPath);
   const last = journal.entries.at(-1);
   const idx = journal.entries.length;
@@ -91,7 +102,9 @@ check('valid appended history passes without hardcoded totals', (dir) => {
   const implementation = json(dir, implementationPath);
   implementation.physical_artifact_totals.migration_files++;
   write(dir, implementationPath, implementation);
-});
+};
+check('valid appended history passes without hardcoded totals', appendStructuralHistory, null, true);
+check('unadmitted appended history does not gain live physical authority', appendStructuralHistory, /demo registration: unchanged preceding source drift: persistence\/physical-slices\/(?:readiness\.json|learning-session\/implementation\.json)/);
 
 console.log(`${count - failed}/${count} migration-history guard tests passed`);
 process.exitCode = failed ? 1 : 0;

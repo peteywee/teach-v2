@@ -6,14 +6,14 @@ export function inspectCommandCoverage(root) {
   const load=path=>{try{return JSON.parse(readFileSync(join(root,path),'utf8'));}catch(error){fail(`${path}: ${error.message}`);return null;}};
   const record=load('verification/whole-repository/command-coverage.json'),kernel=load('kernel/commands.json'),app=load('application-interfaces/authority.json');
   const commands=(kernel?.entries||[]).filter(x=>x.status==='approved'),rows=record?.commands;
-  if(record?.version!=='0.1.0' || record?.full_runtime_conformance!=='UNKNOWN' || record?.shared_or_production_execution_authorized!==false) fail('limited evidence scope and execution BLOCK must remain explicit');
+  if(record?.version!=='0.2.0' || record?.full_runtime_conformance!=='UNKNOWN' || record?.shared_or_production_execution_authorized!==false) fail('limited evidence scope and execution BLOCK must remain explicit');
   if(!Array.isArray(rows)) {fail('complete command ledger required');return errors;}
   if(rows.length!==commands.length || new Set(rows.map(x=>x?.command)).size!==commands.length || rows.some(x=>!commands.some(c=>c.id===x?.command))) fail('exact approved command inventory required');
   for(const command of commands) {
     const row=rows.find(x=>x.command===command.id);
     if(!row) continue;
     const boundary=(app?.command_interfaces||[]).filter(x=>x.commands?.includes(command.id));
-    if(row.owner!==command.owning_domain || boundary.length!==1 || boundary[0].module!==row.owner || JSON.stringify(row.authority_requirements)!==JSON.stringify(command.promotion_evidence)) fail(`${command.id}: owner/authority drift`);
+    if(row.owner!==command.owning_domain || boundary.length!==1 || boundary[0].module!==row.owner || JSON.stringify(row.authority_requirements)!==JSON.stringify(command.promotion_evidence ?? [])) fail(`${command.id}: owner/authority drift`);
     if(!['PARTIAL','BLOCKED'].includes(row.state) || row.runtime_conformance!=='UNKNOWN' || row.runtime_activation!=='BLOCKED') fail(`${command.id}: full runtime conformance cannot be claimed`);
     if(!Array.isArray(row.missing_obligations) || !row.missing_obligations.length || row.missing_obligations.some(x=>typeof x!=='string' || !x.trim())) fail(`${command.id}: missing obligations must remain explicit`);
     const module=row.owner.replace(/[A-Z]/g,(c,i)=>(i?'-':'')+c.toLowerCase());

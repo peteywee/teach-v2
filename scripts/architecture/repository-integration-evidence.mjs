@@ -1,3 +1,4 @@
+import { inspectDemoRuntimeRegistration, createHistoricalSourceReader } from '../kernel/demo-runtime-registration.mjs';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { resolve, join, dirname } from 'node:path';
 import { inspectConsolidatedVerification } from '../verification/consolidated-ci-evidence.mjs';
@@ -6,7 +7,9 @@ import { inspectCommandCoverage } from './command-coverage-evidence.mjs';
 import { inspectAssignmentAdmission } from '../persistence/assignment-admission-evidence.mjs';
 
 export function inspectRepositoryIntegration(root) {
-  const errors=[];
+  const demo=inspectDemoRuntimeRegistration(root);
+  const predecessor=createHistoricalSourceReader(root,demo.source);
+  const errors=[...demo.errors];
   const fail=(message)=>errors.push(`repository integration: ${message}`);
   const load=(path)=>{try{return JSON.parse(readFileSync(join(root,path),'utf8'));}catch(error){fail(`${path}: ${error.message}`);return null;}};
   const text=(path)=>{try{return readFileSync(join(root,path),'utf8');}catch(error){fail(`${path}: ${error.message}`);return '';}};
@@ -57,7 +60,8 @@ export function inspectRepositoryIntegration(root) {
   const composition=text('src/bootstrap/learning-persistence-schema.ts');
   if(/Repository|\.insert\(|\.update\(|\.delete\(/.test(composition)) fail('build-time schema composition cannot activate runtime persistence');
   const queue=load('persistence/physical-slices/queue-post-p05.json');
-  const relationships=load('kernel/relationships.json');
+  // Retained future queue is still BLOCK; prove its preceding relationship inventory separately from live exact semantic closure.
+  const relationships=JSON.parse(predecessor('kernel/relationships.json'));
   const ids=load('kernel/identifiers.json');
   const entities=load('kernel/entities.json');
   if(queue?.version!=='1.2.0' || !Array.isArray(queue?.slices) || queue.slices.length!==3 ||

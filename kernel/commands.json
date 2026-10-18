@@ -22,17 +22,65 @@
       "kind": "command",
       "status": "approved",
       "owning_domain": "Learning",
-      "definition": "Assigns a content pack to a learner.",
+      "definition": "Creates a distinct exact-version Assignment for a learner within current authorized scope.",
       "authority": "Creates Assignment records linking content to learners.",
       "requires": [
-        "ContentPack",
-        "Assignment",
-        "Identity"
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "capabilities",
+          "id": "learning.assignment.create"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdempotencyKey"
+        }
       ],
       "promotion_evidence": [
         "MGR-7",
         "LRN-2"
-      ]
+      ],
+      "input": "selected organizationId,locationId,target IdentityId,ContentPackId,exact ContentVersion; client IdempotencyKey",
+      "output": "Assignment DTO with new AssignmentId",
+      "idempotency": "CLIENT_SUPPLIED; exact-key replay returns original; same key/different payload rejects; new deliberate key creates distinct Assignment",
+      "constraints": [
+        "Ordinary manager calls require current direct-report intersection and scoped manager capability (existing org_admin policy is unchanged but receives no demo grant). The only other caller is automation:demo-admission-v1 through BeginDemoRun fresh-run orchestration for exactly the initial synthetic assignment, under the parent package explicit internal policy, never manager impersonation. Exact content owner equals selected organization.",
+        "Assignment + receipt + required AuditEvent + Assignment creation LifecycleEvent are atomic. At most 10 total assignments per DemoRun; a fresh command at cap returns PRECONDITION_FAILED before side effects. Exact-key replay is resolved before quota, so replay at cap returns its original effect.",
+        "The admission orchestrator supplies an explicit IdempotencyKey as caller to AssignContent; no server-default fallback or secret/session result enters the receipt. Namespace uses canonical actor reference (human identity or exact admitted principal), never an assumed human identity for AutomationActor."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "AuthenticateIdentity",
@@ -72,31 +120,77 @@
       "kind": "command",
       "status": "approved",
       "owning_domain": "Learning",
-      "definition": "Marks a learning session complete.",
+      "definition": "Transitions one ACTIVE session to COMPLETED after all required responses are persisted.",
       "authority": "Transitions LearningSession to completed.",
       "requires": [
-        "LearningSession"
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "capabilities",
+          "id": "learning.session.complete"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        }
       ],
       "promotion_evidence": [
         "LRN-3"
-      ]
+      ],
+      "input": "scope selector and LearningSessionId; no claimed completion count, correctness or key",
+      "output": "canonical COMPLETED session DTO",
+      "idempotency": "STATE_GUARDED; second completion returns CONFLICT with no second success effect",
+      "constraints": [
+        "Current LOCATION learner grant and own-session binding; lock same session as event append.",
+        "All ordered block responses must already be persisted; correctness is not the gate.",
+        "Session transition and required completion AuditEvent are atomic; no candidate LearningSessionCompleted emission."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "CreateApplicationSession",
       "kind": "command",
       "status": "approved",
       "owning_domain": "Identity",
-      "definition": "Creates an application session for an authenticated identity.",
+      "definition": "Creates the single canonical ApplicationSession after ordinary authentication or exact BeginDemoRun/SwitchDemoPersona proof.",
       "authority": "Creates ApplicationSession.",
       "requires": [
-        "Identity",
-        "ApplicationSession"
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        }
       ],
       "promotion_evidence": [
         "SES-1",
         "SES-3",
         "SES-10"
-      ]
+      ],
+      "constraints": [
+        "Same existing random cookie/verifier/lifecycle; new allowed callers only, no alternate authentication token."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "CreateIdentity",
@@ -121,14 +215,33 @@
       "definition": "Creates a membership linking an identity to an organization.",
       "authority": "Creates Membership.",
       "requires": [
-        "Membership",
-        "Identity",
-        "Organization"
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        }
       ],
       "promotion_evidence": [
         "TEN-3",
         "TEN-18"
-      ]
+      ],
+      "constraints": [
+        "Existing callers preserved; BeginDemoRun permitted only for its fresh-run fixed persona scopes."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "DeactivateIdentity",
@@ -217,15 +330,48 @@
       "kind": "command",
       "status": "approved",
       "owning_domain": "Content",
-      "definition": "Publishes a content pack.",
+      "definition": "Creates one validated immutable published content version through the admitted synthetic demo control plane.",
       "authority": "Transitions ContentPack to published state.",
       "requires": [
-        "ContentPack"
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        },
+        {
+          "family": "capabilities",
+          "id": "content.pack.publish"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        }
       ],
       "promotion_evidence": [
         "CNT-3",
         "CNT-6"
-      ]
+      ],
+      "input": "canonical content payload, expected digest; scope/actor from admitted demo control-plane context",
+      "output": "ContentPackId + exact ContentVersion + publishedAt",
+      "idempotency": "SERVER_DERIVED immutable (organizationId, contentPackId, exact version); identical digest returns existing, different digest conflicts",
+      "constraints": [
+        "Only automation:demo-admission-v1 in BeginDemoRun fresh-run transaction may publish the frozen synthetic template. No mounted route and no general customer publisher capability; no DevelopmentAgent runtime grant.",
+        "First successful creation appends required publication AuditEvent in same transaction."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "ReactivateIdentity",
@@ -265,18 +411,59 @@
       "kind": "command",
       "status": "approved",
       "owning_domain": "Learning",
-      "definition": "Records a progress event in a learning session.",
+      "definition": "Validates and appends one server-evaluated learner response while its session is ACTIVE.",
       "authority": "Appends ProgressEvent to a LearningSession.",
       "requires": [
-        "LearningSession",
-        "ProgressEvent"
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "ProgressEvent"
+        },
+        {
+          "family": "values",
+          "id": "ContentResponseEvaluation"
+        },
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        },
+        {
+          "family": "capabilities",
+          "id": "learning.progress.record"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdempotencyKey"
+        }
       ],
       "promotion_evidence": [
         "LRN-3",
         "LRN-4",
         "LRN-7",
         "LRN-10"
-      ]
+      ],
+      "input": "scope selector,LearningSessionId,ContentBlockId,selectedOptionIndex,client IdempotencyKey",
+      "output": "ProgressEvent DTO including server evaluation and current session progress facts",
+      "idempotency": "CLIENT_SUPPLIED; receipt replay never inserts a new learner event",
+      "constraints": [
+        "Current LOCATION learner grant and own-session binding.",
+        "Session row lock orders progress vs completion; validate next block, evaluate server-side, persist event and receipt in same transaction.",
+        "Success audit is not required by default; do not emit candidate ProgressRecorded."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "RevokeApplicationSession",
@@ -360,16 +547,242 @@
       "kind": "command",
       "status": "approved",
       "owning_domain": "Learning",
-      "definition": "Starts a learning session from an assignment.",
+      "definition": "Creates the sole LearningSession for one authorized Assignment.",
       "authority": "Creates LearningSession; emits LearningSessionStarted.",
       "requires": [
-        "LearningSession",
-        "Assignment"
+        {
+          "family": "entities",
+          "id": "LearningSession"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        },
+        {
+          "family": "capabilities",
+          "id": "learning.session.start"
+        },
+        {
+          "family": "identifiers",
+          "id": "RequestId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdempotencyKey"
+        }
       ],
       "promotion_evidence": [
         "LRN-2",
         "LRN-3"
-      ]
+      ],
+      "input": "scope selector, AssignmentId, client IdempotencyKey; no learner ID or session ID",
+      "output": "LearningSession DTO",
+      "idempotency": "CLIENT_SUPPLIED; same-key replay original; independent key against already-started Assignment conflicts",
+      "constraints": [
+        "Current LOCATION learner grant and own-assignment binding, not membership-skipping SELF.",
+        "Session + receipt + required start AuditEvent are atomic; no candidate LearningSessionStarted emission."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "BeginDemoRun",
+      "kind": "command",
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "Exact command definition in demo-boundary.md, section Five new commands.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "Organization"
+        },
+        {
+          "family": "entities",
+          "id": "Location"
+        },
+        {
+          "family": "entities",
+          "id": "Membership"
+        },
+        {
+          "family": "entities",
+          "id": "MembershipGrant"
+        },
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        },
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        },
+        {
+          "family": "entities",
+          "id": "Assignment"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        }
+      ],
+      "capability": "organization.demo.begin",
+      "definition_source": "demo-boundary.md",
+      "constraints": [
+        "No external/shared activation, no foreign repository writes, no customer or deletion authority."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "CreateDemoPersona",
+      "kind": "command",
+      "status": "approved",
+      "owning_domain": "Identity",
+      "definition": "Exact command definition in demo-boundary.md, section Five new commands.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        }
+      ],
+      "capability": "identity.demo.persona.create",
+      "definition_source": "demo-boundary.md",
+      "constraints": [
+        "No external/shared activation, no foreign repository writes, no customer or deletion authority."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "SwitchDemoPersona",
+      "kind": "command",
+      "status": "approved",
+      "owning_domain": "Identity",
+      "definition": "Exact command definition in demo-boundary.md, section Five new commands.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        }
+      ],
+      "capability": "identity.demo.persona.switch",
+      "definition_source": "demo-boundary.md",
+      "constraints": [
+        "No external/shared activation, no foreign repository writes, no customer or deletion authority.",
+        "At most100 lifetime ApplicationSessions per run, including initial/revoked/expired records; authoritative Identity count under run lock. At cap409 PRECONDITION_FAILED without mutation; close remains allowed."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "CloseDemoRun",
+      "kind": "command",
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "Exact command definition in demo-boundary.md, section Five new commands.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        }
+      ],
+      "capability": "organization.demo.close",
+      "definition_source": "demo-boundary.md",
+      "constraints": [
+        "No external/shared activation, no foreign repository writes, no customer or deletion authority."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
+    },
+    {
+      "id": "RevokeDemoSessions",
+      "kind": "command",
+      "status": "approved",
+      "owning_domain": "Identity",
+      "definition": "Exact command definition in demo-boundary.md, section Five new commands.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        },
+        {
+          "family": "entities",
+          "id": "ApplicationSession"
+        }
+      ],
+      "capability": "identity.demo.sessions.revoke",
+      "definition_source": "demo-boundary.md",
+      "constraints": [
+        "No external/shared activation, no foreign repository writes, no customer or deletion authority."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     }
   ]
 }

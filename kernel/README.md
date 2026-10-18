@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-K00",
   "class": "semantic-kernel",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -13,8 +13,9 @@
     "state": "approved",
     "approved_on": "2026-10-17",
     "owner": "Patrick Craven, Top Shelf Service LLC",
-    "record": "domains/capabilities/owner-approval.json",
-    "basis": "TEACH-SEM-CAPABILITY-NAMES-2026-10-17@0.1.1: exactly 36 capability-name/type entries; all other semantics and runtime gates preserved."
+    "record": "domains/demo-runtime/owner-approval.json",
+    "issue": "#82",
+    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0 exact approved semantic registration"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -33,6 +34,13 @@
       "record": "persistence/physical-slices/identity-tokens/registration.json",
       "issue": "#40",
       "basis": "Owner-approved SLICE-P03 relationship registration; GitHub issue #40; K00 0.16.0"
+    },
+    {
+      "state": "approved",
+      "approved_on": "2026-10-17",
+      "owner": "Patrick Craven, Top Shelf Service LLC",
+      "record": "domains/capabilities/owner-approval.json",
+      "basis": "TEACH-SEM-CAPABILITY-NAMES-2026-10-17@0.1.1: exactly 36 capability-name/type entries; all other semantics and runtime gates preserved."
     }
   ]
 }
@@ -42,23 +50,23 @@
 
 Canonical machine-readable source format: JSON.
 
-K00 version: `0.17.0`.
+K00 version: `0.18.0`.
 
 Active domain ownership authority: `domains/ownership-map.json`.
 
-Current relationship authority: 23 relationships are registered in K00 — 15 `approved` and 8 `candidate`; 9 historical discovery-blocked relationship proposals remain outside K00.
+Current relationship authority: 50 relationships are registered in K00 — 49 `approved` and 1 `candidate`. Prior discovery-blocked proposals remain historical unless explicitly included in the approved package.
 
 Registry entries remain `candidate` unless explicitly promoted through SEM-30 owner approval; approved entries are implementation authority only within their still-applicable contract constraints.
 
 Files: `manifest.json`, `entities.json`, `values.json`, `identifiers.json`, `relationships.json`, `states.json`, `state-machines.json`, `invariants.json`, `decision-tables.json`, `capabilities.json`, `commands.json`, `events.json`, `evidence.json`, and `schema/semantic-kernel.schema.json`.
 
-State-machine registration: 4 lifecycle machines are registered as `candidate`; no candidate is promoted by K00 0.4.0.
+Historical K00 0.4.0 state-machine registration: four lifecycle machines were candidate. Current 0.18.0 has ten approved lifecycle machines.
 
-Invariant registration: 22 contract-proven invariants are registered as `candidate`; 5 blocked invariant proposals remain outside K00. Cross-cutting governance invariants are owned by the Governance semantic domain.
+Current invariant registration: 17 approved and 5 candidate invariants; historical blocked proposals remain outside K00. Cross-cutting governance invariants are owned by the Governance semantic domain.
 
-Decision-table registration: 8 deterministic decision tables are registered as `candidate`; 3 blocked decision-table proposals remain outside K00.
+Current decision-table registration: 11 approved and 2 candidate deterministic decision tables. Historical blocked proposals remain outside K00.
 
-Current command authority: all 23 registered commands are `approved`; zero registered commands remain candidate. The separate 8 discovery-blocked command proposals remain outside K00. Events remain 4 approved / 10 candidate.
+Current command authority: all 28 registered commands are `approved`; zero registered commands remain candidate. The separate 8 discovery-blocked command proposals remain outside K00. Events remain 4 approved / 10 candidate.
 
 Event admission: the 14 existing canonical events remain unchanged. Audit-record obligations and state transitions do not implicitly create business events; 9 discovered names were not admitted because no active owning-domain contract explicitly requires them.
 
@@ -82,3 +90,10 @@ Issue #40 registers four approved Identity-domain relationships required for SLI
 ## K00 0.17.0 — Capability name/type admission
 
 Exactly 36 entries are approved under `TEACH-SEM-CAPABILITY-NAMES-2026-10-17@0.1.1`: immutable `Capability`, completed `CapabilityId`, and the 34 unchanged C14 action constants. The package and owner response are preserved in `domains/capabilities/`; the ownership map is 1.8.0. This is semantic naming/type admission only: no grants, routes, runtime activation, principal, schema or migration changes. Membership and CERT-2 gates remain unchanged. Historical sections above describe their original registration scope, not current counts.
+
+
+## K00 0.18.0 — Approved isolated full-demo semantic closure
+
+Issue [#82](https://github.com/peteywee/teach-v2/issues/82) records TEACH-DEMO-RUNTIME-2026-10-17@0.1.0. Exactly 131 typed entries are applied: 46 promotions, 15 revisions, 70 additions. The exact overlay, dependency closure, owner approval and byte-identical proposal are verified in `domains/demo-runtime/`. Membership OQ-TEN-1 is closed only for the approved normalized shape; no Membership hold exception remains in current closure. Five narrowly scoped commands and five capability names are added; no business event is added or promoted. All preceding paragraphs describe historical registration facts, not current counts or current blockers.
+
+Semantic registration does not mount a route, issue a session, create a database table, admit a physical slice or demonstrate a working demo. These require separate recorded gates under the approved package.

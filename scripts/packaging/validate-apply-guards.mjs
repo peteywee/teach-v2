@@ -24,6 +24,7 @@
 // `pins` derives expected versions/counts from live artifacts, so it needs no
 // arguments and catches a pin that is stale in either direction.
 
+import { inspectDemoRuntimeRegistration, createHistoricalSourceReader } from '../kernel/demo-runtime-registration.mjs';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { join, resolve } from 'node:path';
@@ -32,7 +33,9 @@ import { inspectAllAdmissionCriteria } from '../persistence/admission-criteria.m
 import { inspectLearningFoundation } from '../persistence/learning-foundation-evidence.mjs';
 
 const ROOT = resolve(process.cwd());
-const errors = [];
+const demo=inspectDemoRuntimeRegistration(ROOT);
+const readPredecessor=createHistoricalSourceReader(ROOT,demo.source);
+const errors = [...demo.errors];
 
 const load = (p) => {
   try { return JSON.parse(readFileSync(join(ROOT, p), 'utf8')); }
@@ -69,6 +72,8 @@ function detectLoadBase(source) {
 
   const param = declaration[1];
   const snippet = source.slice(declaration.index, declaration.index + 800);
+  const historicalTemplate = snippet.match(new RegExp('(?:readPredecessor|historicalRead)\\(\\s*`([^$`]+)\\$\\{' + escapeRegex(param) + '\\}`\\s*\\)'));
+  if (historicalTemplate) return historicalTemplate[1].replace(/\/$/, '');
   const joined = snippet.match(new RegExp(`join\\(\\s*([A-Za-z_$][\\w$]*)\\s*,\\s*${escapeRegex(param)}\\s*\\)`));
   if (!joined) return '';
   return bases.get(joined[1]) ?? '';
@@ -94,6 +99,15 @@ function checkPins() {
   for (const file of walk('scripts')) {
     if (file === 'scripts/packaging/validate-apply-guards.mjs') continue;
     const source = readFileSync(join(ROOT, file), 'utf8');
+    // An explicit reader-bound predecessor is not a stale live pin. Still compare
+    // every detected pin against that exact verified predecessor, never skip it.
+    const hasHistoricalReader=demo.registered && /createHistoricalSourceReader\(ROOT(?:,|\))/.test(source);
+    const historicalLoad=hasHistoricalReader && /JSON\.parse\((?:readPredecessor|historicalRead)\(/.test(source);
+    const historicalText=hasHistoricalReader && /(?:readPredecessor|historicalRead)\((?:p|path)\)/.test(source);
+    const artifactLoad=path=>historicalLoad?JSON.parse(readPredecessor(path)):load(path);
+    const fileKernelVersion=historicalLoad?artifactLoad('kernel/manifest.json').version:kernelVersion;
+    const fileMapVersion=historicalLoad?artifactLoad('domains/ownership-map.json').version:mapVersion;
+    const fileContractVersion=historicalText?readPredecessor('contracts/README.md').match(/^- Package version: `(\d+\.\d+\.\d+)`/m)?.[1]:contractVersion;
     const bindings = new Map();
     const collections = new Map();
     const loadBase = detectLoadBase(source);
@@ -112,7 +126,7 @@ function checkPins() {
       const a = escapeRegex(alias);
 
       if (binding.path === 'kernel/manifest.json' || binding.path === 'domains/ownership-map.json') {
-        const expected = binding.path === 'kernel/manifest.json' ? kernelVersion : mapVersion;
+        const expected = binding.path === 'kernel/manifest.json' ? fileKernelVersion : fileMapVersion;
         const label = binding.path === 'kernel/manifest.json' ? 'K00 manifest version pin' : 'ownership map version pin';
         const pattern = new RegExp(`\\b${a}\\s*(?:\\?\\.|\\.)\\s*version\\s*!==?\\s*['"](\\d+\\.\\d+\\.\\d+)['"]`, 'g');
         for (const match of source.matchAll(pattern)) {
@@ -123,7 +137,7 @@ function checkPins() {
       }
 
       if (binding.kind === 'json' && /^kernel\/[a-z0-9-]+\.json$/i.test(binding.path)) {
-        const artifact = load(binding.path);
+        const artifact = artifactLoad(binding.path);
         if (Array.isArray(artifact?.entries)) {
           const countExpr = `\\(\\s*${a}(?:\\?\\.|\\.)entries\\s*\\|\\|\\s*\\[\\]\\s*\\)\\.filter\\(\\s*[A-Za-z_$][\\w$]*\\s*=>\\s*[A-Za-z_$][\\w$]*(?:\\?\\.|\\.)status\\s*===\\s*['"]([^'"]+)['"]\\s*\\)\\.length`;
           const patterns = [
@@ -150,8 +164,8 @@ function checkPins() {
           if (!includesCall.test(line)) continue;
           if (!/(?:["']version["']\s*:|(?:Contract )?Package version:)/.test(line)) continue;
           for (const pinned of line.match(/\d+\.\d+\.\d+/g) ?? []) {
-            if (pinned !== contractVersion) {
-              errors.push(`${file}:${i + 1}: stale contract package version pin '${pinned}' — live value is '${contractVersion}'`);
+            if (pinned !== fileContractVersion) {
+              errors.push(`${file}:${i + 1}: stale contract package version pin '${pinned}' — live value is '${fileContractVersion}'`);
             }
           }
         }
@@ -170,7 +184,7 @@ function checkPins() {
         for (const match of source.matchAll(pattern)) {
           const artifactPath = normalizeLoadPath(binding.base, match[1]);
           if (!/^kernel\/[a-z0-9-]+\.json$/i.test(artifactPath)) continue;
-          const artifact = load(artifactPath);
+          const artifact = artifactLoad(artifactPath);
           if (!Array.isArray(artifact?.entries)) continue;
 
           const status = match[2];

@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C23",
   "class": "contract",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-05",
-  "effective_on": "2026-10-05",
+  "updated_on": "2026-10-17",
+  "effective_on": "2026-10-17",
   "approval": {
     "state": "approved",
-    "approved_version": "1.2.0",
-    "approved_on": "2026-10-05",
-    "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "Owner manifest-bound decision-closure r3.1 approval under SYS-21 #75; sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
+    "approved_version": "1.3.0",
+    "approved_on": "2026-10-17",
+    "record": "domains/demo-runtime/owner-approval.json",
+    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; SHA256SUMS sha256:a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -30,12 +30,24 @@
   },
   "supersedes": [
     "TEACH-CON-C23@1.0.3",
-    "TEACH-CON-C23@1.1.0"
+    "TEACH-CON-C23@1.1.0",
+    "TEACH-CON-C23@1.2.0"
   ],
   "superseded_by": null,
   "depends_on": [
     "contracts/"
-  ]
+  ],
+  "demo_runtime_registration": {
+    "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+    "approval_record": "domains/demo-runtime/owner-approval.json",
+    "issue": "#82",
+    "source_package": "domains/demo-runtime/proposal-0.1.0",
+    "sha256sums_sha256": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+    "semantic_authority_only": true,
+    "physical_schema_admission": false,
+    "runtime_activation": false,
+    "deployment_authority": false
+  }
 }
 -->
 
@@ -46,17 +58,17 @@
 | Contract ID        | C23                                                                                                                                                             |
 | Group              | C20 Data Correctness                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.2.0 |
+| Version | 1.3.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by | Patrick Craven (owner), 2026-10-05; manifest-bound decision-closure r3.1, SYS-21 #75; see `APPROVAL-RECORD.md` |
+| Approved by | Patrick Craven (owner), 2026-10-17; TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; see `domains/demo-runtime/owner-approval.json` |
 | Requirement prefix | `AUD`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/analytics-audit.json` (audit half); analytics moves to C61.                                         |
-| Supersedes | 1.1.0 |
+| Supersedes | 1.2.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated | 2026-10-05 |
+| Last updated | 2026-10-17 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -94,7 +106,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **AUD-4** — Audit records MUST NOT be updated or deleted through application paths, enforced at the persistence layer (privileges or equivalent), not by convention.
 - **AUD-5** — Audit records MUST NOT contain passwords, PINs, session credentials, raw single-use tokens, or secrets.
 - **AUD-6** — Identity lifecycle events MUST be append-only.
-- **AUD-7** — Identity, Membership, Assignment and Certification state MUST be reconstructable from lifecycle history; every transition appends its LifecycleEvent in the same transaction and replay MUST equal current lifecycle fields. Projections remain separate from canonical state. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (OQ-AUD-2 resolved 2026-10-05).
+- **AUD-7** — Identity, Membership, Assignment, DemoRun and Certification state MUST be reconstructable from lifecycle history; every transition appends its LifecycleEvent in the same transaction and replay MUST equal current lifecycle fields. Projections remain separate from canonical state. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (OQ-AUD-2 resolved 2026-10-05).
 - **AUD-8** — Capability, tenant-scope, target-scope, credential-abuse and Origin denials MUST be recorded separately from successful mutations; validation errors and plain unauthenticated requests are excluded. Records contain only the specified redacted fields, deduplicate per actor/IP-prefix, class, operation and 5-minute bucket, cap at 100 rows per actor/hour and record one overflow row/hour. Audit immutability and one-year retention remain binding. See `governance/decision-closure/07-evidence-release-operations-spec.md`. (OQ-AUD-3 resolved 2026-10-05).
 - **AUD-9** — Audit records MUST NOT be analytics events; they MUST be stored and transported separately, and analytics failure MUST NOT affect audit writes.
 - **AUD-10** — Reading audit records MUST require an audit-read capability and MUST be tenant-scoped per C13 and C14.
@@ -150,3 +162,15 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.1.0 | 2026-10-04 | Record owner-selected OQ-AUD-1 policy values, append requirement/acceptance cases and preserve prior version; SYS-21 #66. No runtime implementation or production permission. | Patrick Craven (owner selection) |
 | 1.2.0 | 2026-10-05 | Register OQ-AUD-2, OQ-AUD-3; preserve named residuals and existing requirement/acceptance IDs. Decision-closure r3.1 manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c; SYS-21 #75. | Patrick Craven (owner); ChatGPT (recorder) |
+
+## Registered demo runtime amendment (1.3.0)
+
+Exact owner-approved scope: `TEACH-DEMO-RUNTIME-2026-10-17@0.1.0`, SYS-21 [#82](https://github.com/peteywee/teach-v2/issues/82). Approval provenance: `domains/demo-runtime/owner-approval.json`; immutable source: `domains/demo-runtime/proposal-0.1.0/contract-amendments.md`. The addendum below is the approved revision, not an exception inferred by an implementer. It changes only its explicitly named demo behavior; ordinary/customer semantics and unrelated gates remain unchanged. Proposal labels in the immutable package preserve its pre-approval history; this registration supplies current authority. Physical schema admission, runtime activation and shared deployment remain separate.
+
+Add DemoRun/DemoPersona/MembershipGrant/ReportingRelationship/content/assignment/progress/receipt synthetic record classes with creation, fixed run deadline and terminal clocks. Disposition in this isolated milestone is RETAIN_NO_AUTOMATED_DELETE; expiry/reset revoke access but do not delete, anonymize, rewind or promise erasure. Reduced-resolution admission prefixes are potentially identifying network data, used only for bounded admission and included in this retention classification. No full IP, free-text learner data or customer personal data is collected. Audit policy remains centrally one year with deletion blocked; this package adds no expiry purge mechanism.
+
+Begin and Switch are explicitly NON-RETRYABLE secret issuance. Close is state-guarded, preserving original terminal outcome on internal retry; a revoked visitor cookie still fails. Reset is two sequential operations, with a truthful partial outcome if new Begin fails. The three existing learning retryable mutations use CommandReceipt with CLIENT_SUPPLIED keys, current authority before replay, exact payload binding, original non-secret response, 24-hour horizon and retained tombstones. No client retry layer reissues secrets.
+
+Register finite typed audit actor/target/result and lifecycle snapshot definitions. Required audit/lifecycle history is append-only and transaction-bound; failure rolls back effects. Initial synthetic provisioning has separately typed principal attribution. Identity, Membership, Assignment and DemoRun replay must exactly reproduce their lifecycle fields. Preserve approved denial dedup/rate/overflow rules and do not promote business-event candidates.
+
+Exact definitions and field constraints are incorporated from `domains/demo-runtime/proposal-0.1.0/demo-boundary.md`, `domains/demo-runtime/proposal-0.1.0/authority-and-audit.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.json`, and `domains/demo-runtime/proposal-0.1.0/transport-and-queries.json` with its referenced schemas. No definition beyond that approved package is introduced.

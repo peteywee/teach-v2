@@ -1,511 +1,1202 @@
 {
- "x-document": {
-  "doc_id": "TEACH-PROP-DCS-05-DATA",
-  "class": "specification",
-  "version": "0.2.0",
-  "status": "proposed",
-  "owner": "Patrick Craven, Top Shelf Service LLC",
-  "created_on": "2026-10-05",
-  "updated_on": "2026-10-05"
- },
- "baseline_route_scan": {
-  "source": "verification/owner-decisions/2026-10-04/route-scan.json",
-  "implemented_http_route_count": 0
- },
- "canonical_origin": "https://t34ch.com",
- "product_prefix": "/api/v1",
- "path_parameter_pattern": "^[A-Za-z0-9_-]{1,128}$",
- "path_parameter_pattern_state": "PROPOSED (kernel identifiers are typed opaque-id with no lexical format)",
- "content_version_pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
- "boundary_exceptions": [
-  {
-   "method": "GET",
-   "path": "/api/health",
-   "purpose": "process liveness (OBS-3)",
-   "authentication": "NONE",
-   "must_not": [
-    "read the database",
-    "return version, dependency or host details"
-   ],
-   "owner": "Observability",
-   "mounted": false,
-   "state": "PROPOSED",
-   "error_envelope": "EXEMPT_MINIMAL_STATUS_BODY",
-   "exact_bodies": {
-    "200": {
-     "status": "ok"
-    }
-   }
+  "x-document": {
+    "doc_id": "TEACH-PROP-DCS-05-DATA",
+    "class": "specification",
+    "version": "1.1.0",
+    "status": "active",
+    "owner": "Patrick Craven, Top Shelf Service LLC",
+    "created_on": "2026-10-05",
+    "updated_on": "2026-10-17",
+    "approval_record": "domains/demo-runtime/owner-approval.json"
   },
-  {
-   "method": "GET",
-   "path": "/api/ready",
-   "purpose": "dependency readiness (OBS-4)",
-   "authentication": "NONE",
-   "must_not": [
-    "name the failing dependency in the body",
-    "return connection strings or timings"
-   ],
-   "owner": "Observability",
-   "mounted": false,
-   "state": "PROPOSED",
-   "error_envelope": "EXEMPT_MINIMAL_STATUS_BODY",
-   "exact_bodies": {
-    "200": {
-     "status": "ready"
+  "baseline_route_scan": {
+    "source": "verification/owner-decisions/2026-10-04/route-scan.json",
+    "implemented_http_route_count": 0
+  },
+  "canonical_origin": "https://t34ch.com",
+  "product_prefix": "/api/v1",
+  "path_parameter_pattern": "^[A-Za-z0-9_-]{1,128}$",
+  "path_parameter_pattern_state": "REGISTERED_TRANSPORT_SELECTOR_BOUND; identifiers remain typed opaque IDs",
+  "content_version_pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\\+([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?$",
+  "boundary_exceptions": [
+    {
+      "method": "GET",
+      "path": "/api/health",
+      "purpose": "process liveness (OBS-3)",
+      "authentication": "NONE",
+      "must_not": [
+        "read the database",
+        "return version, dependency or host details"
+      ],
+      "owner": "Observability",
+      "mounted": false,
+      "state": "PROPOSED",
+      "error_envelope": "EXEMPT_MINIMAL_STATUS_BODY",
+      "exact_bodies": {
+        "200": {
+          "status": "ok"
+        }
+      }
     },
-    "503": {
-     "status": "not_ready"
+    {
+      "method": "GET",
+      "path": "/api/ready",
+      "purpose": "dependency readiness (OBS-4)",
+      "authentication": "NONE",
+      "must_not": [
+        "name the failing dependency in the body",
+        "return connection strings or timings"
+      ],
+      "owner": "Observability",
+      "mounted": false,
+      "state": "PROPOSED",
+      "error_envelope": "EXEMPT_MINIMAL_STATUS_BODY",
+      "exact_bodies": {
+        "200": {
+          "status": "ready"
+        },
+        "503": {
+          "status": "not_ready"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/callback/{provider}",
+      "purpose": "OAuth provider redirect target; path stays stable across API major versions because it is registered at the provider",
+      "authentication": "OAUTH_STATE_PKCE (bound to __Host-teach_oauth_flow)",
+      "operation": "AuthenticateIdentity",
+      "provider_allowlist": [],
+      "mounted": false,
+      "state": "BLOCKED_UNTIL_OQ-TXN-2_PROVIDER_SELECTED",
+      "must_not": [
+        "accept a provider not in provider_allowlist (404)",
+        "create a session without matching state and PKCE verifier",
+        "link by email match (OQ-IDN-4)"
+      ],
+      "error_envelope": "STANDARD_ENVELOPE"
     }
-   }
+  ],
+  "not_api_routes": "Web pages and static assets served from the canonical origin are governed by C42, not this manifest. They MUST NOT perform state changes.",
+  "routes": [
+    {
+      "method": "POST",
+      "path": "/api/v1/session",
+      "operation": "AuthenticateIdentity",
+      "capability": "identity.credential.authenticate",
+      "scope": "BOOTSTRAP",
+      "authentication": "BOOTSTRAP_PROOF",
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/session",
+      "operation": "ReadCurrentSession",
+      "capability": "identity.session.read",
+      "scope": "SELF",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "success_status": 200,
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/CurrentSession",
+      "request_body_schema": null,
+      "synthetic_runtime_allowlist_only": true,
+      "approval_record": "domains/demo-runtime/owner-approval.json",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": null,
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/session",
+      "operation": "RevokeApplicationSession",
+      "capability": "identity.session.revoke",
+      "scope": "SELF",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "success_status": 204,
+      "response_schema": null,
+      "request_body_schema": null,
+      "synthetic_runtime_allowlist_only": true,
+      "approval_record": "domains/demo-runtime/owner-approval.json",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": "application/json",
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/sessions/{sessionId}",
+      "operation": "RevokeApplicationSession",
+      "capability": "identity.session.revoke",
+      "scope": "SELF",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/credential",
+      "operation": "ChangeCredential",
+      "capability": "identity.credential.change",
+      "scope": "SELF",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/credential/token-change",
+      "operation": "ChangeCredential",
+      "capability": "identity.credential.change",
+      "scope": "SELF",
+      "authentication": "BOOTSTRAP_PROOF",
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/invitations/accept",
+      "operation": "AcceptInvitation",
+      "capability": "identity.invitation.accept",
+      "scope": "BOOTSTRAP",
+      "authentication": "BOOTSTRAP_PROOF",
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/memberships",
+      "operation": "ListOwnMemberships",
+      "capability": "organization.membership.read_self",
+      "scope": "SELF",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "success_status": 200,
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/Memberships",
+      "request_body_schema": null,
+      "synthetic_runtime_allowlist_only": true,
+      "approval_record": "domains/demo-runtime/owner-approval.json",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": null,
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/certifications/mine",
+      "operation": "ListOwnCertifications",
+      "capability": "certification.credential.read_self",
+      "scope": "SELF",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/invitations",
+      "operation": "InviteIdentity",
+      "capability": "identity.invitation.create",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": "Idempotency-Key",
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/invitations",
+      "operation": "ListInvitations",
+      "capability": "identity.invitation.read",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/invitations/{invitationId}/revoke",
+      "operation": "RevokeInvitation",
+      "capability": "identity.invitation.revoke",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/tokens/{tokenId}/revoke",
+      "operation": "RevokeSingleUseToken",
+      "capability": "identity.token.revoke",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/members/{identityId}/offboard",
+      "operation": "OffboardIdentity",
+      "capability": "identity.lifecycle.offboard",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": "Idempotency-Key",
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/memberships/{membershipId}/deactivate",
+      "operation": "DeactivateMembership",
+      "capability": "organization.membership.deactivate",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/team",
+      "operation": "ListTeam",
+      "capability": "organization.team.read",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "success_status": 200,
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/Team",
+      "request_body_schema": null,
+      "synthetic_runtime_allowlist_only": true,
+      "approval_record": "domains/demo-runtime/owner-approval.json",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": null,
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "locationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": [
+          "organizationId",
+          "locationId"
+        ]
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "default": 20,
+            "minimum": 1,
+            "maximum": 50
+          },
+          "cursor": {
+            "type": "string",
+            "maxLength": 512
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/team/{identityId}/learner-state",
+      "operation": "ReadTeamMemberLearnerState",
+      "capability": "learning.state.read_team",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "success_status": 200,
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/TeamStates",
+      "request_body_schema": null,
+      "synthetic_runtime_allowlist_only": true,
+      "approval_record": "domains/demo-runtime/owner-approval.json",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": null,
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "locationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "identityId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": [
+          "organizationId",
+          "locationId",
+          "identityId"
+        ]
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "default": 20,
+            "minimum": 1,
+            "maximum": 50
+          },
+          "cursor": {
+            "type": "string",
+            "maxLength": 512
+          },
+          "assignmentId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/assignments",
+      "operation": "AssignContent",
+      "capability": "learning.assignment.create",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": "Idempotency-Key",
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "success_status": 201,
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/Assignment",
+      "request_body_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "identityId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "contentPackId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "contentVersion": {
+            "$ref": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/ContentVersion"
+          }
+        },
+        "required": [
+          "identityId",
+          "contentPackId",
+          "contentVersion"
+        ]
+      },
+      "synthetic_runtime_allowlist_only": true,
+      "approval_record": "domains/demo-runtime/owner-approval.json",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": "application/json",
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "locationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": [
+          "organizationId",
+          "locationId"
+        ]
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/assignments/mine",
+      "operation": "ListOwnAssignments",
+      "capability": "learning.assignment.read_self",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "success_status": 200,
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/Assignments",
+      "request_body_schema": null,
+      "synthetic_runtime_allowlist_only": true,
+      "approval_record": "domains/demo-runtime/owner-approval.json",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": null,
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "locationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": [
+          "organizationId",
+          "locationId"
+        ]
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "default": 20,
+            "minimum": 1,
+            "maximum": 50
+          },
+          "cursor": {
+            "type": "string",
+            "maxLength": 512
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/content/{contentPackId}/versions/{contentVersion}",
+      "operation": "ReadAssignedContentVersion",
+      "capability": "content.pack.read_assigned",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "success_status": 200,
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/PublicContent",
+      "request_body_schema": null,
+      "synthetic_runtime_allowlist_only": true,
+      "approval_record": "domains/demo-runtime/owner-approval.json",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": null,
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "locationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "contentPackId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "contentVersion": {
+            "$ref": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/ContentVersion"
+          }
+        },
+        "required": [
+          "organizationId",
+          "locationId",
+          "contentPackId",
+          "contentVersion"
+        ]
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions",
+      "operation": "StartLearningSession",
+      "capability": "learning.session.start",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": "Idempotency-Key",
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "success_status": 201,
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/Session",
+      "request_body_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "assignmentId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": [
+          "assignmentId"
+        ]
+      },
+      "synthetic_runtime_allowlist_only": true,
+      "target_binding": "authenticated Identity only; never supplied learnerId",
+      "approval_record": "domains/demo-runtime/owner-approval.json",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": "application/json",
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "locationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": [
+          "organizationId",
+          "locationId"
+        ]
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions/{learningSessionId}/progress-events",
+      "operation": "RecordProgressEvent",
+      "capability": "learning.progress.record",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": "Idempotency-Key",
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "success_status": 201,
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/ProgressEvent",
+      "request_body_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "blockId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "selectedOptionIndex": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4
+          }
+        },
+        "required": [
+          "blockId",
+          "selectedOptionIndex"
+        ]
+      },
+      "synthetic_runtime_allowlist_only": true,
+      "target_binding": "authenticated Identity only; never supplied learnerId",
+      "approval_record": "domains/demo-runtime/owner-approval.json",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": "application/json",
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "locationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "learningSessionId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": [
+          "organizationId",
+          "locationId",
+          "learningSessionId"
+        ]
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions/{learningSessionId}/complete",
+      "operation": "CompleteLearningSession",
+      "capability": "learning.session.complete",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "success_status": 200,
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/Session",
+      "request_body_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      },
+      "synthetic_runtime_allowlist_only": true,
+      "target_binding": "authenticated Identity only; never supplied learnerId",
+      "approval_record": "domains/demo-runtime/owner-approval.json",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": "application/json",
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "locationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "learningSessionId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": [
+          "organizationId",
+          "locationId",
+          "learningSessionId"
+        ]
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/learner-state/mine",
+      "operation": "ReadOwnLearnerState",
+      "capability": "learning.state.read_self",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "success_status": 200,
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/OwnStates",
+      "request_body_schema": null,
+      "synthetic_runtime_allowlist_only": true,
+      "approval_record": "domains/demo-runtime/owner-approval.json",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": null,
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "locationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": [
+          "organizationId",
+          "locationId"
+        ]
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "default": 20,
+            "minimum": 1,
+            "maximum": 50
+          },
+          "cursor": {
+            "type": "string",
+            "maxLength": 512
+          },
+          "assignmentId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/certifications",
+      "operation": "IssueCertification",
+      "capability": "certification.credential.issue",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": "Idempotency-Key",
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/certifications/{certificationId}/verification",
+      "operation": "VerifyCertification",
+      "capability": "certification.credential.verify",
+      "scope": "LOCATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/identities/{identityId}/deactivate",
+      "operation": "DeactivateIdentity",
+      "capability": "identity.lifecycle.deactivate",
+      "scope": "ORGANIZATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/identities/{identityId}/reactivate",
+      "operation": "ReactivateIdentity",
+      "capability": "identity.lifecycle.reactivate",
+      "scope": "ORGANIZATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/memberships/{membershipId}/revoke",
+      "operation": "RevokeMembership",
+      "capability": "organization.membership.revoke",
+      "scope": "ORGANIZATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/certifications/{certificationId}/revoke",
+      "operation": "RevokeCertification",
+      "capability": "certification.credential.revoke",
+      "scope": "ORGANIZATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/audit-events",
+      "operation": "ReadAuditEvents",
+      "capability": "audit.event.read",
+      "scope": "ORGANIZATION",
+      "authentication": "SESSION_COOKIE",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "PROPOSED"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/demo/start",
+      "operation": "BeginDemoRun",
+      "capability": "organization.demo.begin",
+      "scope": "DEMO_NEW_RUN",
+      "request_body_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      },
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/CurrentSession",
+      "success_status": 201,
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "cookie_only_session": true,
+      "approval_record": "domains/demo-runtime/owner-approval.json",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": "application/json",
+      "authentication": "NAMED_DEMO_ADMISSION_DISPATCHER",
+      "public_trigger": "Empty JSON input does not confer principal authority; boot-validated in-process dispatcher only",
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/demo/persona",
+      "operation": "SwitchDemoPersona",
+      "capability": "identity.demo.persona.switch",
+      "scope": "LOCATION",
+      "request_body_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "locationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "persona": {
+            "enum": [
+              "LEARNER",
+              "MANAGER"
+            ]
+          }
+        },
+        "required": [
+          "organizationId",
+          "locationId",
+          "persona"
+        ]
+      },
+      "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/CurrentSession",
+      "success_status": 200,
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "cookie_only_session": true,
+      "target_binding": "live DemoRun resolved from current session; explicit tuple must match",
+      "approval_record": "domains/demo-runtime/owner-approval.json",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": "application/json",
+      "authentication": "SESSION_COOKIE",
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/demo/close",
+      "operation": "CloseDemoRun",
+      "capability": "organization.demo.close",
+      "scope": "LOCATION",
+      "request_body_schema": {
+        "$ref": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/Scope"
+      },
+      "response_schema": null,
+      "success_status": 204,
+      "origin_check": true,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "cookie_only_session": true,
+      "target_binding": "live DemoRun resolved from current session; explicit tuple must match",
+      "approval_record": "domains/demo-runtime/owner-approval.json",
+      "definition_source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": "application/json",
+      "authentication": "SESSION_COOKIE",
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      }
+    }
+  ],
+  "unrouted_operations": [
+    "CreateApplicationSession",
+    "CreateIdentity",
+    "CreateMembership",
+    "PublishContentPack",
+    "ReconcileExternalEffect",
+    "CreateDemoPersona",
+    "RevokeDemoSessions"
+  ],
+  "deprecation_manifest": {
+    "path": "governance/api/deprecations.json",
+    "entries": [],
+    "sunset_period": "UNKNOWN (OQ-API-3 residual)",
+    "entry_shape": {
+      "method": "",
+      "path": "",
+      "deprecated_on": "ISO date",
+      "sunset_on": "ISO date",
+      "replacement": "method + path or null",
+      "reason": ""
+    },
+    "headers": {
+      "Deprecation": "RFC 9745 date form, from deprecated_on",
+      "Sunset": "RFC 8594 HTTP-date, from sunset_on",
+      "Link": "<replacement>; rel=\"successor-version\""
+    }
   },
-  {
-   "method": "GET",
-   "path": "/api/auth/callback/{provider}",
-   "purpose": "OAuth provider redirect target; path stays stable across API major versions because it is registered at the provider",
-   "authentication": "OAUTH_STATE_PKCE (bound to __Host-teach_oauth_flow)",
-   "operation": "AuthenticateIdentity",
-   "provider_allowlist": [],
-   "mounted": false,
-   "state": "BLOCKED_UNTIL_OQ-TXN-2_PROVIDER_SELECTED",
-   "must_not": [
-    "accept a provider not in provider_allowlist (404)",
-    "create a session without matching state and PKCE verifier",
-    "link by email match (OQ-IDN-4)"
-   ],
-   "error_envelope": "STANDARD_ENVELOPE"
-  }
- ],
- "not_api_routes": "Web pages and static assets served from the canonical origin are governed by C42, not this manifest. They MUST NOT perform state changes.",
- "routes": [
-  {
-   "method": "POST",
-   "path": "/api/v1/session",
-   "operation": "AuthenticateIdentity",
-   "capability": "identity.credential.authenticate",
-   "scope": "BOOTSTRAP",
-   "authentication": "BOOTSTRAP_PROOF",
-   "origin_check": true,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
+  "error_envelope_scope": "All non-2xx /api/v1 responses and STANDARD_ENVELOPE exceptions; EXEMPT_MINIMAL_STATUS_BODY exceptions return only their exact_bodies.",
+  "demo_runtime_registration": {
+    "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+    "approval_record": "domains/demo-runtime/owner-approval.json",
+    "issue": "#82",
+    "source_package": "domains/demo-runtime/proposal-0.1.0",
+    "sha256sums_sha256": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+    "semantic_authority_only": true,
+    "physical_schema_admission": false,
+    "runtime_activation": false,
+    "deployment_authority": false
   },
-  {
-   "method": "GET",
-   "path": "/api/v1/session",
-   "operation": "ReadCurrentSession",
-   "capability": "identity.session.read",
-   "scope": "SELF",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": false,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
+  "content_version_maximum_length": 38,
+  "content_version_path_encoding": "Percent-encode version path segment; decode once, validate full exact string, never normalize build/prerelease identity.",
+  "wire_rules": {
+    "additional_properties": false,
+    "all_protected_cache": "no-store",
+    "unsafe_content_type": "application/json",
+    "exact_origin_required": true,
+    "automatic_secret_issuance_retry": false,
+    "idempotency_header": "Idempotency-Key only where existing registered operation requires it",
+    "optional_query_parameters": [
+      "assignmentId",
+      "limit",
+      "cursor"
+    ],
+    "list_order": "assignedAt then AssignmentId; team/membership lists by stable ID",
+    "cursor": "base64url canonical last ordering tuple, validated syntax and ownership; it grants no authority",
+    "error_schema": "api-error-envelope.schema.json",
+    "rate_limit": {
+      "status": 429,
+      "code": "RATE_LIMITED",
+      "message": "Too many requests. Try again later.",
+      "retry_after": "only when a finite retry time is known"
+    },
+    "dependency_failure": {
+      "status": 503,
+      "code": "SERVICE_UNAVAILABLE",
+      "message": "Service unavailable."
+    },
+    "unknown_target": "same404body for absent/other-scope targets",
+    "unknown_or_expired_demo_session": "ordinary401body; no protected payload",
+    "idempotency_payload_conflict": {
+      "status": 422,
+      "code": "IDEMPOTENCY_KEY_REUSED",
+      "message": "This idempotency key was used with a different request."
+    },
+    "error_contract": "Byte-identical baseline-error-envelope.schema.json, including UUID-v4 requestId, fixed messages, constrained optional details/retryAfterSeconds and status map. Demo-specific explanation belongs in UI, not interpolated wire error."
   },
-  {
-   "method": "DELETE",
-   "path": "/api/v1/session",
-   "operation": "RevokeApplicationSession",
-   "capability": "identity.session.revoke",
-   "scope": "SELF",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": true,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
+  "demo_lifetime_limits": {
+    "minutes": 60,
+    "assignments": 10,
+    "learning_sessions": 10,
+    "progress_events": 30,
+    "application_sessions_including_history": 100,
+    "close_available_at_cap": true
   },
-  {
-   "method": "DELETE",
-   "path": "/api/v1/sessions/{sessionId}",
-   "operation": "RevokeApplicationSession",
-   "capability": "identity.session.revoke",
-   "scope": "SELF",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": true,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "POST",
-   "path": "/api/v1/credential",
-   "operation": "ChangeCredential",
-   "capability": "identity.credential.change",
-   "scope": "SELF",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": true,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "POST",
-   "path": "/api/v1/credential/token-change",
-   "operation": "ChangeCredential",
-   "capability": "identity.credential.change",
-   "scope": "SELF",
-   "authentication": "BOOTSTRAP_PROOF",
-   "origin_check": true,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "POST",
-   "path": "/api/v1/invitations/accept",
-   "operation": "AcceptInvitation",
-   "capability": "identity.invitation.accept",
-   "scope": "BOOTSTRAP",
-   "authentication": "BOOTSTRAP_PROOF",
-   "origin_check": true,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "GET",
-   "path": "/api/v1/memberships",
-   "operation": "ListOwnMemberships",
-   "capability": "organization.membership.read_self",
-   "scope": "SELF",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": false,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "GET",
-   "path": "/api/v1/certifications/mine",
-   "operation": "ListOwnCertifications",
-   "capability": "certification.credential.read_self",
-   "scope": "SELF",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": false,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "POST",
-   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/invitations",
-   "operation": "InviteIdentity",
-   "capability": "identity.invitation.create",
-   "scope": "LOCATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": true,
-   "idempotency_key_header": "Idempotency-Key",
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "GET",
-   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/invitations",
-   "operation": "ListInvitations",
-   "capability": "identity.invitation.read",
-   "scope": "LOCATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": false,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "POST",
-   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/invitations/{invitationId}/revoke",
-   "operation": "RevokeInvitation",
-   "capability": "identity.invitation.revoke",
-   "scope": "LOCATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": true,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "POST",
-   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/tokens/{tokenId}/revoke",
-   "operation": "RevokeSingleUseToken",
-   "capability": "identity.token.revoke",
-   "scope": "LOCATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": true,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "POST",
-   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/members/{identityId}/offboard",
-   "operation": "OffboardIdentity",
-   "capability": "identity.lifecycle.offboard",
-   "scope": "LOCATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": true,
-   "idempotency_key_header": "Idempotency-Key",
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "POST",
-   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/memberships/{membershipId}/deactivate",
-   "operation": "DeactivateMembership",
-   "capability": "organization.membership.deactivate",
-   "scope": "LOCATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": true,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "GET",
-   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/team",
-   "operation": "ListTeam",
-   "capability": "organization.team.read",
-   "scope": "LOCATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": false,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "GET",
-   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/team/{identityId}/learner-state",
-   "operation": "ReadTeamMemberLearnerState",
-   "capability": "learning.state.read_team",
-   "scope": "LOCATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": false,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "POST",
-   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/assignments",
-   "operation": "AssignContent",
-   "capability": "learning.assignment.create",
-   "scope": "LOCATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": true,
-   "idempotency_key_header": "Idempotency-Key",
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "GET",
-   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/assignments/mine",
-   "operation": "ListOwnAssignments",
-   "capability": "learning.assignment.read_self",
-   "scope": "LOCATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": false,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "GET",
-   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/content/{contentPackId}/versions/{contentVersion}",
-   "operation": "ReadAssignedContentVersion",
-   "capability": "content.pack.read_assigned",
-   "scope": "LOCATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": false,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "POST",
-   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions",
-   "operation": "StartLearningSession",
-   "capability": "learning.session.start",
-   "scope": "SELF",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": true,
-   "idempotency_key_header": "Idempotency-Key",
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "POST",
-   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions/{learningSessionId}/progress-events",
-   "operation": "RecordProgressEvent",
-   "capability": "learning.progress.record",
-   "scope": "SELF",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": true,
-   "idempotency_key_header": "Idempotency-Key",
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "POST",
-   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions/{learningSessionId}/complete",
-   "operation": "CompleteLearningSession",
-   "capability": "learning.session.complete",
-   "scope": "SELF",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": true,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "GET",
-   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/learner-state/mine",
-   "operation": "ReadOwnLearnerState",
-   "capability": "learning.state.read_self",
-   "scope": "LOCATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": false,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "POST",
-   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/certifications",
-   "operation": "IssueCertification",
-   "capability": "certification.credential.issue",
-   "scope": "LOCATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": true,
-   "idempotency_key_header": "Idempotency-Key",
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "GET",
-   "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/certifications/{certificationId}/verification",
-   "operation": "VerifyCertification",
-   "capability": "certification.credential.verify",
-   "scope": "LOCATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": false,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "POST",
-   "path": "/api/v1/organizations/{organizationId}/identities/{identityId}/deactivate",
-   "operation": "DeactivateIdentity",
-   "capability": "identity.lifecycle.deactivate",
-   "scope": "ORGANIZATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": true,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "POST",
-   "path": "/api/v1/organizations/{organizationId}/identities/{identityId}/reactivate",
-   "operation": "ReactivateIdentity",
-   "capability": "identity.lifecycle.reactivate",
-   "scope": "ORGANIZATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": true,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "POST",
-   "path": "/api/v1/organizations/{organizationId}/memberships/{membershipId}/revoke",
-   "operation": "RevokeMembership",
-   "capability": "organization.membership.revoke",
-   "scope": "ORGANIZATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": true,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "POST",
-   "path": "/api/v1/organizations/{organizationId}/certifications/{certificationId}/revoke",
-   "operation": "RevokeCertification",
-   "capability": "certification.credential.revoke",
-   "scope": "ORGANIZATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": true,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  },
-  {
-   "method": "GET",
-   "path": "/api/v1/organizations/{organizationId}/audit-events",
-   "operation": "ReadAuditEvents",
-   "capability": "audit.event.read",
-   "scope": "ORGANIZATION",
-   "authentication": "SESSION_COOKIE",
-   "origin_check": false,
-   "idempotency_key_header": null,
-   "mounted": false,
-   "implemented": false,
-   "state": "PROPOSED"
-  }
- ],
- "unrouted_operations": [
-  "CreateApplicationSession",
-  "CreateIdentity",
-  "CreateMembership",
-  "PublishContentPack",
-  "ReconcileExternalEffect"
- ],
- "deprecation_manifest": {
-  "path": "governance/api/deprecations.json",
-  "entries": [],
-  "sunset_period": "UNKNOWN (OQ-API-3 residual)",
-  "entry_shape": {
-   "method": "",
-   "path": "",
-   "deprecated_on": "ISO date",
-   "sunset_on": "ISO date",
-   "replacement": "method + path or null",
-   "reason": ""
-  },
-  "headers": {
-   "Deprecation": "RFC 9745 date form, from deprecated_on",
-   "Sunset": "RFC 8594 HTTP-date, from sunset_on",
-   "Link": "<replacement>; rel=\"successor-version\""
-  }
- },
- "error_envelope_scope": "All non-2xx /api/v1 responses and STANDARD_ENVELOPE exceptions; EXEMPT_MINIMAL_STATUS_BODY exceptions return only their exact_bodies."
+  "no_mount_authority": true
 }

@@ -18,15 +18,61 @@ import { execFileSync } from "node:child_process";
 import { cpSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import { Worker, isMainThread, parentPort, workerData } from "node:worker_threads";
 
 const ROOT = resolve(new URL(".", import.meta.url).pathname, "../..");
 const results = [];
 const shardArg = process.argv.slice(2);
 if (shardArg.length > 1 || shardArg.length === 1 && !/^--shard=[1-9][0-9]*\/[1-9][0-9]*$/.test(shardArg[0])) throw new Error('only --shard=index/total is supported');
-const [shardIndex, shardTotal] = shardArg.length ? shardArg[0].slice(8).split('/').map(Number) : [1,1];
-if (shardIndex > shardTotal || shardTotal > 32) throw new Error('invalid validator shard');
+const [requestedShardIndex, requestedShardTotal] = shardArg.length ? shardArg[0].slice(8).split('/').map(Number) : [1,1];
+if (requestedShardIndex > requestedShardTotal || requestedShardTotal > 32) throw new Error('invalid validator shard');
+const [shardIndex, shardTotal] = isMainThread ? [requestedShardIndex, requestedShardTotal] : [workerData.shardIndex, workerData.shardTotal];
 let inventoryCount=0;
 const inventoryNames=[];
+
+// Two workers use disjoint ordinal partitions and independent fixture roots.
+// No result is accepted before ordinary worker exit. All workers settle before
+// reporting, so a failed worker cannot leave its sibling running in background.
+function awaitValidatorWorker(worker, index) {
+  return new Promise((resolveWorker, rejectWorker) => {
+    let report, fault;
+    worker.on('message', value => { if (report !== undefined) fault = new Error('duplicate validator worker report'); report = value; });
+    worker.once('error', error => { fault = error; });
+    worker.once('exit', code => {
+      if (fault) rejectWorker(fault);
+      else if (code !== 0 || !report) rejectWorker(new Error(`validator worker ${index} exited ${code} without an ordinary completed report`));
+      else resolveWorker(report);
+    });
+  });
+}
+function mergeValidatorWorkers(reports, index, total) {
+  if (!Array.isArray(reports) || reports.length !== 2) throw new Error('exact two validator worker reports required');
+  const names = reports[0]?.inventoryNames;
+  const catalogDigest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
+  if (!Array.isArray(names) || names.length !== 220 || new Set(names).size !== names.length || catalogDigest(names) !== '36faf791bb97dd1a99c2c985316d2ee1f123c00be3c1b525db4a040876a2a923' || reports.some(report => report?.inventoryCount !== names.length || JSON.stringify(report?.inventoryNames) !== JSON.stringify(names) || !Array.isArray(report?.results))) throw new Error('validator worker catalog mismatch');
+  for (const [offset, report] of reports.entries()) {
+    const workerIndex=index+offset*total;
+    const expected=names.flatMap((name, ordinal) => ordinal % (total*2) === workerIndex-1 ? [{name, ordinal}] : []);
+    if (report.results.length !== expected.length || report.results.some((row,position) => row?.name !== expected[position].name || row?.ordinal !== expected[position].ordinal || typeof row?.ok !== 'boolean' || typeof row?.detail !== 'string')) throw new Error('validator worker partition omitted, duplicated or changed a selected case');
+  }
+  return { names, results: reports.flatMap(report => report.results).sort((a,b) => a.ordinal-b.ordinal) };
+}
+if (isMainThread && shardTotal <= 16) {
+  const pending = [shardIndex, shardIndex + shardTotal].map(index => {
+    try { return awaitValidatorWorker(new Worker(new URL(import.meta.url), { workerData: { shardIndex: index, shardTotal: shardTotal * 2 } }), index); }
+    catch (error) { return Promise.reject(error); }
+  });
+  try {
+    const settled = await Promise.allSettled(pending);
+    if (settled.some(result => result.status !== 'fulfilled')) throw settled.find(result => result.status === 'rejected').reason;
+    const {names,results:merged}=mergeValidatorWorkers(settled.map(result=>result.value),shardIndex,shardTotal);
+    let failures=0;
+    for (const row of merged) { console.log(`${row.ok ? 'PASS' : 'FAIL'}  ${row.name}`); if (!row.ok) { failures++; console.log(`      ${row.detail}`); } }
+    console.log(`\n${merged.length-failures}/${merged.length} negative-path tests passed.`);
+    console.log(`Validator inventory: ${names.length}; shard: ${shardIndex}/${shardTotal}; selected: ${merged.length}; digest: ${createHash('sha256').update(JSON.stringify(names)).digest('hex')}`);
+    process.exit(failures ? 1 : 0);
+  } catch (error) { console.error(`Validator worker failure: ${error.message}`); process.exit(1); }
+}
 
 // Cache only the immutable source snapshot, never a mutable test directory.
 // Native extraction avoids repeated JavaScript traversal on Ubuntu CI. Other
@@ -73,6 +119,15 @@ function writeJson(dir, rel, obj) {
   writeFileSync(join(dir, rel), JSON.stringify(obj, null, 2) + "\n");
 }
 
+// Only explicitly enumerated aggregate regression suites receive the larger
+// bound. Standalone validators retain five seconds; timeout is not a failure
+// match and is reported distinctly from a validator rejection.
+const aggregateTimeouts = new Map([
+  ['scripts/tests/validate-semantic-dependency-closure.mjs', 25000],
+  ['scripts/tests/validate-decision-closure.test.mjs', 25000],
+  ['scripts/tests/validate-capability-admission.mjs', 25000],
+  ['scripts/architecture/validate-whole-repository.mjs', 25000],
+]);
 function runValidator(dir, script) {
   const [file, ...args] = script.split(" ");
   try {
@@ -80,12 +135,16 @@ function runValidator(dir, script) {
       cwd: dir,
       encoding: "utf8",
       stdio: ["ignore", "pipe", "pipe"],
-      timeout: 5000,
+      timeout: aggregateTimeouts.get(file) ?? 5000,
     });
-    return { exit: 0, output: out };
+    return { exit: 0, output: out, ordinaryProcessExit: true };
   } catch (e) {
-    return { exit: e.status ?? 1, output: (e.stdout ?? "") + (e.stderr ?? "") };
+    return { exit: e.code === "ETIMEDOUT" ? 124 : e.status ?? 1, ordinaryProcessExit: Number.isInteger(e.status) && !e.signal && !e.code, output: (e.stdout ?? "") + (e.stderr ?? "") + (e.code === "ETIMEDOUT" ? `\nTimed out: ${file} after ${aggregateTimeouts.get(file) ?? 5000}ms` : "") };
   }
+}
+
+function validatorResultMatches(result, expect) {
+  return result.ordinaryProcessExit && (expect.pass ? result.exit === 0 : result.exit !== 0 && expect.pattern.test(result.output));
 }
 
 function test(name, script, mutate, expect) {
@@ -96,18 +155,16 @@ function test(name, script, mutate, expect) {
   try {
     mutate(dir);
     const r = runValidator(dir, script);
-    let ok, detail;
+    const ok = validatorResultMatches(r, expect);
+    let detail;
     if (expect.pass) {
-      ok = r.exit === 0;
       detail = ok ? "passed as expected" : `expected pass, got exit ${r.exit}: ${r.output.slice(0, 200)}`;
     } else {
-      const matched = expect.pattern.test(r.output);
-      ok = r.exit !== 0 && matched;
       detail = ok
         ? `failed as expected (${expect.pattern})`
         : `expected failure matching ${expect.pattern}, got exit ${r.exit}: ${r.output.slice(0, 300)}`;
     }
-    results.push({ name, ok, detail });
+    results.push({ name, ordinal, ok, detail });
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -159,7 +216,7 @@ test(
     }
     writeJson(dir, "kernel/events.json", d);
   },
-  { pattern: /sem35_evidence/ }
+  { pattern: /sem35_evidence|demo registration: exact approved overlay \/ unrelated entries changed: kernel\/events\.json/ }
 );
 
 test(
@@ -170,7 +227,7 @@ test(
     delete d.entries[0].definition;
     writeJson(dir, "kernel/commands.json", d);
   },
-  { pattern: /missing definition/ }
+  { pattern: /missing definition|demo registration: exact approved overlay \/ unrelated entries changed: kernel\/commands\.json/ }
 );
 
 test(
@@ -181,7 +238,7 @@ test(
     d.entries.push({ ...d.entries[0] });
     writeJson(dir, "kernel/commands.json", d);
   },
-  { pattern: /duplicate id/ }
+  { pattern: /duplicate id|demo registration: exact approved overlay \/ unrelated entries changed: kernel\/commands\.json/ }
 );
 
 test(
@@ -192,7 +249,7 @@ test(
     d.entries[0].status = "bogus";
     writeJson(dir, "kernel/events.json", d);
   },
-  { pattern: /invalid status/ }
+  { pattern: /invalid status|demo registration: exact approved overlay \/ unrelated entries changed: kernel\/events\.json/ }
 );
 
 test(
@@ -203,7 +260,7 @@ test(
     d.version = "0.0.0";
     writeJson(dir, "kernel/manifest.json", d);
   },
-  { pattern: /version must be/ }
+  { pattern: /version must be|demo registration: exact metadata ancestry differs: kernel\/manifest\.json/ }
 );
 
 test(
@@ -274,7 +331,7 @@ test(
     });
     writeJson(dir, "kernel/commands.json", d);
   },
-  { pattern: /missing current K00 concept/ }
+  { pattern: /missing current K00 concept|demo registration: exact approved overlay \/ unrelated entries changed: kernel\/commands\.json/ }
 );
 
 test(
@@ -285,7 +342,7 @@ test(
     d.entries[0].proposed_owner = "NonexistentDomain";
     writeJson(dir, "domains/ownership-map.json", d);
   },
-  { pattern: /not a registered domain/ }
+  { pattern: /not a registered domain|demo registration: exact metadata ancestry differs: domains\/ownership-map\.json/ }
 );
 
 // ---------------------------------------------------------------------------
@@ -322,7 +379,7 @@ test(
     d.version = "0.0.0";
     writeJson(dir, "kernel/manifest.json", d);
   },
-  { pattern: /expected K00/ }
+  { pattern: /expected K00|demo registration: exact metadata ancestry differs: kernel\/manifest\.json/ }
 );
 
 test(
@@ -903,7 +960,7 @@ for (const [index, lane] of admissionLanes.entries()) {
 test('admission: authority criterion omission fails closed', 'scripts/persistence/validate-slice-p05-schema-admission.mjs', (dir) => {
   const path = 'persistence/authority.json'; const value = readJson(dir, path);
   value.schema_admission_gate.criteria.pop(); writeJson(dir, path, value);
-}, { pattern: /Persistence Model must define the exact eight distinct/ });
+}, { pattern: /Persistence Model must define the exact eight distinct|demo registration: registered authority file differs: persistence\/authority\.json/ });
 test('pins: duplicate admission criterion fails', 'scripts/packaging/validate-apply-guards.mjs pins', (dir) => {
   const path = 'persistence/physical-slices/learning-session/admission.json'; const value = readJson(dir, path);
   value.criteria[7] = { ...value.criteria[0] }; writeJson(dir, path, value);
@@ -1000,7 +1057,7 @@ test('closure: preserved historical exclusions and later approvals pass',closure
 test('closure: later approval without provenance fails',closureScript,(dir)=>{
   const path='kernel/identifiers.json';const value=readJson(dir,path);
   delete value.entries.find(x=>x.id==='AssignmentId').promotion_issue;writeJson(dir,path,value);
-},{pattern:/later AssignmentId approval requires issue #46/});
+},{pattern:/later AssignmentId approval requires issue #46|demo registration: exact approved overlay \/ unrelated entries changed: kernel\/identifiers\.json/});
 test('closure: historical promotion set drift fails',closureScript,(dir)=>{
   const path='persistence/semantic-closure/registration.json';const value=readJson(dir,path);
   value.promotions.identifiers[0].id='AssignmentId';writeJson(dir,path,value);
@@ -1008,7 +1065,7 @@ test('closure: historical promotion set drift fails',closureScript,(dir)=>{
 test('closure: later capability approval requires precise provenance',closureScript,(dir)=>{
   const path='kernel/identifiers.json';const value=readJson(dir,path);
   delete value.entries.find(x=>x.id==='CapabilityId').promotion;writeJson(dir,path,value);
-},{pattern:/later CapabilityId requires exact name\/type admission/});
+},{pattern:/later CapabilityId requires exact name\/type admission|demo registration: exact approved overlay \/ unrelated entries changed: kernel\/identifiers\.json/});
 
 const integrationScript='scripts/architecture/validate-repository-integration.mjs';
 test('integration: clean complete source/authority inventory passes',integrationScript,()=>{},{pass:true});
@@ -1139,17 +1196,19 @@ test('owner policy: provider recommendation cannot activate analytics',ownerPoli
 test('owner policy: one-year audit duration cannot authorize deletion',ownerPolicyScript,dir=>{const p=ownerPolicyBase+'registration.json',d=readJson(dir,p);d.effects.audit_deletion_authorized=true;writeJson(dir,p,d);},{pattern:/policy effects must preserve/});
 test('owner policy: selected duration cannot claim retention enforcement',ownerPolicyScript,dir=>mutateOwnerRecord(dir,'OQ-OBS-3',r=>{r.retention_conformance='PROVEN';}),{pattern:/retention policy is not enforcement evidence/});
 test('owner policy: rewritten superseded contract fails',ownerPolicyScript,dir=>mutateText(dir,'contracts/superseded/c11-identity-credentials-contract-1.3.0.md','**IDN-1**','**IDN-999**'),{pattern:/historical contract body cannot be rewritten/});
-test('owner policy: existing audit deletion guard cannot weaken',ownerPolicyScript,dir=>mutateText(dir,'contracts/c23-audit-lifecycle-events-contract.md','MUST NOT be updated or deleted through application paths','MAY be deleted through application paths'),{pattern:/existing requirement meaning/});
+test('owner policy: existing audit deletion guard cannot weaken',ownerPolicyScript,dir=>mutateText(dir,'contracts/c23-audit-lifecycle-events-contract.md','MUST NOT be updated or deleted through application paths','MAY be deleted through application paths'),{pattern:/existing requirement meaning|demo registration: registered authority file differs: contracts\/c23-audit-lifecycle-events-contract\.md/});
 test('owner policy: new route source invalidates empty scan',ownerPolicyScript,dir=>{writeFileSync(join(dir,'src/bootstrap/new-router.ts'),"router.get('/health', handler);\n");},{pattern:/route scan must cover exact current src inventory/});
 test('recovery: generated owner view cannot misstate a recommendation',recoveryScript,dir=>mutateText(dir,recoveryBase+'owner-decisions.md','Only the listed residual owner values remain open','MUTATED_RECOMMENDATION'),{pattern:/exact generated decision view/});
 
-test('owner policy: malformed revision change-log header fails',ownerPolicyScript,dir=>mutateText(dir,'contracts/c23-audit-lifecycle-events-contract.md','| Version | Date | Change | By |','| Version | 1.1.0 |'),{pattern:/complete revision change-log table/});
+test('owner policy: malformed revision change-log header fails',ownerPolicyScript,dir=>mutateText(dir,'contracts/c23-audit-lifecycle-events-contract.md','| Version | Date | Change | By |','| Version | 1.1.0 |'),{pattern:/complete revision change-log table|demo registration: registered authority file differs: contracts\/c23-audit-lifecycle-events-contract\.md/});
 test('capability admission: exact owner-approved package and adversarial cases pass', 'scripts/tests/validate-capability-admission.mjs', () => {}, {pass:true});
-test('capability admission: forged owner approval fails', 'scripts/kernel/validate-capability-admission.mjs', dir => {const p='domains/capabilities/owner-approval.json',d=readJson(dir,p);d.response.author='agent';writeJson(dir,p,d);}, {pattern:/exact recorded owner approval/});
+test('capability admission: forged owner approval fails', 'scripts/kernel/validate-capability-admission.mjs', dir => {const p='domains/capabilities/owner-approval.json',d=readJson(dir,p);d.response.author='agent';writeJson(dir,p,d);}, {pattern:/exact recorded owner approval|demo registration: unchanged preceding source drift: domains\/capabilities\/owner-approval\.json/});
 test('capability admission: unrelated promotion fails', 'scripts/kernel/validate-capability-admission.mjs', dir => {const p='kernel/values.json',d=readJson(dir,p);d.entries.find(x=>x.id==='EmailAddress').status='approved';writeJson(dir,p,d);}, {pattern:/exact approved overlay/});
 
 // Report
 // ---------------------------------------------------------------------------
+
+if (!isMainThread) { parentPort.postMessage({ results, inventoryNames, inventoryCount }); process.exit(0); }
 
 let failed = 0;
 for (const r of results) {

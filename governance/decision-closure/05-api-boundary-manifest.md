@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-PROP-DCS-05",
   "class": "specification",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-05",
-  "updated_on": "2026-10-05",
+  "updated_on": "2026-10-17",
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
@@ -30,15 +30,16 @@
     "api-boundary-manifest.json",
     "api-error-envelope.schema.json"
   ],
-  "effective_on": "2026-10-05",
+  "effective_on": "2026-10-17",
   "approval": {
     "state": "approved",
-    "approved_on": "2026-10-05",
-    "record": "contracts/APPROVAL-RECORD.md",
-    "basis": "SYS-21 #75; manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c"
+    "approved_on": "2026-10-17",
+    "record": "domains/demo-runtime/owner-approval.json",
+    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82"
   },
   "supersedes": [
-    "TEACH-PROP-DCS-05@0.3.0"
+    "TEACH-PROP-DCS-05@0.3.0",
+    "TEACH-PROP-DCS-05@1.0.0"
   ]
 }
 -->
@@ -50,8 +51,8 @@ Registered on 2026-10-05 by the owner-approved r3.1 manifest under SYS-21 #75. T
 
 | Field | Value |
 | --- | --- |
-| Status | `proposed` — **no route is authorized**. Every entry is `mounted: false`, `implemented: false`. |
-| Owner decision | Approved in chat 2026-10-05 04:05 America/Chicago (decision sheet A–D). Registration PENDING under SYS-21 #75; this document stays `proposed` until it lands. |
+| Status | `active` logical authority; implementation conformance UNKNOWN; no route mounting or physical admission |
+| Owner decision | Prior #75 selections preserved except explicit #82 changes; exact demo approval in `domains/demo-runtime/owner-approval.json` |
 | Resolves if approved | `OQ-API-1` (API-1), `OQ-API-2` (API-10); registers the mechanism half of `OQ-API-3` (API-13) |
 | Stays open | `OQ-API-3` sunset period |
 | Baseline route scan | `verification/owner-decisions/2026-10-04/route-scan.json` — **0 implemented routes** (verified) |
@@ -75,47 +76,48 @@ Nothing else may exist outside `/api/v1`. Web pages and static assets served fro
 
 ## 3. Product routes under `/api/v1`
 
-Path parameters match `^[A-Za-z0-9_-]{1,128}$` (PROPOSED (kernel identifiers are typed opaque-id with no lexical format)). `contentVersion` matches strict SemVer `^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$` (CNT-2). A parameter that fails the pattern returns `404 NOT_FOUND` (the route does not match), never `400`, so malformed IDs and missing IDs are indistinguishable.
+Canonical authority: `api-boundary-manifest.json` version 1.1.0. All 34 routes remain unmounted and unimplemented; logical registration grants no activation. Ordinary identifier selectors match `^[A-Za-z0-9_-]{1,128}$`. ContentVersion uses strict SemVer 2.0 including prerelease/build, maximum 38 characters, with the exact regex in the manifest. Percent-encode the version segment; decode once and never normalize exact identity. Malformed path selectors and missing targets use the existing 404 behavior.
 
-Scope encoding: TEN-7, registered by #74, requires an explicit typed organization/location tuple and says transport encoding follows separate authority. Application Interfaces 1.0.0 defers the HTTP method/path inventory and the error envelope to Transport Interfaces (APP-11, APP-12). This manifest is that Transport Interfaces authority. Location-scoped operations carry `{organizationId}` and `{locationId}` as path segments; organization-scoped operations carry `{organizationId}`. Path segments are chosen over headers because they cannot be stripped by an intermediary, are always present in logs with the request ID, and make a missing scope a non-match instead of an implicit default. The values select; C13/C14 decide.
+Explicit organization/location path selectors never establish authority. The exact package-defined request, path, query and response schema references are attached to each demo route in the machine manifest; unsafe routes require exact allowed Origin and application/json, protected responses no-store.
 
-| # | Method | Path | Operation | Capability | Auth | Origin check | `Idempotency-Key` |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `POST` | `/api/v1/session` | `AuthenticateIdentity` | `identity.credential.authenticate` | BOOTSTRAP_PROOF | yes | — |
-| 2 | `GET` | `/api/v1/session` | `ReadCurrentSession` | `identity.session.read` | SESSION_COOKIE | no | — |
-| 3 | `DELETE` | `/api/v1/session` | `RevokeApplicationSession` | `identity.session.revoke` | SESSION_COOKIE | yes | — |
-| 4 | `DELETE` | `/api/v1/sessions/{sessionId}` | `RevokeApplicationSession` | `identity.session.revoke` | SESSION_COOKIE | yes | — |
-| 5 | `POST` | `/api/v1/credential` | `ChangeCredential` | `identity.credential.change` | SESSION_COOKIE | yes | — |
-| 6 | `POST` | `/api/v1/credential/token-change` | `ChangeCredential` | `identity.credential.change` | BOOTSTRAP_PROOF | yes | — |
-| 7 | `POST` | `/api/v1/invitations/accept` | `AcceptInvitation` | `identity.invitation.accept` | BOOTSTRAP_PROOF | yes | — |
-| 8 | `GET` | `/api/v1/memberships` | `ListOwnMemberships` | `organization.membership.read_self` | SESSION_COOKIE | no | — |
-| 9 | `GET` | `/api/v1/certifications/mine` | `ListOwnCertifications` | `certification.credential.read_self` | SESSION_COOKIE | no | — |
-| 10 | `POST` | `/api/v1/organizations/{organizationId}/locations/{locationId}/invitations` | `InviteIdentity` | `identity.invitation.create` | SESSION_COOKIE | yes | required |
-| 11 | `GET` | `/api/v1/organizations/{organizationId}/locations/{locationId}/invitations` | `ListInvitations` | `identity.invitation.read` | SESSION_COOKIE | no | — |
-| 12 | `POST` | `/api/v1/organizations/{organizationId}/locations/{locationId}/invitations/{invitationId}/revoke` | `RevokeInvitation` | `identity.invitation.revoke` | SESSION_COOKIE | yes | — |
-| 13 | `POST` | `/api/v1/organizations/{organizationId}/locations/{locationId}/tokens/{tokenId}/revoke` | `RevokeSingleUseToken` | `identity.token.revoke` | SESSION_COOKIE | yes | — |
-| 14 | `POST` | `/api/v1/organizations/{organizationId}/locations/{locationId}/members/{identityId}/offboard` | `OffboardIdentity` | `identity.lifecycle.offboard` | SESSION_COOKIE | yes | required |
-| 15 | `POST` | `/api/v1/organizations/{organizationId}/locations/{locationId}/memberships/{membershipId}/deactivate` | `DeactivateMembership` | `organization.membership.deactivate` | SESSION_COOKIE | yes | — |
-| 16 | `GET` | `/api/v1/organizations/{organizationId}/locations/{locationId}/team` | `ListTeam` | `organization.team.read` | SESSION_COOKIE | no | — |
-| 17 | `GET` | `/api/v1/organizations/{organizationId}/locations/{locationId}/team/{identityId}/learner-state` | `ReadTeamMemberLearnerState` | `learning.state.read_team` | SESSION_COOKIE | no | — |
-| 18 | `POST` | `/api/v1/organizations/{organizationId}/locations/{locationId}/assignments` | `AssignContent` | `learning.assignment.create` | SESSION_COOKIE | yes | required |
-| 19 | `GET` | `/api/v1/organizations/{organizationId}/locations/{locationId}/assignments/mine` | `ListOwnAssignments` | `learning.assignment.read_self` | SESSION_COOKIE | no | — |
-| 20 | `GET` | `/api/v1/organizations/{organizationId}/locations/{locationId}/content/{contentPackId}/versions/{contentVersion}` | `ReadAssignedContentVersion` | `content.pack.read_assigned` | SESSION_COOKIE | no | — |
-| 21 | `POST` | `/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions` | `StartLearningSession` | `learning.session.start` | SESSION_COOKIE | yes | required |
-| 22 | `POST` | `/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions/{learningSessionId}/progress-events` | `RecordProgressEvent` | `learning.progress.record` | SESSION_COOKIE | yes | required |
-| 23 | `POST` | `/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions/{learningSessionId}/complete` | `CompleteLearningSession` | `learning.session.complete` | SESSION_COOKIE | yes | — |
-| 24 | `GET` | `/api/v1/organizations/{organizationId}/locations/{locationId}/learner-state/mine` | `ReadOwnLearnerState` | `learning.state.read_self` | SESSION_COOKIE | no | — |
-| 25 | `POST` | `/api/v1/organizations/{organizationId}/locations/{locationId}/certifications` | `IssueCertification` | `certification.credential.issue` | SESSION_COOKIE | yes | required |
-| 26 | `GET` | `/api/v1/organizations/{organizationId}/locations/{locationId}/certifications/{certificationId}/verification` | `VerifyCertification` | `certification.credential.verify` | SESSION_COOKIE | no | — |
-| 27 | `POST` | `/api/v1/organizations/{organizationId}/identities/{identityId}/deactivate` | `DeactivateIdentity` | `identity.lifecycle.deactivate` | SESSION_COOKIE | yes | — |
-| 28 | `POST` | `/api/v1/organizations/{organizationId}/identities/{identityId}/reactivate` | `ReactivateIdentity` | `identity.lifecycle.reactivate` | SESSION_COOKIE | yes | — |
-| 29 | `POST` | `/api/v1/organizations/{organizationId}/memberships/{membershipId}/revoke` | `RevokeMembership` | `organization.membership.revoke` | SESSION_COOKIE | yes | — |
-| 30 | `POST` | `/api/v1/organizations/{organizationId}/certifications/{certificationId}/revoke` | `RevokeCertification` | `certification.credential.revoke` | SESSION_COOKIE | yes | — |
-| 31 | `GET` | `/api/v1/organizations/{organizationId}/audit-events` | `ReadAuditEvents` | `audit.event.read` | SESSION_COOKIE | no | — |
+| Method | Path | Operation | Scope | Mounted |
+| --- | --- | --- | --- | --- |
+| POST | `/api/v1/session` | `AuthenticateIdentity` | BOOTSTRAP | false |
+| GET | `/api/v1/session` | `ReadCurrentSession` | SELF | false |
+| DELETE | `/api/v1/session` | `RevokeApplicationSession` | SELF | false |
+| DELETE | `/api/v1/sessions/{sessionId}` | `RevokeApplicationSession` | SELF | false |
+| POST | `/api/v1/credential` | `ChangeCredential` | SELF | false |
+| POST | `/api/v1/credential/token-change` | `ChangeCredential` | SELF | false |
+| POST | `/api/v1/invitations/accept` | `AcceptInvitation` | BOOTSTRAP | false |
+| GET | `/api/v1/memberships` | `ListOwnMemberships` | SELF | false |
+| GET | `/api/v1/certifications/mine` | `ListOwnCertifications` | SELF | false |
+| POST | `/api/v1/organizations/{organizationId}/locations/{locationId}/invitations` | `InviteIdentity` | LOCATION | false |
+| GET | `/api/v1/organizations/{organizationId}/locations/{locationId}/invitations` | `ListInvitations` | LOCATION | false |
+| POST | `/api/v1/organizations/{organizationId}/locations/{locationId}/invitations/{invitationId}/revoke` | `RevokeInvitation` | LOCATION | false |
+| POST | `/api/v1/organizations/{organizationId}/locations/{locationId}/tokens/{tokenId}/revoke` | `RevokeSingleUseToken` | LOCATION | false |
+| POST | `/api/v1/organizations/{organizationId}/locations/{locationId}/members/{identityId}/offboard` | `OffboardIdentity` | LOCATION | false |
+| POST | `/api/v1/organizations/{organizationId}/locations/{locationId}/memberships/{membershipId}/deactivate` | `DeactivateMembership` | LOCATION | false |
+| GET | `/api/v1/organizations/{organizationId}/locations/{locationId}/team` | `ListTeam` | LOCATION | false |
+| GET | `/api/v1/organizations/{organizationId}/locations/{locationId}/team/{identityId}/learner-state` | `ReadTeamMemberLearnerState` | LOCATION | false |
+| POST | `/api/v1/organizations/{organizationId}/locations/{locationId}/assignments` | `AssignContent` | LOCATION | false |
+| GET | `/api/v1/organizations/{organizationId}/locations/{locationId}/assignments/mine` | `ListOwnAssignments` | LOCATION | false |
+| GET | `/api/v1/organizations/{organizationId}/locations/{locationId}/content/{contentPackId}/versions/{contentVersion}` | `ReadAssignedContentVersion` | LOCATION | false |
+| POST | `/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions` | `StartLearningSession` | LOCATION | false |
+| POST | `/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions/{learningSessionId}/progress-events` | `RecordProgressEvent` | LOCATION | false |
+| POST | `/api/v1/organizations/{organizationId}/locations/{locationId}/learning-sessions/{learningSessionId}/complete` | `CompleteLearningSession` | LOCATION | false |
+| GET | `/api/v1/organizations/{organizationId}/locations/{locationId}/learner-state/mine` | `ReadOwnLearnerState` | LOCATION | false |
+| POST | `/api/v1/organizations/{organizationId}/locations/{locationId}/certifications` | `IssueCertification` | LOCATION | false |
+| GET | `/api/v1/organizations/{organizationId}/locations/{locationId}/certifications/{certificationId}/verification` | `VerifyCertification` | LOCATION | false |
+| POST | `/api/v1/organizations/{organizationId}/identities/{identityId}/deactivate` | `DeactivateIdentity` | ORGANIZATION | false |
+| POST | `/api/v1/organizations/{organizationId}/identities/{identityId}/reactivate` | `ReactivateIdentity` | ORGANIZATION | false |
+| POST | `/api/v1/organizations/{organizationId}/memberships/{membershipId}/revoke` | `RevokeMembership` | ORGANIZATION | false |
+| POST | `/api/v1/organizations/{organizationId}/certifications/{certificationId}/revoke` | `RevokeCertification` | ORGANIZATION | false |
+| GET | `/api/v1/organizations/{organizationId}/audit-events` | `ReadAuditEvents` | ORGANIZATION | false |
+| POST | `/api/v1/demo/start` | `BeginDemoRun` | DEMO_NEW_RUN | false |
+| POST | `/api/v1/demo/persona` | `SwitchDemoPersona` | LOCATION | false |
+| POST | `/api/v1/demo/close` | `CloseDemoRun` | LOCATION | false |
 
-Operations with no route (internal, blocked or automation-only): `CreateApplicationSession`, `CreateIdentity`, `CreateMembership`, `PublishContentPack`, `ReconcileExternalEffect`. A route mapping to any of them fails CI. The 11 protected-read routes additionally wait for owner query interfaces in an Application Interface revision (`02-…` §11 gap 6).
-
-`Idempotency-Key` rules (C22): header value 16–128 chars `[A-Za-z0-9_-]`; missing on a route that requires it → `400 INVALID_REQUEST`; same key + same payload hash → original response replayed; same key + different payload → `422 IDEMPOTENCY_KEY_REUSED`, no side effect (TXN-3, TXN-4).
+Unrouted operations: `CreateApplicationSession`, `CreateIdentity`, `CreateMembership`, `PublishContentPack`, `ReconcileExternalEffect`, `CreateDemoPersona`, `RevokeDemoSessions`. Seven exact demo protected-query interfaces are registered in Application Interfaces 1.1.0; four other historical read interfaces remain missing. No broader route is admitted by this revision.
 
 ## 4. Error envelope (OQ-API-2, API-10)
 
@@ -188,3 +190,7 @@ Deprecation manifest: `governance/api/deprecations.json` (entries empty). Entry 
 | 0.1.0 | 2026-10-05 | Initial proposed manifest: 3 exceptions, 31 routes, error envelope schema. |
 | 0.2.0 | 2026-10-05 | Revised on `6553eb4`: tied the scope-tuple encoding to registered TEN-7 (#74) and to the Transport Interfaces deferrals in Application Interfaces 1.0.0 (APP-11, APP-12); noted that protected reads also need owner query interfaces (`02-…` gap 6); narrowed-residual naming fixed; owner chat approval recorded, registration pending #75. |
 | 0.3.0 | 2026-10-05 | Audit corrections: `/api/health` and `/api/ready` are explicitly exempt from the error envelope, with machine-readable `error_envelope` policy and a CI check (finding 4); no acceptance IDs appended to C41 (finding 1). |
+
+## Exact synthetic transport registration
+
+The prior error envelope and fixed status/message mapping are unchanged. New secret-issuing BeginDemoRun and SwitchDemoPersona are NON-RETRYABLE; their secrets never enter saved responses. Close is state-guarded and revoked visitor cookies deny. Reset is deliberately Close then Begin, with visible partial failure, not an atomic retryable route. The immutable package schemas at `domains/demo-runtime/proposal-0.1.0/transport-schemas.json` and definitions in `domains/demo-runtime/proposal-0.1.0/transport-and-queries.json` control only the selected synthetic payloads.

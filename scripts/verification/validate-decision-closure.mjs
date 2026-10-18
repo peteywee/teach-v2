@@ -4,6 +4,7 @@ import {readFileSync,existsSync,readdirSync} from 'node:fs';
 import {resolve,join} from 'node:path';
 import {createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
+import { createHistoricalSourceReader, inspectDemoRuntimeRegistration } from '../kernel/demo-runtime-registration.mjs';
 import {inspectCapabilityAdmission} from '../kernel/capability-admission.mjs';
 import {scanContractQuestions} from './owner-decision-inventory.mjs';
 
@@ -20,7 +21,8 @@ const marker='The original body below is preserved, including its former current
 
 export function validateDecisionClosure(root){
  const errors=[],check=(ok,message)=>{if(!ok)errors.push(message);};
- const read=p=>readFileSync(join(root,p),'utf8'),json=p=>JSON.parse(read(p));
+ const demo=inspectDemoRuntimeRegistration(root); errors.push(...demo.errors);
+ const read=createHistoricalSourceReader(root,demo.source),json=p=>JSON.parse(read(p));
  try{
   const manifest=json(`${PKG}/package-manifest.json`),reg=json('governance/decision-closure/registration.json');
   check(digest(read(`${PKG}/package-manifest.json`))===APPROVED_MANIFEST,'approved manifest digest changed');
@@ -46,7 +48,8 @@ export function validateDecisionClosure(root){
   archiveInventory.total_files+=archiveInventory.script;
   check(JSON.stringify(archiveInventory)===JSON.stringify(manifest.archive_inventory),'complete archive inventory must include manifest and sidecar (22 files)');
   // Activation copies must reproduce approved normative bodies; proposal bytes remain immutable.
-  for(const name of readdirSync(join(root,'governance/decision-closure')).filter(x=>x!== 'registration.json')){
+  const decisionNames=demo.registered?Object.keys(demo.source.files).filter(p=>p.startsWith('governance/decision-closure/')&&!p.slice('governance/decision-closure/'.length).includes('/')).map(p=>p.slice('governance/decision-closure/'.length)):readdirSync(join(root,'governance/decision-closure'));
+  for(const name of decisionNames.filter(x=>x!== 'registration.json')){
    const p=`governance/decision-closure/${name}`,source=`${PKG}/${name}`;
    check(existsSync(join(root,source)),`unapproved registered specification ${name}`);
    if(!existsSync(join(root,source)))continue;
@@ -57,7 +60,7 @@ export function validateDecisionClosure(root){
     if(start>=0)check([...lines.slice(0,1),...lines.slice(start+2)].join('\n')===body(read(source)),`registered normative specification changed ${name}`);
    }else check(read(p)===read(source),`registered matrix differs from approved matrix ${name}`);
   }
-  const live=scanContractQuestions(root),unresolved=live.unresolved.map(x=>x.id);
+  const live=scanContractQuestions(root,read),unresolved=live.unresolved.map(x=>x.id);
   check(JSON.stringify(unresolved)===JSON.stringify(OPEN_IDS),'exact nine residual/unknown questions required');
   check(JSON.stringify(live.unresolved.filter(x=>x.explicitly_blocks_implementation).map(x=>x.id))==='["OQ-CERT-2"]','CERT-2 must remain the sole explicit blocker');
   const ledger=read('contracts/APPROVAL-RECORD.md');check(ledger.includes('## Part 25 — Decision-closure r3.1 registration (#75)')&&ledger.includes(APPROVED_MANIFEST),'canonical manifest-bound approval ledger required');

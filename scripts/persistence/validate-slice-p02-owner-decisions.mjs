@@ -1,14 +1,17 @@
 #!/usr/bin/env node
+import { createHistoricalSourceReader } from '../kernel/demo-runtime-registration.mjs';
 import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const ROOT=resolve(process.cwd());
+// Historical prerequisite proof; inspectCapabilityAdmission validates the exact live successor first.
+const readPredecessor=createHistoricalSourceReader(ROOT);
 const errors=[];
 // Current-version checks accept only the exact owner-approved successor, not arbitrary version drift.
 errors.push(...inspectCapabilityAdmission(ROOT).errors);
-const load=(p)=>{try{return JSON.parse(readFileSync(join(ROOT,p),'utf8'));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
-const text=(p)=>{try{return readFileSync(join(ROOT,p),'utf8');}catch(e){errors.push(`${p}: ${e.message}`);return '';}};
+const load=(p)=>{try{return JSON.parse(readPredecessor(p));}catch(e){errors.push(`${p}: ${e.message}`);return null;}};
+const text=(p)=>{try{return readPredecessor(p);}catch(e){errors.push(`${p}: ${e.message}`);return '';}};
 
 const reg=load('persistence/physical-slices/identity-session/registration.json');
 const readiness=load('persistence/physical-slices/readiness.json');

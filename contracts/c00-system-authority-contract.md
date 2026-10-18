@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C00",
   "class": "contract",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-05",
-  "effective_on": "2026-10-03",
+  "updated_on": "2026-10-17",
+  "effective_on": "2026-10-17",
   "approval": {
     "state": "approved",
-    "approved_version": "1.0.0",
-    "approved_on": "2026-10-03",
-    "record": "contracts/APPROVAL-RECORD.md",
-    "inheritance": "1.0.1, 1.0.2, and 1.0.3 are non-normative governance/truth-state cleanup patches; 1.0.0 owner approval remains controlling"
+    "approved_version": "1.2.0",
+    "approved_on": "2026-10-17",
+    "record": "domains/demo-runtime/owner-approval.json",
+    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; SHA256SUMS sha256:a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,11 +28,24 @@
     "head_sha": "79fdce5cc3b207750888e5c2c1c198159ad17077",
     "use": "reference only; does not govern and is not governed by this contract"
   },
-  "supersedes": [],
+  "supersedes": [
+    "TEACH-CON-C00@1.1.0"
+  ],
   "superseded_by": null,
   "depends_on": [
     "contracts/"
-  ]
+  ],
+  "demo_runtime_registration": {
+    "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
+    "approval_record": "domains/demo-runtime/owner-approval.json",
+    "issue": "#82",
+    "source_package": "domains/demo-runtime/proposal-0.1.0",
+    "sha256sums_sha256": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+    "semantic_authority_only": true,
+    "physical_schema_admission": false,
+    "runtime_activation": false,
+    "deployment_authority": false
+  }
 }
 -->
 
@@ -43,17 +56,17 @@
 | Contract ID        | C00                                                                                                                                                             |
 | Group              | C00 System Authority                                                                                                                                            |
 | Governed by        | None (root contract)                                                                                                                                            |
-| Version            | 1.1.0                                                                                                                                                           |
+| Version | 1.2.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by        | Patrick Craven (owner), 2026-10-03 — approval instruction given in chat at 10:47 CDT; transcribed by Claude at the owner's direction — see `APPROVAL-RECORD.md` |
+| Approved by | Patrick Craven (owner), 2026-10-17; TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; see `domains/demo-runtime/owner-approval.json` |
 | Requirement prefix | `SYS`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — absorbs the binding principles of legacy `docs/decisions/gate-a-saas-foundation-contracts.md`; does not replace that historical record.        |
-| Supersedes         | None                                                                                                                                                            |
+| Supersedes | 1.1.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated       | 2026-10-05                                                                                                                                                      |
+| Last updated | 2026-10-17 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -119,7 +132,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 - **SYS-26** — An `active` contract MUST govern until it is explicitly superseded; age, disuse, or implementation drift MUST NOT be treated as supersession.
 - **SYS-27** — A contract change MUST be approved before any implementation change that depends on it is merged.
 - **SYS-28** — Legacy Teach implementation MUST NOT be carried into v2 unless the reuse names an owning contract, an owner, and a purpose; the legacy repository MAY be used freely as a reference and evidence source.
-- **SYS-29** — A learner demo MUST NOT be presented until C00, C01, C02, the applicable parts of C11–C15 and C21–C23 per the explicit demo-applicability matrix (OQ-SYS-5 resolved 2026-10-05; shared deployment requires release proof), C31, C32, C41, and C42 are `active`.
+- **SYS-29** — A visitor-plus-manager demo MUST NOT be presented until C00, C01, C02, the applicable parts of C11–C15 and C21–C23 per the explicit demo-applicability matrix (OQ-SYS-5 resolved 2026-10-05; shared deployment requires release proof), C31, C32, C33, C41, and C42 are `active`.
 - **SYS-30** — A manager demonstration MUST NOT be presented until, in addition, C33 is `active`.
 - **SYS-31** — A certification demonstration MUST NOT be presented until, in addition, C34 is `active`.
 - **SYS-32** — Runtime AI, analytics, PWA/offline, and self-service billing MUST NOT be treated as prerequisites for the learner demo.
@@ -188,3 +201,13 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.1.0   | 2026-10-05 | Registered OQ-SYS-1 (intra-group peers, restrictive-wins), OQ-SYS-2 (compatibility register at governance/compatibility-register.json, CI-validated), OQ-SYS-5 (demo applicability matrix). Updated SYS-4, SYS-11, SYS-29. (Decision-closure r3.1, SYS-21) | Astro |
+
+## Registered demo runtime amendment (1.2.0)
+
+Exact owner-approved scope: `TEACH-DEMO-RUNTIME-2026-10-17@0.1.0`, SYS-21 [#82](https://github.com/peteywee/teach-v2/issues/82). Approval provenance: `domains/demo-runtime/owner-approval.json`; immutable source: `domains/demo-runtime/proposal-0.1.0/contract-amendments.md`. The addendum below is the approved revision, not an exception inferred by an implementer. It changes only its explicitly named demo behavior; ordinary/customer semantics and unrelated gates remain unchanged. Proposal labels in the immutable package preserve its pre-approval history; this registration supplies current authority. Physical schema admission, runtime activation and shared deployment remain separate.
+
+Add explicit demo applicability: the visitor+manager demo must satisfy C11–C15, C21–C23, C31–C33 and C41/C42 for every behavior it exposes, including reporting and replay for Identity, Membership, Assignment and DemoRun. Existing learner-only N/A rows do not waive a triggered requirement. Certification/deferred feature gates remain unchanged. Shared deployment still requires release proof.
+
+A visitor acting through a constrained synthetic demo persona is a HumanActor for command/audit classification, but the persona does not claim to identify the actual human visitor. Anonymous admission is a trigger executed only by the named demo-admission AutomationActor. Admit only the two named deterministic principal records, capability lists, scope rules and in-process dispatcher authentication described in demo-boundary.md. No DevelopmentAgent obtains product authority; arbitrary internal code does not inherit either principal. The expiry principal is a bounded named job, not blanket job adoption.
+
+Exact definitions and field constraints are incorporated from `domains/demo-runtime/proposal-0.1.0/demo-boundary.md`, `domains/demo-runtime/proposal-0.1.0/authority-and-audit.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.json`, and `domains/demo-runtime/proposal-0.1.0/transport-and-queries.json` with its referenced schemas. No definition beyond that approved package is introduced.

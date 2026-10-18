@@ -33,10 +33,24 @@
     {
       "id": "AuditEventId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "AuditEvent",
-      "owning_domain": "AuditLifecycle"
+      "owning_domain": "AuditLifecycle",
+      "definition": "AuditEventId",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "AuditEvent"
+        }
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "status": "approved",
@@ -97,10 +111,28 @@
     {
       "id": "ContentBlockId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "ContentBlock",
-      "owning_domain": "Content"
+      "owning_domain": "Content",
+      "definition": "Opaque identifier of a ContentBlock, resolved within an exact immutable ContentPack version.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentBlock"
+        }
+      ],
+      "valueType": "opaque-id",
+      "constraints": [
+        "Does not confer access; authoritative lookup requires pack identity/version/digest."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "ContentPackId",
@@ -182,10 +214,45 @@
     {
       "id": "LearnerStateId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "LearnerState",
-      "owning_domain": "Learning"
+      "owning_domain": "Learning",
+      "definition": "Stable opaque identity of an exact assignment-scoped learner-state projection version.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LearnerState"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "identifiers",
+          "id": "AssignmentId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        }
+      ],
+      "valueType": "opaque-id",
+      "derivation": "ls_ + lowercase SHA256 of canonical JSON array [\"LearnerState\",\"1.0.0\",organizationId,locationId,identityId,assignmentId]",
+      "constraints": [
+        "Not stored as a mutable state row and never accepted as authority."
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "LearningSessionId",
@@ -204,26 +271,68 @@
     {
       "id": "LifecycleEventId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "LifecycleEvent",
-      "owning_domain": "AuditLifecycle"
+      "owning_domain": "AuditLifecycle",
+      "definition": "LifecycleEventId",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "LifecycleEvent"
+        }
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "LocationId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "Location",
-      "owning_domain": "Organization"
+      "owning_domain": "Organization",
+      "definition": "LocationId",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Location"
+        }
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "MembershipId",
       "kind": "identifier",
-      "status": "candidate",
+      "status": "approved",
       "value_type": "opaque-id",
       "represents": "Membership",
-      "owning_domain": "Organization"
+      "owning_domain": "Organization",
+      "definition": "MembershipId",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "Membership"
+        }
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      }
     },
     {
       "id": "OrganizationId",
@@ -301,6 +410,142 @@
       "promotion_evidence": [
         "IDN-26"
       ]
+    },
+    {
+      "id": "DemoRunId",
+      "kind": "identifier",
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "Opaque typed identifier for DemoRun",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        }
+      ],
+      "value_type": "opaque-id",
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      },
+      "represents": "DemoRun"
+    },
+    {
+      "id": "DemoPersonaId",
+      "kind": "identifier",
+      "status": "approved",
+      "owning_domain": "Identity",
+      "definition": "Opaque typed identifier for DemoPersona",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoPersona"
+        }
+      ],
+      "value_type": "opaque-id",
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      },
+      "represents": "DemoPersona"
+    },
+    {
+      "id": "MembershipGrantId",
+      "kind": "identifier",
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "Opaque typed identifier for MembershipGrant",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "MembershipGrant"
+        }
+      ],
+      "value_type": "opaque-id",
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      },
+      "represents": "MembershipGrant"
+    },
+    {
+      "id": "ReportingRelationshipId",
+      "kind": "identifier",
+      "status": "approved",
+      "owning_domain": "Organization",
+      "definition": "Opaque typed identifier for ReportingRelationship",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ReportingRelationship"
+        }
+      ],
+      "value_type": "opaque-id",
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      },
+      "represents": "ReportingRelationship"
+    },
+    {
+      "id": "CommandReceiptId",
+      "kind": "identifier",
+      "status": "approved",
+      "owning_domain": "TransactionControl",
+      "definition": "Opaque typed identifier for CommandReceipt",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "CommandReceipt"
+        }
+      ],
+      "value_type": "opaque-id",
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      },
+      "represents": "CommandReceipt"
+    },
+    {
+      "id": "DemoExecutionPrincipalId",
+      "kind": "identifier",
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "definition": "Opaque typed identifier for DemoExecutionPrincipal",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "DemoExecutionPrincipal"
+        }
+      ],
+      "value_type": "closed-name",
+      "allowed_values": [
+        "automation:demo-admission-v1",
+        "automation:demo-expiry-v1"
+      ],
+      "demo_runtime_registration": {
+        "package_id": "TEACH-DEMO-RUNTIME-2026-10-17",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-runtime/owner-approval.json",
+        "issue": "#82",
+        "registered_on": "2026-10-17"
+      },
+      "represents": "DemoExecutionPrincipal"
     }
   ]
 }
