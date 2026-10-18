@@ -50,6 +50,9 @@ jobs:
       - name: Audit authority
         id: audit_authority
         run: node scripts/verification/run-self-audit.mjs --stage authority
+      - name: Audit demo-registration-entry-regressions
+        id: audit_demo_registration_entry_regressions
+        run: node scripts/verification/run-self-audit.mjs --stage demo-registration-entry-regressions
       - name: Audit demo-registration-regressions
         id: audit_demo_registration_regressions
         run: node scripts/verification/run-self-audit.mjs --stage demo-registration-regressions
@@ -110,6 +113,12 @@ jobs:
       - name: Audit validator-shard-12
         id: audit_validator_shard_12
         run: node scripts/verification/run-self-audit.mjs --stage validator-shard-12
+      - name: Audit validator-shard-13
+        id: audit_validator_shard_13
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-13
+      - name: Audit validator-shard-14
+        id: audit_validator_shard_14
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-14
       - name: Audit audit-regressions
         id: audit_audit_regressions
         run: node scripts/verification/run-self-audit.mjs --stage audit-regressions

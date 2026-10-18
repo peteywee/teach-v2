@@ -1,3 +1,4 @@
+import {REGISTRATION_ENTRY_PATTERN,REGISTRATION_REMAINDER_PATTERN} from './validator-partitions.mjs';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join } from 'node:path';
@@ -24,8 +25,11 @@ export function inspectConsolidatedVerification(root) {
     if (checkouts.length !== 1 || !/^          fetch-depth: 0$/m.test(checkouts[0]) || [...checkouts[0].matchAll(/^          fetch-depth:/gm)].length !== 1) fail('full-history credential-free document checkout required');
     if (inspectWorkflowText(path,workflow).length !== 1) fail('one explicit producer job required');
     if (!workflow.includes("node-version: '20.20.2'") || !workflow.includes('pnpm@12.8.1') || !workflow.includes('run: pnpm install --frozen-lockfile\n') || !workflow.includes('image: postgres:17.11-alpine') || !workflow.includes("TEACH_ISOLATED_DB: '1'") || !workflow.includes('timeout-minutes: 15')) fail('pinned runtime and isolated PostgreSQL required');
-    const demoRegression=plan?.stages?.find(stage=>stage.id==='demo-registration-regressions');
-    if(demoRegression?.command!=='node'||JSON.stringify(demoRegression?.args)!==JSON.stringify(['--test','scripts/tests/validate-demo-runtime-registration.mjs'])||demoRegression?.timeout_ms!==25000)fail('exact bounded demo registration mutation suite must run in CI');
+    for(const [id,pattern] of [['demo-registration-entry-regressions',REGISTRATION_ENTRY_PATTERN],['demo-registration-regressions',REGISTRATION_REMAINDER_PATTERN]]){
+      const demoRegression=plan?.stages?.find(stage=>stage.id===id);
+      if(demoRegression?.command!=='node'||JSON.stringify(demoRegression?.args)!==JSON.stringify(['--test','--test-name-pattern='+pattern,'scripts/tests/validate-demo-runtime-registration.mjs'])||demoRegression?.timeout_ms!==25000)fail('exact bounded demo registration mutation suite must run in CI');
+    }
+    if(createHash('sha256').update(readFileSync(join(root,'scripts/tests/validate-demo-runtime-registration.mjs'))).digest('hex')!=='0aec40789483d97aafbeaa69846037de42b7f2f8a71c34979cd74aac8ce5a639')fail('original seventeen registration test declarations must remain exact');
     const physicalRegression=plan?.stages?.find(stage=>stage.id==='audit-regressions');
     if(physicalRegression?.command!=='node'||JSON.stringify(physicalRegression?.args)!==JSON.stringify(['--test','scripts/tests/validate-development-self-audit.test.mjs','scripts/tests/validate-ci-consolidation.test.mjs','scripts/tests/validate-demo-physical-successor.mjs','scripts/tests/validate-replay-database-cleanup.test.mjs'])||physicalRegression?.timeout_ms!==25000||!existsSync(join(root,'scripts/tests/validate-demo-physical-successor.mjs')))fail('exact bounded physical successor mutation suite must run in CI');
     const demoSource=plan?.stages?.find(stage=>stage.id==='demo-source-tests');

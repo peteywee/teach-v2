@@ -13,6 +13,7 @@
 // Usage: node scripts/tests/validate-validators.mjs
 // Exit 0 = all tests pass. Exit 1 = at least one test failed.
 
+import {VALIDATOR_PARTITION_COUNT,validatorPartitionForOrdinal,assertValidatorInventory} from '../verification/validator-partitions.mjs';
 import {predecessorFixture,exactCurrentDenial,readPredecessorCases,PREDECESSOR_COMMIT,PREDECESSOR_TREE} from '../verification/demo-validator-predecessor.mjs';
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
@@ -60,6 +61,8 @@ function mergeValidatorWorkers(reports, index, total) {
   return { names, results: reports.flatMap(report => report.results).sort((a,b) => a.ordinal-b.ordinal) };
 }
 if (isMainThread && shardTotal <= 16) {
+ // The reviewed fourteen-partition plan runs serially; aggregate controls are isolated.
+ if (shardTotal !== VALIDATOR_PARTITION_COUNT) {
   const pending = [shardIndex, shardIndex + shardTotal].map(index => {
     try { return awaitValidatorWorker(new Worker(new URL(import.meta.url), { workerData: { shardIndex: index, shardTotal: shardTotal * 2 } }), index); }
     catch (error) { return Promise.reject(error); }
@@ -74,6 +77,8 @@ if (isMainThread && shardTotal <= 16) {
     console.log(`Validator inventory: ${names.length}; shard: ${shardIndex}/${shardTotal}; selected: ${merged.length}; digest: ${createHash('sha256').update(JSON.stringify(names)).digest('hex')}`);
     process.exit(failures ? 1 : 0);
   } catch (error) { console.error(`Validator worker failure: ${error.message}`); process.exit(1); }
+}
+
 }
 
 // Cache only the immutable source snapshot, never a mutable test directory.
@@ -152,7 +157,7 @@ function validatorResultMatches(result, expect) {
 function test(name, script, mutate, expect) {
   inventoryNames.push(name);
   const ordinal=inventoryCount++;
-  if(ordinal % shardTotal !== shardIndex-1) return;
+  if(shardTotal===VALIDATOR_PARTITION_COUNT?validatorPartitionForOrdinal(ordinal)!==shardIndex:ordinal % shardTotal !== shardIndex-1) return;
   const dir = scratch();
   try {
     mutate(dir);
@@ -1220,11 +1225,12 @@ test('capability admission: unrelated promotion fails', 'scripts/kernel/validate
 // Report
 // ---------------------------------------------------------------------------
 
+assertValidatorInventory(inventoryNames);
 if (!isMainThread) { parentPort.postMessage({ results, inventoryNames, inventoryCount }); process.exit(0); }
 
 let failed = 0;
 for (const r of results) {
-  console.log(`${r.ok ? "PASS" : "FAIL"}  ${r.name}`);
+  console.log(`${r.ok ? "PASS" : "FAIL"}  ${r.name}${r.detail.startsWith("PAIRED ")?" [PAIRED predecessor inputs/current validator + current admission]":""}`);
   if (!r.ok) {
     failed++;
     console.log(`      ${r.detail}`);
