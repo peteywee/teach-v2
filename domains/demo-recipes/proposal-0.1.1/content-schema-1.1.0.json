@@ -1,0 +1,307 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://t34ch.com/proposals/demo-recipes-0.1.0/content-schema-1.1.0.json",
+  "title": "Proposed canonical ContentPack schema 1.1.0",
+  "status": "PROPOSED_SOURCE_NOT_SELF_AUTHORIZING",
+  "$comment": "One canonical ContentPack schema lineage. This is version 1.1.0, not a legacy adapter or a parallel catalog schema. IDs are inert schema identifiers, never network-fetch instructions.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "1.1.0"
+    },
+    "contentPackId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,128}$(?![\\s\\S])"
+    },
+    "organizationId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,128}$(?![\\s\\S])"
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 38,
+      "pattern": "^(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)(?:-(?:(?:0|[1-9][0-9]*)|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:(?:0|[1-9][0-9]*)|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$(?![\\s\\S])",
+      "description": "Exact strict SemVer 2.0 identity, including prerelease and build metadata; ASCII syntax makes the 38-character and 38-byte bounds equal."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+      "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+    },
+    "blocks": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "$ref": "#/$defs/TeachingBlock"
+      }
+    },
+    "recipes": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "$ref": "#/$defs/Recipe"
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "contentPackId",
+    "organizationId",
+    "version",
+    "title",
+    "blocks",
+    "recipes"
+  ],
+  "$defs": {
+    "TeachingBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$(?![\\s\\S])"
+        },
+        "kind": {
+          "const": "SINGLE_CHOICE"
+        },
+        "instruction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+          "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+          "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+        },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+            "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+          }
+        },
+        "expectedOptionIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "feedback": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+            "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+          }
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "instruction",
+        "prompt",
+        "options",
+        "expectedOptionIndex",
+        "feedback"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "options": {
+                "minItems": 2,
+                "maxItems": 2
+              }
+            },
+            "required": [
+              "options"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedOptionIndex": {
+                "maximum": 1
+              },
+              "feedback": {
+                "minItems": 2,
+                "maxItems": 2
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "options": {
+                "minItems": 3,
+                "maxItems": 3
+              }
+            },
+            "required": [
+              "options"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedOptionIndex": {
+                "maximum": 2
+              },
+              "feedback": {
+                "minItems": 3,
+                "maxItems": 3
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "options": {
+                "minItems": 4,
+                "maxItems": 4
+              }
+            },
+            "required": [
+              "options"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedOptionIndex": {
+                "maximum": 3
+              },
+              "feedback": {
+                "minItems": 4,
+                "maxItems": 4
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "options": {
+                "minItems": 5,
+                "maxItems": 5
+              }
+            },
+            "required": [
+              "options"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedOptionIndex": {
+                "maximum": 4
+              },
+              "feedback": {
+                "minItems": 5,
+                "maxItems": 5
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Recipe": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$(?![\\s\\S])"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+          "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+        },
+        "station": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+          "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+        },
+        "servings": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "ingredients": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 30,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+            "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+          }
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+            "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+          }
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+          "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "station",
+        "servings",
+        "ingredients",
+        "steps",
+        "reference"
+      ],
+      "description": "Read-only fictional recipe value embedded in the existing ContentPack version, not a new entity, command, capability, or scored challenge."
+    }
+  },
+  "x-required-semantic-validation": {
+    "canonicalization": "Before schema validation, parse strict JSON with duplicate-key, forbidden-key, lone-surrogate, float/exponent-number, unsafe-integer, unsupported-property, and excessive-depth rejection. Preserve strings without normalization; sort object keys lexicographically; retain array order; encode safe integers in decimal. Native object validation also rejects getters, hooks, symbols, holes, cycles, and non-plain objects.",
+    "maxCanonicalBytes": 65536,
+    "digest": "sha256: plus lowercase SHA-256 of the full UTF-8 canonical payload; digest is metadata, never a canonical-payload field.",
+    "uniqueBlockIds": "All three block IDs must be unique within this exact version.",
+    "uniqueRecipeIds": "All three recipe IDs must be unique within this exact version.",
+    "immutability": "Validated content is detached and deeply frozen. Published pack identity/version bytes are create-only and cannot be rewritten.",
+    "publicationBinding": "Pack ID, organization ID, exact version, canonical bytes, and digest must match the stored ContentPack and version row.",
+    "schemaIsNotSufficient": "Generic JSON Schema alone does not enforce canonical bytes, lexical JSON rejection, ID uniqueness by property, immutability, publication binding, or authorization. The Content validator and application boundary remain mandatory."
+  }
+}

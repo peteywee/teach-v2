@@ -1,0 +1,93 @@
+{
+  "approval_id": "TEACH-DEMO-RECIPES-2026-10-18",
+  "version": "0.1.1",
+  "state": "APPROVED_BOUNDED_SCOPE",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "recorded_on": "2026-10-18",
+  "source": "Exact owner conversation supplied as trusted transcript history; validator verifies recorded bytes, not independent speaker authentication.",
+  "question": {
+    "message_id": "Sentinel_bb54ecb9be7c8191a74613073ea41da5",
+    "speaker": "assistant",
+    "text": "Database testing caught a real blocker: an existing validation trigger rejects the new recipe fields. That protection should stay; it needs an additive migration that accepts both the old and new content formats.\n\nApprove revision TEACH-DEMO-RECIPES-2026-10-18@0.1.1 to include that migration and test it only in the disposable local database? No new database or tables, no edits to old migrations, and no live-data changes. The earlier proposal incorrectly said no migration would be needed."
+  },
+  "response": {
+    "message_id": "Sentinel_225d967327cc819188c782fd856bd9e7",
+    "speaker": "owner",
+    "text": "approve"
+  },
+  "package_id": "TEACH-DEMO-RECIPES-2026-10-18",
+  "package_version": "0.1.1",
+  "package_sha256sums_digest": "b5f80daf1d94ecbccb1a01f3e58be3fc98d32564567b1cf03fd5c639eb435255",
+  "digest_binding_note": "This recorded digest binds the implementation of the exact named scope and versions approved above; the transcript did not display a digest and this record does not claim that it did.",
+  "approved_scope": [
+    "C31 1.3.0 to 1.4.0; canonical Content schema and synthetic template exact version 1.1.0; retain immutable 1.0.0 reads",
+    "C41 1.2.0 to 1.3.0; existing ReadAssignedContentVersion additionally admits exact PublicContent 1.1.0",
+    "C42 1.2.0 to 1.3.0; read-only kitchen, recipe book and recipe detail views with original general handoff practice",
+    "Exactly three fictional read-only recipes nested in existing organization-owned ContentPack version JSON",
+    "Registration and local isolated implementation only after existing independent review and admission gates pass",
+    "One additive strict content_guard_demo_version migration admitting exact canonical Content schema 1.0.0 or 1.1.0, tested only in the disposable local database after separate source-bound physical admission",
+    "Explicit ContentPack.versionPayload schema-reference projection for the same approved schema lineage; canonical identity, owner, relationships, dependencies and original registry entries unchanged"
+  ],
+  "excluded_scope": [
+    "Hosting or deployment",
+    "Spending or provider changes",
+    "Live or shared database changes",
+    "New tables, schema namespaces, databases, routes, capability grants, entities or owners; all migration changes except the one approved additive guard successor",
+    "Changed lesson, answers, feedback, scoring, participation/completion or lifecycle semantics",
+    "Customer approval claims, real recipe licensing claims, mastery, certification or XP"
+  ],
+  "sys21_issue": {
+    "number": 88,
+    "url": "https://github.com/peteywee/teach-v2/issues/88",
+    "baseline_commit": "2ad83bfce7d5c460f9f5f383a36491d9188de916",
+    "body_sha256": "be848626285aee913365979ec9f6a85cbaf195f1191725639db7afb81eb52683",
+    "historical_body": "## Decision pending: TEACH-DEMO-RECIPES-2026-10-18@0.1.0\nSYS-21 impact issue against main 2ad83bfce7d5c460f9f5f383a36491d9188de916. This is a bounded successor to the registered demo content/read contract, not approval to deploy. Owner ratification of the exact versions below is PENDING. Existing 0.1.0 source package remains immutable.\n\n### Exact proposed revision\n- TEACH-CON-C31 1.3.0 \u2192 1.4.0: admit canonical Content schema 1.1.0 and frozen synthetic template version 1.1.0, retaining read/validation of exact immutable 1.0.0 packs.\n- TEACH-CON-C41 1.2.0 \u2192 1.3.0: existing ReadAssignedContentVersion response additionally admits exact PublicContent schema 1.1.0.\n- TEACH-CON-C42 1.2.0 \u2192 1.3.0: learner kitchen catalog, searchable/filterable recipe book, recipe detail/reference view; navigation to existing general handoff practice clearly not a recipe-specific graded challenge.\n- Successor package TEACH-DEMO-RECIPES-2026-10-18@0.1.0 records this limited exception to the original frozen content/transport definitions. All other incorporated original definitions remain unchanged. Superseded contract copies, changelogs, approval provenance and dependent registration evidence must be preserved.\n\n### Data and behavior boundary\nExactly three clearly fictional recipe records are immutable children of the existing organization-owned ContentPack version JSON. No new database, schema namespace, table, migration, entity owner or public operation. Each record contains unique id, title (max160 Unicode scalars), station(max80), servings(integer1..100), ingredients(1..30 text items each max500), steps(1..20 each max2000), reference(max1000). Existing plain-text safety, canonicalization, 64KiB bound and SHA256 exact-version binding apply. Titles identify fictional samples. Reference copy links only to the original general handoff practice.\nThe original three SINGLE_CHOICE blocks, expected answers, feedback, scoring, completion/participation meaning, assignment/session lifecycle, 15 API routes, seven served asset paths, capabilities and all security guards remain unchanged. Browsing recipes writes no progress or mastery. Managers gain no content-read capability. New admissions use the successor template only after registration/admission gates pass; old immutable content remains readable. No customer approval or real recipe licensing claim.\n\n### Implementation impact\nContent domain validator/public read projection and synthetic template factory; existing Organization admission composition selects the registered successor; existing client response codec accepts the two exact versions; client controller reads only own assigned content with exact pack/version/digest checks; kitchen/book/detail render read-only escaped content with search, station filter, clear, back, refresh and general-practice controls.\nCurrent local work is unpromoted candidate UI/domain preparation. Active contract files and admission composition have not been changed. No new seed or runtime activation is authorized by this issue.\n\n### Acceptance cases recorded before promotion\n1. Validate old1.0 and new1.1 canonical content; reject extra/missing fields, duplicate IDs, malformed bounds/version, unsafe text, digest mismatch; freeze published recipe data.\n2. Original handoff blocks/answers/feedback and completion counts remain byte-equivalent apart from fresh scoped identifiers.\n3. Only own assigned exact-version content appears; foreign org/pack, malformed payload, manager or revoked-session access fails closed.\n4. Kitchen, book, recipe detail and general-practice links connect; search/filter/no-match/clear/back/refresh and missing recipe recovery work without pretend persistence.\n5. Existing learner answer/complete/readback, manager readback/reassignment/revocation, reset confirmation/cancel/partial failure and logout retain guarantees.\n6. Automated/source checks plus actual cloud-browser desktop/mobile and keyboard evidence are labeled separately; unknowns never become blanket all-controls-working claims.\n7. Regenerate source inventory, contract/governance evidence and version-bound test evidence after implementation. Preserve hosted-runtime disabled state.\n\n### Excluded\nHosting/domain configuration, payment/upgrade, new providers, real customers, customer catalog policy, new learning/scoring semantics, certification/XP/mastery, deletion or security-setting changes.\n",
+    "note": "The preserved impact issue body predates the supplied owner approval; its PENDING wording is historical, not current approval state."
+  },
+  "previous_approval": {
+    "approval_id": "TEACH-DEMO-RECIPES-2026-10-18",
+    "version": "0.1.0",
+    "state": "APPROVED_BOUNDED_SCOPE",
+    "owner": "Patrick Craven, Top Shelf Service LLC",
+    "recorded_on": "2026-10-18",
+    "source": "Exact owner conversation supplied as trusted transcript history; validator verifies recorded bytes, not independent speaker authentication.",
+    "question": {
+      "message_id": "Sentinel_320d16ec3ce88191b915e1c9962ccfcb",
+      "speaker": "assistant",
+      "text": "One exact approval is required by the repo\u2019s existing change rules before I connect the new recipe data.\n\nApprove TEACH-DEMO-RECIPES-2026-10-18@0.1.0 in [issue #88](https://github.com/peteywee/teach-v2/issues/88)? It adds three fictional, read-only recipes to the existing content pack and connects the kitchen, recipe-book, and detail views. It updates C31/C41/C42 and the content schema/template; the lesson, scoring, permissions, and 15 API routes stay unchanged.\n\nThis does not authorize hosting, spending, or live-database changes. UI and test preparation can continue while that approval is pending."
+    },
+    "response": {
+      "message_id": "Sentinel_b14361f04f608191af99747e22ca8841",
+      "speaker": "owner",
+      "text": "approve"
+    },
+    "package_id": "TEACH-DEMO-RECIPES-2026-10-18",
+    "package_version": "0.1.0",
+    "package_sha256sums_digest": "51e6cec2b309ca3a14c9ef5f1b8b9f6603c53ec3c4d350602996cf1b6c07b539",
+    "digest_binding_note": "This recorded digest binds the implementation of the exact named scope and versions approved above; the transcript did not display a digest and this record does not claim that it did.",
+    "approved_scope": [
+      "C31 1.3.0 to 1.4.0; canonical Content schema and synthetic template exact version 1.1.0; retain immutable 1.0.0 reads",
+      "C41 1.2.0 to 1.3.0; existing ReadAssignedContentVersion additionally admits exact PublicContent 1.1.0",
+      "C42 1.2.0 to 1.3.0; read-only kitchen, recipe book and recipe detail views with original general handoff practice",
+      "Exactly three fictional read-only recipes nested in existing organization-owned ContentPack version JSON",
+      "Registration and local isolated implementation only after existing independent review and admission gates pass"
+    ],
+    "excluded_scope": [
+      "Hosting or deployment",
+      "Spending or provider changes",
+      "Live or shared database changes",
+      "New tables, schemas, migrations, routes, capability grants, entities or owners",
+      "Changed lesson, answers, feedback, scoring, participation/completion or lifecycle semantics",
+      "Customer approval claims, real recipe licensing claims, mastery, certification or XP"
+    ],
+    "sys21_issue": {
+      "number": 88,
+      "url": "https://github.com/peteywee/teach-v2/issues/88",
+      "baseline_commit": "2ad83bfce7d5c460f9f5f383a36491d9188de916",
+      "body_sha256": "be848626285aee913365979ec9f6a85cbaf195f1191725639db7afb81eb52683",
+      "historical_body": "## Decision pending: TEACH-DEMO-RECIPES-2026-10-18@0.1.0\nSYS-21 impact issue against main 2ad83bfce7d5c460f9f5f383a36491d9188de916. This is a bounded successor to the registered demo content/read contract, not approval to deploy. Owner ratification of the exact versions below is PENDING. Existing 0.1.0 source package remains immutable.\n\n### Exact proposed revision\n- TEACH-CON-C31 1.3.0 \u2192 1.4.0: admit canonical Content schema 1.1.0 and frozen synthetic template version 1.1.0, retaining read/validation of exact immutable 1.0.0 packs.\n- TEACH-CON-C41 1.2.0 \u2192 1.3.0: existing ReadAssignedContentVersion response additionally admits exact PublicContent schema 1.1.0.\n- TEACH-CON-C42 1.2.0 \u2192 1.3.0: learner kitchen catalog, searchable/filterable recipe book, recipe detail/reference view; navigation to existing general handoff practice clearly not a recipe-specific graded challenge.\n- Successor package TEACH-DEMO-RECIPES-2026-10-18@0.1.0 records this limited exception to the original frozen content/transport definitions. All other incorporated original definitions remain unchanged. Superseded contract copies, changelogs, approval provenance and dependent registration evidence must be preserved.\n\n### Data and behavior boundary\nExactly three clearly fictional recipe records are immutable children of the existing organization-owned ContentPack version JSON. No new database, schema namespace, table, migration, entity owner or public operation. Each record contains unique id, title (max160 Unicode scalars), station(max80), servings(integer1..100), ingredients(1..30 text items each max500), steps(1..20 each max2000), reference(max1000). Existing plain-text safety, canonicalization, 64KiB bound and SHA256 exact-version binding apply. Titles identify fictional samples. Reference copy links only to the original general handoff practice.\nThe original three SINGLE_CHOICE blocks, expected answers, feedback, scoring, completion/participation meaning, assignment/session lifecycle, 15 API routes, seven served asset paths, capabilities and all security guards remain unchanged. Browsing recipes writes no progress or mastery. Managers gain no content-read capability. New admissions use the successor template only after registration/admission gates pass; old immutable content remains readable. No customer approval or real recipe licensing claim.\n\n### Implementation impact\nContent domain validator/public read projection and synthetic template factory; existing Organization admission composition selects the registered successor; existing client response codec accepts the two exact versions; client controller reads only own assigned content with exact pack/version/digest checks; kitchen/book/detail render read-only escaped content with search, station filter, clear, back, refresh and general-practice controls.\nCurrent local work is unpromoted candidate UI/domain preparation. Active contract files and admission composition have not been changed. No new seed or runtime activation is authorized by this issue.\n\n### Acceptance cases recorded before promotion\n1. Validate old1.0 and new1.1 canonical content; reject extra/missing fields, duplicate IDs, malformed bounds/version, unsafe text, digest mismatch; freeze published recipe data.\n2. Original handoff blocks/answers/feedback and completion counts remain byte-equivalent apart from fresh scoped identifiers.\n3. Only own assigned exact-version content appears; foreign org/pack, malformed payload, manager or revoked-session access fails closed.\n4. Kitchen, book, recipe detail and general-practice links connect; search/filter/no-match/clear/back/refresh and missing recipe recovery work without pretend persistence.\n5. Existing learner answer/complete/readback, manager readback/reassignment/revocation, reset confirmation/cancel/partial failure and logout retain guarantees.\n6. Automated/source checks plus actual cloud-browser desktop/mobile and keyboard evidence are labeled separately; unknowns never become blanket all-controls-working claims.\n7. Regenerate source inventory, contract/governance evidence and version-bound test evidence after implementation. Preserve hosted-runtime disabled state.\n\n### Excluded\nHosting/domain configuration, payment/upgrade, new providers, real customers, customer catalog policy, new learning/scoring semantics, certification/XP/mastery, deletion or security-setting changes.\n",
+      "note": "The preserved impact issue body predates the supplied owner approval; its PENDING wording is historical, not current approval state."
+    }
+  },
+  "correction": "The prior 0.1.0 no-migration assumption was incorrect. This 0.1.1 approval permits only the stated additive strict guard migration and disposable-local validation; it does not waive independent physical review or authorize live-data changes."
+}

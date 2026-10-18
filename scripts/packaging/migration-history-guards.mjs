@@ -1,6 +1,7 @@
 // Structural admission preflight. PostgreSQL replay remains a separate proof.
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { DEMO_RECIPE_PHYSICAL_LANE, DEMO_RECIPE_MIGRATION, inspectDemoRecipePhysicalSuccessor } from '../persistence/demo-recipes-physical-successor.mjs';
 
 export function inspectMigrationHistory(root) {
   const errors = [];
@@ -102,7 +103,13 @@ export function inspectMigrationHistory(root) {
   for (const file of sqlFiles) if (!tags.has(file.slice(0, -4))) fail(`SQL file ${file} is not journaled`);
   for (const file of snapshotFiles) if (!snapshots.has(file)) fail(`snapshot ${file} is not journaled`);
   const guard = readiness?.implementation_guard;
-  if (guard?.migrations_generated !== journal.entries.length) {
+  // Historical readiness is sealed at six. Only the genuine separately
+  // reviewed function-only successor may account for the seventh migration.
+  const recipe = existsSync(join(root, DEMO_RECIPE_PHYSICAL_LANE)) || existsSync(join(root, DEMO_RECIPE_MIGRATION))
+    ? inspectDemoRecipePhysicalSuccessor(root) : null;
+  if (recipe) errors.push(...recipe.errors);
+  const migrationCount = recipe?.admitted && guard?.migrations_generated === 6 ? recipe.migrationCount : guard?.migrations_generated;
+  if (migrationCount !== journal.entries.length) {
     fail(`readiness migration count ${guard?.migrations_generated} differs from journal count ${journal.entries.length}`);
   }
   if (latestSnapshot && guard?.tables_generated !== Object.keys(latestSnapshot.tables).length) {

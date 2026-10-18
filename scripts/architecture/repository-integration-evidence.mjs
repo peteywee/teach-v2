@@ -17,7 +17,10 @@ export function inspectRepositoryIntegration(root) {
   const admittedFutureTable=(path,table)=>admittedDemo &&
     ['learning_assignments','learning_progress_events'].includes(table.replace(/^public\./,'')) &&
     ['src/modules/learning/infrastructure/persistence/demo-schema.ts',
-     'drizzle/0005_demo_runtime_owner_storage.sql','drizzle/meta/0005_snapshot.json'].includes(path);
+     'drizzle/0005_demo_runtime_owner_storage.sql','drizzle/meta/0005_snapshot.json',
+     // The recipe successor adds no tables; its reviewed snapshot repeats
+     // the unchanged predecessor only after the full physical gate passes.
+     ...(persistence.recipePhysicalSuccessor?.admitted ? ['drizzle/meta/0006_snapshot.json'] : [])].includes(path);
   const fail=(message)=>errors.push(`repository integration: ${message}`);
   const load=(path)=>{try{return JSON.parse(readFileSync(join(root,path),'utf8'));}catch(error){fail(`${path}: ${error.message}`);return null;}};
   const text=(path)=>{try{return readFileSync(join(root,path),'utf8');}catch(error){fail(`${path}: ${error.message}`);return '';}};

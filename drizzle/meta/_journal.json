@@ -43,6 +43,13 @@
       "when": 1792271260954,
       "tag": "0005_demo_runtime_owner_storage",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792357092279,
+      "tag": "0006_demo_recipe_content_guard",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,205 @@
+{
+  "review_id": "TEACH-DEMO-RECIPES-INDEPENDENT-SCHEDULING-SOURCE-REVIEW-2026-10-18",
+  "version": "1.0.0",
+  "outcome": "PASS",
+  "reviewer": "Independent recipe successor source reviewer (review_recipe_demo_candidate)",
+  "reviewer_kind": "INDEPENDENT_AI_CODE_REVIEW",
+  "reviewed_at_utc": "2026-10-18T21:47:15.649372+00:00",
+  "source_edits_by_reviewer": false,
+  "scope": "Scheduling-only correction after the exact-source hosted 25-second demo-postgres timeout: restore original three-suite runner, add separate nine-test recipe guard runner/stage, preserve all 43 PostgreSQL tests and all operation ceilings, and require a distinct genuinely reviewed source-map successor. No application, schema, content, SQL, permission, activation or browser behavior change is reviewed or authorized here.",
+  "predecessor_review": {
+    "path": "persistence/physical-slices/demo-recipes/independent-successor-review.json",
+    "sha256": "758e0183ed2d1c8542a3f75f6a87795eb264f028900179243eadf4524ed3b0a7"
+  },
+  "physical_successor_sha256": "28310d11c39ec517bf0951b155e858d5ca606ea74842cfcd704cef1c33730a0f",
+  "recipe_registration_sha256": "bd0b74666f5da45c70a0d1c0fe42d5d7099a5bc6c9d727b665e4381094605443",
+  "package_sha256sums_digest": "b5f80daf1d94ecbccb1a01f3e58be3fc98d32564567b1cf03fd5c639eb435255",
+  "runtime_proof": "NOT_RUN",
+  "runtime_activation_authorized": false,
+  "shared_or_production_migration_execution_authorized": false,
+  "live_database_changes_authorized": false,
+  "publication_authorized": false,
+  "unresolved_scope_blockers": [],
+  "source_hash_normalization": "Only the single anchored DEMO_RECIPE_PHYSICAL_REVIEW_SHA256 literal in scripts/persistence/demo-recipes-physical-successor.mjs is normalized to null. Every other byte and the other 16 mandatory sources remain exact. The original independent-successor-review.json is separately hard-pinned and must never be rewritten. Install only this new review digest, then independently verify the normalized map and rerun genuine-seal mutation tests.",
+  "reviewed_source_hashes": {
+    "scripts/persistence/demo-recipes-physical-successor.mjs": "8e6b42c7697e6bcc4236ec2fb65e1071308afee29f42d2f2361de651d2959b00",
+    "scripts/persistence/demo-recipes-physical-successor.d.mts": "3cc094d92bd9eb697b43e6fff11e0f78f1cbf5a0d665206777e00d99b9723109",
+    "scripts/persistence/validate-demo-recipes-physical-admission.mjs": "12b0c42ce99db0bfeecb33773e3c69b3a0076cf885fd89d66657782823ae1fed",
+    "scripts/tests/validate-demo-recipes-physical-successor.mjs": "e521c683cfa1628fc533e4ee48e47c692d1b1caffa64e4e13b52b4fb2c92de41",
+    "scripts/persistence/demo-storage-evidence.mjs": "83a7568cae2ab2035b0e75e92b460a6e4c9ffba2a8623666fbbff0baac50807f",
+    "scripts/packaging/migration-history-guards.mjs": "81a6465648063e5d69668e771d07e6098852a7986f9c6254b72ff466bbd1a501",
+    "scripts/architecture/repository-integration-evidence.mjs": "5a36ebe71658e3e30a9a35160f6fd4148fd85e1ddb27947738844725b4971cf1",
+    "scripts/db/verify-demo-generation.mjs": "a3b41659f582f9674aa2271954eefd5d096cd6f9591a67d2eaef4b4f900b391c",
+    "scripts/kernel/demo-recipes-registration.mjs": "91f3c1dd5df111a3f18489047d4181f63e18c75ef8fd34293a730aae20b056e1",
+    "scripts/kernel/demo-runtime-registration.mjs": "0e909026070347702addfef66f3289b11886105ccb80559105b9c005c4a16e83",
+    "src/bootstrap/demo/local-activation.ts": "c83dcc275a12e0919674c4db052e01804065c691cbdca7a70c9b2b5e117b9139",
+    "drizzle/0006_demo_recipe_content_guard.sql": "f8c240898131aca26fcaa4a7cb5d11cb84412358901c20f626667de8ee12851f",
+    "drizzle/meta/0006_snapshot.json": "b070cb4a7377529a77ed81d3ce1b4586da55a6306301899704415fd226a57ef1",
+    "drizzle/meta/_journal.json": "82d436f093d623ac3b90785073f7226e7ed2994283754a39084bfdea2aec33e0",
+    "tests/integration/demo/recipe-content-guard.test.ts": "327af6cf10cec3901f412852c744b6abb33b56898c13828ca85725afd50f984a",
+    "scripts/db/run-demo-integration.ts": "575b41278b354e0cfeb32a51f4b56f7719169772d19f4cdea5b83f2303222a62",
+    "scripts/db/run-demo-recipe-integration.ts": "0ae8978b1762054b7bf0f8a94a2754492e29220e6e4297bf2fa6a85c8464b9f9"
+  },
+  "supplemental_reviewed_hashes": {
+    ".github/workflows/development-self-audit.yml": "026e67eff05b99707389601545d9b480c0c6e02901f94ae0ab9ef8d8fa1162c9",
+    "scripts/verification/self-audit-catalog.mjs": "c260538430b81ed9dc0d09173dc2afe437762975a734c01ce41a365ba6b32f88",
+    "scripts/verification/consolidated-ci-evidence.mjs": "45ae24e005e5a6307b5f1f458a536b8e19bfeb3cacb0d70cf1e13ea449712ef3",
+    "verification/whole-repository/self-audit-plan.json": "f755fad5a2cc65038f0e6a1c534b4437d63e6f02f6ec71e01652c0c460d6efde",
+    "verification/workflow-lifecycle/inventory.json": "e9479546c917c6190c26362d6e4ecd86db3301b66f0399c71da60147d660a37a",
+    "scripts/tests/validate-ci-consolidation.test.mjs": "2db2cb46f8d7b9181c8c55688b32ce1c311aba1f12d646c9ea730000fa350c22",
+    "scripts/tests/demo-storage-evidence.mjs": "95f07173791801fa4d54761456af1ed9f7c5163a60d2fe63caa8b5ff28528721",
+    "tests/integration/demo/migration-replay.test.ts": "ece39f11246877d9f4287cb035f09639cb5c767e44a1481e61b189b949278eaf",
+    "tests/integration/demo/postgres-owner-storage.test.ts": "9bfaae6387614501f8493dbd9adedfc2d14072e480a44a60e1ef6eb148cfbbd7",
+    "tests/integration/demo/application-runtime.test.ts": "8c3f3cf8a7ef98bffe1ea58c36b9b2371965dd57ada13247ed0f6da87d284f2c"
+  },
+  "immutable_file_hashes": {
+    "domains/demo-runtime/proposal-0.1.0/SHA256SUMS": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
+    "domains/demo-runtime/registration.json": "b94cf7c7c9bab35ad2454470295ae2b04b8814bd0ac55c282cdd3dd6df67218d",
+    "drizzle/0000_slice_p01_reconciliation.sql": "c372f6ed790e8adb38a2e1b3102f11c4addd284acd274e1da3add4d23ef64c2c",
+    "drizzle/0001_odd_photon.sql": "e151cdc4b7c1a040aac0bd4769b4033dd130cb0b5eb0835ccde95729cea26994",
+    "drizzle/0002_quick_venus.sql": "76f4f620023d2310d5147b8764bc9f275cbff4d4faf4c8c4975bbeb0dc6a65e2",
+    "drizzle/0003_slice_p04_credential.sql": "3396caa659e905d87ab8a3f92759e7d5bda72eecae27d275fd12cd8e4d284fef",
+    "drizzle/0004_slice_p05_learning_session.sql": "dda0c34f193797f0ad9a3fb5916500ff1038da0cf7701d63a4d8e6b193cca0b4",
+    "drizzle/0005_demo_runtime_owner_storage.sql": "441c579790de90a71c904a6a49e8b22b3bfb5b72bd3bf4171a5b1d062f1d6775",
+    "drizzle/meta/0000_snapshot.json": "5eed3d787030128b2f3e8b8143876b8d281c499ea400eca6894ac5252220342b",
+    "drizzle/meta/0001_snapshot.json": "e06ec42503506c35104c8b480c76cbd2ebb90b343f46dc8e0121dc16acb2917c",
+    "drizzle/meta/0002_snapshot.json": "9068d5373d54e0de0f1d634454ed7c0fe5e7d3aab01409881d6427c488d349bf",
+    "drizzle/meta/0003_snapshot.json": "1dae012c1aba442d6eea4a2394cb310a2d11c070ce96a5ed83196dbeec40903f",
+    "drizzle/meta/0004_snapshot.json": "7c5efbc30c0f6bd27964ea4a3b291c64aa5da2c0cbd94b77d7c55db58068f6cb",
+    "drizzle/meta/0005_snapshot.json": "d27ef436ad2615fe45471e9a46861a4b7f57fe5be67ba5439b5e69aa2bd8f6ad",
+    "persistence/physical-slices/assignment/admission-evidence-plan.json": "4450d34d7933bdf1f017e509f670602abdf0e4a5065ec2f0b9fe59c4e41c6fb8",
+    "persistence/physical-slices/assignment/admission.json": "213a89e1d3f8b870da75ae3cb70f4ce3eac9e8a0c96e7daee8a325e78bb30b31",
+    "persistence/physical-slices/demo-runtime/admission-evidence-plan.json": "3193cbd993d91956bac089c944eb8def2c15bdcf5dd8af866657867915728170",
+    "persistence/physical-slices/demo-runtime/admission.json": "ebf8c356d724af08036aa557f4b0d45ccb0561d4273a60a2bb6a7494765ec901",
+    "persistence/physical-slices/demo-runtime/independent-representation-review.json": "55c87f49d613fdf3ada095caac11124c89ebe89ef13f8993a7ac3360a87928e0",
+    "persistence/physical-slices/demo-runtime/independent-successor-review.json": "f23cf4aa57a6ca68617f70f8a464c2dc936c28f8b656f28eca5f3b4aaf95cf6b",
+    "persistence/physical-slices/demo-runtime/physical-successor.json": "02881a0803d5fe196ea74f67b1d9534482ab0fa322274fd4fc633a87d7355662",
+    "persistence/physical-slices/demo-runtime/prior-journal.json": "6fd7072b2da573cdb2e2fd25b07c2c3e94de693f177cb626cbac2685d57671ee",
+    "persistence/physical-slices/demo-runtime/representation.proposed.json": "5cac3a47dc4ac22085fc262c14a89a5f4e9586d7b4dc0004b5ca084bf34c7ae4",
+    "persistence/physical-slices/demo-runtime/semantic-independent-review.json": "ab222ddd74a8b64b9e7b16dd549f369fd33594f80e350b68b122d6b84d1615ef",
+    "persistence/physical-slices/demo-runtime/semantic-independent-review.md": "1695c5ff3a884c063323eda27e6905f3af61f4814da8aee8d7ea534aa347f655",
+    "persistence/physical-slices/learning-session/admission-evidence-plan.json": "1a1e7a028ee630fbc7f55cfe049cb1692ec974e4d019bfca815ba08fd4c44d4a",
+    "persistence/physical-slices/learning-session/admission.json": "efb8af4bd4b524ae93fce43d167268563aa973e38615c166bfdb31a45224e4d8",
+    "persistence/physical-slices/learning-session/implementation.json": "270be0a3e3789fec76cf52d561e5218f53120ce961540bf67565613ea38f5d4e",
+    "persistence/physical-slices/progress-event/admission-evidence-plan.json": "2b5dd939f2f65cc415e89be8fc9515f6dbb2d913ea7517e9145206d95b3bc55b",
+    "persistence/physical-slices/progress-event/admission.json": "1b6bab3ada1f92cfb12dde3f7a225365efcf01a019aa1fccd3f95fe6bddbe978",
+    "persistence/physical-slices/queue-post-p05.json": "19fafc996c13a28dcd9b90ebd8d5f9df1b17c4189634d335a1e7f9bcc9fd8b92",
+    "persistence/physical-slices/readiness.json": "45c4503aa9948e7f5bc6684800a640548dd627c18bb65b318a9488c7d3403e4d"
+  },
+  "evidence_hashes": {
+    "persistence/physical-slices/demo-recipes/README.md": "4381e8e63b40e58569284de7c03bfb583fdccbaca530a126facea9656b990894",
+    "persistence/physical-slices/demo-recipes/immutable-baseline.json": "47f6d13618713d72de0a321d5edb1e0ad1a1551236f76d176073f5d023ed49d9",
+    "persistence/physical-slices/demo-recipes/prior-journal.json": "412b21579a8deb58d06aaa6890e8bd34ce398ad9801b70d2196ea8332af83ddf",
+    "persistence/physical-slices/demo-recipes/verification-plan.json": "d01cc9995933b37f33860302dba93be105f29e869b4738d7a095ea9390a3c951"
+  },
+  "added_file_hashes": {
+    "drizzle/0006_demo_recipe_content_guard.sql": "f8c240898131aca26fcaa4a7cb5d11cb84412358901c20f626667de8ee12851f",
+    "drizzle/meta/0006_snapshot.json": "b070cb4a7377529a77ed81d3ce1b4586da55a6306301899704415fd226a57ef1"
+  },
+  "revised_file_hashes": {
+    "drizzle/meta/_journal.json": "82d436f093d623ac3b90785073f7226e7ed2994283754a39084bfdea2aec33e0"
+  },
+  "checks": [
+    {
+      "result": "PASS_SOURCE_REVIEW",
+      "subject": "Actual failure diagnosis",
+      "evidence": "Hosted report for clean source 7dcd377d548ed3c5e386c970486c5e4dc6f6cd35/tree cf738d3df06ba1c5c8c14c6fb226adb62bc93bb2 reports unchanged source, duration 25006 ms, exit_code null, timed_out true, ETIMEDOUT. Retained hosted log shows migration 3/3, storage 17/17 and recipe guard 9/9 passing, then application cases 1 through 12 passing before outer termination; no assertion failure shown. Recipe guard consumed about 9.16 seconds of the cumulative 25-second stage."
+    },
+    {
+      "result": "PASS_SOURCE_REVIEW",
+      "subject": "Exact schedule partition and invariant preservation",
+      "evidence": "scripts/db/run-demo-integration.ts is restored byte-exactly to 575b41278b354e0cfeb32a51f4b56f7719169772d19f4cdea5b83f2303222a62. It runs unchanged migration/storage/application sources, 3+17+14=34 tests. The new pinned recipe-only wrapper runs the unchanged 9-test recipe-content-guard source. Both keep isolated-target validation before connection, fresh per-suite random disposable database, explicit TEACH_ISOLATED_DB, 20-second child timeout, DROP in finally and pool.end in outer finally."
+    },
+    {
+      "result": "PASS_SOURCE_REVIEW",
+      "subject": "Complete source-bound CI and unchanged ceilings",
+      "evidence": "Catalog and generated plan/workflow add only demo-recipe-postgres after demo-postgres: 48 exact ordered stages, every timeout_ms still 25000, max_operation_ms still 25000, shell_execution false. Existing pinned Node/pnpm/PostgreSQL/actions, job ceiling, source identity, lifecycle inventory, terminal finalization and artifact retention remain. Consolidation requires both exact runner hashes and the exact new command/stage. Historical reconstruction is fixture-only, accepts only the original hash or exact previously approved fourth-suite projection, and is not used to admit a substituted live wrapper."
+    },
+    {
+      "result": "PASS_SOURCE_REVIEW",
+      "subject": "Fail-closed new review and preserved original review",
+      "evidence": "The active review path is newly independent-scheduling-review.json; original independent-successor-review.json remains byte-identical at SHA758e0183ed2d1c8542a3f75f6a87795eb264f028900179243eadf4524ed3b0a7. New review must bind that exact predecessor plus the exact unchanged physical envelope and expanded 17-source map including both runners. Missing/unsealed/stale new review yields admitted=false, migrationCount=null and empty authority path arrays. No fallback to the old review is permitted."
+    },
+    {
+      "result": "PASS_SOURCE_REVIEW",
+      "subject": "No new semantic or physical promotion",
+      "evidence": "Physical envelope, semantic registration, package, all SQL/snapshots, journal, UI/application, original authority artifacts and external local-activation checks are unchanged. No new migration, table, persistent database, credential, provider, permission or runtime grant is introduced. Existing browser evidence remains historically attributed; no replay is claimed or needed for this scheduling-only source change."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "P2",
+      "status": "ADDRESSED_BY_SCHEDULING_REPAIR_PENDING_HOSTED_RERUN",
+      "title": "Four suites exceeded the unchanged 25-second outer CI operation budget",
+      "resolution": "Separate recipe guard into its own exact bounded stage without increasing timeouts, weakening guards, or dropping any of the 43 tests. Source and local partition results support the repair; final hosted CI is still required."
+    },
+    {
+      "severity": "INFORMATIONAL",
+      "status": "RESOLVED_BEFORE_SEAL",
+      "title": "Scheduling changes touch a sealed runner",
+      "resolution": "A distinct active scheduling review records the new exact map and binds the immutable earlier review. Original review bytes and physical envelope were preserved, rather than reusing stale source approval."
+    }
+  ],
+  "executed_checks": [
+    {
+      "command": "node --test scripts/tests/validate-ci-consolidation.test.mjs scripts/tests/validate-demo-recipes-physical-successor.mjs",
+      "result": "PASS_WITH_EXPLICIT_PRESEAL_SKIPS",
+      "tests": 418,
+      "passed": 416,
+      "failed": 0,
+      "skipped": 2,
+      "exit_code": 0,
+      "skip_reason": "Two genuine-seal-dependent review/source mutation groups await installation of this actual review digest; no synthetic PASS was manufactured. Rerun without skips is required.",
+      "log_sha256": "b3b6289bf1ede7797d16ec5a259952fddb3c95ff1992fdf263f36d99c6dfaaaa"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --noEmit",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "Independent source hashes, inspectors and unchanged-scope comparison",
+      "result": "PASS",
+      "details": "17 mandatory hashes exactly match the frozen map; physical preseal denial contains only missing review and directory-inventory absence; consolidated inspector returns no errors; all 48 stage timeouts equal 25000. No changes under src, tests/integration, drizzle, domains, contracts or kernel."
+    }
+  ],
+  "operator_evidence_reviewed_not_reexecuted": [
+    {
+      "file": "failed-artifact.zip",
+      "sha256": "9e830cada0bce8b443e6da8c1b4b1d26b72f23be88edab1241decf4a13a705df",
+      "result": "EXACT_SOURCE_HOSTED_TIMEOUT"
+    },
+    {
+      "file": "demo-postgres.json",
+      "sha256": "0e8211a2ef16d161509d8c4d3b3d38e2ead3bb4c1f0a595b7484247793490461",
+      "result": "25006ms_ETIMEDOUT"
+    },
+    {
+      "file": "original-partition-pg.log",
+      "sha256": "a8ddaac5e0743af302a3c378b3780dcbae6ac9e6fd728509facc0464204c0ba0",
+      "result": "34/34 PASS, zero skips/failures; suite durations about 1.407s, 2.693s, 11.095s"
+    },
+    {
+      "file": "recipe-partition-pg.log",
+      "sha256": "ed6f3ef9e464b53469b3d41be8baf45822f6396e51932e075ef04b41754e8865",
+      "result": "9/9 PASS, zero skips/failures; suite duration about 4.425s"
+    },
+    {
+      "file": "/tmp/recipe-ci-scheduling-regressions.log",
+      "sha256": "aa2bb3a689f3063704ae71a60b6f9b1efb88185fab78465be417ae251fc695fe",
+      "result": "635/635 scheduling/CI/self-audit/lifecycle regressions PASS, zero skips, reported by implementation worker and checked in persisted log"
+    }
+  ],
+  "limitations": [
+    "Source-review PASS is not a completed hosted CI, runtime proof, database execution, publication, merge, activation or deployment verdict. New exact-source hosted CI must run after commit; no result is inferred from earlier source or local tests.",
+    "Reviewer independently ran source/mutation tests and compiler only; PostgreSQL partitions and browser execution were not replayed by the reviewer. Operator log results are explicitly separate from independently executed checks.",
+    "Supplemental scheduling-file hashes record reviewed bytes; the mandatory runtime physical gate compares the exact 17-source map. Existing exact-plan/workflow/CI checks separately enforce scheduling integration. Further changed reviewed bytes require re-evaluation.",
+    "The trust anchor assumes the reviewed inspector code is trusted; hashing detects drift, not a malicious replacement of the entire checker. Only the single normalized review pin may be installed mechanically after this record is written.",
+    "The new review extends source binding for scheduling only and preserves prior physical/semantic findings and limits. It issues no new attestation and does not alter local clean-tree attestation, shared/production blocks, immutable predecessors, or original package approval."
+  ]
+}

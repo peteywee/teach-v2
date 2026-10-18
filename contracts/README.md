@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-17",
+  "updated_on": "2026-10-18",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
@@ -39,17 +39,28 @@
     "physical_schema_admission": false,
     "runtime_activation": false,
     "deployment_authority": false
+  },
+  "demo_recipes_registration": {
+    "package": "TEACH-DEMO-RECIPES-2026-10-18@0.1.1",
+    "approval_record": "domains/demo-recipes/owner-approval.json",
+    "issue": "#88",
+    "source_package": "domains/demo-recipes/proposal-0.1.1",
+    "sha256sums_sha256": "b5f80daf1d94ecbccb1a01f3e58be3fc98d32564567b1cf03fd5c639eb435255",
+    "semantic_authority_only": true,
+    "physical_schema_admission": false,
+    "runtime_activation": false,
+    "deployment_authority": false
   }
 }
 -->
 
 # Teach v2 Contracts
 
-- Package version: `0.19.0`
+- Package version: `0.20.0`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
-- Last updated: 2026-10-17
+- Last updated: 2026-10-18
 
 These are the normative behavior contracts Teach v2 is built on. They state what the system MUST and
 MUST NOT do. Implementation is measured against them, not the other way round.
@@ -124,12 +135,12 @@ the requirement that keeps the feature off applies.
 | C21 | [Database & Migration](c21-database-migration-contract.md) | 1.2.0 | `MIG` | 14 | 9 | 0 | 0 | `active` |
 | C22 | [Transaction, Idempotency & Reconciliation](c22-transaction-idempotency-reconciliation-contract.md) | 1.4.0 | `TXN` | 16 | 12 | 1 | 0 | `active` |
 | C23 | [Audit & Lifecycle Events](c23-audit-lifecycle-events-contract.md) | 1.3.0 | `AUD` | 11 | 9 | 0 | 0 | `active` |
-| C31 | [Content & Teaching Engine](c31-content-teaching-engine-contract.md) | 1.3.0 | `CNT` | 12 | 9 | 1 | 0 | `active` |
+| C31 | [Content & Teaching Engine](c31-content-teaching-engine-contract.md) | 1.4.0 | `CNT` | 12 | 9 | 1 | 0 | `active` |
 | C32 | [Learning Sessions & Progress](c32-learning-sessions-progress-contract.md) | 1.4.0 | `LRN` | 13 | 11 | 0 | 0 | `active` |
 | C33 | [Manager Operations](c33-manager-operations-contract.md) | 1.3.0 | `MGR` | 10 | 8 | 0 | 0 | `active` |
 | C34 | [Certification & Credentials](c34-certification-credentials-contract.md) | 1.3.0 | `CERT` | 15 | 7 | 1 | 1 | `active` |
-| C41 | [Application / Command / API Boundary](c41-api-boundary-contract.md) | 1.2.0 | `API` | 15 | 11 | 1 | 0 | `active` |
-| C42 | [Web Client Boundary](c42-web-client-boundary-contract.md) | 1.2.0 | `WEB` | 15 | 10 | 0 | 0 | `active` |
+| C41 | [Application / Command / API Boundary](c41-api-boundary-contract.md) | 1.3.0 | `API` | 15 | 11 | 1 | 0 | `active` |
+| C42 | [Web Client Boundary](c42-web-client-boundary-contract.md) | 1.3.0 | `WEB` | 15 | 10 | 0 | 0 | `active` |
 | C51 | [Verification & Evidence](c51-verification-evidence-contract.md) | 1.1.0 | `EVD` | 16 | 7 | 1 | 0 | `active` |
 | C52 | [Deployment, Release & Recovery](c52-deployment-release-recovery-contract.md) | 1.3.0 | `REL` | 18 | 11 | 0 | 0 | `active` |
 | C53 | [Observability](c53-observability-contract.md) | 1.2.0 | `OBS` | 11 | 9 | 1 | 0 | `active` |
@@ -337,3 +348,10 @@ The index now consistently counts unresolved question rows from active contracts
 ## Demo runtime registration
 
 The fifteen contract revisions listed in `governance/decision-closure/demo-runtime-registration.json` register exactly `TEACH-DEMO-RUNTIME-2026-10-17@0.1.0` under SYS-21 #82. Prior version bodies are preserved in `contracts/superseded/`; owner approval is recorded in `domains/demo-runtime/owner-approval.json`. This is logical authority, not physical or runtime admission.
+
+
+## Bounded recipe successor registration (#88)
+
+Package `0.20.0` records C31 `1.4.0`, C41 `1.3.0` and C42 `1.3.0` under `TEACH-DEMO-RECIPES-2026-10-18@0.1.1`. Exactly three fictional read-only recipe children extend Content/PublicContent exact schema `1.1.0`; exact immutable `1.0.0` remains readable. Original lesson, scoring, fifteen API routes, seven asset paths, capabilities and activation gates are unchanged. See `domains/demo-recipes/registration.json` and Part 27 of `APPROVAL-RECORD.md`. This registration does not establish independent review, runtime conformance, hosting, spending or live-database authority.
+
+Revision `0.1.1` corrects the initial no-migration assumption: one separately reviewed additive strict content guard migration is permitted for disposable-local validation only. Original migrations and the original 0.1.0 source package are preserved.

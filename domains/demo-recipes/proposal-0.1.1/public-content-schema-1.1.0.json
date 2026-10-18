@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://t34ch.com/proposals/demo-recipes-0.1.0/public-content-schema-1.1.0.json",
+  "title": "Proposed PublicContent projection 1.1.0",
+  "status": "PROPOSED_SOURCE_NOT_SELF_AUTHORIZING",
+  "$comment": "Public projection of canonical ContentPack 1.1.0, not another content format. PublicBlock and ContentVersion are unchanged copies from the registered transport schema. Resolve Recipe from the same local successor package; never fetch schema URLs.",
+  "$ref": "#/$defs/PublicContent",
+  "$defs": {
+    "ContentVersion": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 38,
+          "description": "Strict SemVer2.0 including prerelease/build; validated by exact canonical parser."
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "version",
+        "digest"
+      ]
+    },
+    "PublicBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$"
+        },
+        "kind": {
+          "const": "SINGLE_CHOICE"
+        },
+        "instruction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "instruction",
+        "prompt",
+        "options"
+      ]
+    },
+    "PublicContent": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contentPackId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$"
+        },
+        "organizationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$"
+        },
+        "contentVersion": {
+          "$ref": "#/$defs/ContentVersion"
+        },
+        "schemaVersion": {
+          "const": "1.1.0"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "blocks": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/$defs/PublicBlock"
+          }
+        },
+        "synthetic": {
+          "const": true
+        },
+        "recipes": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "$ref": "content-schema-1.1.0.json#/$defs/Recipe"
+          }
+        }
+      },
+      "required": [
+        "contentPackId",
+        "organizationId",
+        "contentVersion",
+        "schemaVersion",
+        "title",
+        "blocks",
+        "synthetic",
+        "recipes"
+      ]
+    }
+  },
+  "x-required-semantic-validation": {
+    "source": "Return only the allowlisted projection of the already validated canonical ContentPack 1.1.0. Recipes are detached field-by-field copies of that exact version.",
+    "authorization": "Only a current authorized learner with a current ACTIVE own Assignment to the exact organization-owned pack/version/digest may receive this payload. Managers receive no additional content-read capability.",
+    "digest": "contentVersion.digest binds the full canonical content, including hidden grading material and recipes, not the reduced public JSON bytes. The client checks its expected assigned pack/version/digest binding.",
+    "teachingPrivacy": "Never include expectedOptionIndex or feedback in PublicBlock. Recipe reference denotes only general handoff practice, never recipe-specific assessment or new learning state.",
+    "strictValues": "The source canonical validator enforces strict identifiers, exact 38-byte SemVer, plain text, unique IDs/options, and canonical size. Original transport definition copies alone are not sufficient semantic validation."
+  }
+}

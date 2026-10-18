@@ -1,4 +1,5 @@
-import { definitions, errorContract } from './wire-contract.mjs';
+import { definitions as originalDefinitions, recipeDefinitions, errorContract } from './wire-contract.mjs';
+const definitions={...originalDefinitions,Recipe:recipeDefinitions.Recipe,PublicContent:{anyOf:[originalDefinitions.PublicContent,recipeDefinitions.PublicContent]}};
 export class ApiError extends Error {
  constructor(kind, {status=0, code='', requestId=null, retryAfterSeconds=null}={}) { super(kind); this.name='ApiError';Object.assign(this,{kind,status,code,requestId,retryAfterSeconds}); }
 }

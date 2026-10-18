@@ -3,9 +3,13 @@ import {execFileSync} from 'node:child_process';
 import {cpSync,mkdtempSync,readFileSync,rmSync,writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join,relative,resolve} from 'node:path';
+import { inspectDemoRecipePhysicalSuccessor, DEMO_RECIPE_MIGRATION, DEMO_RECIPE_SNAPSHOT } from '../persistence/demo-recipes-physical-successor.mjs';
 const root=resolve(process.cwd()),dir=mkdtempSync(join(tmpdir(),'demo-generated-'));
 try{
- cpSync(join(root,'drizzle'),dir,{recursive:true});rmSync(join(dir,'0005_demo_runtime_owner_storage.sql'));rmSync(join(dir,'meta/0005_snapshot.json'));
+ const recipe=inspectDemoRecipePhysicalSuccessor(root);assert.deepEqual(recipe.errors,[],'recipe predecessor generation requires verified physical successor');
+ cpSync(join(root,'drizzle'),dir,{recursive:true});
+ if(recipe.admitted){rmSync(join(dir,DEMO_RECIPE_MIGRATION.slice('drizzle/'.length)));rmSync(join(dir,DEMO_RECIPE_SNAPSHOT.slice('drizzle/'.length)));}
+ rmSync(join(dir,'0005_demo_runtime_owner_storage.sql'));rmSync(join(dir,'meta/0005_snapshot.json'));
  const journal=JSON.parse(readFileSync(join(dir,'meta/_journal.json'),'utf8'));journal.entries=journal.entries.filter(entry=>entry.idx<5);writeFileSync(join(dir,'meta/_journal.json'),JSON.stringify(journal));
  const config=join(dir,'generation.config.ts');writeFileSync(config,`import config from ${JSON.stringify(join(root,'drizzle.config.ts'))};\nexport default {...config,out:${JSON.stringify(relative(root,dir))}};\n`);
  execFileSync('pnpm',['exec','drizzle-kit','generate','--name','demo_runtime_owner_storage','--config',config],{cwd:root,encoding:'utf8',timeout:25000,stdio:'pipe'});

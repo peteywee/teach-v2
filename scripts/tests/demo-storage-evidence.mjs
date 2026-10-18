@@ -4,6 +4,9 @@ import { after, test } from 'node:test';
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
+import { reconstructHistoricalDemoIntegration } from '../verification/consolidated-ci-evidence.mjs';
+import { inspectRecipeRegistration } from '../kernel/demo-recipes-registration.mjs';
+import { DEMO_RECIPE_PHYSICAL_EVIDENCE, DEMO_RECIPE_PHYSICAL_ENVELOPE, DEMO_RECIPE_PHYSICAL_REVIEW, DEMO_RECIPE_MIGRATION, DEMO_RECIPE_SNAPSHOT } from '../persistence/demo-recipes-physical-successor.mjs';
 import { inspectRepositoryIntegration } from '../architecture/repository-integration-evidence.mjs';
 import { currentFacts } from '../verification/development-self-audit.mjs';
 import { deriveOwnerDecisionInventory } from '../verification/owner-decision-inventory.mjs';
@@ -60,12 +63,18 @@ test('unchanged P01-P05 historical fixture retains its real baseline checks', ()
   const source=json('domains/demo-runtime/source-baseline.json');
   const physicalPaths=['persistence/physical-slices/readiness.json','persistence/physical-slices/queue-post-p05.json',...['learning-session','assignment','progress-event'].flatMap(lane => ['admission.json','admission-evidence-plan.json'].map(name => `persistence/physical-slices/${lane}/${name}`)),'persistence/physical-slices/learning-session/implementation.json'];
   const demoSources=Object.keys(DEMO_OWNER_ADAPTERS).flatMap(suffix => { const [owner,file]=suffix.split('/'); return [`src/modules/${owner}/infrastructure/persistence/${file}`,`src/modules/${owner}/infrastructure/persistence/demo-schema.ts`]; });
-  const removed=[...demoSources,'src/bootstrap/demo/demo-persistence-schema.ts','drizzle/0005_demo_runtime_owner_storage.sql','drizzle/meta/0005_snapshot.json','persistence/physical-slices/demo-runtime/physical-successor.json','persistence/physical-slices/demo-runtime/independent-successor-review.json'];
-  const paths=[...physicalPaths,...removed,'drizzle/meta/_journal.json','drizzle.config.ts'];
+  const recipe=inspectRecipeRegistration(fixture);
+  assert.deepEqual(recipe.errors,[]);
+  const recipeRemoved=['persistence/physical-slices/demo-recipes/independent-successor-review.json','scripts/kernel/validate-demo-recipes-registration.mjs','scripts/persistence/validate-demo-recipes-physical-admission.mjs',...recipe.addedPaths,...DEMO_RECIPE_PHYSICAL_EVIDENCE,DEMO_RECIPE_PHYSICAL_ENVELOPE,DEMO_RECIPE_PHYSICAL_REVIEW,DEMO_RECIPE_MIGRATION,DEMO_RECIPE_SNAPSHOT];
+  const removed=[...recipeRemoved,...demoSources,'src/bootstrap/demo/demo-persistence-schema.ts','drizzle/0005_demo_runtime_owner_storage.sql','drizzle/meta/0005_snapshot.json','persistence/physical-slices/demo-runtime/physical-successor.json','persistence/physical-slices/demo-runtime/independent-successor-review.json'];
+  const paths=['scripts/db/run-demo-integration.ts',...recipe.revisedPaths,...physicalPaths,...removed,'drizzle/meta/_journal.json','drizzle.config.ts'];
   const originals=new Map(paths.map(path => [path,existsSync(join(fixture,path))?raw(path):null]));
   try {
+    writeFileSync(join(fixture,'scripts/db/run-demo-integration.ts'),reconstructHistoricalDemoIntegration(raw('scripts/db/run-demo-integration.ts')));
+    for(const path of recipe.revisedPaths) writeFileSync(join(fixture,path),recipe.predecessorFiles[path]);
     for(const path of physicalPaths) writeFileSync(join(fixture,path),source.files[path]);
     for(const path of removed) rmSync(join(fixture,path),{force:true});
+    for(const path of ['domains/demo-recipes','persistence/physical-slices/demo-recipes']) rmSync(join(fixture,path),{recursive:true,force:true});
     writeFileSync(join(fixture,'drizzle/meta/_journal.json'),raw('persistence/physical-slices/demo-runtime/prior-journal.json'));
     writeFileSync(join(fixture,'drizzle.config.ts'),raw('drizzle.p05.config.ts'));
     assert.deepEqual(inspect().errors,[]);
@@ -77,7 +86,7 @@ test('unchanged P01-P05 historical fixture retains its real baseline checks', ()
       assert.equal(result.status,0,`${result.stdout}${result.stderr}`);
     }
   } finally {
-    for(const [path,value] of originals) if(value===null) rmSync(join(fixture,path),{force:true}); else writeFileSync(join(fixture,path),value);
+    for(const [path,value] of originals) if(value===null) rmSync(join(fixture,path),{force:true}); else { mkdirSync(join(fixture,path,'..'),{recursive:true}); writeFileSync(join(fixture,path),value); }
   }
 });
 
@@ -135,4 +144,13 @@ test('audit summary still rejects a changed historical decision packet', () => {
   const path='verification/legacy-recovery/owner-decisions.json',original=raw(path);
   try{const record=JSON.parse(original);record.totals.physical_shape_questions++;writeFileSync(join(fixture,path),JSON.stringify(record));assert.throws(()=>currentFacts(fixture),/owner decision inventory drift/);}
   finally{writeFileSync(join(fixture,path),original);}
+});
+
+test('audit summary retains nine unresolved owner questions and rejects live recipe contract drift', () => {
+  assert.equal(currentFacts(fixture).owner_decisions.unresolved_contract_questions,9);
+  for(const path of ['contracts/c31-content-teaching-engine-contract.md','contracts/c41-api-boundary-contract.md','contracts/c42-web-client-boundary-contract.md']) {
+    const original=raw(path);
+    try{writeFileSync(join(fixture,path),original+'\n');assert.throws(()=>currentFacts(fixture),/recipe successor|registered authority file differs|demo recipe registration/);}
+    finally{writeFileSync(join(fixture,path),original);}
+  }
 });

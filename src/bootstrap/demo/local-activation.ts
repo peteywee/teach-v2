@@ -4,6 +4,8 @@ import {fileURLToPath} from 'node:url';
 import {execFileSync} from 'node:child_process';
 import {resolve} from 'node:path';
 import {DemoError} from '../../modules/authorization/application/demo-error.js';
+import {inspectRecipeRegistration} from '../../../scripts/kernel/demo-recipes-registration.mjs';
+import {inspectDemoRecipePhysicalSuccessor} from '../../../scripts/persistence/demo-recipes-physical-successor.mjs';
 import {parseStrictJson} from '../../modules/content/domain/demo-content.js';
 
 const PACKAGE='a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a';
@@ -46,6 +48,11 @@ export function loadLocalDemoActivation(options:{sourceRoot:string;attestationPa
   executingDemoSourceRoot(options.sourceRoot);
   if(!/^[a-f0-9]{64}$/.test(options.attestationSha256))blocked();const attestationBytes=readFileSync(options.attestationPath);if(attestationBytes.byteLength>8192||sha256(attestationBytes)!==options.attestationSha256)blocked();
   const root=executingDemoSourceRoot(options.sourceRoot);const read=(path:string)=>readFileSync(resolve(root,path));const git=(args:string[])=>execFileSync('git',args,{cwd:root,encoding:'utf8',timeout:1000,stdio:['ignore','pipe','ignore']}).trim();
+  // The original admission stays pinned. The bounded content successor must also
+  // pass its exact registration seal; the external clean-tree attestation remains mandatory.
+  const recipes=inspectRecipeRegistration(root);if(!recipes.present||recipes.errors.length)blocked();
+  const recipeStorage=inspectDemoRecipePhysicalSuccessor(root);
+  if(!recipeStorage.present||!recipeStorage.admitted||recipeStorage.errors.length||recipeStorage.migrationCount!==7)blocked();
   const sums=read('domains/demo-runtime/proposal-0.1.0/SHA256SUMS');
   for(const line of sums.toString('utf8').trim().split('\n')){const match=line.match(/^([a-f0-9]{64})  ([A-Za-z0-9_.-]+)$/);if(!match||sha256(read('domains/demo-runtime/proposal-0.1.0/'+match[2]))!==match[1])blocked();}
   const admissionBytes=read('persistence/physical-slices/demo-runtime/admission.json');const admission=JSON.parse(admissionBytes.toString('utf8'));

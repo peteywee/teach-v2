@@ -7,7 +7,7 @@ import { fixedMembership,requireDemoLearnerTarget } from '../../authorization/ap
 import { appendDemoSuccess,appendDemoLifecycle } from '../../audit-lifecycle/application/demo-audit.js';
 import { createDemoPersona,createDemoApplicationSession,revokeDemoSessions } from '../../identity/application/demo-session-service.js';
 import { publishDemoContent } from '../../content/application/demo-content-service.js';
-import { newDemoContent } from '../../content/application/demo-template.js';
+import { newRecipeDemoContent } from '../../content/application/demo-template.js';
 import { assignDemoContent,type DemoLearningPorts } from '../../learning/application/demo-learning-service.js';
 
 export function demoRunSnapshot(run:DemoRun){return {schemaVersion:1,id:run.id,organizationId:run.organizationId,locationId:run.locationId,status:run.status,createdAt:run.createdAt.toISOString(),expiresAt:run.expiresAt.toISOString(),closedAt:run.closedAt?.toISOString()??null,closeReason:run.closeReason};}
@@ -29,7 +29,7 @@ export async function beginDemoRun(ports:DemoLearningPorts,requestId:string,pref
     for(const bundle of [persona.kind==='LEARNER'?'learner':'manager','demo_visitor'] as const)await ports.organization.createGrant({id:randomUUID(),membershipId:membership.id,bundle,createdAt:new Date(context.now)});
   }
   await ports.organization.createReporting({id:randomUUID(),...context.scope,managerIdentityId:manager.identityId,learnerIdentityId:learner.identityId,createdAt:new Date(context.now)});
-  const content=newDemoContent(run.organizationId,randomUUID);await publishDemoContent(ports,context,content);
+  const content=newRecipeDemoContent(run.organizationId,randomUUID);await publishDemoContent(ports,context,content);
   await assignDemoContent(ports,context,{identityId:learner.identityId,contentPackId:content.content.contentPackId,contentVersion:{version:content.content.version,digest:content.digest}},randomUUID(),run);
   await context.refresh();const issued=await createDemoApplicationSession(ports,context,learner.identityId);
   await appendDemoSuccess(ports.audit,context,'BeginDemoRun',{type:'DemoRun',id:run.id});

@@ -11,14 +11,34 @@ export interface TeachingBlock {
   feedback: string[];
 }
 
-export interface TeachingContent {
-  schemaVersion: '1.0.0';
+export interface TeachingRecipe {
+  id: string;
+  title: string;
+  station: string;
+  servings: number;
+  ingredients: string[];
+  steps: string[];
+  reference: string;
+}
+
+interface TeachingContentBase {
   contentPackId: string;
   organizationId: string;
   version: string;
   title: string;
   blocks: TeachingBlock[];
 }
+
+export interface LegacyTeachingContent extends TeachingContentBase {
+  schemaVersion: '1.0.0';
+}
+
+export interface RecipeTeachingContent extends TeachingContentBase {
+  schemaVersion: '1.1.0';
+  recipes: TeachingRecipe[];
+}
+
+export type TeachingContent = LegacyTeachingContent | RecipeTeachingContent;
 
 export interface ValidatedContent {
   readonly content: TeachingContent;
@@ -223,21 +243,48 @@ function block(value: unknown): TeachingBlock {
   };
 }
 
+function recipe(value: unknown): TeachingRecipe {
+  const input = record(value, ['id', 'title', 'station', 'servings', 'ingredients', 'steps', 'reference']);
+  if (typeof input.servings !== 'number' || !Number.isInteger(input.servings)
+    || input.servings < 1 || input.servings > 100) invalid('recipe servings out of bounds');
+  if (!Array.isArray(input.ingredients) || input.ingredients.length < 1 || input.ingredients.length > 30) invalid('recipe ingredient count out of bounds');
+  if (!Array.isArray(input.steps) || input.steps.length < 1 || input.steps.length > 20) invalid('recipe step count out of bounds');
+  return {
+    id: identifier(input.id), title: plainText(input.title, 160), station: plainText(input.station, 80),
+    servings: input.servings, ingredients: input.ingredients.map(value => plainText(value, 500)),
+    steps: input.steps.map(value => plainText(value, 2000)), reference: plainText(input.reference, 1000),
+  };
+}
+
 /** Returns a detached, deeply frozen payload, binding the exact scope and version. */
 export function validateContent(value: unknown): ValidatedContent {
   // Validate the full original value first: unsupported hidden properties or getters
   // must not vanish while a schema-shaped object is constructed below.
   canonicalJson(value);
-  const input = record(value, ['schemaVersion', 'contentPackId', 'organizationId', 'version', 'title', 'blocks']);
-  if (input.schemaVersion !== '1.0.0') invalid('unsupported schema version');
+  const schemaVersion = value && typeof value === 'object' && !Array.isArray(value)
+    ? Object.getOwnPropertyDescriptor(value, 'schemaVersion')?.value : undefined;
+  if (schemaVersion !== '1.0.0' && schemaVersion !== '1.1.0') invalid('unsupported schema version');
+  const keys = ['schemaVersion', 'contentPackId', 'organizationId', 'version', 'title', 'blocks'];
+  const input = record(value, schemaVersion === '1.1.0' ? [...keys, 'recipes'] : keys);
   if (!isExactSemver(input.version)) invalid('invalid exact SemVer');
   if (!Array.isArray(input.blocks) || input.blocks.length !== 3) invalid('exactly three blocks are required');
   const blocks = input.blocks.map(block);
   if (new Set(blocks.map(item => item.id)).size !== 3) invalid('duplicate block identifier');
-  const content: TeachingContent = {
-    schemaVersion: '1.0.0', contentPackId: identifier(input.contentPackId), organizationId: identifier(input.organizationId),
+  const base = {
+    contentPackId: identifier(input.contentPackId), organizationId: identifier(input.organizationId),
     version: input.version, title: plainText(input.title, 160), blocks,
   };
+  let content: TeachingContent;
+  if (schemaVersion === '1.1.0') {
+    if (!Array.isArray(input.recipes) || input.recipes.length !== 3) invalid('exactly three recipes are required');
+    const recipes = input.recipes.map(recipe);
+    if (new Set(recipes.map(item => item.id)).size !== 3) invalid('duplicate recipe identifier');
+    for (const item of recipes) { Object.freeze(item.ingredients); Object.freeze(item.steps); Object.freeze(item); }
+    Object.freeze(recipes);
+    content = { schemaVersion, ...base, recipes };
+  } else {
+    content = { schemaVersion, ...base };
+  }
   const canonical = canonicalJson(content);
   if (Buffer.byteLength(canonical, 'utf8') > maxCanonicalBytes) invalid('canonical content exceeds 64 KiB');
   for (const item of blocks) { Object.freeze(item.options); Object.freeze(item.feedback); Object.freeze(item); }
@@ -247,11 +294,20 @@ export function validateContent(value: unknown): ValidatedContent {
 
 export function publicContent(validated: ValidatedContent) {
   const { content, digest } = validated;
-  return {
+  const base = {
     contentPackId: content.contentPackId, organizationId: content.organizationId,
     contentVersion: { version: content.version, digest }, schemaVersion: content.schemaVersion,
     title: content.title,
     blocks: content.blocks.map(({ id, kind, instruction, prompt, options }) => ({ id, kind, instruction, prompt, options: [...options] })),
     synthetic: true as const,
   };
+  if (content.schemaVersion === '1.1.0') {
+    return {
+      ...base, schemaVersion: content.schemaVersion,
+      recipes: content.recipes.map(({ id, title, station, servings, ingredients, steps, reference }) => ({
+        id, title, station, servings, ingredients: [...ingredients], steps: [...steps], reference,
+      })),
+    };
+  }
+  return { ...base, schemaVersion: content.schemaVersion };
 }

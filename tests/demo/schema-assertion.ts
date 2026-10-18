@@ -3,6 +3,9 @@ import { readFileSync } from 'node:fs';
 import type { DemoOperation } from '../../src/bootstrap/demo/application-port.js';
 
 const schemas=JSON.parse(readFileSync(new URL('../../domains/demo-runtime/proposal-0.1.0/transport-schemas.json',import.meta.url),'utf8')).$defs;
+const recipeSchemas=JSON.parse(readFileSync(new URL('../../domains/demo-recipes/proposal-0.1.1/public-content-schema-1.1.0.json',import.meta.url),'utf8')).$defs;
+const recipe=JSON.parse(readFileSync(new URL('../../domains/demo-recipes/proposal-0.1.1/content-schema-1.1.0.json',import.meta.url),'utf8')).$defs.Recipe;
+schemas.Recipe=recipe;schemas.PublicContent={anyOf:[schemas.PublicContent,recipeSchemas.PublicContent]};
 const names: Partial<Record<DemoOperation,string>>={ReadCurrentSession:'CurrentSession',ListOwnMemberships:'Memberships',ListTeam:'Team',ReadTeamMemberLearnerState:'TeamStates',AssignContent:'Assignment',ListOwnAssignments:'Assignments',ReadAssignedContentVersion:'PublicContent',StartLearningSession:'Session',RecordProgressEvent:'ProgressEvent',CompleteLearningSession:'Session',ReadOwnLearnerState:'OwnStates',BeginDemoRun:'CurrentSession',SwitchDemoPersona:'CurrentSession'};
 export function assertOperationResponse(operation:DemoOperation,value:unknown):void{
   const name=names[operation];if(name)validate(schemas[name],value,'/'+name);else assert.equal(value,undefined);

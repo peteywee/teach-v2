@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C42",
   "class": "contract",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-17",
-  "effective_on": "2026-10-17",
+  "updated_on": "2026-10-18",
+  "effective_on": "2026-10-18",
   "approval": {
     "state": "approved",
-    "approved_version": "1.2.0",
-    "approved_on": "2026-10-17",
-    "record": "domains/demo-runtime/owner-approval.json",
-    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; SHA256SUMS sha256:a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a"
+    "approved_version": "1.3.0",
+    "approved_on": "2026-10-18",
+    "record": "domains/demo-recipes/owner-approval.json",
+    "basis": "TEACH-DEMO-RECIPES-2026-10-18@0.1.1; SYS-21 #88; bounded content/read/UI successor; SHA256SUMS sha256:b5f80daf1d94ecbccb1a01f3e58be3fc98d32564567b1cf03fd5c639eb435255"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -30,7 +30,8 @@
   },
   "supersedes": [
     "TEACH-CON-C42@1.0.3",
-    "TEACH-CON-C42@1.1.0"
+    "TEACH-CON-C42@1.1.0",
+    "TEACH-CON-C42@1.2.0"
   ],
   "superseded_by": null,
   "depends_on": [
@@ -46,6 +47,17 @@
     "physical_schema_admission": false,
     "runtime_activation": false,
     "deployment_authority": false
+  },
+  "demo_recipes_registration": {
+    "package": "TEACH-DEMO-RECIPES-2026-10-18@0.1.1",
+    "approval_record": "domains/demo-recipes/owner-approval.json",
+    "issue": "#88",
+    "source_package": "domains/demo-recipes/proposal-0.1.1",
+    "sha256sums_sha256": "b5f80daf1d94ecbccb1a01f3e58be3fc98d32564567b1cf03fd5c639eb435255",
+    "semantic_authority_only": true,
+    "physical_schema_admission": false,
+    "runtime_activation": false,
+    "deployment_authority": false
   }
 }
 -->
@@ -57,17 +69,17 @@
 | Contract ID        | C42                                                                                                                                                             |
 | Group              | C40 Application Boundaries                                                                                                                                      |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.2.0 |
+| Version | 1.3.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by | Patrick Craven (owner), 2026-10-17; TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; see `domains/demo-runtime/owner-approval.json` |
+| Approved by | Patrick Craven (owner), 2026-10-18; TEACH-DEMO-RECIPES-2026-10-18@0.1.1; SYS-21 #88; see `domains/demo-recipes/owner-approval.json` |
 | Requirement prefix | `WEB`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New. Carries forward the legacy Gate A shared forbidden-surface requirements.                                                                                   |
-| Supersedes | 1.1.0 |
+| Supersedes | 1.2.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated | 2026-10-17 |
+| Last updated | 2026-10-18 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -143,13 +155,13 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 
 | Item                         | State                    | Detail                                                                                                                                                                                                                                                |
 | ---------------------------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Target codebase              | verified (limited scope) | `peteywee/teach-v2` default branch `main`, verified through governance baseline commit `292e8da9123987e9d94f09669c7bc6b6d43c4320` on 2026-10-03. The repository contains the contract/governance foundation; application implementation remains not yet built.                                |
+| Target codebase | verified (limited scope) | Source-bound predecessor is `peteywee/teach-v2` main `2ad83bfce7d5c460f9f5f383a36491d9188de916`, inspected 2026-10-18. This registration does not establish current implementation or runtime conformance. |
 | Legacy repository consulted  | reference only           | `peteywee/teach` `work/TR-0010-production-cutover` at `79fdce5cc3b2` (`main` at `99162f17eace`), read 2026-10-03 for lineage: legacy domain contract JSON files and the Gate A decision record. Legacy code was not inspected and does not govern v2. |
-| Implementation conformance   | unknown                  | Not yet verified. No v2 implementation was inspected; the owner states v2 is yet to be built.                                                                                                                                                         |
-| Acceptance cases implemented | unknown                  | Not yet verified. No mapping between repository tests and these IDs has been established.                                                                                                                                                             |
+| Implementation conformance | unknown | Not established by this registration. Current implementation tests, independent review and runtime evidence are separate source-bound records. |
+| Acceptance cases implemented | unknown | Registration specifies required cases; it does not establish executed test or browser evidence for the current candidate. |
 | Blocking open questions      | 0 open | Only unresolved question rows govern blocking; registration is not implementation evidence |
-| Owner approval               | declared | 1.1.0 owner approval recorded in APPROVAL-RECORD.md under #75; runtime implementation conformance remains UNKNOWN |
-| Independent review           | not performed            | Drafted and self-checked by Claude against the contract-authoring checklist only.                                                                                                                                                                     |
+| Owner approval | declared | 1.3.0 bounded recipe successor approval recorded in APPROVAL-RECORD.md under #88; independent review and runtime implementation conformance are not established by registration |
+| Independent review | not established by registration | No independent-review verdict is issued here. Any later review must bind the actual successor candidate and preserve its limitations. |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
 ## 8. Change Log
@@ -165,6 +177,8 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | 1.0.2   | 2026-10-03 | Non-normative baseline cleanup: corrected stale current-status provenance after the contract spine was committed; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.0.3   | 2026-10-03 | Non-normative truth-state cleanup: verification status now anchors the live v2 repository through governance baseline `292e8da9123987e9d94f09669c7bc6b6d43c4320`; no behavioral requirement changed. | ChatGPT (governance) |
 | 1.1.0 | 2026-10-05 | Register OQ-WEB-1, OQ-WEB-2; preserve named residuals and existing requirement/acceptance IDs. Decision-closure r3.1 manifest sha256:ff7b51df1e3a235e9d226d9d7232f81c64bbeb451b359b6e0f2ea232b6e1757c; SYS-21 #75. | Patrick Craven (owner); ChatGPT (recorder) |
+| 1.2.0 | 2026-10-17 | Exact synthetic demo runtime package registration under SYS-21 #82; original incorporated definitions preserved below. | Patrick Craven (owner); ChatGPT (recorder) |
+| 1.3.0 | 2026-10-18 | Bounded three-recipe content/read/UI successor under SYS-21 #88; preserve original learning, routes, permissions and activation gates. | Patrick Craven (owner); ChatGPT (recorder) |
 
 ## Registered demo runtime amendment (1.2.0)
 
@@ -175,3 +189,14 @@ Register exactly the proposed methods/paths/request+response schemas and owner q
 Every unsafe demo route requires byte-exact allowed Origin and application/json; safe requests do not allocate or reset. Protected response caching is no-store. All success/failure/denial responses use the approved envelope rules; existing rate/capacity codes, exact fixed messages and status mapping are preserved from the baseline error schema. UI must distinguish loading/empty/denied/invalid/offline/failed/unsaved/recorded states, use actual persisted results and clear protected data on session/run changes. Reset's two-step semantics must be visible on partial failure. Require keyboard, WCAG2.2AA, 44px targets, reduced motion and actual mobile/desktop browser inspection, not only fixture screenshots.
 
 Exact definitions and field constraints are incorporated from `domains/demo-runtime/proposal-0.1.0/demo-boundary.md`, `domains/demo-runtime/proposal-0.1.0/authority-and-audit.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.json`, and `domains/demo-runtime/proposal-0.1.0/transport-and-queries.json` with its referenced schemas. No definition beyond that approved package is introduced.
+
+
+## Registered bounded recipe successor (1.3.0)
+
+Exact owner-approved scope: `TEACH-DEMO-RECIPES-2026-10-18@0.1.1`, SYS-21 [#88](https://github.com/peteywee/teach-v2/issues/88). Approval provenance: `domains/demo-recipes/owner-approval.json`; exact source schemas and template: `domains/demo-recipes/proposal-0.1.1/`. This bounded successor overrides only the content/read/UI additions stated below. All original package definitions, authority, admission and activation gates otherwise remain controlling. The original package and its registration remain immutable. Registration proves neither independent review nor runtime behavior and authorizes no hosting, spending or live-database changes.
+
+The learner surface adds a kitchen catalog, searchable and station-filterable recipe book, and recipe detail/reference view, all rendered only from the learner's own assigned exact-version content. Required controls include search, station filter, clear, back, refresh and missing-recipe recovery. Read-only navigation must not write learning progress or invent persistent state. Plain-text recipe data is escaped; loading, empty, no-match, invalid, denied, offline and failure states remain explicit. Schema 1.0.0 content has no recipes and must remain usable without invented sample data.
+
+A recipe may link to the original general handoff practice only with copy that makes clear it is not recipe-specific or graded recipe mastery. The original learner answer/complete/readback, manager readback/reassignment/revocation, reset confirmation/cancel/partial-failure and logout semantics remain unchanged. Managers gain no recipe content-read capability. Session/run changes clear protected recipe data as well as existing learner state. No new HTTP route or served asset path is admitted.
+
+Preserve WEB-AC-1 through WEB-AC-10 and require connected kitchen/book/detail/general-practice flow coverage, repeated and interrupted navigation, clear/back/refresh, missing recipe recovery and narrow/mobile layout. Automated source/fixture checks, actual browser desktop/mobile inspection, keyboard evidence and screen-reader evidence must be labeled separately. WCAG 2.2 AA, at least 44 by 44 CSS pixel targets and reduced-motion requirements remain unchanged; unperformed checks remain UNKNOWN, never blanket all-controls-working claims.
