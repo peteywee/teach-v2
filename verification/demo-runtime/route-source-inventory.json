@@ -4,8 +4,13 @@
   "scope": "Exact registered demo source only; listener activation and browser/runtime proof are separate gates",
   "package_sha256sums": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
   "registration_sha256": "b94cf7c7c9bab35ad2454470295ae2b04b8814bd0ac55c282cdd3dd6df67218d",
-  "source_file_count": 110,
+  "source_file_count": 115,
   "source_sha256": {
+    "src/bootstrap/demo-hosted/composition.ts": "dabe1770d7a17fe83c168137cc670c8a3911e80c6cfe83257930f073a3027f42",
+    "src/bootstrap/demo-hosted/configuration.ts": "46f862c1be8db04f96000e875d03a550424941b4689dd1614b1904b596831c24",
+    "src/bootstrap/demo-hosted/expiry.ts": "06cb48c6b96e8b4797acc9c3eb9494e01fac2fa58639dfd57f57678ac1fa2a7e",
+    "src/bootstrap/demo-hosted/pool.ts": "6a755fe7291b06acd34ee120f94f0ba5b8ff07f137c2c613764393805ba99211",
+    "src/bootstrap/demo-hosted/transport.ts": "ae9a1ff5514b66fa7fee3a7aea7ee5c96600024ad3f6543399d1dfc130ae7a42",
     "src/bootstrap/demo/README.md": "751a11dbc003a4ac253681a59c55ef285123a20ec5aca681ce8bfafd81698d06",
     "src/bootstrap/demo/application-port.ts": "90ebd1c1e339fc116f73f62b8b203c156ca7c50bc50aa51a2c9796bc07a29097",
     "src/bootstrap/demo/application.ts": "d58e64f6a4dac4be83dfd56043d59afa0f71b85fd97befe57164c4722e42b86c",
@@ -113,8 +118,8 @@
     "src/web/demo/assets.json": "e17024f7dfc5c7978af159e6370f58379068c42686b4aa63d39f654e6238a1c4",
     "src/web/demo/controller.mjs": "4c76f655b8405c01865b68e0c57e50143ebc200654e61770797809640468e8dc",
     "src/web/demo/index.html": "63806ab9d35adb581b59b9383237d0dda15e3aa162ea5dc922000682094b8866",
-    "src/web/demo/styles.css": "53fc83fec14518b10caddc72c5bfa29f5c21aacd1bb37cd541d5ee6a19d0f9e6",
-    "src/web/demo/views.mjs": "62686f104c658c0761cf32bbbcb77104bd26eaa3871ffd749c16a581a1649b29",
+    "src/web/demo/styles.css": "6d665fee7909be3effa374111f475bae18730b61a090366375a92cc7b34829d2",
+    "src/web/demo/views.mjs": "d8830b79e7d1e9b6dab8d587546d713f2490c7be27841e2cb0ac3c9dcc580d6d",
     "src/web/demo/wire-contract.mjs": "1ef60e6d05cace24e45175583c98c172d9954c16a1e3adaa118e53b74d94d257"
   },
   "routes": [

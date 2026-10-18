@@ -1,0 +1,17 @@
+{
+  "kind": "INERT_HOSTED_LAYOUT_PROPOSAL",
+  "execution": "DISABLED",
+  "providerDeployable": false,
+  "providers": ["Vercel", "Supabase"],
+  "projectPolicy": "NEW_DEMO_ONLY_PROJECTS_REQUIRE_SEPARATE_APPROVAL",
+  "origin": "https://demo.example.invalid",
+  "staticAssetCount": 7,
+  "apiRouteCount": 15,
+  "runtimeAuthorizer": "NOT_IMPLEMENTED",
+  "readiness": {"ready": false, "state": "DISABLED"},
+  "pool": {"max": 2, "mode": "transaction", "verifiedTlsRequired": true, "startupMigration": false},
+  "scheduler": {"mounted": false, "registered": false, "authorizer": "NOT_IMPLEMENTED", "maximumBatch": 100},
+  "credentials": "NOT_INCLUDED",
+  "secretRevisionValues": "REQUIRE_PROVIDER_VERIFICATION_AND_SEPARATE_APPROVAL",
+  "deployment": "NOT_AUTHORIZED_BY_H01"
+}
