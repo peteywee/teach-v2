@@ -1,3 +1,4 @@
+import { inspectDemoRecoveryRegistration } from './demo-recovery-registration.mjs';
 import { createHash } from 'node:crypto';
 import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -84,10 +85,13 @@ export function inspectSchemaIsolationRegistration(root) {
     for (const path of SCHEMA_ISOLATION_REVISED_PATHS) equal(hash(source.files[path] ?? ''), PREDECESSOR_HASHES[path], `registered predecessor bytes differ: ${path}`);
     equal(PREDECESSOR_HASHES[SCHEMA_ISOLATION_REVISED_PATHS[1]], runtime.authority_file_hashes[SCHEMA_ISOLATION_REVISED_PATHS[1]], 'operations predecessor must match immutable runtime registration');
     for (const path of SCHEMA_ISOLATION_REVISED_PATHS.slice(2)) equal(PREDECESSOR_HASHES[path], recipes.authority_file_hashes[path], `predecessor must match immutable recipe registration: ${path}`);
+    const recovery = inspectDemoRecoveryRegistration(root);
+    errors.push(...recovery.errors);
+    const projected = path => Object.hasOwn(recovery.predecessorFiles, path) ? recovery.predecessorFiles[path] : raw(path);
     const authorityPaths = [...SCHEMA_ISOLATION_REVISED_PATHS, ...ARCHIVES];
     equal(Object.keys(registration.authority_file_hashes).sort(), authorityPaths.slice().sort(), 'exact six live authority seals required');
     // Read only our finite path allowlist, never an injected manifest target.
-    for (const path of authorityPaths) equal(hash(raw(path)), registration.authority_file_hashes[path], `registered authority file differs: ${path}`);
+    for (const path of authorityPaths) equal(hash(projected(path)), registration.authority_file_hashes[path], `registered authority file differs: ${path}`);
     const inventory = readdirSync(join(root, SCHEMA_ISOLATION_BASE), { withFileTypes: true });
     equal(inventory.map(entry => entry.name).sort(), [...EVIDENCE_NAMES].sort(), 'exact evidence directory inventory required');
     if (inventory.some(entry => !entry.isFile())) fail('evidence inventory permits only regular files');
@@ -109,7 +113,7 @@ export function inspectSchemaIsolationRegistration(root) {
     equal(registration.nonexception_data_api_default, 'DISABLED', 'nonexception Data API default must remain disabled');
     equal(registration.shared_resources_are_isolated, false, 'shared project resources cannot be claimed isolated');
     for (const [index, id, before] of [[0, 'TEACH-CON-C21', '1.2.0'], [1, 'TEACH-PROP-DCS-07', '1.1.0']]) {
-      const path = SCHEMA_ISOLATION_REVISED_PATHS[index], old = source.files[path], current = raw(path), archive = raw(ARCHIVES[index]);
+      const path = SCHEMA_ISOLATION_REVISED_PATHS[index], old = source.files[path], current = projected(path), archive = raw(ARCHIVES[index]);
       const previousMetadata = metadata(old), currentMetadata = metadata(current);
       equal([previousMetadata.doc_id, previousMetadata.version], [id, before], `predecessor document identity differs: ${id}`);
       equal([currentMetadata.doc_id, currentMetadata.version, currentMetadata.status, currentMetadata.approval.approved_version], [id, '2.0.0', 'active', '2.0.0'], `current document metadata differs: ${id}`);
@@ -122,7 +126,7 @@ export function inspectSchemaIsolationRegistration(root) {
     }
     return { errors, present: true, registration,
       revisedPaths: errors.length ? [] : [...SCHEMA_ISOLATION_REVISED_PATHS],
-      addedPaths: errors.length ? [] : [...ADDED_PATHS],
+      addedPaths: errors.length ? [] : [...ADDED_PATHS, ...recovery.addedPaths],
       predecessorFiles: errors.length ? {} : { ...source.files },
     };
   } catch (error) {

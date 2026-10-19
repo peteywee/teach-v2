@@ -106,6 +106,9 @@ jobs:
       - name: Verify packaged accepting PostgreSQL runtime
         id: hosted_accepting_postgres
         run: pnpm exec node scripts/verification/run-hosted-source-check.mjs accepting_postgres
+      - name: Verify encrypted synthetic recovery rehearsal
+        id: hosted_recovery
+        run: pnpm exec node scripts/verification/run-hosted-source-check.mjs recovery
       - name: Remove disposable loopback PostgreSQL
         id: hosted_postgres_stop
         if: always()

@@ -1,0 +1,12 @@
+{
+  "baseline_commit": "86a7ba6e10cc851da25c7e5331350caf622e6d4f",
+  "state": "PREPARATION_ONLY_NOT_REGISTERED",
+  "predecessors": {
+    "contracts/c21-database-migration-contract.md": "88e632e5a3c28c07bd9d3ea0589c1a3b590991fa781420713d24ab648c7b6669",
+    "governance/decision-closure/07-evidence-release-operations-spec.md": "f3c03b1fe20b5e33aadb85bbddc7c45e0c36520a33a34ddb086a97a89854a868"
+  },
+  "successors": {
+    "operations-3.0.0.proposed.md": "eec2f37906c122cf595763ad099ca518098a41c751661018e87ff93e6f44a54b",
+    "c21-3.0.0.proposed.md": "9dd3ae87fe46db17d2305291f5adc9bf3161e6d96d5e2bbc3612491a9463d14c"
+  }
+}

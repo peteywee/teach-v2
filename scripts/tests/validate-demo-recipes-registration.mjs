@@ -1,3 +1,4 @@
+import { RECOVERY_BASE, RECOVERY_ARCHIVES } from '../kernel/demo-recovery-registration.mjs';
 import assert from 'node:assert/strict';
 import { after, test } from 'node:test';
 import { createHash } from 'node:crypto';
@@ -8,7 +9,7 @@ import { inspectRecipeRegistration, RECIPE_BASE, RECIPE_PROPOSAL, RECIPE_PACKAGE
 import { inspectDemoRuntimeRegistration, createHistoricalSourceReader } from '../kernel/demo-runtime-registration.mjs';
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const fixture = mkdtempSync(join(tmpdir(), 'teach-recipe-registration-'));
-for (const name of ['kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle']) cpSync(join(root, name), join(fixture, name), { recursive: true });
+for (const name of ['docs', 'scripts', '.github', 'verification', 'kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle']) cpSync(join(root, name), join(fixture, name), { recursive: true });
 after(() => rmSync(fixture, { recursive: true, force: true }));
 const raw = path => readFileSync(join(fixture, path), 'utf8');
 const json = path => JSON.parse(raw(path));
@@ -146,7 +147,12 @@ test('predecessor-only checkout remains accepted, but cannot pretend recipe regi
   const schemaRegistration = schemaSource ? json(`${schemaBase}/registration.json`) : null;
   const schemaLive = schemaSource ? Object.fromEntries(Object.keys(schemaRegistration.authority_file_hashes).map(path => [path, raw(path)])) : {};
   const schemaParked = join(fixture, 'parked-schema-evidence');
+  const recoveryLive = Object.fromEntries(RECOVERY_ARCHIVES.map(path => [path, raw(path)]));
+  const recoveryParked = join(fixture, 'parked-recovery-evidence');
   try {
+    // Unwind the complete recovery layer, not only its active authority bytes.
+    renameSync(join(fixture, RECOVERY_BASE), recoveryParked);
+    for (const path of RECOVERY_ARCHIVES) rmSync(join(fixture, path));
     if (schemaSource) {
       renameSync(join(fixture, schemaBase), schemaParked);
       for (const [path, text] of Object.entries(schemaSource.files)) writeFileSync(join(fixture, path), text);
@@ -166,6 +172,8 @@ test('predecessor-only checkout remains accepted, but cannot pretend recipe regi
       renameSync(schemaParked, join(fixture, schemaBase));
       for (const [path, text] of Object.entries(schemaLive)) writeFileSync(join(fixture, path), text);
     }
+    renameSync(recoveryParked, join(fixture, RECOVERY_BASE));
+    for (const [path, text] of Object.entries(recoveryLive)) writeFileSync(join(fixture, path), text);
   }
 });
 

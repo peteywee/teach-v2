@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 import assert from 'node:assert/strict';
+// Existing production-proof stage runs bounded first-install tests; no new workflow.
+import './validate-demo-recovery-evidence.mjs';
 import { buildConfigurationIdentity } from '../release/build-config-identity.mjs';
 import { validateProductionMigrationEvidence } from '../release/validate-production-migration-evidence.mjs';
 

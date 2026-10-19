@@ -70,6 +70,14 @@ export async function launchFixture(plan,{command=docker,portFree=assertPortFree
   command(['start',plan.name]);await ready(plan);
  }catch(error){try{cleanupFixture(plan,command);}catch(cleanup){throw new AggregateError([error,cleanup],'fixture failed; cleanup unverified');}throw error;}
 }
+// Read only the current run's exact fixed fixture, never a caller-selected container.
+export function readOwnedFixture(env=process.env,command=docker){
+ const saved=JSON.parse(readFileSync(statePath(env),'utf8')),plan=fixturePlan(saved.owner);
+ assert.ok(saved.owner.startsWith(`${env.GITHUB_RUN_ID}-${env.GITHUB_RUN_ATTEMPT}-`),'fixture belongs to another run');
+ assert.deepEqual(saved,plan,'fixture state differs from fixed plan');
+ assertFixtureOwned(inspectFixture(plan.name,command),plan);
+ return plan;
+}
 export async function main(action,env=process.env){
  const file=statePath(env);
  if(action==='start'){

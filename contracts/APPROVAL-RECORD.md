@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -48,7 +48,7 @@
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
 - Last updated: 2026-10-19
-- Contract package version: `0.21.0`
+- Contract package version: `0.22.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -525,3 +525,11 @@ Recorded 2026-10-19 UTC. The supplied exchange does not provide an exact approva
 The owner selected Node 24 and approved both bounded preparation scopes. Authority covers policy registration and preparation of code and disposable-local tests only. It does not create or grant a runtime/migration role, credential or persistent access, change a live database or provider setting, activate shared runtime, authorize deployment/spending, establish independent verification or approve an exact release candidate. MIG-9/MIG-10 backup and isolated restore proof, MIG-13 destructive-migration approval, MIG-14 reconciliation, OQ-MIG-4 exact frozen candidate/migration/restore-point apply approval and C52 promotion gates remain unchanged. Legacy data import remains ABSENT.
 
 A shared PostgreSQL schema provides an object/access boundary, not isolated compute, connections, storage, administrators, service credentials, backups/PITR or recovery blast radius. The design and bounded successor registration are `governance/demo-schema-isolation/design.md` and `registration.json`. Superseded C21 1.2.0 and operations specification 1.1.0 retain their original bodies; original package snapshots and prior approvals are not rewritten.
+
+## Part 29 — First additive synthetic demo recovery exception
+
+Recorded 2026-10-19. The owner approved adoption of the independently reviewed preparation and publication of the corresponding PR. Minimal decision: `docs/proposals/demo-recovery-exception/owner-adoption.json`. Registration: `docs/proposals/demo-recovery-exception/adoption-registration.json`.
+
+C21 and operations advance from 2.0.0 to 3.0.0. The exception is only for the FIRST ADDITIVE SYNTHETIC installation into previously absent `teach_v2_demo` in t34ch project `acqafjkdkdmtpnsxiesw`, PostgreSQL 17. A candidate-bound encrypted consistent application recovery set with all required coverage and actual isolated same-major restore may substitute for the native point/mechanism requirement. Required roles, memberships, grants and extensions must be recreated or verified on the isolated target, never silently inherited. Unknown coverage blocks. Native defaults, manual exact-candidate apply approval and all other gates remain outside this exact exception.
+
+Actual t34ch recovery evidence remains UNKNOWN. Adoption does not authorize real capture/export, key or credential creation/transmission, security grants, live database writes, deployment or spending. Existing scoped archives and synthetic rehearsal are not actual recovery evidence. Earlier ledger parts and source seals are preserved.

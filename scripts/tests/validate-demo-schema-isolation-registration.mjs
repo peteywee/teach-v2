@@ -1,3 +1,5 @@
+import { RECOVERY_BASE, RECOVERY_ARCHIVES } from '../kernel/demo-recovery-registration.mjs';
+import './validate-demo-recovery-registration.mjs';
 import assert from 'node:assert/strict';
 import { after, test } from 'node:test';
 import { createHash } from 'node:crypto';
@@ -10,7 +12,7 @@ import { inspectDemoRuntimeRegistration, createHistoricalSourceReader } from '..
 
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const fixture = mkdtempSync(join(tmpdir(), 'teach-schema-registration-'));
-for (const name of ['kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle']) cpSync(join(root, name), join(fixture, name), { recursive: true });
+for (const name of ['docs', 'scripts', '.github', 'verification', 'kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle']) cpSync(join(root, name), join(fixture, name), { recursive: true });
 after(() => rmSync(fixture, { recursive: true, force: true }));
 const raw = path => readFileSync(join(fixture, path), 'utf8');
 const json = path => JSON.parse(raw(path));
@@ -42,7 +44,7 @@ test('exact bounded decision verifies current sources before exposing four prede
     const result = inspectSchemaIsolationRegistration(target);
     assert.deepEqual(result.errors, []);
     assert.deepEqual(result.revisedPaths, [...REVISED]);
-    assert.equal(result.addedPaths.length, 6);
+    assert.equal(result.addedPaths.length, 8);
     assert.equal(result.registration.schema, 'teach_v2_demo');
     assert.equal(result.registration.node_major, 24);
     assert.equal(result.registration.local_preparation_authorized, true);
@@ -133,7 +135,11 @@ test('complete predecessor-only checkout remains valid when the entire successor
   const registration = json(registrationPath), source = json(`${BASE}/source-baseline.json`);
   const live = Object.fromEntries(Object.keys(registration.authority_file_hashes).map(path => [path, raw(path)]));
   const parked = join(fixture, 'held-complete-schema-evidence');
+  const recoveryParked = join(fixture, 'held-complete-recovery-evidence');
+  const recoveryArchives = Object.fromEntries(RECOVERY_ARCHIVES.map(path => [path, raw(path)]));
   try {
+    renameSync(join(fixture, RECOVERY_BASE), recoveryParked);
+    for (const path of RECOVERY_ARCHIVES) rmSync(join(fixture, path));
     renameSync(join(fixture, BASE), parked);
     for (const [path, text] of Object.entries(source.files)) writeFileSync(join(fixture, path), text);
     for (const path of Object.keys(live)) if (!Object.hasOwn(source.files, path)) rmSync(join(fixture, path));
@@ -141,6 +147,8 @@ test('complete predecessor-only checkout remains valid when the entire successor
     assert.deepEqual(inspectRecipeRegistration(fixture).errors, []);
     assert.deepEqual(inspectDemoRuntimeRegistration(fixture).errors, []);
   } finally {
+    renameSync(recoveryParked, join(fixture, RECOVERY_BASE));
+    for (const [path, text] of Object.entries(recoveryArchives)) writeFileSync(join(fixture, path), text);
     renameSync(parked, join(fixture, BASE));
     for (const [path, text] of Object.entries(live)) writeFileSync(join(fixture, path), text);
   }

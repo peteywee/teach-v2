@@ -41,4 +41,9 @@ try {
  check(binder.includes('authorizationFactory(transaction)')&&binder.includes('auditFactory(transaction)')&&binder.includes('new PostgresApplicationSessionRepository(transaction)')&&binder.includes('throw new IdentityCommandDependenciesUnavailableError()'),'same transaction binding and refusal required');
  check(inspectConsolidatedVerification(root).length===0,'session transaction PG automation required with complete consolidated catalog');
  console.log(`PASS legacy recovery: ${ids.length} unresolved owner questions, pinned reference evidence and conditional session audit; runtime BLOCKED`);
-} catch(error){console.error(error.message);process.exitCode=1;}
+} catch(error){
+ // Do not project unverified historical data or suppress independent CI controls.
+ console.error(error.message);
+ for(const diagnostic of inspectConsolidatedVerification(root))console.error(diagnostic);
+ process.exitCode=1;
+}

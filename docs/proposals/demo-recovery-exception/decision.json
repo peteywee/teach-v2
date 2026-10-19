@@ -1,0 +1,14 @@
+{
+  "decision_id": "TEACH-FIRST-ADDITIVE-DEMO-RECOVERY",
+  "version": "1.0.0",
+  "recorded_on": "2026-10-19",
+  "state": "OWNER_APPROVED_PREPARATION_ONLY",
+  "baseline_commit": "86a7ba6e10cc851da25c7e5331350caf622e6d4f",
+  "proposal": "docs/proposals/demo-recovery-exception/proposal.md",
+  "active_contract_changed": false,
+  "source_export_authorized": false,
+  "credential_or_security_change_authorized": false,
+  "live_migration_authorized": false,
+  "deployment_authorized": false,
+  "spending_authorized": false
+}

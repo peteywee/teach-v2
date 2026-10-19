@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-PROP-DCS-07",
   "class": "specification",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -40,17 +40,18 @@
   "confirms_recommendation": [
     "OQ-OBS-1"
   ],
-  "effective_on": "2026-10-19",
   "approval": {
     "state": "approved",
-    "approved_version": "2.0.0",
-    "record": "governance/demo-schema-isolation/owner-approval.json",
-    "basis": "Bounded demo-schema Data API exception; recorded 2026-10-19 UTC. Prior #75 and #82 decisions unchanged outside this exception. Local preparation only."
+    "approved_version": "3.0.0",
+    "approved_on": "2026-10-19",
+    "record": "docs/proposals/demo-recovery-exception/owner-adoption.json",
+    "basis": "Owner approved adoption of the reviewed first additive synthetic demo recovery exception and corresponding PR; actual recovery and live actions remain separately gated."
   },
   "supersedes": [
     "TEACH-PROP-DCS-07@0.3.0",
     "TEACH-PROP-DCS-07@1.0.0",
-    "TEACH-PROP-DCS-07@1.1.0"
+    "TEACH-PROP-DCS-07@1.1.0",
+    "TEACH-PROP-DCS-07@2.0.0"
   ],
   "approval_history": [
     {
@@ -70,19 +71,30 @@
     "live_database_changes": false,
     "deployment_authority": false,
     "spending_authority": false
+  },
+  "effective_on": "2026-10-19",
+  "demo_recovery_exception_registration": {
+    "registration": "docs/proposals/demo-recovery-exception/adoption-registration.json",
+    "owner_decision": "docs/proposals/demo-recovery-exception/owner-adoption.json",
+    "scope": "POLICY_ONLY",
+    "actual_recovery_evidence": "UNKNOWN",
+    "live_database_changes": false,
+    "runtime_activation": false,
+    "deployment_authority": false,
+    "spending_authority": false
   }
 }
 -->
 
 # Evidence, Release and Operations Specification
 
-Registered on 2026-10-05 by the owner-approved r3.1 manifest under SYS-21 #75. The normative sections below are binding policy selections; baseline facts, proposed metadata and registration instructions describe the preserved source snapshot, not current runtime evidence. Capability promotion, physical schema/executor admission, provider selection, implementation and production execution retain their separate gates. Implementation conformance: UNKNOWN.
+Registered on 2026-10-05 by the owner-approved r3.1 manifest under SYS-21 #75. The 3.0.0 successor adopts the owner-approved limited first-install recovery exception on 2026-10-19; prior selections remain binding outside that exact exception. Baseline facts and historical registration instructions describe the preserved source snapshot, not current runtime evidence. Capability promotion, physical schema/executor admission, provider selection, implementation and production execution retain their separate gates. Implementation conformance: UNKNOWN.
 
 
 | Field | Value |
 | --- | --- |
-| Status | `active` logical authority; implementation conformance UNKNOWN; no route mounting or physical admission |
-| Owner decision | Prior #75/#82 selections preserved except the bounded C21 2.0.0 schema-isolation exception; exact additional approval in `governance/demo-schema-isolation/owner-approval.json` |
+| Status | `active` 3.0.0; owner-approved policy adoption only; no live authority |
+| Owner decision | Prior selections and schema isolation preserved; the C21 3.0.0 first-install recovery exception is adopted as policy only; actual recovery evidence remains UNKNOWN. |
 | Resolves if approved | `OQ-EVD-1`, `OQ-EVD-3`, `OQ-REL-3`, `OQ-MIG-3`, `OQ-MIG-4`, `OQ-OBS-2`, `OQ-AUD-2`, `OQ-AUD-3` |
 | Split (supplied part registers, value stays open) | `OQ-EVD-2` (duration, archive location), `OQ-TXN-2` (email and OAuth providers) |
 | Owner confirmation needed | `OQ-OBS-1` (Sentry recommendation; alert destination unknown) |
@@ -167,7 +179,7 @@ Evidence is bound to the exact candidate, Supabase project, database and schema,
 | HTTP probes | Publishable/anon and authenticated requests, explicit demo schema/profile requests, table endpoints and applicable RPC paths are denied with attributable API authorization/schema errors. Network failure, missing credential, generic 404 or unexplained non-200 alone is not proof. |
 | Legacy inventory/settings/journal before and after | Legacy schema, rows, grants, defaults, triggers, functions, exposed schemas and journal remain unchanged; only separately inventoried demo objects differ. |
 
-Missing, unreadable, stale or contradictory project-specific evidence blocks promotion. Provider defaults, announced changes, project age and successful local tests never substitute for target readback. MIG-9/MIG-10 still require the fresh post-freeze named restore point and current isolated restore proof; §8 still requires manual exact-candidate owner approval. The design and unresolved live gates are in `governance/demo-schema-isolation/design.md`.
+Missing, unreadable, stale or contradictory project-specific evidence blocks promotion. Provider defaults, announced changes, project age and successful local tests never substitute for target readback. MIG-9/MIG-10 still require the fresh post-freeze named restore point and current isolated restore proof, with only C21 §4.1 permitting its exact application recovery set for the first additive synthetic installation; §8 still requires manual exact-candidate owner approval. The design and unresolved live gates are in `governance/demo-schema-isolation/design.md`.
 
 ## 6. OQ-AUD-2 and OQ-AUD-3 — audit history and denial records
 
@@ -212,9 +224,9 @@ Dependency: step 7 needs a smoke organization, which needs tenant bootstrap — 
 Owner-supplied: manual, owner-approved, exact candidate. Procedure:
 
 1. Candidate frozen; MIG-6 (empty-DB replay) and MIG-7 (apply to a copy of current production schema) PROVEN on the candidate SHA.
-2. Fresh named restore point captured after the candidate is frozen (MIG-9); restore proof ≤ 30 days old (MIG-10).
-3. Owner records approval naming candidate SHA, migration IDs and restore point.
-4. Operator runs `pnpm db:migrate` against production with the release credential; output stored as evidence.
+2. Fresh named restore point captured after the candidate is frozen (MIG-9); restore proof ≤ 30 days old (MIG-10). Only C21 §4.1 permits the exact candidate-bound encrypted application recovery set and actual PG17 restore/preservation rehearsal instead. All eight normative procedure steps in docs/proposals/demo-recovery-exception/proposal.md MUST pass; missing/unknown coverage blocks. This is not platform disaster recovery or an ongoing production policy.
+3. Owner records approval naming candidate SHA, migration IDs/hashes and restore point (or exact C21 §4.1 recovery set solely inside that exception). Preparation approval is not capture, credential, live apply or deployment authority.
+4. Operator runs `pnpm db:migrate` against production with the release credential; output stored as evidence. For the sole C21 §4.1 exception, use the separately reviewed isolated-schema additive lineage/apply procedure instead, never the public-schema legacy runner. Recheck target, absent namespace/prior apply and no unapproved role collision; any provisioned creator/runtime identities and effective privileges must match separately approved provisioning and unchanged preservation inventory immediately before manual apply. No CI production credential or automatic apply is permitted.
 5. Post-apply readback: migration journal head equals candidate; MIG-14 drift check = 0.
 6. CI holds no production database credential; a workflow that can reach production fails review.
 
@@ -271,3 +283,7 @@ Registers now: in scope = email delivery and OAuth sign-in; payments disabled. R
 For the synthetic scope, Identity, Membership, Assignment and DemoRun lifecycle snapshots are finite, versioned, append-only, transaction-bound and replay exactly to current lifecycle fields. No candidate business event is promoted. AuditActor/AuditTarget unions and redacted fields are exactly those in the approved authority-and-audit.md. Denial dedup uses an immutable insert-only unique key per five-minute bucket, not mutation of an audit row counter; 100 rows/actor/hour and one overflow row/hour remain. This package creates no audit purge, production permission or verification evidence.
 
 Exact owner approval: `domains/demo-runtime/owner-approval.json`; immutable governing definitions: `domains/demo-runtime/proposal-0.1.0/demo-boundary.md` and `domains/demo-runtime/proposal-0.1.0/authority-and-audit.md`. No implementation success is claimed by this logical registration.
+
+## 15. Proposed bounded recovery revision
+
+Version 3.0.0 is adopted as policy only; actual recovery evidence remains UNKNOWN. Only C21 §4.1 changes the recovery alternative for the exact first additive synthetic installation. See docs/proposals/demo-recovery-exception/proposal.md; no other policy, evidence or live authority is changed.

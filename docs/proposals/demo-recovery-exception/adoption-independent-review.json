@@ -1,0 +1,32 @@
+{
+  "review_id": "TEACH-DEMO-RECOVERY-EXCEPTION-2026-10-19-REVIEW",
+  "registration_sha256": "c3628373926ce8eb484d7799efe56fa6e71585febf5aaaa59233dcf0ec79b495",
+  "scope": "POLICY_AND_FINITE_SOURCE_COMPATIBILITY_ONLY",
+  "outcome": "PASS",
+  "source_edits_by_reviewer": false,
+  "reviewer": "Independent engineering reviewer",
+  "reviewed_at_utc": "2026-10-19T23:31:05.140Z",
+  "unresolved_scope_blockers": [],
+  "actual_recovery_evidence": "UNKNOWN",
+  "data_export_authorized": false,
+  "credential_creation_authorized": false,
+  "security_grants_authorized": false,
+  "live_database_changes_authorized": false,
+  "deployment_authorized": false,
+  "spending_authorized": false,
+  "runtime_activation_authorized": false,
+  "review_basis": [
+    "Reviewed active first-additive synthetic scope, native fallback, mixed-envelope rejection and explicit independent isolated recovery requirements.",
+    "Verified exact preserved baseline sources and archive bodies, unchanged historical seals and finite authenticated projection.",
+    "Independently executed 84 evidence and dispatch tests. Post-seal registration and aggregate execution remain separate test receipts, not assertions made by this policy/source review.",
+    "Reviewed complete successor teardown fixture correction; all historical validity assertions retained.",
+    "Reviewed authenticated exact-path original-test projection, complete fixture teardown, and bounded synthetic recovery CI using only exact current-run owned loopback PG17 container and fixed official client commands. Local target/ownership negatives pass; actual Docker topology remains exact-head hosted CI verification, not locally claimed.",
+    "Reviewed localized blocking-error collection that preserves original workflow diagnostics, authenticated unchanged seventeen-test assertion, and full recovery-layer teardown before historical P01-P05 assertions. No fallback bytes or weakened denial expectations.",
+    "Reviewed independent consolidated diagnostics in two existing failed historical-read paths: original rejection preserved, no unverified predecessor or dependent persistence continuation. Five direct CLI workflow regressions require both source seal and specific original control denial.",
+    "Reviewed exact repository-integration predecessor extension through existing authenticated engineering bridge; old engineering predecessor precedence and immutable physical review retained, no recipe verifier edit."
+  ],
+  "limitations": [
+    "Local synthetic same-cluster restore proves mechanism only, not actual t34ch recovery, role recreation or concurrent sequence consistency.",
+    "Actual export, access/key handling, coverage, isolated restore and exact live apply require separate evidence and approvals."
+  ]
+}
