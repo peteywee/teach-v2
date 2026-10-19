@@ -1,7 +1,8 @@
+import { RECOVERY_BASE, inspectDemoRecoveryRegistration } from '../kernel/demo-recovery-registration.mjs';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { after, test } from 'node:test';
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { reconstructHistoricalDemoIntegration } from '../verification/consolidated-ci-evidence.mjs';
@@ -20,7 +21,7 @@ import { inspectFutureAdmission } from '../persistence/future-admission-evidence
 
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const fixture = mkdtempSync(join(tmpdir(), 'teach-demo-storage-'));
-for (const path of ['kernel','domains','architecture','contracts','application-interfaces','governance','persistence','drizzle','src','drizzle.config.ts','drizzle.p05.config.ts','pnpm-lock.yaml','package.json','scripts','.github','verification','tests']) cpSync(join(root,path),join(fixture,path),{recursive:true});
+for (const path of ['docs', 'kernel','domains','architecture','contracts','application-interfaces','governance','persistence','drizzle','src','drizzle.config.ts','drizzle.p05.config.ts','pnpm-lock.yaml','package.json','scripts','.github','verification','tests']) cpSync(join(root,path),join(fixture,path),{recursive:true});
 after(() => rmSync(fixture,{recursive:true,force:true}));
 const raw = path => readFileSync(join(fixture,path),'utf8');
 const json = path => JSON.parse(raw(path));
@@ -62,6 +63,9 @@ test('reviewed current successor and immutable P01-P05 evidence both pass', {ski
 });
 
 test('unchanged P01-P05 historical fixture retains its real baseline checks', () => {
+  const recovery=inspectDemoRecoveryRegistration(fixture);
+  assert.deepEqual(recovery.errors,[]);
+  const recoveryParked=join(fixture,'parked-recovery-evidence');
   const source=json('domains/demo-runtime/source-baseline.json');
   const physicalPaths=['persistence/physical-slices/readiness.json','persistence/physical-slices/queue-post-p05.json',...['learning-session','assignment','progress-event'].flatMap(lane => ['admission.json','admission-evidence-plan.json'].map(name => `persistence/physical-slices/${lane}/${name}`)),'persistence/physical-slices/learning-session/implementation.json'];
   const demoSources=Object.keys(DEMO_OWNER_ADAPTERS).flatMap(suffix => { const [owner,file]=suffix.split('/'); return [`src/modules/${owner}/infrastructure/persistence/${file}`,`src/modules/${owner}/infrastructure/persistence/demo-schema.ts`]; });
@@ -73,9 +77,12 @@ test('unchanged P01-P05 historical fixture retains its real baseline checks', ()
   assert.deepEqual(recipe.errors,[]);
   const recipeRemoved=['persistence/physical-slices/demo-recipes/independent-successor-review.json','scripts/kernel/validate-demo-recipes-registration.mjs','scripts/persistence/validate-demo-recipes-physical-admission.mjs',...recipe.addedPaths,...DEMO_RECIPE_PHYSICAL_EVIDENCE,DEMO_RECIPE_PHYSICAL_ENVELOPE,DEMO_RECIPE_PHYSICAL_REVIEW,DEMO_RECIPE_MIGRATION,DEMO_RECIPE_SNAPSHOT];
   const removed=[...schema.addedPaths,...engineering.addedPaths,'verification/demo-schema-isolation/engineering-manifest.json','verification/demo-schema-isolation/engineering-independent-review.json',...recipeRemoved,...demoSources,'src/bootstrap/demo/demo-persistence-schema.ts','drizzle/0005_demo_runtime_owner_storage.sql','drizzle/meta/0005_snapshot.json','persistence/physical-slices/demo-runtime/physical-successor.json','persistence/physical-slices/demo-runtime/independent-successor-review.json'];
-  const paths=[...schema.revisedPaths,...engineering.revisedPaths,'scripts/db/run-demo-integration.ts',...recipe.revisedPaths,...physicalPaths,...removed,'drizzle/meta/_journal.json','drizzle.config.ts'];
+  const paths=[...Object.keys(recovery.predecessorSources),...schema.revisedPaths,...engineering.revisedPaths,'scripts/db/run-demo-integration.ts',...recipe.revisedPaths,...physicalPaths,...removed,'drizzle/meta/_journal.json','drizzle.config.ts'];
   const originals=new Map(paths.map(path => [path,existsSync(join(fixture,path))?raw(path):null]));
   try {
+    // Remove this complete newest layer before replaying earlier authority.
+    renameSync(join(fixture,RECOVERY_BASE),recoveryParked);
+    for(const [path,text] of Object.entries(recovery.predecessorSources))writeFileSync(join(fixture,path),text);
     for(const successor of [engineering,schema])for(const path of successor.revisedPaths)writeFileSync(join(fixture,path),successor.predecessorFiles[path]);
     writeFileSync(join(fixture,'scripts/db/run-demo-integration.ts'),reconstructHistoricalDemoIntegration(raw('scripts/db/run-demo-integration.ts')));
     for(const path of recipe.revisedPaths) writeFileSync(join(fixture,path),recipe.predecessorFiles[path]);
@@ -99,6 +106,7 @@ test('unchanged P01-P05 historical fixture retains its real baseline checks', ()
     }
   } finally {
     for(const [path,value] of originals) if(value===null) rmSync(join(fixture,path),{force:true}); else { mkdirSync(join(fixture,path,'..'),{recursive:true}); writeFileSync(join(fixture,path),value); }
+    renameSync(recoveryParked,join(fixture,RECOVERY_BASE));
   }
 });
 

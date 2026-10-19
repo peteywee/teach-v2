@@ -7,7 +7,8 @@ import { runBounded, sourceIdentity } from './development-self-audit.mjs';
 // Explicit inventory, no shell or caller-supplied command. Successor PostgreSQL
 // checks use only the existing disposable-loopback guards, never hosted databases.
 export const hostedSourceChecks = Object.freeze({
-  schema: ['--import','tsx','--test','scripts/tests/validate-isolated-schema-lineage.test.mjs','scripts/tests/validate-demo-schema-isolation-registration.mjs','scripts/tests/validate-demo-schema-isolation-engineering.mjs','tests/demo/database-target.test.ts','scripts/tests/validate-hosted-ci.mjs','scripts/tests/hosted-loopback-postgres.test.mjs'],
+  recovery: ['scripts/db/verify-demo-recovery-rehearsal.mjs'],
+  schema: ['--import','tsx','--test','scripts/tests/validate-isolated-schema-lineage.test.mjs','scripts/tests/validate-demo-schema-isolation-registration.mjs','scripts/tests/validate-demo-schema-isolation-engineering.mjs','tests/demo/database-target.test.ts','scripts/tests/validate-hosted-ci.mjs','scripts/tests/hosted-loopback-postgres.test.mjs','scripts/tests/recovery-rehearsal-target.test.mjs'],
   hosted: ['--import','tsx','--test','tests/demo-hosted/admission.test.ts','tests/demo-hosted/http-application.test.ts','tests/demo-hosted/node-adapter.test.ts','tests/demo-hosted/runtime-policy.test.ts','tests/demo-hosted/transport.test.ts'],
   package: ['--test','scripts/tests/demo-vercel-package.mjs'],
   successor: ['--import','tsx','--test','tests/demo-successor/preparation.test.ts','tests/demo-successor/accepting.test.ts','scripts/db/manual-apply/probe-safety.test.mjs'],
@@ -33,7 +34,7 @@ export function evaluateHostedSourceCheck(report) {
 export function runHostedSourceCheck(root,check,expectedSha=process.env.AUDIT_EXPECTED_SHA){
   if(!Object.hasOwn(hostedSourceChecks,check))throw Error('unknown hosted source check');
   const before=sourceIdentity(root),args=hostedSourceChecks[check];
-  const env=['successor_model','successor_postgres','accepting_postgres'].includes(check)?{...process.env,TEACH_DB_SCHEMA:'teach_v2_demo'}:process.env;
+  const env=['successor_model','successor_postgres','accepting_postgres','recovery'].includes(check)?{...process.env,TEACH_DB_SCHEMA:'teach_v2_demo'}:process.env;
   const result=runBounded(process.execPath,args,{root,timeoutMs:25000,env});
   const after=sourceIdentity(root),hash=value=>createHash('sha256').update(value).digest('hex');
   const report={kind:'hosted-source-check',check,command:['node',...args],node:process.version,platform:process.platform,expected_sha:expectedSha,source:before,source_unchanged:before.stamp===after.stamp,timeout_ms:25000,...Object.fromEntries(Object.entries(result).filter(([key])=>!['stdout','stderr'].includes(key))),stdout_sha256:hash(result.stdout),stderr_sha256:hash(result.stderr),runtime_activation:'BLOCKED',shared_or_production_execution_authorized:false};

@@ -1,0 +1,21 @@
+{
+  "decision_id": "TEACH-DEMO-RECOVERY-EXCEPTION-2026-10-19",
+  "record_form": "MINIMAL_OWNER_DECISION_SUMMARY",
+  "recorded_on": "2026-10-19",
+  "decision": "Adopt the reviewed limited recovery exception into project rules and publish the corresponding PR.",
+  "reviewed_preparation_commit": "f85e284a82cf75d7f8c3b8081453432f138eac35",
+  "reviewed_preparation_tree": "ee62c62bd9e7c25e7ff0383c74e1bc2836bfe2cf",
+  "policy_adoption_authorized": true,
+  "corresponding_pr_authorized": true,
+  "operation": "FIRST_ADDITIVE_SYNTHETIC_DEMO_INSTALL",
+  "project_id": "acqafjkdkdmtpnsxiesw",
+  "schema": "teach_v2_demo",
+  "actual_recovery_evidence": "UNKNOWN",
+  "data_export_authorized": false,
+  "credential_creation_authorized": false,
+  "security_grants_authorized": false,
+  "live_database_changes_authorized": false,
+  "deployment_authorized": false,
+  "spending_authorized": false,
+  "runtime_activation_authorized": false
+}

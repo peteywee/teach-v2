@@ -12,7 +12,7 @@ import { expectedPlan, inspectAuditPlan } from '../verification/self-audit-catal
 import { discoverFoundationTests, evaluateAuditReports, runAuditStage, sourceIdentity } from '../verification/development-self-audit.mjs';
 import { localDocumentGovernanceContext, resolveDocumentGovernanceContext, inspectDocumentGovernanceContext, documentGovernanceArgs } from '../verification/document-governance-context.mjs';
 import { inspectDevelopmentSelfAudit } from '../verification/validate-development-self-audit.mjs';
-import { inspectConsolidatedVerification, inspectConsolidationCoverage, preservedProofBytes, reconstructHistoricalReplay } from '../verification/consolidated-ci-evidence.mjs';
+import { inspectConsolidatedVerification, inspectConsolidationCoverage, preservedProofBytes, reconstructHistoricalReplay, preservedRegistrationTestBytes } from '../verification/consolidated-ci-evidence.mjs';
 import { deriveWorkflowInventory, inspectClosureObserverText, inspectWorkflowText, closureObserverPath, closureObserverName } from '../verification/workflow-lifecycle-inventory.mjs';
 import { inspectProducerWorkflowWiring, inspectWorkflowLifecycles } from '../verification/validate-workflow-lifecycle.mjs';
 import { buildWorkflowReport, closeWorkflowReport, reportDigest, planWorkflowRecovery } from '../verification/workflow-lifecycle.mjs';
@@ -630,7 +630,7 @@ function gitFixture({ realValidator = false } = {}) {
   write('.gitignore', 'verification/generated/\n');
   write('verification/whole-repository/self-audit-plan.json', JSON.stringify(expectedPlan, null, 2) + '\n');
   write('src/modules/example/domain/a.test.ts', '// fixture inventory\n');
-  if (realValidator) for (const path of ['scripts/kernel/demo-schema-isolation-registration.mjs','scripts/kernel/demo-recipes-registration.mjs','scripts/kernel/demo-runtime-registration.mjs','scripts/kernel/semantic-dependency-closure.mjs','scripts/kernel/demo-physical-successor.mjs','scripts/persistence/demo-admission-evidence.mjs','scripts/persistence/admission-criteria.mjs']) write(path, read(path));
+  if (realValidator) for (const path of ['scripts/kernel/demo-recovery-registration.mjs','scripts/kernel/demo-schema-isolation-registration.mjs','scripts/kernel/demo-recipes-registration.mjs','scripts/kernel/demo-runtime-registration.mjs','scripts/kernel/semantic-dependency-closure.mjs','scripts/kernel/demo-physical-successor.mjs','scripts/persistence/demo-admission-evidence.mjs','scripts/persistence/admission-criteria.mjs']) write(path, read(path));
   write('scripts/docs/validate-document-metadata.mjs', realValidator ? read('scripts/docs/validate-document-metadata.mjs') : `import {readFileSync,writeFileSync,existsSync} from 'node:fs';\nconst p='verification/generated/control.json';const c=existsSync(p)?JSON.parse(readFileSync(p)):{};writeFileSync('verification/generated/argv.json',JSON.stringify({argv:process.argv.slice(2),legacyBase:process.env.DOC_GOV_BASE_REF??null}));if(c.corrupt_event)writeFileSync(c.corrupt_event,'{invalid');process.exit(c.exit??0);\n`);
   const metadata = { doc_id: 'FIXTURE-001', class: 'governance-policy', version: '1.0.0', status: 'draft', owner: 'VerificationEvidence', created_on: '2026-10-01', updated_on: '2026-10-10' };
   const document = (meta = metadata, body = 'original') => '<!--tos-doc\n' + JSON.stringify(meta) + '\n-->\n' + body + '\n';
@@ -1097,7 +1097,7 @@ test('dedicated controls cannot be renamed, moved, omitted or duplicated behind 
  assert.deepEqual(WHOLE_REPOSITORY_CONTROLS.map(row=>[row.ordinal,row.name,row.partition]),[[152,'whole audit: every standalone gate passes',13],[153,'whole audit: an otherwise untriggered historical validator fails',14]]);
 });
 test('registration split executes exactly one plus sixteen unchanged test declarations',()=>{
- const source=read('scripts/tests/validate-demo-runtime-registration.mjs');
+ const source=preservedRegistrationTestBytes(ROOT);
  assert.equal(hash(source),'0aec40789483d97aafbeaa69846037de42b7f2f8a71c34979cd74aac8ce5a639');
  const names=[...source.matchAll(/^test\('([^']+)'/gm)].map(match=>match[1]);assert.equal(names.length,17);assert.deepEqual(names,REGISTRATION_TEST_NAMES);
  const stages=expectedPlan.stages.filter(stage=>['demo-registration-entry-regressions','demo-registration-regressions'].includes(stage.id));

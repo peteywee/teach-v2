@@ -1,3 +1,4 @@
+import { inspectDemoRecoveryRegistration } from '../kernel/demo-recovery-registration.mjs';
 import { inspectRecipeRegistration } from '../kernel/demo-recipes-registration.mjs';
 import {REGISTRATION_ENTRY_PATTERN,REGISTRATION_REMAINDER_PATTERN} from './validator-partitions.mjs';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
@@ -30,7 +31,11 @@ export function inspectConsolidatedVerification(root) {
       const demoRegression=plan?.stages?.find(stage=>stage.id===id);
       if(demoRegression?.command!=='node'||JSON.stringify(demoRegression?.args)!==JSON.stringify(['--test','--test-name-pattern='+pattern,'scripts/tests/validate-demo-runtime-registration.mjs'])||demoRegression?.timeout_ms!==25000)fail('exact bounded demo registration mutation suite must run in CI');
     }
-    if(createHash('sha256').update(readFileSync(join(root,'scripts/tests/validate-demo-runtime-registration.mjs'))).digest('hex')!=='0aec40789483d97aafbeaa69846037de42b7f2f8a71c34979cd74aac8ce5a639')fail('original seventeen registration test declarations must remain exact');
+    // A failed source seal remains blocking, but cannot suppress independent
+    // order/finalizer/atomicity diagnostics below. Never substitute unverified bytes.
+    try {
+      if(createHash('sha256').update(preservedRegistrationTestBytes(root)).digest('hex')!=='0aec40789483d97aafbeaa69846037de42b7f2f8a71c34979cd74aac8ce5a639')fail('original seventeen registration test declarations must remain exact');
+    } catch(error) { fail(error.message); }
     const physicalRegression=plan?.stages?.find(stage=>stage.id==='audit-regressions');
     if(physicalRegression?.command!=='node'||JSON.stringify(physicalRegression?.args)!==JSON.stringify(['--test','scripts/tests/validate-development-self-audit.test.mjs','scripts/tests/validate-ci-consolidation.test.mjs','scripts/tests/validate-demo-physical-successor.mjs','scripts/tests/validate-replay-database-cleanup.test.mjs'])||physicalRegression?.timeout_ms!==25000||!existsSync(join(root,'scripts/tests/validate-demo-physical-successor.mjs')))fail('exact bounded physical successor mutation suite must run in CI');
     const demoSource=plan?.stages?.find(stage=>stage.id==='demo-source-tests');
@@ -165,4 +170,15 @@ export function reconstructHistoricalDemoIntegration(current) {
   const historical=current.replace(addition, '').replace(label, 'Demo migration, owner storage and application integration PASS in three separate disposable databases');
   if(digest(historical)!==original)throw Error('exact original isolated three-suite wrapper required');
   return historical;
+}
+
+// One exact, authenticated fixture-only predecessor. Preserve the original
+// seventeen-declaration seal; never permit caller-supplied paths or bytes.
+export function preservedRegistrationTestBytes(root) {
+  const recovery = inspectDemoRecoveryRegistration(root);
+  if (recovery.errors.length) throw Error(recovery.errors.join('; '));
+  const path = 'scripts/tests/validate-demo-runtime-registration.mjs';
+  return Object.hasOwn(recovery.predecessorSources, path)
+    ? recovery.predecessorSources[path]
+    : readFileSync(join(root, path), 'utf8');
 }

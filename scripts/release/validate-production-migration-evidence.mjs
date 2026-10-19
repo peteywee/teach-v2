@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { readFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
+import { validateDemoRecoveryEvidence } from './validate-demo-recovery-evidence.mjs';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -9,6 +10,9 @@ export function validateProductionMigrationEvidence(evidence) {
   if (!evidence || typeof evidence !== 'object' || Array.isArray(evidence)) {
     return ['production migration evidence must be an object'];
   }
+  // Exact dispatch only. Unknown/absent operations retain the unchanged native gate.
+  // This checks evidence structure, not authenticity, policy admission or live approval.
+  if (evidence.operation === 'FIRST_ADDITIVE_SYNTHETIC_DEMO_INSTALL') return validateDemoRecoveryEvidence(evidence);
   if (evidence.schema_version !== '1.0.0') errors.push('schema_version must be 1.0.0');
   if (evidence.environment !== 'production') errors.push('environment must be production');
   if (!/^sha256:[0-9a-f]{64}$/.test(evidence.configuration_identity ?? '')) {

@@ -1,3 +1,4 @@
+import { inspectDemoRecoveryRegistration } from '../kernel/demo-recovery-registration.mjs';
 import { createHash } from 'node:crypto';
 import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -95,6 +96,9 @@ export function inspectSchemaIsolationEngineering(root) {
     return { ...empty, errors };
   }
   try {
+    const recovery = inspectDemoRecoveryRegistration(root);
+    errors.push(...recovery.errors);
+    const projected = path => Object.hasOwn(recovery.predecessorSources, path) ? recovery.predecessorSources[path] : raw(path);
     const decision = inspectSchemaIsolationRegistration(root);
     errors.push(...decision.errors);
     if (!decision.present) fail('exact approved bounded schema decision required');
@@ -126,11 +130,17 @@ export function inspectSchemaIsolationEngineering(root) {
     equal(Object.keys(manifest.current_sha256).sort(), [...ENGINEERING_REVISED_PATHS, ...ENGINEERING_ADDED_PATHS].sort(), 'exact current source allowlist required');
     // Iteration is over the hard-coded set, never over manifest-controlled paths.
     for (const path of ENGINEERING_REVISED_PATHS) equal(hash(manifest.predecessor_files[path] ?? ''), manifest.predecessor_sha256[path], `preserved predecessor source bytes differ: ${path}`);
-    for (const path of [...ENGINEERING_REVISED_PATHS, ...ENGINEERING_ADDED_PATHS]) equal(hash(normalizedSchemaEngineeringSource(path, raw(path))), manifest.current_sha256[path], `reviewed current source differs: ${path}`);
+    for (const path of [...ENGINEERING_REVISED_PATHS, ...ENGINEERING_ADDED_PATHS]) equal(hash(normalizedSchemaEngineeringSource(path, projected(path))), manifest.current_sha256[path], `reviewed current source differs: ${path}`);
     const evidenceNames = readdirSync(join(root, ENGINEERING_BASE), { withFileTypes: true }).filter(entry => entry.name.startsWith('engineering-'));
     equal(evidenceNames.map(entry => entry.name).sort(), [ENGINEERING_MANIFEST, ENGINEERING_REVIEW].map(path => path.split('/').at(-1)).sort(), 'exact engineering evidence inventory required');
     if (evidenceNames.some(entry => !entry.isFile())) fail('engineering evidence permits only regular files');
-    return { errors, present: true, revisedPaths: errors.length ? [] : [...ENGINEERING_REVISED_PATHS], addedPaths: errors.length ? [] : [...ENGINEERING_ADDED_PATHS], predecessorFiles: errors.length ? {} : { ...manifest.predecessor_files } };
+    // Recipe's immutable source review additionally pins this one later-edited
+    // inspector. Expose only its fully authenticated recovery predecessor;
+    // existing older engineering predecessors retain precedence.
+    const integrationPath = 'scripts/architecture/repository-integration-evidence.mjs';
+    const recoveryIntegration = Object.hasOwn(recovery.predecessorSources, integrationPath)
+      ? { [integrationPath]: recovery.predecessorSources[integrationPath] } : {};
+    return { errors, present: true, revisedPaths: errors.length ? [] : [...ENGINEERING_REVISED_PATHS], addedPaths: errors.length ? [] : [...ENGINEERING_ADDED_PATHS], predecessorFiles: errors.length ? {} : { ...recoveryIntegration, ...manifest.predecessor_files } };
   } catch (error) {
     fail(`missing or malformed source evidence: ${error.message}`);
     return { ...empty, errors, present: true };

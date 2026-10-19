@@ -9,7 +9,7 @@ import { inspectDemoRecipePhysicalSuccessor } from '../persistence/demo-recipes-
 
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const fixture = mkdtempSync(join(tmpdir(), 'teach-schema-engineering-'));
-for (const name of ['.github', 'kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle', 'verification', 'scripts', 'src', 'tests']) cpSync(join(root, name), join(fixture, name), { recursive: true });
+for (const name of ['docs', '.github', 'kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle', 'verification', 'scripts', 'src', 'tests']) cpSync(join(root, name), join(fixture, name), { recursive: true });
 after(() => rmSync(fixture, { recursive: true, force: true }));
 const raw = path => readFileSync(join(fixture, path), 'utf8');
 const hash = text => createHash('sha256').update(text).digest('hex');

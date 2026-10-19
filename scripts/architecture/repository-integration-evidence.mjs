@@ -9,7 +9,10 @@ import { inspectAssignmentAdmission } from '../persistence/assignment-admission-
 export function inspectRepositoryIntegration(root) {
   let persistence;
   try { persistence=createPersistenceEvidenceContext(root); }
-  catch(error) { return [`repository integration: unverified persistence evidence: ${error.message}`]; }
+  catch(error) {
+    // Preserve the persistence block; independent workflow controls still run.
+    return [`repository integration: unverified persistence evidence: ${error.message}`, ...inspectConsolidatedVerification(root)];
+  }
   const errors=[...persistence.errors];
   // A marker or claimed ADMIT is insufficient: only independently reviewed
   // current storage may use these exact two tables at these exact locations.
