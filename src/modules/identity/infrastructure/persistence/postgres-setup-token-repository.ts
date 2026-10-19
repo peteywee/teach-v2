@@ -1,3 +1,4 @@
+import { identities } from './schema.js';
 import { snapshotPersistenceInput } from './input-snapshot.mjs';
 import { and, eq, sql } from 'drizzle-orm';
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
@@ -22,7 +23,7 @@ export class PostgresSetupTokenRepository implements SingleUseTokenRepository {
   }):Promise<SingleUseTokenRecord> {
     input = snapshotPersistenceInput(input);
     return this.db.transaction(async tx=>{
-      const lock=await tx.execute(sql`select "status" from "identity_identities" where "id"=${input.identityId} for update`);
+      const lock=await tx.execute(sql`select "status" from ${identities} where "id"=${input.identityId} for update`);
       if(lock.rows[0]?.status!=='ACTIVE') throw new Error('authoritative Identity must be ACTIVE');
       const [row]=await tx.insert(setupTokens).values({
         id:input.id,identityId:input.identityId,status:'ACTIVE',

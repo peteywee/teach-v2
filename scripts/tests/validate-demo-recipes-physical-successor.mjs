@@ -15,7 +15,7 @@ import {
 
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const fixture = mkdtempSync(join(tmpdir(), 'teach-recipe-physical-'));
-for (const path of ['domains', 'contracts', 'kernel', 'persistence', 'drizzle']) cpSync(join(root, path), join(fixture, path), { recursive: true });
+for (const path of ['.github', 'domains', 'contracts', 'kernel', 'persistence', 'drizzle', 'governance', 'verification', 'scripts', 'src', 'tests']) cpSync(join(root, path), join(fixture, path), { recursive: true });
 for (const path of DEMO_RECIPE_REVIEWED_SOURCE_PATHS) { mkdirSync(join(fixture, path, '..'), { recursive: true }); cpSync(join(root, path), join(fixture, path)); }
 after(() => rmSync(fixture, { recursive: true, force: true }));
 const raw = path => readFileSync(join(fixture, path), 'utf8');

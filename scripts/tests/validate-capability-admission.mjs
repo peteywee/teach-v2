@@ -4,11 +4,18 @@ import { spawnSync } from 'node:child_process';
 import { cpSync, mkdtempSync, readFileSync, writeFileSync, rmSync, mkdirSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
+import { inspectSchemaIsolationRegistration } from '../kernel/demo-schema-isolation-registration.mjs';
 import { inspectCapabilityAdmission, inspectAdmissionSchema } from '../kernel/capability-admission.mjs';
 
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const fixture = mkdtempSync(join(tmpdir(), 'teach-capability-admission-'));
 for (const path of ['kernel','domains','contracts','application-interfaces','governance/decision-closure']) cpSync(join(root,path),join(fixture,path),{recursive:true});
+// Unwind the verified latest authority layer before restoring the runtime
+// predecessor. Partial directory copies must not leave new archive orphans.
+const schemaSuccessor=inspectSchemaIsolationRegistration(root);
+assert.deepEqual(schemaSuccessor.errors,[]);
+for(const path of schemaSuccessor.revisedPaths){mkdirSync(dirname(join(fixture,path)),{recursive:true});writeFileSync(join(fixture,path),schemaSuccessor.predecessorFiles[path]);}
+for(const path of schemaSuccessor.addedPaths)rmSync(join(fixture,path),{force:true});
 // Keep the prior admission's negative tests on its exact historical live
 // snapshot. The successor has its own mutation suite; neither proof replaces
 // the other or grants a blanket exemption to current authority files.

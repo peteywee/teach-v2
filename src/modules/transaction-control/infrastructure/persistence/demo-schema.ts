@@ -1,5 +1,6 @@
+import { pgTable } from '../../../../platform/database-target.js';
 import { sql } from 'drizzle-orm';
-import { pgTable,text,timestamp,integer,jsonb,foreignKey,unique,check,type AnyPgColumn } from 'drizzle-orm/pg-core';
+import { text,timestamp,integer,jsonb,foreignKey,unique,check,type AnyPgColumn } from 'drizzle-orm/pg-core';
 type Ref=AnyPgColumn<{data:string}>;
 export function defineDemoReceiptTable(organizationId:Ref,locationId:Ref,locationOrganizationId:Ref) {
  return pgTable('transaction_command_receipts',{id:text('id').primaryKey(),actorClass:text('actor_class').notNull(),actorReference:text('actor_reference').notNull(),organizationId:text('organization_id').notNull(),locationId:text('location_id').notNull(),operation:text('operation').notNull(),key:text('key').notNull(),canonicalPayloadDigest:text('canonical_payload_digest').notNull(),responseSchemaVersion:integer('response_schema_version').notNull(),response:jsonb('response').notNull(),createdAt:timestamp('created_at',{withTimezone:true,mode:'date'}).notNull(),replayUntil:timestamp('replay_until',{withTimezone:true,mode:'date'}).notNull()},t=>[

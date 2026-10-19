@@ -1,0 +1,32 @@
+✔ mechanical builder binds exact approved scope and cannot issue review or runtime PASS (4.92692ms)
+✔ actual candidate requires genuine sealed review before any seventh-migration admission (95.150262ms)
+✔ missing review denies even when candidate and source registration are otherwise valid (23.958249ms)
+✔ orphan migration and envelope removal never gain admission (17.844322ms)
+✔ all new physical evidence remains byte-bound (124.143864ms)
+✔ new SQL cannot change behind an unchanged reviewed envelope (33.387639ms)
+✔ new SQL cannot append table, database or privilege operations (131.220536ms)
+✔ envelope cannot broaden scope, hide drift or claim runtime proof (187.440687ms)
+✔ original six migrations, snapshots and original physical admission remain exact (848.235823ms)
+✔ prior six-entry journal cannot reorder, drift or lose entries (76.662777ms)
+✔ eighth migration and unjournaled SQL are never admitted (58.024004ms)
+✔ seventh snapshot changes only identity and ancestry, not table fields or schema (97.556961ms)
+✔ sealed review cannot be rebound, forged or changed (125.669512ms)
+✔ physical evidence rejects unknown files and symbolic links (49.594225ms)
+✔ source registration cannot be replaced by a caller boolean or altered evidence (26.030269ms)
+✔ every reviewed gate, activation and test source is independently byte-bound (410.684552ms)
+✔ original package file contents and exact finite inventory remain immutable in standalone admission (458.668632ms)
+✔ scheduling reseal preserves the prior genuine independent review at its exact original path (42.682676ms)
+✔ unsealed review fails closed; genuine sealed source review exposes only exact finite predecessors (67.384184ms)
+✔ every exact current source is verified before any predecessor source is exposed (220.434668ms)
+✔ altered predecessors, injected paths, rebound hashes and review authority escalation deny (118.21775ms)
+✔ a rehashed current source and manifest cannot replace the independently sealed review (10.593453ms)
+✔ missing review, orphan manifest, extra engineering evidence and symlinks never expose predecessors (18.747902ms)
+✔ prior independent physical reviews remain byte-exact and cannot be replaced by this source review (102.680593ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2970.936124

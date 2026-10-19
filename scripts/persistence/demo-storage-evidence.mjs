@@ -105,7 +105,8 @@ export function inspectDemoStorageEvidence(root) {
       // Supplemental source boundary: repository SQL may use only its owner's
       // admitted tables. Cross-owner migration FKs/triggers are a separate,
       // independently admitted consistency mechanism, not repository authority.
-      for (const match of body.matchAll(/\b(?:FROM|JOIN|UPDATE|INTO|TRUNCATE(?:\s+TABLE)?)\s+(?:"?public"?\s*\.\s*)?"?([a-z_][a-z0-9_]*)"?/gi)) {
+      const sqlBody=body.replace(/\$\{databaseObject\(["']([a-z_][a-z0-9_]*)["']\)\}/g, '$1');
+      for (const match of sqlBody.matchAll(/\b(?:FROM|JOIN|UPDATE|INTO|TRUNCATE(?:\s+TABLE)?)\s+(?:"?public"?\s*\.\s*)?"?([a-z_][a-z0-9_]*)"?/gi)) {
         const table = match[1].toLowerCase();
         if (tableOwners.has(table) && tableOwners.get(table) !== owner) fail(`owner adapter ${owner}/${name} queries foreign-owned table ${table}`);
       }

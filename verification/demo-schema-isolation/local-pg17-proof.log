@@ -1,0 +1,6 @@
+waiting for server to start.... done
+server started
+Isolated runtime PASS: learner admission, recipes, idempotent start, three responses, completion, manager read, close, required audit
+ISOLATED SCHEMA PROOF PASS: {"postgresMajor":17,"migrations":7,"applicationTables":22,"journalTables":1,"functions":39,"denialAndDefaultProbes":35,"hostileBuiltinProbes":10,"namedApiRolesTested":2,"legacyUnchanged":true,"cleanReplayIdentical":true,"runtimeExercised":true,"schemaFingerprint":"a7f175eccbd65cf0caadd7c4ab0b99ce4c5746e42ea141fd062efdfbbdbf54e1"}
+waiting for server to shut down.... done
+server stopped

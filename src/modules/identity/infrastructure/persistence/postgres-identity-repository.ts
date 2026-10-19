@@ -121,7 +121,7 @@ async function lockIdentityStatus(
   id: string,
 ): Promise<IdentityStatus | null> {
   const result = await tx.execute(
-    sql`select "status" from "identity_identities" where "id" = ${id} for update`,
+    sql`select "status" from ${identities} where "id" = ${id} for update`,
   );
   const status = result.rows[0]?.status;
   return typeof status === 'string' ? (status as IdentityStatus) : null;

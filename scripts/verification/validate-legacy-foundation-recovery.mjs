@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import {inspectRecipeRegistration} from '../kernel/demo-recipes-registration.mjs';
+import {inspectSchemaIsolationRegistration} from '../kernel/demo-schema-isolation-registration.mjs';
 import {createHistoricalSourceReader} from '../kernel/demo-runtime-registration.mjs';
 import {readFileSync,existsSync} from 'node:fs';
 import {resolve,join} from 'node:path';
@@ -16,7 +17,8 @@ try {
  const inventory=json(base+'owner-decisions.json');
  const historical=createHistoricalSourceReader(root);
  const recipe=inspectRecipeRegistration(root);check(recipe.errors.length===0,'current recipe successor must verify before historical question projection');
- const readContract=path=>recipe.present&&Object.hasOwn(recipe.predecessorFiles,path)?recipe.predecessorFiles[path]:read(path);
+ const schema=inspectSchemaIsolationRegistration(root);check(schema.errors.length===0,'current schema successor must verify before historical question projection');
+ const readContract=path=>recipe.present&&Object.hasOwn(recipe.predecessorFiles,path)?recipe.predecessorFiles[path]:schema.present&&Object.hasOwn(schema.predecessorFiles,path)?schema.predecessorFiles[path]:read(path);
  const readInventory=path=>['persistence/physical-slices/assignment/admission-evidence-plan.json','persistence/physical-slices/progress-event/admission-evidence-plan.json'].includes(path)?historical(path):read(path);
  check(JSON.stringify(inventory)===JSON.stringify(deriveOwnerDecisionInventory(root,inventory.consulted_v2_baseline,readInventory,readContract)),'live owner inventory drift');
  const packet=json(base+'decision-packet.json'),ids=inventory.unresolved_contract_questions.map(x=>x.id);

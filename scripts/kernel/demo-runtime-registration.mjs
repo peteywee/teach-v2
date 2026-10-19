@@ -3,8 +3,9 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 import { inspectSemanticDependencyClosure } from './semantic-dependency-closure.mjs';
-import { DEMO_PHYSICAL_ENVELOPE, inspectDemoPhysicalSuccessor } from './demo-physical-successor.mjs';
+import { inspectDemoPhysicalSuccessor } from './demo-physical-successor.mjs';
 import { inspectRecipeRegistration } from './demo-recipes-registration.mjs';
+import { inspectSchemaIsolationRegistration } from './demo-schema-isolation-registration.mjs';
 
 export const DEMO_PACKAGE_ID = 'TEACH-DEMO-RUNTIME-2026-10-17';
 export const DEMO_PACKAGE_SHA256 = 'a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a';
@@ -153,19 +154,44 @@ export function hasDemoRegistration(root) {
 // filesystem override and not a substitute for current-source validation.
 export function createHistoricalSourceReader(root, source) {
   const registered = hasDemoRegistration(root);
-  const snapshot = source ?? (registered ? JSON.parse(readFileSync(join(root, `${DEMO_BASE}/source-baseline.json`), 'utf8')) : null);
+  let snapshot = source ?? (registered ? JSON.parse(readFileSync(join(root, `${DEMO_BASE}/source-baseline.json`), 'utf8')) : null);
   const registration = registered ? JSON.parse(readFileSync(join(root, `${DEMO_BASE}/registration.json`), 'utf8')) : null;
   const revised = new Set(registered ? [
     ...Object.keys(DEMO_FAMILY_KINDS).map(family => `kernel/${family}.json`),
     'kernel/manifest.json', 'domains/ownership-map.json',
     ...Object.keys(registration.authority_file_hashes ?? {}),
   ] : []);
-  if (registered && existsSync(join(root, DEMO_PHYSICAL_ENVELOPE))) {
-    // Physical predecessors are available only after the complete current
-    // successor passes, never merely because a path appears in a manifest.
-    const verified = inspectDemoRuntimeRegistration(root);
-    if (verified.errors.length) throw new Error(verified.errors.join('\n'));
-    for (const path of verified.physicalSuccessor.revisedPaths) revised.add(path);
+  if (registered) {
+    const schema = inspectSchemaIsolationRegistration(root);
+    // The immutable semantic-only predecessor is also a structural-test input:
+    // its unmodified original evidence may project original overlay bytes while
+    // a live, nonprojected input is intentionally invalid. This is not admission.
+    // Any later successor or orphan switches back to complete-chain validation.
+    const successor = schema.present || schema.errors.length || [
+      'domains/demo-recipes', 'persistence/physical-slices/demo-runtime',
+      'persistence/physical-slices/demo-recipes', 'src/bootstrap/demo',
+      'drizzle/0005_demo_runtime_owner_storage.sql', 'drizzle/meta/0005_snapshot.json',
+      'kernel/content-schema-reference-successor.json',
+      'contracts/superseded/c31-content-teaching-engine-contract-1.3.0.md',
+      'contracts/superseded/c41-api-boundary-contract-1.2.0.md',
+      'contracts/superseded/c42-web-client-boundary-contract-1.2.0.md',
+    ].some(path => existsSync(join(root,path))) || [
+      'contracts/c31-content-teaching-engine-contract.md','contracts/c41-api-boundary-contract.md','contracts/c42-web-client-boundary-contract.md',
+    ].some(path => existsSync(join(root,path)) && readFileSync(join(root,path),'utf8').includes('demo_recipes_registration'));
+    if (successor) {
+      const verified = inspectDemoRuntimeRegistration(root);
+      if (verified.errors.length) throw new Error(verified.errors.join('\n'));
+      if (source && !isDeepStrictEqual(source, verified.source)) throw new Error('demo registration: historical reader requires the verified source snapshot');
+      snapshot = verified.source;
+      for (const path of [...verified.physicalSuccessor.revisedPaths, ...verified.schemaIsolationSuccessor.revisedPaths]) revised.add(path);
+    } else {
+      for (const [path, expected] of Object.entries(EVIDENCE_HASHES)) {
+        if (hash(readFileSync(join(root,path))) !== expected) throw new Error('demo registration: exact original semantic evidence required: '+path);
+      }
+      const original = JSON.parse(readFileSync(join(root, `${DEMO_BASE}/source-baseline.json`),'utf8'));
+      if (source && !isDeepStrictEqual(source,original)) throw new Error('demo registration: historical reader requires the verified source snapshot');
+      snapshot = original;
+    }
   }
   return path => snapshot && revised.has(path) && Object.hasOwn(snapshot.files, path) ? snapshot.files[path] : readFileSync(join(root, path), 'utf8');
 }
@@ -205,7 +231,7 @@ function inspectActiveAuthorityInventory(root, expectedFiles) {
 }
 
 export function inspectDemoRuntimeRegistration(root) {
-  if (!hasDemoRegistration(root)) return { errors: [], registered: false };
+  if (!hasDemoRegistration(root)) return { errors: inspectSchemaIsolationRegistration(root).errors, registered: false };
   const errors = [];
   const raw = path => readFileSync(join(root, path), 'utf8');
   const json = path => JSON.parse(raw(path));
@@ -258,13 +284,16 @@ export function inspectDemoRuntimeRegistration(root) {
     for (const flag of ['runtime_activation_authorized', 'physical_admission_performed', 'shared_or_production_execution_authorized']) equal(registration[flag], false, `registration cannot authorize ${flag}`);
     // The bounded recipe successor proves all current bytes and retained exact
     // predecessor bytes before the old source-bound authority checks may use them.
+    const schemaIsolationSuccessor = inspectSchemaIsolationRegistration(root);
+    errors.push(...schemaIsolationSuccessor.errors);
+    const schemaRevisions = new Set(schemaIsolationSuccessor.revisedPaths);
     const recipeSuccessor = inspectRecipeRegistration(root);
     errors.push(...recipeSuccessor.errors);
     const recipeRevisions = new Set(recipeSuccessor.revisedPaths);
     const expectedFiles = new Set([
       ...Object.keys(source.files), ...Object.keys(registration.authority_file_hashes ?? {}),
       ...Object.keys(EVIDENCE_HASHES), ...[...seen, 'SHA256SUMS'].map(name => `${DEMO_PROPOSAL}/${name}`),
-      ...recipeSuccessor.addedPaths,
+      ...recipeSuccessor.addedPaths, ...schemaIsolationSuccessor.addedPaths,
     ]);
     errors.push(...inspectActiveAuthorityInventory(root, expectedFiles));
     const overlay = buildDemoKernelOverlay(source, proposal);
@@ -295,8 +324,8 @@ export function inspectDemoRuntimeRegistration(root) {
         errors.push(`demo registration: invalid authority hash target ${path}`); continue;
       }
       // Original reviewed pins remain unchanged. A verified successor replaces
-      // only its exact five paths, while independently sealing their new bytes.
-      const registeredBytes = recipeRevisions.has(path) ? recipeSuccessor.predecessorFiles[path] : raw(path);
+      // only their exact paths, while independently sealing their new bytes.
+      const registeredBytes = recipeRevisions.has(path) ? recipeSuccessor.predecessorFiles[path] : schemaRevisions.has(path) ? schemaIsolationSuccessor.predecessorFiles[path] : raw(path);
       equal(hash(registeredBytes), digest, `registered authority file differs: ${path}`);
     }
     const closure = inspectSemanticDependencyClosure(docs);
@@ -317,7 +346,7 @@ export function inspectDemoRuntimeRegistration(root) {
       // Only nine independently reviewed, byte-exact successors can replace
       // live predecessor hashes. Retained source hashes were checked above.
       if (physicalRevisions.has(path)) continue;
-      const current = raw(path);
+      const current = schemaRevisions.has(path) ? schemaIsolationSuccessor.predecessorFiles[path] : raw(path);
       // Criterion order has never been admission authority: retain the
       // existing positive control while every row, evidence value and all
       // other fields remain exact. Actual admission validation still reads
@@ -331,7 +360,7 @@ export function inspectDemoRuntimeRegistration(root) {
         equal(normalize(current), normalize(source.files[path]), `unchanged preceding source drift: ${path}`);
       } else equal(hash(current), digest, `unchanged preceding source drift: ${path}`);
     }
-    return { errors, registered: true, registeredEntries: 131, closure, source, proposal, physicalSuccessor, recipeSuccessor };
+    return { errors, registered: true, registeredEntries: 131, closure, source, proposal, physicalSuccessor, recipeSuccessor, schemaIsolationSuccessor };
   } catch (error) {
     errors.push(`demo registration: missing or malformed evidence: ${error.message}`);
     return { errors, registered: true };

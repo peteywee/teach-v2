@@ -66,6 +66,39 @@ jobs:
           name: development-self-audit-\${{ github.event.pull_request.head.sha || github.sha }}
           path: verification/generated/self-audit/
           if-no-files-found: error
+      - name: Pin additional hosted-source Node runtime
+        id: hosted_node24
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '24.19.0'
+      - name: Enable pinned pnpm for Node24 checks
+        id: hosted_pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@12.8.1 --activate
+      - name: Verify schema source controls
+        id: hosted_schema
+        run: pnpm exec node scripts/verification/run-hosted-source-check.mjs schema
+      - name: Verify disabled hosted runtime and adapter
+        id: hosted_hosted
+        run: pnpm exec node scripts/verification/run-hosted-source-check.mjs hosted
+      - name: Verify disabled Node24 package
+        id: hosted_package
+        run: pnpm exec node scripts/verification/run-hosted-source-check.mjs package
+      - name: Retain hosted source evidence
+        id: hosted_upload
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: hosted-source-\${{ github.event.pull_request.head.sha || github.sha }}
+          path: verification/generated/hosted-source/
+          if-no-files-found: error
+      - name: Restore historical lifecycle Node runtime
+        id: hosted_restore_node20
+        if: always()
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '20.20.2'
       - name: Record workflow lifecycle checkpoint
         id: lifecycle_record
         if: always()

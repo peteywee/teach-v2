@@ -1,0 +1,24 @@
+{
+  "approval_id": "TEACH-DEMO-SCHEMA-ISOLATION-2026-10-19",
+  "recorded_on": "2026-10-19",
+  "recorded_timezone": "Etc/UTC",
+  "approval_timestamp": "NOT_RECORDED_IN_SUPPLIED_EVIDENCE",
+  "owner": "Patrick Craven",
+  "approved_scope": [
+    "Prepare code and disposable-local tests for dedicated teach_v2_demo schema isolation within the legacy Supabase project.",
+    "Amend C21 MIG-12 with the bounded demo-schema Data API exception while preserving all other release gates.",
+    "Target Node 24.x, not the proposed Node 22.x; record and verify the actual Vercel patch version before any future approved deployment."
+  ],
+  "schema": "teach_v2_demo",
+  "node_major": 24,
+  "local_preparation_authorized": true,
+  "shared_or_production_execution_authorized": false,
+  "live_database_changes_authorized": false,
+  "credential_creation_authorized": false,
+  "runtime_activation_authorized": false,
+  "deployment_authorized": false,
+  "spending_authorized": false,
+  "independent_verification": "NOT_ESTABLISHED_BY_APPROVAL",
+  "meaning": "Records the owner-approved bounded preparation scope, not a transcript or independent review. The UTC record date is not an approval timestamp; no production, live role/credential or release authority is inferred.",
+  "record_form": "MINIMAL_OWNER_DECISION_SUMMARY"
+}

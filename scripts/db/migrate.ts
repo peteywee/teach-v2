@@ -1,3 +1,4 @@
+if (process.env.TEACH_DB_SCHEMA && process.env.TEACH_DB_SCHEMA !== 'public') throw new Error('Public migration runner cannot target the isolated schema');
 import { assertIsolatedDatabaseTarget } from './isolated-database-target.mjs';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { drizzle } from 'drizzle-orm/node-postgres';

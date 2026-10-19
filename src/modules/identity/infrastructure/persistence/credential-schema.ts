@@ -1,5 +1,6 @@
+import { pgTable } from '../../../../platform/database-target.js';
 import { sql } from 'drizzle-orm';
-import { check, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { check, text, timestamp } from 'drizzle-orm/pg-core';
 import { identities } from './schema.js';
 import type { CredentialType } from '../../domain/credential.js';
 

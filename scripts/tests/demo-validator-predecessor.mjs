@@ -6,6 +6,7 @@ import {spawnSync} from 'node:child_process';
 import {join,resolve} from 'node:path';
 import {tmpdir} from 'node:os';
 import {runInNewContext} from 'node:vm';
+import {createHistoricalSourceReader} from '../kernel/demo-runtime-registration.mjs';
 import {predecessorFixture,exactCurrentDenial,readPredecessorCases,PREDECESSOR_COMMIT,PREDECESSOR_TREE} from '../verification/demo-validator-predecessor.mjs';
 const root=resolve(new URL('../..',import.meta.url).pathname),hash=x=>createHash('sha256').update(x).digest('hex');
 const manifest=readPredecessorCases(root),source=readFileSync(join(root,'scripts/tests/validate-validators.mjs'),'utf8'),declarations=[];
@@ -51,4 +52,26 @@ test('manifest byte pin rejects redirected probes, omitted pairs and changed dec
   mkdirSync(join(dir,'scripts/verification'),{recursive:true});const path=join(dir,'scripts/verification/demo-validator-transitions.json');
   for(const change of [v=>v.cases.pop(),v=>v.cases[0].script='scripts/unreviewed.mjs',v=>v.cases[0].current_diagnostic='unrelated error',v=>v.cases[0].current_seal_probe_path='contracts/unrelated.md',v=>v.cases[0].extra=true,v=>v.predecessor_commit='0'.repeat(40)]){const altered=structuredClone(manifest);change(altered);writeFileSync(path,JSON.stringify(altered,null,2)+'\n');assert.throws(()=>readPredecessorCases(dir),/exact reviewed/);}
  }finally{rmSync(dir,{recursive:true,force:true});}
+});
+
+// These do not modify the six original property-oracle assertions above.
+test('semantic-only historical reader pins original evidence and rejects forged snapshots',()=>{
+ const dir=predecessorFixture(root);try{
+  const snapshot=JSON.parse(readFileSync(join(dir,'domains/demo-runtime/source-baseline.json'),'utf8'));
+  assert.doesNotThrow(()=>createHistoricalSourceReader(dir,snapshot));
+  const forged=structuredClone(snapshot);forged.files['kernel/entities.json']='{}';
+  assert.throws(()=>createHistoricalSourceReader(dir,forged),/verified source snapshot/);
+  for(const name of ['registration.json','source-baseline.json','owner-approval.json']){
+   const path=join(dir,'domains/demo-runtime',name),original=readFileSync(path,'utf8');
+   try{writeFileSync(path,original+'\n');assert.throws(()=>createHistoricalSourceReader(dir),/exact original semantic evidence/);}finally{writeFileSync(path,original);}
+  }
+ }finally{rmSync(dir,{recursive:true,force:true});}
+});
+test('orphan successor evidence cannot enter the semantic-only structural reader path',()=>{
+ for(const directory of ['governance/demo-schema-isolation','domains/demo-recipes','persistence/physical-slices/demo-runtime']){
+  const dir=predecessorFixture(root);try{
+   mkdirSync(join(dir,directory),{recursive:true});writeFileSync(join(dir,directory,directory.endsWith('demo-runtime')?'independent-successor-review.json':'unapproved.json'),'{}');
+   assert.throws(()=>createHistoricalSourceReader(dir),/orphan|unexpected active authority/);
+  }finally{rmSync(dir,{recursive:true,force:true});}
+ }
 });

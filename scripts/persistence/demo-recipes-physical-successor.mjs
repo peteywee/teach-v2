@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
+import { inspectSchemaIsolationEngineering } from '../verification/demo-schema-isolation-engineering.mjs';
 import { inspectRecipeRegistration, RECIPE_PACKAGE_SHA256, RECIPE_REGISTRATION_SHA256 } from '../kernel/demo-recipes-registration.mjs';
 
 export const DEMO_RECIPE_PHYSICAL_LANE = 'persistence/physical-slices/demo-recipes';
@@ -69,8 +70,10 @@ const regularRead = (root, path) => {
 /** Exact finite source binding. Only the review anchor literal is normalized;
  * no other source bytes may change after independent review. */
 export function demoRecipeReviewedSourceHashes(root) {
+  const engineering = inspectSchemaIsolationEngineering(root);
+  if (engineering.errors.length) throw Error('exact independently reviewed gate, activation and test source hashes differ: ' + engineering.errors.join('; '));
   return Object.fromEntries(DEMO_RECIPE_REVIEWED_SOURCE_PATHS.map(path => {
-    let source = regularRead(root, path);
+    let source = Object.hasOwn(engineering.predecessorFiles, path) ? engineering.predecessorFiles[path] : regularRead(root, path);
     if (path === 'scripts/persistence/demo-recipes-physical-successor.mjs') {
       const anchor = /^export const DEMO_RECIPE_PHYSICAL_REVIEW_SHA256 = (?:null|'[a-f0-9]{64}');$/m;
       if (!anchor.test(source)) throw Error('exact review-anchor declaration required');
@@ -137,7 +140,10 @@ export function inspectDemoRecipePhysicalSuccessor(root) {
     if (!review) fail('independent successor review missing');
     else {
       if (!DEMO_RECIPE_PHYSICAL_REVIEW_SHA256 || hash(raw(DEMO_RECIPE_PHYSICAL_REVIEW)) !== DEMO_RECIPE_PHYSICAL_REVIEW_SHA256) fail('independent successor review is unsealed or bytes changed');
-      equal(review.reviewed_source_hashes, demoRecipeReviewedSourceHashes(root), 'exact independently reviewed gate, activation and test source hashes differ');
+      // A failed current-source seal must not suppress the original independent
+      // baseline diagnostics below. It still leaves final admission denied.
+      try { equal(review.reviewed_source_hashes, demoRecipeReviewedSourceHashes(root), 'exact independently reviewed gate, activation and test source hashes differ'); }
+      catch (error) { fail(error.message); }
       equal(review.predecessor_review, { path: PREDECESSOR_REVIEW, sha256: PREDECESSOR_REVIEW_SHA256 }, 'scheduling review must bind preserved predecessor review');
       equal(review.outcome, 'PASS', 'independent structural review must PASS');
       equal(review.source_edits_by_reviewer, false, 'reviewer cannot author candidate sources');

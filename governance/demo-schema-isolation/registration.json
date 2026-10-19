@@ -1,0 +1,94 @@
+{
+  "registration_id": "TEACH-DEMO-SCHEMA-ISOLATION-2026-10-19",
+  "version": "1.0.0",
+  "state": "REGISTERED_BOUNDED_LOCAL_PREPARATION_ONLY",
+  "recorded_on": "2026-10-19",
+  "recorded_timezone": "Etc/UTC",
+  "source_baseline_commit": "87c427ebb4b7e8f5b65ae04a1c47165ccea81932",
+  "source_baseline_tree": "2f7306d3b5c6b02b0b52f78d96b348dde0ee660b",
+  "source_baseline_sha256": "188f9d60358e3b5ad46f05257e897d8f0cf1edd3d9d12e8fc8008e326512366a",
+  "approval_record": "governance/demo-schema-isolation/owner-approval.json",
+  "approval_sha256": "36a0c15b5121e87cf323ed47308b2ab440d0b7ed58e6e11d9c656f388ef39481",
+  "design": "governance/demo-schema-isolation/design.md",
+  "design_sha256": "38a1e27353073af60163e12fcfdc41582333094ac1ec8f4e24d8862598136453",
+  "revised_paths": [
+    "contracts/c21-database-migration-contract.md",
+    "governance/decision-closure/07-evidence-release-operations-spec.md",
+    "contracts/README.md",
+    "contracts/APPROVAL-RECORD.md"
+  ],
+  "added_paths": [
+    "contracts/superseded/c21-database-migration-contract-1.2.0.md",
+    "governance/decision-closure/superseded/07-evidence-release-operations-spec-1.1.0.md",
+    "governance/demo-schema-isolation/design.md",
+    "governance/demo-schema-isolation/owner-approval.json",
+    "governance/demo-schema-isolation/source-baseline.json",
+    "governance/demo-schema-isolation/registration.json"
+  ],
+  "authority_file_hashes": {
+    "contracts/c21-database-migration-contract.md": "88e632e5a3c28c07bd9d3ea0589c1a3b590991fa781420713d24ab648c7b6669",
+    "governance/decision-closure/07-evidence-release-operations-spec.md": "f3c03b1fe20b5e33aadb85bbddc7c45e0c36520a33a34ddb086a97a89854a868",
+    "contracts/README.md": "9c0a628ff3bcc85a552ccfaaf0079ce2df3f14e52e18fa731df17a24271c8a2d",
+    "contracts/APPROVAL-RECORD.md": "8438c329e489ea44826f2d9866d3129eb03c85ee55c1ce02323dcfbbc61603ad",
+    "contracts/superseded/c21-database-migration-contract-1.2.0.md": "45d515e0865d3955e5cc5346066f0c73fe8fed408423fca83eb44d6e7e423689",
+    "governance/decision-closure/superseded/07-evidence-release-operations-spec-1.1.0.md": "07798e4ae96aa1122fb4b36056ed837c1ce8ce5932f2604c87f911d341fb89de"
+  },
+  "predecessor_file_hashes": {
+    "contracts/c21-database-migration-contract.md": "8e3c550fb583a90d7c9ee2c1b62ed53b7c1b573fb874d316ba51c27eaa388279",
+    "governance/decision-closure/07-evidence-release-operations-spec.md": "a0018831136b2d09920a92f67baf30715b794ae27477dace4045dca9a88fadde",
+    "contracts/README.md": "52cfc226f6c94d948c860086f76b5b005c7b22d4285b1b4efa794df3e2166000",
+    "contracts/APPROVAL-RECORD.md": "992c4c4c592f98c6c0aed7a426328d7788c832d8332d89997a74a4eca0325ef2"
+  },
+  "contracts": [
+    {
+      "contract": "C21",
+      "path": "contracts/c21-database-migration-contract.md",
+      "from": "1.2.0",
+      "to": "2.0.0",
+      "superseded_copy": "contracts/superseded/c21-database-migration-contract-1.2.0.md",
+      "changed_requirement_ids": [
+        "MIG-12"
+      ],
+      "changed_acceptance_ids": [
+        "MIG-AC-7"
+      ],
+      "new_requirement_ids": 0,
+      "new_acceptance_ids": 0
+    }
+  ],
+  "specifications": [
+    {
+      "doc_id": "TEACH-PROP-DCS-07",
+      "path": "governance/decision-closure/07-evidence-release-operations-spec.md",
+      "from": "1.1.0",
+      "to": "2.0.0",
+      "superseded_copy": "governance/decision-closure/superseded/07-evidence-release-operations-spec-1.1.0.md",
+      "changed_scope": "Section 5 bounded demo-schema Data API exception and registration metadata; all other policy selections unchanged."
+    }
+  ],
+  "schema": "teach_v2_demo",
+  "node_major": 24,
+  "local_preparation_authorized": true,
+  "runtime_activation_authorized": false,
+  "physical_admission_performed": false,
+  "shared_or_production_execution_authorized": false,
+  "live_database_changes_authorized": false,
+  "credential_creation_authorized": false,
+  "deployment_authorized": false,
+  "spending_authorized": false,
+  "implementation_conformance": "NOT_ESTABLISHED_BY_REGISTRATION",
+  "independent_verification": "NOT_ESTABLISHED_BY_REGISTRATION",
+  "historical_migrations_immutable": true,
+  "legacy_data_import": "ABSENT",
+  "nonexception_data_api_default": "DISABLED",
+  "shared_resources_are_isolated": false,
+  "preserved_release_gates": [
+    "MIG-9 fresh named post-freeze restore point",
+    "MIG-10 same-engine-major isolated restore, <=30 days, invalidated by backup configuration changes",
+    "MIG-13 destructive change approval and recovery plan",
+    "MIG-14 schema/journal reconciliation",
+    "OQ-MIG-4 exact frozen candidate/migration IDs/restore point manual owner apply approval",
+    "C51 independent verification",
+    "C52 exact candidate release, configuration, smoke and promotion gates"
+  ]
+}
