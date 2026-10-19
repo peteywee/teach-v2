@@ -213,6 +213,9 @@ jobs:
         run: |
           corepack enable
           corepack prepare pnpm@12.8.1 --activate
+      - name: Start genuine loopback PostgreSQL for Node24 proofs
+        id: hosted_postgres_start
+        run: timeout 25s node scripts/verification/hosted-loopback-postgres.mjs start
       - name: Verify schema source controls
         id: hosted_schema
         run: pnpm exec node scripts/verification/run-hosted-source-check.mjs schema
@@ -222,6 +225,28 @@ jobs:
       - name: Verify disabled Node24 package
         id: hosted_package
         run: pnpm exec node scripts/verification/run-hosted-source-check.mjs package
+      - name: Verify disabled successor controls
+        id: hosted_successor
+        run: pnpm exec node scripts/verification/run-hosted-source-check.mjs successor
+      - name: Verify reproducible successor package
+        id: hosted_successor_package
+        run: pnpm exec node scripts/verification/run-hosted-source-check.mjs successor_package
+      - name: Verify isolated model catalog equivalence
+        id: hosted_successor_model
+        run: pnpm exec node scripts/verification/run-hosted-source-check.mjs successor_model
+      - name: Verify nonowner successor PostgreSQL runtime
+        id: hosted_successor_postgres
+        run: pnpm exec node scripts/verification/run-hosted-source-check.mjs successor_postgres
+      - name: Verify opt-in accepting artifact
+        id: hosted_accepting_package
+        run: pnpm exec node scripts/verification/run-hosted-source-check.mjs accepting_package
+      - name: Verify packaged accepting PostgreSQL runtime
+        id: hosted_accepting_postgres
+        run: pnpm exec node scripts/verification/run-hosted-source-check.mjs accepting_postgres
+      - name: Remove disposable loopback PostgreSQL
+        id: hosted_postgres_stop
+        if: always()
+        run: timeout 25s node scripts/verification/hosted-loopback-postgres.mjs stop
       - name: Retain hosted source evidence
         id: hosted_upload
         if: always()

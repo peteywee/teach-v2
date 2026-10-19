@@ -9,7 +9,7 @@ export const ENGINEERING_MANIFEST = `${ENGINEERING_BASE}/engineering-manifest.js
 export const ENGINEERING_REVIEW = `${ENGINEERING_BASE}/engineering-independent-review.json`;
 // Only the separate, genuinely independent reviewer may supply this seal.
 // Normalizing this one literal breaks the review/self-hash cycle and nothing else.
-export const SCHEMA_ENGINEERING_REVIEW_SHA256 = 'f41111d763b3d31d179be376a9720e5d3459cca38e2691d25f9217a9b2d5602f';
+export const SCHEMA_ENGINEERING_REVIEW_SHA256 = '8555a444c0c630ef6edeaec34a2ac764962edbea72064078001e4b09641092ff';
 export const ENGINEERING_REVISED_PATHS = Object.freeze([
   ".github/workflows/development-self-audit.yml",
   "scripts/kernel/demo-recipes-registration.mjs",

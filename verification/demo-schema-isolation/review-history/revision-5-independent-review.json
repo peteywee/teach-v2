@@ -1,0 +1,72 @@
+{
+  "review_id": "TEACH-DEMO-SCHEMA-ENGINEERING-REVIEW-2026-10-19",
+  "review_revision": 5,
+  "scope": "BOUNDED_SOURCE_COMPATIBILITY_ONLY",
+  "outcome": "PASS",
+  "reviewer": "Independent source reviewer",
+  "source_edits_by_reviewer": false,
+  "reviewed_at_utc": "2026-10-19T09:58:25.630Z",
+  "engineering_manifest_sha256": "b6572b0a4498099357d60df5e5b1c57f049dcef8a99bebb9d0e16be09e56460c",
+  "decision_registration_sha256": "188788182ba635e7ab8cc21e8236aad89f707022c5cafdd6201de32ae2b2194d",
+  "source_baseline_commit": "87c427ebb4b7e8f5b65ae04a1c47165ccea81932",
+  "source_baseline_tree": "2f7306d3b5c6b02b0b52f78d96b348dde0ee660b",
+  "runtime_proof": "NOT_ESTABLISHED_BY_REVIEW",
+  "runtime_activation_authorized": false,
+  "physical_admission_granted": false,
+  "shared_or_production_execution_authorized": false,
+  "live_database_changes_authorized": false,
+  "credential_creation_authorized": false,
+  "deployment_authorized": false,
+  "spending_authorized": false,
+  "unresolved_scope_blockers": [],
+  "reviewed_scope": [
+    "Independently compared all 41 preserved predecessor file bodies with the exact published baseline and all 49 finite current source hashes. Four current files changed from published revision 4: producer workflow, workflow renderer, bounded hosted-check runner, and lifecycle inventory. The existing independent-review anchor is the only normalized literal.",
+    "Reviewed the existing single producer with all 48 historical Node 20 audit stages unchanged and nine separately bounded Node 24 checks. Fixed command inventory, exact source and output hashes, unconditional upload, Node 20 restoration and lifecycle step inventory are retained. No additional workflow or live execution is introduced.",
+    "Reviewed successor transaction isolation, nonowner runtime composition, bounded retained pool, BEGIN/SET LOCAL/COMMIT failure release, idle client error handling, configured origin and isolated target, immutable startup configuration, and exact build/runtime Node patch failure. Configuration is not deployment approval. Default provider entrypoint remains disabled; accepting artifact is separately built and unselected.",
+    "Reviewed reproducible server closure and exact browser assets, packaged accepting entrypoint tests and local synthetic memory/PG17 proof hooks. Local test outcomes are separately source-bound evidence, not established by this source compatibility seal and not proof of Supavisor or provider security.",
+    "Reviewed metadata-only READ ONLY/ROLLBACK preservation probes and local-only execution guards. The manual installation packet explicitly excludes full recovery, application data/sequence-state preservation and live authority; it requires separate recovery, provisioning, apply and deployment approvals.",
+    "Preserved the exact published revision 4 manifest and review under review-history. Existing decision registrations, finite allowlists, all original predecessor bodies, historical physical-review seals, and every false authority flag are unchanged. No raw private conversation or secret is added."
+  ],
+  "independent_preseal_checks": [
+    {
+      "check": "Predecessor baseline body equality",
+      "passed": 41,
+      "failed": 0
+    },
+    {
+      "check": "Integrated successor and CI control tests on debcb98",
+      "passed": 8,
+      "failed": 0
+    },
+    {
+      "check": "Independent packaged entrypoint assets, Host, cold configuration and Node mismatch tests on accepting artifact 3933521",
+      "outcome": "PASS"
+    },
+    {
+      "check": "Integrated accepting PostgreSQL proof",
+      "source_commit": "d2eab771b919e32e189e44f61bc2d9cdea41e002",
+      "outcome": "PROVEN",
+      "duration_ms": 9423
+    },
+    {
+      "check": "Integrated successor PostgreSQL and both metadata probes",
+      "source_commit": "d2eab771b919e32e189e44f61bc2d9cdea41e002",
+      "outcome": "PROVEN",
+      "duration_ms": 6737
+    },
+    {
+      "check": "Integrated model catalog equivalence and eleven negative mutations",
+      "source_commit": "ceb53844a0a64604f835f0908abdf87791ff7957",
+      "outcome": "PROVEN",
+      "duration_ms": 1620
+    }
+  ],
+  "limitations": [
+    "Local independent checks used Node 24.19.0 and existing pinned pnpm 12.8.1 without dependency installation. Historical Node 20 checks and exact published-head CI remain separate required validation.",
+    "This artifact accepts bounded source compatibility only. Postseal current-positive, packaging, canonical audit and exact published-head lifecycle evidence must pass separately.",
+    "The reviewer authored no application, test or workflow implementation. Changes supplied by this reviewer are only the current manifest/review, exact preserved published review-history copies and normalized verification anchor.",
+    "The accepting artifact has local proof only and is unselected. Supavisor, remote TLS, actual provider settings, recovery coverage and live browser acceptance remain unproven.",
+    "No live database, deployment, credentials, production activation, spending or merge is authorized by this artifact."
+  ],
+  "supersedes_review_sha256": "f41111d763b3d31d179be376a9720e5d3459cca38e2691d25f9217a9b2d5602f"
+}
