@@ -213,6 +213,9 @@ jobs:
         run: |
           corepack enable
           corepack prepare pnpm@12.8.1 --activate
+      - name: Start genuine loopback PostgreSQL for Node24 proofs
+        id: hosted_postgres_start
+        run: timeout 25s node scripts/verification/hosted-loopback-postgres.mjs start
       - name: Verify schema source controls
         id: hosted_schema
         run: pnpm exec node scripts/verification/run-hosted-source-check.mjs schema
@@ -240,6 +243,10 @@ jobs:
       - name: Verify packaged accepting PostgreSQL runtime
         id: hosted_accepting_postgres
         run: pnpm exec node scripts/verification/run-hosted-source-check.mjs accepting_postgres
+      - name: Remove disposable loopback PostgreSQL
+        id: hosted_postgres_stop
+        if: always()
+        run: timeout 25s node scripts/verification/hosted-loopback-postgres.mjs stop
       - name: Retain hosted source evidence
         id: hosted_upload
         if: always()

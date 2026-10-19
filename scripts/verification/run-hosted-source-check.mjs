@@ -7,7 +7,7 @@ import { runBounded, sourceIdentity } from './development-self-audit.mjs';
 // Explicit inventory, no shell or caller-supplied command. Successor PostgreSQL
 // checks use only the existing disposable-loopback guards, never hosted databases.
 export const hostedSourceChecks = Object.freeze({
-  schema: ['--import','tsx','--test','scripts/tests/validate-isolated-schema-lineage.test.mjs','scripts/tests/validate-demo-schema-isolation-registration.mjs','scripts/tests/validate-demo-schema-isolation-engineering.mjs','tests/demo/database-target.test.ts','scripts/tests/validate-hosted-ci.mjs'],
+  schema: ['--import','tsx','--test','scripts/tests/validate-isolated-schema-lineage.test.mjs','scripts/tests/validate-demo-schema-isolation-registration.mjs','scripts/tests/validate-demo-schema-isolation-engineering.mjs','tests/demo/database-target.test.ts','scripts/tests/validate-hosted-ci.mjs','scripts/tests/hosted-loopback-postgres.test.mjs'],
   hosted: ['--import','tsx','--test','tests/demo-hosted/admission.test.ts','tests/demo-hosted/http-application.test.ts','tests/demo-hosted/node-adapter.test.ts','tests/demo-hosted/runtime-policy.test.ts','tests/demo-hosted/transport.test.ts'],
   package: ['--test','scripts/tests/demo-vercel-package.mjs'],
   successor: ['--import','tsx','--test','tests/demo-successor/preparation.test.ts','tests/demo-successor/accepting.test.ts','scripts/db/manual-apply/probe-safety.test.mjs'],

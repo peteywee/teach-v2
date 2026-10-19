@@ -19,4 +19,10 @@ test('same producer retains legacy stage inventory and includes every new bounde
  assert.ok(text.indexOf('id: hosted_restore_node20')<text.indexOf('id: lifecycle_record'));
  assert.ok(text.includes("node-version: '24.19.0'"));assert.equal((text.match(/node-version: '20.20.2'/g)||[]).length,2);
  assert.ok(text.includes('path: verification/generated/hosted-source/'));
+ assert.ok(text.indexOf('id: hosted_postgres_start')>text.indexOf('id: audit_upload'));
+ assert.ok(text.indexOf('id: hosted_postgres_start')<text.indexOf('id: hosted_schema'));
+ assert.ok(text.indexOf('id: hosted_postgres_stop')<text.indexOf('id: lifecycle_record'));
+ assert.ok(text.includes('id: hosted_postgres_stop\n        if: always()'));
+ assert.ok(text.includes('timeout 25s node scripts/verification/hosted-loopback-postgres.mjs start'));
+ assert.ok(text.includes('timeout 25s node scripts/verification/hosted-loopback-postgres.mjs stop'));
 });

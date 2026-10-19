@@ -92,7 +92,7 @@
     "verification/workflow-lifecycle/inventory.json": "e9479546c917c6190c26362d6e4ecd86db3301b66f0399c71da60147d660a37a"
   },
   "current_sha256": {
-    ".github/workflows/development-self-audit.yml": "0b5fa9680e81e80a8a6310a93b782ec99ffed3b887060e43792f9adc57bd706b",
+    ".github/workflows/development-self-audit.yml": "96c2d561f2cc711fe0a4a1366f1a47f23f7f006852521680d5d461b29a26bff4",
     "scripts/kernel/demo-recipes-registration.mjs": "ef80c31418783fdb508c22cb6f3bad656d06927f4225d0d453e7a859ffdb1159",
     "scripts/kernel/demo-runtime-registration.mjs": "0cb2eeae8008111c1b64403b054feed54684ad76e333457c992afb1683360b09",
     "scripts/kernel/demo-schema-isolation-registration.mjs": "60040594ae754c3a95fadf32e8f4cf251471a1ea03515c87ccab4a2ca02a837a",
@@ -106,11 +106,11 @@
     "scripts/tests/validate-demo-recipes-registration.mjs": "d3fbc265f012c04cefdd9d4a81fc5ebc9d787b2c6e6ba27b1211fb43568fc78d",
     "scripts/tests/validate-demo-schema-isolation-engineering.mjs": "4488d599d6161d9acf134d3c53256ecac92940221eec9eb731e29ae021f38e1d",
     "scripts/tests/validate-demo-schema-isolation-registration.mjs": "a15d7830564abddf3f2e337cfa0034df8a1fcb26f0392bf2eca489032c21a238",
-    "scripts/tests/validate-hosted-ci.mjs": "de445bab092b74ec90845e69a47fe00ad76d42337258bda9f751bca5ddb29af0",
+    "scripts/tests/validate-hosted-ci.mjs": "2715da27ac7cd50ee0a4705d223b6dff3a19b4f0d4c7bb1dbb32b591aee9d3a6",
     "scripts/verification/demo-schema-isolation-engineering.mjs": "488ae6b41ecb62aaba68a04ca1b311ea77fe21f8b395cf2a928c7c457fb6cf10",
     "scripts/verification/development-self-audit.mjs": "c9016b5c87a42664383c48de48895377d1a6f1493ea6160a32baf76f7dc149fd",
-    "scripts/verification/run-hosted-source-check.mjs": "09c0cd4930784ad82365d54a17012996342a25a7cbe803926c6db8ae179569dc",
-    "scripts/verification/self-audit-workflow.mjs": "177b8a3eaee2bd42a6177cfb7a68ab3ed0d038ba12084d4ff58f70c70b01b297",
+    "scripts/verification/run-hosted-source-check.mjs": "81ae8e25e91208ae1e138bb34df8083a3eeabc28bf90c55b08439b21c5bf369c",
+    "scripts/verification/self-audit-workflow.mjs": "3232e6610f8624266e679c69e20939d9daaa64279cc78314f17fe1275fa9a066",
     "scripts/verification/validate-legacy-foundation-recovery.mjs": "5f247976aa21df38b8029fcaa8197295bae0b26d196fcdaf24ae7d87594ff6da",
     "scripts/verification/validate-owner-policy-registration.mjs": "b96724a455d227601a65140c3877070308763c769ec50ad93ac072522f8f8120",
     "src/bootstrap/demo/README.md": "987af95669b2ce7d6e9b6bbdd55c9f8532a8b46b97e74690c3836a3a1ab24971",
@@ -140,6 +140,6 @@
     "src/modules/transaction-control/infrastructure/persistence/schema.ts": "8ed01c9168e1a6da136769dc7f5b538187af00e9e79a1675a1b494ad5e7a1ebe",
     "src/platform/database-target.ts": "87633e6d33452895f1a16c852ebd1c75af79b991327839071017efd381390873",
     "tests/demo/database-target.test.ts": "4a8e3ce18a0234dc3cbde1adbee57090e51f702c7f1efe4ce932b6b2a8eb320f",
-    "verification/workflow-lifecycle/inventory.json": "9a44cd7eea7a8cea384b33d545f0d8c721370b4dfc2119bf4a26cf7ba698167b"
+    "verification/workflow-lifecycle/inventory.json": "e355797805535a865890474714d2aeab2417839e32f8b61e83450c533befdede"
   }
 }
