@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {pathToFileURL} from 'node:url';
+import {join,resolve} from 'node:path';
+import {assertIsolatedDatabaseTarget} from './isolated-database-target.mjs';
+import {verifyIsolatedSchemaProof} from './verify-isolated-schema.mjs';
+import {exerciseAcceptingRuntime} from '../tests/accepting-runtime-flow.mjs';
+import {exerciseRuntime} from './exercise-successor-runtime.js';
+assertIsolatedDatabaseTarget(process.env.DATABASE_URL);
+assert.equal(process.env.TEACH_DB_SCHEMA,'teach_v2_demo');
+const root=resolve(process.argv[2]!);
+const {SuccessorDemoTransaction}=await import(pathToFileURL(join(root,'src/bootstrap/demo-successor/transaction.js')).href);
+const {createRuntimePool}=await import(pathToFileURL(join(root,'src/bootstrap/demo-successor/runtime.js')).href);
+await verifyIsolatedSchemaProof({exerciseRuntime:async({pool}:any)=>{const recovered=createRuntimePool({...pool.options,max:2});try{let connected:any;recovered.on('connect',(client:any)=>{connected=client;});await recovered.query('SELECT 1');const previous=connected;assert.ok(previous);previous.emit('error',new Error('synthetic idle disconnect'));assert.equal((await recovered.query('SELECT 1 AS recovered')).rows[0].recovered,1);assert.notEqual(connected,previous);}finally{await recovered.end();}await exerciseAcceptingRuntime(root,new SuccessorDemoTransaction(pool));await exerciseRuntime({pool});}});
