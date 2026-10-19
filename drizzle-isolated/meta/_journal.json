@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1791115200000,
+      "tag": "0000_slice_p01_reconciliation",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791123780562,
+      "tag": "0001_odd_photon",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791132491926,
+      "tag": "0002_quick_venus",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1791140554656,
+      "tag": "0003_slice_p04_credential",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791145431316,
+      "tag": "0004_slice_p05_learning_session",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792271260954,
+      "tag": "0005_demo_runtime_owner_storage",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792357092279,
+      "tag": "0006_demo_recipe_content_guard",
+      "breakpoints": true
+    }
+  ]
+}

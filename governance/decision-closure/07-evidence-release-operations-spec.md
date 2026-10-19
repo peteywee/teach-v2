@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-PROP-DCS-07",
   "class": "specification",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-05",
-  "updated_on": "2026-10-17",
+  "updated_on": "2026-10-19",
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
@@ -40,17 +40,37 @@
   "confirms_recommendation": [
     "OQ-OBS-1"
   ],
-  "effective_on": "2026-10-17",
+  "effective_on": "2026-10-19",
   "approval": {
     "state": "approved",
-    "approved_on": "2026-10-17",
-    "record": "domains/demo-runtime/owner-approval.json",
-    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82"
+    "approved_version": "2.0.0",
+    "record": "governance/demo-schema-isolation/owner-approval.json",
+    "basis": "Bounded demo-schema Data API exception; recorded 2026-10-19 UTC. Prior #75 and #82 decisions unchanged outside this exception. Local preparation only."
   },
   "supersedes": [
     "TEACH-PROP-DCS-07@0.3.0",
-    "TEACH-PROP-DCS-07@1.0.0"
-  ]
+    "TEACH-PROP-DCS-07@1.0.0",
+    "TEACH-PROP-DCS-07@1.1.0"
+  ],
+  "approval_history": [
+    {
+      "state": "approved",
+      "approved_on": "2026-10-17",
+      "record": "domains/demo-runtime/owner-approval.json",
+      "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82"
+    }
+  ],
+  "demo_schema_isolation_registration": {
+    "registration": "governance/demo-schema-isolation/registration.json",
+    "approval_record": "governance/demo-schema-isolation/owner-approval.json",
+    "scope": "LOCAL_CODE_AND_TESTS_ONLY",
+    "schema": "teach_v2_demo",
+    "node_major": 24,
+    "runtime_activation": false,
+    "live_database_changes": false,
+    "deployment_authority": false,
+    "spending_authority": false
+  }
 }
 -->
 
@@ -62,7 +82,7 @@ Registered on 2026-10-05 by the owner-approved r3.1 manifest under SYS-21 #75. T
 | Field | Value |
 | --- | --- |
 | Status | `active` logical authority; implementation conformance UNKNOWN; no route mounting or physical admission |
-| Owner decision | Prior #75 selections preserved except explicit #82 changes; exact demo approval in `domains/demo-runtime/owner-approval.json` |
+| Owner decision | Prior #75/#82 selections preserved except the bounded C21 2.0.0 schema-isolation exception; exact additional approval in `governance/demo-schema-isolation/owner-approval.json` |
 | Resolves if approved | `OQ-EVD-1`, `OQ-EVD-3`, `OQ-REL-3`, `OQ-MIG-3`, `OQ-MIG-4`, `OQ-OBS-2`, `OQ-AUD-2`, `OQ-AUD-3` |
 | Split (supplied part registers, value stays open) | `OQ-EVD-2` (duration, archive location), `OQ-TXN-2` (email and OAuth providers) |
 | Owner confirmation needed | `OQ-OBS-1` (Sentry recommendation; alert destination unknown) |
@@ -116,40 +136,38 @@ Residual owner values: **retention duration** and **archive location**. Options 
 
 ## 5. OQ-MIG-3 — no browser-reachable database (MIG-11, MIG-12)
 
-Owner-supplied: no browser-reachable application tables; no implicit RLS exemption.
+Application tables remain backend-only with no implicit RLS exemption. C21 2.0.0 records the exact bounded owner approval in `governance/demo-schema-isolation/owner-approval.json`. Its scope is code and local tests only. No live target, role/credential, configuration, deployment or spending is approved.
 
-Required controls on the target Supabase project, all four (defense in depth). They hold regardless of the project's creation date or Supabase's default:
+### 5.1 Nonexception default
 
-1. **Disable the Data API** for the project (Teach V2 does not use PostgREST; all access is backend-only). With it disabled, no auto-generated REST endpoint responds regardless of grants.
-2. **Revoke existing privileges** on every application table from `anon` and `authenticated`: `REVOKE ALL ON ALL TABLES IN SCHEMA public FROM anon, authenticated;` and the same for sequences and functions.
-3. **Revoke default privileges** so future tables are not exposed: `ALTER DEFAULT PRIVILEGES IN SCHEMA public REVOKE ALL ON TABLES FROM anon, authenticated;` (repeat for sequences, functions; for each role that creates objects).
-4. **Enable RLS with no policies** on every application table: `ALTER TABLE <t> ENABLE ROW LEVEL SECURITY;` — a fallback that denies rows if a grant reappears.
+Disable the project Data API. Retain existing/default browser-role privilege revocation and RLS with no policies on application tables. This default still governs every application schema other than the exact bounded synthetic demo exception below. Legacy tables belong to the pre-existing application and are not reclassified as V2 demo objects or altered by this preparation.
 
-Items 2–4 are schema/privilege changes and therefore go through Drizzle migrations (MIG-3, MIG-4), not dashboard edits. Item 1 is a provider setting recorded in the release configuration manifest (REL-6).
+### 5.2 Dedicated demo-schema exception
 
-Test (MIG-AC for MIG-12), run against the deployed candidate's database and against CI Postgres with Supabase-equivalent roles created:
+Only the bounded synthetic demo in the dedicated `teach_v2_demo` schema may share the legacy Supabase project while the Data API stays enabled for legacy. All controls are required together:
 
-```sql
-SET ROLE anon;  SELECT 1 FROM identity_identities LIMIT 1;  -- expect: permission denied (42501)
-SET ROLE authenticated; INSERT INTO learning_sessions VALUES ('x','y','z','ACTIVE'); -- expect: 42501
-RESET ROLE;
-SELECT grantee, table_name, privilege_type FROM information_schema.role_table_grants
- WHERE grantee IN ('anon','authenticated') AND table_schema = 'public';            -- expect: 0 rows
-SELECT relname FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
- WHERE n.nspname='public' AND c.relkind='r' AND NOT c.relrowsecurity;              -- expect: 0 rows
-```
+1. The demo schema is absent from every target Data API exposed-schema setting. An HTTP schema/profile header must not make it reachable. Existing legacy exposure/settings are unchanged.
+2. `anon`, `authenticated` and `PUBLIC` have no effective demo schema access, table privileges, sequence privileges or function execution. Test inherited grants as well as explicit ACL entries. All object changes, including explicit revokes, go through the separately generated, governed demo migration lineage.
+3. Effective default privileges deny the same access for every role creating demo objects. Read `pg_default_acl`, role membership and relevant global defaults, and test newly created sentinel objects. PostgreSQL schema-specific defaults do not subtract global grants: in particular, a schema-only default revoke is not proof that `PUBLIC` lacks function EXECUTE. A future dedicated creator role can have isolated global defaults; no live role creation or change to a legacy creator's global defaults is approved here.
+4. Every demo application table has RLS enabled and no browser policies. This is additional defense, not a replacement for schema/object privilege denial. The preparation adds no permissive browser policy.
 
-Plus an HTTP probe: `GET https://<project>.supabase.co/rest/v1/identity_identities` with the project's publishable key → not 200.
+The exception is a schema/access boundary only. Compute, connections, storage, project administrators, service credentials, outages, backup/PITR and recovery blast radius remain shared. A backup of the shared project is not an isolated demo backup. No cross-schema legacy FK, trigger, function dependency, query, import or migration/journal write is introduced.
 
-**Release blocker:** no candidate may be promoted to an environment backed by Supabase until all four checks pass on that environment, proven by readback from that project:
+### 5.3 Required readback and tests
 
-| Readback | Source | Pass |
-| --- | --- | --- |
-| Data API enabled? Exposed schemas | Supabase project API settings, recorded in the release config manifest (REL-6) | Data API disabled, or `public` not exposed |
-| Table, sequence, function grants to `anon`/`authenticated` | `information_schema.role_table_grants`, `role_routine_grants`, `pg_class.relacl` | Zero rows / no ACL entries |
-| Default privileges in `public` | `pg_default_acl` for every object-creating role | No entry granting to `anon` or `authenticated` |
-| RLS on every application table | `pg_class.relrowsecurity` | True for all |
-| HTTP probe with the publishable key | `GET /rest/v1/<table>` | Not 200 |
+Evidence is bound to the exact candidate, Supabase project, database and schema, migration/journal head and configuration manifest. Readback and both SQL-role and HTTP probes must run on the actual approved target before promotion. CI's disposable PostgreSQL tests prove local behavior only; they cannot prove Supabase provider exposure settings.
+
+| Readback/probe | Required result |
+| --- | --- |
+| Project Data API/exposed-schema settings | Default: API disabled. Exact demo exception: API may remain enabled for legacy, `teach_v2_demo` is absent from all exposed-schema settings; legacy settings unchanged. |
+| Effective schema/table/sequence/function privileges | Zero effective access for anon/authenticated and an unprivileged role inheriting PUBLIC, including inherited role grants and PUBLIC function EXECUTE. |
+| Every demo object creator's effective defaults | No browser/PUBLIC privileges; newly created table/sequence/function sentinel probes denied; global defaults and role inheritance considered. |
+| RLS and policy catalog | RLS enabled on every demo application table; no browser policies. |
+| SQL denial probes | Fully qualified SELECT/INSERT/UPDATE/DELETE, sequence access and callable function access denied to browser/PUBLIC roles. |
+| HTTP probes | Publishable/anon and authenticated requests, explicit demo schema/profile requests, table endpoints and applicable RPC paths are denied with attributable API authorization/schema errors. Network failure, missing credential, generic 404 or unexplained non-200 alone is not proof. |
+| Legacy inventory/settings/journal before and after | Legacy schema, rows, grants, defaults, triggers, functions, exposed schemas and journal remain unchanged; only separately inventoried demo objects differ. |
+
+Missing, unreadable, stale or contradictory project-specific evidence blocks promotion. Provider defaults, announced changes, project age and successful local tests never substitute for target readback. MIG-9/MIG-10 still require the fresh post-freeze named restore point and current isolated restore proof; §8 still requires manual exact-candidate owner approval. The design and unresolved live gates are in `governance/demo-schema-isolation/design.md`.
 
 ## 6. OQ-AUD-2 and OQ-AUD-3 — audit history and denial records
 
@@ -216,7 +234,7 @@ Test: seed canary values into every input field; run core paths; scan all log si
 
 Registers now: in scope = email delivery and OAuth sign-in; payments disabled. Reconciliation ownership: TransactionControl owns `ReconciliationRecord` for email sends (an email send with an ambiguous result is never retried before provider readback, TXN-6/7). OAuth code exchange is a read-like exchange with no external side effect to reconcile; a failed exchange simply fails sign-in. Residual: **which email provider and which OAuth provider(s)**. Until selected: no adapter exists, invitations and resets are created but not delivered, and the OAuth callback stays unmounted.
 
-## 11. Proposed registration text
+## 11. Historical r3.1 proposed registration text
 
 | Contract | Question | Token |
 | --- | --- | --- |
@@ -245,6 +263,8 @@ Registers now: in scope = email delivery and OAuth sign-in; payments disabled. R
 | 0.1.0 | 2026-10-05 | Initial proposed specification; adds Supabase default-exposure release blocker. |
 | 0.2.0 | 2026-10-05 | Revised on `6553eb4`: added the closure-observer change from #74 (PR runs skipped, not BLOCKED) and its EVD-14 constraint; all target contract versions re-checked unchanged; narrowed-residual naming fixed; owner chat approval (including Sentry confirmation) recorded, registration pending #75. |
 | 0.3.0 | 2026-10-05 | Audit correction: Supabase premise reworded — exposure is project-specific (opt-in default for new projects from 2026-05-30, enforced on existing projects 2026-10-30) and must be proven by readback from the target project; release blocker kept, with an explicit readback table (finding 5). |
+
+| 2.0.0 | 2026-10-19 | Bound the C21 MIG-12 exception to the unexposed dedicated demo schema; preserve the nonexception default, historical #75/#82 scope and all release gates. Shared project resources/backups are not isolated. Local code/tests only. |
 
 ## Exact synthetic audit and replay (#82)
 

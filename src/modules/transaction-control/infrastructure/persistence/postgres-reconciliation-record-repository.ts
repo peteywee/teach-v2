@@ -1,3 +1,4 @@
+import { databaseFunction } from '../../../../platform/database-target.js';
 import { snapshotPersistenceInput } from './input-snapshot.mjs';
 import { createHash } from 'node:crypto';
 import { and, eq, sql } from 'drizzle-orm';
@@ -41,7 +42,7 @@ export class PostgresReconciliationRecordRepository
         // This permits many records to share one key only when they belong to the
         // same operation/payload binding.
         await tx.execute(
-          sql`select pg_advisory_xact_lock(hashtextextended(${input.idempotency.key}, 0))`,
+          sql`select ${sql.raw(databaseFunction('pg_advisory_xact_lock'))}(${sql.raw(databaseFunction('hashtextextended'))}(${input.idempotency.key}, 0))`,
         );
 
         const [bound] = await tx

@@ -5,6 +5,7 @@ import { readFileSync, readdirSync, existsSync, mkdirSync, writeFileSync } from 
 import { join } from 'node:path';
 import { deriveOwnerDecisionInventory } from './owner-decision-inventory.mjs';
 import { createHistoricalSourceReader } from '../kernel/demo-runtime-registration.mjs';
+import { inspectSchemaIsolationRegistration } from '../kernel/demo-schema-isolation-registration.mjs';
 import { inspectRecipeRegistration } from '../kernel/demo-recipes-registration.mjs';
 import { resolveDocumentGovernanceContext, inspectDocumentGovernanceContext, documentGovernanceArgs } from './document-governance-context.mjs';
 import { inspectAuditPlan } from './self-audit-catalog.mjs';
@@ -41,7 +42,9 @@ export function currentFacts(root) {
   const historical=createHistoricalSourceReader(root);
   const recipe=inspectRecipeRegistration(root);
   if(recipe.errors.length)throw new Error('current recipe successor must verify before historical question projection: '+recipe.errors.join('; '));
-  const readContract=path=>recipe.present&&Object.hasOwn(recipe.predecessorFiles,path)?recipe.predecessorFiles[path]:readFileSync(join(root,path),'utf8');
+  const schema=inspectSchemaIsolationRegistration(root);
+  if(schema.errors.length)throw new Error('current schema successor must verify before historical question projection: '+schema.errors.join('; '));
+  const readContract=path=>recipe.present&&Object.hasOwn(recipe.predecessorFiles,path)?recipe.predecessorFiles[path]:schema.present&&Object.hasOwn(schema.predecessorFiles,path)?schema.predecessorFiles[path]:readFileSync(join(root,path),'utf8');
   const readInventory=path=>['persistence/physical-slices/assignment/admission-evidence-plan.json','persistence/physical-slices/progress-event/admission-evidence-plan.json'].includes(path)?historical(path):readFileSync(join(root,path),'utf8');
   const packetInventory=deriveOwnerDecisionInventory(root,ownerInventory.consulted_v2_baseline,readInventory,readContract);
   if(JSON.stringify(ownerInventory)!==JSON.stringify(packetInventory))throw new Error('owner decision inventory drift');

@@ -1,0 +1,98 @@
+{
+  "review_id": "TEACH-DEMO-SCHEMA-ENGINEERING-REVIEW-2026-10-19",
+  "review_revision": 4,
+  "scope": "BOUNDED_SOURCE_COMPATIBILITY_ONLY",
+  "outcome": "PASS",
+  "reviewer": "Independent source reviewer",
+  "source_edits_by_reviewer": false,
+  "reviewed_at_utc": "2026-10-19T07:06:52.650Z",
+  "engineering_manifest_sha256": "39ee84ee78e0daff3205f1f728cb7f3bf1f4b1d82578030f8e180ae01797cff5",
+  "decision_registration_sha256": "188788182ba635e7ab8cc21e8236aad89f707022c5cafdd6201de32ae2b2194d",
+  "source_baseline_commit": "87c427ebb4b7e8f5b65ae04a1c47165ccea81932",
+  "source_baseline_tree": "2f7306d3b5c6b02b0b52f78d96b348dde0ee660b",
+  "runtime_proof": "NOT_ESTABLISHED_BY_REVIEW",
+  "runtime_activation_authorized": false,
+  "physical_admission_granted": false,
+  "shared_or_production_execution_authorized": false,
+  "live_database_changes_authorized": false,
+  "credential_creation_authorized": false,
+  "deployment_authorized": false,
+  "spending_authorized": false,
+  "unresolved_scope_blockers": [],
+  "reviewed_scope": [
+    "Verified all 41 preserved predecessor bodies and digests against the exact published baseline, and all 49 finite current source digests. Only the independent-review anchor literal is normalized.",
+    "Reviewed schema-qualified SQL and bounded database-target selection, schema lineage and separate migration journal, retained public migrations, and inert hosted runtime boundaries. Source review does not establish live database behavior.",
+    "Verified historical packet projection validates the schema decision before reading preserved authority bytes. Live owner-question inventory remains live and runtime remains blocked.",
+    "Verified supplemental cross-owner SQL scanning recognizes the literal databaseObject helper form, the mutation changes actual source, and original structural-denial assertions are retained.",
+    "Verified the semantic-only historical reader requires all three exact original evidence hashes and caller-snapshot equality. Any detected schema, recipe, physical, bootstrap, or migration successor or orphan requires full-chain validation. This reader does not grant admission.",
+    "Reviewed successor-aware restoration in storage, capability, engineering, and recipe fixtures without weakening original assertions. The restored historical storage fixture loads its integration inspector and P01-P04 CLI dependency closure in fresh child processes from that same fixture, preventing a cached current workflow renderer from being paired with historical YAML.",
+    "Reviewed the existing single producer workflow, retained 48 historical Node 20 audit stages, three separately bounded Node 24 checks, exact report and raw-output hashes, unconditional evidence upload and Node 20 restoration, and lifecycle inventory coverage. The observer workflow is unchanged.",
+    "Verified minimal owner-decision publication without raw private exchanges. The sanitized historical unpublished review explicitly identifies itself as a derivative, not original review bytes. Previously published review seals remain unchanged."
+  ],
+  "independent_preseal_checks": [
+    {
+      "check": "Final capability-admission regression suite on unchanged capability fixture source",
+      "passed": 17,
+      "failed": 0
+    },
+    {
+      "check": "Final historical-reader source and schema-registration tamper suites on unchanged reader source",
+      "passed": 16,
+      "failed": 0
+    },
+    {
+      "check": "Physical-successor and recipe-registration suites on current source",
+      "passed": 28,
+      "failed": 0
+    },
+    {
+      "check": "Current CI consolidation, audit and lifecycle wiring regression suites",
+      "passed": 489,
+      "failed": 0
+    },
+    {
+      "check": "Unchanged hosted runtime tests",
+      "passed": 39,
+      "failed": 0
+    },
+    {
+      "check": "Unchanged schema-lineage, hosted-CI evaluator and engineering fail-closed/preservation checks",
+      "passed": 10,
+      "failed": 0,
+      "skipped": 3,
+      "skip_reason": "Engineering current-positive tests require the new genuine independent seal and must run after it is written."
+    },
+    {
+      "check": "TypeScript no-emit check on unchanged application sources",
+      "outcome": "PASS"
+    },
+    {
+      "check": "Independent mechanical reconstruction of the exact historical storage fixture, with41 published predecessor bodies and49 current hashes verified before reconstruction",
+      "passed": 11,
+      "failed": 0,
+      "scope": "DIAGNOSTIC_ONLY_NOT_CURRENT_ENGINEERING_ACCEPTANCE",
+      "checks": [
+        "storage",
+        "fixture-loaded integration",
+        "P05 foundation",
+        "P05 implementation",
+        "assignment",
+        "P07",
+        "P08",
+        "P01 CLI",
+        "P02 CLI",
+        "P03 CLI",
+        "P04 CLI"
+      ]
+    }
+  ],
+  "limitations": [
+    "Local independent checks used Node 24.19.0 and pinned pnpm 12.8.1 with a runner-only dependency-verification override and no installs. Local Node 20 execution was not available.",
+    "This artifact accepts bounded source compatibility only. Postseal current-positive, packaging, canonical audit and exact published-head CI and lifecycle evidence remain separate required validation; none is established by this review.",
+    "The previous review was superseded after its postseal tests exposed a historical fixture module-resolution mismatch. That fixture-only repair has been independently inspected and mechanically exercised; full current-positive tests must still pass under this new seal.",
+    "The reviewer authored no application or test implementation. Only this review record and its exact verification anchor were supplied by the reviewer.",
+    "Only the sanitized final tree may be published atop the verified public baseline. Private local predecessor history is not approved for publication.",
+    "No live database, deployment, credentials, production activation, spending, or merge is authorized by this artifact."
+  ],
+  "supersedes_review_sha256": "0b0f8c526b1133b643241fbfe4acb15b6b97e9fb0c8bc44a6e774b39e5e8856e"
+}

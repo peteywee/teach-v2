@@ -5,6 +5,8 @@ import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, write
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { reconstructHistoricalDemoIntegration } from '../verification/consolidated-ci-evidence.mjs';
+import { inspectSchemaIsolationRegistration } from '../kernel/demo-schema-isolation-registration.mjs';
+import { inspectSchemaIsolationEngineering } from '../verification/demo-schema-isolation-engineering.mjs';
 import { inspectRecipeRegistration } from '../kernel/demo-recipes-registration.mjs';
 import { DEMO_RECIPE_PHYSICAL_EVIDENCE, DEMO_RECIPE_PHYSICAL_ENVELOPE, DEMO_RECIPE_PHYSICAL_REVIEW, DEMO_RECIPE_MIGRATION, DEMO_RECIPE_SNAPSHOT } from '../persistence/demo-recipes-physical-successor.mjs';
 import { inspectRepositoryIntegration } from '../architecture/repository-integration-evidence.mjs';
@@ -27,7 +29,7 @@ const mutate = (path, transform, pattern, inspectEvidence=inspect) => {
   const original = existsSync(join(fixture,path)) ? raw(path) : null;
   try {
     if (transform === null) rmSync(join(fixture,path));
-    else { mkdirSync(join(fixture,path,'..'),{recursive:true}); writeFileSync(join(fixture,path),transform(original)); }
+    else { const revised=transform(original); assert.notEqual(revised,original,`no-op mutation of ${path}`); mkdirSync(join(fixture,path,'..'),{recursive:true}); writeFileSync(join(fixture,path),revised); }
     const result = inspectEvidence();
     assert.ok(result.errors.length,`accepted mutation of ${path}`);
     assert.match(result.errors.join('\n'),pattern);
@@ -63,26 +65,36 @@ test('unchanged P01-P05 historical fixture retains its real baseline checks', ()
   const source=json('domains/demo-runtime/source-baseline.json');
   const physicalPaths=['persistence/physical-slices/readiness.json','persistence/physical-slices/queue-post-p05.json',...['learning-session','assignment','progress-event'].flatMap(lane => ['admission.json','admission-evidence-plan.json'].map(name => `persistence/physical-slices/${lane}/${name}`)),'persistence/physical-slices/learning-session/implementation.json'];
   const demoSources=Object.keys(DEMO_OWNER_ADAPTERS).flatMap(suffix => { const [owner,file]=suffix.split('/'); return [`src/modules/${owner}/infrastructure/persistence/${file}`,`src/modules/${owner}/infrastructure/persistence/demo-schema.ts`]; });
+  const schema=inspectSchemaIsolationRegistration(fixture);
+  const engineering=inspectSchemaIsolationEngineering(fixture);
+  assert.deepEqual(schema.errors,[]);
+  assert.deepEqual(engineering.errors,[]);
   const recipe=inspectRecipeRegistration(fixture);
   assert.deepEqual(recipe.errors,[]);
   const recipeRemoved=['persistence/physical-slices/demo-recipes/independent-successor-review.json','scripts/kernel/validate-demo-recipes-registration.mjs','scripts/persistence/validate-demo-recipes-physical-admission.mjs',...recipe.addedPaths,...DEMO_RECIPE_PHYSICAL_EVIDENCE,DEMO_RECIPE_PHYSICAL_ENVELOPE,DEMO_RECIPE_PHYSICAL_REVIEW,DEMO_RECIPE_MIGRATION,DEMO_RECIPE_SNAPSHOT];
-  const removed=[...recipeRemoved,...demoSources,'src/bootstrap/demo/demo-persistence-schema.ts','drizzle/0005_demo_runtime_owner_storage.sql','drizzle/meta/0005_snapshot.json','persistence/physical-slices/demo-runtime/physical-successor.json','persistence/physical-slices/demo-runtime/independent-successor-review.json'];
-  const paths=['scripts/db/run-demo-integration.ts',...recipe.revisedPaths,...physicalPaths,...removed,'drizzle/meta/_journal.json','drizzle.config.ts'];
+  const removed=[...schema.addedPaths,...engineering.addedPaths,'verification/demo-schema-isolation/engineering-manifest.json','verification/demo-schema-isolation/engineering-independent-review.json',...recipeRemoved,...demoSources,'src/bootstrap/demo/demo-persistence-schema.ts','drizzle/0005_demo_runtime_owner_storage.sql','drizzle/meta/0005_snapshot.json','persistence/physical-slices/demo-runtime/physical-successor.json','persistence/physical-slices/demo-runtime/independent-successor-review.json'];
+  const paths=[...schema.revisedPaths,...engineering.revisedPaths,'scripts/db/run-demo-integration.ts',...recipe.revisedPaths,...physicalPaths,...removed,'drizzle/meta/_journal.json','drizzle.config.ts'];
   const originals=new Map(paths.map(path => [path,existsSync(join(fixture,path))?raw(path):null]));
   try {
+    for(const successor of [engineering,schema])for(const path of successor.revisedPaths)writeFileSync(join(fixture,path),successor.predecessorFiles[path]);
     writeFileSync(join(fixture,'scripts/db/run-demo-integration.ts'),reconstructHistoricalDemoIntegration(raw('scripts/db/run-demo-integration.ts')));
     for(const path of recipe.revisedPaths) writeFileSync(join(fixture,path),recipe.predecessorFiles[path]);
     for(const path of physicalPaths) writeFileSync(join(fixture,path),source.files[path]);
     for(const path of removed) rmSync(join(fixture,path),{force:true});
-    for(const path of ['domains/demo-recipes','persistence/physical-slices/demo-recipes']) rmSync(join(fixture,path),{recursive:true,force:true});
+    for(const path of ['governance/demo-schema-isolation','domains/demo-recipes','persistence/physical-slices/demo-recipes']) rmSync(join(fixture,path),{recursive:true,force:true});
     writeFileSync(join(fixture,'drizzle/meta/_journal.json'),raw('persistence/physical-slices/demo-runtime/prior-journal.json'));
     writeFileSync(join(fixture,'drizzle.config.ts'),raw('drizzle.p05.config.ts'));
     assert.deepEqual(inspect().errors,[]);
-    assert.deepEqual(inspectRepositoryIntegration(fixture),[]);
+    // This fixture restores the engineering predecessor, including its exact
+    // workflow renderer and YAML. Load the paired inspector from that fixture,
+    // not the already cached current renderer imported by this test module.
+    const integrationResult=spawnSync(process.execPath,['--input-type=module','-e',"import {inspectRepositoryIntegration} from './scripts/architecture/repository-integration-evidence.mjs'; console.log(JSON.stringify(inspectRepositoryIntegration(process.cwd())));"],{cwd:fixture,encoding:'utf8',timeout:5000});
+    assert.equal(integrationResult.status,0,integrationResult.stdout+integrationResult.stderr);
+    assert.deepEqual(JSON.parse(integrationResult.stdout),[]);
     for(const inspectEvidence of [inspectLearningFoundation,inspectLearningImplementation,inspectAssignmentAdmission]) assert.deepEqual(inspectEvidence(fixture),[]);
     for(const slice of ['P07','P08']) assert.deepEqual(inspectFutureAdmission(fixture,slice),[]);
     for(const slice of ['p01','p02','p03','p04']) {
-      const result=spawnSync(process.execPath,[join(root,`scripts/persistence/validate-slice-${slice}-implementation-boundary.mjs`)],{cwd:fixture,encoding:'utf8',timeout:5000});
+      const result=spawnSync(process.execPath,[join(fixture,`scripts/persistence/validate-slice-${slice}-implementation-boundary.mjs`)],{cwd:fixture,encoding:'utf8',timeout:5000});
       assert.equal(result.status,0,`${result.stdout}${result.stderr}`);
     }
   } finally {
@@ -96,7 +108,7 @@ test('missing historical migration cannot be hidden by historical projection', (
 test('forged successor marker never replaces independent exact review', () => mutate('persistence/physical-slices/demo-runtime/physical-successor.json',() => JSON.stringify({present:true,approved:true,outcome:'PASS',revisedPaths:['persistence/physical-slices/readiness.json']}),/exact independently verified nine-path physical successor required|demo physical successor:/));
 test('extra owner adapter fails exact inventory', () => mutate('src/modules/learning/infrastructure/persistence/postgres-extra-adapter.ts',() => 'export class PostgresExtraAdapter {}\n',/unadmitted physical adapter or source: .*postgres-extra-adapter/));
 test('wrong owner table definition fails', () => mutate('src/modules/learning/infrastructure/persistence/demo-schema.ts',text => text.replace("pgTable('learning_assignments'","pgTable('organization_memberships'"),/exact Learning-owned table definitions required/));
-test('Organization cannot query Identity persona storage directly', () => mutate('src/modules/organization/infrastructure/persistence/postgres-demo-organization.ts',text => text.replace('FROM organization_demo_runs','FROM identity_demo_personas'),/owner adapter organization\/PostgresDemoOrganization queries foreign-owned table identity_demo_personas/));
+test('Organization cannot query Identity persona storage directly', () => mutate('src/modules/organization/infrastructure/persistence/postgres-demo-organization.ts',text => text.replace('databaseObject("organization_demo_runs")','databaseObject("identity_demo_personas")'),/owner adapter organization\/PostgresDemoOrganization queries foreign-owned table identity_demo_personas/));
 test('wrong semantic ownership fails independently of physical naming', () => mutateJson('kernel/entities.json',value => { value.entries.find(entry => entry.id==='Assignment').owning_domain='Organization'; },/exact approved overlay|learning_assignments: approved entity\/owner required/));
 test('extra current table fails exact inventory', () => mutateJson('drizzle/meta/0005_snapshot.json',value => { value.tables['public.extra']={...value.tables['public.content_packs'],name:'extra'}; },/exact prior eight plus fourteen owner tables required/));
 test('wrong current field nullability fails exact approved mapping', () => mutateJson('drizzle/meta/0005_snapshot.json',value => { value.tables['public.learning_assignments'].columns.identity_id.notNull=false; },/approved nullability required: learning_assignments.identity_id/));

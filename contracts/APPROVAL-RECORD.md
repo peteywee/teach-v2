@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-18",
+  "updated_on": "2026-10-19",
   "effective_on": "2026-10-03",
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -28,6 +28,17 @@
     "physical_schema_admission": false,
     "runtime_activation": false,
     "deployment_authority": false
+  },
+  "demo_schema_isolation_registration": {
+    "registration": "governance/demo-schema-isolation/registration.json",
+    "approval_record": "governance/demo-schema-isolation/owner-approval.json",
+    "scope": "LOCAL_CODE_AND_TESTS_ONLY",
+    "schema": "teach_v2_demo",
+    "node_major": 24,
+    "runtime_activation": false,
+    "live_database_changes": false,
+    "deployment_authority": false,
+    "spending_authority": false
   }
 }
 -->
@@ -36,8 +47,8 @@
 
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
-- Last updated: 2026-10-18
-- Contract package version: `0.20.0`
+- Last updated: 2026-10-19
+- Contract package version: `0.21.0`
 
 This file is the only place approval of a C-series contract is recorded (SYS-17).
 
@@ -500,3 +511,17 @@ Owner approval: `domains/demo-recipes/owner-approval.json`, preserving both the 
 Preserved predecessor copies and before/after hashes are listed in `domains/demo-recipes/registration.json`. Original runtime package/registration, lesson, answers, feedback, scoring, permissions, fifteen API routes and seven served asset paths remain unchanged. The approval excludes hosting, spending, live-database changes, new semantic entities or physical tables, customer approval claims and recipe-specific grading. Registration is not independent review or runtime evidence; existing admission and separate local activation authority remain required.
 
 The owner subsequently approved the 0.1.1 correction: one additive strict `content_guard_demo_version` successor migration, tested only in the disposable local database. The original 0.1.0 source package remains immutable. This correction permits no new database/table, no historical migration edits and no live-data changes. Independent physical review/admission is separate. C31 also records the finite kernel schema-reference projection; canonical concept identities and all original registry entries remain unchanged.
+
+## Part 28 — Bounded demo-schema isolation and Node 24 preparation
+
+Recorded 2026-10-19 UTC. The supplied exchange does not provide an exact approval timestamp; this is the recording date, not a fabricated message date. A minimal summary of the approved scope and Node-version selection is recorded in `governance/demo-schema-isolation/owner-approval.json`.
+
+| Contract / artifact | From | To | Approved bounded change |
+| --- | --- | --- | --- |
+| C21 Database & Migration | 1.2.0 | 2.0.0 | MIG-12 permits the dedicated, unexposed synthetic `teach_v2_demo` schema in the legacy Supabase project with legacy Data API enabled; all browser/PUBLIC existing and effective default privileges denied, every demo table RLS-enabled with no browser policies. Project-wide disable remains the nonexception default. |
+| Evidence, Release and Operations Specification | 1.1.0 | 2.0.0 | Implement the same bounded §5 exception and exact-target readback; preserve all other #75/#82 decisions. |
+| Local runtime target | Node 20 proposal predecessor / Node 22 requested option | Node 24.x | Owner explicitly selected Node 24; record and verify the actual Vercel patch version before any later separately approved deployment. |
+
+The owner selected Node 24 and approved both bounded preparation scopes. Authority covers policy registration and preparation of code and disposable-local tests only. It does not create or grant a runtime/migration role, credential or persistent access, change a live database or provider setting, activate shared runtime, authorize deployment/spending, establish independent verification or approve an exact release candidate. MIG-9/MIG-10 backup and isolated restore proof, MIG-13 destructive-migration approval, MIG-14 reconciliation, OQ-MIG-4 exact frozen candidate/migration/restore-point apply approval and C52 promotion gates remain unchanged. Legacy data import remains ABSENT.
+
+A shared PostgreSQL schema provides an object/access boundary, not isolated compute, connections, storage, administrators, service credentials, backups/PITR or recovery blast radius. The design and bounded successor registration are `governance/demo-schema-isolation/design.md` and `registration.json`. Superseded C21 1.2.0 and operations specification 1.1.0 retain their original bodies; original package snapshots and prior approvals are not rewritten.

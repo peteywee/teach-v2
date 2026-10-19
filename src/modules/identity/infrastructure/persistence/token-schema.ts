@@ -1,10 +1,10 @@
+import { pgTable } from '../../../../platform/database-target.js';
 import { sql } from 'drizzle-orm';
 import {
   check,
   customType,
   foreignKey,
   index,
-  pgTable,
   text,
   timestamp,
   uniqueIndex,

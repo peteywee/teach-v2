@@ -1,5 +1,6 @@
+import { pgTable } from '../../../../platform/database-target.js';
 import { sql } from 'drizzle-orm';
-import { check, foreignKey, index, pgTable, text, type AnyPgColumn } from 'drizzle-orm/pg-core';
+import { check, foreignKey, index, text, type AnyPgColumn } from 'drizzle-orm/pg-core';
 import type { LearningSessionStatus } from '../../domain/learning-session.js';
 
 // The composition root supplies the Identity-owned reference. Learning neither

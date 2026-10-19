@@ -38,7 +38,7 @@ export class PostgresApplicationSessionRepository
 
     return this.db.transaction(async (tx) => {
       const lock = await tx.execute(
-        sql`select "status" from "identity_identities" where "id" = ${input.identityId} for update`,
+        sql`select "status" from ${identities} where "id" = ${input.identityId} for update`,
       );
       if (lock.rows[0]?.status !== 'ACTIVE') {
         throw new ApplicationSessionNotFoundError();
@@ -140,7 +140,7 @@ export class PostgresApplicationSessionRepository
       if (!candidate) return null;
 
       const identityLock = await tx.execute(
-        sql`select "status" from "identity_identities" where "id" = ${candidate.identityId} for update`,
+        sql`select "status" from ${identities} where "id" = ${candidate.identityId} for update`,
       );
       if (identityLock.rows[0]?.status !== 'ACTIVE') return null;
 

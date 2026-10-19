@@ -1,0 +1,26 @@
+waiting for server to start.... done
+server started
+✔ every nested required Begin audit failure rolls back all scoped records and returns no cookie (394.80506ms)
+✔ recipe references are persisted in the same immutable ContentPack and browsing saves no learning records (206.853062ms)
+✔ concurrent identical start and response requests persist one effect and original receipt (240.553606ms)
+✔ progress receipt failure rolls back response, and completion audit failure retains ACTIVE (160.883584ms)
+✔ two runs remain isolated and cross-run target selectors have identical NOT_FOUND failures (126.847966ms)
+✔ last assignment slot serializes and independent manager attempts cannot exceed ten (242.776635ms)
+✔ switch versus close has one linearized winner and the old credential cannot return (118.660294ms)
+✔ required lifecycle and command receipt failures leave no nested Begin records or HTTP cookie (120.007554ms)
+✔ required Switch and Close facts roll back revocation, issuance and terminal transitions (169.250678ms)
+✔ fresh DB time after a blocked membership lock denies a deadline crossed while waiting (2096.813254ms)
+✔ fresh DB time after a blocked receipt lookup denies replay across the run deadline (2101.802904ms)
+✔ current membership revocation wins before a waiting protected read, not a stale grant snapshot (86.073426ms)
+✔ final transaction fence rolls back effects after audit and lifecycle insert lock waits cross expiry (4178.947838ms)
+✔ fresh PostgreSQL HTTP requests complete all fifteen routes and persist manager reassignment/readback (310.599797ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11227.459538
+waiting for server to shut down.... done
+server stopped

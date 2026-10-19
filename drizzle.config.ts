@@ -1,3 +1,5 @@
+// Historical public lineage must never consume isolated-schema table definitions.
+if (process.env.TEACH_DB_SCHEMA && process.env.TEACH_DB_SCHEMA !== 'public') throw new Error('Use the separately verified isolated-schema lineage; public generation is blocked');
 import { defineConfig } from 'drizzle-kit';
 
 const url =

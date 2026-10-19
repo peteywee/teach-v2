@@ -1,5 +1,6 @@
+import { pgTable } from '../../../../platform/database-target.js';
 import { sql } from 'drizzle-orm';
-import { pgTable, text, timestamp, check, foreignKey, unique, type AnyPgColumn } from 'drizzle-orm/pg-core';
+import { text, timestamp, check, foreignKey, unique, type AnyPgColumn } from 'drizzle-orm/pg-core';
 const time = (name:string) => timestamp(name,{withTimezone:true,mode:'date'});
 export function defineDemoOrganizationTables(identityId: AnyPgColumn<{data:string}>) {
  const organizations=pgTable('organization_organizations',{id:text('id').primaryKey(),classification:text('classification').notNull(),createdAt:time('created_at').notNull()},t=>[check('organization_demo_class_check',sql`${t.classification} = 'DEMO_ONLY'`)]);

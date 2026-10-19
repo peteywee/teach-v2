@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { after, test } from 'node:test';
 import { createHash } from 'node:crypto';
-import { cpSync, mkdtempSync, readFileSync, writeFileSync, rmSync, mkdirSync, renameSync, symlinkSync } from 'node:fs';
+import { cpSync, mkdtempSync, readFileSync, writeFileSync, rmSync, mkdirSync, renameSync, symlinkSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { inspectRecipeRegistration, RECIPE_BASE, RECIPE_PROPOSAL, RECIPE_PACKAGE_SHA256, RECIPE_REGISTRATION_SHA256, RECIPE_PREDECESSOR_PROPOSAL, RECIPE_SCHEMA_PROJECTION } from '../kernel/demo-recipes-registration.mjs';
@@ -139,7 +139,19 @@ test('predecessor-only checkout remains accepted, but cannot pretend recipe regi
   const archives = Object.fromEntries(registration.contracts.map(row => [row.superseded_copy, raw(row.superseded_copy)]));
   const parked = join(fixture, 'parked-recipe-evidence');
   const projection = raw(RECIPE_SCHEMA_PROJECTION);
+  // Remove the later schema successor as a complete layer before constructing
+  // a runtime-only predecessor. Retaining its current docs would not be old scope.
+  const schemaBase = 'governance/demo-schema-isolation';
+  const schemaSource = existsSync(join(fixture, schemaBase)) ? json(`${schemaBase}/source-baseline.json`) : null;
+  const schemaRegistration = schemaSource ? json(`${schemaBase}/registration.json`) : null;
+  const schemaLive = schemaSource ? Object.fromEntries(Object.keys(schemaRegistration.authority_file_hashes).map(path => [path, raw(path)])) : {};
+  const schemaParked = join(fixture, 'parked-schema-evidence');
   try {
+    if (schemaSource) {
+      renameSync(join(fixture, schemaBase), schemaParked);
+      for (const [path, text] of Object.entries(schemaSource.files)) writeFileSync(join(fixture, path), text);
+      for (const path of Object.keys(schemaLive)) if (!Object.hasOwn(schemaSource.files, path)) rmSync(join(fixture, path));
+    }
     renameSync(join(fixture, RECIPE_BASE), parked);
     rmSync(join(fixture, RECIPE_SCHEMA_PROJECTION));
     for (const [path, text] of Object.entries(source.files)) writeFileSync(join(fixture, path), text);
@@ -150,6 +162,10 @@ test('predecessor-only checkout remains accepted, but cannot pretend recipe regi
     renameSync(parked, join(fixture, RECIPE_BASE));
     writeFileSync(join(fixture, RECIPE_SCHEMA_PROJECTION), projection);
     for (const [path, text] of Object.entries({ ...live, ...archives })) writeFileSync(join(fixture, path), text);
+    if (schemaSource) {
+      renameSync(schemaParked, join(fixture, schemaBase));
+      for (const [path, text] of Object.entries(schemaLive)) writeFileSync(join(fixture, path), text);
+    }
   }
 });
 

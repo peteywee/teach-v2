@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-18",
+  "updated_on": "2026-10-19",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
@@ -50,17 +50,28 @@
     "physical_schema_admission": false,
     "runtime_activation": false,
     "deployment_authority": false
+  },
+  "demo_schema_isolation_registration": {
+    "registration": "governance/demo-schema-isolation/registration.json",
+    "approval_record": "governance/demo-schema-isolation/owner-approval.json",
+    "scope": "LOCAL_CODE_AND_TESTS_ONLY",
+    "schema": "teach_v2_demo",
+    "node_major": 24,
+    "runtime_activation": false,
+    "live_database_changes": false,
+    "deployment_authority": false,
+    "spending_authority": false
   }
 }
 -->
 
 # Teach v2 Contracts
 
-- Package version: `0.20.0`
+- Package version: `0.21.0`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
-- Last updated: 2026-10-18
+- Last updated: 2026-10-19
 
 These are the normative behavior contracts Teach v2 is built on. They state what the system MUST and
 MUST NOT do. Implementation is measured against them, not the other way round.
@@ -132,7 +143,7 @@ the requirement that keeps the feature off applies.
 | C13 | [Tenancy & Membership](c13-tenancy-membership-contract.md) | 1.6.0 | `TEN` | 19 | 13 | 0 | 0 | `active` |
 | C14 | [Authorization & Capabilities](c14-authorization-capabilities-contract.md) | 1.4.0 | `AUTHZ` | 21 | 13 | 0 | 0 | `active` |
 | C15 | [Data Isolation & Privacy](c15-data-isolation-privacy-contract.md) | 1.2.0 | `PRIV` | 17 | 10 | 2 | 0 | `active` |
-| C21 | [Database & Migration](c21-database-migration-contract.md) | 1.2.0 | `MIG` | 14 | 9 | 0 | 0 | `active` |
+| C21 | [Database & Migration](c21-database-migration-contract.md) | 2.0.0 | `MIG` | 14 | 9 | 0 | 0 | `active` |
 | C22 | [Transaction, Idempotency & Reconciliation](c22-transaction-idempotency-reconciliation-contract.md) | 1.4.0 | `TXN` | 16 | 12 | 1 | 0 | `active` |
 | C23 | [Audit & Lifecycle Events](c23-audit-lifecycle-events-contract.md) | 1.3.0 | `AUD` | 11 | 9 | 0 | 0 | `active` |
 | C31 | [Content & Teaching Engine](c31-content-teaching-engine-contract.md) | 1.4.0 | `CNT` | 12 | 9 | 1 | 0 | `active` |
@@ -355,3 +366,7 @@ The fifteen contract revisions listed in `governance/decision-closure/demo-runti
 Package `0.20.0` records C31 `1.4.0`, C41 `1.3.0` and C42 `1.3.0` under `TEACH-DEMO-RECIPES-2026-10-18@0.1.1`. Exactly three fictional read-only recipe children extend Content/PublicContent exact schema `1.1.0`; exact immutable `1.0.0` remains readable. Original lesson, scoring, fifteen API routes, seven asset paths, capabilities and activation gates are unchanged. See `domains/demo-recipes/registration.json` and Part 27 of `APPROVAL-RECORD.md`. This registration does not establish independent review, runtime conformance, hosting, spending or live-database authority.
 
 Revision `0.1.1` corrects the initial no-migration assumption: one separately reviewed additive strict content guard migration is permitted for disposable-local validation only. Original migrations and the original 0.1.0 source package are preserved.
+
+## Bounded schema-isolation preparation (recorded 2026-10-19 UTC)
+
+Package `0.21.0` records C21 `2.0.0`: only the dedicated synthetic `teach_v2_demo` schema may share the legacy Supabase project with the legacy Data API enabled, subject to unexposed schema, browser/PUBLIC privilege and effective-default denial, RLS and exact-target SQL/HTTP readback. The nonexception default still disables the project Data API. This is local code/test preparation, targeting Node 24.x, not live database, role/credential, runtime activation, deployment or spending approval. Shared compute/storage/backups and recovery blast radius are not isolated. Backup/restore and exact-candidate owner gates remain unchanged. See `governance/demo-schema-isolation/registration.json` and `design.md`; historical #75/#82/#88 packages remain immutable.

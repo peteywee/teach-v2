@@ -1,5 +1,6 @@
+import { pgTable } from '../../../../platform/database-target.js';
 import { sql } from 'drizzle-orm';
-import { pgTable,text,timestamp,integer,jsonb,foreignKey,unique,index,check,type AnyPgColumn } from 'drizzle-orm/pg-core';
+import { text,timestamp,integer,jsonb,foreignKey,unique,index,check,type AnyPgColumn } from 'drizzle-orm/pg-core';
 type Ref=AnyPgColumn<{data:string}>;
 const time=(name:string)=>timestamp(name,{withTimezone:true,mode:'date'});
 export function defineDemoLearningTables(ref:{identityId:Ref;organizationId:Ref;locationId:Ref;locationOrganizationId:Ref;membershipIdentityId:Ref;membershipOrganizationId:Ref;membershipLocationId:Ref;packId:Ref;packOrganizationId:Ref;versionPackId:Ref;version:Ref;digest:Ref}) {

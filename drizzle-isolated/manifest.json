@@ -1,0 +1,115 @@
+{
+  "version": 1,
+  "schema": "teach_v2_demo",
+  "journal": "teach_v2_demo.__drizzle_migrations",
+  "historicalJournalSha256": "82d436f093d623ac3b90785073f7226e7ed2994283754a39084bfdea2aec33e0",
+  "tables": [
+    "audit_events",
+    "content_pack_versions",
+    "content_packs",
+    "identity_application_sessions",
+    "identity_credentials",
+    "identity_demo_personas",
+    "identity_identities",
+    "identity_invitations",
+    "identity_password_reset_tokens",
+    "identity_setup_tokens",
+    "learning_assignments",
+    "learning_progress_events",
+    "learning_sessions",
+    "lifecycle_events",
+    "organization_demo_runs",
+    "organization_locations",
+    "organization_membership_grants",
+    "organization_memberships",
+    "organization_organizations",
+    "organization_reporting_relationships",
+    "transaction_command_receipts",
+    "transaction_control_reconciliation_records"
+  ],
+  "functions": [
+    "audit_guard_demo_event",
+    "audit_guard_demo_lifecycle",
+    "content_guard_demo_version",
+    "demo_assignment_shape",
+    "demo_audit_denial_subject",
+    "demo_audit_target_matches",
+    "demo_canonical_json",
+    "demo_content_version_shape",
+    "demo_evaluation_shape",
+    "demo_identity_scope_matches",
+    "demo_json_id",
+    "demo_json_keys",
+    "demo_json_string",
+    "demo_json_timestamp",
+    "demo_json_timestamp_equals",
+    "demo_lifecycle_shape",
+    "demo_plain_text",
+    "demo_progress_shape",
+    "demo_reject_history_change",
+    "demo_session_shape",
+    "demo_valid_network_prefix",
+    "demo_valid_semver",
+    "identity_guard_application_session_update",
+    "identity_guard_demo_credential",
+    "identity_guard_demo_persona",
+    "identity_guard_demo_session",
+    "identity_guard_identity_update",
+    "identity_guard_invitation_insert",
+    "identity_guard_invitation_update",
+    "identity_guard_single_use_token_update",
+    "learning_guard_demo_assignment",
+    "learning_guard_progress",
+    "learning_guard_session_write",
+    "organization_guard_demo_run",
+    "organization_guard_grant",
+    "organization_guard_membership",
+    "organization_guard_report",
+    "transaction_control_guard_reconciliation_record_update",
+    "transaction_guard_demo_receipt"
+  ],
+  "migrations": [
+    {
+      "name": "0000_slice_p01_reconciliation.sql",
+      "historicalSha256": "c372f6ed790e8adb38a2e1b3102f11c4addd284acd274e1da3add4d23ef64c2c",
+      "isolatedSha256": "53643ef4853adeffa864175a14ae8104d8b358fc788aef2db9055ab2a57561ba",
+      "when": 1791115200000
+    },
+    {
+      "name": "0001_odd_photon.sql",
+      "historicalSha256": "e151cdc4b7c1a040aac0bd4769b4033dd130cb0b5eb0835ccde95729cea26994",
+      "isolatedSha256": "e9bfb8fdc4a276cb67019a281f997a20bac6c6e8038b46132b09414834851222",
+      "when": 1791123780562
+    },
+    {
+      "name": "0002_quick_venus.sql",
+      "historicalSha256": "76f4f620023d2310d5147b8764bc9f275cbff4d4faf4c8c4975bbeb0dc6a65e2",
+      "isolatedSha256": "f7c27b7d98b47cc72671a67129632660b65e8978e48d1fa2fa3b971f3abe7088",
+      "when": 1791132491926
+    },
+    {
+      "name": "0003_slice_p04_credential.sql",
+      "historicalSha256": "3396caa659e905d87ab8a3f92759e7d5bda72eecae27d275fd12cd8e4d284fef",
+      "isolatedSha256": "c46fcd2409b284e1c752923db061a7ccbc4d9001dd9f2ce316c1b9a929d1b3ef",
+      "when": 1791140554656
+    },
+    {
+      "name": "0004_slice_p05_learning_session.sql",
+      "historicalSha256": "dda0c34f193797f0ad9a3fb5916500ff1038da0cf7701d63a4d8e6b193cca0b4",
+      "isolatedSha256": "28aafd8d401fb0756a91ee3df2fee8a7ffd9d9cdee829b5e0da625933df8fd8f",
+      "when": 1791145431316
+    },
+    {
+      "name": "0005_demo_runtime_owner_storage.sql",
+      "historicalSha256": "441c579790de90a71c904a6a49e8b22b3bfb5b72bd3bf4171a5b1d062f1d6775",
+      "isolatedSha256": "31faa5e1668a15b9eccc3c166002b8f5284520d2e7740bb356abfd8710e39221",
+      "when": 1792271260954
+    },
+    {
+      "name": "0006_demo_recipe_content_guard.sql",
+      "historicalSha256": "f8c240898131aca26fcaa4a7cb5d11cb84412358901c20f626667de8ee12851f",
+      "isolatedSha256": "39b1cb2e6b4db8b052c8b7db85133f81ebf7949f80c15e905f66bf97f88ae280",
+      "when": 1792357092279
+    }
+  ]
+}

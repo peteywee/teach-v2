@@ -1,9 +1,9 @@
+import { pgTable } from '../../../../platform/database-target.js';
 import { sql } from 'drizzle-orm';
 import {
   check,
   index,
   jsonb,
-  pgTable,
   text,
   timestamp,
 } from 'drizzle-orm/pg-core';

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { createHistoricalSourceReader, inspectDemoRuntimeRegistration } from '../kernel/demo-runtime-registration.mjs';
+import {inspectSchemaIsolationEngineering} from './demo-schema-isolation-engineering.mjs';
 import {DEMO_ROUTE_INVENTORY,inspectDemoRouteInventory} from './demo-route-inventory.mjs';
 import {existsSync,readFileSync,readdirSync} from 'node:fs';
 import {resolve,join} from 'node:path';
@@ -44,7 +45,9 @@ try {
  const scan=json(base+'route-scan.json');
  if(existsSync(join(root,DEMO_ROUTE_INVENTORY))){
   // Keep the zero-route scan as historical evidence, not a claim about new source.
-  const historical=Object.keys(scan.source_sha256);check(historical.length===scan.source_file_count&&historical.every(path=>hash(read(path))===scan.source_sha256[path]),'historical route scan must preserve every original source hash');
+  const engineering=inspectSchemaIsolationEngineering(root);check(engineering.errors.length===0,engineering.errors.join('; '));
+  const historicalRead=path=>Object.hasOwn(engineering.predecessorFiles,path)?engineering.predecessorFiles[path]:read(path);
+  const historical=Object.keys(scan.source_sha256);check(historical.length===scan.source_file_count&&historical.every(path=>hash(historicalRead(path))===scan.source_sha256[path]),'historical route scan must preserve every original source hash');
   check(scan.implemented_http_route_count===0&&scan.approved_boundary_exceptions.length===0&&scan.oq_api_1_resolved===false&&scan.runtime_route_inventory==='UNKNOWN'&&scan.deployment_inspected===false,'original route scan cannot be rewritten as current proof');
   check(inspectDemoRouteInventory(root,successor).length===0,inspectDemoRouteInventory(root,successor).join('; '));
  }else{

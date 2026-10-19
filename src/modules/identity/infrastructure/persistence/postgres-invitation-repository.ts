@@ -120,7 +120,7 @@ async function requireActiveIdentity(
   identityId:string,
 ):Promise<void> {
   const result=await tx.execute(
-    sql`select "status" from "identity_identities" where "id"=${identityId} for update`,
+    sql`select "status" from ${identities} where "id"=${identityId} for update`,
   );
   if(result.rows[0]?.status!=='ACTIVE') {
     throw new Error('authoritative Identity must be ACTIVE');

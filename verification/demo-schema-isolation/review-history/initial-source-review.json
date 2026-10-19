@@ -1,0 +1,41 @@
+{
+  "review_id": "TEACH-DEMO-SCHEMA-ENGINEERING-REVIEW-2026-10-19",
+  "scope": "BOUNDED_SOURCE_COMPATIBILITY_ONLY",
+  "outcome": "PASS",
+  "reviewer": "Independent source reviewer",
+  "source_edits_by_reviewer": false,
+  "reviewed_at_utc": "2026-10-19T01:15:48.566Z",
+  "engineering_manifest_sha256": "81066ad7605b75dddaea0e5332615894191b68d08350fd40ad6a0c1597f1820a",
+  "decision_registration_sha256": "fc2c52df69ec03408168fc3f76fa0e61d9f68a552965fcf96ae79696b79eac55",
+  "runtime_proof": "NOT_ESTABLISHED_BY_REVIEW",
+  "runtime_activation_authorized": false,
+  "physical_admission_granted": false,
+  "shared_or_production_execution_authorized": false,
+  "live_database_changes_authorized": false,
+  "credential_creation_authorized": false,
+  "deployment_authorized": false,
+  "spending_authorized": false,
+  "unresolved_scope_blockers": [],
+  "checks": [
+    "Independently compared all 32 retained predecessor source texts and hashes to git show at exact commit 87c427ebb4b7e8f5b65ae04a1c47165ccea81932; verified all 38 current source hashes against actual bytes, with only the one documented engineering review-anchor literal normalized.",
+    "Inspected finite allowlists, regular-file and ancestor checks, decision-registration validation, independent review and manifest binding, scope flags, and fail-closed empty predecessor results. No manifest-controlled path iteration or arbitrary caller snapshot is admitted.",
+    "Inspected physical-source reader and historical route scanner integration. Current successor bytes must pass independent source binding before retained predecessor bytes can satisfy historical pins; historical review files/seals are unchanged, and current route inventory is separately validated.",
+    "Reviewed target metadata and persistence diffs: finite schema selection, explicit isolated Drizzle tables/FKs and raw application identifiers, finite pg_catalog builtin identifiers, bound query values, unchanged public-mode SQL behavior. No activation or connection is introduced by selection.",
+    "Independently ran Node 24.19.0 typecheck; 4 database-target/model/source tests; 5 isolated-lineage tests; 16 URL-target tests; 8 decision successor tests; and 4 selected historical runtime-registration controls, all PASS.",
+    "Independently ran engineering suite before seal: 3 fail-closed/preservation groups PASS, 3 positive/current-source mutation groups explicitly SKIPPED while genuine review seal absent. Full sealed suite must be run after inserting this artifact hash; no skipped group is claimed passed here."
+  ],
+  "resolved_findings": [
+    "P2: runtime builtin clock, lock, hash and aggregate references could be shadowed by a hostile search_path. Corrected in demo adapters and foundation reconciliation via finite pg_catalog-qualified helper in isolated mode; inspected corrected exact bytes.",
+    "P3: successor tamper test required a diagnostic prefix even when predecessor evidence failed earlier. Corrected without weakening denial assertions; independently reran 8-case successor suite successfully.",
+    "Documentation: malformed C21 changelog header corrected; closed historical-SQL compiler no longer misrepresented as Drizzle model-to-DDL/snapshot equivalence."
+  ],
+  "limits": [
+    "This artifact attests only bounded source compatibility of manifest-listed exact bytes, not migration runtime execution, complete implementation conformance, physical admission, promotion, owner approval or authorization.",
+    "Reviewer inspected implementer PG17 proof source and recorded 35 denial/default probes, 10 hostile builtin probes and representative lifecycle log but did not independently execute PostgreSQL. Those results remain implementer runtime evidence, not proof created by this source review.",
+    "No provider exposure/readback, HTTP denial, live roles/credentials, shared-target legacy-copy upgrade, deployment, activation or restore proof was performed. Existing exact-candidate owner apply/release and backup/restore gates remain required.",
+    "Drizzle model-to-DDL and semantic snapshot equivalence remain unproven. Source namespace/FK tests and deterministic derived-lineage checks do not establish it.",
+    "The full historical runtime-registration suite exceeded the bounded 25-second command window and was terminated; only the four explicitly selected historical controls are claimed passed."
+  ],
+  "publication_form": "SANITIZED_DERIVATIVE_NOT_ORIGINAL_REVIEW_BYTES",
+  "privacy_note": "Internal execution identity removed for publication. Exact original retained privately; this derivative is historical context, not current acceptance authority."
+}

@@ -40,3 +40,25 @@ Safe reads do not refresh session idle time. Required state, audit, lifecycle,
 receipt and credential issuance either commit together or are not reported as
 success. A separate bounded redacted denial transaction never grants authority.
 Reset is close followed by deliberate fresh admission; history is never deleted.
+
+## Separate isolated-schema preparation
+
+The existing local demo uses `public` by default. `TEACH_DB_SCHEMA=teach_v2_demo`
+selects explicitly schema-qualified table metadata and source-qualified owner SQL
+at process startup; it does not grant activation or select a remote database.
+Unknown schema values fail closed. Never switch the variable after importing the
+persistence modules. This avoids transaction-pool `search_path` dependence.
+
+The historical `drizzle/0000`–`0006` lineage is unchanged and MUST NOT be used
+against a shared legacy project: 0005 intentionally hardens all of `public`.
+Use only the separately reproduced `drizzle-isolated/` lineage and its local-only
+runner for this preparation. Its journal belongs to `teach_v2_demo`, not `public`
+or `drizzle`. See `drizzle-isolated/README.md` for bounded local proof commands.
+Do not run historical generation configs with isolated-schema selection.
+
+The shared-schema exception leaves legacy Data API behavior untouched, but
+requires project-specific proof that the demo schema is excluded and denied.
+Local PostgreSQL proofs are not provider readback or HTTP denial proof. No live
+roles, credentials, grants, provider settings, deployment, restore-point gates,
+or spending are authorized by this code. Runtime-role permissions/RLS in the
+proof are disposable examples, not a provisioned persistent role.

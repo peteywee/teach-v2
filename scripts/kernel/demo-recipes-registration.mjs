@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
+import { inspectSchemaIsolationRegistration } from './demo-schema-isolation-registration.mjs';
 
 export const RECIPE_BASE = 'domains/demo-recipes';
 export const RECIPE_PROPOSAL = `${RECIPE_BASE}/proposal-0.1.1`;
@@ -76,6 +77,11 @@ export function inspectRecipeRegistration(root) {
     const originalEntries = readdirSync(join(root, originalProposal), { withFileTypes: true });
     equal(originalEntries.map(entry => entry.name).sort(), [...originalSeen, 'SHA256SUMS'].sort(), 'exact original runtime package directory inventory required');
     if (originalEntries.some(entry => !entry.isFile())) fail('original runtime package permits only regular files');
+    // Verify every new current byte before consulting its exact predecessor for
+    // the two ledger/index paths pinned by this immutable recipe registration.
+    const schemaIsolationSuccessor = inspectSchemaIsolationRegistration(root);
+    errors.push(...schemaIsolationSuccessor.errors);
+    const schemaRevisions = new Set(schemaIsolationSuccessor.revisedPaths);
     const registration = json(registrationPath);
     const source = json(`${RECIPE_BASE}/source-baseline.json`);
     const approval = json(`${RECIPE_BASE}/owner-approval.json`);
@@ -99,7 +105,7 @@ export function inspectRecipeRegistration(root) {
     equal(Object.keys(registration.authority_file_hashes).sort(), [...RECIPE_REVISED_PATHS, ...ARCHIVES, RECIPE_SCHEMA_PROJECTION].sort(), 'exact five authority revisions, three preserved contracts and one schema-reference projection required');
     for (const [path, digest] of Object.entries(registration.authority_file_hashes)) {
       if (![...RECIPE_REVISED_PATHS, ...ARCHIVES, RECIPE_SCHEMA_PROJECTION].includes(path)) continue;
-      equal(hash(raw(path)), digest, `registered authority file differs: ${path}`);
+      equal(hash(schemaRevisions.has(path) ? schemaIsolationSuccessor.predecessorFiles[path] : raw(path)), digest, `registered authority file differs: ${path}`);
     }
     equal(Object.keys(registration.evidence_hashes).sort(), EVIDENCE_NAMES.filter(name => name !== 'registration.json').map(name => `${RECIPE_BASE}/${name}`).sort(), 'exact evidence inventory required');
     for (const name of EVIDENCE_NAMES.filter(name => name !== 'registration.json')) {

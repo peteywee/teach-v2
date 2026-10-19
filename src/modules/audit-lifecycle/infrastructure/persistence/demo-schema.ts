@@ -1,5 +1,6 @@
+import { pgTable } from '../../../../platform/database-target.js';
 import { sql } from 'drizzle-orm';
-import { pgTable,text,timestamp,integer,jsonb,foreignKey,unique,check,type AnyPgColumn } from 'drizzle-orm/pg-core';
+import { text,timestamp,integer,jsonb,foreignKey,unique,check,type AnyPgColumn } from 'drizzle-orm/pg-core';
 type Ref=AnyPgColumn<{data:string}>;const time=(name:string)=>timestamp(name,{withTimezone:true,mode:'date'});
 export function defineDemoAuditTables(organizationId:Ref,locationId:Ref,locationOrganizationId:Ref) {
  const audit=pgTable('audit_events',{id:text('id').primaryKey(),occurredAt:time('occurred_at').notNull(),requestId:text('request_id').notNull(),idempotencyKey:text('idempotency_key'),actorClass:text('actor_class').notNull(),actorReference:text('actor_reference'),action:text('action').notNull(),result:text('result').notNull(),targetType:text('target_type').notNull(),targetId:text('target_id'),targetVersion:text('target_version'),targetDigest:text('target_digest'),organizationId:text('organization_id'),locationId:text('location_id'),denialClass:text('denial_class'),ipPrefix:text('ip_prefix'),dedupBucketStart:time('dedup_bucket_start'),overflowBucketStart:time('overflow_bucket_start')},t=>[
