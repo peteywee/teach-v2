@@ -1,0 +1,5 @@
+[build]
+command = "pnpm exec node scripts/packaging/build-netlify-canary.mjs"
+publish = ".netlify-canary/public"
+[functions]
+directory = ".netlify-canary/functions"

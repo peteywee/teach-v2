@@ -4,7 +4,7 @@
   "scope": "Exact registered demo source only; listener activation and browser/runtime proof are separate gates",
   "package_sha256sums": "a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a",
   "registration_sha256": "b94cf7c7c9bab35ad2454470295ae2b04b8814bd0ac55c282cdd3dd6df67218d",
-  "source_file_count": 127,
+  "source_file_count": 129,
   "source_sha256": {
     "src/bootstrap/demo-hosted/composition.ts": "dabe1770d7a17fe83c168137cc670c8a3911e80c6cfe83257930f073a3027f42",
     "src/bootstrap/demo-hosted/configuration.ts": "46f862c1be8db04f96000e875d03a550424941b4689dd1614b1904b596831c24",
@@ -14,6 +14,8 @@
     "src/bootstrap/demo-hosted/runtime-policy.ts": "7bae5200ac56943aadba0944043a644283e8d640344ae0c15a6135c58e2ee76e",
     "src/bootstrap/demo-hosted/transport.ts": "ae9a1ff5514b66fa7fee3a7aea7ee5c96600024ad3f6543399d1dfc130ae7a42",
     "src/bootstrap/demo-hosted/vercel-entrypoint.ts": "4e4d4878283a55bd3da40029179cf4b35c272b3934f3a02887acfd7fdbbd083e",
+    "src/bootstrap/demo-netlify/entrypoint.ts": "4bfa57f80e9060db1b9420be326500913cbff19b3cc8b8377ebf3bb5aab547b4",
+    "src/bootstrap/demo-netlify/fetch-adapter.ts": "669848b50ac555423ed34cfa06053abbf6a0e8365e7efa157fdc821843e7fcdf",
     "src/bootstrap/demo-successor/accepting-entrypoint.ts": "f52b8c8e3c7c081bf89e0b233ee5620449a1b2e3b4f6c69a74f4367481a7fe7b",
     "src/bootstrap/demo-successor/binding.ts": "f1135150f7263b513b800770aa409abd6f00ca1bf812a41258d7092a50ad5c62",
     "src/bootstrap/demo-successor/composition.ts": "b3ae1330d0028221ef63549380b9541e8346c71a374bd131e092757831d6415c",

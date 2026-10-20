@@ -1,0 +1,1 @@
+{"extends":"./tsconfig.json","compilerOptions":{"rootDir":".","noEmit":false,"declaration":false,"sourceMap":false,"incremental":false},"include":["src/bootstrap/demo-netlify/*.ts"]}

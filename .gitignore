@@ -11,3 +11,6 @@ dist/
 !.env.example
 
 verification/generated/
+
+# Isolated canary generated output
+/.netlify-canary/
