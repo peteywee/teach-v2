@@ -25,7 +25,7 @@ export function buildDemoNetlify(root,output){
   for(const p of ownSources){const js=p.replace(/\.ts$/,'.js');writeFileSync(join(runtime,js),readFileSync(join(scratch,js)),{flag:'wx'});}
   if(snapshot.some((p,i)=>!before[i].equals(readFileSync(join(root,p))))||git(['status','--porcelain','--untracked-files=all'])||git(['rev-parse','HEAD'])!==sourceCommit)throw Error('Source changed during build');
   // Provider bundling must preserve the module-relative filesystem closure.
-  writeFileSync(join(output,'functions/demo.mjs'),`import handler from '../private/runtime/src/bootstrap/demo-netlify/entrypoint.js';\nexport default handler;\nexport const config = {path:'/*',preferStatic:false,nodeBundler:'none',nodeVersion:'24',includedFiles:['private/runtime/**']};\n`);
+  writeFileSync(join(output,'functions/demo.mjs'),`import handler from '../private/runtime/src/bootstrap/demo-netlify/entrypoint.js';\nexport default handler;\nexport const config = {path:'/*',preferStatic:false,nodeBundler:'none',nodeVersion:'24',includedFiles:['../private/runtime/**']};\n`);
   writeFileSync(join(output,'netlify.toml'),'[build]\npublish = "public"\n[functions]\ndirectory = "functions"\n');
   const manifest={kind:'NETLIFY_LOCAL_DISABLED_PREPARATION',execution:'DISABLED',deploymentAuthorized:false,providerVerified:false,rawIngressVerified:false,sourceCommit,sourceTree,nodePatch:process.versions.node,packages:base.packages,closureDigest:base.closure.closureDigest,files:bundleInventory(output)};
   writeFileSync(join(output,'netlify-preparation-manifest.json'),JSON.stringify(manifest,null,2)+'\n');return manifest;

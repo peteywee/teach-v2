@@ -23,7 +23,7 @@ No server data or assets are copied into the CDN publish directory. Source SQL,
 tests, environment files and credentials are not added to the function package.
 
 The wrapper declares `path: '/*'`, `preferStatic: false`, `nodeVersion: '24'`,
-`nodeBundler: 'none'` and `includedFiles: ['private/runtime/**']`. Explicit custom
+`nodeBundler: 'none'` and `includedFiles: ['../private/runtime/**']`. Explicit custom
 bundling avoids changing module-relative file paths. This is a preparation
 layout, not a tested Netlify deploy ZIP. Netlify's actual packaging, retained
 paths, routing and absence of public internal files require independent proof.
@@ -100,3 +100,20 @@ preparation does not weaken or replace the raw Node framing boundary. A separate
 packaged memory-transaction test exercises the assembled runtime through the
 Fetch seam for all 15 operations and all 7 exact assets. It is still not database
 or provider evidence.
+
+## First canary correction (2026-10-21)
+
+Inline includedFiles globs are relative to the function source directory, unlike
+TOML's repository/base-relative setting. The corrected scaffold uses
+../private/runtime/**; the canary uses ../private/**. The isolated canary build
+pins Node 24.21.0 to match the first observed provider patch; exact patch equality
+is still required and must be checked again on every deployment. These changes
+do not enable an accepting handler or establish raw-ingress equivalence.
+
+Run scripts/tests/netlify-provider-package.mjs with the absolute package directory
+of the official @netlify/zip-it-and-ship-it@16.4.0 installed separately using pnpm.
+That version is pinned by the observed @netlify/build@37.5.0 registry metadata.
+The regression invokes the actual packager, verifies extracted private bytes and
+cold checks, and proves the former glob omits evidence. Application dependencies
+and the Vercel build are unchanged. Generated records contain only nonsecret
+versions/counts/booleans; they must not rely on log visibility for confidentiality.

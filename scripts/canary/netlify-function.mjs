@@ -38,4 +38,4 @@ export default async function handler(request){
  }
  return new Response(fixedBody,{status:503,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff','content-security-policy':"default-src 'none'; frame-ancestors 'none'"}});
 }
-export const config={path:'/*',preferStatic:false,nodeBundler:'none',nodeVersion:'24',includedFiles:['.netlify-canary/private/**']};
+export const config={path:'/*',preferStatic:false,nodeBundler:'none',nodeVersion:'24',includedFiles:['../private/**']};
