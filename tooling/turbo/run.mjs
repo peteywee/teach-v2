@@ -8,9 +8,8 @@ const result = spawnSync(process.execPath, [
   resolve(tooling, 'node_modules/turbo/bin/turbo'),
   '--skip-infer',
   'run',
-  ...process.argv.slice(2),
   '--cwd', root,
-  '--cache=local:rw',
+  ...process.argv.slice(2),
 ], {
   cwd: root,
   stdio: 'inherit',

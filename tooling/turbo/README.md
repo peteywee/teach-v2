@@ -18,6 +18,8 @@ Run both checks, inspect the task plan, or run one task:
 pnpm --dir tooling/turbo check
 pnpm --dir tooling/turbo plan
 pnpm --dir tooling/turbo turbo typecheck
+pnpm --dir tooling/turbo turbo typecheck -- --pretty false
+pnpm --dir tooling/turbo test
 ```
 
 The launcher includes the actual Node version, OS, and architecture in the cache

@@ -5,6 +5,7 @@
   "type": "module",
   "packageManager": "pnpm@12.8.1",
   "scripts": {
+    "test": "node --test run.test.mjs",
     "check": "node run.mjs typecheck test:foundation",
     "plan": "node run.mjs typecheck test:foundation --dry=json",
     "turbo": "node run.mjs"
