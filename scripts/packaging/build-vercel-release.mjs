@@ -26,6 +26,46 @@ export default handler;
   writeFileSync(path, JSON.stringify({...config, handler: 'vercel-launcher.mjs'}));
 }
 
+/** External document navigation may read only the existing public welcome page.
+ * Run the reviewed handler first: runtime/configuration/Host denials stay intact.
+ * Never rewrite request metadata or change an API response.
+ */
+export function addVercelPublicNavigation(bundle) {
+  const path = join(bundle, '.vc-config.json');
+  const config = JSON.parse(readFileSync(path, 'utf8'));
+  if (config.handler !== 'vercel-launcher.mjs' || config.runtime !== 'nodejs24.x') throw Error('Expected diagnostic handler required');
+  const welcomeSha256 = createHash('sha256').update(readFileSync(join(bundle, 'src/web/demo/index.html'))).digest('hex');
+  writeFileSync(join(bundle, 'vercel-public-navigation.mjs'), `import handler from './vercel-launcher.mjs';
+import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {captureRuntimeConfiguration} from './src/bootstrap/demo-successor/runtime-config.js';
+import {toHostedRequest} from './src/bootstrap/demo-hosted/node-adapter.js';
+export default async function publicNavigation(incoming,outgoing){
+  if(incoming.method!=='GET'||incoming.url!=='/')return handler(incoming,outgoing);
+  let request;
+  try{request=toHostedRequest(incoming,captureRuntimeConfiguration(process.env).origin);}catch{return handler(incoming,outgoing);}
+  const url=new URL(request.url),headers=request.headers;
+  const documentNavigation=request.method==='GET'&&url.pathname==='/'&&!url.search&&!headers.has('origin')&&
+    ['cross-site','same-site'].includes(headers.get('sec-fetch-site'))&&headers.get('sec-fetch-mode')==='navigate'&&headers.get('sec-fetch-dest')==='document';
+  if(!documentNavigation)return handler(incoming,outgoing);
+  let status,responseHeaders,body;
+  await handler(incoming,{writeHead(code,value){status=code;responseHeaders=value;},end(value){body=value;}});
+  let forbidden=false;
+  try{forbidden=status===403&&JSON.parse(body).error.code==='FORBIDDEN'&&!Object.hasOwn(responseHeaders,'set-cookie');}catch{/* Preserve every other response. */}
+  if(forbidden){
+    try{
+      const welcome=readFileSync(new URL('./src/web/demo/index.html',import.meta.url));
+      if(createHash('sha256').update(welcome).digest('hex')===${JSON.stringify(welcomeSha256)}){
+        outgoing.writeHead(200,{...responseHeaders,'content-type':'text/html; charset=utf-8'});outgoing.end(welcome);return;
+      }
+    }catch{/* Missing or modified bytes preserve the reviewed denial. */}
+  }
+  outgoing.writeHead(status,responseHeaders);outgoing.end(body);
+}
+`, {flag: 'wx'});
+  writeFileSync(path, JSON.stringify({...config, handler: 'vercel-public-navigation.mjs'}));
+}
+
 /** Restore only equivalent JSON formatting; changed configuration stays blocked. */
 export function restoreVercelConfigFormatting(root) {
   const path = join(root, 'vercel.json');
@@ -65,6 +105,7 @@ export function buildVercelRelease(root = process.cwd()) {
     const output = join(scratch, 'output');
     const manifest = buildSuccessorAccepting(root, output);
     addVercelStartupDiagnostics(join(output, 'functions', 'demo.func'));
+    addVercelPublicNavigation(join(output, 'functions', 'demo.func'));
     const files = bundleInventory(output);
     writeFileSync(join(output, 'vercel-release-manifest.json'), JSON.stringify({
       kind: 'TEACH_VERCEL_RELEASE_MANIFEST', sourceCommit: manifest.sourceCommit,

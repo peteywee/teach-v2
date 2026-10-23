@@ -10,7 +10,7 @@ const good={TEACH_DB_SCHEMA:'teach_v2_demo',TEACH_SUPABASE_PROJECT:'acqafjkdkdmt
 test('configuration is exact server-only target, verified TLS and two retained connections',()=>{const cfg=captureRuntimeConfiguration(good);assert.equal(cfg.options.max,2);assert.equal((cfg.options.ssl as any).rejectUnauthorized,true);assert.equal(cfg.options.port,6543);assert.ok(Object.isFrozen(cfg));for(const key of Object.keys(good))assert.throws(()=>captureRuntimeConfiguration({...good,[key]:undefined}));for(const bad of [{TEACH_DB_SCHEMA:'public'},{TEACH_SUPABASE_PROJECT:'xgtxszipmenyujwhcfut'},{TEACH_DB_USER:'postgres.acqafjkdkdmtpnsxiesw'},{TEACH_DEMO_ORIGIN:'http://demo.example.test'},{TEACH_DB_HOST:'evil.test'}])assert.throws(()=>captureRuntimeConfiguration({...good,...bad}));});
 test('default entrypoint ignores request activation and invalid configuration',async()=>{const {default:handler}=await import('../../src/bootstrap/demo-successor/accepting-entrypoint.js');let status=0,body='';await handler({url:'/?activate=true',headers:{'x-activate':'true'}} as any,{writeHead(code:number){status=code;},end(bytes:Buffer){body=bytes.toString();}} as any);assert.equal(status,503);assert.match(body,/SERVICE_UNAVAILABLE/);});
 
-const {restoreVercelConfigFormatting,addVercelStartupDiagnostics}=await import(new URL('../../scripts/packaging/build-vercel-release.mjs',import.meta.url).href);
+const {restoreVercelConfigFormatting,addVercelStartupDiagnostics,addVercelPublicNavigation}=await import(new URL('../../scripts/packaging/build-vercel-release.mjs',import.meta.url).href);
 function configFixture(run:(root:string,original:string)=>void){
  const root=mkdtempSync(join(tmpdir(),'teach-vercel-config-test-'));
  const original=JSON.stringify({framework:null,buildCommand:'node reviewed-build.mjs'},null,2)+'\n';
@@ -59,5 +59,27 @@ test('Vercel launcher preserves handler identity and logs only safe startup evid
    assert.equal(result.logs[0].configurationValid,mode==='valid');assert.deepEqual(result.logs[0].missingConfiguration,mode==='missing'?['TEACH_DB_PASSWORD']:[]);
   }
   assert.throws(()=>addVercelStartupDiagnostics(root),/Expected accepting handler required/);
+ }finally{rmSync(root,{recursive:true,force:true});}
+});
+
+test('public Vercel navigation serves only intact welcome bytes after the reviewed handler permits initialization',async()=>{
+ const root=mkdtempSync(join(tmpdir(),'teach-vercel-public-navigation-test-'));
+ try{
+  const source=join(root,'src/bootstrap');mkdirSync(join(source,'demo-successor'),{recursive:true});mkdirSync(join(source,'demo-hosted'),{recursive:true});mkdirSync(join(root,'src/web/demo'),{recursive:true});
+  writeFileSync(join(root,'package.json'),JSON.stringify({type:'module'}));
+  writeFileSync(join(root,'.vc-config.json'),JSON.stringify({runtime:'nodejs24.x',handler:'vercel-launcher.mjs'}));
+  const welcome=Buffer.from('<!doctype html><title>Reviewed public welcome</title>');writeFileSync(join(root,'src/web/demo/index.html'),welcome);
+  writeFileSync(join(source,'demo-successor/runtime-config.js'),"export function captureRuntimeConfiguration(){return {origin:'https://demo.example.test'};}");
+  writeFileSync(join(source,'demo-hosted/node-adapter.js'),"export function toHostedRequest(r,origin){const headers=new Headers();for(let i=0;i<r.rawHeaders.length;i+=2)headers.append(r.rawHeaders[i],r.rawHeaders[i+1]);if(headers.get('host')!=='demo.example.test')throw Error('Invalid Host');return new Request(origin+r.url,{method:r.method,headers});}");
+  writeFileSync(join(root,'vercel-launcher.mjs'),"export default async function handler(r,out){if(r.method!=='GET'){out.writeHead(201,{'set-cookie':['original-cookie'],'cache-control':'no-store'});out.end(r.body);return;}const status=r.status??403;out.writeHead(status,{'cache-control':'no-store','content-security-policy':\"default-src 'self'\",'content-type':'application/json'});out.end(Buffer.from(JSON.stringify({error:{code:status===403?'FORBIDDEN':'SERVICE_UNAVAILABLE'}})));}");
+  addVercelPublicNavigation(root);
+  const {default:handler}=await import(pathToFileURL(join(root,'vercel-public-navigation.mjs')).href);
+  const navigation={url:'/',method:'GET',rawHeaders:['Host','demo.example.test','Sec-Fetch-Site','cross-site','Sec-Fetch-Mode','navigate','Sec-Fetch-Dest','document']};
+  async function invoke(request:any){let status:number|undefined,headers:any,body:any;const before=structuredClone(request);await handler(request,{writeHead(s:number,h:any){status=s;headers=h;},end(value:any){body=value;}});assert.deepEqual(request,before);return {status,headers,body};}
+  for(const site of ['cross-site','same-site']){const r=await invoke({...navigation,rawHeaders:navigation.rawHeaders.map(x=>x==='cross-site'?site:x)});assert.equal(r.status,200);assert.deepEqual(r.body,welcome);assert.equal(r.headers['cache-control'],'no-store');assert.equal(r.headers['content-security-policy'],"default-src 'self'");assert.equal(r.headers['set-cookie'],undefined);}
+  for(const request of [{...navigation,status:503},{...navigation,url:'/api/v1/session'},{...navigation,url:'/?tracking=value'},{...navigation,rawHeaders:[...navigation.rawHeaders,'Origin','https://foreign.example.test']},{...navigation,rawHeaders:navigation.rawHeaders.map(x=>x==='navigate'?'cors':x)},{...navigation,rawHeaders:navigation.rawHeaders.map(x=>x==='document'?'iframe':x)}])assert.notEqual((await invoke(request)).status,200);
+  const post=await invoke({...navigation,method:'POST',url:'/api/v1/demo/start',body:'unchanged-body'});assert.equal(post.status,201);assert.equal(post.body,'unchanged-body');assert.deepEqual(post.headers['set-cookie'],['original-cookie']);
+  writeFileSync(join(root,'src/web/demo/index.html'),'modified');assert.equal((await invoke(navigation)).status,403);
+  assert.throws(()=>addVercelPublicNavigation(root),/Expected diagnostic handler required/);
  }finally{rmSync(root,{recursive:true,force:true});}
 });
