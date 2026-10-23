@@ -1,10 +1,30 @@
 import {cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
 import {isDeepStrictEqual} from 'node:util';
 import {tmpdir} from 'node:os';
 import {dirname, join, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {buildSuccessorAccepting} from './build-successor-accepting.mjs';
+import {bundleInventory} from './build-successor-local.mjs';
+
+/** Read-only operator diagnostics; the reviewed handler retains every admission check. */
+export function addVercelStartupDiagnostics(bundle) {
+  const path = join(bundle, '.vc-config.json');
+  const config = JSON.parse(readFileSync(path, 'utf8'));
+  if (config.handler !== 'src/bootstrap/demo-successor/accepting-entrypoint.js' || config.runtime !== 'nodejs24.x') throw Error('Expected accepting handler required');
+  writeFileSync(join(bundle, 'vercel-launcher.mjs'), `import handler from './src/bootstrap/demo-successor/accepting-entrypoint.js';
+import {runtimeReadback} from './src/bootstrap/demo-successor/entrypoint.js';
+import {captureRuntimeConfiguration} from './src/bootstrap/demo-successor/runtime-config.js';
+const runtime=runtimeReadback();
+let configurationValid=false;
+try{captureRuntimeConfiguration(process.env);configurationValid=true;}catch{/* Values and caught errors never enter logs. */}
+const missingConfiguration=['TEACH_DB_SCHEMA','TEACH_SUPABASE_PROJECT','TEACH_DEMO_ORIGIN','TEACH_DB_HOST','TEACH_DB_USER','TEACH_DB_PASSWORD','TEACH_DB_CA'].filter(key=>!process.env[key]);
+console.info(JSON.stringify({kind:'TEACH_VERCEL_STARTUP',runtime,configurationValid,missingConfiguration}));
+export default handler;
+`, {flag: 'wx'});
+  writeFileSync(path, JSON.stringify({...config, handler: 'vercel-launcher.mjs'}));
+}
 
 /** Restore only equivalent JSON formatting; changed configuration stays blocked. */
 export function restoreVercelConfigFormatting(root) {
@@ -44,6 +64,14 @@ export function buildVercelRelease(root = process.cwd()) {
   try {
     const output = join(scratch, 'output');
     const manifest = buildSuccessorAccepting(root, output);
+    addVercelStartupDiagnostics(join(output, 'functions', 'demo.func'));
+    const files = bundleInventory(output);
+    writeFileSync(join(output, 'vercel-release-manifest.json'), JSON.stringify({
+      kind: 'TEACH_VERCEL_RELEASE_MANIFEST', sourceCommit: manifest.sourceCommit,
+      sourceTree: manifest.sourceTree, nodePatch: manifest.nodePatch,
+      acceptingManifestSha256: createHash('sha256').update(readFileSync(join(output, 'accepting-manifest.json'))).digest('hex'),
+      files
+    }, null, 2) + '\n', {flag: 'wx'});
     mkdirSync(dirname(destination), {recursive: true});
     cpSync(output, pending, {recursive: true, errorOnExist: true, force: false});
     renameSync(pending, destination);
@@ -52,7 +80,7 @@ export function buildVercelRelease(root = process.cwd()) {
       sourceCommit: manifest.sourceCommit,
       sourceTree: manifest.sourceTree,
       nodePatch: manifest.nodePatch,
-      files: Object.keys(manifest.files).length,
+      files: Object.keys(files).length + 1,
       output: '.vercel/output',
       providerVerified: false
     };

@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {execFileSync} from 'node:child_process';
-import {mkdtempSync,readFileSync,writeFileSync,rmSync,symlinkSync} from 'node:fs';
+import {mkdtempSync,mkdirSync,readFileSync,writeFileSync,rmSync,symlinkSync} from 'node:fs';
+import {pathToFileURL} from 'node:url';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {captureRuntimeConfiguration} from '../../src/bootstrap/demo-successor/runtime-config.js';
@@ -9,7 +10,7 @@ const good={TEACH_DB_SCHEMA:'teach_v2_demo',TEACH_SUPABASE_PROJECT:'acqafjkdkdmt
 test('configuration is exact server-only target, verified TLS and two retained connections',()=>{const cfg=captureRuntimeConfiguration(good);assert.equal(cfg.options.max,2);assert.equal((cfg.options.ssl as any).rejectUnauthorized,true);assert.equal(cfg.options.port,6543);assert.ok(Object.isFrozen(cfg));for(const key of Object.keys(good))assert.throws(()=>captureRuntimeConfiguration({...good,[key]:undefined}));for(const bad of [{TEACH_DB_SCHEMA:'public'},{TEACH_SUPABASE_PROJECT:'xgtxszipmenyujwhcfut'},{TEACH_DB_USER:'postgres.acqafjkdkdmtpnsxiesw'},{TEACH_DEMO_ORIGIN:'http://demo.example.test'},{TEACH_DB_HOST:'evil.test'}])assert.throws(()=>captureRuntimeConfiguration({...good,...bad}));});
 test('default entrypoint ignores request activation and invalid configuration',async()=>{const {default:handler}=await import('../../src/bootstrap/demo-successor/accepting-entrypoint.js');let status=0,body='';await handler({url:'/?activate=true',headers:{'x-activate':'true'}} as any,{writeHead(code:number){status=code;},end(bytes:Buffer){body=bytes.toString();}} as any);assert.equal(status,503);assert.match(body,/SERVICE_UNAVAILABLE/);});
 
-const {restoreVercelConfigFormatting}=await import(new URL('../../scripts/packaging/build-vercel-release.mjs',import.meta.url).href);
+const {restoreVercelConfigFormatting,addVercelStartupDiagnostics}=await import(new URL('../../scripts/packaging/build-vercel-release.mjs',import.meta.url).href);
 function configFixture(run:(root:string,original:string)=>void){
  const root=mkdtempSync(join(tmpdir(),'teach-vercel-config-test-'));
  const original=JSON.stringify({framework:null,buildCommand:'node reviewed-build.mjs'},null,2)+'\n';
@@ -34,3 +35,29 @@ test('Vercel normalization rejects invalid JSON and a symbolic-link configuratio
  rmSync(path);writeFileSync(join(root,'outside.txt'),'private fixture');symlinkSync('outside.txt',path);
  assert.throws(()=>restoreVercelConfigFormatting(root),/Regular Vercel configuration required/);
 }));
+
+test('Vercel launcher preserves handler identity and logs only safe startup evidence',()=>{
+ const root=mkdtempSync(join(tmpdir(),'teach-vercel-launcher-test-'));
+ try{
+  const source=join(root,'src/bootstrap/demo-successor');mkdirSync(source,{recursive:true});
+  writeFileSync(join(root,'package.json'),JSON.stringify({type:'module'}));
+  writeFileSync(join(root,'.vc-config.json'),JSON.stringify({runtime:'nodejs24.x',handler:'src/bootstrap/demo-successor/accepting-entrypoint.js',launcherType:'Nodejs',shouldAddHelpers:false}));
+  writeFileSync(join(source,'accepting-entrypoint.js'),'export default ()=>503;');
+  writeFileSync(join(source,'entrypoint.js'),"export const runtimeReadback=()=>({policy:'24.x',buildNodeVersion:'24.22.1',observedNodeVersion:'24.19.0',verified:false,requiresReverification:true});");
+  writeFileSync(join(source,'runtime-config.js'),"export function captureRuntimeConfiguration(env){if(env.TEACH_DB_SCHEMA==='invalid'||!env.TEACH_DB_PASSWORD)throw Error('PRIVATE_SENTINEL_DO_NOT_LOG');return env;}");
+  addVercelStartupDiagnostics(root);
+  const config=JSON.parse(readFileSync(join(root,'.vc-config.json'),'utf8'));assert.equal(config.handler,'vercel-launcher.mjs');assert.equal(config.shouldAddHelpers,false);
+  const launcher=pathToFileURL(join(root,config.handler)).href,original=pathToFileURL(join(source,'accepting-entrypoint.js')).href;
+  const script=`const logs=[];console.info=value=>logs.push(JSON.parse(value));const launcher=await import(${JSON.stringify(launcher)}),original=await import(${JSON.stringify(original)});console.log(JSON.stringify({logs,sameHandler:launcher.default===original.default,status:launcher.default()}));`;
+  for(const mode of ['valid','invalid','missing']){
+   const env={...process.env};for(const key of Object.keys(env))if(key.startsWith('TEACH_'))delete env[key];Object.assign(env,good,{TEACH_DB_PASSWORD:'PRIVATE_SENTINEL_PASSWORD',TEACH_DB_CA:'PRIVATE_SENTINEL_CA'});
+   if(mode==='invalid')env.TEACH_DB_SCHEMA='invalid';if(mode==='missing')delete env.TEACH_DB_PASSWORD;
+   const output=execFileSync(process.execPath,['--input-type=module','-e',script],{env,encoding:'utf8',timeout:3000});
+   assert.ok(!output.includes('PRIVATE_SENTINEL'));const result=JSON.parse(output);
+   assert.equal(result.sameHandler,true);assert.equal(result.status,503);assert.equal(result.logs.length,1);
+   assert.equal(result.logs[0].kind,'TEACH_VERCEL_STARTUP');assert.equal(result.logs[0].runtime.verified,false);
+   assert.equal(result.logs[0].configurationValid,mode==='valid');assert.deepEqual(result.logs[0].missingConfiguration,mode==='missing'?['TEACH_DB_PASSWORD']:[]);
+  }
+  assert.throws(()=>addVercelStartupDiagnostics(root),/Expected accepting handler required/);
+ }finally{rmSync(root,{recursive:true,force:true});}
+});

@@ -207,3 +207,9 @@ unchanged hosted-source CI stage. They prove exact-byte restoration/idempotence,
 semantic-change refusal without disclosure, and invalid-JSON/symlink refusal.
 All five accepting tests, the full TypeScript check and whitespace check passed
 locally before publication. Actual provider success remains unverified.
+
+## 2026-10-23 production initialization diagnostic
+
+PR #93 is merged as `901ae23cfe3b1661d8d7b2c1e3a803afd749f4c0`; postmerge self-audit and workflow closure both passed. After the owner confirmed the Production origin setting, redeployment `dpl_8GTuTiMXyV7Kmje2P5t8t2LMPghL` built successfully from that exact revision with Node 24.22.1. The canonical origin still returned generic app HTTP 503. Build success does not prove initialization or database access; no runtime diagnostic logs existed.
+
+The Vercel packaging wrapper now adds a server-only launcher that reports runtime readback, configuration validity, and absent configuration key names. It exports the identical reviewed handler. It never logs environment values, caught errors, SQL, or credentials, and makes no database connection. The original sealed application sources and runtime/configuration gates remain byte-identical. A separate release manifest inventories the derived provider artifact and binds its retained base accepting manifest. Local fixture tests prove handler identity, retained denial under runtime drift, valid/invalid/missing configuration reporting, and suppression of sentinel secrets/error text. Live diagnosis and the full browser/database journey remain unverified until this exact source is built and exercised.
