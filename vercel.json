@@ -2,5 +2,5 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "pnpm install --frozen-lockfile --ignore-scripts --ignore-pnpmfile",
-  "buildCommand": "pnpm exec node scripts/packaging/build-vercel-release.mjs"
+  "buildCommand": "pnpm --yes dlx node@24.21.0 scripts/packaging/build-vercel-release.mjs --via-pnpm"
 }
