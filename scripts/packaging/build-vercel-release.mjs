@@ -1,4 +1,5 @@
 import {cpSync, existsSync, mkdirSync, mkdtempSync, renameSync, rmSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
 import {tmpdir} from 'node:os';
 import {dirname, join, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -30,6 +31,19 @@ export function buildVercelRelease(root = process.cwd()) {
       output: '.vercel/output',
       providerVerified: false
     };
+  } catch (error) {
+    if (error?.message === 'Clean source required') {
+      let status = {unavailable: true};
+      try {
+        const entries = execFileSync('git', ['--no-optional-locks', 'status', '--porcelain=v1', '-z', '--untracked-files=all'], {
+          cwd: root, encoding: 'utf8', timeout: 5000,
+          env: {...process.env, GIT_NO_REPLACE_OBJECTS: '1'}
+        }).split('\0').filter(Boolean);
+        status = {entries: entries.slice(0, 20), omitted: Math.max(0, entries.length - 20)};
+      } catch { /* Preserve the original build refusal if diagnostics fail. */ }
+      console.error(JSON.stringify({kind: 'TEACH_VERCEL_SOURCE_STATUS', ...status}));
+    }
+    throw error;
   } finally {
     rmSync(scratch, {recursive: true, force: true});
     rmSync(pending, {recursive: true, force: true});
