@@ -120,5 +120,16 @@ export function buildVercelRelease(root = process.cwd()) {
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  console.log(JSON.stringify(buildVercelRelease(process.argv[2])));
+  if (process.argv[2] === '--via-pnpm') {
+    const executable = process.env.npm_execpath;
+    if (!executable) throw Error('Package-manager executable required');
+    const script = /\.(?:mjs|cjs|js)$/.test(executable);
+    const env = {...process.env};
+    // Runtime provisioning uses a different user agent. Let the actual pnpm
+    // executable generate its own exec metadata; never synthesize a version claim.
+    delete env.npm_config_user_agent;
+    execFileSync(script ? process.execPath : executable,
+      [...(script ? [executable] : []), 'exec', process.execPath, fileURLToPath(import.meta.url)],
+      {cwd: process.cwd(), env, timeout: 25000, stdio: 'inherit'});
+  } else console.log(JSON.stringify(buildVercelRelease(process.argv[2])));
 }
