@@ -2,11 +2,10 @@
 import { readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { inspectRepositoryIntegration } from './repository-integration-evidence.mjs';
 import { inspectDemoStorageEvidence } from '../persistence/demo-storage-evidence.mjs';
 
 const root=resolve(process.cwd());
-const errors=inspectRepositoryIntegration(root);
+const errors=[];
 const excluded=new Set(['tests','packaging','release']);
 const scripts=[];
 for(const dir of readdirSync(join(root,'scripts'),{withFileTypes:true})) {
@@ -17,6 +16,9 @@ for(const dir of readdirSync(join(root,'scripts'),{withFileTypes:true})) {
   }
 }
 scripts.sort();
+// The standalone integration validator performs the same complete inspection.
+// Require its slot, then execute it once through the bounded loop below.
+if(!scripts.includes('scripts/architecture/validate-repository-integration.mjs')) errors.push('required repository integration validator missing');
 for(const path of scripts) {
   const result=spawnSync(process.execPath,[path],{cwd:root,encoding:'utf8',timeout:5000});
   if(result.status!==0) errors.push(`${path}: ${result.error?.message||((result.stdout||'')+(result.stderr||'')).trim()}`);

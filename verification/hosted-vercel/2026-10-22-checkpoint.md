@@ -80,6 +80,59 @@ unknown mandatory criterion keeps hosted acceptance incomplete.
 
 ## Planned visual map
 
+### Continuation — 23 October 2026
+
+Authenticated Git deployment context now confirms that the existing Vercel
+project is linked to `peteywee/teach-v2`. The project-domain endpoint separately
+verifies `teach-v2.vercel.app`; the deployment list is still empty. The summary
+project endpoint's empty `domains` array was incomplete and must not override
+that more specific domain evidence.
+
+Patrick reported saving the three fixed target variables and the restricted
+runtime password in his own authenticated dashboard. Instructions scoped all
+variables to Production and the password to Secret. He supplied the pooler
+hostname `aws-1-us-east-2.pooler.supabase.com` and the Supabase Root 2021 CA.
+The certificate parses, expires 26 April 2031, and has SHA-256 fingerprint
+`807025ad50d4ed219d2c9c7d299c004f824eb00cf7f65afef607d07b72e6cafa`.
+These are operator declarations and certificate parsing, not provider variable
+readback or an actual TLS/database connection. The last supplied variable was
+`TEACH_DEMO_ORIGIN=https://teach-v2.vercel.app`; its save is unconfirmed.
+No secret was received, retrieved or included in source.
+
+Exact-head CI at `96d71d1febfac64d538d8ec00a682175ede47e15` failed:
+run `39794459729`, authority stage, 25-second timeout. The original umbrella
+performed the complete repository integration inspection before discovery,
+then ran that same inspection again through its standalone validator.
+The small successor removes the first duplicate inspection, explicitly
+requires the standalone integration validator, and retains all 58 validators,
+each validator's five-second ceiling, and the outer 25-second ceiling.
+No sealed test, review, registration, workflow or timeout is changed.
+
+Local verification of the revised umbrella, SHA-256
+`218ed200c58ff706edf315a5d9971b0bb6559bd41b60571164d163a3411a7e48`:
+
+| Criterion | Result | Evidence |
+| --- | --- | --- |
+| Complete authority umbrella, Node 24.19.0 | PASS | All 58 validators; 22,150 ms |
+| Complete authority umbrella, CI's Node 20.20.2 | PASS | All 58 validators; 22,683 ms |
+| Existing unchanged physical-validator regression | PASS | One selected test; five-second bound and failure propagation |
+| Missing integration validator | PASS | Actual umbrella in VM rejects absent slot; 57 other validators retained |
+| Failed integration validator | PASS | Actual umbrella in VM propagates failure; all 58 invoked, integration once |
+| Diff whitespace | PASS | `git diff --check` |
+| New exact-head hosted CI | UNKNOWN | Must run after publication; local timing is not hosted acceptance |
+| Review-thread audit | PASS | No unresolved threads at the observed prior head; not independent approval |
+| Live browser/database acceptance | BLOCKED | No deployment exists |
+
+An earlier read-only compile-cache experiment also completed the old umbrella
+under Node 24. It is not the submitted fix: CI uses Node 20, and the successor
+does not enable a compile cache or reuse validation results. The previous
+parallel candidate remains unsubmitted. No efficiency percentage is claimed.
+
+Next: publish this bounded fix to PR #93, reconcile exact-head CI and source
+scope/review threads, finish Production configuration, then release and perform
+the existing browser-to-database acceptance checks. Do not infer live behavior
+from repository linkage, local checks or an untested deployment.
+
 ```mermaid
 flowchart TD
     S["V1: Reviewed source and build"] --> C{"V2: Production configuration available?"}
