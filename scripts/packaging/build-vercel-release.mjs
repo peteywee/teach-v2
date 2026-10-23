@@ -26,6 +26,37 @@ export default handler;
   writeFileSync(path, JSON.stringify({...config, handler: 'vercel-launcher.mjs'}));
 }
 
+/** Observe existing driver promises only; no connection, query, retry or pool is added. */
+export function addVercelDatabaseDiagnostics(bundle) {
+  const path = join(bundle, 'vercel-launcher.mjs');
+  const launcher = readFileSync(path, 'utf8');
+  if (!launcher.startsWith("import handler from './src/bootstrap/demo-successor/accepting-entrypoint.js';")) throw Error('Expected startup launcher required');
+  writeFileSync(join(bundle, 'vercel-database-diagnostics.mjs'), `import pg from 'pg';
+const allowedCodes=new Set(['ECONNREFUSED','ETIMEDOUT','ENOTFOUND','EAI_AGAIN','ECONNRESET','ECONNABORTED','ERR_TLS_CERT_ALTNAME_INVALID','SELF_SIGNED_CERT_IN_CHAIN','DEPTH_ZERO_SELF_SIGNED_CERT','UNABLE_TO_VERIFY_LEAF_SIGNATURE','UNABLE_TO_GET_ISSUER_CERT_LOCALLY','CERT_HAS_EXPIRED']);
+const connected=new WeakSet();
+function failure(stage,error){
+  try{
+    const code=typeof error?.code==='string'&&(/^[0-9A-Z]{5}$/.test(error.code)||allowedCodes.has(error.code))?error.code:'UNCLASSIFIED';
+    const category=typeof error?.message==='string'&&/tenant or user not found/i.test(error.message)?'POOLER_TARGET':'DRIVER_ERROR';
+    console.error(JSON.stringify({kind:'TEACH_VERCEL_DATABASE_FAILURE',stage,code,category}));
+  }catch{/* Observability cannot replace the original result/error. */}
+}
+function connection(client){
+  try{if(connected.has(client))return;connected.add(client);const stream=client.connection?.stream;console.info(JSON.stringify({kind:'TEACH_VERCEL_DATABASE_CONNECTION',encrypted:stream?.encrypted===true,authorized:stream?.authorized===true}));}catch{/* Preserve the client. */}
+}
+for(const [prototype,key,stage]of [[pg.Pool.prototype,'connect','connect'],[pg.Client.prototype,'query','query']]){
+  const original=prototype[key];
+  prototype[key]=function(...args){
+    let result;
+    try{result=Reflect.apply(original,this,args);}catch(error){failure(stage,error);throw error;}
+    if(!result||typeof result.then!=='function')return result;
+    return result.then(value=>{if(stage==='connect')connection(value);return value;},error=>{failure(stage,error);throw error;});
+  };
+}
+`, {flag: 'wx'});
+  writeFileSync(path, "import './vercel-database-diagnostics.mjs';\n" + launcher);
+}
+
 /** External document navigation may read only the existing public welcome page.
  * Run the reviewed handler first: runtime/configuration/Host denials stay intact.
  * Never rewrite request metadata or change an API response.
@@ -105,6 +136,7 @@ export function buildVercelRelease(root = process.cwd()) {
     const output = join(scratch, 'output');
     const manifest = buildSuccessorAccepting(root, output);
     addVercelStartupDiagnostics(join(output, 'functions', 'demo.func'));
+    addVercelDatabaseDiagnostics(join(output, 'functions', 'demo.func'));
     addVercelPublicNavigation(join(output, 'functions', 'demo.func'));
     const files = bundleInventory(output);
     writeFileSync(join(output, 'vercel-release-manifest.json'), JSON.stringify({
