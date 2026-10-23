@@ -1,0 +1,15 @@
+{
+  "name": "@teach/turbo-tools",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.8.1",
+  "scripts": {
+    "check": "node run.mjs typecheck test:foundation",
+    "plan": "node run.mjs typecheck test:foundation --dry=json",
+    "turbo": "node run.mjs"
+  },
+  "devDependencies": {
+    "turbo": "2.11.10"
+  }
+}
