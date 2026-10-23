@@ -85,6 +85,22 @@ export function buildVercelRelease(root = process.cwd()) {
       providerVerified: false
     };
   } catch (error) {
+    if (error?.message === 'Pinned pnpm12.8.1 required') {
+      let executableVersion = null;
+      try {
+        const executable = process.env.npm_execpath;
+        if (executable) {
+          const script = /\.(?:mjs|cjs|js)$/.test(executable);
+          const reported = execFileSync(script ? process.execPath : executable, script ? [executable, '--version'] : ['--version'], {
+            cwd: root, encoding: 'utf8', timeout: 5000, stdio: ['ignore', 'pipe', 'ignore']
+          }).trim();
+          if (/^v?\d+\.\d+\.\d+$/.test(reported)) executableVersion = reported;
+        }
+      } catch { /* Preserve the original guard refusal. */ }
+      console.error(JSON.stringify({kind: 'TEACH_VERCEL_PNPM_STATUS',
+        agentMatches: /^pnpm\/12\.8\.1(?: |$)/.test(process.env.npm_config_user_agent ?? ''),
+        executablePresent: Boolean(process.env.npm_execpath), executableVersion}));
+    }
     if (error?.message === 'Clean source required') {
       let status = {unavailable: true};
       try {
