@@ -1,9 +1,31 @@
-import {cpSync, existsSync, mkdirSync, mkdtempSync, renameSync, rmSync} from 'node:fs';
+import {cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
+import {isDeepStrictEqual} from 'node:util';
 import {tmpdir} from 'node:os';
 import {dirname, join, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {buildSuccessorAccepting} from './build-successor-accepting.mjs';
+
+/** Restore only equivalent JSON formatting; changed configuration stays blocked. */
+export function restoreVercelConfigFormatting(root) {
+  const path = join(root, 'vercel.json');
+  if (!lstatSync(path).isFile()) throw Error('Regular Vercel configuration required');
+  const committed = execFileSync('git', ['--no-optional-locks', 'show', 'HEAD:vercel.json'], {
+    cwd: root, timeout: 5000, env: {...process.env, GIT_NO_REPLACE_OBJECTS: '1'}
+  });
+  const current = readFileSync(path);
+  if (current.equals(committed)) return false;
+  let actual, expected;
+  try { actual = JSON.parse(current); expected = JSON.parse(committed); }
+  catch { throw Error('Invalid Vercel configuration JSON'); }
+  if (!isDeepStrictEqual(actual, expected)) {
+    const keys = [...new Set([...Object.keys(expected ?? {}), ...Object.keys(actual ?? {})])];
+    const changed = keys.filter(key => !isDeepStrictEqual(actual?.[key], expected?.[key]));
+    throw Error('Vercel configuration values differ from committed source: ' + JSON.stringify(changed.slice(0, 20)));
+  }
+  writeFileSync(path, committed);
+  return true;
+}
 
 /** Publish the existing reviewed Node adapter as Build Output API output.
  * Configuration remains server-only; missing configuration or Node patch drift
@@ -15,6 +37,9 @@ export function buildVercelRelease(root = process.cwd()) {
   const destination = join(root, '.vercel', 'output');
   const pending = join(root, '.vercel', 'output.pending');
   if (existsSync(destination) || existsSync(pending)) throw Error('New Vercel output required');
+  if (process.env.VERCEL === '1' && restoreVercelConfigFormatting(root)) {
+    console.log(JSON.stringify({kind: 'TEACH_VERCEL_CONFIG_FORMATTING_RESTORED'}));
+  }
   const scratch = mkdtempSync(join(tmpdir(), 'teach-vercel-release-'));
   try {
     const output = join(scratch, 'output');

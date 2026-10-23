@@ -183,3 +183,27 @@ index, dependency-lock, Node-patch and package-closure checks. No runtime code,
 secret, workflow or registered review is changed. The helper reproduction and
 its no-mutation control passed. This local successor still needs publication
 and its own exact-head CI before release; the prior CI PASS does not transfer.
+
+The operator subsequently confirmed Production tracks `main`. Published follow-up
+`51d864b0666a190146944f67c7e02348141edb1c` correctly created a Preview build
+(`dpl_4dsUaL2v8ywyLjRw8DvKDBFRj14i`), but still failed the clean-source guard.
+The ignore correction alone did not establish provider resolution.
+
+A filenames-only diagnostic was published as
+`5bf33673821f035273487836b34067cbd2d08251`. Preview build
+`dpl_AFxrJ2ZSyk1ymUxvuFYzGYHmdm6L` reported exactly ` M vercel.json`, with
+zero omitted entries. It did not print file contents or credentials.
+
+The next wrapper revision permits only provider formatting normalization:
+under `VERCEL=1`, compare the parsed regular `vercel.json` with its committed
+HEAD version; restore committed bytes only when the JSON is deeply identical.
+Changed values, invalid JSON and a symbolic-link configuration are refused.
+The existing clean-source/index checks then still inspect the complete checkout.
+No index reset, source-file ignore rule or arbitrary tracked-file restoration is
+introduced. A differing configuration reports changed key names, never values.
+
+Three new regressions run through the existing accepting-test file in the
+unchanged hosted-source CI stage. They prove exact-byte restoration/idempotence,
+semantic-change refusal without disclosure, and invalid-JSON/symlink refusal.
+All five accepting tests, the full TypeScript check and whitespace check passed
+locally before publication. Actual provider success remains unverified.
