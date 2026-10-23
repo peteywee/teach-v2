@@ -156,3 +156,30 @@ flowchart TD
 Resource comparison: baseline and exact token/cost telemetry UNAVAILABLE. No
 efficiency savings are claimed. This is a hosted-demo continuation, not proof
 of a real restaurant pilot, second-restaurant portability or commercial readiness.
+
+### Vercel build diagnosis — 23 October 2026
+
+The full GitHub self-audit run `39941631911` passed for published commit
+`47400e943c7d2c710d41bc2ee1cbd486196be14b`, tree
+`77d33b4ea50001870fce8f1448705b8c641ed096`. This supersedes the earlier pending
+CI observation for that exact revision only.
+
+Git-triggered Vercel build `dpl_8h5BWJbq95xeTFTv9tNB4VkF7iyQ` failed at
+`Clean source required`, using Node 24.22.1, pnpm 12.8.1 and Vercel CLI 65.1.0.
+Its metadata unexpectedly labels the working branch Production. Further pushes
+are held pending confirmation that the Production branch tracks `main`.
+
+The exact published `vercel@65.1.0` npm package was inspected. Its
+`addToGitIgnore` helper checks complete lines for literal `.vercel`, rather than
+interpreting ignore patterns. The submitted `.vercel/` line therefore causes
+that helper to append `.vercel`, modifying the tracked file. An isolated Git
+fixture running that exact helper reproduced the modification and dirty status.
+Replacing `.vercel/` with `.vercel` made the same helper return unchanged and
+left the fixture clean. This is a provider-mutation reproduction; a subsequent
+successful provider build is still required to establish live resolution.
+
+The one-character ignore-pattern correction preserves the existing clean-source,
+index, dependency-lock, Node-patch and package-closure checks. No runtime code,
+secret, workflow or registered review is changed. The helper reproduction and
+its no-mutation control passed. This local successor still needs publication
+and its own exact-head CI before release; the prior CI PASS does not transfer.
