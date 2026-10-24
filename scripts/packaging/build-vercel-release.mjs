@@ -50,7 +50,7 @@ export async function compareDatabaseLogins(configuration, {Client = pg.Client, 
         let timer;
         try {
           await Promise.race([
-            Promise.resolve().then(() => client.end()).catch(() => {result.cleanupFailed = true;}),
+            Promise.resolve().then(() => client.end()).catch(() => {result.cleanupFailed = true; try {client.connection?.stream?.destroy();} catch {}}),
             new Promise(resolve => {timer = setTimeout(() => {result.cleanupFailed = true; try {client.connection?.stream?.destroy();} catch {} resolve();}, 500);})
           ]);
         } finally {clearTimeout(timer);}
@@ -191,7 +191,8 @@ export function restoreVercelConfigFormatting(root) {
 /** Publish the existing reviewed Node adapter as Build Output API output.
  * Configuration remains server-only; missing configuration or Node patch drift
  * still denies through the existing accepting entrypoint before pool creation.
- * This build neither reads credentials nor connects to a provider or database.
+ * This packaging function neither reads credentials nor connects to a database.
+ * The Production CLI runs the separate read-only login comparison afterward.
  */
 export function buildVercelRelease(root = process.cwd()) {
   root = resolve(root);

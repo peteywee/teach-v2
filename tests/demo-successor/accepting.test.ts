@@ -126,11 +126,11 @@ test('paired database logins independently verify the same credential, TLS, role
  async function scenario(pooler:any={},direct:any={}){
   const clients:any[]=[];
   class Client{
-   options:any;state:any;queries:string[]=[];ended=false;connection:any;
-   constructor(options:any){this.options=options;this.state=options.port===6543?pooler:direct;this.connection={stream:{encrypted:true,authorized:this.state.tls!==false}};clients.push(this);}
+   options:any;state:any;queries:string[]=[];ended=false;destroyed=false;connection:any;
+   constructor(options:any){this.options=options;this.state=options.port===6543?pooler:direct;this.connection={stream:{encrypted:true,authorized:this.state.tls!==false,destroy:()=>{this.destroyed=true;}}};clients.push(this);}
    async connect(){if(this.state.connect)throw Object.assign(Error('PRIVATE_SENTINEL_DRIVER_MESSAGE'),{code:this.state.connect});}
    async query(sql:string){this.queries.push(sql);if(this.state.query)throw Object.assign(Error('PRIVATE_SENTINEL_QUERY_MESSAGE'),{code:this.state.query});return {rows:[{role:this.state.role??'teach_v2_demo_runtime',database:'postgres',read_only:this.state.readOnly??'on'}]};}
-   async end(){this.ended=true;if(this.state.cleanup)throw Error('PRIVATE_SENTINEL_CLEANUP');}
+   async end(){this.ended=true;if(this.state.cleanup)throw Error('PRIVATE_SENTINEL_CLEANUP');if(this.state.cleanupHang)await new Promise(()=>{});}
   }
   const report=await compareDatabaseLogins(configuration,{Client,sourceCommit});
   assert.equal(clients.length,2);assert.ok(clients.every(c=>c.ended));
@@ -146,6 +146,7 @@ test('paired database logins independently verify the same credential, TLS, role
  const network=await scenario({connect:'28P01'},{connect:'ENETUNREACH'});assert.equal(network.report.comparison,'INCONCLUSIVE');assert.equal(network.report.tests[1].code,'ENETUNREACH');
  for(const bad of [{tls:false},{role:'postgres'},{readOnly:'off'},{query:'42501'},{cleanup:true}])assert.equal((await scenario({},bad)).report.tests[1].status,'FAIL');
  const postAuth=await scenario({query:'28P01'},{query:'28P01'});assert.equal(postAuth.report.comparison,'INCONCLUSIVE');
+ for(const bad of [{cleanup:true},{cleanupHang:true}]){const cleanup=await scenario({},bad);assert.equal(cleanup.report.tests[1].status,'FAIL');assert.equal(cleanup.clients[1].destroyed,true);}
 });
 
 test('paired database login tests refuse target/source/TLS drift before opening connections',async()=>{
