@@ -10,7 +10,7 @@ const good={TEACH_DB_SCHEMA:'teach_v2_demo',TEACH_SUPABASE_PROJECT:'acqafjkdkdmt
 test('configuration is exact server-only target, verified TLS and two retained connections',()=>{const cfg=captureRuntimeConfiguration(good);assert.equal(cfg.options.max,2);assert.equal((cfg.options.ssl as any).rejectUnauthorized,true);assert.equal(cfg.options.port,6543);assert.ok(Object.isFrozen(cfg));for(const key of Object.keys(good))assert.throws(()=>captureRuntimeConfiguration({...good,[key]:undefined}));for(const bad of [{TEACH_DB_SCHEMA:'public'},{TEACH_SUPABASE_PROJECT:'xgtxszipmenyujwhcfut'},{TEACH_DB_USER:'postgres.acqafjkdkdmtpnsxiesw'},{TEACH_DEMO_ORIGIN:'http://demo.example.test'},{TEACH_DB_HOST:'evil.test'}])assert.throws(()=>captureRuntimeConfiguration({...good,...bad}));});
 test('default entrypoint ignores request activation and invalid configuration',async()=>{const {default:handler}=await import('../../src/bootstrap/demo-successor/accepting-entrypoint.js');let status=0,body='';await handler({url:'/?activate=true',headers:{'x-activate':'true'}} as any,{writeHead(code:number){status=code;},end(bytes:Buffer){body=bytes.toString();}} as any);assert.equal(status,503);assert.match(body,/SERVICE_UNAVAILABLE/);});
 
-const {restoreVercelConfigFormatting,addVercelStartupDiagnostics,addVercelPublicNavigation,addVercelDatabaseDiagnostics}=await import(new URL('../../scripts/packaging/build-vercel-release.mjs',import.meta.url).href);
+const {restoreVercelConfigFormatting,addVercelStartupDiagnostics,addVercelPublicNavigation,addVercelDatabaseDiagnostics,compareDatabaseLogins}=await import(new URL('../../scripts/packaging/build-vercel-release.mjs',import.meta.url).href);
 function configFixture(run:(root:string,original:string)=>void){
  const root=mkdtempSync(join(tmpdir(),'teach-vercel-config-test-'));
  const original=JSON.stringify({framework:null,buildCommand:'node reviewed-build.mjs'},null,2)+'\n';
@@ -117,4 +117,43 @@ export default {Pool,Client};`);
   assert.ok(records.some(x=>x.stage==='query'&&x.code==='42501'));
   assert.throws(()=>addVercelDatabaseDiagnostics(root),/Expected startup launcher required/);
  }finally{console.info=info;console.error=error;rmSync(root,{recursive:true,force:true});}
+});
+
+
+test('paired database logins independently verify the same credential, TLS, role and read-only access',async()=>{
+ const configuration=captureRuntimeConfiguration({...good,TEACH_DB_HOST:'aws-1-us-east-2.pooler.supabase.com',TEACH_DB_PASSWORD:'PRIVATE_SENTINEL_PASSWORD',TEACH_DB_CA:'-----BEGIN CERTIFICATE-----PRIVATE_SENTINEL_CA'});
+ const sourceCommit='a'.repeat(40);
+ async function scenario(pooler:any={},direct:any={}){
+  const clients:any[]=[];
+  class Client{
+   options:any;state:any;queries:string[]=[];ended=false;destroyed=false;connection:any;
+   constructor(options:any){this.options=options;this.state=options.port===6543?pooler:direct;this.connection={stream:{encrypted:true,authorized:this.state.tls!==false,destroy:()=>{this.destroyed=true;}}};clients.push(this);}
+   async connect(){if(this.state.connect)throw Object.assign(Error('PRIVATE_SENTINEL_DRIVER_MESSAGE'),{code:this.state.connect});}
+   async query(sql:string){this.queries.push(sql);if(this.state.query)throw Object.assign(Error('PRIVATE_SENTINEL_QUERY_MESSAGE'),{code:this.state.query});return {rows:[{role:this.state.role??'teach_v2_demo_runtime',database:'postgres',read_only:this.state.readOnly??'on'}]};}
+   async end(){this.ended=true;if(this.state.cleanup)throw Error('PRIVATE_SENTINEL_CLEANUP');if(this.state.cleanupHang)await new Promise(()=>{});}
+  }
+  const report=await compareDatabaseLogins(configuration,{Client,sourceCommit});
+  assert.equal(clients.length,2);assert.ok(clients.every(c=>c.ended));
+  for(const c of clients){assert.equal(c.options.password,'PRIVATE_SENTINEL_PASSWORD');assert.equal(c.options.ssl.rejectUnauthorized,true);assert.equal(c.options.ssl.minVersion,'TLSv1.2');assert.equal(c.options.connectionTimeoutMillis,3000);assert.equal(c.options.query_timeout,2000);assert.equal(c.options.options,'-c default_transaction_read_only=on');assert.ok(c.queries.every((q:string)=>q.startsWith('SELECT current_user')));}
+  assert.equal(clients[0].options.user,'teach_v2_demo_runtime.acqafjkdkdmtpnsxiesw');assert.equal(clients[1].options.user,'teach_v2_demo_runtime');
+  assert.equal(clients[1].options.host,'db.acqafjkdkdmtpnsxiesw.supabase.co');
+  assert.ok(!JSON.stringify(report).includes('PRIVATE_SENTINEL'));
+  return {report,clients};
+ }
+ const success=await scenario();assert.equal(success.report.comparison,'BOTH_AUTHENTICATED');assert.ok(success.report.tests.every((t:any)=>t.status==='PASS'&&t.authenticated&&t.identityVerified&&t.readOnly&&t.tlsVerified));
+ const rejected=await scenario({connect:'28P01'},{connect:'28P01'});assert.equal(rejected.report.comparison,'BOTH_REJECTED_PASSWORD');assert.ok(rejected.clients.every(c=>c.queries.length===0));
+ const cached=await scenario({connect:'28P01'});assert.equal(cached.report.comparison,'DIRECT_ACCEPTED_POOLER_REJECTED');assert.equal(cached.report.tests[1].status,'PASS');
+ const network=await scenario({connect:'28P01'},{connect:'ENETUNREACH'});assert.equal(network.report.comparison,'INCONCLUSIVE');assert.equal(network.report.tests[1].code,'ENETUNREACH');
+ for(const bad of [{tls:false},{role:'postgres'},{readOnly:'off'},{query:'42501'},{cleanup:true}])assert.equal((await scenario({},bad)).report.tests[1].status,'FAIL');
+ const postAuth=await scenario({query:'28P01'},{query:'28P01'});assert.equal(postAuth.report.comparison,'INCONCLUSIVE');
+ for(const bad of [{cleanup:true},{cleanupHang:true}]){const cleanup=await scenario({},bad);assert.equal(cleanup.report.tests[1].status,'FAIL');assert.equal(cleanup.clients[1].destroyed,true);}
+});
+
+test('paired database login tests refuse target/source/TLS drift before opening connections',async()=>{
+ const configuration=captureRuntimeConfiguration({...good,TEACH_DB_HOST:'aws-1-us-east-2.pooler.supabase.com'});let connections=0;
+ class RefusedClient{constructor(){connections++;throw Error('Should not connect');}}
+ for(const options of [{...configuration.options,host:'foreign.example.test'},{...configuration.options,user:'postgres.acqafjkdkdmtpnsxiesw'},{...configuration.options,ssl:{...(configuration.options.ssl as object),rejectUnauthorized:false}},{...configuration.options,password:''}]){
+  const result=await compareDatabaseLogins({options},{Client:RefusedClient,sourceCommit:'a'.repeat(40)});assert.equal(result.status,'BLOCKED');
+ }
+ assert.equal((await compareDatabaseLogins(configuration,{Client:RefusedClient,sourceCommit:'unknown'})).status,'BLOCKED');assert.equal(connections,0);
 });
