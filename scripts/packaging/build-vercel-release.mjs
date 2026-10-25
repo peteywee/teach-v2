@@ -4,9 +4,79 @@ import {createHash} from 'node:crypto';
 import {isDeepStrictEqual} from 'node:util';
 import {tmpdir} from 'node:os';
 import {dirname, join, resolve} from 'node:path';
-import {fileURLToPath} from 'node:url';
+import {fileURLToPath,pathToFileURL} from 'node:url';
+import pg from 'pg';
 import {buildSuccessorAccepting} from './build-successor-accepting.mjs';
 import {bundleInventory} from './build-successor-local.mjs';
+
+/** Two independent, read-only login tests using the same server-held credential.
+ * No password/hash, connection string, SQL parameter or raw driver message is logged.
+ * These build diagnostics never become an endpoint or change application admission.
+ */
+export async function compareDatabaseLogins(configuration, {Client = pg.Client, sourceCommit} = {}) {
+  const p = configuration?.options;
+  if (p?.host !== 'aws-1-us-east-2.pooler.supabase.com' || p.user !== 'teach_v2_demo_runtime.acqafjkdkdmtpnsxiesw' ||
+      p.port !== 6543 || p.database !== 'postgres' || typeof p.password !== 'string' || !p.password ||
+      p.ssl?.rejectUnauthorized !== true || p.ssl.minVersion !== 'TLSv1.2' ||
+      typeof p.ssl.ca !== 'string' || !p.ssl.ca.includes('-----BEGIN CERTIFICATE-----') || !/^[a-f0-9]{40}$/.test(sourceCommit ?? '')) {
+    return {kind: 'TEACH_DATABASE_LOGIN_COMPARISON', status: 'BLOCKED', reason: 'EXACT_CONFIG_AND_SOURCE_REQUIRED'};
+  }
+  const targets = [
+    {test: 'vercel-pooler', host: p.host, port: 6543, user: p.user},
+    {test: 'supabase-direct', host: 'db.acqafjkdkdmtpnsxiesw.supabase.co', port: 5432, user: 'teach_v2_demo_runtime'}
+  ];
+  const networkCodes = new Set(['ECONNREFUSED','ETIMEDOUT','ENOTFOUND','EAI_AGAIN','ECONNRESET','ECONNABORTED','ENETUNREACH','EHOSTUNREACH','ERR_TLS_CERT_ALTNAME_INVALID','SELF_SIGNED_CERT_IN_CHAIN','DEPTH_ZERO_SELF_SIGNED_CERT','UNABLE_TO_VERIFY_LEAF_SIGNATURE','UNABLE_TO_GET_ISSUER_CERT_LOCALLY','CERT_HAS_EXPIRED']);
+  async function probe(target) {
+    const result = {test: target.test, authenticated: false, identityVerified: false, readOnly: false, tlsVerified: false, stage: 'connect', status: 'FAIL'};
+    let client;
+    try {
+      client = new Client({host: target.host, port: target.port, user: target.user, database: 'postgres', password: p.password,
+        ssl: {...p.ssl}, connectionTimeoutMillis: 3000, query_timeout: 2000,
+        statement_timeout: 2000, options: '-c default_transaction_read_only=on'});
+      await client.connect();
+      result.authenticated = true;
+      const stream = client.connection?.stream;
+      result.tlsVerified = stream?.encrypted === true && stream?.authorized === true;
+      result.stage = 'readback';
+      const reply = await client.query("SELECT current_user AS role, current_database() AS database, current_setting('transaction_read_only') AS read_only");
+      result.identityVerified = reply.rows?.length === 1 && reply.rows[0].role === 'teach_v2_demo_runtime' && reply.rows[0].database === 'postgres';
+      result.readOnly = reply.rows?.[0]?.read_only === 'on';
+      if (result.identityVerified && result.readOnly && result.tlsVerified) result.status = 'PASS';
+      else result.code = 'READBACK_NOT_VERIFIED';
+    } catch (error) {
+      result.code = typeof error?.code === 'string' && (/^[0-9A-Z]{5}$/.test(error.code) || networkCodes.has(error.code)) ? error.code : 'UNCLASSIFIED';
+    } finally {
+      if (client) {
+        let timer;
+        try {
+          await Promise.race([
+            Promise.resolve().then(() => client.end()).catch(() => {result.cleanupFailed = true; try {client.connection?.stream?.destroy();} catch {}}),
+            new Promise(resolve => {timer = setTimeout(() => {result.cleanupFailed = true; try {client.connection?.stream?.destroy();} catch {} resolve();}, 500);})
+          ]);
+        } finally {clearTimeout(timer);}
+        if (result.cleanupFailed) result.status = 'FAIL';
+      }
+    }
+    return result;
+  }
+  const tests = await Promise.all(targets.map(probe));
+  let comparison = 'INCONCLUSIVE';
+  if (tests.every(t => t.status === 'PASS')) comparison = 'BOTH_AUTHENTICATED';
+  else if (tests.every(t => !t.authenticated && t.code === '28P01')) comparison = 'BOTH_REJECTED_PASSWORD';
+  else if (tests[1].status === 'PASS' && !tests[0].authenticated && tests[0].code === '28P01') comparison = 'DIRECT_ACCEPTED_POOLER_REJECTED';
+  return {kind: 'TEACH_DATABASE_LOGIN_COMPARISON', sourceCommit, credentialSource: 'same-production-environment-value', tests, comparison};
+}
+
+async function runProductionLoginComparison(manifest) {
+  if (process.env.VERCEL !== '1' || process.env.VERCEL_ENV !== 'production') return;
+  let result;
+  try {
+    const configUrl = pathToFileURL(resolve(manifest.output, 'functions/demo.func/src/bootstrap/demo-successor/runtime-config.js')).href;
+    const {captureRuntimeConfiguration} = await import(configUrl);
+    result = await compareDatabaseLogins(captureRuntimeConfiguration(process.env), {sourceCommit: manifest.sourceCommit});
+  } catch {result = {kind: 'TEACH_DATABASE_LOGIN_COMPARISON', status: 'BLOCKED', reason: 'CONFIGURATION_NOT_VERIFIED'};}
+  console.info(JSON.stringify(result));
+}
 
 /** Read-only operator diagnostics; the reviewed handler retains every admission check. */
 export function addVercelStartupDiagnostics(bundle) {
@@ -121,7 +191,8 @@ export function restoreVercelConfigFormatting(root) {
 /** Publish the existing reviewed Node adapter as Build Output API output.
  * Configuration remains server-only; missing configuration or Node patch drift
  * still denies through the existing accepting entrypoint before pool creation.
- * This build neither reads credentials nor connects to a provider or database.
+ * This packaging function neither reads credentials nor connects to a database.
+ * The Production CLI runs the separate read-only login comparison afterward.
  */
 export function buildVercelRelease(root = process.cwd()) {
   root = resolve(root);
@@ -201,5 +272,9 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     delete env.npm_execpath;
     execFileSync('pnpm', ['exec', process.execPath, fileURLToPath(import.meta.url)],
       {cwd: process.cwd(), env, timeout: 25000, stdio: 'inherit'});
-  } else console.log(JSON.stringify(buildVercelRelease(process.argv[2])));
+  } else {
+    const manifest = buildVercelRelease(process.argv[2]);
+    console.log(JSON.stringify(manifest));
+    await runProductionLoginComparison(manifest);
+  }
 }
