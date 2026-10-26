@@ -9,10 +9,12 @@ export const KITCHEN_ENGINEERING_MANIFEST = `${KITCHEN_ENGINEERING_BASE}/enginee
 export const KITCHEN_ENGINEERING_REVIEW = `${KITCHEN_ENGINEERING_BASE}/engineering-independent-review.json`;
 // Only the genuine independent reviewer supplies this seal. This one literal
 // alone is normalized to break the review/self-hash cycle; old seals never move.
-export const KITCHEN_ENGINEERING_REVIEW_SHA256 = 'a61d7e896c88a3333d91cb27cd2beca29a422cd8da74fe162fc511bf786168cf';
+export const KITCHEN_ENGINEERING_REVIEW_SHA256 = 'd220388a6a61b6de1be850f78c186bc5e0e683a0a40472aed690e57fe9c939c5';
 export const KITCHEN_SOURCE_REVISIONS = Object.freeze([
   '.github/workflows/development-self-audit.yml',
   'scripts/verification/self-audit-workflow.mjs',
+  'scripts/verification/run-hosted-source-check.mjs',
+  'scripts/verification/validator-partitions.mjs',
   'scripts/tests/hosted-loopback-postgres.test.mjs',
   'scripts/tests/validate-hosted-ci.mjs',
   'verification/workflow-lifecycle/inventory.json',

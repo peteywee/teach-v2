@@ -1,8 +1,8 @@
 {
   "review_id": "TEACH-DEMO-KITCHEN-ENGINEERING-REVIEW-2026-10-26",
-  "manifest_sha256": "7dd2bd2ec37ab82451bd63847210ce682da5137666afbd98c31dc169b2aebb05",
+  "manifest_sha256": "4d59e7dd747db167b148c06f52f53939c4c5fe29fb54e0cc92f1956585e44aae",
   "reviewer": "/root/reconcile_teach_hosting_direction",
-  "reviewed_at_utc": "2026-10-26T10:28:00Z",
+  "reviewed_at_utc": "2026-10-26T11:04:15Z",
   "outcome": "PASS",
   "source_edits_by_reviewer": false,
   "scope": "BOUNDED_KITCHEN_SOURCE_AND_GUARD_SUCCESSOR",
@@ -13,19 +13,20 @@
   "security_grants_authorized": false,
   "deployment_authorized": false,
   "unresolved_scope_blockers": [],
-  "review_basis": "Independent read-only six-source hosted-proof and finalizer-fixture delta: all 50 baseline predecessors and 75 current normalized source hashes verified. The isolated-schema proof now requires exactly eight fresh migrations and an eight-total zero-application replay, matching the sealed historical seven plus sole 0007 successor; all other snapshots, privilege probes, target guards and SQL remain unchanged. One recovery fixture selects the exact audit finalizer. The single frozen validator case now requires both its original first-if mutation and matcher on authenticated predecessor inputs and an exact unique current finalizer mutation with the specific ordinary-exit denial. Other 219 declarations, all 220 original declaration bytes, the 115-case transition manifest and existing journal triple oracle remain intact. The pure partition-selection VM receives only a null transition binding; actual assertions remain separately exercised. No workflow, lifecycle admission, API, SQL, permission, timeout or scheduling change. Actual Docker topology and production runtime remain unproven by source review.",
+  "review_basis": "Independent read-only finite timing refinement: all 52 baseline predecessors and 77 current normalized source hashes verified. Exactly six named validator ordinals move within the same fourteen partitions; the other 214 assignments, all 220 original declarations, immutable transition pins and 52-stage Node20 plan remain unchanged. The authority runner changes only its fixed worker count from two to three with corresponding concurrency controls; every one of 59 slots, deterministic result order, failure drain, process-group cleanup, five-second child ceiling and 25-second outer ceiling remain intact. The former schema command becomes two explicitly named mandatory receipts covering the same seven direct files and existing recovery import closure, with exact 8 plus 41 successful case inventories and no skipped, duplicate, unknown, nested or malformed TAP results. Both steps are required by exact workflow and lifecycle inventory; obsolete schema receipt names are rejected. Schema test bodies outside the two extended hosted-CI controls, all nine other hosted commands, target guards, migration SQL and production permissions are unchanged. Diagnostic timings inform scheduling but do not establish final exact-source or production success.",
   "independent_local_checks": [
-    "All 50 baseline predecessor bytes independently matched git show 884d829e and all 75 current normalized source hashes matched the manifest",
-    "Exact six-source manifest delta inspected; two migration-count assertions and exact recovery finalizer selector verified",
-    "Original 220 declaration block independently matched baseline byte-for-byte with SHA256 b6b6e3e319b45dd18776e072833698cde6cb2ea21f4552e2f0c71f14fb2460bb; original 115-case manifest and journal transition unchanged",
-    "Named-case binding, exact mutation hash, unique current target, AND-composed predecessor/current ordinary-exit diagnostics, negative meta-tests and pure-VM null binding inspected",
-    "Compiler lineage, target guards, owned fixture helpers, workflow, lifecycle admission and both 0007 SQL bodies matched previous reviewed source bytes; git diff --check passed"
+    "All 52 baseline predecessor bytes independently matched git show 884d829e and all 77 current normalized source hashes matched the manifest",
+    "Exact six ordinal moves independently checked; all other 214 assignments unchanged and fourteen-partition union contains every original ordinal exactly once",
+    "Original 220 declarations, 115-case transition manifest, Node20 stage plan/catalog, lifecycle admission, database target guards and both 0007 SQL bodies independently matched prior source",
+    "Whole-runner delta inspected as one additional fixed worker with matching tests; remaining runOne, limits, process-group behavior and ordered failure collection unchanged",
+    "Saved unsplit 49-case diagnostic output independently matched the exact 8/41 catalog union; both saved split TAP logs parsed successfully; four malformed/duplicate/bailout probes independently rejected",
+    "Nine other hosted commands and original seven direct schema files matched prior source; workflow template and derived lifecycle inventory matched committed candidates exactly; git diff --check passed"
   ],
   "remaining_release_checks": [
-    "Coherent sealed/tamper sweep, exact finalizer shard 8 and clean affected hosted schema/model/nonowner PostgreSQL proofs",
-    "Required exact-head CI including actual Docker host-network kitchen PostgreSQL proof and complete later Node24 lane",
+    "Clean exact-source all fourteen partition timings, both mandatory schema receipts, aggregate regressions and independent sealed/tamper sweep",
+    "Required exact-head CI on pinned Node20 and Node24 including actual Docker host-network kitchen PostgreSQL proof and complete hosted lane",
     "Authorized production migration and exact-revision deployment verification",
     "Fresh live kitchen and unchanged training/reset/logout acceptance"
   ],
-  "supersedes_review_sha256": "39d653ec99f76761a96c590c77872c552ff26b77eef8c7fe5d0268ade884bd7e"
+  "supersedes_review_sha256": "a61d7e896c88a3333d91cb27cd2beca29a422cd8da74fe162fc511bf786168cf"
 }

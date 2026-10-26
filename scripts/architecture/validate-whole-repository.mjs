@@ -17,7 +17,7 @@ export function discoverAuthorityValidators(root) {
  return scripts.sort();
 }
 
-/** Two bounded, no-argument read-only validator children at a time. Every slot
+/** Three bounded, no-argument read-only validator children at a time. Every slot
  * runs once; results retain inventory order. There is no shared proof cache or
  * skipped validator. Children inherit the umbrella's process group so the outer
  * 25s self-audit SIGKILL also terminates them, rather than orphaning detached work. */
@@ -48,7 +48,7 @@ export async function runAuthorityValidators(root,scripts,{timeoutMs=5000,spawnI
   timer=setTimeout(()=>{failure='validator timed out after '+timeoutMs+'ms';stop();},timeoutMs);
  });
  const worker=async()=>{for(;;){const index=next++;if(index>=scripts.length)return;results[index]=await runOne(scripts[index]);}};
- await Promise.all([worker(),worker()]);return results;
+ await Promise.all([worker(),worker(),worker()]);return results;
 }
 
 async function main() {

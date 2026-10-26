@@ -1,4 +1,4 @@
-import {VALIDATOR_PARTITION_COUNT,validatorPartitionOrdinals,validatorPartitionForOrdinal,assertValidatorInventory,WHOLE_REPOSITORY_CONTROLS,REGISTRATION_TEST_NAMES,REGISTRATION_ENTRY_PATTERN,REGISTRATION_REMAINDER_PATTERN} from '../verification/validator-partitions.mjs';
+import {VALIDATOR_PARTITION_COUNT,validatorPartitionOrdinals,validatorPartitionForOrdinal,assertValidatorInventory,WHOLE_REPOSITORY_CONTROLS,REBALANCED_VALIDATOR_CASES,REGISTRATION_TEST_NAMES,REGISTRATION_ENTRY_PATTERN,REGISTRATION_REMAINDER_PATTERN} from '../verification/validator-partitions.mjs';
 import assert from 'node:assert/strict';
 import { after, test } from 'node:test';
 import { createHash } from 'node:crypto';
@@ -1074,7 +1074,7 @@ test('live coverage requires physical validator slot 56 and its bounded mutation
 
 test('authenticated predecessor authority umbrella retains five-second physical failure propagation', () => {
   // Keep the real original sequential assertion as a historical source proof.
-  // The current bounded two-child runner has its own mandatory executable suite.
+  // The current bounded three-child runner has its own mandatory executable suite.
   const source=kitchenPredecessor('scripts/architecture/validate-whole-repository.mjs').replace(/^#!.*\n/,'').replace(/^import .*;\n/gm,'');
   const calls=[], output=[];
   assert.throws(()=>runInNewContext(source, {
@@ -1089,7 +1089,7 @@ test('authenticated predecessor authority umbrella retains five-second physical 
   assert.equal(physical.command,process.execPath); assert.equal(physical.options.timeout,5000);
   assert.match(output.join('\n'),/physical-negative-control/);
 });
-test('current two-child authority runner regression suite is required in the exact bounded catalog',()=>{
+test('current three-child authority runner regression suite is required in the exact bounded catalog',()=>{
   const prior=JSON.parse(kitchenPredecessor('verification/whole-repository/self-audit-plan.json')).stages.find(x=>x.id==='audit-regressions');
   const current=expectedPlan.stages.find(x=>x.id==='audit-regressions');
   assert.deepEqual(current,{...prior,args:[...prior.args,AUDIT_RUNNER_TEST]});
@@ -1113,7 +1113,7 @@ test('current authority runner executes all 59 exact slots and retains ordered p
     return child;
   };
   const results=await runAuthorityValidators(ROOT,paths,{spawnImpl});
-  assert.equal(calls.length,59);assert.equal(maxActive,2);assert.equal(active,0);
+  assert.equal(calls.length,59);assert.equal(maxActive,3);assert.equal(active,0);
   assert.deepEqual(calls.map(call=>call.args[0]),paths);assert.deepEqual(results.map(result=>result.path),paths);
   for(const call of calls){
     assert.equal(call.command,process.execPath);assert.equal(call.args.length,1);assert.equal(call.options.cwd,ROOT);
@@ -1155,7 +1155,19 @@ test('fourteen bounded partitions isolate both whole-audit controls and retain e
  assert.deepEqual(partitions.flat().sort((a,b)=>a-b),all);
  assert.equal(new Set(partitions.flat()).size,220);
  assert.deepEqual(partitions[12],[152]);assert.deepEqual(partitions[13],[153]);
- for(let i=0;i<12;i++)assert.deepEqual(partitions[i],all.filter(n=>n%12===i&&n!==152&&n!==153));
+ const moved=new Map([[108,3],[120,4],[144,4],[176,12],[180,4],[201,5]]);
+ for(let i=0;i<12;i++)assert.deepEqual(partitions[i],all.filter(n=>(moved.get(n)??n%12+1)===i+1&&n!==152&&n!==153));
+ for(const ordinal of all.filter(n=>!moved.has(n)))assert.equal(validatorPartitionForOrdinal(ordinal),ordinal===152?13:ordinal===153?14:ordinal%12+1,'all other 214 assignments remain unchanged');
+ assert.deepEqual(REBALANCED_VALIDATOR_CASES.map(row=>[row.ordinal,row.name,row.partition]),[
+  [108,'foundation: repository totals fails',3],
+  [120,'p05 physical evidence: production execution fails',4],
+  [144,'integration: invented relationship count fails',4],
+  [176,'integration: future table cannot hide in existing module',12],
+  [180,'integration: missing future evidence plan fails',4],
+  [201,'decision closure: registered policy and 24 denial regressions pass',5],
+ ]);
+ assert.equal(Object.isFrozen(REBALANCED_VALIDATOR_CASES),true);assert.ok(REBALANCED_VALIDATOR_CASES.every(Object.isFrozen));
+ for(const row of REBALANCED_VALIDATOR_CASES)assert.equal(workerNames[row.ordinal],row.name);
  const stages=expectedPlan.stages.filter(s=>s.id.startsWith('validator-shard-'));
  assert.deepEqual(stages.map(s=>s.args[1]),Array.from({length:14},(_,i)=>`--shard=${i+1}/14`));
  for(const ordinal of [-1,220,NaN,1.5,'152'])assert.throws(()=>validatorPartitionForOrdinal(ordinal),/exact validator ordinal/);

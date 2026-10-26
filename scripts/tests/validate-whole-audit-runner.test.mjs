@@ -17,7 +17,7 @@ test('discovery retains all standalone slots and exact exclusions, in stable ord
   assert.deepEqual(discoverAuthorityValidators(root),['scripts/architecture/audit-a.mjs','scripts/architecture/validate-repository-integration.mjs','scripts/kernel/validate-z.mjs']);
  }finally{rmSync(root,{recursive:true,force:true});}
 });
-test('runner executes every slot once with at most two children and returns inventory order',async()=>{
+test('runner executes every slot once with at most three children and returns inventory order',async()=>{
  const paths=['slow','fast','fails','last'],started=[];let active=0,max=0;
  const spawnImpl=(command,args,options)=>{
   assert.equal(command,process.execPath);assert.equal(options.shell,false);assert.equal(options.detached,false);assert.deepEqual(options.stdio,['ignore','pipe','pipe']);assert.equal(args.length,1);
@@ -26,7 +26,7 @@ test('runner executes every slot once with at most two children and returns inve
   setTimeout(()=>{child.stdout.end(path);active--;child.emit('close',path==='fails'?1:0,null);},path==='slow'?35:5);return child;
  };
  const results=await runAuthorityValidators('/tmp',paths,{spawnImpl});
- assert.equal(max,2);assert.deepEqual(started,paths);assert.deepEqual(results.map(x=>x.path),paths);assert.deepEqual(results.map(x=>x.status),[0,0,1,0]);assert.ok(results.every(x=>x.stdout===x.path));
+ assert.equal(max,3);assert.deepEqual(started,paths);assert.deepEqual(results.map(x=>x.path),paths);assert.deepEqual(results.map(x=>x.status),[0,0,1,0]);assert.ok(results.every(x=>x.stdout===x.path));
 });
 test('launch errors do not skip subsequent slots or fabricate success',async()=>{
  let n=0;const spawnImpl=()=>{n++;throw new Error('fixture launch failure');};
