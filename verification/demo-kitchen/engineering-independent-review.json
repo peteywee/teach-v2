@@ -1,8 +1,8 @@
 {
   "review_id": "TEACH-DEMO-KITCHEN-ENGINEERING-REVIEW-2026-10-26",
-  "manifest_sha256": "c96f3a38ec417fd44449a605b45b58c8d9e6bc6c296187db0ef6ac128ec1e59c",
+  "manifest_sha256": "a45d13d8d7dd9a64ab971216f12ff319cb7d923e497928c2e510420cec202b93",
   "reviewer": "/root/reconcile_teach_hosting_direction",
-  "reviewed_at_utc": "2026-10-26T05:22:47Z",
+  "reviewed_at_utc": "2026-10-26T06:56:35Z",
   "outcome": "PASS",
   "source_edits_by_reviewer": false,
   "scope": "BOUNDED_KITCHEN_SOURCE_AND_GUARD_SUCCESSOR",
@@ -13,17 +13,18 @@
   "security_grants_authorized": false,
   "deployment_authorized": false,
   "unresolved_scope_blockers": [],
-  "review_basis": "Independent read-only deny-fast delta review: all 43 baseline predecessors and 67 current normalized source hashes verified; only the runtime registration inspector source hash changed. Thirteen added lines reject a missing or nonapproved pinned entry only after existing immutable proposal/source validation, returning errors with no source, closure or predecessor authority. The family map is invocation-local. Surviving candidates execute the entire unchanged valid-path successor, overlay, metadata, inventory and closure logic. Existing 262 mutation-test assertions, scheduler, SQL, permissions and all operation bounds are unchanged.",
+  "review_basis": "Independent read-only APPLY-test scheduling and VM fixture delta: all 47 baseline predecessors and 71 current normalized source hashes verified. Ten original APPLY declaration/mutation bodies, assertion expression and runGuard options remain unchanged; fixed two-worker execution assigns exact disjoint groups of five, validates ordinary exits and single exact reports, drains both workers and orders results. The collector matches the previously reviewed migration protocol. No per-child timeout existed in this suite and none is claimed; the unchanged outer 25000 ms group bound remains. A single no-transition stub is added only to the existing mocked partition-selection VM with empty predecessor cases; all 220 partition assertions and actual transition oracles remain unchanged. No new stage, API, SQL or permission change.",
   "independent_local_checks": [
-    "All 43 baseline and 67 current hash comparisons passed; predecessor snapshots unchanged",
-    "Exact diff confirms only thirteen added necessary-condition denial lines and no removed or changed valid-path checks",
-    "Existing 262 status/deletion mutation test bytes unchanged; execution held for isolated post-seal verification"
+    "All 47 baseline and 71 current source hash comparisons passed",
+    "Original ten APPLY declaration/mutation bodies and runGuard function independently matched previous reviewed source bytes",
+    "Collector matched previously independently exercised migration collector after function/diagnostic-name normalization",
+    "Exact one-property partition-only VM context delta inspected; actual transition tests and all partition assertions unchanged"
   ],
   "remaining_release_checks": [
-    "Unchanged 262 status/deletion sweep and valid-path/tamper regressions on the new exact seal",
-    "Required exact-head CI and unchanged 25000 ms stage bounds",
+    "Exact ten-case APPLY suite within unchanged 25000 ms bound, complete audit regressions and final sealed/tamper sweep",
+    "Required exact-head CI",
     "Authorized production migration and exact-revision deployment verification",
     "Fresh live kitchen and unchanged training/reset/logout acceptance"
   ],
-  "supersedes_review_sha256": "4c611eda777cc9feaad8f03cb0cf28d0bbd6f84dde405a3a374d530fb3337af8"
+  "supersedes_review_sha256": "9b370ccc80f4a8873ed2eed139a233dd3e5870ffbb845ff31886ce62b6924699"
 }

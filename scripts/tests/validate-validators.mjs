@@ -13,6 +13,7 @@
 // Usage: node scripts/tests/validate-validators.mjs
 // Exit 0 = all tests pass. Exit 1 = at least one test failed.
 
+import {withKitchenPredecessor,kitchenValidatorTransition} from './kitchen-predecessor-fixture.mjs';
 import {VALIDATOR_PARTITION_COUNT,validatorPartitionForOrdinal,assertValidatorInventory} from '../verification/validator-partitions.mjs';
 import {predecessorFixture,exactCurrentDenial,readPredecessorCases,PREDECESSOR_COMMIT,PREDECESSOR_TREE} from '../verification/demo-validator-predecessor.mjs';
 import { createHash } from "node:crypto";
@@ -165,7 +166,24 @@ function test(name, script, mutate, expect) {
     if(transition&&(transition.script!==script||transition.original_pattern!==(expect.pattern?.source??null)||transition.original_outcome!==(expect.pass?'PASS':'DENIAL')||transition.original_mutation_sha256!==createHash('sha256').update(mutate.toString()).digest('hex')))throw Error('exact original predecessor case declaration required');
     if(transition?.current_seal_probe_path){const path=join(dir,transition.current_seal_probe_path);writeFileSync(path,readFileSync(path,'utf8')+'\n');}
     const r = runValidator(dir, transition?.current_probe_script??script);
-    let ok = transition?exactCurrentDenial(r,transition.current_diagnostic,dir):validatorResultMatches(r, expect);
+    const kitchenTransition = kitchenValidatorTransition(name, transition);
+    const currentDiagnostic = kitchenTransition?.current_diagnostic ?? transition?.current_diagnostic;
+    let ok = transition?exactCurrentDenial(r,currentDiagnostic,dir):validatorResultMatches(r, expect);
+    let recipeDenial = null;
+    if (kitchenTransition) {
+      // Authenticate a pristine successor before reconstructing the exact
+      // recipe-era fixture. Keep its original denial as a third independent
+      // oracle, not an alternative to the current kitchen denial or b90 property.
+      const recipe = scratch();
+      try {
+        const recipeResult = withKitchenPredecessor(recipe, () => {
+          mutate(recipe);
+          return runValidator(recipe, script);
+        });
+        recipeDenial = exactCurrentDenial(recipeResult, transition.current_diagnostic, recipe);
+        ok = ok && recipeDenial;
+      } finally { rmSync(recipe,{recursive:true,force:true}); }
+    }
     let property;
     if(transition){
       const predecessor=predecessorFixture(ROOT);
@@ -180,7 +198,7 @@ function test(name, script, mutate, expect) {
         ? `failed as expected (${expect.pattern})`
         : `expected failure matching ${expect.pattern}, got exit ${r.exit}: ${r.output.slice(0, 1500)}`;
     }
-    if(transition)detail=`PAIRED predecessor-input/current-validator property (${PREDECESSOR_COMMIT}/${PREDECESSOR_TREE}): ${validatorResultMatches(property,expect)?'PASS':'FAIL'}; current exact-seal denial: ${exactCurrentDenial(r,transition.current_diagnostic,dir)?'PASS':'FAIL'}; ${detail}${!validatorResultMatches(property,expect)?'\nProperty output: '+property.output.slice(0,1500):''}`;
+    if(transition)detail=`PAIRED predecessor-input/current-validator property (${PREDECESSOR_COMMIT}/${PREDECESSOR_TREE}): ${validatorResultMatches(property,expect)?'PASS':'FAIL'}; current exact-seal denial: ${exactCurrentDenial(r,currentDiagnostic,dir)?'PASS':'FAIL'}${kitchenTransition?'; authenticated recipe-era exact-seal denial: '+(recipeDenial?'PASS':'FAIL'):''}; ${detail}${!validatorResultMatches(property,expect)?'\nProperty output: '+property.output.slice(0,1500):''}`;
     results.push({ name, ordinal, ok, detail });
   } finally {
     rmSync(dir, { recursive: true, force: true });

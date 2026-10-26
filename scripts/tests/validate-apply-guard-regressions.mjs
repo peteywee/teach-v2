@@ -3,12 +3,16 @@
 // Each case runs in a scratch copy so repository state is never mutated.
 
 import { execFileSync } from 'node:child_process';
+import assert from 'node:assert/strict';
 import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, relative, resolve, sep } from 'node:path';
+import { Worker, isMainThread, parentPort, workerData } from 'node:worker_threads';
 
 const ROOT = resolve(new URL('.', import.meta.url).pathname, '../..');
 const results = [];
+const inventory = [];
+if (!isMainThread && ![0, 1].includes(workerData?.index)) throw Error('exact fixed APPLY worker required');
 
 function scratch() {
   const dir = mkdtempSync(join(tmpdir(), 'pin-guard-'));
@@ -42,18 +46,21 @@ function runGuard(dir) {
 }
 
 function test(name, mutate, expect) {
+  const ordinal = inventory.length; inventory.push(name);
+  if (isMainThread || ordinal % 2 !== workerData.index) return;
   const dir = scratch();
   try {
     mutate(dir);
     const r = runGuard(dir);
     const ok = expect.pass ? r.exit === 0 : r.exit !== 0 && expect.pattern.test(r.output);
     results.push({
+      ordinal,
       name,
       ok,
       detail: ok ? 'as expected' : `exit ${r.exit}: ${r.output.slice(0, 500)}`,
     });
   } catch (e) {
-    results.push({ name, ok: false, detail: e.message });
+    results.push({ ordinal, name, ok: false, detail: e.message });
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -179,13 +186,44 @@ test(
 
 test('clean repository passes', () => {}, { pass: true });
 
-let failed = 0;
-for (const r of results) {
-  console.log(`${r.ok ? 'PASS' : 'FAIL'}  ${r.name}`);
-  if (!r.ok) {
-    failed++;
-    console.log(`      ${r.detail}`);
-  }
+// Fixed disjoint original ordinals only: no new stage or operation allowance.
+// Both workers and their unchanged CLI children inherit the outer process group.
+function awaitApplyWorker(worker, index) {
+  return new Promise((resolveWorker, rejectWorker) => {
+    let report, fault, messages = 0;
+    worker.on('message', value => { if (++messages !== 1) fault = Error('duplicate APPLY worker report'); report = value; });
+    worker.once('error', error => { fault = error; });
+    worker.once('exit', code => {
+      if (fault) rejectWorker(fault);
+      else if (code !== 0 || messages !== 1 || !report) rejectWorker(Error(`APPLY worker ${index} exited ${code} without an ordinary completed report`));
+      else resolveWorker(report);
+    });
+  });
 }
-console.log(`\n${results.length - failed}/${results.length} APPLY guard regression tests passed.`);
-process.exit(failed ? 1 : 0);
+if (isMainThread) {
+  const pending = [0, 1].map(index => {
+    try { return awaitApplyWorker(new Worker(new URL(import.meta.url), { workerData: { index } }), index); }
+    catch (error) { return Promise.reject(error); }
+  });
+  const settled = await Promise.allSettled(pending);
+  try {
+    assert.equal(inventory.length, 10); assert.equal(new Set(inventory).size, 10);
+    if (settled.some(row => row.status !== 'fulfilled')) throw settled.find(row => row.status === 'rejected').reason;
+    for (const [index, { value: report }] of settled.entries()) {
+      assert.deepEqual(report.inventory, inventory);
+      const expected = inventory.flatMap((name, ordinal) => ordinal % 2 === index ? [{ name, ordinal }] : []);
+      assert.ok(Array.isArray(report.results)); assert.equal(report.results.length, 5);
+      assert.deepEqual(report.results.map(({ name, ordinal }) => ({ name, ordinal })), expected);
+      assert.ok(report.results.every(row => typeof row.ok === 'boolean' && typeof row.detail === 'string'));
+      results.push(...report.results);
+    }
+    results.sort((a, b) => a.ordinal - b.ordinal);
+    let failed = 0;
+    for (const r of results) {
+      console.log(`${r.ok ? 'PASS' : 'FAIL'}  ${r.name}`);
+      if (!r.ok) { failed++; console.log(`      ${r.detail}`); }
+    }
+    console.log(`\n${results.length - failed}/${results.length} APPLY guard regression tests passed.`);
+    process.exitCode = failed ? 1 : 0;
+  } catch (error) { console.error(`APPLY worker failure: ${error.message}`); process.exitCode = 1; }
+} else parentPort.postMessage({ inventory, results });

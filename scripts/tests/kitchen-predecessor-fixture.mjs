@@ -25,3 +25,19 @@ export function withKitchenPredecessor(root, work) {
     for(const [path,text] of live){mkdirSync(dirname(join(root,path)),{recursive:true});writeFileSync(join(root,path),text);}
   }
 }
+
+// Exactly one existing 220-case declaration acquired a newer kitchen denial.
+// This does not replace its original b90 property or recipe-era current oracle.
+export const KITCHEN_VALIDATOR_TRANSITION = Object.freeze({
+  name: 'slice-p04 implementation: missing journal entry fails',
+  script: 'scripts/persistence/validate-slice-p04-implementation-boundary.mjs',
+  original_diagnostic: 'demo physical admission: original journal prefix must remain immutable',
+  current_diagnostic: 'demo kitchen engineering: current source differs: drizzle/meta/_journal.json',
+});
+export function kitchenValidatorTransition(name, transition) {
+  if (name !== KITCHEN_VALIDATOR_TRANSITION.name) return null;
+  assert.equal(transition?.name, name, 'named original transition required');
+  assert.equal(transition?.script, KITCHEN_VALIDATOR_TRANSITION.script, 'original transition validator required');
+  assert.equal(transition?.current_diagnostic, KITCHEN_VALIDATOR_TRANSITION.original_diagnostic, 'original recipe-era diagnostic required');
+  return KITCHEN_VALIDATOR_TRANSITION;
+}
