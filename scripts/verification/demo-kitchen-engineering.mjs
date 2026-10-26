@@ -9,9 +9,12 @@ export const KITCHEN_ENGINEERING_MANIFEST = `${KITCHEN_ENGINEERING_BASE}/enginee
 export const KITCHEN_ENGINEERING_REVIEW = `${KITCHEN_ENGINEERING_BASE}/engineering-independent-review.json`;
 // Only the genuine independent reviewer supplies this seal. This one literal
 // alone is normalized to break the review/self-hash cycle; old seals never move.
-export const KITCHEN_ENGINEERING_REVIEW_SHA256 = '8f2f3c21fc69960cddb99683ab60617f5badf865f7dda7ba43ceca31500de3ba';
+export const KITCHEN_ENGINEERING_REVIEW_SHA256 = 'a61d7e896c88a3333d91cb27cd2beca29a422cd8da74fe162fc511bf786168cf';
 export const KITCHEN_SOURCE_REVISIONS = Object.freeze([
   '.github/workflows/development-self-audit.yml',
+  'scripts/verification/self-audit-workflow.mjs',
+  'scripts/tests/hosted-loopback-postgres.test.mjs',
+  'scripts/tests/validate-hosted-ci.mjs',
   'verification/workflow-lifecycle/inventory.json',
   'scripts/kernel/demo-runtime-registration.mjs',
   'scripts/kernel/demo-recipes-registration.mjs',
@@ -69,6 +72,7 @@ export const KITCHEN_REVIEWED_ADDITIONS = Object.freeze([
   'scripts/tests/validate-demo-kitchen-engineering.mjs',
   'scripts/tests/validate-whole-audit-runner.test.mjs',
   'scripts/verification/demo-storage-partitions.mjs',
+  'scripts/verification/kitchen-loopback-postgres.mjs',
   'scripts/tests/kitchen-predecessor-fixture.mjs',
   'tests/integration/demo/kitchen-content-guard.test.ts',
   'tests/demo/kitchen-content.test.ts',

@@ -65,7 +65,7 @@ test('workflow drift blocks the new seal and still exercises specific checkpoint
 // Exercise every existing workflow-negative route, not just the leaf inspector.
 for(const [name,script,from,to,pattern] of [
  ['omitted checkpoint','scripts/verification/validate-development-self-audit.mjs','--stage typecheck','--stage invented',/complete ordered/],
- ['missing finalizer','scripts/verification/validate-development-self-audit.mjs','if: always()','if: success()',/finalize and be retained/],
+ ['missing finalizer','scripts/verification/validate-development-self-audit.mjs','id: audit_finalize\n        if: always()','id: audit_finalize\n        if: success()',/finalize and be retained/],
  ['missing Identity PG','scripts/verification/validate-development-self-audit.mjs','run: node scripts/verification/run-self-audit.mjs --stage postgres-identity-commands','run: echo skipped',/atomic Identity integration/],
  ['missing session PG','scripts/verification/validate-legacy-foundation-recovery.mjs','run: node scripts/verification/run-self-audit.mjs --stage postgres-session-commands','run: echo skipped',/session transaction PG automation/],
  ['path-filtered PR','scripts/architecture/validate-repository-integration.mjs','pull_request:',"pull_request:\n    paths: ['src/**']",/physical proofs must run on every PR and main tree/],

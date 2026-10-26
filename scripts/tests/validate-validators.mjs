@@ -13,7 +13,7 @@
 // Usage: node scripts/tests/validate-validators.mjs
 // Exit 0 = all tests pass. Exit 1 = at least one test failed.
 
-import {withKitchenPredecessor,kitchenValidatorTransition} from './kitchen-predecessor-fixture.mjs';
+import {withKitchenPredecessor,kitchenValidatorTransition,kitchenFinalizerTransition,mutateKitchenFinalizer} from './kitchen-predecessor-fixture.mjs';
 import {VALIDATOR_PARTITION_COUNT,validatorPartitionForOrdinal,assertValidatorInventory} from '../verification/validator-partitions.mjs';
 import {predecessorFixture,exactCurrentDenial,readPredecessorCases,PREDECESSOR_COMMIT,PREDECESSOR_TREE} from '../verification/demo-validator-predecessor.mjs';
 import { createHash } from "node:crypto";
@@ -161,7 +161,11 @@ function test(name, script, mutate, expect) {
   if(shardTotal===VALIDATOR_PARTITION_COUNT?validatorPartitionForOrdinal(ordinal)!==shardIndex:ordinal % shardTotal !== shardIndex-1) return;
   const dir = scratch();
   try {
-    mutate(dir);
+    const finalizerTransition = kitchenFinalizerTransition(name, script, mutate, expect);
+    if (finalizerTransition) {
+      const path = join(dir, '.github/workflows/development-self-audit.yml');
+      writeFileSync(path, mutateKitchenFinalizer(readFileSync(path, 'utf8')));
+    } else mutate(dir);
     const transition=predecessorCases.find(row=>row.name===name);
     if(transition&&(transition.script!==script||transition.original_pattern!==(expect.pattern?.source??null)||transition.original_outcome!==(expect.pass?'PASS':'DENIAL')||transition.original_mutation_sha256!==createHash('sha256').update(mutate.toString()).digest('hex')))throw Error('exact original predecessor case declaration required');
     if(transition?.current_seal_probe_path){const path=join(dir,transition.current_seal_probe_path);writeFileSync(path,readFileSync(path,'utf8')+'\n');}
@@ -169,6 +173,18 @@ function test(name, script, mutate, expect) {
     const kitchenTransition = kitchenValidatorTransition(name, transition);
     const currentDiagnostic = kitchenTransition?.current_diagnostic ?? transition?.current_diagnostic;
     let ok = transition?exactCurrentDenial(r,currentDiagnostic,dir):validatorResultMatches(r, expect);
+    let finalizerProperty = null;
+    if (finalizerTransition) {
+      const recipe = scratch();
+      try {
+        const original = withKitchenPredecessor(recipe, () => {
+          mutate(recipe);
+          return runValidator(recipe, script);
+        });
+        finalizerProperty = validatorResultMatches(original, expect) && exactCurrentDenial(original, finalizerTransition.diagnostic, recipe);
+        ok = ok && exactCurrentDenial(r, finalizerTransition.diagnostic, dir) && finalizerProperty;
+      } finally { rmSync(recipe,{recursive:true,force:true}); }
+    }
     let recipeDenial = null;
     if (kitchenTransition) {
       // Authenticate a pristine successor before reconstructing the exact
@@ -199,6 +215,7 @@ function test(name, script, mutate, expect) {
         : `expected failure matching ${expect.pattern}, got exit ${r.exit}: ${r.output.slice(0, 1500)}`;
     }
     if(transition)detail=`PAIRED predecessor-input/current-validator property (${PREDECESSOR_COMMIT}/${PREDECESSOR_TREE}): ${validatorResultMatches(property,expect)?'PASS':'FAIL'}; current exact-seal denial: ${exactCurrentDenial(r,currentDiagnostic,dir)?'PASS':'FAIL'}${kitchenTransition?'; authenticated recipe-era exact-seal denial: '+(recipeDenial?'PASS':'FAIL'):''}; ${detail}${!validatorResultMatches(property,expect)?'\nProperty output: '+property.output.slice(0,1500):''}`;
+    if(finalizerTransition)detail=`PAIRED authenticated recipe-era original finalizer property: ${finalizerProperty?'PASS':'FAIL'}; exact current finalizer denial: ${exactCurrentDenial(r,finalizerTransition.diagnostic,dir)?'PASS':'FAIL'}; ${detail}`;
     results.push({ name, ordinal, ok, detail });
   } finally {
     rmSync(dir, { recursive: true, force: true });

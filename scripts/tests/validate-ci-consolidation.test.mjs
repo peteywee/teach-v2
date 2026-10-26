@@ -1183,7 +1183,7 @@ test('actual fourteen-partition harness selection executes each declared ordinal
  assert.ok(start>0&&end>start);
  assert.match(workerHarnessSource,/if \(shardTotal !== VALIDATOR_PARTITION_COUNT\) \{/);
  for(let index=1;index<=14;index++){
-  const results=[],context={inventoryNames:[],inventoryCount:0,shardTotal:14,shardIndex:index,VALIDATOR_PARTITION_COUNT,validatorPartitionForOrdinal,predecessorCases:[],kitchenValidatorTransition:()=>null,scratch:()=>'/unused-pure-fixture',rmSync:()=>{},results,runValidator:()=>({exit:0,output:'',ordinaryProcessExit:true}),validatorResultMatches:()=>true};
+  const results=[],context={inventoryNames:[],inventoryCount:0,shardTotal:14,shardIndex:index,VALIDATOR_PARTITION_COUNT,validatorPartitionForOrdinal,predecessorCases:[],kitchenValidatorTransition:()=>null,kitchenFinalizerTransition:()=>null,scratch:()=>'/unused-pure-fixture',rmSync:()=>{},results,runValidator:()=>({exit:0,output:'',ordinaryProcessExit:true}),validatorResultMatches:()=>true};
   const execute=runInNewContext(workerHarnessSource.slice(start,end)+'; test;',context);
   for(const name of workerNames)execute(name,'unused-script',()=>{},{pass:true});
   assert.deepEqual(results.map(row=>row.ordinal),validatorPartitionOrdinals(index));

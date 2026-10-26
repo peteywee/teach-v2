@@ -4,6 +4,8 @@ import {readFileSync} from 'node:fs';
 import {evaluateHostedSourceCheck,hostedSourceChecks} from '../verification/run-hosted-source-check.mjs';
 import {renderConsolidatedProducerWorkflow} from '../verification/self-audit-workflow.mjs';
 import {inspectWorkflowText} from '../verification/workflow-lifecycle-inventory.mjs';
+import {inspectKitchenEngineering} from '../verification/demo-kitchen-engineering.mjs';
+import {expectedPlan} from '../verification/self-audit-catalog.mjs';
 const valid=()=>({kind:'hosted-source-check',started_at:'2026-10-19T00:00:00.000Z',finished_at:'2026-10-19T00:00:15.000Z',stdout_sha256:'c'.repeat(64),stderr_sha256:'d'.repeat(64),check:'schema',command:['node',...hostedSourceChecks.schema],node:'v24.19.0',platform:'linux',expected_sha:'a'.repeat(40),source:{dirty:false,source_sha:'a'.repeat(40),tree_sha:'b'.repeat(40),stamp:'c'.repeat(64),working_digest:'d'.repeat(64)},source_unchanged:true,exit_code:0,timed_out:false,execution_error:null,duration_ms:15000,timeout_ms:25000,runtime_activation:'BLOCKED',shared_or_production_execution_authorized:false});
 test('Node24 lane cannot reuse legacy runtime, dirty source, failure, timeout or activation',()=>{
  assert.deepEqual(evaluateHostedSourceCheck(valid()),[]);
@@ -12,8 +14,25 @@ test('Node24 lane cannot reuse legacy runtime, dirty source, failure, timeout or
 test('same producer retains legacy stage inventory and includes every new bounded check in lifecycle evidence',()=>{
  const text=renderConsolidatedProducerWorkflow();
  assert.equal(readFileSync(new URL('../../.github/workflows/development-self-audit.yml',import.meta.url),'utf8'),text);
- assert.equal((text.match(/run: node scripts\/verification\/run-self-audit.mjs --stage /g)||[]).length,48);
+ const kitchen=inspectKitchenEngineering(new URL('../..',import.meta.url).pathname);
+ assert.equal(kitchen.present,true);assert.deepEqual(kitchen.errors,[]);
+ const stages=source=>[...source.matchAll(/run: node scripts\/verification\/run-self-audit.mjs --stage ([a-z0-9-]+)/g)].map(match=>match[1]);
+ const predecessor=kitchen.predecessorFiles['.github/workflows/development-self-audit.yml'];
+ assert.equal(typeof predecessor,'string');
+ const legacy=stages(predecessor),current=stages(text);
+ assert.equal(legacy.length,48);assert.equal(new Set(legacy).size,48);
+ assert.equal(current.length,52);assert.equal(new Set(current).size,52);
+ assert.deepEqual(current,expectedPlan.stages.map(stage=>stage.id));
+ const added=['demo-kitchen-registration','demo-kitchen-postgres','demo-storage-owner-regressions','demo-storage-integration-regressions'];
+ assert.deepEqual(current.filter(id=>!added.includes(id)),legacy);
+ assert.deepEqual(current.filter(id=>added.includes(id)).sort(),added.slice().sort());
  const jobs=inspectWorkflowText('.github/workflows/development-self-audit.yml',text);assert.equal(jobs.length,1);
+ const stepIds=jobs[0].all_step_ids,kitchenIndex=stepIds.indexOf('audit_demo_kitchen_postgres');
+ assert.deepEqual(stepIds.slice(kitchenIndex-1,kitchenIndex+2),['kitchen_postgres_start','audit_demo_kitchen_postgres','kitchen_postgres_stop']);
+ for(const id of ['kitchen_postgres_start','kitchen_postgres_stop'])assert.equal(stepIds.filter(value=>value===id).length,1);
+ assert.ok(text.includes('id: kitchen_postgres_start\n        run: timeout 25s node scripts/verification/kitchen-loopback-postgres.mjs start'));
+ assert.ok(text.includes('id: kitchen_postgres_stop\n        if: always()\n        run: timeout 25s node scripts/verification/kitchen-loopback-postgres.mjs stop'));
+ assert.ok(text.indexOf('id: kitchen_postgres_stop')<text.indexOf('id: audit_upload'));
  for(const check of Object.keys(hostedSourceChecks)){assert.ok(jobs[0].all_step_ids.includes('hosted_'+check));assert.ok(text.includes(`run: pnpm exec node scripts/verification/run-hosted-source-check.mjs ${check}`));}
  assert.ok(text.indexOf('id: audit_upload')<text.indexOf('id: hosted_node24'));
  assert.ok(text.indexOf('id: hosted_restore_node20')<text.indexOf('id: lifecycle_record'));
