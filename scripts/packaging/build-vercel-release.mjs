@@ -167,6 +167,54 @@ export default async function publicNavigation(incoming,outgoing){
   writeFileSync(path, JSON.stringify({...config, handler: 'vercel-public-navigation.mjs'}));
 }
 
+/** Only this Production build's exact provider hostname may navigate to the public
+ * canonical home. No hostname wildcard, request rewriting, API admission or
+ * deployment-protection change. Older immutable deployments remain unchanged.
+ */
+export function addVercelProductionRootRedirect(bundle, env = process.env) {
+  if (env.VERCEL !== '1' || env.VERCEL_ENV !== 'production') return false;
+  const host = env.VERCEL_URL;
+  // Validate the provider-supplied build value; requests use exact equality in
+  // toHostedRequest, never this pattern or forwarded headers.
+  if (typeof host !== 'string' || !/^teach-v2-[a-z0-9]{1,32}-peteyweetss\.vercel\.app$(?![\s\S])/.test(host)) {
+    throw Error('Exact Production deployment hostname required');
+  }
+  const path = join(bundle, '.vc-config.json');
+  const config = JSON.parse(readFileSync(path, 'utf8'));
+  if (config.handler !== 'vercel-public-navigation.mjs' || config.runtime !== 'nodejs24.x') throw Error('Expected public navigation handler required');
+  writeFileSync(join(bundle, 'vercel-production-root.mjs'), `import handler from './vercel-public-navigation.mjs';
+import {captureRuntimeConfiguration} from './src/bootstrap/demo-successor/runtime-config.js';
+import {toHostedRequest} from './src/bootstrap/demo-hosted/node-adapter.js';
+const deploymentOrigin=${JSON.stringify('https://' + host)};
+const canonicalOrigin='https://teach-v2.vercel.app';
+export default async function productionRoot(incoming,outgoing){
+  if(incoming.method!=='GET'||incoming.url!=='/')return handler(incoming,outgoing);
+  let request;
+  try{
+    if(captureRuntimeConfiguration(process.env).origin!==canonicalOrigin)return handler(incoming,outgoing);
+    request=toHostedRequest(incoming,deploymentOrigin);
+  }catch{return handler(incoming,outgoing);}
+  const headers=request.headers;
+  if(headers.has('origin')||headers.get('sec-fetch-mode')!=='navigate'||headers.get('sec-fetch-dest')!=='document'||
+    !['none','same-origin','same-site','cross-site'].includes(headers.get('sec-fetch-site')))return handler(incoming,outgoing);
+  // Run the unchanged handler first so runtime/configuration failures still deny.
+  let status,responseHeaders,body;
+  await handler(incoming,{writeHead(code,value){status=code;responseHeaders=value;},end(value){body=value;}});
+  let invalidHost=false;
+  try{invalidHost=status===400&&JSON.parse(body).error.code==='INVALID_REQUEST'&&
+    !Object.keys(responseHeaders).some(key=>key.toLowerCase()==='set-cookie');}catch{/* Preserve every other response. */}
+  if(invalidHost){
+    outgoing.writeHead(307,{'location':canonicalOrigin+'/','cache-control':'no-store','referrer-policy':'no-referrer',
+      'content-security-policy':"default-src 'none'; frame-ancestors 'none'",'x-content-type-options':'nosniff'});
+    outgoing.end();return;
+  }
+  outgoing.writeHead(status,responseHeaders);outgoing.end(body);
+}
+`, {flag: 'wx'});
+  writeFileSync(path, JSON.stringify({...config, handler: 'vercel-production-root.mjs'}));
+  return true;
+}
+
 /** Restore only equivalent JSON formatting; changed configuration stays blocked. */
 export function restoreVercelConfigFormatting(root) {
   const path = join(root, 'vercel.json');
@@ -209,6 +257,7 @@ export function buildVercelRelease(root = process.cwd()) {
     addVercelStartupDiagnostics(join(output, 'functions', 'demo.func'));
     addVercelDatabaseDiagnostics(join(output, 'functions', 'demo.func'));
     addVercelPublicNavigation(join(output, 'functions', 'demo.func'));
+    addVercelProductionRootRedirect(join(output, 'functions', 'demo.func'));
     const files = bundleInventory(output);
     writeFileSync(join(output, 'vercel-release-manifest.json'), JSON.stringify({
       kind: 'TEACH_VERCEL_RELEASE_MANIFEST', sourceCommit: manifest.sourceCommit,
