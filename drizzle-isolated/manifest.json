@@ -2,7 +2,7 @@
   "version": 1,
   "schema": "teach_v2_demo",
   "journal": "teach_v2_demo.__drizzle_migrations",
-  "historicalJournalSha256": "82d436f093d623ac3b90785073f7226e7ed2994283754a39084bfdea2aec33e0",
+  "historicalJournalSha256": "c7fe91cffd5a9ed952ef2183f671c67068632f865e2cd22f206d2ca8724e2a40",
   "tables": [
     "audit_events",
     "content_pack_versions",
@@ -110,6 +110,12 @@
       "historicalSha256": "f8c240898131aca26fcaa4a7cb5d11cb84412358901c20f626667de8ee12851f",
       "isolatedSha256": "39b1cb2e6b4db8b052c8b7db85133f81ebf7949f80c15e905f66bf97f88ae280",
       "when": 1792357092279
+    },
+    {
+      "name": "0007_demo_kitchen_content_guard.sql",
+      "historicalSha256": "9fb45f65daebf30479de6cc08d62ee0884a210ca74b9ad377a7bb34c33645655",
+      "isolatedSha256": "83cee79983ae59a537ae1329e09c0aa0e00bcaea72b2468132b1f9d446dbdb58",
+      "when": 1792979340000
     }
   ]
 }

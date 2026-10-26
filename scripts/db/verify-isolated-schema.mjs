@@ -149,10 +149,10 @@ export async function verifyIsolatedSchemaProof({ exerciseRuntime } = {}) {
         assert.deepEqual((await creator.query('SELECT * FROM teach_v2_demo.unrelated')).rows, [{ id: 9 }]);
         await creator.query('DROP SCHEMA teach_v2_demo CASCADE');
       }
-      assert.deepEqual(await applyIsolatedSchemaMigrations(creator), { schema, applied: 7, total: 7 });
+      assert.deepEqual(await applyIsolatedSchemaMigrations(creator), { schema, applied: 8, total: 8 });
       assert.deepEqual(await legacySnapshot(owner), before, 'legacy inventory, ACL, RLS, defaults, sequences, journals or rows changed');
       const first = await isolatedSnapshot(owner);
-      assert.deepEqual(await applyIsolatedSchemaMigrations(creator), { schema, applied: 0, total: 7 });
+      assert.deepEqual(await applyIsolatedSchemaMigrations(creator), { schema, applied: 0, total: 8 });
       assert.deepEqual(await isolatedSnapshot(owner), first, 'second application was not a no-op');
       assert.equal(first.relations.filter((row) => row.relkind === 'r').length, 23);
       assert.equal(first.functions.length, 39);
@@ -214,7 +214,7 @@ export async function verifyIsolatedSchemaProof({ exerciseRuntime } = {}) {
       assert.deepEqual(await isolatedSnapshot(owner), protectedState, 'journal drift rejection mutated schema');
     }
     assert.equal(fingerprints[0], fingerprints[1], 'independent clean replays differ');
-    const result = { postgresMajor: 17, migrations: 7, applicationTables: 22, journalTables: 1, functions: 39, denialAndDefaultProbes: probes, hostileBuiltinProbes: shadowProbes, namedApiRolesTested: 2, legacyUnchanged: true, cleanReplayIdentical: true, runtimeExercised: Boolean(exerciseRuntime), schemaFingerprint: fingerprints[0] };
+    const result = { postgresMajor: 17, migrations: 8, applicationTables: 22, journalTables: 1, functions: 39, denialAndDefaultProbes: probes, hostileBuiltinProbes: shadowProbes, namedApiRolesTested: 2, legacyUnchanged: true, cleanReplayIdentical: true, runtimeExercised: Boolean(exerciseRuntime), schemaFingerprint: fingerprints[0] };
     console.log(`ISOLATED SCHEMA PROOF PASS: ${JSON.stringify(result)}`);
     return result;
   } finally {

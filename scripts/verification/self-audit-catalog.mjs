@@ -1,3 +1,4 @@
+import { STORAGE_OWNER_PATTERN, STORAGE_INTEGRATION_PATTERN } from './demo-storage-partitions.mjs';
 import {REGISTRATION_ENTRY_PATTERN,REGISTRATION_REMAINDER_PATTERN} from './validator-partitions.mjs';
 // Development verification commands only. This is not a product rules engine,
 // command authorization registry, or permission to execute shared migrations.
@@ -26,13 +27,17 @@ export const stageCatalog = Object.freeze([
   ['validator-shard-12', 'node', ['scripts/tests/validate-validators.mjs', '--shard=12/14']],
   ['validator-shard-13', 'node', ['scripts/tests/validate-validators.mjs', '--shard=13/14']],
   ['validator-shard-14', 'node', ['scripts/tests/validate-validators.mjs', '--shard=14/14']],
-  ['audit-regressions', 'node', ['--test', 'scripts/tests/validate-development-self-audit.test.mjs', 'scripts/tests/validate-ci-consolidation.test.mjs', 'scripts/tests/validate-demo-physical-successor.mjs', 'scripts/tests/validate-replay-database-cleanup.test.mjs']],
+  ['audit-regressions', 'node', ['--test', 'scripts/tests/validate-development-self-audit.test.mjs', 'scripts/tests/validate-ci-consolidation.test.mjs', 'scripts/tests/validate-demo-physical-successor.mjs', 'scripts/tests/validate-replay-database-cleanup.test.mjs', 'scripts/tests/validate-whole-audit-runner.test.mjs']],
   ['recovery-regressions', 'node', ['--test', 'scripts/tests/validate-owner-decision-inventory.test.mjs']],
   ['lifecycle-regressions', 'node', ['--test', 'scripts/tests/validate-workflow-lifecycle.test.mjs', 'scripts/tests/validate-workflow-lifecycle-wiring.test.mjs', 'scripts/tests/validate-workflow-lifecycle-readback.test.mjs']],
-  ['demo-source-tests', 'node', ['--import', 'tsx', '--test', 'tests/demo/activation.test.ts', 'tests/demo/application.test.ts', 'tests/demo/content.test.ts', 'tests/demo/cookie.test.ts', 'tests/demo/http-application.test.ts', 'tests/demo/transport.test.ts', 'tests/demo-web/api.test.mjs', 'tests/demo-web/controller.test.mjs', 'tests/demo-web/views.test.mjs', 'scripts/tests/demo-route-inventory.mjs', 'scripts/tests/demo-storage-evidence.mjs', 'scripts/tests/demo-validator-predecessor.mjs', 'tests/demo/recipe-content.test.ts', 'tests/demo-web/recipe-api.test.mjs', 'tests/demo-web/recipes.test.mjs', 'scripts/tests/validate-demo-recipes-registration.mjs', 'scripts/tests/validate-demo-recipes-physical-successor.mjs']],
+  ['demo-source-tests', 'node', ['--import', 'tsx', '--test', 'tests/demo/activation.test.ts', 'tests/demo/application.test.ts', 'tests/demo/content.test.ts', 'tests/demo/cookie.test.ts', 'tests/demo/http-application.test.ts', 'tests/demo/transport.test.ts', 'tests/demo-web/api.test.mjs', 'tests/demo-web/controller.test.mjs', 'tests/demo-web/views.test.mjs', 'scripts/tests/demo-route-inventory.mjs', 'scripts/tests/demo-validator-predecessor.mjs', 'tests/demo/recipe-content.test.ts', 'tests/demo/kitchen-content.test.ts', 'scripts/tests/validate-demo-kitchen-registration.mjs', 'scripts/tests/validate-demo-kitchen-engineering.mjs', 'tests/demo-web/stations.test.mjs', 'tests/demo-web/station-api.test.mjs', 'tests/demo-web/recipe-api.test.mjs', 'tests/demo-web/recipes.test.mjs', 'scripts/tests/validate-demo-recipes-registration.mjs', 'scripts/tests/validate-demo-recipes-physical-successor.mjs']],
+  ['demo-storage-owner-regressions', 'node', ['--test', '--test-name-pattern='+STORAGE_OWNER_PATTERN, 'scripts/tests/demo-storage-evidence.mjs']],
+  ['demo-storage-integration-regressions', 'node', ['--test', '--test-name-pattern='+STORAGE_INTEGRATION_PATTERN, 'scripts/tests/demo-storage-evidence.mjs']],
+  ['demo-kitchen-registration', 'node', ['scripts/kernel/validate-demo-kitchen-registration.mjs']],
   ['demo-generation', 'node', ['scripts/db/verify-demo-generation.mjs']],
   ['demo-postgres', 'node', ['--import', 'tsx', 'scripts/db/run-demo-integration.ts']],
   ['demo-recipe-postgres', 'node', ['--import', 'tsx', 'scripts/db/run-demo-recipe-integration.ts']],
+  ['demo-kitchen-postgres', 'node', ['--import', 'tsx', 'scripts/db/run-demo-kitchen-integration.ts']],
   ['typecheck', 'pnpm', ['typecheck']],
   ['foundation', 'pnpm', ['exec', 'node', '--import', 'tsx', '--test']],
   ['drizzle-history', 'pnpm', ['exec', 'drizzle-kit', 'check']],

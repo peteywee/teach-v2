@@ -10,7 +10,7 @@ import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const fixture = mkdtempSync(join(tmpdir(), 'teach-demo-registration-'));
-for (const path of ['docs', 'scripts', '.github', 'verification', 'kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle']) cpSync(join(root, path), join(fixture, path), { recursive: true });
+for (const path of ['docs', 'scripts', '.github', 'verification', 'kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle', 'drizzle-isolated', 'src', 'tests']) cpSync(join(root, path), join(fixture, path), { recursive: true });
 after(() => rmSync(fixture, { recursive: true, force: true }));
 const raw = path => readFileSync(join(fixture, path), 'utf8');
 const json = path => JSON.parse(raw(path));
@@ -67,6 +67,26 @@ test('typed references cannot substitute a candidate homonym or wrong family', (
   rejectedJson('kernel/entities.json', doc => { doc.entries.find(entry => entry.id === 'CommandReceipt').requires.find(ref => ref.id === 'IdempotencyKey').family = 'values'; }, /depends on candidate/);
   rejectedJson('kernel/entities.json', doc => { doc.entries.find(entry => entry.id === 'DemoRun').requires[0].family = 'values'; }, /unregistered dependency/);
   rejectedJson('kernel/entities.json', doc => { doc.entries.find(entry => entry.id === 'DemoRun').requires.push({ family: 'unknown', id: 'DemoRunId' }); }, /cannot be established/);
+  const deniedBeforeProjection = (changes, pattern) => {
+    const originals = new Map(Object.keys(changes).map(path => [path, raw(path)]));
+    try {
+      for (const [path, mutate] of Object.entries(changes)) {
+        const doc = JSON.parse(originals.get(path)); mutate(doc); writeFileSync(join(fixture, path), JSON.stringify(doc));
+      }
+      const result = inspectDemoRuntimeRegistration(fixture);
+      assert.match(result.errors.join('\n'), pattern);
+      assert.deepEqual(Object.keys(result).sort(), ['errors', 'registered']);
+      assert.equal(result.registered, true);
+    } finally { for (const [path, bytes] of originals) writeFileSync(join(fixture, path), bytes); }
+  };
+  deniedBeforeProjection({
+    'kernel/identifiers.json': doc => { const entry = doc.entries.find(row => row.id === 'LocationId'); entry.kind = 'value_object'; entry.status = 'candidate'; },
+    'kernel/values.json': doc => { doc.entries.push({ id: 'LocationId', kind: 'identifier', status: 'approved' }); },
+    'kernel/relationships.json': doc => { doc.entries.find(row => row.id === 'AssignmentReferencesContentPack').to = 'LocationId'; },
+  }, /AssignmentReferencesContentPack\.to -> LocationId: depends on candidate.*SEM-36/);
+  deniedBeforeProjection({
+    'kernel/entities.json': doc => { doc.entries.find(row => row.id === 'Identity').requires = { id: 'Membership' }; },
+  }, /Identity\.requires.*dependency closure cannot be established.*SEM-36/);
 });
 
 test('Membership promotion removes only old hold and cannot promote candidate business events', () => {

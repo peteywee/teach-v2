@@ -1,3 +1,4 @@
+import {KITCHEN_VALIDATOR_TRANSITION,kitchenValidatorTransition,KITCHEN_FINALIZER_TRANSITION,kitchenFinalizerTransition,mutateKitchenFinalizer} from './kitchen-predecessor-fixture.mjs';
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {createHash} from 'node:crypto';
@@ -74,4 +75,36 @@ test('orphan successor evidence cannot enter the semantic-only structural reader
    assert.throws(()=>createHistoricalSourceReader(dir),/orphan|unexpected active authority/);
   }finally{rmSync(dir,{recursive:true,force:true});}
  }
+});
+
+test('one exact kitchen transition preserves both older oracles and rejects unrelated current failures',()=>{
+ const expected={name:'slice-p04 implementation: missing journal entry fails',script:'scripts/persistence/validate-slice-p04-implementation-boundary.mjs',original_diagnostic:'demo physical admission: original journal prefix must remain immutable',current_diagnostic:'demo kitchen engineering: current source differs: drizzle/meta/_journal.json'};
+ assert.deepEqual(KITCHEN_VALIDATOR_TRANSITION,expected);assert.equal(Object.isFrozen(KITCHEN_VALIDATOR_TRANSITION),true);
+ const row=manifest.cases.find(item=>item.name===expected.name);assert.ok(row);assert.equal(kitchenValidatorTransition(row.name,row),KITCHEN_VALIDATOR_TRANSITION);
+ for(const declaration of declarations.filter(item=>item.name!==expected.name))assert.equal(kitchenValidatorTransition(declaration.name,manifest.cases.find(item=>item.name===declaration.name)),null);
+ for(const changed of [undefined,{...row,name:'unlisted'},{...row,script:'scripts/unreviewed.mjs'},{...row,current_diagnostic:'unrelated error'}])assert.throws(()=>kitchenValidatorTransition(expected.name,changed));
+ const valid={exit:1,ordinaryProcessExit:true,output:'Error: '+expected.current_diagnostic+'\n'};
+ assert.equal(exactCurrentDenial(valid,expected.current_diagnostic,'/tmp/fixture'),true);
+ for(const patch of [{exit:0},{exit:124},{exit:null},{ordinaryProcessExit:false},{output:''},{output:'unrelated failure'},{output:expected.current_diagnostic.slice(0,-1)},{output:expected.current_diagnostic+' extra'},{output:expected.original_diagnostic}])assert.equal(exactCurrentDenial({...valid,...patch},expected.current_diagnostic,'/tmp/fixture'),false);
+});
+
+test('one exact finalizer adaptation preserves the frozen mutation and targets no kitchen cleanup',()=>{
+ const row=declarations.find(item=>item.name===KITCHEN_FINALIZER_TRANSITION.name);
+ assert.deepEqual(row,{name:KITCHEN_FINALIZER_TRANSITION.name,script:KITCHEN_FINALIZER_TRANSITION.script,outcome:'DENIAL',pattern:KITCHEN_FINALIZER_TRANSITION.pattern,mutation:KITCHEN_FINALIZER_TRANSITION.mutation_sha256});
+ assert.equal(manifest.cases.some(item=>item.name===row.name),false);
+ assert.equal(Object.isFrozen(KITCHEN_FINALIZER_TRANSITION),true);
+ const mutate=(dir)=>mutateText(dir,selfAuditWorkflow,'if: always()','if: success()');
+ const expect={pattern:/finalize and be retained/};
+ assert.equal(kitchenFinalizerTransition(row.name,row.script,mutate,expect),KITCHEN_FINALIZER_TRANSITION);
+ for(const item of declarations.filter(item=>item.name!==row.name))assert.equal(kitchenFinalizerTransition(item.name,item.script,()=>{},{}),null);
+ for(const [script,mutation,outcome] of [[row.script,()=>{},expect],['unreviewed',mutate,expect],[row.script,mutate,{pass:true,...expect}],[row.script,mutate,{pattern:/unrelated/}]])assert.throws(()=>kitchenFinalizerTransition(row.name,script,mutation,outcome));
+ const workflow=readFileSync(join(root,'.github/workflows/development-self-audit.yml'),'utf8');
+ const target='        id: audit_finalize\n        if: always()\n        run: node scripts/verification/run-self-audit.mjs --finish\n';
+ const altered=mutateKitchenFinalizer(workflow);
+ assert.equal(altered,workflow.replace(target,target.replace('if: always()','if: success()')));
+ assert.match(altered,/id: kitchen_postgres_stop\n        if: always\(\)/);
+ for(const invalid of [workflow.replace(target,''),workflow+target,altered,workflow.replace('id: audit_finalize','id: unrelated')])assert.throws(()=>mutateKitchenFinalizer(invalid));
+ const diagnostic=KITCHEN_FINALIZER_TRANSITION.diagnostic,valid={exit:1,ordinaryProcessExit:true,output:diagnostic+'\n'};
+ assert.equal(exactCurrentDenial(valid,diagnostic,'/tmp/fixture'),true);
+ for(const patch of [{exit:0},{exit:124},{ordinaryProcessExit:false},{output:'consolidated verification: exact constrained producer template required; shell/default/environment/execution overrides forbidden'},{output:diagnostic+' extra'}])assert.equal(exactCurrentDenial({...valid,...patch},diagnostic,'/tmp/fixture'),false);
 });

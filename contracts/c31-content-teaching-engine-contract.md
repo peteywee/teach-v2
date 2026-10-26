@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C31",
   "class": "contract",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-18",
-  "effective_on": "2026-10-18",
+  "updated_on": "2026-10-26",
+  "effective_on": "2026-10-26",
   "approval": {
     "state": "approved",
-    "approved_version": "1.4.0",
-    "approved_on": "2026-10-18",
-    "record": "domains/demo-recipes/owner-approval.json",
-    "basis": "TEACH-DEMO-RECIPES-2026-10-18@0.1.1; SYS-21 #88; bounded content/read/UI successor; SHA256SUMS sha256:b5f80daf1d94ecbccb1a01f3e58be3fc98d32564567b1cf03fd5c639eb435255"
+    "approved_version": "1.5.0",
+    "approved_on": "2026-10-26",
+    "record": "domains/demo-kitchen/owner-approval.json",
+    "basis": "Bounded owner-approved kitchen scope; implementation versions/digest recorded separately from owner wording."
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -31,7 +31,8 @@
   "supersedes": [
     "TEACH-CON-C31@1.1.0",
     "TEACH-CON-C31@1.2.0",
-    "TEACH-CON-C31@1.3.0"
+    "TEACH-CON-C31@1.3.0",
+    "TEACH-CON-C31@1.4.0"
   ],
   "superseded_by": null,
   "depends_on": [
@@ -58,6 +59,16 @@
     "physical_schema_admission": false,
     "runtime_activation": false,
     "deployment_authority": false
+  },
+  "demo_kitchen_registration": {
+    "package": "TEACH-DEMO-KITCHEN-2026-10-26@0.1.0",
+    "issue": "#99",
+    "approval_record": "domains/demo-kitchen/owner-approval.json",
+    "source_package": "domains/demo-kitchen/proposal-0.1.0",
+    "sha256sums_sha256": "ba01dfc871d53a98a621ee301ec8435061c8d01f0ac509c1029539d03337406d",
+    "source_registration_only": true,
+    "physical_schema_admission": false,
+    "runtime_proof": "NOT_ESTABLISHED_BY_REGISTRATION"
   }
 }
 -->
@@ -69,17 +80,17 @@
 | Contract ID        | C31                                                                                                                                                             |
 | Group              | C30 Product Semantics                                                                                                                                           |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.4.0 |
+| Version | 1.5.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by | Patrick Craven (owner), 2026-10-18; TEACH-DEMO-RECIPES-2026-10-18@0.1.1; SYS-21 #88; see `domains/demo-recipes/owner-approval.json` |
+| Approved by | Patrick Craven (scope owner), 2026-10-26; SYS-21 #99; see `domains/demo-kitchen/owner-approval.json`; implementation versions recorded by preparer |
 | Requirement prefix | `CNT`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | Reference only — reworks legacy `.topshelf/contracts/domain/content-engine.json`.                                                                               |
-| Supersedes | 1.3.0 |
+| Supersedes | 1.4.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated | 2026-10-18 |
+| Last updated | 2026-10-26 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -158,7 +169,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Implementation conformance | unknown | Not established by this registration. Current implementation tests, independent review and runtime evidence are separate source-bound records. |
 | Acceptance cases implemented | unknown | Registration specifies required cases; it does not establish executed test or browser evidence for the current candidate. |
 | Blocking open questions      | 0 open | Only unresolved question rows govern blocking; registration is not implementation evidence |
-| Owner approval | declared | 1.4.0 bounded recipe successor approval recorded in APPROVAL-RECORD.md under #88; independent review and runtime implementation conformance are not established by registration |
+| Owner approval | declared | 1.5.0 bounded kitchen scope recorded in `domains/demo-kitchen/owner-approval.json` under #99; registration establishes neither independent review nor runtime conformance |
 | Independent review | not established by registration | No independent-review verdict is issued here. Any later review must bind the actual successor candidate and preserve its limitations. |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
@@ -204,3 +215,20 @@ Acceptance coverage preserves CNT-AC-1 through CNT-AC-9 and adds cases for both 
 The approved 0.1.1 revision corrects the earlier no-migration assumption. Exactly one additive migration may replace the existing `content_guard_demo_version` function with strict support for both exact schema versions. Historical migrations and existing table identities remain unchanged. This permits no new database, table, column, schema namespace, ownership or live-data change. Independent exact-source physical review and disposable-local admission are required before executing the successor migration.
 
 `kernel/content-schema-reference-successor.json` records the finite effective interpretation of `ContentPack.fields.versionPayload`: canonical Content schema exact `1.0.0` or `1.1.0`, resolved through the explicitly bound original/successor schema references. The original 131-entry registration remains byte-exact; no concept identity, owning domain, relationship, dependency or lifecycle changes. This is an explicit schema-reference projection within the one kernel, not a parallel registry or an open-ended schema-version allowance.
+
+
+## Registered bounded kitchen successor (1.5.0)
+
+Current bounded amendment: `TEACH-DEMO-KITCHEN-2026-10-26@0.1.0`; approval `domains/demo-kitchen/owner-approval.json`; source package `domains/demo-kitchen/proposal-0.1.0/`. Earlier incorporated packages are preserved; only the exact additions below supersede their earlier content/read/UI limits. Source registration is not independent verification or execution evidence.
+
+Exact canonical Content schema and template `1.2.0` add bounded stations, display-only fictional people, tools/equipment, inventory holdings and station-linked recipes as child values in the existing immutable ContentPack. Admit only exact `1.0.0`, `1.1.0`, `1.2.0` schemas. Catalog IDs are local to the pack/version, not account or global asset identities. Station responsibility derives the recipe's fictional person; recipe requirements and inventory holdings are distinct. Shared holdings are counted once, not multiplied by recipes. Finite bounds, unique identifiers, valid references, plain text, the 64 KiB bound and exact version/digest binding are enforced by the registered schema and canonical validator. Earlier published content remains immutable and readable without fabricated catalog values.
+
+New admissions select the successor only after source/physical checks. Original three teaching blocks, answers, feedback, progress and completion meaning remain unchanged. No recipe mastery, aggregate score, certification, real staffing, live stock, maintenance or availability is claimed. One additive strict replacement of `teach_v2_demo.content_guard_demo_version` accepts this exact schema lineage while preserving all prior guards; no new tables, accounts, grants or permissions. Physical admission, recovery/release prerequisites, actual apply and deployment verification remain separate. No general recovery exception is created.
+
+`kernel/content-schema-kitchen-successor.json` extends the finite versionPayload schema-reference projection while preserving both the original kernel bytes and the prior recipe projection. No identity, owner, relationship, dependency or lifecycle is changed.
+
+### Successor change log
+
+| Version | Date | Change | By |
+| --- | --- | --- | --- |
+| 1.5.0 | 2026-10-26 | Bounded fictional stations, people, recipe/tool references and sample holdings; no new entities, permissions or learning semantics. | Patrick Craven (scope owner); ChatGPT (recorder) |

@@ -229,7 +229,8 @@
         "scripts/tests/validate-development-self-audit.test.mjs",
         "scripts/tests/validate-ci-consolidation.test.mjs",
         "scripts/tests/validate-demo-physical-successor.mjs",
-        "scripts/tests/validate-replay-database-cleanup.test.mjs"
+        "scripts/tests/validate-replay-database-cleanup.test.mjs",
+        "scripts/tests/validate-whole-audit-runner.test.mjs"
       ],
       "timeout_ms": 25000
     },
@@ -270,13 +271,45 @@
         "tests/demo-web/controller.test.mjs",
         "tests/demo-web/views.test.mjs",
         "scripts/tests/demo-route-inventory.mjs",
-        "scripts/tests/demo-storage-evidence.mjs",
         "scripts/tests/demo-validator-predecessor.mjs",
         "tests/demo/recipe-content.test.ts",
+        "tests/demo/kitchen-content.test.ts",
+        "scripts/tests/validate-demo-kitchen-registration.mjs",
+        "scripts/tests/validate-demo-kitchen-engineering.mjs",
+        "tests/demo-web/stations.test.mjs",
+        "tests/demo-web/station-api.test.mjs",
         "tests/demo-web/recipe-api.test.mjs",
         "tests/demo-web/recipes.test.mjs",
         "scripts/tests/validate-demo-recipes-registration.mjs",
         "scripts/tests/validate-demo-recipes-physical-successor.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-storage-owner-regressions",
+      "command": "node",
+      "args": [
+        "--test",
+        "--test-name-pattern=^(?:actual owner storage has no shape failures while missing successor review remains fail-closed|reviewed current successor and immutable P01-P05 evidence both pass|unchanged P01-P05 historical fixture retains its real baseline checks|missing successor migration fails independently of review state|reordered migrations fail original prefix and contiguous ordering|missing historical migration cannot be hidden by historical projection|forged successor marker never replaces independent exact review|extra owner adapter fails exact inventory|wrong owner table definition fails|Organization cannot query Identity persona storage directly|wrong semantic ownership fails independently of physical naming|extra current table fails exact inventory|wrong current field nullability fails exact approved mapping|removed owner table DDL fails even with correct snapshot|missing historical owner in current composition fails|current evidence cannot reuse historical runtime PASS|P07 cannot become admitted through exact demo exception|audit summary validates the sealed historical packet but reports current physical questions|audit summary refuses historical packet projection after live seal tampering|audit summary still rejects a changed historical decision packet|audit summary retains nine unresolved owner questions and rejects live recipe contract drift)$",
+        "scripts/tests/demo-storage-evidence.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-storage-integration-regressions",
+      "command": "node",
+      "args": [
+        "--test",
+        "--test-name-pattern=^(?:repository integration accepts exact reviewed current storage and historical queue|repository integration cannot admit owner tables from a forged successor|repository integration rejects Certification even inside the admitted migration|repository integration rejects admitted table names at an unadmitted source location|repository integration rejects admitted table names in a later migration|repository integration rejects admitted table names in a later snapshot|repository integration does not project a tampered live queue|repository integration requires the real isolated guard despite compact imports|repository integration rejects a guard after the first Pool)$",
+        "scripts/tests/demo-storage-evidence.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-kitchen-registration",
+      "command": "node",
+      "args": [
+        "scripts/kernel/validate-demo-kitchen-registration.mjs"
       ],
       "timeout_ms": 25000
     },
@@ -305,6 +338,16 @@
         "--import",
         "tsx",
         "scripts/db/run-demo-recipe-integration.ts"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-kitchen-postgres",
+      "command": "node",
+      "args": [
+        "--import",
+        "tsx",
+        "scripts/db/run-demo-kitchen-integration.ts"
       ],
       "timeout_ms": 25000
     },

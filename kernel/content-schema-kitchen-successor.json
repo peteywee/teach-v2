@@ -1,0 +1,43 @@
+{
+  "projection_id": "TEACH-DEMO-KITCHEN-CONTENT-SCHEMA-REFERENCE",
+  "version": "0.1.0",
+  "status": "approved",
+  "package": "TEACH-DEMO-KITCHEN-2026-10-26@0.1.0",
+  "approval_record": "domains/demo-kitchen/owner-approval.json",
+  "authority_contract": "TEACH-CON-C31@1.5.0",
+  "issue": "#99",
+  "owner": "Content",
+  "target": {
+    "path": "kernel/entities.json",
+    "entry": "ContentPack",
+    "field": "fields.versionPayload"
+  },
+  "predecessor_text": "canonical schema 1.0.0 described in canonical_content_schema",
+  "predecessor_registry_sha256": "cd90fbe900ed6501260851fb5544af80f5d8b2ada3febe1af05860ce65566769",
+  "predecessor_projection": {
+    "path": "kernel/content-schema-reference-successor.json",
+    "sha256": "4d1a61727f434c1536514cffdb388648d13ad0306b1e0940e4764a16c9868101"
+  },
+  "exact_schema_references": [
+    {
+      "version": "1.0.0",
+      "path": "domains/demo-runtime/proposal-0.1.0/learning-definition.json",
+      "pointer": "/canonical_content_schema"
+    },
+    {
+      "version": "1.1.0",
+      "path": "domains/demo-recipes/proposal-0.1.1/content-schema-1.1.0.json",
+      "pointer": ""
+    },
+    {
+      "version": "1.2.0",
+      "path": "domains/demo-kitchen/proposal-0.1.0/content-schema-1.2.0.json",
+      "pointer": ""
+    }
+  ],
+  "original_registry_entries_modified": false,
+  "new_concepts": [],
+  "identity_owner_relationships_dependencies_unchanged": true,
+  "physical_admission_granted": false,
+  "runtime_activation_authorized": false
+}

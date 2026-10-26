@@ -9,10 +9,11 @@ import { join, resolve } from 'node:path';
 import { inspectSchemaIsolationRegistration, SCHEMA_ISOLATION_BASE as BASE, SCHEMA_ISOLATION_REVISED_PATHS as REVISED, SCHEMA_ISOLATION_REGISTRATION_SHA256 } from '../kernel/demo-schema-isolation-registration.mjs';
 import { inspectRecipeRegistration } from '../kernel/demo-recipes-registration.mjs';
 import { inspectDemoRuntimeRegistration, createHistoricalSourceReader } from '../kernel/demo-runtime-registration.mjs';
+import { withKitchenPredecessor } from './kitchen-predecessor-fixture.mjs';
 
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const fixture = mkdtempSync(join(tmpdir(), 'teach-schema-registration-'));
-for (const name of ['docs', 'scripts', '.github', 'verification', 'kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle']) cpSync(join(root, name), join(fixture, name), { recursive: true });
+for (const name of ['docs', 'scripts', '.github', 'verification', 'kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle', 'drizzle-isolated', 'src', 'tests']) cpSync(join(root, name), join(fixture, name), { recursive: true });
 after(() => rmSync(fixture, { recursive: true, force: true }));
 const raw = path => readFileSync(join(fixture, path), 'utf8');
 const json = path => JSON.parse(raw(path));
@@ -131,7 +132,7 @@ test('historical reader cannot accept a caller-forged snapshot or hide current d
   finally { writeFileSync(join(fixture, REVISED[0]), current); renameSync(held, envelope); }
 });
 
-test('complete predecessor-only checkout remains valid when the entire successor layer is absent', () => {
+test('complete predecessor-only checkout remains valid when the entire successor layer is absent', () => withKitchenPredecessor(fixture, () => {
   const registration = json(registrationPath), source = json(`${BASE}/source-baseline.json`);
   const live = Object.fromEntries(Object.keys(registration.authority_file_hashes).map(path => [path, raw(path)]));
   const parked = join(fixture, 'held-complete-schema-evidence');
@@ -152,4 +153,4 @@ test('complete predecessor-only checkout remains valid when the entire successor
     renameSync(parked, join(fixture, BASE));
     for (const [path, text] of Object.entries(live)) writeFileSync(join(fixture, path), text);
   }
-});
+}));

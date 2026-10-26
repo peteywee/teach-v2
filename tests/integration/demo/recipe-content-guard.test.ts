@@ -66,6 +66,7 @@ before(async () => {
     await cp('drizzle', prior, { recursive: true });
     const journalPath = join(prior, 'meta/_journal.json');
     const journal = JSON.parse(await readFile(journalPath, 'utf8'));
+    const recipePrefix = journal.entries.filter((entry: { idx: number }) => entry.idx <= 6);
     journal.entries = journal.entries.filter((entry: { idx: number }) => entry.idx <= 5);
     await writeFile(journalPath, JSON.stringify(journal));
     await applyDemoMigrations(pool, prior);
@@ -82,8 +83,11 @@ before(async () => {
     await rejectsSql(() => insert(successor), '0005 rejects the successor');
     priorBoundary = await boundary();
     priorGuardOid = (await pool.query("SELECT 'content_guard_demo_version()'::regprocedure::oid AS oid")).rows[0].oid;
-    await applyDemoMigrations(pool);
-    await applyDemoMigrations(pool); // Drizzle replay is an idempotent no-op.
+    // Preserve this historical 0005 -> 0006 proof even after later successors.
+    journal.entries = recipePrefix;
+    await writeFile(journalPath, JSON.stringify(journal));
+    await applyDemoMigrations(pool, prior);
+    await applyDemoMigrations(pool, prior); // Drizzle replay is an idempotent no-op.
   } finally { await rm(prior, { recursive: true, force: true }); }
 });
 after(async () => { await pool.end(); });

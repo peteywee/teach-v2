@@ -131,6 +131,15 @@ jobs:
       - name: Audit demo-source-tests
         id: audit_demo_source_tests
         run: node scripts/verification/run-self-audit.mjs --stage demo-source-tests
+      - name: Audit demo-storage-owner-regressions
+        id: audit_demo_storage_owner_regressions
+        run: node scripts/verification/run-self-audit.mjs --stage demo-storage-owner-regressions
+      - name: Audit demo-storage-integration-regressions
+        id: audit_demo_storage_integration_regressions
+        run: node scripts/verification/run-self-audit.mjs --stage demo-storage-integration-regressions
+      - name: Audit demo-kitchen-registration
+        id: audit_demo_kitchen_registration
+        run: node scripts/verification/run-self-audit.mjs --stage demo-kitchen-registration
       - name: Audit demo-generation
         id: audit_demo_generation
         run: node scripts/verification/run-self-audit.mjs --stage demo-generation
@@ -140,6 +149,16 @@ jobs:
       - name: Audit demo-recipe-postgres
         id: audit_demo_recipe_postgres
         run: node scripts/verification/run-self-audit.mjs --stage demo-recipe-postgres
+      - name: Start owned loopback PostgreSQL for kitchen proof
+        id: kitchen_postgres_start
+        run: timeout 25s node scripts/verification/kitchen-loopback-postgres.mjs start
+      - name: Audit demo-kitchen-postgres
+        id: audit_demo_kitchen_postgres
+        run: node scripts/verification/run-self-audit.mjs --stage demo-kitchen-postgres
+      - name: Remove kitchen fixture and restore service target
+        id: kitchen_postgres_stop
+        if: always()
+        run: timeout 25s node scripts/verification/kitchen-loopback-postgres.mjs stop
       - name: Audit typecheck
         id: audit_typecheck
         run: node scripts/verification/run-self-audit.mjs --stage typecheck
@@ -216,9 +235,12 @@ jobs:
       - name: Start genuine loopback PostgreSQL for Node24 proofs
         id: hosted_postgres_start
         run: timeout 25s node scripts/verification/hosted-loopback-postgres.mjs start
-      - name: Verify schema source controls
-        id: hosted_schema
-        run: pnpm exec node scripts/verification/run-hosted-source-check.mjs schema
+      - name: Verify schema registration source controls
+        id: hosted_schema_registration
+        run: pnpm exec node scripts/verification/run-hosted-source-check.mjs schema_registration
+      - name: Verify remaining schema source controls
+        id: hosted_schema_support
+        run: pnpm exec node scripts/verification/run-hosted-source-check.mjs schema_support
       - name: Verify disabled hosted runtime and adapter
         id: hosted_hosted
         run: pnpm exec node scripts/verification/run-hosted-source-check.mjs hosted

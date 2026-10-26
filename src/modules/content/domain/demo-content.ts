@@ -38,7 +38,25 @@ export interface RecipeTeachingContent extends TeachingContentBase {
   recipes: TeachingRecipe[];
 }
 
-export type TeachingContent = LegacyTeachingContent | RecipeTeachingContent;
+export interface KitchenStation { id: string; label: string; responsiblePersonId: string }
+export interface DemoPerson { id: string; displayLabel: string; roleLabel: string }
+export interface EquipmentItem { id: string; label: string; kind: 'TOOL' | 'EQUIPMENT' }
+export interface EquipmentRequirement { equipmentId: string; quantity: number }
+export interface InventoryHolding extends EquipmentRequirement { stationId: string | null }
+export interface StationRecipe extends Omit<TeachingRecipe, 'station'> {
+  stationId: string;
+  requirements: EquipmentRequirement[];
+}
+export interface StationTeachingContent extends TeachingContentBase {
+  schemaVersion: '1.2.0';
+  stations: KitchenStation[];
+  people: DemoPerson[];
+  equipment: EquipmentItem[];
+  inventory: InventoryHolding[];
+  recipes: StationRecipe[];
+}
+
+export type TeachingContent = LegacyTeachingContent | RecipeTeachingContent | StationTeachingContent;
 
 export interface ValidatedContent {
   readonly content: TeachingContent;
@@ -256,6 +274,75 @@ function recipe(value: unknown): TeachingRecipe {
   };
 }
 
+function boundedItems<T>(value: unknown, maximum: number, parse: (item: unknown) => T): T[] {
+  if (!Array.isArray(value) || value.length < 1 || value.length > maximum) invalid('catalog count out of bounds');
+  return value.map(parse);
+}
+
+function quantity(value: unknown): number {
+  if (typeof value !== 'number' || !Number.isInteger(value) || value < 1 || value > 100) invalid('quantity out of bounds');
+  return value;
+}
+
+function uniqueIds(items: { id: string }[]): Set<string> {
+  const ids = new Set(items.map(item => item.id));
+  if (ids.size !== items.length) invalid('duplicate catalog identifier');
+  return ids;
+}
+
+function kitchenCatalog(input: Record<string, unknown>) {
+  const people = boundedItems(input.people, 24, value => {
+    const item = record(value, ['id', 'displayLabel', 'roleLabel']);
+    return { id: identifier(item.id), displayLabel: plainText(item.displayLabel, 80), roleLabel: plainText(item.roleLabel, 80) };
+  });
+  const personIds = uniqueIds(people);
+  const stations = boundedItems(input.stations, 12, value => {
+    const item = record(value, ['id', 'label', 'responsiblePersonId']);
+    const responsiblePersonId = identifier(item.responsiblePersonId);
+    if (!personIds.has(responsiblePersonId)) invalid('unresolved responsible person');
+    return { id: identifier(item.id), label: plainText(item.label, 80), responsiblePersonId };
+  });
+  const stationIds = uniqueIds(stations);
+  const equipment = boundedItems(input.equipment, 40, value => {
+    const item = record(value, ['id', 'label', 'kind']);
+    if (item.kind !== 'TOOL' && item.kind !== 'EQUIPMENT') invalid('invalid equipment kind');
+    return { id: identifier(item.id), label: plainText(item.label, 80), kind: item.kind };
+  });
+  const equipmentIds = uniqueIds(equipment);
+  const requirement = (value: unknown): EquipmentRequirement => {
+    const item = record(value, ['equipmentId', 'quantity']);
+    const equipmentId = identifier(item.equipmentId);
+    if (!equipmentIds.has(equipmentId)) invalid('unresolved equipment');
+    return { equipmentId, quantity: quantity(item.quantity) };
+  };
+  const inventory = boundedItems(input.inventory, 80, value => {
+    const item = record(value, ['equipmentId', 'stationId', 'quantity']);
+    const stationId = item.stationId === null ? null : identifier(item.stationId);
+    if (stationId !== null && !stationIds.has(stationId)) invalid('unresolved inventory station');
+    return { ...requirement({ equipmentId: item.equipmentId, quantity: item.quantity }), stationId };
+  });
+  if (new Set(inventory.map(item => JSON.stringify([item.equipmentId, item.stationId]))).size !== inventory.length) invalid('duplicate inventory holding');
+  const recipes = boundedItems(input.recipes, 24, value => {
+    const item = record(value, ['id', 'title', 'stationId', 'servings', 'ingredients', 'steps', 'reference', 'requirements']);
+    const stationId = identifier(item.stationId);
+    if (!stationIds.has(stationId)) invalid('unresolved recipe station');
+    const { station: _station, ...body } = recipe({
+      id: item.id, title: item.title, station: 'Synthetic station', servings: item.servings,
+      ingredients: item.ingredients, steps: item.steps, reference: item.reference,
+    });
+    const requirements = boundedItems(item.requirements, 20, requirement);
+    if (new Set(requirements.map(part => part.equipmentId)).size !== requirements.length) invalid('duplicate equipment requirement');
+    return { ...body, stationId, requirements };
+  });
+  uniqueIds(recipes);
+  return { stations, people, equipment, inventory, recipes };
+}
+
+function freezeCatalog(value: object): void {
+  for (const child of Object.values(value)) if (child !== null && typeof child === 'object') freezeCatalog(child);
+  Object.freeze(value);
+}
+
 /** Returns a detached, deeply frozen payload, binding the exact scope and version. */
 export function validateContent(value: unknown): ValidatedContent {
   // Validate the full original value first: unsupported hidden properties or getters
@@ -263,9 +350,10 @@ export function validateContent(value: unknown): ValidatedContent {
   canonicalJson(value);
   const schemaVersion = value && typeof value === 'object' && !Array.isArray(value)
     ? Object.getOwnPropertyDescriptor(value, 'schemaVersion')?.value : undefined;
-  if (schemaVersion !== '1.0.0' && schemaVersion !== '1.1.0') invalid('unsupported schema version');
+  if (schemaVersion !== '1.0.0' && schemaVersion !== '1.1.0' && schemaVersion !== '1.2.0') invalid('unsupported schema version');
   const keys = ['schemaVersion', 'contentPackId', 'organizationId', 'version', 'title', 'blocks'];
-  const input = record(value, schemaVersion === '1.1.0' ? [...keys, 'recipes'] : keys);
+  const input = record(value, schemaVersion === '1.2.0' ? [...keys, 'recipes', 'stations', 'people', 'equipment', 'inventory']
+    : schemaVersion === '1.1.0' ? [...keys, 'recipes'] : keys);
   if (!isExactSemver(input.version)) invalid('invalid exact SemVer');
   if (!Array.isArray(input.blocks) || input.blocks.length !== 3) invalid('exactly three blocks are required');
   const blocks = input.blocks.map(block);
@@ -275,7 +363,11 @@ export function validateContent(value: unknown): ValidatedContent {
     version: input.version, title: plainText(input.title, 160), blocks,
   };
   let content: TeachingContent;
-  if (schemaVersion === '1.1.0') {
+  if (schemaVersion === '1.2.0') {
+    const catalog = kitchenCatalog(input);
+    freezeCatalog(catalog);
+    content = { schemaVersion, ...base, ...catalog };
+  } else if (schemaVersion === '1.1.0') {
     if (!Array.isArray(input.recipes) || input.recipes.length !== 3) invalid('exactly three recipes are required');
     const recipes = input.recipes.map(recipe);
     if (new Set(recipes.map(item => item.id)).size !== 3) invalid('duplicate recipe identifier');
@@ -301,6 +393,19 @@ export function publicContent(validated: ValidatedContent) {
     blocks: content.blocks.map(({ id, kind, instruction, prompt, options }) => ({ id, kind, instruction, prompt, options: [...options] })),
     synthetic: true as const,
   };
+  if (content.schemaVersion === '1.2.0') {
+    return {
+      ...base, schemaVersion: content.schemaVersion,
+      stations: content.stations.map(({ id, label, responsiblePersonId }) => ({ id, label, responsiblePersonId })),
+      people: content.people.map(({ id, displayLabel, roleLabel }) => ({ id, displayLabel, roleLabel })),
+      equipment: content.equipment.map(({ id, label, kind }) => ({ id, label, kind })),
+      inventory: content.inventory.map(({ equipmentId, stationId, quantity }) => ({ equipmentId, stationId, quantity })),
+      recipes: content.recipes.map(({ id, title, stationId, servings, ingredients, steps, reference, requirements }) => ({
+        id, title, stationId, servings, ingredients: [...ingredients], steps: [...steps], reference,
+        requirements: requirements.map(({ equipmentId, quantity }) => ({ equipmentId, quantity })),
+      })),
+    };
+  }
   if (content.schemaVersion === '1.1.0') {
     return {
       ...base, schemaVersion: content.schemaVersion,

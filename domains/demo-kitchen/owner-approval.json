@@ -1,0 +1,36 @@
+{
+  "approval_id": "TEACH-DEMO-KITCHEN-2026-10-26",
+  "version": "0.1.0",
+  "state": "APPROVED_BOUNDED_SCOPE",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "impact_issue": "https://github.com/peteywee/teach-v2/issues/99",
+  "record_form": "MINIMAL_OWNER_DECISION_SUMMARY",
+  "recorded_on": "2026-10-26",
+  "approval_timestamp_utc": "2026-10-26T01:45:04Z",
+  "source": "Owner conversation supplied as trusted history; recorded scope, not independent speaker authentication. Private conversation text and message identifiers are not published.",
+  "approved_scope": [
+    "Complete synthetic demo acceptance and correct defects within the demo boundary.",
+    "Add lean fictional station, person, recipe/tool relationships and a sample equipment inventory in the existing content pack.",
+    "Prepare, test and apply the additive versioned database validation-rule update with the release; preserve existing recipes and training records; no new tables, accounts or permissions.",
+    "Push the expanded batch, open a pull request, and merge/deploy after its tests and checks pass."
+  ],
+  "excluded_scope": [
+    "Real customer data or accounts; credential retrieval or permission changes.",
+    "Changed teaching answers, completion/lifecycle semantics, aggregate scores, mastery or certification.",
+    "New tables, routes, capabilities, ownership domains or live stock/staffing claims.",
+    "Any migration, deployment or recovery exception outside this exact bounded update."
+  ],
+  "release_approval_conditional_on_tests_and_checks": true,
+  "implementation_versions_recorded_by_preparer": {
+    "package": "0.1.0",
+    "content_schema": "1.2.0",
+    "contracts": {
+      "C31": "1.5.0",
+      "C41": "1.4.0",
+      "C42": "1.4.0"
+    }
+  },
+  "package_sha256sums_digest": "ba01dfc871d53a98a621ee301ec8435061c8d01f0ac509c1029539d03337406d",
+  "digest_binding_note": "The owner approved the described scope, not a displayed source digest or exact implementation versions. This record binds the prepared implementation of that scope; it does not assert those bytes were independently reviewed.",
+  "independent_verification": "NOT_ESTABLISHED_BY_APPROVAL"
+}

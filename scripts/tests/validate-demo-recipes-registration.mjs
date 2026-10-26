@@ -7,9 +7,10 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { inspectRecipeRegistration, RECIPE_BASE, RECIPE_PROPOSAL, RECIPE_PACKAGE_SHA256, RECIPE_REGISTRATION_SHA256, RECIPE_PREDECESSOR_PROPOSAL, RECIPE_SCHEMA_PROJECTION } from '../kernel/demo-recipes-registration.mjs';
 import { inspectDemoRuntimeRegistration, createHistoricalSourceReader } from '../kernel/demo-runtime-registration.mjs';
+import { withKitchenPredecessor } from './kitchen-predecessor-fixture.mjs';
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const fixture = mkdtempSync(join(tmpdir(), 'teach-recipe-registration-'));
-for (const name of ['docs', 'scripts', '.github', 'verification', 'kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle']) cpSync(join(root, name), join(fixture, name), { recursive: true });
+for (const name of ['docs', 'scripts', '.github', 'verification', 'kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle', 'drizzle-isolated', 'src', 'tests']) cpSync(join(root, name), join(fixture, name), { recursive: true });
 after(() => rmSync(fixture, { recursive: true, force: true }));
 const raw = path => readFileSync(join(fixture, path), 'utf8');
 const json = path => JSON.parse(raw(path));
@@ -72,7 +73,7 @@ test('predecessor byte, baseline commit, active metadata and approval provenance
   changeJson(`${RECIPE_BASE}/owner-approval.json`, value => { value.response.text = 'approve deployment'; });
   changeJson(`${RECIPE_BASE}/owner-approval.json`, value => { value.question.message_id = 'invented'; });
   changeJson(`${RECIPE_BASE}/owner-approval.json`, value => { value.sys21_issue.number = 82; });
-  change('contracts/c31-content-teaching-engine-contract.md', text => text.replace('"version": "1.4.0"', '"version": "1.5.0"'));
+  change('contracts/c31-content-teaching-engine-contract.md', text => { const changed=text.replace('"version": "1.5.0"', '"version": "9.9.9"'); assert.notEqual(changed,text); return changed; });
 });
 
 test('activation, spending, review and semantic expansion claims cannot be introduced by registration edits', () => {
@@ -133,7 +134,7 @@ test('unrelated original route, capability and governance changes still fail ori
   change('domains/demo-runtime/proposal-0.1.0/transport-and-queries.json', text => text + '\n', inspectDemoRuntimeRegistration, /immutable package file differs/);
 });
 
-test('predecessor-only checkout remains accepted, but cannot pretend recipe registration exists', () => {
+test('predecessor-only checkout remains accepted, but cannot pretend recipe registration exists', () => withKitchenPredecessor(fixture, () => {
   const source = json(`${RECIPE_BASE}/source-baseline.json`);
   const registration = json(`${RECIPE_BASE}/registration.json`);
   const live = Object.fromEntries(Object.keys(source.files).map(path => [path, raw(path)]));
@@ -175,7 +176,7 @@ test('predecessor-only checkout remains accepted, but cannot pretend recipe regi
     renameSync(recoveryParked, join(fixture, RECOVERY_BASE));
     for (const [path, text] of Object.entries(recoveryLive)) writeFileSync(join(fixture, path), text);
   }
-});
+}));
 
 test('historical reader cannot launder a mutated current recipe contract', () => {
   const path = 'contracts/c31-content-teaching-engine-contract.md', original = raw(path);

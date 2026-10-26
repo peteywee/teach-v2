@@ -1,0 +1,107 @@
+{
+  "registration_id": "TEACH-DEMO-KITCHEN-2026-10-26",
+  "version": "0.1.0",
+  "state": "REGISTERED_BOUNDED_SOURCE_ONLY",
+  "package_id": "TEACH-DEMO-KITCHEN-2026-10-26",
+  "package_version": "0.1.0",
+  "package_sha256sums_digest": "ba01dfc871d53a98a621ee301ec8435061c8d01f0ac509c1029539d03337406d",
+  "source_baseline_commit": "884d829e5b53dcf9291677f52e7f100882f528e6",
+  "source_baseline_tree": "5b0e25d95320e712d7fb112852cfe29f085f895e",
+  "source_baseline_sha256": "9eb831eb84535ff63185fbfb23356d7f57a82432ef74e250af7dadb3ca28f959",
+  "approval_record": "domains/demo-kitchen/owner-approval.json",
+  "approval_sha256": "f760ebb5a3521f36183923ecd219b7c32ebe5c893cdcfd85d8055c50beb1acef",
+  "immutable_proposal": "domains/demo-kitchen/proposal-0.1.0",
+  "registered_on": "2026-10-26",
+  "impact_issue": "https://github.com/peteywee/teach-v2/issues/99",
+  "predecessor_registration": {
+    "path": "domains/demo-recipes/registration.json",
+    "sha256": "bd0b74666f5da45c70a0d1c0fe42d5d7099a5bc6c9d727b665e4381094605443"
+  },
+  "contracts": [
+    {
+      "contract": "C31",
+      "path": "contracts/c31-content-teaching-engine-contract.md",
+      "from": "1.4.0",
+      "to": "1.5.0",
+      "superseded_copy": "contracts/superseded/c31-content-teaching-engine-contract-1.4.0.md",
+      "before_sha256": "a6faa3aa61015a1bde940a9a21ed652f06ede7c95612497bdf4074f5e4dfd60d",
+      "after_sha256": "4b6e32f84f3ca8dd2951b9c29e95b61c923f37d5dc37ffe299b0a23fdef451ae",
+      "superseded_sha256": "96ede5bcfce113afdf1ab7d03dc093d12828b0a24d0eda22a5fe620fd7c1387d"
+    },
+    {
+      "contract": "C41",
+      "path": "contracts/c41-api-boundary-contract.md",
+      "from": "1.3.0",
+      "to": "1.4.0",
+      "superseded_copy": "contracts/superseded/c41-api-boundary-contract-1.3.0.md",
+      "before_sha256": "191759a7f20862f5e4dafdc81a13b80987d29fcb3cc0d20fd5bb4754a088d71a",
+      "after_sha256": "a12a6c7bd4cc9b1bb6fb38a4095e29f4a1e031d2638a609ca6793316f02a1008",
+      "superseded_sha256": "d4020ef7fdd71b5f4bd950c6b75849239a2c56fcf4eae89407018ac454fa1b6b"
+    },
+    {
+      "contract": "C42",
+      "path": "contracts/c42-web-client-boundary-contract.md",
+      "from": "1.3.0",
+      "to": "1.4.0",
+      "superseded_copy": "contracts/superseded/c42-web-client-boundary-contract-1.3.0.md",
+      "before_sha256": "9a4e47b396a7867175abaf18eabb8ff290486c050fbdf5d9ac3f08730dac512e",
+      "after_sha256": "7a261dabdb540a18d2350ab19f92dc43d785de57dac39566569f8afc40bf64ec",
+      "superseded_sha256": "d77615d09d82a2ff6dfdf450a1fa65618cf92cbce0521dd23ed7238cde0ce934"
+    }
+  ],
+  "revised_paths": [
+    "contracts/c31-content-teaching-engine-contract.md",
+    "contracts/c41-api-boundary-contract.md",
+    "contracts/c42-web-client-boundary-contract.md",
+    "contracts/README.md",
+    "contracts/APPROVAL-RECORD.md"
+  ],
+  "authority_file_hashes": {
+    "contracts/c31-content-teaching-engine-contract.md": "4b6e32f84f3ca8dd2951b9c29e95b61c923f37d5dc37ffe299b0a23fdef451ae",
+    "contracts/c41-api-boundary-contract.md": "a12a6c7bd4cc9b1bb6fb38a4095e29f4a1e031d2638a609ca6793316f02a1008",
+    "contracts/c42-web-client-boundary-contract.md": "7a261dabdb540a18d2350ab19f92dc43d785de57dac39566569f8afc40bf64ec",
+    "contracts/README.md": "150c6dbd38382448cce860b9a3e511ec7bb653ff098b8dd6f7a76b7ef4e49b1c",
+    "contracts/APPROVAL-RECORD.md": "85465f3d9b0e38b2dadfdce3a66eb0187257a50ad4efac1b56002f8cd56e314e",
+    "contracts/superseded/c31-content-teaching-engine-contract-1.4.0.md": "96ede5bcfce113afdf1ab7d03dc093d12828b0a24d0eda22a5fe620fd7c1387d",
+    "contracts/superseded/c41-api-boundary-contract-1.3.0.md": "d4020ef7fdd71b5f4bd950c6b75849239a2c56fcf4eae89407018ac454fa1b6b",
+    "contracts/superseded/c42-web-client-boundary-contract-1.3.0.md": "d77615d09d82a2ff6dfdf450a1fa65618cf92cbce0521dd23ed7238cde0ce934",
+    "kernel/content-schema-kitchen-successor.json": "09ea2c8eaa9c5f983706e68e3c4fde358a81e8d5b6a989513096aad266a4e448"
+  },
+  "predecessor_file_hashes": {
+    "contracts/c31-content-teaching-engine-contract.md": "a6faa3aa61015a1bde940a9a21ed652f06ede7c95612497bdf4074f5e4dfd60d",
+    "contracts/c41-api-boundary-contract.md": "191759a7f20862f5e4dafdc81a13b80987d29fcb3cc0d20fd5bb4754a088d71a",
+    "contracts/c42-web-client-boundary-contract.md": "9a4e47b396a7867175abaf18eabb8ff290486c050fbdf5d9ac3f08730dac512e",
+    "contracts/README.md": "5aac6f632e467f85436e8c7dee828b978eaf9fbedd3868c8e884a12c916ebbbd",
+    "contracts/APPROVAL-RECORD.md": "cdc23be15613112f9aed4d98875507b210d27ce4418ca95fbd08c2f0c377e9f5"
+  },
+  "evidence_hashes": {
+    "domains/demo-kitchen/README.md": "ceb1014b376bca2a1ded3c2c77c5406ed8b4a64edfc780cf2e7c1b9ba0e62f05",
+    "domains/demo-kitchen/owner-approval.json": "f760ebb5a3521f36183923ecd219b7c32ebe5c893cdcfd85d8055c50beb1acef",
+    "domains/demo-kitchen/source-baseline.json": "9eb831eb84535ff63185fbfb23356d7f57a82432ef74e250af7dadb3ca28f959"
+  },
+  "schema_reference_projection": {
+    "path": "kernel/content-schema-kitchen-successor.json",
+    "sha256": "09ea2c8eaa9c5f983706e68e3c4fde358a81e8d5b6a989513096aad266a4e448"
+  },
+  "schemaVersions": [
+    "1.0.0",
+    "1.1.0",
+    "1.2.0"
+  ],
+  "new_synthetic_template_version": "1.2.0",
+  "new_semantic_entries": 0,
+  "new_tables": 0,
+  "new_routes": 0,
+  "new_capabilities": 0,
+  "new_migrations": 1,
+  "guard_target": "teach_v2_demo.content_guard_demo_version",
+  "api_route_count": 15,
+  "served_asset_path_count": 7,
+  "historical_migrations_immutable": true,
+  "independent_verification": "NOT_ESTABLISHED_BY_REGISTRATION",
+  "implementation_conformance": "NOT_ESTABLISHED_BY_REGISTRATION",
+  "physical_admission_performed": false,
+  "runtime_activation_authorized": false,
+  "execution_authorized_by_registration": false,
+  "meaning": "Source integrity and bounded scope only. The owner separately conditionally approved release/apply; source registration is not review, physical admission, passed tests, migration execution, deployment or recovery evidence."
+}

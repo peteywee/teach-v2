@@ -6,6 +6,10 @@ const schemas=JSON.parse(readFileSync(new URL('../../domains/demo-runtime/propos
 const recipeSchemas=JSON.parse(readFileSync(new URL('../../domains/demo-recipes/proposal-0.1.1/public-content-schema-1.1.0.json',import.meta.url),'utf8')).$defs;
 const recipe=JSON.parse(readFileSync(new URL('../../domains/demo-recipes/proposal-0.1.1/content-schema-1.1.0.json',import.meta.url),'utf8')).$defs.Recipe;
 schemas.Recipe=recipe;schemas.PublicContent={anyOf:[schemas.PublicContent,recipeSchemas.PublicContent]};
+const kitchenSchemas=JSON.parse(readFileSync(new URL('../../domains/demo-kitchen/proposal-0.1.0/content-schema-1.2.0.json',import.meta.url),'utf8')).$defs;
+const kitchenPublic=JSON.parse(readFileSync(new URL('../../domains/demo-kitchen/proposal-0.1.0/public-content-schema-1.2.0.json',import.meta.url),'utf8')).$defs.PublicContent;
+for(const name of ['StationRecipe','KitchenStation','DemoPerson','EquipmentItem','InventoryHolding','EquipmentRequirement'])schemas[name]=kitchenSchemas[name];
+schemas.PublicContent.anyOf.push(kitchenPublic);
 const names: Partial<Record<DemoOperation,string>>={ReadCurrentSession:'CurrentSession',ListOwnMemberships:'Memberships',ListTeam:'Team',ReadTeamMemberLearnerState:'TeamStates',AssignContent:'Assignment',ListOwnAssignments:'Assignments',ReadAssignedContentVersion:'PublicContent',StartLearningSession:'Session',RecordProgressEvent:'ProgressEvent',CompleteLearningSession:'Session',ReadOwnLearnerState:'OwnStates',BeginDemoRun:'CurrentSession',SwitchDemoPersona:'CurrentSession'};
 export function assertOperationResponse(operation:DemoOperation,value:unknown):void{
   const name=names[operation];if(name)validate(schemas[name],value,'/'+name);else assert.equal(value,undefined);

@@ -1,0 +1,26 @@
+{
+  "successor_id": "TEACH-DEMO-KITCHEN-PHYSICAL-SUCCESSOR-2026-10-26",
+  "baseline_commit": "884d829e5b53dcf9291677f52e7f100882f528e6",
+  "prior_migration_count": 7,
+  "current_migration_count": 8,
+  "application_tables": 22,
+  "functions": 39,
+  "schema_versions": [
+    "1.0.0",
+    "1.1.0",
+    "1.2.0"
+  ],
+  "changed_function": "teach_v2_demo.content_guard_demo_version",
+  "new_tables": 0,
+  "new_roles": 0,
+  "new_grants": 0,
+  "new_policies": 0,
+  "rewritten_content_rows": 0,
+  "runtime_activation_authorized": false,
+  "shared_or_production_execution_authorized": false,
+  "deployment_authorized": false,
+  "migration_sha256": {
+    "drizzle/0007_demo_kitchen_content_guard.sql": "9fb45f65daebf30479de6cc08d62ee0884a210ca74b9ad377a7bb34c33645655",
+    "drizzle-isolated/0007_demo_kitchen_content_guard.sql": "83cee79983ae59a537ae1329e09c0aa0e00bcaea72b2468132b1f9d446dbdb58"
+  }
+}

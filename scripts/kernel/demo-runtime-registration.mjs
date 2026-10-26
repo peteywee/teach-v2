@@ -6,6 +6,7 @@ import { inspectSemanticDependencyClosure } from './semantic-dependency-closure.
 import { inspectDemoPhysicalSuccessor } from './demo-physical-successor.mjs';
 import { inspectRecipeRegistration } from './demo-recipes-registration.mjs';
 import { inspectSchemaIsolationRegistration } from './demo-schema-isolation-registration.mjs';
+import { inspectKitchenRegistration } from './demo-kitchen-registration.mjs';
 
 export const DEMO_PACKAGE_ID = 'TEACH-DEMO-RUNTIME-2026-10-17';
 export const DEMO_PACKAGE_SHA256 = 'a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a';
@@ -168,7 +169,7 @@ export function createHistoricalSourceReader(root, source) {
     // a live, nonprojected input is intentionally invalid. This is not admission.
     // Any later successor or orphan switches back to complete-chain validation.
     const successor = schema.present || schema.errors.length || [
-      'domains/demo-recipes', 'persistence/physical-slices/demo-runtime',
+      'domains/demo-recipes', 'domains/demo-kitchen', 'persistence/physical-slices/demo-runtime',
       'persistence/physical-slices/demo-recipes', 'src/bootstrap/demo',
       'drizzle/0005_demo_runtime_owner_storage.sql', 'drizzle/meta/0005_snapshot.json',
       'kernel/content-schema-reference-successor.json',
@@ -183,7 +184,7 @@ export function createHistoricalSourceReader(root, source) {
       if (verified.errors.length) throw new Error(verified.errors.join('\n'));
       if (source && !isDeepStrictEqual(source, verified.source)) throw new Error('demo registration: historical reader requires the verified source snapshot');
       snapshot = verified.source;
-      for (const path of [...verified.physicalSuccessor.revisedPaths, ...verified.schemaIsolationSuccessor.revisedPaths]) revised.add(path);
+      for (const path of [...verified.physicalSuccessor.revisedPaths, ...verified.schemaIsolationSuccessor.revisedPaths, ...verified.kitchenSuccessor.revisedPaths]) revised.add(path);
     } else {
       for (const [path, expected] of Object.entries(EVIDENCE_HASHES)) {
         if (hash(readFileSync(join(root,path))) !== expected) throw new Error('demo registration: exact original semantic evidence required: '+path);
@@ -275,6 +276,22 @@ export function inspectDemoRuntimeRegistration(root) {
     }
     equal(counts, { PROMOTE: 46, ADD: 70, REVISE: 15 }, 'exact change disposition counts required');
     if (errors.length) return { errors, registered: true };
+    // Presence, approval and inspectable approved references are necessary,
+    // never sufficient, for admission. Preserve the exact semantic diagnostic
+    // before denying malformed live kernels without costly successor work.
+    // These invocation-local reads grant no authority; every surviving candidate
+    // still undergoes all original exact overlay/closure and successor checks.
+    const currentFamilies = new Map(Object.keys(DEMO_FAMILY_KINDS).map(family => {
+      const path = `kernel/${family}.json`; return [path, json(path)];
+    }));
+    for (const entry of proposal.entries) {
+      const path = `kernel/${entry.family}.json`;
+      const entries = currentFamilies.get(path)?.entries;
+      const current = Array.isArray(entries) ? entries.find(row => row?.id === entry.id) : undefined;
+      equal(current?.status, 'approved', `exact approved overlay / unrelated entries changed: ${path}`);
+    }
+    errors.push(...inspectSemanticDependencyClosure(Object.fromEntries([...currentFamilies].map(([path, doc]) => [path.slice(7), doc]))).errors);
+    if (errors.length) return { errors, registered: true };
     const registration = json(`${DEMO_BASE}/registration.json`);
     const approval = json(`${DEMO_BASE}/owner-approval.json`);
     equal(registration.registered_entries, proposal.entries.map(({ family, id, change }) => ({ family, id, change })), 'exact registered entry inventory required');
@@ -290,10 +307,12 @@ export function inspectDemoRuntimeRegistration(root) {
     const recipeSuccessor = inspectRecipeRegistration(root);
     errors.push(...recipeSuccessor.errors);
     const recipeRevisions = new Set(recipeSuccessor.revisedPaths);
+    const kitchenSuccessor = inspectKitchenRegistration(root);
+    errors.push(...kitchenSuccessor.errors);
     const expectedFiles = new Set([
       ...Object.keys(source.files), ...Object.keys(registration.authority_file_hashes ?? {}),
       ...Object.keys(EVIDENCE_HASHES), ...[...seen, 'SHA256SUMS'].map(name => `${DEMO_PROPOSAL}/${name}`),
-      ...recipeSuccessor.addedPaths, ...schemaIsolationSuccessor.addedPaths,
+      ...recipeSuccessor.addedPaths, ...schemaIsolationSuccessor.addedPaths, ...kitchenSuccessor.addedPaths,
     ]);
     errors.push(...inspectActiveAuthorityInventory(root, expectedFiles));
     const overlay = buildDemoKernelOverlay(source, proposal);
@@ -360,7 +379,7 @@ export function inspectDemoRuntimeRegistration(root) {
         equal(normalize(current), normalize(source.files[path]), `unchanged preceding source drift: ${path}`);
       } else equal(hash(current), digest, `unchanged preceding source drift: ${path}`);
     }
-    return { errors, registered: true, registeredEntries: 131, closure, source, proposal, physicalSuccessor, recipeSuccessor, schemaIsolationSuccessor };
+    return { errors, registered: true, registeredEntries: 131, closure, source, proposal, physicalSuccessor, recipeSuccessor, schemaIsolationSuccessor, kitchenSuccessor };
   } catch (error) {
     errors.push(`demo registration: missing or malformed evidence: ${error.message}`);
     return { errors, registered: true };
