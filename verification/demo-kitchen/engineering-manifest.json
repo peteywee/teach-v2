@@ -102,7 +102,7 @@
   "current_sha256": {
     ".github/workflows/development-self-audit.yml": "acb4d77822386ccea3e0d74a62f91efbc7987fc4a74a56e292a1d545ab947612",
     "verification/workflow-lifecycle/inventory.json": "b35d7ef9bc0bb9a70801c2144ef03a6145614ff2605d45c7735ee05ffeb0a10a",
-    "scripts/kernel/demo-runtime-registration.mjs": "4c472bebb0558c5ca7bd9176dc33f16d8befe6df5756988d21fa2c07d074ae84",
+    "scripts/kernel/demo-runtime-registration.mjs": "44572ae52c6ddd9a0c2496d21effb516e0d87aed197e28009c8d76cdf90497a6",
     "scripts/kernel/demo-recipes-registration.mjs": "1016e91dff4b49449c05cd1babf49d96b77f10bce059d1d8921c10446ec74ac1",
     "scripts/kernel/demo-recovery-registration.mjs": "ffc2c6a7f5044f6a95ee6b8bf7235b6394870000d3e6a8276116796edf788749",
     "scripts/verification/demo-schema-isolation-engineering.mjs": "d4816378d75cc0dc164c942d759a69204cf2eaa293c9c3f0391d5b35d18e20f6",

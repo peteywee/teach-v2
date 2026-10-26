@@ -276,6 +276,19 @@ export function inspectDemoRuntimeRegistration(root) {
     }
     equal(counts, { PROMOTE: 46, ADD: 70, REVISE: 15 }, 'exact change disposition counts required');
     if (errors.length) return { errors, registered: true };
+    // The pinned proposal requires every registered entry to be present and
+    // approved. Reject that necessary-condition failure before projecting any
+    // expensive successors. This invocation-local read grants no authority:
+    // candidates that survive still undergo every exact overlay/closure check.
+    const currentFamilies = new Map();
+    for (const entry of proposal.entries) {
+      const path = `kernel/${entry.family}.json`;
+      if (!currentFamilies.has(path)) currentFamilies.set(path, json(path));
+      const entries = currentFamilies.get(path)?.entries;
+      const current = Array.isArray(entries) ? entries.find(row => row?.id === entry.id) : undefined;
+      equal(current?.status, 'approved', `exact approved overlay / unrelated entries changed: ${path}`);
+    }
+    if (errors.length) return { errors, registered: true };
     const registration = json(`${DEMO_BASE}/registration.json`);
     const approval = json(`${DEMO_BASE}/owner-approval.json`);
     equal(registration.registered_entries, proposal.entries.map(({ family, id, change }) => ({ family, id, change })), 'exact registered entry inventory required');
