@@ -1,3 +1,5 @@
+import { STORAGE_OWNER_PATTERN, STORAGE_INTEGRATION_PATTERN, assertStoragePartitionInventory } from './demo-storage-partitions.mjs';
+import { inspectKitchenRegistration } from '../kernel/demo-kitchen-registration.mjs';
 import { inspectDemoRecoveryRegistration } from '../kernel/demo-recovery-registration.mjs';
 import { inspectRecipeRegistration } from '../kernel/demo-recipes-registration.mjs';
 import {REGISTRATION_ENTRY_PATTERN,REGISTRATION_REMAINDER_PATTERN} from './validator-partitions.mjs';
@@ -37,8 +39,17 @@ export function inspectConsolidatedVerification(root) {
       if(createHash('sha256').update(preservedRegistrationTestBytes(root)).digest('hex')!=='0aec40789483d97aafbeaa69846037de42b7f2f8a71c34979cd74aac8ce5a639')fail('original seventeen registration test declarations must remain exact');
     } catch(error) { fail(error.message); }
     const physicalRegression=plan?.stages?.find(stage=>stage.id==='audit-regressions');
-    if(physicalRegression?.command!=='node'||JSON.stringify(physicalRegression?.args)!==JSON.stringify(['--test','scripts/tests/validate-development-self-audit.test.mjs','scripts/tests/validate-ci-consolidation.test.mjs','scripts/tests/validate-demo-physical-successor.mjs','scripts/tests/validate-replay-database-cleanup.test.mjs'])||physicalRegression?.timeout_ms!==25000||!existsSync(join(root,'scripts/tests/validate-demo-physical-successor.mjs')))fail('exact bounded physical successor mutation suite must run in CI');
+    if(physicalRegression?.command!=='node'||JSON.stringify(physicalRegression?.args)!==JSON.stringify(['--test','scripts/tests/validate-development-self-audit.test.mjs','scripts/tests/validate-ci-consolidation.test.mjs','scripts/tests/validate-demo-physical-successor.mjs','scripts/tests/validate-replay-database-cleanup.test.mjs','scripts/tests/validate-whole-audit-runner.test.mjs'])||physicalRegression?.timeout_ms!==25000||!existsSync(join(root,'scripts/tests/validate-demo-physical-successor.mjs')))fail('exact bounded physical successor mutation suite must run in CI');
+    for (const [id, pattern] of [['demo-storage-owner-regressions', STORAGE_OWNER_PATTERN], ['demo-storage-integration-regressions', STORAGE_INTEGRATION_PATTERN]]) {
+      const stage = plan?.stages?.find(stage => stage.id === id);
+      if (stage?.command !== 'node' || JSON.stringify(stage?.args) !== JSON.stringify(['--test', '--test-name-pattern='+pattern, 'scripts/tests/demo-storage-evidence.mjs']) || stage?.timeout_ms !== 25000) fail('exact bounded exhaustive storage partitions required');
+    }
+    try {
+      const names = [...readFileSync(join(root, 'scripts/tests/demo-storage-evidence.mjs'), 'utf8').matchAll(/^test\('([^']+)'/gm)].map(match => match[1]);
+      assertStoragePartitionInventory(names);
+    } catch (error) { fail(error.message); }
     const demoSource=plan?.stages?.find(stage=>stage.id==='demo-source-tests');
+    if (demoSource?.args?.includes('scripts/tests/demo-storage-evidence.mjs')) fail('storage declarations must execute only in their two exact bounded partitions');
     for(const path of demoSource?.args?.filter(arg=>/^(?:tests|scripts)\//.test(arg))||[])if(!existsSync(join(root,path)))fail(`required demo test missing: ${path}`);
     const recipe = inspectRecipeRegistration(root);
     errors.push(...recipe.errors);
@@ -118,8 +129,10 @@ export function inspectConsolidationCoverage(root) {
     // Exact admitted successors add capability names, demo semantics, and the
     // reviewed physical gate, all executed by the unchanged authority loop.
     const recipe = inspectRecipeRegistration(root); errors.push(...recipe.errors);
+    const kitchen = inspectKitchenRegistration(root); errors.push(...kitchen.errors);
     const admittedValidators=['scripts/kernel/validate-capability-admission.mjs','scripts/kernel/validate-demo-runtime-registration.mjs','scripts/persistence/validate-demo-physical-admission.mjs',
-      ...(recipe.present && recipe.errors.length===0 ? ['scripts/kernel/validate-demo-recipes-registration.mjs','scripts/persistence/validate-demo-recipes-physical-admission.mjs'] : [])];
+      ...(recipe.present && recipe.errors.length===0 ? ['scripts/kernel/validate-demo-recipes-registration.mjs','scripts/persistence/validate-demo-recipes-physical-admission.mjs'] : []),
+      ...(kitchen.present && kitchen.errors.length===0 ? ['scripts/kernel/validate-demo-kitchen-registration.mjs'] : [])];
     const requiredValidators=[...coverage.baseline_umbrella_validators,...admittedValidators].sort();
     if(JSON.stringify(validators.sort())!==JSON.stringify(requiredValidators))fail('complete baseline plus exact admitted standalone validator inventory required');
     if(hash(readFileSync(join(root,'scripts/db/replay-database-cleanup.mjs')))!=='54c2027a98ce883aa9f1a892a11b165eabe56353028a23c63cbf495a4887b388')fail('reviewed bounded replay cleanup helper identity required');

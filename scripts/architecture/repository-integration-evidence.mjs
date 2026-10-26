@@ -1,3 +1,4 @@
+import { inspectKitchenPhysicalSuccessor } from '../persistence/demo-kitchen-physical-successor.mjs';
 import { createPersistenceEvidenceContext } from '../persistence/demo-storage-evidence.mjs';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { resolve, join, dirname } from 'node:path';
@@ -13,7 +14,8 @@ export function inspectRepositoryIntegration(root) {
     // Preserve the persistence block; independent workflow controls still run.
     return [`repository integration: unverified persistence evidence: ${error.message}`, ...inspectConsolidatedVerification(root)];
   }
-  const errors=[...persistence.errors];
+  const kitchen=inspectKitchenPhysicalSuccessor(root);
+  const errors=[...persistence.errors,...kitchen.errors];
   // A marker or claimed ADMIT is insufficient: only independently reviewed
   // current storage may use these exact two tables at these exact locations.
   const admittedDemo=persistence.extended && persistence.errors.length===0;
@@ -23,7 +25,8 @@ export function inspectRepositoryIntegration(root) {
      'drizzle/0005_demo_runtime_owner_storage.sql','drizzle/meta/0005_snapshot.json',
      // The recipe successor adds no tables; its reviewed snapshot repeats
      // the unchanged predecessor only after the full physical gate passes.
-     ...(persistence.recipePhysicalSuccessor?.admitted ? ['drizzle/meta/0006_snapshot.json'] : [])].includes(path);
+     ...(persistence.recipePhysicalSuccessor?.admitted ? ['drizzle/meta/0006_snapshot.json'] : []),
+     ...(kitchen.admitted ? ['drizzle/meta/0007_snapshot.json'] : [])].includes(path);
   const fail=(message)=>errors.push(`repository integration: ${message}`);
   const load=(path)=>{try{return JSON.parse(readFileSync(join(root,path),'utf8'));}catch(error){fail(`${path}: ${error.message}`);return null;}};
   const text=(path)=>{try{return readFileSync(join(root,path),'utf8');}catch(error){fail(`${path}: ${error.message}`);return '';}};

@@ -1,3 +1,4 @@
+import { inspectKitchenPhysicalSuccessor } from '../persistence/demo-kitchen-physical-successor.mjs';
 // Structural admission preflight. PostgreSQL replay remains a separate proof.
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -108,7 +109,8 @@ export function inspectMigrationHistory(root) {
   const recipe = existsSync(join(root, DEMO_RECIPE_PHYSICAL_LANE)) || existsSync(join(root, DEMO_RECIPE_MIGRATION))
     ? inspectDemoRecipePhysicalSuccessor(root) : null;
   if (recipe) errors.push(...recipe.errors);
-  const migrationCount = recipe?.admitted && guard?.migrations_generated === 6 ? recipe.migrationCount : guard?.migrations_generated;
+  const kitchen = inspectKitchenPhysicalSuccessor(root); errors.push(...kitchen.errors);
+  const migrationCount = kitchen.admitted && recipe?.admitted && guard?.migrations_generated === 6 ? kitchen.migrationCount : recipe?.admitted && guard?.migrations_generated === 6 ? recipe.migrationCount : guard?.migrations_generated;
   if (migrationCount !== journal.entries.length) {
     fail(`readiness migration count ${guard?.migrations_generated} differs from journal count ${journal.entries.length}`);
   }

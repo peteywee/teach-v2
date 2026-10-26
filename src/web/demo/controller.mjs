@@ -1,5 +1,6 @@
 import { ApiError } from './api.mjs';
-const empty=()=>({phase:'loading',screen:'home',session:null,membership:null,assignments:[],states:[],team:[],teamStates:{},content:null,library:[],recipeKey:null,assignmentId:null,memberId:null,feedbackId:null,selected:null,error:null,notice:'',busy:false});
+const empty=()=>({phase:'loading',screen:'home',session:null,membership:null,assignments:[],states:[],team:[],teamStates:{},content:null,library:[],catalogs:[],recipeKey:null,stationKey:null,equipmentKey:null,assignmentId:null,memberId:null,feedbackId:null,selected:null,error:null,notice:'',busy:false});
+const libraryScreens=['kitchen','stations','station','recipes','recipe','equipment'];
 const sameRef=(a,b)=>a?.version===b?.version&&a?.digest===b?.digest;
 const protocol=()=>{throw new ApiError('protocol');};
 /** Owns presentation state only. APIs remain the authority for permissions and completion. */
@@ -55,7 +56,7 @@ export function createDemoController({api,onChange=()=>{},online=()=>globalThis.
   const current=await call(t,'ReadCurrentSession');
   if(state.session&&(state.session.identityId!==current.identityId||state.session.demo.runId!==current.demo.runId||state.session.demo.scope.organizationId!==current.demo.scope.organizationId||state.session.demo.scope.locationId!==current.demo.scope.locationId))keys.clear();
   // A different tab may rotate the shared HttpOnly cookie. Never carry old persona/scope data forward.
-  state.assignments=[];state.states=[];state.team=[];state.teamStates={};state.content=null;state.library=[];state.recipeKey=null;
+  state.assignments=[];state.states=[];state.team=[];state.teamStates={};state.content=null;state.library=[];state.catalogs=[];state.recipeKey=null;state.stationKey=null;state.equipmentKey=null;
   if(expected&&(current.identityId!==expected.identityId||current.demo.runId!==expected.demo.runId||current.demo.persona!==expected.demo.persona))protocol();
   state.session=current;requireOps('ListOwnMemberships');const memberships=await call(t,'ListOwnMemberships');
   const member=memberships.items.find(m=>m.organizationId===current.demo.scope.organizationId&&m.locationId===current.demo.scope.locationId);
@@ -71,20 +72,41 @@ export function createDemoController({api,onChange=()=>{},online=()=>globalThis.
   if(content.contentPackId!==a.contentPackId||content.organizationId!==a.organizationId||!sameRef(content.contentVersion,a.contentVersion))protocol();
   const s=ownState();if(s.nextBlockId!==(content.blocks[s.recordedBlockCount]?.id??null)||s.responses.some((r,i)=>r.evaluation.blockId!==content.blocks[i]?.id))protocol();state.content=content;state.screen=s.session?.status==='COMPLETED'?'completion':'training';state.feedbackId=null;state.selected=null;
  }
+
+ function validateCatalog(content){
+  for(const name of ['stations','people','equipment','inventory'])if(!Array.isArray(content[name]))protocol();
+  const ids=name=>{const values=content[name].map(x=>x.id);if(new Set(values).size!==values.length)protocol();return new Set(values);};
+  const stations=ids('stations'),people=ids('people'),equipment=ids('equipment');
+  if(content.stations.some(x=>!people.has(x.responsiblePersonId)))protocol();
+  const quantity=n=>Number.isSafeInteger(n)&&n>0&&n<=100;
+  const holdings=new Set();
+  for(const x of content.inventory){const key=JSON.stringify([x.equipmentId,x.stationId]);if(!equipment.has(x.equipmentId)||(x.stationId!==null&&!stations.has(x.stationId))||!quantity(x.quantity)||holdings.has(key))protocol();holdings.add(key);}
+  for(const r of content.recipes){
+   if(!stations.has(r.stationId)||!Array.isArray(r.requirements)||!r.requirements.length)protocol();
+   const seen=new Set();for(const x of r.requirements){if(!equipment.has(x.equipmentId)||!quantity(x.quantity)||seen.has(x.equipmentId))protocol();seen.add(x.equipmentId);}
+  }
+ }
  async function library(t,screen='recipes',recipeKey=null){
   requireOps('ListOwnAssignments','ReadAssignedContentVersion');await own(t);
-  const entries=[],seen=new Set();
+  const entries=[],catalogs=[],seen=new Set();
   for(const {assignment:a} of [...state.assignments].reverse()){
    const ref=JSON.stringify([a.contentPackId,a.contentVersion.version,a.contentVersion.digest]);if(seen.has(ref))continue;seen.add(ref);
    const content=await call(t,'ReadAssignedContentVersion',{params:{...scope(),contentPackId:a.contentPackId,contentVersion:a.contentVersion.version}});
    if(content.contentPackId!==a.contentPackId||content.organizationId!==a.organizationId||!sameRef(content.contentVersion,a.contentVersion))protocol();
-   if(content.schemaVersion==='1.1.0'){
-    if(!Array.isArray(content.recipes)||content.recipes.length!==3||new Set(content.recipes.map(r=>r.id)).size!==3)protocol();
-    for(const recipe of content.recipes)entries.push({key:a.id+':'+recipe.id,assignmentId:a.id,contentPackId:a.contentPackId,contentVersion:a.contentVersion,recipe});
+   if(content.schemaVersion==='1.1.0'||content.schemaVersion==='1.2.0'){
+    if(!Array.isArray(content.recipes)||!content.recipes.length||content.recipes.length>(content.schemaVersion==='1.2.0'?24:3)||(content.schemaVersion==='1.1.0'&&content.recipes.length!==3)||new Set(content.recipes.map(r=>r.id)).size!==content.recipes.length)protocol();
+    let catalogKey=null;
+    if(content.schemaVersion==='1.2.0'){
+     validateCatalog(content);catalogKey=a.id;
+     catalogs.push({key:catalogKey,contentPackId:a.contentPackId,contentVersion:a.contentVersion,stations:content.stations,people:content.people,equipment:content.equipment,inventory:content.inventory});
+    }
+    for(const recipe of content.recipes)entries.push({key:a.id+':'+recipe.id,assignmentId:a.id,contentPackId:a.contentPackId,contentVersion:a.contentVersion,recipe,...(catalogKey?{catalogKey}:{})});
    }else if(content.schemaVersion!=='1.0.0'||Object.hasOwn(content,'recipes'))protocol();
   }
   if(screen==='recipe'&&!entries.some(entry=>entry.key===recipeKey))throw new ApiError('server',{status:404,code:'NOT_FOUND'});
-  state.library=entries;state.recipeKey=recipeKey;state.screen=screen;state.assignmentId=null;state.content=null;state.feedbackId=null;state.selected=null;
+  if(screen==='station'&&!catalogs.some(c=>c.stations.some(x=>c.key+':'+x.id===recipeKey)))throw new ApiError('server',{status:404,code:'NOT_FOUND'});
+  if(screen==='equipment'&&recipeKey!==null&&!catalogs.some(c=>c.equipment.some(x=>c.key+':'+x.id===recipeKey)))throw new ApiError('server',{status:404,code:'NOT_FOUND'});
+  state.library=entries;state.catalogs=catalogs;state.recipeKey=screen==='recipe'?recipeKey:null;state.stationKey=screen==='station'?recipeKey:null;state.equipmentKey=screen==='equipment'?recipeKey:null;state.screen=screen;state.assignmentId=null;state.content=null;state.feedbackId=null;state.selected=null;
  }
  async function begin(t){const issued=await call(t,'BeginDemoRun',{body:{}});await hydrate(t,{expected:issued});state.notice='Your isolated demo is ready. All training responses are saved by the service.';}
  return {
@@ -92,10 +114,10 @@ export function createDemoController({api,onChange=()=>{},online=()=>globalThis.
   boot:async()=>{if(writePending)await new Promise(resolve=>idleWaiters.push(resolve));return run(async t=>{try{await hydrate(t);}catch(e){if(e.status===401){clear();state.screen='home';return;}throw e;}});},
   enter:()=>run(begin,{mutation:true,discard:true}),
   recover:()=>run(async t=>{await hydrate(t);state.notice='Session and saved records reloaded from the service.';}),
-  refresh:()=>run(async t=>{const screen=state.screen,id=state.assignmentId,member=state.memberId,recipeKey=state.recipeKey;await hydrate(t);if(['kitchen','recipes','recipe'].includes(screen)){await library(t,screen,recipeKey);}if(id&&allowed('ListOwnAssignments'))await readAssignment(t,id);if(screen==='member'&&state.team.some(x=>x.identityId===member)){state.memberId=member;state.screen='member';}state.notice='Showing the latest saved records.';}),
+  refresh:()=>run(async t=>{const screen=state.screen,id=state.assignmentId,member=state.memberId,recipeKey=state.recipeKey??state.stationKey??state.equipmentKey;await hydrate(t);if(libraryScreens.includes(screen)){await library(t,screen,recipeKey);}if(id&&allowed('ListOwnAssignments'))await readAssignment(t,id);if(screen==='member'&&state.team.some(x=>x.identityId===member)){state.memberId=member;state.screen='member';}state.notice='Showing the latest saved records.';}),
   dashboard:()=>run(async t=>{await hydrate(t);}),
   navigate:screen=>run(async t=>{if(screen==='home'){await hydrate(t);return;}if(screen==='manager'){requireOps('ListTeam');await team(t);state.screen='manager';}else{requireOps('ListOwnAssignments');await own(t);state.screen='learner';}state.feedbackId=null;state.selected=null;}),
-  library:(screen='recipes',recipeKey=null)=>run(async t=>{if(!['kitchen','recipes','recipe'].includes(screen))protocol();await hydrate(t);await library(t,screen,recipeKey);}),
+  library:(screen='recipes',recipeKey=null)=>run(async t=>{if(!libraryScreens.includes(screen))protocol();await hydrate(t);await library(t,screen,recipeKey);}),
   switchPersona:persona=>{
    if(!state.session||writePending)return false;if(!allowed('SwitchDemoPersona'))return run(async()=>{throw new ApiError('server',{status:403,code:'FORBIDDEN'});});const target=scope();
    return run(async t=>{const issued=await call(t,'SwitchDemoPersona',{body:{...target,persona}});await hydrate(t,{expected:issued});state.notice='Persona switched securely. The previous session is revoked.';},{mutation:true,discard:true});

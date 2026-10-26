@@ -1,0 +1,26 @@
+{
+  "baseline_commit": "884d829e5b53dcf9291677f52e7f100882f528e6",
+  "files": {
+    "drizzle-isolated/0000_slice_p01_reconciliation.sql": "53643ef4853adeffa864175a14ae8104d8b358fc788aef2db9055ab2a57561ba",
+    "drizzle-isolated/0001_odd_photon.sql": "e9bfb8fdc4a276cb67019a281f997a20bac6c6e8038b46132b09414834851222",
+    "drizzle-isolated/0002_quick_venus.sql": "f7c27b7d98b47cc72671a67129632660b65e8978e48d1fa2fa3b971f3abe7088",
+    "drizzle-isolated/0003_slice_p04_credential.sql": "c46fcd2409b284e1c752923db061a7ccbc4d9001dd9f2ce316c1b9a929d1b3ef",
+    "drizzle-isolated/0004_slice_p05_learning_session.sql": "28aafd8d401fb0756a91ee3df2fee8a7ffd9d9cdee829b5e0da625933df8fd8f",
+    "drizzle-isolated/0005_demo_runtime_owner_storage.sql": "31faa5e1668a15b9eccc3c166002b8f5284520d2e7740bb356abfd8710e39221",
+    "drizzle-isolated/0006_demo_recipe_content_guard.sql": "39b1cb2e6b4db8b052c8b7db85133f81ebf7949f80c15e905f66bf97f88ae280",
+    "drizzle/0000_slice_p01_reconciliation.sql": "c372f6ed790e8adb38a2e1b3102f11c4addd284acd274e1da3add4d23ef64c2c",
+    "drizzle/0001_odd_photon.sql": "e151cdc4b7c1a040aac0bd4769b4033dd130cb0b5eb0835ccde95729cea26994",
+    "drizzle/0002_quick_venus.sql": "76f4f620023d2310d5147b8764bc9f275cbff4d4faf4c8c4975bbeb0dc6a65e2",
+    "drizzle/0003_slice_p04_credential.sql": "3396caa659e905d87ab8a3f92759e7d5bda72eecae27d275fd12cd8e4d284fef",
+    "drizzle/0004_slice_p05_learning_session.sql": "dda0c34f193797f0ad9a3fb5916500ff1038da0cf7701d63a4d8e6b193cca0b4",
+    "drizzle/0005_demo_runtime_owner_storage.sql": "441c579790de90a71c904a6a49e8b22b3bfb5b72bd3bf4171a5b1d062f1d6775",
+    "drizzle/0006_demo_recipe_content_guard.sql": "f8c240898131aca26fcaa4a7cb5d11cb84412358901c20f626667de8ee12851f",
+    "drizzle/meta/0000_snapshot.json": "5eed3d787030128b2f3e8b8143876b8d281c499ea400eca6894ac5252220342b",
+    "drizzle/meta/0001_snapshot.json": "e06ec42503506c35104c8b480c76cbd2ebb90b343f46dc8e0121dc16acb2917c",
+    "drizzle/meta/0002_snapshot.json": "9068d5373d54e0de0f1d634454ed7c0fe5e7d3aab01409881d6427c488d349bf",
+    "drizzle/meta/0003_snapshot.json": "1dae012c1aba442d6eea4a2394cb310a2d11c070ce96a5ed83196dbeec40903f",
+    "drizzle/meta/0004_snapshot.json": "7c5efbc30c0f6bd27964ea4a3b291c64aa5da2c0cbd94b77d7c55db58068f6cb",
+    "drizzle/meta/0005_snapshot.json": "d27ef436ad2615fe45471e9a46861a4b7f57fe5be67ba5439b5e69aa2bd8f6ad",
+    "drizzle/meta/0006_snapshot.json": "b070cb4a7377529a77ed81d3ce1b4586da55a6306301899704415fd226a57ef1"
+  }
+}

@@ -214,7 +214,7 @@ export async function verifyIsolatedSchemaProof({ exerciseRuntime } = {}) {
       assert.deepEqual(await isolatedSnapshot(owner), protectedState, 'journal drift rejection mutated schema');
     }
     assert.equal(fingerprints[0], fingerprints[1], 'independent clean replays differ');
-    const result = { postgresMajor: 17, migrations: 7, applicationTables: 22, journalTables: 1, functions: 39, denialAndDefaultProbes: probes, hostileBuiltinProbes: shadowProbes, namedApiRolesTested: 2, legacyUnchanged: true, cleanReplayIdentical: true, runtimeExercised: Boolean(exerciseRuntime), schemaFingerprint: fingerprints[0] };
+    const result = { postgresMajor: 17, migrations: 8, applicationTables: 22, journalTables: 1, functions: 39, denialAndDefaultProbes: probes, hostileBuiltinProbes: shadowProbes, namedApiRolesTested: 2, legacyUnchanged: true, cleanReplayIdentical: true, runtimeExercised: Boolean(exerciseRuntime), schemaFingerprint: fingerprints[0] };
     console.log(`ISOLATED SCHEMA PROOF PASS: ${JSON.stringify(result)}`);
     return result;
   } finally {

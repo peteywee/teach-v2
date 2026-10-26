@@ -16,8 +16,10 @@ export const HISTORICAL_PINS = Object.freeze({
   '0004_slice_p05_learning_session.sql': 'dda0c34f193797f0ad9a3fb5916500ff1038da0cf7701d63a4d8e6b193cca0b4',
   '0005_demo_runtime_owner_storage.sql': '441c579790de90a71c904a6a49e8b22b3bfb5b72bd3bf4171a5b1d062f1d6775',
   '0006_demo_recipe_content_guard.sql': 'f8c240898131aca26fcaa4a7cb5d11cb84412358901c20f626667de8ee12851f',
+  '0007_demo_kitchen_content_guard.sql': '9fb45f65daebf30479de6cc08d62ee0884a210ca74b9ad377a7bb34c33645655',
 });
 const JOURNAL_PIN = '82d436f093d623ac3b90785073f7226e7ed2994283754a39084bfdea2aec33e0';
+const KITCHEN_JOURNAL_PIN = 'c7fe91cffd5a9ed952ef2183f671c67068632f865e2cd22f206d2ca8724e2a40';
 const BREAKPOINT = '\n--> statement-breakpoint\n';
 const RETAINED_TABLES = ['organization_organizations', 'organization_locations', 'organization_membership_grants', 'organization_reporting_relationships', 'identity_demo_personas', 'content_packs', 'content_pack_versions', 'learning_assignments', 'learning_progress_events', 'audit_events', 'lifecycle_events', 'transaction_command_receipts'];
 const CATALOG_FUNCTIONS = new Set(['now', 'length', 'btrim', 'octet_length', 'isfinite', 'encode', 'sha256', 'convert_to', 'family', 'masklen', 'pg_advisory_xact_lock', 'clock_timestamp', 'count', 'lower', 'jsonb_typeof', 'jsonb_array_length', 'jsonb_build_object', 'hashtextextended', 'date_bin', 'pg_current_xact_id', 'string_agg', 'to_jsonb', 'jsonb_each', 'jsonb_array_elements', 'array_append', 'chr']);
@@ -138,7 +140,10 @@ export function buildIsolatedLineage(root = REPOSITORY_ROOT) {
     return { name, hash, sql };
   });
   const journalBytes = readFileSync(resolve(root, 'drizzle/meta/_journal.json'), 'utf8');
-  assert.equal(sha256(journalBytes), JOURNAL_PIN, 'historical journal drift');
+  assert.equal(sha256(journalBytes), KITCHEN_JOURNAL_PIN, 'historical journal drift');
+  const priorBytes = readFileSync(resolve(root, 'persistence/physical-slices/demo-kitchen/prior-journal.json'), 'utf8');
+  assert.equal(sha256(priorBytes), JOURNAL_PIN, 'preserved seven-migration journal drift');
+  assert.deepEqual({ ...JSON.parse(journalBytes), entries: JSON.parse(journalBytes).entries.slice(0, 7) }, JSON.parse(priorBytes), 'historical journal prefix drift');
   const journal = JSON.parse(journalBytes);
   const combined = sources.map(({ sql }) => sql).join('\n');
   const tables = [...new Set([...combined.matchAll(/CREATE TABLE "?([a-z_]+)"?/g)].map((match) => match[1]))].sort();
@@ -172,7 +177,7 @@ export function buildIsolatedLineage(root = REPOSITORY_ROOT) {
     files.set(source.name, prefix + sql);
   }
   files.set('meta/_journal.json', JSON.stringify(journal, null, 2) + '\n');
-  const manifest = { version: 1, schema: ISOLATED_SCHEMA, journal: `${ISOLATED_SCHEMA}.__drizzle_migrations`, historicalJournalSha256: JOURNAL_PIN, tables, functions, migrations: sources.map(({ name, hash }, idx) => ({ name, historicalSha256: hash, isolatedSha256: sha256(files.get(name)), when: journal.entries[idx].when })) };
+  const manifest = { version: 1, schema: ISOLATED_SCHEMA, journal: `${ISOLATED_SCHEMA}.__drizzle_migrations`, historicalJournalSha256: KITCHEN_JOURNAL_PIN, tables, functions, migrations: sources.map(({ name, hash }, idx) => ({ name, historicalSha256: hash, isolatedSha256: sha256(files.get(name)), when: journal.entries[idx].when })) };
   files.set('manifest.json', JSON.stringify(manifest, null, 2) + '\n');
   return { files, manifest };
 }

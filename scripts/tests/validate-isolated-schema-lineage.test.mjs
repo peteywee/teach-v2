@@ -13,6 +13,7 @@ test('committed isolated lineage is deterministic and historical migrations are 
   assert.equal(first.manifest.journal, 'teach_v2_demo.__drizzle_migrations');
   assert.equal(first.manifest.tables.length, 22);
   assert.equal(first.manifest.functions.length, 39);
+  assert.equal(first.manifest.migrations.length, 8);
   for (const [name, bytes] of first.files) {
     if (!name.endsWith('.sql')) continue;
     assert.doesNotMatch(bytes, /IN SCHEMA public|ALTER TABLE public\.|schemaname='public'|nspname='public'/);
@@ -55,6 +56,7 @@ test('compiler rejects historical drift and verifier rejects generated drift or 
   try {
     cpSync(join(REPOSITORY_ROOT, 'drizzle'), join(root, 'drizzle'), { recursive: true });
     cpSync(join(REPOSITORY_ROOT, 'drizzle-isolated'), join(root, 'drizzle-isolated'), { recursive: true });
+    cpSync(join(REPOSITORY_ROOT, 'persistence/physical-slices/demo-kitchen'), join(root, 'persistence/physical-slices/demo-kitchen'), { recursive: true });
     const name = Object.keys(HISTORICAL_PINS)[0], historical = join(root, 'drizzle', name), generated = join(root, 'drizzle-isolated', name);
     const original = readFileSync(historical, 'utf8');
     writeFileSync(historical, original + '\n');

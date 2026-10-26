@@ -1,3 +1,4 @@
+import { withKitchenPredecessor } from './kitchen-predecessor-fixture.mjs';
 import { RECOVERY_BASE, inspectDemoRecoveryRegistration } from '../kernel/demo-recovery-registration.mjs';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
@@ -21,7 +22,7 @@ import { inspectFutureAdmission } from '../persistence/future-admission-evidence
 
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const fixture = mkdtempSync(join(tmpdir(), 'teach-demo-storage-'));
-for (const path of ['docs', 'kernel','domains','architecture','contracts','application-interfaces','governance','persistence','drizzle','src','drizzle.config.ts','drizzle.p05.config.ts','pnpm-lock.yaml','package.json','scripts','.github','verification','tests']) cpSync(join(root,path),join(fixture,path),{recursive:true});
+for (const path of ['docs', 'kernel','domains','architecture','contracts','application-interfaces','governance','persistence','drizzle','drizzle-isolated','src','drizzle.config.ts','drizzle.p05.config.ts','pnpm-lock.yaml','package.json','scripts','.github','verification','tests']) cpSync(join(root,path),join(fixture,path),{recursive:true});
 after(() => rmSync(fixture,{recursive:true,force:true}));
 const raw = path => readFileSync(join(fixture,path),'utf8');
 const json = path => JSON.parse(raw(path));
@@ -62,7 +63,7 @@ test('reviewed current successor and immutable P01-P05 evidence both pass', {ski
   assert.equal(json('persistence/physical-slices/readiness.json').version,'2.0.0');
 });
 
-test('unchanged P01-P05 historical fixture retains its real baseline checks', () => {
+test('unchanged P01-P05 historical fixture retains its real baseline checks', () => withKitchenPredecessor(fixture, () => {
   const recovery=inspectDemoRecoveryRegistration(fixture);
   assert.deepEqual(recovery.errors,[]);
   const recoveryParked=join(fixture,'parked-recovery-evidence');
@@ -108,7 +109,7 @@ test('unchanged P01-P05 historical fixture retains its real baseline checks', ()
     for(const [path,value] of originals) if(value===null) rmSync(join(fixture,path),{force:true}); else { mkdirSync(join(fixture,path,'..'),{recursive:true}); writeFileSync(join(fixture,path),value); }
     renameSync(recoveryParked,join(fixture,RECOVERY_BASE));
   }
-});
+}));
 
 test('missing successor migration fails independently of review state', () => mutate('drizzle/0005_demo_runtime_owner_storage.sql',null,/0005_demo_runtime_owner_storage\.sql:.*ENOENT/));
 test('reordered migrations fail original prefix and contiguous ordering', () => mutateJson('drizzle/meta/_journal.json',value => { [value.entries[3],value.entries[4]]=[value.entries[4],value.entries[3]]; },/journal index 3 must have contiguous idx 3|original journal prefix must remain immutable/));

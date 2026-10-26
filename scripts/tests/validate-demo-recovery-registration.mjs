@@ -11,7 +11,7 @@ import { inspectSchemaIsolationRegistration } from '../kernel/demo-schema-isolat
 import { inspectSchemaIsolationEngineering } from '../verification/demo-schema-isolation-engineering.mjs';
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const fixture = mkdtempSync(join(tmpdir(), 'teach-recovery-registration-'));
-for (const name of ['docs', 'scripts', '.github', 'kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle', 'verification', 'src', 'tests']) cpSync(join(root, name), join(fixture, name), { recursive: true });
+for (const name of ['docs', 'scripts', '.github', 'kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle', 'drizzle-isolated', 'verification', 'src', 'tests']) cpSync(join(root, name), join(fixture, name), { recursive: true });
 after(() => rmSync(fixture, { recursive: true, force: true }));
 const raw = path => readFileSync(join(fixture, path), 'utf8');
 const denied = () => {

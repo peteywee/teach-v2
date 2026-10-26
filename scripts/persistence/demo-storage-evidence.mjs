@@ -1,3 +1,4 @@
+import { inspectKitchenPhysicalSuccessor } from './demo-kitchen-physical-successor.mjs';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
@@ -69,8 +70,9 @@ export function inspectDemoStorageEvidence(root) {
   const expectedTables = [...new Set([...Object.keys(prior?.tables ?? {}), ...(mapping?.tables ?? []).map(table => `public.${table.table}`)])].sort();
   equal(Object.keys(latest?.tables ?? {}).sort(), expectedTables, 'exact prior eight plus fourteen owner tables required');
   if (expectedTables.length !== 22) fail('exact 22-table current schema required');
-  const migrationCount = recipePhysicalSuccessor.admitted ? 7 : 6;
-  if (journal?.entries?.length !== migrationCount || journal?.entries?.[5]?.idx !== 5 || journal?.entries?.[5]?.tag !== '0005_demo_runtime_owner_storage') fail('exact six-migration history or independently reviewed seven-migration recipe successor required');
+  const kitchenPhysicalSuccessor = inspectKitchenPhysicalSuccessor(root); errors.push(...kitchenPhysicalSuccessor.errors);
+  const migrationCount = kitchenPhysicalSuccessor.admitted && recipePhysicalSuccessor.admitted ? 8 : recipePhysicalSuccessor.admitted ? 7 : 6;
+  if (journal?.entries?.length !== migrationCount || journal?.entries?.[5]?.idx !== 5 || journal?.entries?.[5]?.tag !== '0005_demo_runtime_owner_storage') fail('exact historical history or independently reviewed recipe/kitchen guard successor required');
   errors.push(...inspectMigrationHistory(root));
   const migration = text('drizzle/0005_demo_runtime_owner_storage.sql');
   equal([...migration.matchAll(/CREATE TABLE\s+"([^"]+)"/g)].map(match => match[1]).sort(), (mapping?.tables ?? []).filter(table => table.table !== 'learning_sessions').map(table => table.table).sort(), 'migration must create exactly the fourteen admitted new owner tables');

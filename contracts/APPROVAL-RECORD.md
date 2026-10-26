@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.22.0",
+  "version": "0.23.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-19",
+  "updated_on": "2026-10-26",
   "effective_on": "2026-10-03",
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -39,6 +39,16 @@
     "live_database_changes": false,
     "deployment_authority": false,
     "spending_authority": false
+  },
+  "demo_kitchen_registration": {
+    "package": "TEACH-DEMO-KITCHEN-2026-10-26@0.1.0",
+    "issue": "#99",
+    "approval_record": "domains/demo-kitchen/owner-approval.json",
+    "source_package": "domains/demo-kitchen/proposal-0.1.0",
+    "sha256sums_sha256": "ba01dfc871d53a98a621ee301ec8435061c8d01f0ac509c1029539d03337406d",
+    "source_registration_only": true,
+    "physical_schema_admission": false,
+    "runtime_proof": "NOT_ESTABLISHED_BY_REGISTRATION"
   }
 }
 -->
@@ -533,3 +543,16 @@ Recorded 2026-10-19. The owner approved adoption of the independently reviewed p
 C21 and operations advance from 2.0.0 to 3.0.0. The exception is only for the FIRST ADDITIVE SYNTHETIC installation into previously absent `teach_v2_demo` in t34ch project `acqafjkdkdmtpnsxiesw`, PostgreSQL 17. A candidate-bound encrypted consistent application recovery set with all required coverage and actual isolated same-major restore may substitute for the native point/mechanism requirement. Required roles, memberships, grants and extensions must be recreated or verified on the isolated target, never silently inherited. Unknown coverage blocks. Native defaults, manual exact-candidate apply approval and all other gates remain outside this exact exception.
 
 Actual t34ch recovery evidence remains UNKNOWN. Adoption does not authorize real capture/export, key or credential creation/transmission, security grants, live database writes, deployment or spending. Existing scoped archives and synthetic rehearsal are not actual recovery evidence. Earlier ledger parts and source seals are preserved.
+
+
+## Part 30 — Bounded fictional station and equipment foundation
+
+Recorded 2026-10-26. Minimal owner decision: `domains/demo-kitchen/owner-approval.json`. The owner approved the lean linked station/equipment extension, final synthetic acceptance and fixes, publication/merge/deployment after tests and checks pass, and the additive versioned validation-rule update with the release. No new tables, accounts or permissions. This ledger records scope; it does not attest independent review, exact-source physical admission, executed migration or deployed behavior. Existing recovery/release prerequisites and no-secret/no-permission-change boundaries remain controlling.
+
+| Contract | From | To | Bounded change |
+| --- | --- | --- | --- |
+| C31 | 1.4.0 | 1.5.0 | Exact 1.2.0 fictional catalog child values; unchanged prior content/teaching |
+| C41 | 1.3.0 | 1.4.0 | Existing own-assigned content read admits PublicContent 1.2.0; no new operation |
+| C42 | 1.3.0 | 1.4.0 | Read-only Stations and Equipment navigation; requirements distinct from holdings |
+
+Implementation versions and source digests are preparer bindings of the approved scope, not a claim that the owner saw or independently reviewed those exact bytes. See `domains/demo-kitchen/registration.json`.

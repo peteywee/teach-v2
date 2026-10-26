@@ -1,3 +1,4 @@
+import { inspectKitchenPhysicalSuccessor } from './demo-kitchen-physical-successor.mjs';
 import { createHash } from 'node:crypto';
 import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -86,7 +87,9 @@ export function demoRecipeReviewedSourceHashes(root) {
 // Mechanical candidate builder only. This cannot issue review PASS, physical
 // admission, PostgreSQL proof or runtime permission; review seals its output.
 export function buildDemoRecipePhysicalSuccessor(root) {
-  const raw = path => regularRead(root, path);
+  const kitchen = inspectKitchenPhysicalSuccessor(root);
+  if (kitchen.errors.length) throw Error(kitchen.errors.join('; '));
+  const raw = path => Object.hasOwn(kitchen.predecessorFiles, path) ? kitchen.predecessorFiles[path] : regularRead(root, path);
   const baseline = JSON.parse(raw(`${DEMO_RECIPE_PHYSICAL_LANE}/immutable-baseline.json`));
   const prior = JSON.parse(raw(`${DEMO_RECIPE_PHYSICAL_LANE}/prior-journal.json`));
   const journal = JSON.parse(raw(DEMO_RECIPE_JOURNAL));
@@ -122,7 +125,9 @@ export function inspectDemoRecipePhysicalSuccessor(root) {
   }
   const errors = [], fail = message => errors.push(`demo recipe physical successor: ${message}`);
   const equal = (actual, expected, message) => { if (!isDeepStrictEqual(actual, expected)) fail(message); };
-  const raw = path => regularRead(root, path);
+  const kitchen = inspectKitchenPhysicalSuccessor(root);
+  errors.push(...kitchen.errors);
+  const raw = path => Object.hasOwn(kitchen.predecessorFiles, path) ? kitchen.predecessorFiles[path] : regularRead(root, path);
   const json = path => JSON.parse(raw(path));
   if (!envelopeExists) {
     fail('exact hash-bound physical envelope required; orphan recipe migration or evidence is not admission');
@@ -194,8 +199,8 @@ export function inspectDemoRecipePhysicalSuccessor(root) {
     const entry = journal.entries?.[6];
     equal(entry, { idx: 6, version: '7', when: entry?.when, tag: '0006_demo_recipe_content_guard', breakpoints: true }, 'exact function-only migration journal suffix required');
     if (!Number.isSafeInteger(entry?.when) || entry.when <= prior.entries[5].when) fail('strictly increasing migration timestamp required');
-    equal(readdirSync(join(root, 'drizzle')).filter(name => name.endsWith('.sql')).sort(), [...prior.entries.map(row => `${row.tag}.sql`), '0006_demo_recipe_content_guard.sql'].sort(), 'only six original migrations and exact recipe guard migration admitted');
-    equal(readdirSync(join(root, 'drizzle/meta')).filter(name => name.endsWith('_snapshot.json')).sort(), Array.from({ length: 7 }, (_, index) => `${String(index).padStart(4, '0')}_snapshot.json`), 'exact seven-snapshot inventory required');
+    equal(readdirSync(join(root, 'drizzle')).filter(name => name.endsWith('.sql') && !(kitchen.admitted && name === '0007_demo_kitchen_content_guard.sql')).sort(), [...prior.entries.map(row => `${row.tag}.sql`), '0006_demo_recipe_content_guard.sql'].sort(), 'only six original migrations and exact recipe guard migration admitted');
+    equal(readdirSync(join(root, 'drizzle/meta')).filter(name => name.endsWith('_snapshot.json') && !(kitchen.admitted && name === '0007_snapshot.json')).sort(), Array.from({ length: 7 }, (_, index) => `${String(index).padStart(4, '0')}_snapshot.json`), 'exact seven-snapshot inventory required');
     const oldSnapshot = json('drizzle/meta/0005_snapshot.json'), snapshot = json(DEMO_RECIPE_SNAPSHOT);
     equal(snapshot, { ...oldSnapshot, id: snapshot.id, prevId: oldSnapshot.id }, 'function-only migration snapshot may change only id and prevId');
     if (typeof snapshot.id !== 'string' || !/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(snapshot.id) || snapshot.id === '00000000-0000-0000-0000-000000000000' || Object.keys(baseline.files).filter(path => /^drizzle\/meta\/\d+_snapshot\.json$/.test(path)).some(path => json(path).id === snapshot.id)) fail('unique nonzero successor snapshot identity required');

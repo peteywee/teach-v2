@@ -74,6 +74,7 @@ export const HOSTED_RUNTIME_SOURCES = Object.freeze([
   'src/modules/authorization/application/ports/demo-command-context.ts',
   'src/modules/authorization/application/ports/session-command-authorization.ts',
   'src/modules/content/application/demo-content-service.ts',
+  'src/modules/content/application/demo-kitchen-template.ts',
   'src/modules/content/application/demo-template.ts',
   'src/modules/content/application/ports/demo-content.ts',
   'src/modules/content/domain/demo-content.ts',

@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C41",
   "class": "contract",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-18",
-  "effective_on": "2026-10-18",
+  "updated_on": "2026-10-26",
+  "effective_on": "2026-10-26",
   "approval": {
     "state": "approved",
-    "approved_version": "1.3.0",
-    "approved_on": "2026-10-18",
-    "record": "domains/demo-recipes/owner-approval.json",
-    "basis": "TEACH-DEMO-RECIPES-2026-10-18@0.1.1; SYS-21 #88; bounded content/read/UI successor; SHA256SUMS sha256:b5f80daf1d94ecbccb1a01f3e58be3fc98d32564567b1cf03fd5c639eb435255"
+    "approved_version": "1.4.0",
+    "approved_on": "2026-10-26",
+    "record": "domains/demo-kitchen/owner-approval.json",
+    "basis": "Bounded owner-approved kitchen scope; implementation versions/digest recorded separately from owner wording."
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -31,7 +31,8 @@
   "supersedes": [
     "TEACH-CON-C41@1.0.3",
     "TEACH-CON-C41@1.1.0",
-    "TEACH-CON-C41@1.2.0"
+    "TEACH-CON-C41@1.2.0",
+    "TEACH-CON-C41@1.3.0"
   ],
   "superseded_by": null,
   "depends_on": [
@@ -58,6 +59,16 @@
     "physical_schema_admission": false,
     "runtime_activation": false,
     "deployment_authority": false
+  },
+  "demo_kitchen_registration": {
+    "package": "TEACH-DEMO-KITCHEN-2026-10-26@0.1.0",
+    "issue": "#99",
+    "approval_record": "domains/demo-kitchen/owner-approval.json",
+    "source_package": "domains/demo-kitchen/proposal-0.1.0",
+    "sha256sums_sha256": "ba01dfc871d53a98a621ee301ec8435061c8d01f0ac509c1029539d03337406d",
+    "source_registration_only": true,
+    "physical_schema_admission": false,
+    "runtime_proof": "NOT_ESTABLISHED_BY_REGISTRATION"
   }
 }
 -->
@@ -69,17 +80,17 @@
 | Contract ID        | C41                                                                                                                                                             |
 | Group              | C40 Application Boundaries                                                                                                                                      |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.3.0 |
+| Version | 1.4.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by | Patrick Craven (owner), 2026-10-18; TEACH-DEMO-RECIPES-2026-10-18@0.1.1; SYS-21 #88; see `domains/demo-recipes/owner-approval.json` |
+| Approved by | Patrick Craven (scope owner), 2026-10-26; SYS-21 #99; see `domains/demo-kitchen/owner-approval.json`; implementation versions recorded by preparer |
 | Requirement prefix | `API`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New. Carries forward the legacy Gate A rule that route/OpenAPI drift fails CI.                                                                                  |
-| Supersedes | 1.2.0 |
+| Supersedes | 1.3.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated | 2026-10-18 |
+| Last updated | 2026-10-26 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -162,7 +173,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Implementation conformance | unknown | Not established by this registration. Current implementation tests, independent review and runtime evidence are separate source-bound records. |
 | Acceptance cases implemented | unknown | Registration specifies required cases; it does not establish executed test or browser evidence for the current candidate. |
 | Blocking open questions      | 0 open | Only unresolved question rows govern blocking; registration is not implementation evidence |
-| Owner approval | declared | 1.3.0 bounded recipe successor approval recorded in APPROVAL-RECORD.md under #88; independent review and runtime implementation conformance are not established by registration |
+| Owner approval | declared | 1.4.0 bounded kitchen scope recorded in `domains/demo-kitchen/owner-approval.json` under #99; registration establishes neither independent review nor runtime conformance |
 | Independent review | not established by registration | No independent-review verdict is issued here. Any later review must bind the actual successor candidate and preserve its limitations. |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
@@ -200,3 +211,16 @@ Exact owner-approved scope: `TEACH-DEMO-RECIPES-2026-10-18@0.1.1`, SYS-21 [#88](
 The existing `ReadAssignedContentVersion` response additionally admits exact PublicContent schema `1.1.0` in `public-content-schema-1.1.0.json`; exact `1.0.0` remains valid. The version discriminator admits these two exact schema versions only, not an open SemVer range. The 1.1.0 projection includes the immutable recipe child values but excludes authored expected answers and private feedback. Existing exact pack ID, organization ID, version and digest checks remain controlling. No new route, operation, owner query, capability or error envelope is registered. The original fifteen API methods/paths and seven served asset paths remain unchanged.
 
 Only the current learner's own assigned exact content version is readable. Foreign-organization/foreign-pack access, malformed payloads, manager access without the existing learner content-read capability and revoked sessions fail closed. Recipe search and station filtering are local read-only presentation operations, not APIs or writes. Preserve API-AC-1 through API-AC-11 and require negative coverage for both schema versions, scope mismatch and malformed or stale exact-version reads. Registration is not a runtime authorization or verification claim.
+
+
+## Registered bounded kitchen successor (1.4.0)
+
+Current bounded amendment: `TEACH-DEMO-KITCHEN-2026-10-26@0.1.0`; approval `domains/demo-kitchen/owner-approval.json`; source package `domains/demo-kitchen/proposal-0.1.0/`. Earlier incorporated packages are preserved; only the exact additions below supersede their earlier content/read/UI limits. Source registration is not independent verification or execution evidence.
+
+The existing authorized `ReadAssignedContentVersion` GET may additionally return exact PublicContent `1.2.0` from an active own assignment bound to the same organization, content pack, immutable version and digest. The projection includes only validated fictional catalog fields and teaching blocks without hidden expected answers or feedback. Managers gain no content-read capability. All fifteen operations, paths, methods, authentication, Host/Origin checks, scoped authorization, error contracts and seven static asset paths remain unchanged. No inventory, station or staffing mutation endpoint is added.
+
+### Successor change log
+
+| Version | Date | Change | By |
+| --- | --- | --- | --- |
+| 1.4.0 | 2026-10-26 | Bounded fictional stations, people, recipe/tool references and sample holdings; no new entities, permissions or learning semantics. | Patrick Craven (scope owner); ChatGPT (recorder) |

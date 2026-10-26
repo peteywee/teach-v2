@@ -54,11 +54,16 @@ test('recipe references are persisted in the same immutable ContentPack and brow
   const v=visitor();await v.call('BeginDemoRun');const a=(await v.call('ListOwnAssignments')).items[0].assignment;
   const params={contentPackId:a.contentPackId,contentVersion:a.contentVersion.version};
   const pack=await v.call('ReadAssignedContentVersion',{},params);
-  assert.equal(pack.schemaVersion,'1.1.0');assert.equal(pack.recipes.length,3);assert.equal(pack.blocks.length,3);
-  assert.ok(pack.recipes.every((r:any)=>r.title.startsWith('Fictional sample:')&&r.reference==='General handoff practice'));
+  assert.equal(pack.schemaVersion,'1.2.0');assert.equal(pack.recipes.length,3);assert.equal(pack.blocks.length,3);
+  assert.ok(pack.recipes.every((r:any)=>r.title.startsWith('Fictional sample:')&&r.reference.includes('General handoff practice')));
+  assert.deepEqual(pack.stations.map((station:any)=>station.label),['Fry','Cold Prep','Hot Prep']);
+  assert.equal(pack.people.length,3);assert.equal(pack.equipment.length,8);assert.equal(pack.inventory.length,8);
+  assert.ok(pack.stations.every((station:any)=>pack.people.some((person:any)=>person.id===station.responsiblePersonId)));
+  assert.ok(pack.recipes.every((recipe:any)=>pack.stations.some((station:any)=>station.id===recipe.stationId)&&recipe.requirements.every((part:any)=>pack.equipment.some((item:any)=>item.id===part.equipmentId))));
   assert.deepEqual(pack.contentVersion,a.contentVersion);
   const persisted=(await pool.query('SELECT canonical_json,digest FROM content_pack_versions WHERE content_pack_id=$1 AND version=$2',[a.contentPackId,a.contentVersion.version])).rows[0];
   assert.deepEqual(JSON.parse(persisted.canonical_json).recipes,pack.recipes);assert.equal(persisted.digest,a.contentVersion.digest);
+  for(const field of ['stations','people','equipment','inventory'])assert.deepEqual(JSON.parse(persisted.canonical_json)[field],pack[field]);
   assert.deepEqual(await v.call('ReadAssignedContentVersion',{},params),pack);
   assert.equal(await count('learning_sessions'),0);assert.equal(await count('learning_progress_events'),0);
   const other=visitor();await other.call('BeginDemoRun');await assert.rejects(other.call('ReadAssignedContentVersion',{},params),code('NOT_FOUND'));

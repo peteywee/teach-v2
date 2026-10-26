@@ -1,3 +1,4 @@
+import { withKitchenPredecessor } from './kitchen-predecessor-fixture.mjs';
 import assert from 'node:assert/strict';
 import { after, test } from 'node:test';
 import { spawnSync } from 'node:child_process';
@@ -16,7 +17,7 @@ import {
 
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const fixture = mkdtempSync(join(tmpdir(), 'teach-physical-successor-'));
-for (const path of ['docs', 'scripts', '.github', 'verification', 'kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle']) cpSync(join(root, path), join(fixture, path), { recursive: true });
+for (const path of ['docs', 'scripts', '.github', 'verification', 'kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle', 'drizzle-isolated', 'src', 'tests']) cpSync(join(root, path), join(fixture, path), { recursive: true });
 after(() => rmSync(fixture, { recursive: true, force: true }));
 const raw = path => readFileSync(join(fixture, path), 'utf8');
 const json = path => JSON.parse(raw(path));
@@ -38,7 +39,7 @@ const mutateJson = (path, change, pattern) => mutate(path, text => {
   const value = JSON.parse(text); change(value); return JSON.stringify(value, null, 2) + '\n';
 }, pattern);
 
-test('source-only registration still proves unchanged physical predecessors without an envelope', () => {
+test('source-only registration still proves unchanged physical predecessors without an envelope', () => withKitchenPredecessor(fixture, () => {
   const originals = new Map([...DEMO_PHYSICAL_PATHS, DEMO_PHYSICAL_ENVELOPE, DEMO_PHYSICAL_REVIEW].map(path => [path, existsSync(join(fixture, path)) ? raw(path) : null]));
   try {
     for (const path of DEMO_PHYSICAL_PATHS) writeFileSync(join(fixture, path), source.files[path]);
@@ -56,7 +57,7 @@ test('source-only registration still proves unchanged physical predecessors with
   } finally {
     for (const [path, original] of originals) original === null ? rmSync(join(fixture, path), { force: true }) : writeFileSync(join(fixture, path), original);
   }
-});
+}));
 
 test('fixed nine-path evidence builder preserves exact before hashes and declares no review authority', () => {
   assert.equal(DEMO_PHYSICAL_PATHS.length, 9);
@@ -142,7 +143,9 @@ test('unrelated physical histories, semantic authority and all original migratio
   mutateJson('kernel/entities.json', value => { value.entries.find(row => row.id === 'DemoRun').status = 'candidate'; }, /exact approved overlay/);
   mutate('drizzle/0004_slice_p05_learning_session.sql', text => text + '\n', /historical migration changed/);
   mutate('drizzle/meta/0004_snapshot.json', text => text + '\n', /historical metadata changed/);
-  mutateJson('drizzle/meta/_journal.json', value => { value.entries[0].when += 1; }, /original journal prefix must remain immutable/);
+  withKitchenPredecessor(fixture, () => {
+    mutateJson('drizzle/meta/_journal.json', value => { value.entries[0].when += 1; }, /original journal prefix must remain immutable/);
+  });
 });
 
 test('physical evidence inventory rejects unknown files, directories and symlinks', () => {

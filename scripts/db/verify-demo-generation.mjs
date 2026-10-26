@@ -1,3 +1,4 @@
+import { inspectKitchenPhysicalSuccessor } from '../persistence/demo-kitchen-physical-successor.mjs';
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {cpSync,mkdtempSync,readFileSync,rmSync,writeFileSync} from 'node:fs';
@@ -7,7 +8,9 @@ import { inspectDemoRecipePhysicalSuccessor, DEMO_RECIPE_MIGRATION, DEMO_RECIPE_
 const root=resolve(process.cwd()),dir=mkdtempSync(join(tmpdir(),'demo-generated-'));
 try{
  const recipe=inspectDemoRecipePhysicalSuccessor(root);assert.deepEqual(recipe.errors,[],'recipe predecessor generation requires verified physical successor');
+ const kitchen=inspectKitchenPhysicalSuccessor(root);assert.deepEqual(kitchen.errors,[],'kitchen predecessor generation requires verified physical successor');
  cpSync(join(root,'drizzle'),dir,{recursive:true});
+ if(kitchen.admitted){rmSync(join(dir,'0007_demo_kitchen_content_guard.sql'));rmSync(join(dir,'meta/0007_snapshot.json'));}
  if(recipe.admitted){rmSync(join(dir,DEMO_RECIPE_MIGRATION.slice('drizzle/'.length)));rmSync(join(dir,DEMO_RECIPE_SNAPSHOT.slice('drizzle/'.length)));}
  rmSync(join(dir,'0005_demo_runtime_owner_storage.sql'));rmSync(join(dir,'meta/0005_snapshot.json'));
  const journal=JSON.parse(readFileSync(join(dir,'meta/_journal.json'),'utf8'));journal.entries=journal.entries.filter(entry=>entry.idx<5);writeFileSync(join(dir,'meta/_journal.json'),JSON.stringify(journal));

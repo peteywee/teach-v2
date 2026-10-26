@@ -1,5 +1,6 @@
-import { definitions as originalDefinitions, recipeDefinitions, errorContract } from './wire-contract.mjs';
-const definitions={...originalDefinitions,Recipe:recipeDefinitions.Recipe,PublicContent:{anyOf:[originalDefinitions.PublicContent,recipeDefinitions.PublicContent]}};
+import { definitions as originalDefinitions, recipeDefinitions, kitchenDefinitions, errorContract } from './wire-contract.mjs';
+const {PublicContent:kitchenPublicContent,ContentVersion:_kitchenVersion,PublicBlock:_kitchenBlock,...kitchenValues}=kitchenDefinitions;
+const definitions={...originalDefinitions,...kitchenValues,Recipe:recipeDefinitions.Recipe,PublicContent:{anyOf:[originalDefinitions.PublicContent,recipeDefinitions.PublicContent,kitchenPublicContent]}};
 export class ApiError extends Error {
  constructor(kind, {status=0, code='', requestId=null, retryAfterSeconds=null}={}) { super(kind); this.name='ApiError';Object.assign(this,{kind,status,code,requestId,retryAfterSeconds}); }
 }

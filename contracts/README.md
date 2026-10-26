@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-CON-INDEX",
   "class": "contract-index",
-  "version": "0.22.0",
+  "version": "0.23.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-19",
+  "updated_on": "2026-10-26",
   "effective_on": "2026-10-03",
   "approval": {
     "state": "approved",
@@ -61,17 +61,27 @@
     "live_database_changes": false,
     "deployment_authority": false,
     "spending_authority": false
+  },
+  "demo_kitchen_registration": {
+    "package": "TEACH-DEMO-KITCHEN-2026-10-26@0.1.0",
+    "issue": "#99",
+    "approval_record": "domains/demo-kitchen/owner-approval.json",
+    "source_package": "domains/demo-kitchen/proposal-0.1.0",
+    "sha256sums_sha256": "ba01dfc871d53a98a621ee301ec8435061c8d01f0ac509c1029539d03337406d",
+    "source_registration_only": true,
+    "physical_schema_admission": false,
+    "runtime_proof": "NOT_ESTABLISHED_BY_REGISTRATION"
   }
 }
 -->
 
 # Teach v2 Contracts
 
-- Package version: `0.22.0`
+- Package version: `0.23.0`
 - Status: `active` — approved by the owner on 2026-10-03 (see `APPROVAL-RECORD.md`)
 - Owner: Patrick Craven, Top Shelf Service LLC
 - Created: 2026-10-03
-- Last updated: 2026-10-19
+- Last updated: 2026-10-26
 
 These are the normative behavior contracts Teach v2 is built on. They state what the system MUST and
 MUST NOT do. Implementation is measured against them, not the other way round.
@@ -146,12 +156,12 @@ the requirement that keeps the feature off applies.
 | C21 | [Database & Migration](c21-database-migration-contract.md) | 3.0.0 | `MIG` | 14 | 9 | 0 | 0 | `active` |
 | C22 | [Transaction, Idempotency & Reconciliation](c22-transaction-idempotency-reconciliation-contract.md) | 1.4.0 | `TXN` | 16 | 12 | 1 | 0 | `active` |
 | C23 | [Audit & Lifecycle Events](c23-audit-lifecycle-events-contract.md) | 1.3.0 | `AUD` | 11 | 9 | 0 | 0 | `active` |
-| C31 | [Content & Teaching Engine](c31-content-teaching-engine-contract.md) | 1.4.0 | `CNT` | 12 | 9 | 1 | 0 | `active` |
+| C31 | [Content & Teaching Engine](c31-content-teaching-engine-contract.md) | 1.5.0 | `CNT` | 12 | 9 | 1 | 0 | `active` |
 | C32 | [Learning Sessions & Progress](c32-learning-sessions-progress-contract.md) | 1.4.0 | `LRN` | 13 | 11 | 0 | 0 | `active` |
 | C33 | [Manager Operations](c33-manager-operations-contract.md) | 1.3.0 | `MGR` | 10 | 8 | 0 | 0 | `active` |
 | C34 | [Certification & Credentials](c34-certification-credentials-contract.md) | 1.3.0 | `CERT` | 15 | 7 | 1 | 1 | `active` |
-| C41 | [Application / Command / API Boundary](c41-api-boundary-contract.md) | 1.3.0 | `API` | 15 | 11 | 1 | 0 | `active` |
-| C42 | [Web Client Boundary](c42-web-client-boundary-contract.md) | 1.3.0 | `WEB` | 15 | 10 | 0 | 0 | `active` |
+| C41 | [Application / Command / API Boundary](c41-api-boundary-contract.md) | 1.4.0 | `API` | 15 | 11 | 1 | 0 | `active` |
+| C42 | [Web Client Boundary](c42-web-client-boundary-contract.md) | 1.4.0 | `WEB` | 15 | 10 | 0 | 0 | `active` |
 | C51 | [Verification & Evidence](c51-verification-evidence-contract.md) | 1.1.0 | `EVD` | 16 | 7 | 1 | 0 | `active` |
 | C52 | [Deployment, Release & Recovery](c52-deployment-release-recovery-contract.md) | 1.3.0 | `REL` | 18 | 11 | 0 | 0 | `active` |
 | C53 | [Observability](c53-observability-contract.md) | 1.2.0 | `OBS` | 11 | 9 | 1 | 0 | `active` |
@@ -374,3 +384,8 @@ Package `0.21.0` records C21 `2.0.0`: only the dedicated synthetic `teach_v2_dem
 ## Bounded first-install recovery policy successor
 
 Package `0.22.0` adopts C21 `3.0.0` and operations `3.0.0`. Only the first additive synthetic `teach_v2_demo` installation in t34ch may use the independently evidenced candidate-bound encrypted consistent application recovery set and actual isolated PostgreSQL 17 restore in place of the native restore-point prerequisite. Native recovery remains mandatory outside that exact scope. Missing required coverage blocks. This is policy adoption, not actual recovery proof, export, credential/grant, live migration, runtime activation, deployment or spending authority. See `docs/proposals/demo-recovery-exception/adoption-registration.json` and `docs/proposals/demo-recovery-exception/owner-adoption.json`. Previous package decisions remain historical and immutable.
+
+
+## Bounded fictional kitchen successor (0.23.0)
+
+C31 1.5.0, C41/C42 1.4.0 admit exact schema 1.2.0 alongside immutable 1.0.0/1.1.0, with linked fictional station/person/recipe/tool references and separate inventory holdings. Owner scope and conditional publication/apply approval are recorded in `domains/demo-kitchen/owner-approval.json`. Source registration `domains/demo-kitchen/registration.json` proves no review, physical admission or runtime result. Original kernel, capabilities, routes, teaching and recovery/release gates remain unchanged.

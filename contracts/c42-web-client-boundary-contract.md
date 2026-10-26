@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C42",
   "class": "contract",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-18",
-  "effective_on": "2026-10-18",
+  "updated_on": "2026-10-26",
+  "effective_on": "2026-10-26",
   "approval": {
     "state": "approved",
-    "approved_version": "1.3.0",
-    "approved_on": "2026-10-18",
-    "record": "domains/demo-recipes/owner-approval.json",
-    "basis": "TEACH-DEMO-RECIPES-2026-10-18@0.1.1; SYS-21 #88; bounded content/read/UI successor; SHA256SUMS sha256:b5f80daf1d94ecbccb1a01f3e58be3fc98d32564567b1cf03fd5c639eb435255"
+    "approved_version": "1.4.0",
+    "approved_on": "2026-10-26",
+    "record": "domains/demo-kitchen/owner-approval.json",
+    "basis": "Bounded owner-approved kitchen scope; implementation versions/digest recorded separately from owner wording."
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -31,7 +31,8 @@
   "supersedes": [
     "TEACH-CON-C42@1.0.3",
     "TEACH-CON-C42@1.1.0",
-    "TEACH-CON-C42@1.2.0"
+    "TEACH-CON-C42@1.2.0",
+    "TEACH-CON-C42@1.3.0"
   ],
   "superseded_by": null,
   "depends_on": [
@@ -58,6 +59,16 @@
     "physical_schema_admission": false,
     "runtime_activation": false,
     "deployment_authority": false
+  },
+  "demo_kitchen_registration": {
+    "package": "TEACH-DEMO-KITCHEN-2026-10-26@0.1.0",
+    "issue": "#99",
+    "approval_record": "domains/demo-kitchen/owner-approval.json",
+    "source_package": "domains/demo-kitchen/proposal-0.1.0",
+    "sha256sums_sha256": "ba01dfc871d53a98a621ee301ec8435061c8d01f0ac509c1029539d03337406d",
+    "source_registration_only": true,
+    "physical_schema_admission": false,
+    "runtime_proof": "NOT_ESTABLISHED_BY_REGISTRATION"
   }
 }
 -->
@@ -69,17 +80,17 @@
 | Contract ID        | C42                                                                                                                                                             |
 | Group              | C40 Application Boundaries                                                                                                                                      |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.3.0 |
+| Version | 1.4.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
-| Approved by | Patrick Craven (owner), 2026-10-18; TEACH-DEMO-RECIPES-2026-10-18@0.1.1; SYS-21 #88; see `domains/demo-recipes/owner-approval.json` |
+| Approved by | Patrick Craven (scope owner), 2026-10-26; SYS-21 #99; see `domains/demo-kitchen/owner-approval.json`; implementation versions recorded by preparer |
 | Requirement prefix | `WEB`                                                                                                                                                           |
 | Activation         | Required for the core rebuild                                                                                                                                   |
 | Legacy lineage     | New. Carries forward the legacy Gate A shared forbidden-surface requirements.                                                                                   |
-| Supersedes | 1.2.0 |
+| Supersedes | 1.3.0 |
 | Superseded by      | None                                                                                                                                                            |
 | Created            | 2026-10-03                                                                                                                                                      |
-| Last updated | 2026-10-18 |
+| Last updated | 2026-10-26 |
 
 ## 1. Purpose and Failure Prevented
 
@@ -160,7 +171,7 @@ The keywords MUST, MUST NOT, SHOULD, and MAY are used in the RFC 2119 sense. Req
 | Implementation conformance | unknown | Not established by this registration. Current implementation tests, independent review and runtime evidence are separate source-bound records. |
 | Acceptance cases implemented | unknown | Registration specifies required cases; it does not establish executed test or browser evidence for the current candidate. |
 | Blocking open questions      | 0 open | Only unresolved question rows govern blocking; registration is not implementation evidence |
-| Owner approval | declared | 1.3.0 bounded recipe successor approval recorded in APPROVAL-RECORD.md under #88; independent review and runtime implementation conformance are not established by registration |
+| Owner approval | declared | 1.4.0 bounded kitchen scope recorded in `domains/demo-kitchen/owner-approval.json` under #99; registration establishes neither independent review nor runtime conformance |
 | Independent review | not established by registration | No independent-review verdict is issued here. Any later review must bind the actual successor candidate and preserve its limitations. |
 | Source of intent             | declared                 | Owner-supplied rebuild proposal (`source/2026-10-03-teach-v2-contract-hierarchy-proposal.md`), consolidated decisions (`source/2026-10-03-teach-rebuild-consolidated-decisions.md`), and legacy Gate A owner decisions (2026-07-22) where cited.      |
 
@@ -200,3 +211,18 @@ The learner surface adds a kitchen catalog, searchable and station-filterable re
 A recipe may link to the original general handoff practice only with copy that makes clear it is not recipe-specific or graded recipe mastery. The original learner answer/complete/readback, manager readback/reassignment/revocation, reset confirmation/cancel/partial-failure and logout semantics remain unchanged. Managers gain no recipe content-read capability. Session/run changes clear protected recipe data as well as existing learner state. No new HTTP route or served asset path is admitted.
 
 Preserve WEB-AC-1 through WEB-AC-10 and require connected kitchen/book/detail/general-practice flow coverage, repeated and interrupted navigation, clear/back/refresh, missing recipe recovery and narrow/mobile layout. Automated source/fixture checks, actual browser desktop/mobile inspection, keyboard evidence and screen-reader evidence must be labeled separately. WCAG 2.2 AA, at least 44 by 44 CSS pixel targets and reduced-motion requirements remain unchanged; unperformed checks remain UNKNOWN, never blanket all-controls-working claims.
+
+
+## Registered bounded kitchen successor (1.4.0)
+
+Current bounded amendment: `TEACH-DEMO-KITCHEN-2026-10-26@0.1.0`; approval `domains/demo-kitchen/owner-approval.json`; source package `domains/demo-kitchen/proposal-0.1.0/`. Earlier incorporated packages are preserved; only the exact additions below supersede their earlier content/read/UI limits. Source registration is not independent verification or execution evidence.
+
+Learners may navigate a compact Stations list/detail, Recipe book/detail and Equipment inventory/detail from their existing kitchen catalog. Links use scoped immutable catalog IDs, never label/array position identity. Display only server-validated own assigned content; escape all dynamic labels and identifiers. Show fictional responsibility, recipe requirements and inventory holdings separately, including shared holdings once. Legacy schemas retain their original recipes/station labels without invented people, tools or counts.
+
+Browsing, searching, filtering, refreshing and linking these references writes no progress. Only the explicit existing general-handoff action can start training. Preserve manager privacy/capability restrictions, authoritative save/completion readback, repeated assignment history, reset semantics, stale-response cancellation and logout concealment. New navigation must retain keyboard-operable native controls, accessible names, current-page indication and heading focus. Required cases include wrong scope/reference, duplicate/dangling graph identities, malformed bounds/text, stale reads after navigation/logout, no synthetic fallback and legacy version compatibility. Source/unit evidence is distinct from live browser, mobile and assistive-technology proof.
+
+### Successor change log
+
+| Version | Date | Change | By |
+| --- | --- | --- | --- |
+| 1.4.0 | 2026-10-26 | Bounded fictional stations, people, recipe/tool references and sample holdings; no new entities, permissions or learning semantics. | Patrick Craven (scope owner); ChatGPT (recorder) |

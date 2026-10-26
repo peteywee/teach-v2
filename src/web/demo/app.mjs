@@ -9,7 +9,7 @@ function render(s){
  for(const id of ['reset-demo','logout-demo']){const el=document.getElementById(id);el.hidden=!s.session;el.disabled=s.busy;}
  document.getElementById('home-button').disabled=s.busy;
  document.title=`Teach · ${s.session?s.screen:'Welcome'} · Isolated demo`;
- const changed=!previous||previous.screen!==s.screen||previous.phase!==s.phase||previous.recipeKey!==s.recipeKey||previous.assignmentId!==s.assignmentId||previous.feedbackId!==s.feedbackId;
+ const changed=!previous||previous.screen!==s.screen||previous.phase!==s.phase||previous.recipeKey!==s.recipeKey||previous.stationKey!==s.stationKey||previous.equipmentKey!==s.equipmentKey||previous.assignmentId!==s.assignmentId||previous.feedbackId!==s.feedbackId;
  if(changed&&previous){const target=s.feedbackId&&s.phase==='ready'?document.querySelector('.response'):document.getElementById('page-title');target?.focus();}
  if(changed||s.notice!==previous?.notice)document.querySelector('#announcer').textContent=s.notice;
  previous=s;
@@ -17,6 +17,9 @@ function render(s){
 root.addEventListener('click',event=>{const target=event.target.closest('[data-action]');if(!target||target.disabled)return;const s=controller.snapshot(),id=target.dataset.id;
  switch(target.dataset.action){
   case 'kitchen':recipeSearch='';station='';controller.library('kitchen');break;
+  case 'stations':controller.library('stations');break;
+  case 'station':controller.library('station',id);break;
+  case 'equipment':controller.library('equipment',id??null);break;
   case 'recipes':recipeSearch='';station='';controller.library('recipes');break;
   case 'recipe':controller.library('recipe',id);break;
   case 'clear-recipes':recipeSearch='';station='';render(s);document.getElementById('recipe-search')?.focus();announceRecipeResults();break;

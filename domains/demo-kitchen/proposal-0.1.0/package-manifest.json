@@ -1,0 +1,59 @@
+{
+  "package_id": "TEACH-DEMO-KITCHEN-2026-10-26",
+  "version": "0.1.0",
+  "state": "SOURCE_PACKAGE_NOT_SELF_AUTHORIZING",
+  "created_on": "2026-10-26",
+  "source_commit": "884d829e5b53dcf9291677f52e7f100882f528e6",
+  "source_tree": "5b0e25d95320e712d7fb112852cfe29f085f895e",
+  "impact_issue": "https://github.com/peteywee/teach-v2/issues/99",
+  "canonical_content_lineage": {
+    "owner": "Content",
+    "exact_schema_versions": [
+      "1.0.0",
+      "1.1.0",
+      "1.2.0"
+    ],
+    "successor_schema": "content-schema-1.2.0.json",
+    "successor_public_projection": "public-content-schema-1.2.0.json",
+    "synthetic_template": "synthetic-content-template-1.2.0.json",
+    "template_version": "1.2.0",
+    "predecessor_registration": "domains/demo-recipes/registration.json",
+    "predecessor_registration_sha256": "bd0b74666f5da45c70a0d1c0fe42d5d7099a5bc6c9d727b665e4381094605443"
+  },
+  "contract_revisions": [
+    {
+      "contract": "C31",
+      "from": "1.4.0",
+      "to": "1.5.0"
+    },
+    {
+      "contract": "C41",
+      "from": "1.3.0",
+      "to": "1.4.0"
+    },
+    {
+      "contract": "C42",
+      "from": "1.3.0",
+      "to": "1.4.0"
+    }
+  ],
+  "artifact_files": [
+    "README.md",
+    "content-schema-1.2.0.json",
+    "package-manifest.json",
+    "public-content-schema-1.2.0.json",
+    "synthetic-content-template-1.2.0.json",
+    "0007_demo_kitchen_content_guard.sql"
+  ],
+  "new_entities": 0,
+  "new_tables": 0,
+  "new_migrations": 1,
+  "new_routes": 0,
+  "new_capabilities": 0,
+  "api_route_count": 15,
+  "served_asset_path_count": 7,
+  "guard_target": "teach_v2_demo.content_guard_demo_version",
+  "historical_migrations_immutable": true,
+  "independent_verification": "NOT_ESTABLISHED_BY_PACKAGE",
+  "execution_authorized_by_package": false
+}
