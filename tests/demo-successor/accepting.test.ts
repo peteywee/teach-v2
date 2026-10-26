@@ -10,7 +10,7 @@ const good={TEACH_DB_SCHEMA:'teach_v2_demo',TEACH_SUPABASE_PROJECT:'acqafjkdkdmt
 test('configuration is exact server-only target, verified TLS and two retained connections',()=>{const cfg=captureRuntimeConfiguration(good);assert.equal(cfg.options.max,2);assert.equal((cfg.options.ssl as any).rejectUnauthorized,true);assert.equal(cfg.options.port,6543);assert.ok(Object.isFrozen(cfg));for(const key of Object.keys(good))assert.throws(()=>captureRuntimeConfiguration({...good,[key]:undefined}));for(const bad of [{TEACH_DB_SCHEMA:'public'},{TEACH_SUPABASE_PROJECT:'xgtxszipmenyujwhcfut'},{TEACH_DB_USER:'postgres.acqafjkdkdmtpnsxiesw'},{TEACH_DEMO_ORIGIN:'http://demo.example.test'},{TEACH_DB_HOST:'evil.test'}])assert.throws(()=>captureRuntimeConfiguration({...good,...bad}));});
 test('default entrypoint ignores request activation and invalid configuration',async()=>{const {default:handler}=await import('../../src/bootstrap/demo-successor/accepting-entrypoint.js');let status=0,body='';await handler({url:'/?activate=true',headers:{'x-activate':'true'}} as any,{writeHead(code:number){status=code;},end(bytes:Buffer){body=bytes.toString();}} as any);assert.equal(status,503);assert.match(body,/SERVICE_UNAVAILABLE/);});
 
-const {restoreVercelConfigFormatting,addVercelStartupDiagnostics,addVercelPublicNavigation,addVercelDatabaseDiagnostics,compareDatabaseLogins}=await import(new URL('../../scripts/packaging/build-vercel-release.mjs',import.meta.url).href);
+const {restoreVercelConfigFormatting,addVercelStartupDiagnostics,addVercelPublicNavigation,addVercelProductionRootRedirect,addVercelDatabaseDiagnostics,compareDatabaseLogins}=await import(new URL('../../scripts/packaging/build-vercel-release.mjs',import.meta.url).href);
 function configFixture(run:(root:string,original:string)=>void){
  const root=mkdtempSync(join(tmpdir(),'teach-vercel-config-test-'));
  const original=JSON.stringify({framework:null,buildCommand:'node reviewed-build.mjs'},null,2)+'\n';
@@ -81,6 +81,79 @@ test('public Vercel navigation serves only intact welcome bytes after the review
   const post=await invoke({...navigation,method:'POST',url:'/api/v1/demo/start',body:'unchanged-body'});assert.equal(post.status,201);assert.equal(post.body,'unchanged-body');assert.deepEqual(post.headers['set-cookie'],['original-cookie']);
   writeFileSync(join(root,'src/web/demo/index.html'),'modified');assert.equal((await invoke(navigation)).status,403);
   assert.throws(()=>addVercelPublicNavigation(root),/Expected diagnostic handler required/);
+ }finally{rmSync(root,{recursive:true,force:true});}
+});
+
+test('Production root redirect binds one build hostname and leaves preview and invalid metadata unchanged',()=>{
+ const root=mkdtempSync(join(tmpdir(),'teach-vercel-production-root-metadata-'));
+ const config={runtime:'nodejs24.x',handler:'vercel-public-navigation.mjs',shouldAddHelpers:false};
+ const valid={VERCEL:'1',VERCEL_ENV:'production',VERCEL_URL:'teach-v2-fixture123-peteyweetss.vercel.app'};
+ try{
+  writeFileSync(join(root,'.vc-config.json'),JSON.stringify(config));
+  for(const env of [{},{...valid,VERCEL:'0'},{...valid,VERCEL_ENV:'preview'},{...valid,VERCEL_ENV:'development'}])assert.equal(addVercelProductionRootRedirect(root,env),false);
+  for(const host of [undefined,'teach-v2.vercel.app','teach-v2-git-main-peteyweetss.vercel.app','teach-v2-fixture123-foreign.vercel.app','https://'+valid.VERCEL_URL,valid.VERCEL_URL+':443',valid.VERCEL_URL+'\n','*.vercel.app','evil.test']){
+   assert.throws(()=>addVercelProductionRootRedirect(root,{...valid,VERCEL_URL:host}),/Exact Production deployment hostname required/);
+   assert.deepEqual(JSON.parse(readFileSync(join(root,'.vc-config.json'),'utf8')),config);
+  }
+  assert.equal(addVercelProductionRootRedirect(root,valid),true);
+  assert.equal(JSON.parse(readFileSync(join(root,'.vc-config.json'),'utf8')).handler,'vercel-production-root.mjs');
+  assert.equal(JSON.parse(readFileSync(join(root,'.vc-config.json'),'utf8')).shouldAddHelpers,false);
+  assert.throws(()=>addVercelProductionRootRedirect(root,valid),/Expected public navigation handler required/);
+ }finally{rmSync(root,{recursive:true,force:true});}
+});
+
+test('Production home redirects only exact generated-host document navigation, preserving the original adapter and denials',async()=>{
+ const root=mkdtempSync(join(tmpdir(),'teach-vercel-production-root-test-'));
+ const canonical='https://teach-v2.vercel.app',host='teach-v2-fixture123-peteyweetss.vercel.app';
+ const adapter=new URL('../../src/bootstrap/demo-hosted/node-adapter.ts',import.meta.url).href;
+ try{
+  const source=join(root,'src/bootstrap');mkdirSync(join(source,'demo-successor'),{recursive:true});mkdirSync(join(source,'demo-hosted'),{recursive:true});
+  writeFileSync(join(root,'package.json'),JSON.stringify({type:'module'}));
+  writeFileSync(join(root,'.vc-config.json'),JSON.stringify({runtime:'nodejs24.x',handler:'vercel-public-navigation.mjs'}));
+  writeFileSync(join(source,'demo-hosted/node-adapter.js'),`export {toHostedRequest} from ${JSON.stringify(adapter)};`);
+  const statePath=join(source,'demo-successor/runtime-config.js');
+  writeFileSync(statePath,`export const state={origin:${JSON.stringify(canonical)},configValid:true,initialized:true,override:null,calls:0};export function captureRuntimeConfiguration(){if(!state.configValid)throw Error('Invalid configuration');return {origin:state.origin};}`);
+  writeFileSync(join(root,'vercel-public-navigation.mjs'),`import {state} from './src/bootstrap/demo-successor/runtime-config.js';import {toHostedRequest} from './src/bootstrap/demo-hosted/node-adapter.js';
+export default async function handler(r,out){state.calls++;let status=200,code='ORIGINAL';if(!state.initialized) {status=503;code='SERVICE_UNAVAILABLE';}else {try{toHostedRequest(r,state.origin);}catch{status=400;code='INVALID_REQUEST';}}
+const response=state.override??{status,headers:{'cache-control':'no-store','content-type':'application/json'},body:JSON.stringify({error:{code}})};out.writeHead(response.status,response.headers);out.end(response.body);}`);
+  const env={VERCEL:'1',VERCEL_ENV:'production',VERCEL_URL:host};addVercelProductionRootRedirect(root,env);env.VERCEL_URL='teach-v2-otherbuild-peteyweetss.vercel.app';
+  const {default:handler}=await import(pathToFileURL(join(root,'vercel-production-root.mjs')).href);
+  const {state}=await import(pathToFileURL(statePath).href);
+  const navigation={url:'/',method:'GET',rawHeaders:['Host',host,'Sec-Fetch-Site','none','Sec-Fetch-Mode','navigate','Sec-Fetch-Dest','document']};
+  async function invoke(request:any){let status:number|undefined,headers:any,body:any;const before=structuredClone(request),calls=state.calls;await handler(request,{writeHead(s:number,h:any){status=s;headers=h;},end(value:any){body=value;}});assert.deepEqual(request,before);assert.equal(state.calls,calls+1);return {status,headers,body};}
+  for(const site of ['none','same-origin','same-site','cross-site']){
+   const r=await invoke({...navigation,rawHeaders:navigation.rawHeaders.map(x=>x==='none'?site:x)});
+   assert.equal(r.status,307);assert.equal(r.headers.location,canonical+'/');assert.equal(r.headers['cache-control'],'no-store');assert.equal(r.headers['referrer-policy'],'no-referrer');assert.equal(r.headers['set-cookie'],undefined);assert.equal(r.body,undefined);
+  }
+  // A Vercel protection cookie may accompany a legitimate document navigation;
+  // it is never forwarded to the canonical domain or reissued by this response.
+  assert.equal((await invoke({...navigation,rawHeaders:[...navigation.rawHeaders,'Cookie','synthetic-protection-cookie']})).status,307);
+  const replaceHeader=(name:string,value:string)=>navigation.rawHeaders.map((x,i,a)=>i>0&&a[i-1]===name?value:x);
+  const denied=[
+   {...navigation,url:'/api/v1/session'}, {...navigation,url:'/?tracking=value'}, {...navigation,url:'//evil.test/'},
+   {...navigation,url:'/./'}, {...navigation,url:'/#fragment'}, {...navigation,method:'HEAD'}, {...navigation,method:'POST',body:'unchanged-body'},
+   {...navigation,rawHeaders:replaceHeader('Host','teach-v2-otherbuild-peteyweetss.vercel.app')},
+   {...navigation,rawHeaders:replaceHeader('Host',host+':443')}, {...navigation,rawHeaders:replaceHeader('Host',host+'.evil.test')},
+   {...navigation,rawHeaders:[...replaceHeader('Host','evil.test'),'X-Forwarded-Host',host]},
+   {...navigation,rawHeaders:[...navigation.rawHeaders,'Host',host]}, {...navigation,rawHeaders:[...navigation.rawHeaders,'Origin',canonical]},
+   {...navigation,rawHeaders:[...navigation.rawHeaders,'Origin','https://evil.test']},
+   {...navigation,rawHeaders:[...navigation.rawHeaders,'Content-Length','1']}, {...navigation,rawHeaders:[...navigation.rawHeaders,'Transfer-Encoding','chunked']},
+   {...navigation,rawHeaders:replaceHeader('Sec-Fetch-Mode','cors')}, {...navigation,rawHeaders:replaceHeader('Sec-Fetch-Dest','iframe')},
+   {...navigation,rawHeaders:replaceHeader('Sec-Fetch-Site','unexpected')}, {...navigation,rawHeaders:['Host',host]},
+  ];
+  for(const request of denied){const r=await invoke(request);assert.equal(r.status,400);assert.equal(r.headers.location,undefined);assert.match(r.body,/INVALID_REQUEST/);}
+  // Canonical navigation and API requests are delegated, not redirected.
+  for(const request of [{...navigation,rawHeaders:replaceHeader('Host','teach-v2.vercel.app')},{...navigation,url:'/api/v1/session',rawHeaders:replaceHeader('Host','teach-v2.vercel.app')}]){const r=await invoke(request);assert.equal(r.status,200);assert.equal(r.headers.location,undefined);}
+  state.initialized=false;assert.equal((await invoke(navigation)).status,503);state.initialized=true;
+  state.configValid=false;assert.equal((await invoke(navigation)).status,400);state.configValid=true;
+  state.origin='https://other.example.test';assert.equal((await invoke(navigation)).status,400);state.origin=canonical;
+  for(const override of [
+   {status:403,headers:{},body:JSON.stringify({error:{code:'FORBIDDEN'}})},
+   {status:400,headers:{},body:'not JSON'},
+   {status:400,headers:{},body:JSON.stringify({error:{code:'OTHER'}})},
+   {status:400,headers:{'Set-Cookie':['unchanged-cookie']},body:JSON.stringify({error:{code:'INVALID_REQUEST'}})},
+  ]){state.override=override;const r=await invoke(navigation);assert.deepEqual(r,override);}
+  state.override=null;assert.equal((await invoke(navigation)).status,307);
  }finally{rmSync(root,{recursive:true,force:true});}
 });
 
