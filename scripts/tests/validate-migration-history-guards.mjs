@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { MIGRATION_GUARD_NAMES, parseBoundedPartition, boundedPartitionEvidence } from '../verification/validator-partitions.mjs';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -11,6 +12,7 @@ import { exactCurrentDenial } from '../verification/demo-validator-predecessor.m
 import { withKitchenPredecessor } from './kitchen-predecessor-fixture.mjs';
 import { installAuthoringPredecessor } from './authoring-predecessor-fixture.mjs';
 
+const partition = parseBoundedPartition(process.argv.slice(2),3);
 const ROOT = resolve(new URL('.', import.meta.url).pathname, '../..');
 const json = (dir, path) => JSON.parse(readFileSync(join(dir, path), 'utf8'));
 const write = (dir, path, value) => writeFileSync(join(dir, path), JSON.stringify(value, null, 2) + '\n');
@@ -61,7 +63,7 @@ const inventory = [], results = [];
 if (!isMainThread && ![0, 1].includes(workerData?.index)) throw Error('exact fixed migration worker required');
 function check(name, mutate, pattern = null, structuralOnly = false) {
   const ordinal = count++; inventory.push(name);
-  if (isMainThread || ordinal % 2 !== workerData.index) return;
+  if (isMainThread ? partition===null||ordinal%3!==partition-1 : ordinal%2!==workerData.index) return;
   const messages = []; let ok = true;
   const dir = mkdtempSync(join(tmpdir(), 'migration-guard-'));
   try {
@@ -205,7 +207,14 @@ function awaitMigrationWorker(worker, index) {
     });
   });
 }
-if (isMainThread) {
+if (isMainThread && partition!==null) {
+  assert.deepEqual(inventory,MIGRATION_GUARD_NAMES);
+  const evidence=boundedPartitionEvidence('migration',partition);
+  assert.deepEqual(results.map(row=>row.name),evidence.names);
+  for(const row of results)console.log(row.detail);
+  console.log('Bounded partition: '+JSON.stringify(evidence));
+  process.exitCode=results.every(row=>row.ok)?0:1;
+} else if (isMainThread) {
   const pending = [0, 1].map(index => {
     try { return awaitMigrationWorker(new Worker(new URL(import.meta.url), { workerData: { index } }), index); }
     catch (error) { return Promise.reject(error); }

@@ -1,3 +1,4 @@
+import { SCHEDULING_EXTRA_IDS } from '../verification/self-audit-catalog.mjs';
 import { inspectAuthoringEngineering } from '../verification/demo-authoring-engineering.mjs';
 import { authoringStages } from '../verification/authoring-stage-catalog.mjs';
 import assert from 'node:assert/strict';
@@ -57,8 +58,8 @@ test('same producer retains legacy stage inventory and includes every new bounde
  assert.equal(legacy.length,48);assert.equal(new Set(legacy).size,48);
  assert.equal(current.length,52);assert.equal(new Set(current).size,52);
  assert.deepEqual(live,expectedPlan.stages.map(stage=>stage.id));
- assert.equal(live.length,57);assert.equal(new Set(live).size,57);
- assert.deepEqual(live.filter(id=>!authoringStages.some(([added])=>id===added)),current);
+ assert.equal(live.length,73);assert.equal(new Set(live).size,73);
+ assert.deepEqual(live.filter(id=>!authoringStages.some(([added])=>id===added)&&!SCHEDULING_EXTRA_IDS.includes(id)),current);
  assert.deepEqual(live.filter(id=>authoringStages.some(([added])=>id===added)),authoringStages.map(([id])=>id));
  const added=['demo-kitchen-registration','demo-kitchen-postgres','demo-storage-owner-regressions','demo-storage-integration-regressions'];
  assert.deepEqual(current.filter(id=>!added.includes(id)),legacy);

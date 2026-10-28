@@ -2,7 +2,7 @@ import { inspectSourceInScope } from './source-inspection-scope.mjs';
 import { inspectAuthoringEngineering } from './demo-authoring-engineering.mjs';
 import { inspectAuthoringRegistration } from '../kernel/demo-authoring-registration.mjs';
 import { authoringStages } from './authoring-stage-catalog.mjs';
-import { STORAGE_OWNER_PATTERN, STORAGE_INTEGRATION_PATTERN, assertStoragePartitionInventory } from './demo-storage-partitions.mjs';
+import { STORAGE_OWNER_PATTERN, STORAGE_INTEGRATION_PATTERN, STORAGE_INTEGRATION_FIRST_PATTERN, STORAGE_INTEGRATION_SECOND_PATTERN, assertStoragePartitionInventory } from './demo-storage-partitions.mjs';
 import { inspectKitchenRegistration } from '../kernel/demo-kitchen-registration.mjs';
 import { inspectDemoRecoveryRegistration } from '../kernel/demo-recovery-registration.mjs';
 import { inspectRecipeRegistration } from '../kernel/demo-recipes-registration.mjs';
@@ -11,7 +11,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join } from 'node:path';
 import { renderConsolidatedProducerWorkflow } from './self-audit-workflow.mjs';
-import { inspectAuditPlan } from './self-audit-catalog.mjs';
+import { inspectAuditPlan, expectedPlan } from './self-audit-catalog.mjs';
 import { inspectWorkflowText } from './workflow-lifecycle-inventory.mjs';
 import { inspectProducerWorkflowWiring } from './validate-workflow-lifecycle.mjs';
 
@@ -46,7 +46,7 @@ export function inspectConsolidatedVerificationUncached(root) {
     } catch(error) { fail(error.message); }
     const physicalRegression=plan?.stages?.find(stage=>stage.id==='audit-regressions');
     if(physicalRegression?.command!=='node'||JSON.stringify(physicalRegression?.args)!==JSON.stringify(['--test','scripts/tests/validate-development-self-audit.test.mjs','scripts/tests/validate-ci-consolidation.test.mjs','scripts/tests/validate-demo-physical-successor.mjs','scripts/tests/validate-replay-database-cleanup.test.mjs','scripts/tests/validate-whole-audit-runner.test.mjs'])||physicalRegression?.timeout_ms!==25000||!existsSync(join(root,'scripts/tests/validate-demo-physical-successor.mjs')))fail('exact bounded physical successor mutation suite must run in CI');
-    for (const [id, pattern] of [['demo-storage-owner-regressions', STORAGE_OWNER_PATTERN], ['demo-storage-integration-regressions', STORAGE_INTEGRATION_PATTERN]]) {
+    for (const [id, pattern] of [['demo-storage-owner-regressions', STORAGE_OWNER_PATTERN], ['demo-storage-integration-regressions', STORAGE_INTEGRATION_FIRST_PATTERN], ['demo-storage-integration-second', STORAGE_INTEGRATION_SECOND_PATTERN]]) {
       const stage = plan?.stages?.find(stage => stage.id === id);
       if (stage?.command !== 'node' || JSON.stringify(stage?.args) !== JSON.stringify(['--test', '--test-name-pattern='+pattern, 'scripts/tests/demo-storage-evidence.mjs']) || stage?.timeout_ms !== 25000) fail('exact bounded exhaustive storage partitions required');
     }
@@ -55,7 +55,7 @@ export function inspectConsolidatedVerificationUncached(root) {
       assertStoragePartitionInventory(names);
     } catch (error) { fail(error.message); }
     const demoSource=plan?.stages?.find(stage=>stage.id==='demo-source-tests');
-    if (demoSource?.args?.includes('scripts/tests/demo-storage-evidence.mjs')) fail('storage declarations must execute only in their two exact bounded partitions');
+    if (demoSource?.args?.includes('scripts/tests/demo-storage-evidence.mjs')) fail('storage declarations must execute only in their three exact bounded partitions');
     for(const path of demoSource?.args?.filter(arg=>/^(?:tests|scripts)\//.test(arg))||[])if(!existsSync(join(root,path)))fail(`required demo test missing: ${path}`);
     const recipe = inspectRecipeRegistration(root);
     errors.push(...recipe.errors);
@@ -144,7 +144,7 @@ export function inspectConsolidationCoverageUncached(root) {
     }
     // Keep the historical 53-validator consolidation baseline immutable. The
     // Exact admitted successors add capability names, demo semantics, and the
-    // reviewed physical gate, all executed by the unchanged authority loop.
+    // reviewed physical gate, all executed by the explicitly refined authority partitions.
     const recipe = inspectRecipeRegistration(root); errors.push(...recipe.errors);
     const kitchen = inspectKitchenRegistration(root); errors.push(...kitchen.errors);
     const authoring = inspectAuthoringRegistration(root); errors.push(...authoring.errors);
@@ -163,9 +163,9 @@ export function inspectConsolidationCoverageUncached(root) {
         const stage=stages.get(item.stages[0]);
         const expanded=item.command.startsWith('node scripts/verification/run-self-audit.mjs --stage ')?['node','scripts/verification/run-self-audit.mjs','--stage',stage?.id].join(' '):[stage?.command,...(stage?.args||[])].join(' ');
         // The target/snapshot stage intentionally groups two explicit node-test inputs.
-        if(item.command!==expanded && !(item.stages[0]==='target-snapshots'&&stage?.args.includes(item.command.split(' ').at(-1))))fail(`${producer.workflow}: command no longer covered by its mapped stage`);
+        if(item.command!==expanded && !(item.stages[0]==='authority'&&item.command==='node scripts/architecture/validate-whole-repository.mjs'&&['authority','authority-second'].every(id=>JSON.stringify(stages.get(id))===JSON.stringify(expectedPlan.stages.find(row=>row.id===id)))) && !(item.stages[0]==='migration-guards'&&item.command==='node scripts/tests/validate-migration-history-guards.mjs'&&['migration-guards','migration-guards-second','migration-guards-third'].every(id=>JSON.stringify(stages.get(id))===JSON.stringify(expectedPlan.stages.find(row=>row.id===id)))) && !(item.stages[0]==='target-snapshots'&&stage?.args.includes(item.command.split(' ').at(-1))))fail(`${producer.workflow}: command no longer covered by its mapped stage`);
       } else if(item.kind==='umbrella_validator') {
-        if(!validators.includes(item.validator)||stages.get('authority')?.args[0]!=='scripts/architecture/validate-whole-repository.mjs')fail('authority umbrella must execute every mapped validator');
+        if(!validators.includes(item.validator)||!['authority','authority-second'].every(id=>JSON.stringify(stages.get(id))===JSON.stringify(expectedPlan.stages.find(row=>row.id===id))))fail('authority umbrella must execute every mapped validator');
         if(item.command.startsWith('pnpm ')&&scripts[item.command.slice(5)]!==`node ${item.validator}`)fail('package alias changed its mapped validator');
       } else if(item.kind==='live_foundation_inventory') {
         if(stages.get('foundation')?.discover_tests!=='src/modules'||item.test_files.some(path=>!coverage.preserved_test_and_replay_files.some(file=>file.path===path)))fail('complete live foundation test coverage required');

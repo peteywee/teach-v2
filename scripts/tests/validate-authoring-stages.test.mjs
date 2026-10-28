@@ -1,3 +1,4 @@
+import { refineScheduledStage, SCHEDULING_EXTRA_IDS } from '../verification/self-audit-catalog.mjs';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readFileSync, existsSync } from 'node:fs';
@@ -9,17 +10,29 @@ import { renderConsolidatedProducerWorkflow } from '../verification/self-audit-w
 import { inspectWorkflowText } from '../verification/workflow-lifecycle-inventory.mjs';
 import { hostedSchemaCaseNames, hostedSourceChecks } from '../verification/run-hosted-source-check.mjs';
 const root = resolve(new URL('../..', import.meta.url).pathname);
-test('five distinct bounded authoring commands retain all original fifty-two stage identities and argv', () => {
+test('five authoring commands and exact bounded scheduling refinement retain all fifty-two logical obligations', () => {
   const source = inspectAuthoringEngineering(root); assert.equal(source.present, true); assert.deepEqual(source.errors, []);
   const prior = JSON.parse(source.predecessorFiles['verification/whole-repository/self-audit-plan.json']);
-  assert.equal(prior.stages.length, 52); assert.equal(expectedPlan.stages.length, 57);
-  assert.deepEqual(expectedPlan.stages.filter(stage => !authoringStages.some(([id]) => id === stage.id)), prior.stages);
-  assert.equal(new Set(expectedPlan.stages.map(stage => stage.id)).size, 57);
+  assert.equal(prior.stages.length, 52); assert.equal(expectedPlan.stages.length, 73);
+  assert.deepEqual(expectedPlan.stages.filter(stage => !authoringStages.some(([id]) => id === stage.id)&&!SCHEDULING_EXTRA_IDS.includes(stage.id)), prior.stages.map(refineScheduledStage));
+  assert.equal(new Set(expectedPlan.stages.map(stage => stage.id)).size, 73);
   for (const [id, command, args] of authoringStages) {
     assert.deepEqual(expectedPlan.stages.find(stage => stage.id === id), { id, command, args, timeout_ms: 25000 });
     for (const path of args.filter(value => /^(?:scripts|tests)\//.test(value))) assert.ok(existsSync(join(root, path)), path);
     const removed = structuredClone(expectedPlan); removed.stages = removed.stages.filter(stage => stage.id !== id); assert.ok(inspectAuditPlan(removed).length);
     const weakened = structuredClone(expectedPlan); weakened.stages.find(stage => stage.id === id).timeout_ms = 30000; assert.ok(inspectAuditPlan(weakened).length);
+  }
+  const oldMapping=source.predecessorFiles['scripts/verification/validator-partitions.mjs'];
+  const currentMapping=readFileSync(join(root,'scripts/verification/validator-partitions.mjs'),'utf8');
+  assert.equal(typeof oldMapping,'string');
+  const originalBody=oldMapping.slice(oldMapping.indexOf('export function validatorPartitionForOrdinal'),oldMapping.indexOf('export function validatorPartitionOrdinals')).trim();
+  const preservedBody=currentMapping.slice(currentMapping.indexOf('export function predecessorValidatorPartitionForOrdinal'),currentMapping.indexOf('// Explicit scheduling successor')).trim().replace('predecessorValidatorPartitionForOrdinal','validatorPartitionForOrdinal');
+  assert.equal(preservedBody,originalBody,'original fourteen-way mapping remains byte-exact under its explicit predecessor name');
+  for(const id of SCHEDULING_EXTRA_IDS){
+    const missing=structuredClone(expectedPlan);missing.stages=missing.stages.filter(row=>row.id!==id);assert.ok(inspectAuditPlan(missing).length);
+    const duplicate=structuredClone(expectedPlan);duplicate.stages.push(structuredClone(duplicate.stages.find(row=>row.id===id)));assert.ok(inspectAuditPlan(duplicate).length);
+    const weakened=structuredClone(expectedPlan);weakened.stages.find(row=>row.id===id).timeout_ms=30000;assert.ok(inspectAuditPlan(weakened).length);
+    const miswired=structuredClone(expectedPlan);miswired.stages.find(row=>row.id===id).args=['--unknown'];assert.ok(inspectAuditPlan(miswired).length);
   }
   const recoveryTest = 'scripts/tests/validate-authoring-recovery-policy.test.mjs';
   assert.ok(expectedPlan.stages.find(stage => stage.id === 'demo-authoring-source-tests').args.includes(recoveryTest));

@@ -1,3 +1,4 @@
+import { inspectSchemaIsolationEngineering } from '../verification/demo-schema-isolation-engineering.mjs';
 import { createAuthoringPredecessorCopy } from './authoring-proof-copy.mjs';
 import { inspectDemoRecoveryRegistration } from '../kernel/demo-recovery-registration.mjs';
 import { hasGuardedDatabaseEntry } from '../architecture/repository-integration-evidence.mjs';
@@ -82,6 +83,16 @@ test('fresh inspections reject mutation immediately after success and recover on
   } finally { writeFileSync(entities, original); }
   assert.deepEqual(inspectRecipeRegistration(fixture).errors, []);
   assert.deepEqual(inspectDemoRecipePhysicalSuccessor(fixture).errors, []);
+  assert.deepEqual(inspectSchemaIsolationEngineering(fixture).errors, []);
+  const auditPath=join(fixture,'scripts/verification/development-self-audit.mjs'),auditBytes=readFileSync(auditPath,'utf8');
+  try {
+    writeFileSync(auditPath,auditBytes+'\n');
+    const schema=inspectSchemaIsolationEngineering(fixture);
+    assert.ok(schema.errors.some(error=>error.includes('scripts/verification/development-self-audit.mjs')));
+    assert.deepEqual(schema.predecessorFiles,{});assert.deepEqual(schema.revisedPaths,[]);assert.deepEqual(schema.addedPaths,[]);
+  } finally { writeFileSync(auditPath,auditBytes); }
+  assert.deepEqual(inspectSchemaIsolationEngineering(fixture).errors, []);
+
   const runner = join(fixture, 'scripts/db/run-demo-integration.ts'), runnerBytes = readFileSync(runner, 'utf8');
   try {
     writeFileSync(runner, runnerBytes + '\n');

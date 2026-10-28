@@ -11,7 +11,17 @@
       "id": "authority",
       "command": "node",
       "args": [
-        "scripts/architecture/validate-whole-repository.mjs"
+        "scripts/architecture/validate-whole-repository.mjs",
+        "--partition=1/2"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "authority-second",
+      "command": "node",
+      "args": [
+        "scripts/architecture/validate-whole-repository.mjs",
+        "--partition=2/2"
       ],
       "timeout_ms": 25000
     },
@@ -83,7 +93,26 @@
       "id": "migration-guards",
       "command": "node",
       "args": [
-        "scripts/tests/validate-migration-history-guards.mjs"
+        "scripts/tests/validate-migration-history-guards.mjs",
+        "--partition=1/3"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "migration-guards-second",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-migration-history-guards.mjs",
+        "--partition=2/3"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "migration-guards-third",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-migration-history-guards.mjs",
+        "--partition=3/3"
       ],
       "timeout_ms": 25000
     },
@@ -100,7 +129,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=1/14"
+        "--shard=1/26"
       ],
       "timeout_ms": 25000
     },
@@ -109,7 +138,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=2/14"
+        "--shard=2/26"
       ],
       "timeout_ms": 25000
     },
@@ -118,7 +147,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=3/14"
+        "--shard=3/26"
       ],
       "timeout_ms": 25000
     },
@@ -127,7 +156,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=4/14"
+        "--shard=4/26"
       ],
       "timeout_ms": 25000
     },
@@ -136,7 +165,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=5/14"
+        "--shard=5/26"
       ],
       "timeout_ms": 25000
     },
@@ -145,7 +174,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=6/14"
+        "--shard=6/26"
       ],
       "timeout_ms": 25000
     },
@@ -154,7 +183,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=7/14"
+        "--shard=7/26"
       ],
       "timeout_ms": 25000
     },
@@ -163,7 +192,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=8/14"
+        "--shard=8/26"
       ],
       "timeout_ms": 25000
     },
@@ -172,7 +201,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=9/14"
+        "--shard=9/26"
       ],
       "timeout_ms": 25000
     },
@@ -181,7 +210,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=10/14"
+        "--shard=10/26"
       ],
       "timeout_ms": 25000
     },
@@ -190,7 +219,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=11/14"
+        "--shard=11/26"
       ],
       "timeout_ms": 25000
     },
@@ -199,7 +228,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=12/14"
+        "--shard=12/26"
       ],
       "timeout_ms": 25000
     },
@@ -208,7 +237,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=13/14"
+        "--shard=13/26"
       ],
       "timeout_ms": 25000
     },
@@ -217,7 +246,115 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=14/14"
+        "--shard=14/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-15",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=15/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-16",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=16/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-17",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=17/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-18",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=18/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-19",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=19/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-20",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=20/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-21",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=21/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-22",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=22/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-23",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=23/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-24",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=24/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-25",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=25/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-26",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=26/26"
       ],
       "timeout_ms": 25000
     },
@@ -300,7 +437,17 @@
       "command": "node",
       "args": [
         "--test",
-        "--test-name-pattern=^(?:repository integration accepts exact reviewed current storage and historical queue|repository integration cannot admit owner tables from a forged successor|repository integration rejects Certification even inside the admitted migration|repository integration rejects admitted table names at an unadmitted source location|repository integration rejects admitted table names in a later migration|repository integration rejects admitted table names in a later snapshot|repository integration does not project a tampered live queue|repository integration requires the real isolated guard despite compact imports|repository integration rejects a guard after the first Pool)$",
+        "--test-name-pattern=^(?:repository integration accepts exact reviewed current storage and historical queue|repository integration rejects Certification even inside the admitted migration|repository integration rejects admitted table names in a later migration|repository integration does not project a tampered live queue|repository integration rejects a guard after the first Pool)$",
+        "scripts/tests/demo-storage-evidence.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-storage-integration-second",
+      "command": "node",
+      "args": [
+        "--test",
+        "--test-name-pattern=^(?:repository integration cannot admit owner tables from a forged successor|repository integration rejects admitted table names at an unadmitted source location|repository integration rejects admitted table names in a later snapshot|repository integration requires the real isolated guard despite compact imports)$",
         "scripts/tests/demo-storage-evidence.mjs"
       ],
       "timeout_ms": 25000

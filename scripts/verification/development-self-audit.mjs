@@ -1,3 +1,5 @@
+import { boundedPartitionEvidence } from './validator-partitions.mjs';
+import { storagePartitionNames } from './demo-storage-partitions.mjs';
 import {VALIDATOR_PARTITION_COUNT,validatorPartitionOrdinals} from './validator-partitions.mjs';
 import { spawnSync, execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -66,6 +68,22 @@ export function runBounded(command,args,{root,timeoutMs=25000,env=process.env}={
   return {started_at:started.toISOString(),finished_at:new Date().toISOString(),duration_ms:Date.now()-started.getTime(),exit_code:result.status,
     timed_out:result.error?.code==='ETIMEDOUT',execution_error:result.error?.code||cleanupError||null,stdout:result.stdout||'',stderr:result.stderr||''};
 }
+export function expectedScheduledEvidence(id){
+ if(id==='authority'||id==='authority-second')return boundedPartitionEvidence('authority',id==='authority'?1:2);
+ if(['migration-guards','migration-guards-second','migration-guards-third'].includes(id))return boundedPartitionEvidence('migration',id==='migration-guards'?1:id==='migration-guards-second'?2:3);
+ if(id==='demo-storage-integration-regressions'||id==='demo-storage-integration-second')return {kind:'storage',index:id==='demo-storage-integration-regressions'?1:2,total:2,names:storagePartitionNames(id==='demo-storage-integration-regressions'?1:2)};
+ return null;
+}
+function readScheduledEvidence(id,stdout){
+ const expected=expectedScheduledEvidence(id);if(!expected)return null;
+ if(expected.kind==='storage'){
+  const names=[...stdout.matchAll(/^ok [0-9]+ - (.+)$/gm)].map(match=>match[1]).filter(name=>!name.includes(' # SKIP'));
+  return {kind:'storage',index:expected.index,total:2,names};
+ }
+ const lines=stdout.split('\n').filter(line=>line.startsWith('Bounded partition: '));
+ if(lines.length!==1)return null;
+ try{return JSON.parse(lines[0].slice('Bounded partition: '.length));}catch{return null;}
+}
 export function runAuditStage(root,id,{expectedSha=process.env.AUDIT_EXPECTED_SHA,env=process.env}={}) {
   const planPath=join(root,'verification/whole-repository/self-audit-plan.json'),planText=readFileSync(planPath,'utf8'),plan=JSON.parse(planText);
   const errors=inspectAuditPlan(plan);if(errors.length)throw new Error(errors.join('; '));
@@ -83,6 +101,7 @@ export function runAuditStage(root,id,{expectedSha=process.env.AUDIT_EXPECTED_SH
     source:before,source_unchanged:same,...(inputContext?{input_context:inputContext,input_context_error:contextError}:{}),plan_sha256:digest(planText),command:[stage.command,...args],runtime:{node:process.version,platform:process.platform},
     started_at:result.started_at,finished_at:result.finished_at,duration_ms:result.duration_ms,exit_code:result.exit_code,timed_out:result.timed_out,execution_error:result.execution_error,
     stdout_sha256:digest(result.stdout),stderr_sha256:digest(result.stderr),
+    ...(expectedScheduledEvidence(id)?{scheduled_partition:readScheduledEvidence(id,result.stdout)}:{}),
     ...(validatorMatch?{validator_shard:{inventory:Number(validatorMatch[1]),index:Number(validatorMatch[2]),total:Number(validatorMatch[3]),selected:Number(validatorMatch[4]),digest:validatorMatch[5]}}:{}),
     full_runtime_conformance:'UNKNOWN',runtime_activation:'BLOCKED',shared_or_production_execution_authorized:false};
   const output=join(root,'verification/generated/self-audit');mkdirSync(output,{recursive:true});writeFileSync(join(output,`${id}.json`),JSON.stringify(report,null,2)+'\n');
@@ -101,6 +120,7 @@ export function evaluateAuditReports(plan,reports,source,planHash,foundationTest
       if(r.input_context_error!==null||inspectDocumentGovernanceContext(documentContext,source.source_sha).length||JSON.stringify(r.input_context)!==JSON.stringify(documentContext))errors.push(`${stage.id}: exact event/base context required`);
       else if(JSON.stringify(r.command)!==JSON.stringify([stage.command,...documentGovernanceArgs(documentContext)]))errors.push(`${stage.id}: executed command differs from event/base plan`);
     } else if(!Array.isArray(r.command)||r.command[0]!==stage.command||JSON.stringify(r.command.slice(1,1+stage.args.length))!==JSON.stringify(stage.args)||!stage.discover_tests&&r.command.length!==stage.args.length+1)errors.push(`${stage.id}: executed command differs from plan`);
+    if(expectedScheduledEvidence(stage.id)&&JSON.stringify(r.scheduled_partition)!==JSON.stringify(expectedScheduledEvidence(stage.id)))errors.push(`${stage.id}: exact executed scheduling partition required`);
     if(stage.discover_tests && (!Array.isArray(foundationTests)||!foundationTests.length||JSON.stringify(r.command)!==JSON.stringify([stage.command,...stage.args,...foundationTests])))errors.push(`${stage.id}: complete live foundation inventory required`);
     const started=Date.parse(r.started_at),finished=Date.parse(r.finished_at);
     if(!Number.isFinite(started)||!Number.isFinite(finished)||finished<started||!Number.isFinite(r.duration_ms)||r.duration_ms<0||r.duration_ms>stage.timeout_ms+2000||Math.abs(finished-started-r.duration_ms)>1000||!/^[a-f0-9]{64}$/.test(r.stdout_sha256||'')||!/^[a-f0-9]{64}$/.test(r.stderr_sha256||''))errors.push(`${stage.id}: invalid time/output provenance`);

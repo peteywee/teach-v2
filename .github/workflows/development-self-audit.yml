@@ -50,6 +50,9 @@ jobs:
       - name: Audit authority
         id: audit_authority
         run: node scripts/verification/run-self-audit.mjs --stage authority
+      - name: Audit authority-second
+        id: audit_authority_second
+        run: node scripts/verification/run-self-audit.mjs --stage authority-second
       - name: Audit demo-registration-entry-regressions
         id: audit_demo_registration_entry_regressions
         run: node scripts/verification/run-self-audit.mjs --stage demo-registration-entry-regressions
@@ -74,6 +77,12 @@ jobs:
       - name: Audit migration-guards
         id: audit_migration_guards
         run: node scripts/verification/run-self-audit.mjs --stage migration-guards
+      - name: Audit migration-guards-second
+        id: audit_migration_guards_second
+        run: node scripts/verification/run-self-audit.mjs --stage migration-guards-second
+      - name: Audit migration-guards-third
+        id: audit_migration_guards_third
+        run: node scripts/verification/run-self-audit.mjs --stage migration-guards-third
       - name: Audit apply-regressions
         id: audit_apply_regressions
         run: node scripts/verification/run-self-audit.mjs --stage apply-regressions
@@ -119,6 +128,42 @@ jobs:
       - name: Audit validator-shard-14
         id: audit_validator_shard_14
         run: node scripts/verification/run-self-audit.mjs --stage validator-shard-14
+      - name: Audit validator-shard-15
+        id: audit_validator_shard_15
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-15
+      - name: Audit validator-shard-16
+        id: audit_validator_shard_16
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-16
+      - name: Audit validator-shard-17
+        id: audit_validator_shard_17
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-17
+      - name: Audit validator-shard-18
+        id: audit_validator_shard_18
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-18
+      - name: Audit validator-shard-19
+        id: audit_validator_shard_19
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-19
+      - name: Audit validator-shard-20
+        id: audit_validator_shard_20
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-20
+      - name: Audit validator-shard-21
+        id: audit_validator_shard_21
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-21
+      - name: Audit validator-shard-22
+        id: audit_validator_shard_22
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-22
+      - name: Audit validator-shard-23
+        id: audit_validator_shard_23
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-23
+      - name: Audit validator-shard-24
+        id: audit_validator_shard_24
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-24
+      - name: Audit validator-shard-25
+        id: audit_validator_shard_25
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-25
+      - name: Audit validator-shard-26
+        id: audit_validator_shard_26
+        run: node scripts/verification/run-self-audit.mjs --stage validator-shard-26
       - name: Audit audit-regressions
         id: audit_audit_regressions
         run: node scripts/verification/run-self-audit.mjs --stage audit-regressions
@@ -137,6 +182,9 @@ jobs:
       - name: Audit demo-storage-integration-regressions
         id: audit_demo_storage_integration_regressions
         run: node scripts/verification/run-self-audit.mjs --stage demo-storage-integration-regressions
+      - name: Audit demo-storage-integration-second
+        id: audit_demo_storage_integration_second
+        run: node scripts/verification/run-self-audit.mjs --stage demo-storage-integration-second
       - name: Audit demo-kitchen-registration
         id: audit_demo_kitchen_registration
         run: node scripts/verification/run-self-audit.mjs --stage demo-kitchen-registration

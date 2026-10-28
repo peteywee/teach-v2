@@ -1,3 +1,7 @@
+import { predecessorValidatorPartitionForOrdinal, AUTHORITY_VALIDATORS, MIGRATION_GUARD_NAMES, parseBoundedPartition, boundedPartitionEvidence } from '../verification/validator-partitions.mjs';
+import { STORAGE_INTEGRATION_FIRST_PATTERN, STORAGE_INTEGRATION_SECOND_PATTERN, storagePartitionNames } from '../verification/demo-storage-partitions.mjs';
+import { refineScheduledStage, SCHEDULING_EXTRA_IDS } from '../verification/self-audit-catalog.mjs';
+import { expectedScheduledEvidence } from '../verification/development-self-audit.mjs';
 import { inspectAuthoringEngineering } from '../verification/demo-authoring-engineering.mjs';
 import { authoringStages } from '../verification/authoring-stage-catalog.mjs';
 import { createAuthoringPredecessorCopy } from './authoring-proof-copy.mjs';
@@ -424,7 +428,7 @@ const currentAdditions = [...additions.map(([id,command,args])=>[id,command,id==
 const CURRENT_VALIDATORS = [...BASELINE_VALIDATORS,'scripts/kernel/validate-capability-admission.mjs','scripts/kernel/validate-demo-runtime-registration.mjs','scripts/persistence/validate-demo-physical-admission.mjs','scripts/kernel/validate-demo-recipes-registration.mjs','scripts/persistence/validate-demo-recipes-physical-admission.mjs','scripts/kernel/validate-demo-kitchen-registration.mjs'];
 const LIVE_VALIDATORS = [...CURRENT_VALIDATORS,'scripts/kernel/validate-demo-authoring-registration.mjs'];
 const AUDIT_RUNNER_TEST = 'scripts/tests/validate-whole-audit-runner.test.mjs';
-test('all 24 baseline obligations retain their identities, argv, discovery and bounds', () => {
+test('all 24 baseline logical obligations retain identities, discovery and bounds through exact scheduling refinement', () => {
   const predecessor=JSON.parse(kitchenPredecessor('verification/whole-repository/self-audit-plan.json'));
   for (const old of BASELINE_STAGES) {
     const stage = expectedPlan.stages.find(x => x.id === old.id);
@@ -434,7 +438,7 @@ test('all 24 baseline obligations retain their identities, argv, discovery and b
     if(old.id.startsWith('validator-shard-'))expected.args[1]=expected.args[1].replace('/3','/14');
     assert.deepEqual(predecessor.stages.find(x=>x.id===old.id),expected,`preserved ${old.id}`);
     if(old.id==='audit-regressions')expected.args.push(AUDIT_RUNNER_TEST);
-    assert.deepEqual(stage, expected, old.id);
+    assert.deepEqual(stage, refineScheduledStage(expected), old.id);
   }
   assert.equal(predecessor.stages.length, 48);
   assert.equal(new Set(predecessor.stages.map(x => x.id)).size, 48);
@@ -443,8 +447,8 @@ test('all 24 baseline obligations retain their identities, argv, discovery and b
   assert.equal(previousPlan.stages.length, 52);
   assert.equal(new Set(previousPlan.stages.map(x => x.id)).size, 52);
   assert.deepEqual(previousPlan.stages.map(x=>x.id).sort(),[...predecessor.stages.map(x=>x.id),...KITCHEN_STAGES.map(([id])=>id),...STORAGE_STAGES.map(([id])=>id)].sort());
-  assert.equal(expectedPlan.stages.length,57);
-  assert.deepEqual(expectedPlan.stages.filter(row=>!authoringStages.some(([id])=>row.id===id)),previousPlan.stages);
+  assert.equal(expectedPlan.stages.length,73);
+  assert.deepEqual(expectedPlan.stages.filter(row=>!authoringStages.some(([id])=>row.id===id)&&!SCHEDULING_EXTRA_IDS.includes(row.id)),previousPlan.stages.map(refineScheduledStage));
   assert.deepEqual(JSON.parse(read('verification/whole-repository/self-audit-plan.json')), expectedPlan);
   assert.equal(expectedPlan.shell_execution, false);
   assert.equal(expectedPlan.max_operation_ms, 25000);
@@ -453,7 +457,7 @@ for (const [id, command, args] of currentAdditions) test(`unique obligation ${id
   const stage = expectedPlan.stages.find(x => x.id === id);
   assert.ok(stage, id);
   assert.equal(stage.command, command);
-  assert.deepEqual(stage.args, args);
+  assert.deepEqual(stage.args, refineScheduledStage({id,command,args}).args);
   assert.equal(stage.timeout_ms, 25000);
   if(id==='demo-source-tests')assert.deepEqual(JSON.parse(kitchenPredecessor('verification/whole-repository/self-audit-plan.json')).stages.find(x=>x.id===id).args,additions.find(([name])=>name===id)[2]);
   if (id === 'document-governance') assert.equal(stage.dynamic_input, 'source-bound-event-document-base');
@@ -626,13 +630,30 @@ function auditEvidence() {
     ...(stage.dynamic_input ? { input_context: structuredClone(context), input_context_error: null } : {}),
     runtime: { node: 'v20.20.2', platform: 'linux' }, started_at: '2026-10-17T12:00:00.000Z', finished_at: '2026-10-17T12:00:00.010Z', duration_ms: 10,
     exit_code: 0, timed_out: false, execution_error: null, stdout_sha256: hash('out'), stderr_sha256: hash(''),
-    ...(stage.id.startsWith('validator-shard-') ? { validator_shard: { inventory: 220, index: Number(stage.id.split('-').at(-1)), total: 14, selected: validatorPartitionOrdinals(Number(stage.id.split('-').at(-1))).length, digest: '36faf791bb97dd1a99c2c985316d2ee1f123c00be3c1b525db4a040876a2a923' } } : {}),
+    ...(expectedScheduledEvidence(stage.id)?{scheduled_partition:expectedScheduledEvidence(stage.id)}:{}),
+    ...(stage.id.startsWith('validator-shard-') ? { validator_shard: { inventory: 220, index: Number(stage.id.split('-').at(-1)), total: 26, selected: validatorPartitionOrdinals(Number(stage.id.split('-').at(-1))).length, digest: '36faf791bb97dd1a99c2c985316d2ee1f123c00be3c1b525db4a040876a2a923' } } : {}),
     full_runtime_conformance: 'UNKNOWN', runtime_activation: 'BLOCKED', shared_or_production_execution_authorized: false,
   }));
   return { source, context, tests, planHash, reports };
 }
 const evaluate = f => evaluateAuditReports(expectedPlan, f.reports, f.source, f.planHash, f.tests, f.context);
-test('complete 57-stage source-bound evidence reconciles', () => assert.deepEqual(evaluate(auditEvidence()), []));
+test('complete 73-stage source-bound evidence reconciles', () => {
+ assert.deepEqual(evaluate(auditEvidence()), []);
+ for(const id of ['authority','authority-second','migration-guards','migration-guards-second','migration-guards-third','demo-storage-integration-regressions','demo-storage-integration-second']){
+  for(const mutate of [r=>delete r.scheduled_partition,r=>r.scheduled_partition.names.pop(),r=>r.scheduled_partition.names.push(r.scheduled_partition.names[0]),r=>r.scheduled_partition.names[0]='renamed-case',r=>r.scheduled_partition.index=99,r=>r.scheduled_partition.total=99,r=>r.timed_out=true,r=>r.command.push('--partition=1/3')]){
+   const f=auditEvidence();mutate(f.reports.find(row=>row.stage===id));assert.ok(evaluate(f).length,id);
+  }
+ }
+ for(const kind of ['authority','migration']){
+  const names=kind==='authority'?AUTHORITY_VALIDATORS:MIGRATION_GUARD_NAMES;
+  const halves=Array.from({length:kind==='authority'?2:3},(_,i)=>boundedPartitionEvidence(kind,i+1));
+  assert.deepEqual(halves.map(row=>row.names.length),kind==='authority'?[30,30]:[6,6,6]);
+  assert.deepEqual(halves.flatMap(row=>row.names).sort(),[...names].sort());assert.equal(new Set(halves.flatMap(row=>row.names)).size,names.length);
+ }
+ assert.equal(parseBoundedPartition(['--partition=3/3'],3),3);assert.throws(()=>parseBoundedPartition(['--partition=1/2'],3));
+ assert.equal(parseBoundedPartition([]),null);assert.equal(parseBoundedPartition(['--partition=1/2']),1);assert.equal(parseBoundedPartition(['--partition=2/2']),2);
+ for(const args of [['--partition=0/2'],['--partition=3/2'],['--partition=1/3'],['--unknown'],['--partition=1/2','--extra']])assert.throws(()=>parseBoundedPartition(args));
+});
 for (const [id] of currentAdditions) {
   for (const state of ['missing', 'BLOCKED', 'UNKNOWN', 'SKIPPED']) test(`${id} ${state} cannot disappear into a green aggregate`, () => {
     const f = auditEvidence();
@@ -962,7 +983,9 @@ test('every old command has a real executable stage, validator, setup or complet
         assert.equal(entry.stages.length, 1); const stage = stages.get(entry.stages[0]);
         const direct = [stage.command, ...stage.args].join(' '), wrapper = `node scripts/verification/run-self-audit.mjs --stage ${stage.id}`;
         const groupedNodeTest = entry.command.startsWith('node --test ') && stage.command === 'node' && stage.args[0] === '--test' && entry.command.slice(12).split(' ').every(path => stage.args.includes(path));
-        assert.ok(entry.command === direct || entry.command === wrapper || groupedNodeTest, entry.command);
+        const refinement=stage.id==='authority'?['authority','authority-second']:stage.id==='migration-guards'?['migration-guards','migration-guards-second','migration-guards-third']:[];
+        const refined=refinement.length>0&&entry.command===[stage.command,...stage.args.slice(0,-1)].join(' ')&&refinement.every(id=>JSON.stringify(stages.get(id))===JSON.stringify(expectedPlan.stages.find(row=>row.id===id)));
+        assert.ok(entry.command === direct || entry.command === wrapper || groupedNodeTest || refined, entry.command);
       } else if (entry.kind === 'umbrella_validator') {
         assert.deepEqual(entry.stages, ['authority']); assert.ok(BASELINE_VALIDATORS.includes(entry.validator)); assert.equal(entry.command.startsWith('pnpm ') ? JSON.parse(read('package.json')).scripts[entry.command.slice(5)] : entry.command, `node ${entry.validator}`); assert.ok(existsSync(join(ROOT, entry.validator)));
       } else if (entry.kind === 'shared_runner_setup' || entry.kind === 'always_run_finalizer') {
@@ -1017,6 +1040,13 @@ test('live coverage rejects a deleted historical validator even if manifest coun
 
 test('live coverage requires the newly admitted capability validator, not just the historical 53', () => {
   mutateFixtureFile('scripts/kernel/validate-capability-admission.mjs', file => rmSync(file));
+  for(const id of ['authority','authority-second','migration-guards','migration-guards-second','migration-guards-third'])for(const mode of ['missing','miswired']){
+    mutateFixtureFile('verification/whole-repository/self-audit-plan.json',(file,original)=>{
+      const plan=JSON.parse(original);if(mode==='missing')plan.stages=plan.stages.filter(row=>row.id!==id);else plan.stages.find(row=>row.id===id).args=['scripts/architecture/validate-whole-repository.mjs','--partition=1/9'];
+      writeFileSync(file,JSON.stringify(plan));
+    },root=>{const errors=inspectConsolidationCoverage(root);assert.match(errors.join('\n'),/command no longer covered by its mapped stage|authority umbrella must execute every mapped validator/);return errors;});
+  }
+
 });
 test('live coverage rejects an unreviewed extra standalone validator', () => {
   const path = join(structuralRoot, 'scripts/kernel/validate-unreviewed-admission.mjs');
@@ -1166,14 +1196,14 @@ test('live coverage rejects restoring forced backend termination', () => {
   });
 });
 
-test('fourteen bounded partitions isolate both whole-audit controls and retain every original ordinal exactly once',()=>{
- const all=Array.from({length:220},(_,i)=>i), partitions=Array.from({length:14},(_,i)=>validatorPartitionOrdinals(i+1));
+test('twenty-six bounded partitions refine the authenticated fourteen and retain every original ordinal exactly once',()=>{
+ const all=Array.from({length:220},(_,i)=>i), partitions=Array.from({length:26},(_,i)=>validatorPartitionOrdinals(i+1));
  assert.deepEqual(partitions.flat().sort((a,b)=>a-b),all);
  assert.equal(new Set(partitions.flat()).size,220);
  assert.deepEqual(partitions[12],[152]);assert.deepEqual(partitions[13],[153]);
  const moved=new Map([[108,3],[120,4],[144,4],[176,12],[180,4],[201,5]]);
- for(let i=0;i<12;i++)assert.deepEqual(partitions[i],all.filter(n=>(moved.get(n)??n%12+1)===i+1&&n!==152&&n!==153));
- for(const ordinal of all.filter(n=>!moved.has(n)))assert.equal(validatorPartitionForOrdinal(ordinal),ordinal===152?13:ordinal===153?14:ordinal%12+1,'all other 214 assignments remain unchanged');
+ for(let i=0;i<12;i++){const old=all.filter(n=>(moved.get(n)??n%12+1)===i+1&&n!==152&&n!==153);assert.deepEqual(partitions[i],old.filter((_,j)=>j%2===0));assert.deepEqual(partitions[i+14],old.filter((_,j)=>j%2===1));}
+ for(const ordinal of all.filter(n=>!moved.has(n)))assert.equal(predecessorValidatorPartitionForOrdinal(ordinal),ordinal===152?13:ordinal===153?14:ordinal%12+1,'all other 214 assignments remain unchanged');
  assert.deepEqual(REBALANCED_VALIDATOR_CASES.map(row=>[row.ordinal,row.name,row.partition]),[
   [108,'foundation: repository totals fails',3],
   [120,'p05 physical evidence: production execution fails',4],
@@ -1185,9 +1215,9 @@ test('fourteen bounded partitions isolate both whole-audit controls and retain e
  assert.equal(Object.isFrozen(REBALANCED_VALIDATOR_CASES),true);assert.ok(REBALANCED_VALIDATOR_CASES.every(Object.isFrozen));
  for(const row of REBALANCED_VALIDATOR_CASES)assert.equal(workerNames[row.ordinal],row.name);
  const stages=expectedPlan.stages.filter(s=>s.id.startsWith('validator-shard-'));
- assert.deepEqual(stages.map(s=>s.args[1]),Array.from({length:14},(_,i)=>`--shard=${i+1}/14`));
+ assert.deepEqual(stages.map(s=>s.args[1]),Array.from({length:26},(_,i)=>`--shard=${i+1}/26`));
  for(const ordinal of [-1,220,NaN,1.5,'152'])assert.throws(()=>validatorPartitionForOrdinal(ordinal),/exact validator ordinal/);
- for(const index of [0,15,NaN,1.5,'13'])assert.throws(()=>validatorPartitionOrdinals(index),/exact validator partition/);
+ for(const index of [0,27,NaN,1.5,'13'])assert.throws(()=>validatorPartitionOrdinals(index),/exact validator partition/);
 });
 test('dedicated controls cannot be renamed, moved, omitted or duplicated behind the catalog digest',()=>{
  const names=[...workerNames];assert.doesNotThrow(()=>assertValidatorInventory(names));
@@ -1206,12 +1236,12 @@ test('registration split executes exactly one plus sixteen unchanged test declar
  assert.deepEqual([...selected.flat()].sort(),[...names].sort());assert.equal(new Set(selected.flat()).size,17);
 });
 
-test('actual fourteen-partition harness selection executes each declared ordinal in its exact one stage',()=>{
+test('actual twenty-six-partition harness selection executes each declared ordinal in its exact one stage',()=>{
  const start=workerHarnessSource.indexOf('function test(name, script, mutate, expect)'),end=workerHarnessSource.indexOf('// ---------------------------------------------------------------------------\n// Semantic kernel:',start);
  assert.ok(start>0&&end>start);
  assert.match(workerHarnessSource,/if \(shardTotal !== VALIDATOR_PARTITION_COUNT\) \{/);
- for(let index=1;index<=14;index++){
-  const results=[],context={inventoryNames:[],inventoryCount:0,shardTotal:14,shardIndex:index,VALIDATOR_PARTITION_COUNT,validatorPartitionForOrdinal,predecessorCases:[],kitchenValidatorTransition:()=>null,kitchenFinalizerTransition:()=>null,scratch:()=>'/unused-pure-fixture',rmSync:()=>{},results,runValidator:()=>({exit:0,output:'',ordinaryProcessExit:true}),validatorResultMatches:()=>true};
+ for(let index=1;index<=26;index++){
+  const results=[],context={inventoryNames:[],inventoryCount:0,shardTotal:26,shardIndex:index,VALIDATOR_PARTITION_COUNT,validatorPartitionForOrdinal,predecessorCases:[],kitchenValidatorTransition:()=>null,kitchenFinalizerTransition:()=>null,scratch:()=>'/unused-pure-fixture',rmSync:()=>{},results,runValidator:()=>({exit:0,output:'',ordinaryProcessExit:true}),validatorResultMatches:()=>true};
   const execute=runInNewContext(workerHarnessSource.slice(start,end)+'; test;',context);
   for(const name of workerNames)execute(name,'unused-script',()=>{},{pass:true});
   assert.deepEqual(results.map(row=>row.ordinal),validatorPartitionOrdinals(index));
@@ -1228,6 +1258,7 @@ test('storage partitions retain every original declaration exactly once and reje
  }
  const selected=[STORAGE_OWNER_PATTERN,STORAGE_INTEGRATION_PATTERN].map(pattern=>names.filter(name=>new RegExp(pattern).test(name)));
  assert.deepEqual(selected.map(part=>part.length),[21,9]);assert.equal(new Set(selected.flat()).size,30);assert.deepEqual(selected.flat().sort(),names.slice().sort());
+ const current=[STORAGE_OWNER_PATTERN,STORAGE_INTEGRATION_FIRST_PATTERN,STORAGE_INTEGRATION_SECOND_PATTERN].map(pattern=>names.filter(name=>new RegExp(pattern).test(name)));assert.deepEqual(current.map(rows=>rows.length),[21,5,4]);assert.equal(new Set(current.flat()).size,30);assert.deepEqual(current.flat().sort(),names.slice().sort());
  assert.ok(!expectedPlan.stages.find(stage=>stage.id==='demo-source-tests').args.includes('scripts/tests/demo-storage-evidence.mjs'));
 });
 test('pinned Node test runner executes exact storage partitions without parent-suite leakage',()=>{
@@ -1238,6 +1269,8 @@ test('pinned Node test runner executes exact storage partitions without parent-s
   const run=pattern=>{const out=execFileSync(process.execPath,['--test','--test-reporter=tap','--test-name-pattern='+pattern,file],{env:childEnvironment,encoding:'utf8',timeout:5000});return [...out.matchAll(/^# EXECUTED:(.+)$/gm)].map(match=>JSON.parse(match[1]));};
   assert.deepEqual(run(STORAGE_OWNER_PATTERN),STORAGE_TEST_NAMES.filter(name=>!name.startsWith('repository integration ')));
   assert.deepEqual(run(STORAGE_INTEGRATION_PATTERN),STORAGE_TEST_NAMES.filter(name=>name.startsWith('repository integration ')));
+  assert.deepEqual(run(STORAGE_INTEGRATION_FIRST_PATTERN),storagePartitionNames(1));
+  assert.deepEqual(run(STORAGE_INTEGRATION_SECOND_PATTERN),storagePartitionNames(2));
   assert.equal(run('^(?!repository integration )').length,30);
  }finally{rmSync(dir,{recursive:true,force:true});}
 });
@@ -1256,7 +1289,7 @@ test('pinned Node test runner executes exact registration partitions without par
 });
 
 
-test('recipe CI extension keeps both exact successor gates in the unchanged authority umbrella', () => {
+test('recipe CI extension keeps both exact successor gates in the complete refined authority coverage', () => {
   for (const path of ['scripts/kernel/validate-demo-recipes-registration.mjs', 'scripts/persistence/validate-demo-recipes-physical-admission.mjs']) mutateFixtureFile(path, file => rmSync(file));
 });
 for (const path of ['tests/demo/recipe-content.test.ts', 'tests/demo-web/recipe-api.test.mjs', 'tests/demo-web/recipes.test.mjs', 'scripts/tests/validate-demo-recipes-registration.mjs', 'scripts/tests/validate-demo-recipes-physical-successor.mjs']) test(`recipe CI cannot omit existing-stage regression ${path}`, () => {

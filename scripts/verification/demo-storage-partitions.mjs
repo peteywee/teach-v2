@@ -41,3 +41,8 @@ export function assertStoragePartitionInventory(names) {
   const owner = new RegExp(STORAGE_OWNER_PATTERN), integration = new RegExp(STORAGE_INTEGRATION_PATTERN);
   if (names.filter(name => owner.test(name)).length !== 21 || names.filter(name => integration.test(name)).length !== 9 || names.some(name => Number(owner.test(name)) + Number(integration.test(name)) !== 1)) throw Error('disjoint exhaustive 21/9 storage partition required');
 }
+
+export const STORAGE_INTEGRATION_NAMES=Object.freeze(selected(true));
+export const STORAGE_INTEGRATION_FIRST_PATTERN='^(?:'+STORAGE_INTEGRATION_NAMES.filter((_,i)=>i%2===0).map(escape).join('|')+')$';
+export const STORAGE_INTEGRATION_SECOND_PATTERN='^(?:'+STORAGE_INTEGRATION_NAMES.filter((_,i)=>i%2===1).map(escape).join('|')+')$';
+export function storagePartitionNames(index){if(![1,2].includes(index))throw Error('exact storage partition required');return STORAGE_INTEGRATION_NAMES.filter((_,i)=>i%2===index-1);}

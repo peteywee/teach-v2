@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "reviewer": "independent-review-authoring-security",
-  "reviewed_at_utc": "2026-10-28T12:11:07.856732+00:00",
+  "reviewed_at_utc": "2026-10-28T12:53:45.058955+00:00",
   "scope": "BOUNDED_MANAGER_AUTHORING_SOURCE_AND_STORAGE_SUCCESSOR",
-  "manifest_sha256": "1634532d98b71961e3ad41531dec108a54dedcf2dec9531aa708bde5a41794a8",
+  "manifest_sha256": "c960980d8b02387707bab5b9276a361043dbc9c95ec3404a24a54ef2da92ad72",
   "outcome": "PASS",
   "source_edits_by_reviewer": false,
   "unresolved_scope_blockers": [],
@@ -14,7 +14,7 @@
   "security_grants_authorized": false,
   "deployment_authorized": false,
   "reviewed_properties": [
-    "Exact 176-file current inventory, 91 predecessor files byte-matching released-tree-equivalent baseline4a9b964, and81 immutable historical files verified independently.",
+    "Exact 182-file current inventory, 97 predecessor files byte-matching released-tree-equivalent baseline 4a9b964, and 81 immutable historical files verified independently.",
     "Raw registration passes with exact issue 101 and finite append-only semantic, contract and manager capability scope; old automation policy and learner policy remain unchanged.",
     "Shared run lock and active-session refresh serialize per-visit commands; server manager membership and tenant/location scope precede authoring reads and writes.",
     "Only catalog fields are composed over immutable seed training. Publication appends an exact new version without replacing assignments or old history; assignment remains a separate existing boundary.",
@@ -45,7 +45,13 @@
     "Fixed internal authoringAdmissionPair runs genuine engineering and physical inspectors within one fresh synchronous same-root scope per pair; no caller callbacks or per-loop cache. All original denial assertions remain; existing case adds cardinality, admission, returned-result mutation isolation and immediate source mutation/restoration checks.",
     "Schema registration current-source test separately authenticates policy additions and asserts exact old eight paths plus exact eight new policy paths as a set/count union. Historical fixture remains exact original eight; no test census or command bound change.",
     "Old recovery inspector now uses the existing closed genuine-function dispatcher with a fresh synchronous per-top-level scope; its original implementation body and all assertions are unchanged. Existing scope test adds recovery returned-object mutation, current recovery/domain/policy mutation denial with empty outputs, cross-root separation, exact restoration and thrown-clone cleanup. No validator, stage, partition, mutation census or timeout change.",
-    "Authenticated predecessor proof copy now owns a real node_modules directory using reflink-or-copy, not root symlink or hardlinks. Source and copied dependency closure reject absolute/outward/reentry/broken/cyclic links and special files; relative internal pnpm links remain intact. Existing-case regression proves copy-file mutation cannot alter original installation, cleanup, absolute-link denial and outward-then-reentry denial despite original resolved target being inside. No install/network/default verifier bypass or timeout change."
+    "Authenticated predecessor proof copy now owns a real node_modules directory using reflink-or-copy, not root symlink or hardlinks. Source and copied dependency closure reject absolute/outward/reentry/broken/cyclic links and special files; relative internal pnpm links remain intact. Existing-case regression proves copy-file mutation cannot alter original installation, cleanup, absolute-link denial and outward-then-reentry denial despite original resolved target being inside. No install/network/default verifier bypass or timeout change.",
+    "Explicit scheduling successor supersedes earlier 57-stage/14-partition scheduling without changing product scope or original test assertions: 72 mandatory stages and 26 finite validator partitions retain exact 220 validator declarations and digest, isolated full-umbrella controls, and authenticated original fourteen-way mapping refined by ordered parity. All commands remain bounded at 25 seconds and hosted job at 900 seconds.",
+    "Authority partitions require exact discovered sixty-validator inventory and emit exact executed-name/ordinal/digest receipts; migration parity partitions preserve byte-identical eighteen declaration bodies and full no-argument mode. Storage retains byte-identical thirty-case file and exact old 21/9 census, with current integration selectors split exhaustively into 5/4.",
+    "Aggregate finalization requires both same-source bounded receipts for each split obligation, exact commands, inventories, names, ordinals and digests; missing, duplicated, renamed, wrong-index/total, timeout and altered-command evidence is denied. Five newly changed source paths are bound with genuine historical predecessor bytes rather than hidden to preserve an obsolete delivery path count.",
+    "Final scheduling refinement uses 73 mandatory stages: migration guards now three exact modulo-three six-case partitions instead of two nine-case stages, while original eighteen declaration bodies and no-argument two-worker full control remain unchanged. Exact required receipts, workflow/catalog inventory, invalid selectors and omission/miswiring regressions include all three partitions.",
+    "Schema engineering authenticates the raw authoring engineering leaf before any projection and returns empty outputs immediately on failure. Its existing recovery then kitchen precedence is preserved, followed only by exact authenticated authoring predecessor files. Original historical schema assertions and review hashes are unchanged; added same-process current audit-source tamper/restoration assertions require path-specific denial and empty outputs.",
+    "Historical no-argument authority producer is covered only when both exact current authority stage descriptors exist; original migration producer requires all three exact current descriptors. No path-only or count-only coverage shortcut is accepted."
   ],
   "independent_checks": [
     {
@@ -84,12 +90,43 @@
       "passed": 7,
       "failed": 0,
       "scope": "independent policy source/descriptor/tamper/dispatch tests, not actual recovery proof"
+    },
+    {
+      "check": "Scheduling successor independent source rehash, body-byte preservation, actual authority discovery, exhaustive mapping and union verification",
+      "result": "PASS",
+      "manifest_sha256": "3f86b18eea5a561ac7f0bd816ac272b81c7a0c8f97a6079075aa7d6099d245df",
+      "current_files": 181,
+      "predecessor_files": 96,
+      "immutable_files": 81,
+      "validator_ordinals": 220,
+      "authority_validators": 60,
+      "migration_cases": 18,
+      "storage_cases": 30,
+      "mandatory_stages": 72,
+      "command_bound_ms": 25000,
+      "runtime": "Node 24.22.1; static and pure diagnostic only"
+    },
+    {
+      "check": "Final 73-stage exact inventory rehash and exhaustive bounded union/body-preservation recheck",
+      "result": "PASS",
+      "manifest_sha256": "c960980d8b02387707bab5b9276a361043dbc9c95ec3404a24a54ef2da92ad72",
+      "current_files": 182,
+      "predecessor_files": 97,
+      "immutable_files": 81,
+      "validator_ordinals": 220,
+      "authority_validators": 60,
+      "migration_cases": 18,
+      "storage_cases": 30,
+      "mandatory_stages": 73,
+      "runtime": "Node 24.22.1; static and pure diagnostic only"
     }
   ],
   "limitations": [
     "This review does not replace the pending complete pinned-runtime stage suite, exact-head CI, fresh PostgreSQL execution, production preflight or live browser acceptance.",
     "Physical iPhone, screen-reader and injected network-fault behavior are not established by this source review.",
     "New table runtime policies and function execution permissions require exact reviewed activation and readback; source admission is not execution authorization.",
-    "Latest fixture, historical runner, policy and mechanical adapter corrections are source-reviewed; complete pinned whole-candidate execution after final seal remains required. Actual recovery evidence remains UNKNOWN until separately established."
+    "Latest fixture, historical runner, policy and mechanical adapter corrections are source-reviewed; complete pinned whole-candidate execution after final seal remains required. Actual recovery evidence remains UNKNOWN until separately established.",
+    "Current 72-stage scheduling successor full native-default local sweep, hosted CI and measured 900-second job headroom are not established by this source review; no runtime, recovery or production authority is inferred.",
+    "The earlier 72-stage manifest failed composed historical schema/coverage gates; this review binds the corrected 73-stage source only. Actual composed gate success, full native-default sweep and hosted performance remain pending."
   ]
 }
