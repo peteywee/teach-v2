@@ -1,9 +1,10 @@
+import { createAuthoringPredecessorCopy } from './authoring-proof-copy.mjs';
 import { inspectDemoRecoveryRegistration } from '../kernel/demo-recovery-registration.mjs';
 import { hasGuardedDatabaseEntry } from '../architecture/repository-integration-evidence.mjs';
 import assert from 'node:assert/strict';
 import { after, test } from 'node:test';
-import { readFileSync, writeFileSync, rmSync, renameSync, symlinkSync, mkdirSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { readFileSync, writeFileSync, rmSync, renameSync, symlinkSync, mkdirSync, lstatSync, realpathSync, existsSync } from 'node:fs';
+import { basename, join, resolve } from 'node:path';
 import { inspectAuthoringRegistration, AUTHORING_OPERATIONS } from '../kernel/demo-authoring-registration.mjs';
 import { inspectAuthoringEngineering, AUTHORING_ENGINEERING_MANIFEST, AUTHORING_ENGINEERING_REVIEW } from '../verification/demo-authoring-engineering.mjs';
 import { inspectAuthoringPhysicalSuccessor } from '../persistence/demo-authoring-physical-successor.mjs';
@@ -106,6 +107,31 @@ test('test-only predecessor reconstruction authenticates current bytes and resto
   assert.equal(readFileSync(join(fixture, 'drizzle/meta/_journal.json'), 'utf8'), before);
   assert.ok(inspect().every(result => result.errors.length === 0));
   mutate('drizzle/0007_demo_kitchen_content_guard.sql');
+  const dependencies = realpathSync(join(root, 'node_modules'));
+  const original = readFileSync(join(dependencies, 'drizzle-kit/package.json'), 'utf8');
+  const copy = createAuthoringPredecessorCopy(root);
+  try {
+    const owned = join(copy.root, 'node_modules');
+    assert.equal(lstatSync(owned).isSymbolicLink(), false); assert.equal(lstatSync(owned).isDirectory(), true);
+    assert.ok(realpathSync(join(owned, 'drizzle-kit')).startsWith(owned + '/'));
+    const copied = join(owned, 'drizzle-kit/package.json');
+    assert.equal(readFileSync(copied, 'utf8'), original); writeFileSync(copied, original + '\n');
+    assert.equal(readFileSync(join(dependencies, 'drizzle-kit/package.json'), 'utf8'), original);
+  } finally { copy.remove(); }
+  assert.equal(existsSync(copy.root), false);
+  assert.equal(readFileSync(join(dependencies, 'drizzle-kit/package.json'), 'utf8'), original);
+  const invalidDependencies = join(fixture, 'node_modules'); mkdirSync(invalidDependencies);
+  try {
+    symlinkSync(dependencies, join(invalidDependencies, 'external'), 'dir');
+    assert.throws(() => createAuthoringPredecessorCopy(fixture), /dependency symlink must stay inside copied installation/);
+    rmSync(join(invalidDependencies, 'external'));
+    mkdirSync(join(invalidDependencies, 'target'));
+    symlinkSync('../../' + basename(fixture) + '/node_modules/target', join(invalidDependencies, 'reentry'), 'dir');
+    assert.equal(realpathSync(join(invalidDependencies, 'reentry')), join(invalidDependencies, 'target'));
+    assert.throws(() => createAuthoringPredecessorCopy(fixture), /dependency symlink must stay inside copied installation/);
+
+  } finally { rmSync(invalidDependencies, { recursive: true, force: true }); }
+
 });
 
 test('finite invocation scope rejects caller injection and clears results after returns and exceptions', () => {

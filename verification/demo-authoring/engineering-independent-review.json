@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "reviewer": "independent-review-authoring-security",
-  "reviewed_at_utc": "2026-10-28T11:47:44.693777+00:00",
+  "reviewed_at_utc": "2026-10-28T12:11:07.856732+00:00",
   "scope": "BOUNDED_MANAGER_AUTHORING_SOURCE_AND_STORAGE_SUCCESSOR",
-  "manifest_sha256": "a4315b37bb79f9cff3515ac8c7655622ad3ac4f64ea4cf7927acf98622cb22ad",
+  "manifest_sha256": "1634532d98b71961e3ad41531dec108a54dedcf2dec9531aa708bde5a41794a8",
   "outcome": "PASS",
   "source_edits_by_reviewer": false,
   "unresolved_scope_blockers": [],
@@ -44,7 +44,8 @@
     "Recipe physical reviewed-source hash helper now authenticates current authoring engineering first and throws on any error before finite schema\u2192authoring\u2192raw predecessor resolution. Original reviewed-source inventory and historical hash constant remain unchanged. Existing same-process freshness case verifies current runner mutation denies by exact path with false admission and empty added/revised paths, then exact restoration succeeds.",
     "Fixed internal authoringAdmissionPair runs genuine engineering and physical inspectors within one fresh synchronous same-root scope per pair; no caller callbacks or per-loop cache. All original denial assertions remain; existing case adds cardinality, admission, returned-result mutation isolation and immediate source mutation/restoration checks.",
     "Schema registration current-source test separately authenticates policy additions and asserts exact old eight paths plus exact eight new policy paths as a set/count union. Historical fixture remains exact original eight; no test census or command bound change.",
-    "Old recovery inspector now uses the existing closed genuine-function dispatcher with a fresh synchronous per-top-level scope; its original implementation body and all assertions are unchanged. Existing scope test adds recovery returned-object mutation, current recovery/domain/policy mutation denial with empty outputs, cross-root separation, exact restoration and thrown-clone cleanup. No validator, stage, partition, mutation census or timeout change."
+    "Old recovery inspector now uses the existing closed genuine-function dispatcher with a fresh synchronous per-top-level scope; its original implementation body and all assertions are unchanged. Existing scope test adds recovery returned-object mutation, current recovery/domain/policy mutation denial with empty outputs, cross-root separation, exact restoration and thrown-clone cleanup. No validator, stage, partition, mutation census or timeout change.",
+    "Authenticated predecessor proof copy now owns a real node_modules directory using reflink-or-copy, not root symlink or hardlinks. Source and copied dependency closure reject absolute/outward/reentry/broken/cyclic links and special files; relative internal pnpm links remain intact. Existing-case regression proves copy-file mutation cannot alter original installation, cleanup, absolute-link denial and outward-then-reentry denial despite original resolved target being inside. No install/network/default verifier bypass or timeout change."
   ],
   "independent_checks": [
     {
