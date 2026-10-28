@@ -1,3 +1,4 @@
+import { inspectDemoRecoveryRegistrationUncached } from '../kernel/demo-recovery-registration.mjs';
 import { inspectAuthoringRegistrationUncached } from '../kernel/demo-authoring-registration.mjs';
 import { inspectAuthoringEngineeringUncached } from '../verification/demo-authoring-engineering.mjs';
 import { inspectAuthoringPhysicalSuccessorUncached } from '../persistence/demo-authoring-physical-successor.mjs';
@@ -32,6 +33,7 @@ const implementations = new Map([
   ['recipeRegistration', inspectRecipeRegistrationUncached],
   ['recipePhysical', inspectDemoRecipePhysicalSuccessorUncached],
   ['runtimeRegistration', inspectDemoRuntimeRegistrationUncached],
+  ['recoveryRegistration', inspectDemoRecoveryRegistrationUncached],
   ['storage', inspectDemoStorageEvidenceUncached],
   ['repositoryIntegration', inspectRepositoryIntegrationUncached],
   ['migrationHistory', inspectMigrationHistoryUncached],

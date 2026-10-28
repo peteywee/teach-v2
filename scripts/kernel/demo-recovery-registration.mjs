@@ -1,3 +1,4 @@
+import { inspectSourceInScope } from '../verification/source-inspection-scope.mjs';
 import {inspectAuthoringEngineering} from '../verification/demo-authoring-engineering.mjs';
 import {inspectAuthoringRecoveryRegistration} from './demo-authoring-recovery-registration.mjs';
 import { createHash } from 'node:crypto';
@@ -67,7 +68,10 @@ export function normalizedRecoverySource(path, text) {
 /** Non-recursive finite leaf. It authenticates every current byte and the
  * independent review before exposing any historical projection. No caller
  * reader, dynamic target, fallback, or registration hash can grant authority. */
-export function inspectDemoRecoveryRegistration(root) {
+export function inspectDemoRecoveryRegistration(root) { return inspectSourceInScope('recoveryRegistration', root); }
+
+// Dispatcher-only implementation; direct invocation establishes no shared scope.
+export function inspectDemoRecoveryRegistrationUncached(root) {
   const empty = { present: false, revisedPaths: [], addedPaths: [], predecessorFiles: {}, predecessorSources: {} };
   const errors = [], fail = message => errors.push(`demo schema isolation registration: recovery exception: ${message}`);
   const equal = (actual, expected, message) => { if (!isDeepStrictEqual(actual, expected)) fail(message); };

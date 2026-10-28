@@ -1,3 +1,4 @@
+import { inspectDemoRecoveryRegistration } from '../kernel/demo-recovery-registration.mjs';
 import { hasGuardedDatabaseEntry } from '../architecture/repository-integration-evidence.mjs';
 import assert from 'node:assert/strict';
 import { after, test } from 'node:test';
@@ -124,14 +125,30 @@ test('finite invocation scope rejects caller injection and clears results after 
   assert.ok(pair().every(result => result.errors.length === 0));
   assert.equal(pair()[1].admitted, true);
 
+  const recovery = () => inspectDemoRecoveryRegistration(fixture);
+  const recoveryResult = recovery(); assert.deepEqual(recoveryResult.errors, []);
+  recoveryResult.errors.push('caller mutation'); recoveryResult.predecessorSources.injected = 'untrusted';
+  assert.deepEqual(recovery().errors, []); assert.equal(recovery().predecessorSources.injected, undefined);
+  for (const relative of ['scripts/kernel/demo-recovery-registration.mjs', 'src/modules/content/domain/demo-authoring.ts', 'contracts/c21-database-migration-contract.md']) {
+    const path = join(fixture, relative), bytes = readFileSync(path, 'utf8');
+    try {
+      writeFileSync(path, bytes + '\n');
+      const result = recovery(); assert.ok(result.errors.length > 0);
+      assert.deepEqual(result.predecessorFiles, {}); assert.deepEqual(result.predecessorSources, {});
+      assert.deepEqual(result.revisedPaths, []); assert.deepEqual(result.addedPaths, []);
+      assert.deepEqual(inspectDemoRecoveryRegistration(root).errors, []);
+    } finally { writeFileSync(path, bytes); }
+    assert.deepEqual(recovery().errors, []);
+  }
   const originalResult = inspectAuthoringRegistration(fixture);
   assert.deepEqual(originalResult.errors, []);
   originalResult.errors.push('caller mutation'); originalResult.predecessorFiles.injected = 'untrusted';
   assert.deepEqual(inspectAuthoringRegistration(fixture).errors, []);
   assert.equal(inspectAuthoringRegistration(fixture).predecessorFiles.injected, undefined);
   const clone = globalThis.structuredClone, sentinel = new Error('clone exception');
-  try { globalThis.structuredClone = () => { throw sentinel; }; assert.throws(() => inspectAuthoringRegistration(fixture), error => error === sentinel); }
+  try { globalThis.structuredClone = () => { throw sentinel; }; assert.throws(() => inspectAuthoringRegistration(fixture), error => error === sentinel); assert.throws(() => recovery(), error => error === sentinel); }
   finally { globalThis.structuredClone = clone; }
+  assert.deepEqual(recovery().errors, []);
   const path = join(fixture, 'kernel/entities.json'), bytes = readFileSync(path, 'utf8');
   try {
     writeFileSync(path, bytes + '\n');
