@@ -1,3 +1,4 @@
+import { installAuthoringPredecessor } from './authoring-predecessor-fixture.mjs';
 import assert from 'node:assert/strict';
 import { after, test } from 'node:test';
 import { spawnSync, execFileSync } from 'node:child_process';
@@ -11,6 +12,7 @@ import { inspectCapabilityAdmission } from '../kernel/capability-admission.mjs';
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const fixture = mkdtempSync(join(tmpdir(), 'teach-demo-registration-'));
 for (const path of ['docs', 'scripts', '.github', 'verification', 'kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle', 'drizzle-isolated', 'src', 'tests']) cpSync(join(root, path), join(fixture, path), { recursive: true });
+installAuthoringPredecessor(fixture);
 after(() => rmSync(fixture, { recursive: true, force: true }));
 const raw = path => readFileSync(join(fixture, path), 'utf8');
 const json = path => JSON.parse(raw(path));

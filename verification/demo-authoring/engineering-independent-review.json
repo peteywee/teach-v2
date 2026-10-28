@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "reviewer": "independent-review-authoring-security",
+  "reviewed_at_utc": "2026-10-28T10:53:53.040220+00:00",
+  "scope": "BOUNDED_MANAGER_AUTHORING_SOURCE_AND_STORAGE_SUCCESSOR",
+  "manifest_sha256": "8d6b6ed89afddf4d084ed03264db96c34ed56d073cff3e644649fc9df4d42008",
+  "outcome": "PASS",
+  "source_edits_by_reviewer": false,
+  "unresolved_scope_blockers": [],
+  "runtime_proof": "NOT_ESTABLISHED_BY_REVIEW",
+  "runtime_activation_authorized": false,
+  "shared_or_production_execution_authorized": false,
+  "credential_creation_authorized": false,
+  "security_grants_authorized": false,
+  "deployment_authorized": false,
+  "reviewed_properties": [
+    "Exact 176-file current inventory, 91 predecessor files byte-matching released-tree-equivalent baseline4a9b964, and81 immutable historical files verified independently.",
+    "Raw registration passes with exact issue 101 and finite append-only semantic, contract and manager capability scope; old automation policy and learner policy remain unchanged.",
+    "Shared run lock and active-session refresh serialize per-visit commands; server manager membership and tenant/location scope precede authoring reads and writes.",
+    "Only catalog fields are composed over immutable seed training. Publication appends an exact new version without replacing assignments or old history; assignment remains a separate existing boundary.",
+    "Optimistic revisions, exact operation/payload receipt keys, same-transaction audit and receipt writes, no-op publication and recovery readbacks preserve truthful mutation outcomes.",
+    "SQL adds exactly two scoped tables with non-delete owner adapters, bounded catalog and receipt guards, invoker functions and private RLS/ACL defaults; historical migration bytes remain unchanged.",
+    "UI retains unsaved edits on validation/stale/uncertain responses, distinguishes verified rejection from uncertainty, uses explicit same-key recovery and clear dirty-navigation/reset/logout boundaries.",
+    "Finite fresh-reader registration, independent manifest review and physical successor checks authenticate current source before legacy fixture projections; no cross-call verdict cache introduced.",
+    "Recipe registration correction authenticates raw authoring source first and fails closed before exact predecessor projection; all prior recipe assertions remain unchanged. Positive composition and same-process current-entity mutation/restoration regressions added.",
+    "Finite dispatcher uses only fourteen genuine synchronous inspector implementations and primitive canonical root; private invocation-local memo is cloned, guarded against cycles and cleared in finally. No cross-call cached verdict or caller-supplied callback/context/reader is accepted; unchanged assertion bodies retain authority checks.",
+    "Recipe physical inventory excludes only exact 0008 SQL and snapshot after complete authoring physical admission; errors propagate and unknown migration suffixes remain denied.",
+    "Current packaging closure authenticates source and physical admission before exact twelve assets and twenty operations; exact authoring operations JSON is retained in runtime output. Historical package tests reconstruct authenticated predecessor while preserving old seven/fifteen assertions.",
+    "Packaged authoring flow retains old fifteen-operation journey, exercises all five new operations, verifies saved reload and receipt, redacted preview, replay-safe publication, separate explicit assignment and unchanged historical learner content.",
+    "Adversarial source tests cover callback/object injection rejection, result mutation isolation, forced exception cleanup, different-root mutation/restoration, and current packaged UI tamper denial.",
+    "Recipe physical imported seal binding is evaluated at invocation to avoid circular-module initialization TDZ; exact fields and equality assertions unchanged.",
+    "Domain validation errors remain pure; application maps them to finite INVALID_REQUEST with the same frozen details and HTTP exposes only the mapped subtype. Authorization, transaction and data rules unchanged.",
+    "Only exact authoring integration test may delegate database opening; its real target guard must precede one exact imported schema-proof call, and the delegate must retain its own guard before Pool. All other database entries retain original direct guard rule.",
+    "Separately approved one-migration recovery policy is genuinely independently reviewed by registration856cc721a92ff13f955ba1bafe4327b49ea50d7765e5947f735a329f9e0c6541 and review6fa9efdb111886f96304eea747c4fb2e6205f3f0501a7257eae3e35b9eab7c03; policy adoption is not actual recovery, data transfer, key access or execution authority.",
+    "Historical fixtures now carry complete finite imported/current source closure before authentication; projected legacy storage proof imports its own predecessor module graph. Original assertions retained.",
+    "Historical PostgreSQL runners execute original exact suites from authenticated isolated predecessor copies, never rewriting checkout; cleanup is in finally. Current authoring and8\u21929 stages remain separate.",
+    "Legacy owner inventory CLI independently authenticates current authoring registration before finite semantic/contract predecessor reads; added actual CLI current kernel/contract mutation denial and restoration regression.",
+    "Receipt-port method rename and databaseObject quote normalization preserve exact owner predicates, parameterized SQL, pg_catalog.count, receipt bounds and error behavior.",
+    "Workflow census remains original28 plus exact two appended mutations; recovery policy tests join mandatory authoring source stage without changing57-stage count or25-second command bounds.",
+    "Legacy recovery reader now authenticates genuine current authoring engineering before two-source predecessor fallback, returns empty immediately on any upstream error and propagates only exact independently admitted policy additions. Current source mutation cannot be hidden by predecessor reads.",
+    "Recovery regression uses one complete current source fixture, checks current archive admission and path-specific source-tamper denial with empty outputs, then retains all original historical assertions inside existing test census.",
+    "Historical43-case scheduling proof now authenticates current engineering before reading only exact original integration runner; original hardcoded hashes, declarations and20s child/25s stage bounds unchanged.",
+    "Consolidated CI wrapper check authenticates genuine current authoring engineering and propagates all errors before exact named predecessor access; existing historical SHA remains unchanged, raw fallback only after successful/absent admission. Existing three wrapper tamper cases now additionally require initial/restored aggregate success and path-attributed current-runner failure. No census or bound change.",
+    "Recipe physical reviewed-source hash helper now authenticates current authoring engineering first and throws on any error before finite schema\u2192authoring\u2192raw predecessor resolution. Original reviewed-source inventory and historical hash constant remain unchanged. Existing same-process freshness case verifies current runner mutation denies by exact path with false admission and empty added/revised paths, then exact restoration succeeds.",
+    "Fixed internal authoringAdmissionPair runs genuine engineering and physical inspectors within one fresh synchronous same-root scope per pair; no caller callbacks or per-loop cache. All original denial assertions remain; existing case adds cardinality, admission, returned-result mutation isolation and immediate source mutation/restoration checks.",
+    "Schema registration current-source test separately authenticates policy additions and asserts exact old eight paths plus exact eight new policy paths as a set/count union. Historical fixture remains exact original eight; no test census or command bound change."
+  ],
+  "independent_checks": [
+    {
+      "command": "node --test tests/demo-web/authoring-*.test.mjs",
+      "runtime": "Node 24.22.1",
+      "tests": 63,
+      "passed": 63,
+      "failed": 0,
+      "scope": "targeted local diagnostic, not pinned CI receipt"
+    },
+    {
+      "command": "node --import tsx --test tests/demo-authoring/*.test.ts",
+      "runtime": "Node 24.22.1",
+      "tests": 18,
+      "passed": 18,
+      "failed": 0,
+      "scope": "targeted local application, journey and transport diagnostic; not live proof"
+    },
+    {
+      "check": "Rehash current, immutable and predecessor inventories plus inspectAuthoringRegistration",
+      "result": "PASS",
+      "current_files": 176,
+      "immutable_files": 81,
+      "predecessor_files": 91
+    },
+    {
+      "command": "node --test --test-name-pattern='finite invocation scope|delegated authoring database' scripts/tests/validate-demo-authoring-admission.mjs",
+      "runtime": "Node24.22.1",
+      "passed": 2,
+      "failed": 0,
+      "scope": "independent local diagnostics: injection, result mutation, exception cleanup, separate-root freshness and guard-order/delegate regressions; not pinned whole-candidate receipt"
+    },
+    {
+      "command": "node --test scripts/tests/validate-authoring-recovery-policy.test.mjs",
+      "runtime": "Node24.22.1",
+      "passed": 7,
+      "failed": 0,
+      "scope": "independent policy source/descriptor/tamper/dispatch tests, not actual recovery proof"
+    }
+  ],
+  "limitations": [
+    "This review does not replace the pending complete pinned-runtime stage suite, exact-head CI, fresh PostgreSQL execution, production preflight or live browser acceptance.",
+    "Physical iPhone, screen-reader and injected network-fault behavior are not established by this source review.",
+    "New table runtime policies and function execution permissions require exact reviewed activation and readback; source admission is not execution authorization.",
+    "Latest fixture, historical runner, policy and mechanical adapter corrections are source-reviewed; complete pinned whole-candidate execution after final seal remains required. Actual recovery evidence remains UNKNOWN until separately established."
+  ]
+}

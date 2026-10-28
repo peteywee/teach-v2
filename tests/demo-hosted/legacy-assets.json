@@ -1,0 +1,37 @@
+[
+  {
+    "path": "/",
+    "file": "index.html",
+    "contentType": "text/html; charset=utf-8"
+  },
+  {
+    "path": "/assets/styles.css",
+    "file": "styles.css",
+    "contentType": "text/css; charset=utf-8"
+  },
+  {
+    "path": "/assets/app.mjs",
+    "file": "app.mjs",
+    "contentType": "text/javascript; charset=utf-8"
+  },
+  {
+    "path": "/assets/api.mjs",
+    "file": "api.mjs",
+    "contentType": "text/javascript; charset=utf-8"
+  },
+  {
+    "path": "/assets/controller.mjs",
+    "file": "controller.mjs",
+    "contentType": "text/javascript; charset=utf-8"
+  },
+  {
+    "path": "/assets/views.mjs",
+    "file": "views.mjs",
+    "contentType": "text/javascript; charset=utf-8"
+  },
+  {
+    "path": "/assets/wire-contract.mjs",
+    "file": "wire-contract.mjs",
+    "contentType": "text/javascript; charset=utf-8"
+  }
+]

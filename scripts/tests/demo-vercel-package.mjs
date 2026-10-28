@@ -1,3 +1,4 @@
+import {installAuthoringPredecessor} from './authoring-predecessor-fixture.mjs';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {execFileSync} from 'node:child_process';
@@ -11,6 +12,7 @@ function git(cwd,args){return execFileSync('git',args,{cwd,stdio:['ignore','pipe
 function fixture(){
  const dir=mkdtempSync(join(tmpdir(),'teach-h02-test-')),source=join(dir,'source');mkdirSync(source);
  for(const path of git(root,['ls-files','--cached','--others','--exclude-standard','-z']).split('\0').filter(Boolean)){mkdirSync(dirname(join(source,path)),{recursive:true});cpSync(join(root,path),join(source,path));}
+ installAuthoringPredecessor(source);
  git(source,['init','-q']);git(source,['add','.']);git(source,['-c','user.name=Local Test','-c','user.email=test@example.invalid','commit','-qm','H02 test fixture']);
  symlinkSync(join(root,'node_modules'),join(source,'node_modules'),'dir');
  const options={sourceRoot:source,expectedCommit:git(source,['rev-parse','HEAD']),expectedTree:git(source,['rev-parse','HEAD^{tree}'])};

@@ -342,12 +342,68 @@
       "timeout_ms": 25000
     },
     {
+      "id": "demo-authoring-admission",
+      "command": "node",
+      "args": [
+        "--test",
+        "scripts/tests/validate-demo-authoring-admission.mjs",
+        "scripts/tests/validate-authoring-isolated-lineage.test.mjs",
+        "scripts/tests/validate-authoring-stages.test.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-authoring-source-tests",
+      "command": "node",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "tests/demo-authoring/application.test.ts",
+        "tests/demo-authoring/journey.test.ts",
+        "tests/demo-authoring/transport.test.ts",
+        "tests/demo-web/authoring-model.test.mjs",
+        "tests/demo-web/authoring-api.test.mjs",
+        "tests/demo-web/authoring-controller.test.mjs",
+        "tests/demo-web/authoring-views.test.mjs",
+        "tests/demo-web/authoring-events.test.mjs",
+        "scripts/tests/validate-authoring-recovery-policy.test.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-authoring-generation",
+      "command": "node",
+      "args": [
+        "scripts/db/verify-authoring-generation.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
       "id": "demo-kitchen-postgres",
       "command": "node",
       "args": [
         "--import",
         "tsx",
         "scripts/db/run-demo-kitchen-integration.ts"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-authoring-postgres",
+      "command": "node",
+      "args": [
+        "--import",
+        "tsx",
+        "scripts/db/run-demo-authoring-integration.ts"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-authoring-isolated-history",
+      "command": "node",
+      "args": [
+        "scripts/db/verify-authoring-isolated-history.mjs"
       ],
       "timeout_ms": 25000
     },

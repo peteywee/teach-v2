@@ -1,9 +1,9 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-04",
-  "updated_on": "2026-10-17",
+  "updated_on": "2026-10-26",
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
@@ -76,9 +76,11 @@
       "module": "Content",
       "interface_kind": "application-command-boundary",
       "commands": [
-        "PublishContentPack"
+        "PublishContentPack",
+        "SaveContentDraft",
+        "PublishContentDraft"
       ],
-      "command_count": 1
+      "command_count": 3
     },
     {
       "module": "Identity",
@@ -225,6 +227,16 @@
       "direction": "already-authorized owning command transaction -> TransactionControl",
       "purpose": "Exact CLIENT_SUPPLIED receipt for AssignContent, StartLearningSession and RecordProgressEvent; current authority before replay, exact payload binding, 24-hour horizon and retained tombstones. No secrets, key-only lookup or route.",
       "definition_source": "domains/demo-runtime/proposal-0.1.0/authority-and-audit.md"
+    },
+    {
+      "id": "AuthoringReceiptInterface",
+      "owner": "TransactionControl",
+      "consumers": [
+        "Content"
+      ],
+      "direction": "already-authorized Content transaction \u2192 TransactionControl",
+      "purpose": "Separate append-only SaveContentDraft/PublishContentDraft receipts, run+manager+key identity, exact operation/payload; current authority before replay/readback. No old CommandReceipt reinterpretation.",
+      "definition_source": "domains/demo-authoring/proposal-0.1.0/authoring-policy.json"
     }
   ],
   "owner_read_interfaces": [
@@ -450,7 +462,7 @@
   "baseline_commit": "14ca8c409993c9e57077d9705db022d3bfd26b1a",
   "source_proposal": "domains/demo-runtime/proposal-0.1.0",
   "next_stage": "Persistence Model",
-  "approval_record": "domains/demo-runtime/owner-approval.json",
+  "approval_record": "domains/demo-authoring/owner-approval.json",
   "demo_runtime_registration": {
     "package": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0",
     "approval_record": "domains/demo-runtime/owner-approval.json",
@@ -538,6 +550,36 @@
       "predicate": "same authoritative current visibility as ListTeam (manager direct reports intersected with scope; org_admin organization membership); this demo grants only manager, never org_admin",
       "source": "domains/demo-runtime/proposal-0.1.0/transport-and-queries.json",
       "response_schema": "domains/demo-runtime/proposal-0.1.0/transport-schemas.json#/$defs/TeamStates"
+    },
+    {
+      "id": "ReadAuthoringWorkspace",
+      "owning_domain": "Content",
+      "capability": "content.draft.read",
+      "input": "Exact scope selectors; saved revision or operation/key selectors where named by wire schema",
+      "output": "Bounded private authoring DTO; no answer keys or credentials",
+      "predicate": "Database-current manager + live run + same immutable organization/location + owner identity; learner and cross-run denied",
+      "source": "domains/demo-authoring/proposal-0.1.0/authoring-operations.json",
+      "response_schema": "domains/demo-authoring/proposal-0.1.0/authoring-wire.schema.json"
+    },
+    {
+      "id": "PreviewContentDraft",
+      "owning_domain": "Content",
+      "capability": "content.draft.preview",
+      "input": "Exact scope selectors; saved revision or operation/key selectors where named by wire schema",
+      "output": "Bounded private authoring DTO; no answer keys or credentials",
+      "predicate": "Database-current manager + live run + same immutable organization/location + owner identity; learner and cross-run denied",
+      "source": "domains/demo-authoring/proposal-0.1.0/authoring-operations.json",
+      "response_schema": "domains/demo-authoring/proposal-0.1.0/authoring-wire.schema.json"
+    },
+    {
+      "id": "ReadAuthoringOperation",
+      "owning_domain": "TransactionControl",
+      "capability": "transaction.authoring.read",
+      "input": "Exact scope selectors; saved revision or operation/key selectors where named by wire schema",
+      "output": "Bounded private authoring DTO; no answer keys or credentials",
+      "predicate": "Database-current manager + live run + same immutable organization/location + owner identity; learner and cross-run denied",
+      "source": "domains/demo-authoring/proposal-0.1.0/authoring-operations.json",
+      "response_schema": "domains/demo-authoring/proposal-0.1.0/authoring-wire.schema.json"
     }
   ],
   "internal_query_interfaces": [
@@ -727,5 +769,122 @@
       "definition_source": "domains/demo-runtime/proposal-0.1.0/demo-boundary.md"
     }
   ],
-  "transport_boundary": "Exact methods/paths and schemas registered in governance/decision-closure/api-boundary-manifest.json; mounting requires separate admission and implementation proof."
+  "transport_boundary": "Exact methods/paths and schemas registered in governance/decision-closure/api-boundary-manifest.json; mounting requires separate admission and implementation proof.",
+  "demo_authoring_registration": {
+    "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+    "package_version": "0.1.0",
+    "approval_record": "domains/demo-authoring/owner-approval.json",
+    "impact_issue": null,
+    "registered_on": "2026-10-26"
+  },
+  "authoring_command_definitions": [
+    {
+      "family": "commands",
+      "entry": {
+        "id": "SaveContentDraft",
+        "kind": "command",
+        "status": "approved",
+        "owning_domain": "Content",
+        "definition": "Validate and compare-and-swap the manager-owned working catalog, atomically recording required audit and a replay receipt.",
+        "requires": [
+          {
+            "family": "entities",
+            "id": "ContentDraft"
+          },
+          {
+            "family": "entities",
+            "id": "AuthoringReceipt"
+          },
+          {
+            "family": "entities",
+            "id": "DemoRun"
+          },
+          {
+            "family": "entities",
+            "id": "ContentPack"
+          },
+          {
+            "family": "capabilities",
+            "id": "content.draft.write"
+          },
+          {
+            "family": "identifiers",
+            "id": "RequestId"
+          },
+          {
+            "family": "identifiers",
+            "id": "IdempotencyKey"
+          }
+        ],
+        "capability": "content.draft.write",
+        "authority": "Only a current HumanActor manager in the exact live demo run; no automation impersonation or general customer publication.",
+        "constraints": [
+          "Current scope/session/run fence before work and before commit.",
+          "Uncertain response resolves through operation readback; never assumed success.",
+          "No new creation audit or version on an unchanged publication."
+        ],
+        "demo_authoring_registration": {
+          "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+          "package_version": "0.1.0",
+          "approval_record": "domains/demo-authoring/owner-approval.json",
+          "impact_issue": null,
+          "registered_on": "2026-10-26"
+        }
+      }
+    },
+    {
+      "family": "commands",
+      "entry": {
+        "id": "PublishContentDraft",
+        "kind": "command",
+        "status": "approved",
+        "owning_domain": "Content",
+        "definition": "Validate an exact saved draft revision and append one immutable Content version through the Content owner boundary, with audit/receipt/publication marker atomically; never implicitly assign.",
+        "requires": [
+          {
+            "family": "entities",
+            "id": "ContentDraft"
+          },
+          {
+            "family": "entities",
+            "id": "AuthoringReceipt"
+          },
+          {
+            "family": "entities",
+            "id": "DemoRun"
+          },
+          {
+            "family": "entities",
+            "id": "ContentPack"
+          },
+          {
+            "family": "capabilities",
+            "id": "content.draft.publish"
+          },
+          {
+            "family": "identifiers",
+            "id": "RequestId"
+          },
+          {
+            "family": "identifiers",
+            "id": "IdempotencyKey"
+          }
+        ],
+        "capability": "content.draft.publish",
+        "authority": "Only a current HumanActor manager in the exact live demo run; no automation impersonation or general customer publication.",
+        "constraints": [
+          "Current scope/session/run fence before work and before commit.",
+          "Uncertain response resolves through operation readback; never assumed success.",
+          "No new creation audit or version on an unchanged publication."
+        ],
+        "demo_authoring_registration": {
+          "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+          "package_version": "0.1.0",
+          "approval_record": "domains/demo-authoring/owner-approval.json",
+          "impact_issue": null,
+          "registered_on": "2026-10-26"
+        }
+      }
+    }
+  ]
 }

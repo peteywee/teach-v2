@@ -150,15 +150,16 @@ jobs:
 `;
   const stages=expectedPlan.stages.map(({id})=>{
     const stage=`      - name: Audit ${id}\n        id: audit_${id.replaceAll('-','_')}\n        run: node scripts/verification/run-self-audit.mjs --stage ${id}\n`;
-    if(id!=='demo-kitchen-postgres')return stage;
-    return `      - name: Start owned loopback PostgreSQL for kitchen proof
-        id: kitchen_postgres_start
-        run: timeout 25s node scripts/verification/kitchen-loopback-postgres.mjs start
-`+stage+`      - name: Remove kitchen fixture and restore service target
+    if(id==='demo-authoring-isolated-history')return stage+`      - name: Remove kitchen and authoring fixture and restore service target
         id: kitchen_postgres_stop
         if: always()
         run: timeout 25s node scripts/verification/kitchen-loopback-postgres.mjs stop
 `;
+    if(id!=='demo-kitchen-postgres')return stage;
+    return `      - name: Start owned loopback PostgreSQL for kitchen proof
+        id: kitchen_postgres_start
+        run: timeout 25s node scripts/verification/kitchen-loopback-postgres.mjs start
+`+stage;
   }).join('');
   return prefix+stages+suffix;
 }

@@ -1,3 +1,4 @@
+import {inspectAuthoringPhysicalSuccessor} from '../persistence/demo-authoring-physical-successor.mjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
@@ -34,9 +35,12 @@ function fixture(t) {
   t.after(() => rmSync(temporary, { recursive: true, force: true }));
   const sourceRoot = join(temporary, 'source');
   mkdirSync(sourceRoot);
+  const current=inspectAuthoringPhysicalSuccessor(repository);
+  assert.deepEqual(current.errors,[]);if(current.present)assert.equal(current.admitted,true);
   for (const path of [...HOSTED_PACKAGE_FILES, ...fixtureExtras]) {
     mkdirSync(dirname(join(sourceRoot, path)), { recursive: true });
-    copyFileSync(join(repository, path), join(sourceRoot, path));
+    if(Object.hasOwn(current.predecessorFiles,path))writeFileSync(join(sourceRoot,path),current.predecessorFiles[path]);
+    else copyFileSync(join(repository, path), join(sourceRoot, path));
   }
   // Inert decoys prove that selection is finite, not a broad source-tree copy.
   put(sourceRoot, 'tests/demo-hosted/test-only-harness.ts', 'export const testOnly = true;\n');

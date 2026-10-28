@@ -27,7 +27,7 @@ export function buildSuccessorLocal(root,output){
   mkdirSync(output);
   for(const path of Object.keys(before.files)){
    if(path.startsWith('src/')&&path.endsWith('.ts')&&!path.endsWith('.d.ts')&&!path.endsWith('.d.mts')){const js=path.slice(0,-3)+'.js';write(js,readFileSync(join(scratch,js)));}
-   else if(path.startsWith('src/')||path.startsWith('governance/')||path.endsWith('baseline-error-envelope.schema.json'))write(path,readFileSync(join(root,path)));
+   else if(path.startsWith('src/')||path.startsWith('governance/')||path.endsWith('baseline-error-envelope.schema.json')||path==='domains/demo-authoring/proposal-0.1.0/authoring-operations.json')write(path,readFileSync(join(root,path)));
   }
   const packages={};
   function retain(name,from,expected){

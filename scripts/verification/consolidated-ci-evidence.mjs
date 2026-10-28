@@ -1,3 +1,7 @@
+import { inspectSourceInScope } from './source-inspection-scope.mjs';
+import { inspectAuthoringEngineering } from './demo-authoring-engineering.mjs';
+import { inspectAuthoringRegistration } from '../kernel/demo-authoring-registration.mjs';
+import { authoringStages } from './authoring-stage-catalog.mjs';
 import { STORAGE_OWNER_PATTERN, STORAGE_INTEGRATION_PATTERN, assertStoragePartitionInventory } from './demo-storage-partitions.mjs';
 import { inspectKitchenRegistration } from '../kernel/demo-kitchen-registration.mjs';
 import { inspectDemoRecoveryRegistration } from '../kernel/demo-recovery-registration.mjs';
@@ -11,7 +15,9 @@ import { inspectAuditPlan } from './self-audit-catalog.mjs';
 import { inspectWorkflowText } from './workflow-lifecycle-inventory.mjs';
 import { inspectProducerWorkflowWiring } from './validate-workflow-lifecycle.mjs';
 
-export function inspectConsolidatedVerification(root) {
+export function inspectConsolidatedVerification(root) { return inspectSourceInScope('consolidatedVerification', root); }
+// Internal finite dispatcher entry. Direct invocation establishes no shared scope.
+export function inspectConsolidatedVerificationUncached(root) {
   const errors = [], fail = message => errors.push(`consolidated verification: ${message}`);
   const path = '.github/workflows/development-self-audit.yml';
   try {
@@ -53,8 +59,12 @@ export function inspectConsolidatedVerification(root) {
     for(const path of demoSource?.args?.filter(arg=>/^(?:tests|scripts)\//.test(arg))||[])if(!existsSync(join(root,path)))fail(`required demo test missing: ${path}`);
     const recipe = inspectRecipeRegistration(root);
     errors.push(...recipe.errors);
-    const wrapper = readFileSync(join(root,'scripts/db/run-demo-integration.ts'),'utf8');
-    if(createHash('sha256').update(wrapper).digest('hex')!=='575b41278b354e0cfeb32a51f4b56f7719169772d19f4cdea5b83f2303222a62')fail('exact original isolated three-suite wrapper required');
+    const authoredSource = inspectAuthoringEngineering(root);
+    if (authoredSource.errors.length) errors.push(...authoredSource.errors);
+    else {
+      const wrapper = authoredSource.predecessorFiles['scripts/db/run-demo-integration.ts'] ?? readFileSync(join(root,'scripts/db/run-demo-integration.ts'),'utf8');
+      if(createHash('sha256').update(wrapper).digest('hex')!=='575b41278b354e0cfeb32a51f4b56f7719169772d19f4cdea5b83f2303222a62')fail('exact original isolated three-suite wrapper required');
+    }
     if(recipe.present) {
       const recipeStage=plan?.stages?.find(stage=>stage.id==='demo-recipe-postgres');
       if(recipeStage?.command!=='node'||JSON.stringify(recipeStage?.args)!==JSON.stringify(['--import','tsx','scripts/db/run-demo-recipe-integration.ts'])||recipeStage?.timeout_ms!==25000)fail('exact separate bounded recipe PostgreSQL stage required');
@@ -62,6 +72,11 @@ export function inspectConsolidatedVerification(root) {
     }
     if(recipe.present)for(const path of ['tests/demo/recipe-content.test.ts','tests/demo-web/recipe-api.test.mjs','tests/demo-web/recipes.test.mjs','scripts/tests/validate-demo-recipes-registration.mjs','scripts/tests/validate-demo-recipes-physical-successor.mjs'])if(!demoSource?.args.includes(path)||!existsSync(join(root,path)))fail(`bounded recipe successor regression must run in existing demo-source stage: ${path}`);
     if(!existsSync(join(root,'scripts/db/verify-demo-generation.mjs')))fail('demo generation proof required');
+    for (const [id, command, args] of authoringStages) {
+      const stage = plan.stages.find(row => row.id === id);
+      if (stage?.command !== command || JSON.stringify(stage?.args) !== JSON.stringify(args) || stage?.timeout_ms !== 25000) fail('exact separate bounded authoring stage required: '+id);
+      for (const path of args.filter(value => /^(?:scripts|tests)\//.test(value))) if (!existsSync(join(root, path))) fail('required authoring proof missing: '+path);
+    }
     const stages = [...workflow.matchAll(/^        run: node scripts\/verification\/run-self-audit\.mjs --stage ([a-z0-9-]+)$/gm)].map(match => match[1]);
     if (JSON.stringify(stages) !== JSON.stringify(plan?.stages?.map(stage => stage.id))) fail('complete ordered checkpoint workflow required');
     const identity = plan?.stages?.find(stage => stage.id === 'postgres-identity-commands');
@@ -99,7 +114,9 @@ export function reconstructHistoricalReplay(path, bytes) {
 
 // Frozen migration evidence is a reviewed control-model input, not editable proof.
 // Validate its identity AND its live execution links; a count or green workflow is insufficient.
-export function inspectConsolidationCoverage(root) {
+export function inspectConsolidationCoverage(root) { return inspectSourceInScope('consolidationCoverage', root); }
+// Internal finite dispatcher entry. Direct invocation establishes no shared scope.
+export function inspectConsolidationCoverageUncached(root) {
   const errors=[],fail=message=>errors.push(`CI coverage: ${message}`);
   const hash=value=>createHash('sha256').update(value).digest('hex');
   try {
@@ -130,9 +147,11 @@ export function inspectConsolidationCoverage(root) {
     // reviewed physical gate, all executed by the unchanged authority loop.
     const recipe = inspectRecipeRegistration(root); errors.push(...recipe.errors);
     const kitchen = inspectKitchenRegistration(root); errors.push(...kitchen.errors);
+    const authoring = inspectAuthoringRegistration(root); errors.push(...authoring.errors);
     const admittedValidators=['scripts/kernel/validate-capability-admission.mjs','scripts/kernel/validate-demo-runtime-registration.mjs','scripts/persistence/validate-demo-physical-admission.mjs',
       ...(recipe.present && recipe.errors.length===0 ? ['scripts/kernel/validate-demo-recipes-registration.mjs','scripts/persistence/validate-demo-recipes-physical-admission.mjs'] : []),
-      ...(kitchen.present && kitchen.errors.length===0 ? ['scripts/kernel/validate-demo-kitchen-registration.mjs'] : [])];
+      ...(kitchen.present && kitchen.errors.length===0 ? ['scripts/kernel/validate-demo-kitchen-registration.mjs'] : []),
+      ...(authoring.present && authoring.errors.length===0 ? ['scripts/kernel/validate-demo-authoring-registration.mjs'] : [])];
     const requiredValidators=[...coverage.baseline_umbrella_validators,...admittedValidators].sort();
     if(JSON.stringify(validators.sort())!==JSON.stringify(requiredValidators))fail('complete baseline plus exact admitted standalone validator inventory required');
     if(hash(readFileSync(join(root,'scripts/db/replay-database-cleanup.mjs')))!=='54c2027a98ce883aa9f1a892a11b165eabe56353028a23c63cbf495a4887b388')fail('reviewed bounded replay cleanup helper identity required');

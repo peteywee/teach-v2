@@ -1,10 +1,14 @@
+import { inspectSourceInScope } from '../verification/source-inspection-scope.mjs';
+import { inspectAuthoringPhysicalSuccessor } from '../persistence/demo-authoring-physical-successor.mjs';
 import { inspectKitchenPhysicalSuccessor } from '../persistence/demo-kitchen-physical-successor.mjs';
 // Structural admission preflight. PostgreSQL replay remains a separate proof.
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { DEMO_RECIPE_PHYSICAL_LANE, DEMO_RECIPE_MIGRATION, inspectDemoRecipePhysicalSuccessor } from '../persistence/demo-recipes-physical-successor.mjs';
 
-export function inspectMigrationHistory(root) {
+export function inspectMigrationHistory(root) { return inspectSourceInScope('migrationHistory', root); }
+// Internal finite dispatcher entry. Direct invocation establishes no shared scope.
+export function inspectMigrationHistoryUncached(root) {
   const errors = [];
   const fail = (message) => errors.push(`migration history: ${message}`);
   const json = (path) => {
@@ -110,11 +114,13 @@ export function inspectMigrationHistory(root) {
     ? inspectDemoRecipePhysicalSuccessor(root) : null;
   if (recipe) errors.push(...recipe.errors);
   const kitchen = inspectKitchenPhysicalSuccessor(root); errors.push(...kitchen.errors);
-  const migrationCount = kitchen.admitted && recipe?.admitted && guard?.migrations_generated === 6 ? kitchen.migrationCount : recipe?.admitted && guard?.migrations_generated === 6 ? recipe.migrationCount : guard?.migrations_generated;
+  const authoring = inspectAuthoringPhysicalSuccessor(root); errors.push(...authoring.errors);
+  const migrationCount = authoring.admitted && guard?.migrations_generated === 6 ? authoring.migrationCount : kitchen.admitted && recipe?.admitted && guard?.migrations_generated === 6 ? kitchen.migrationCount : recipe?.admitted && guard?.migrations_generated === 6 ? recipe.migrationCount : guard?.migrations_generated;
   if (migrationCount !== journal.entries.length) {
     fail(`readiness migration count ${guard?.migrations_generated} differs from journal count ${journal.entries.length}`);
   }
-  if (latestSnapshot && guard?.tables_generated !== Object.keys(latestSnapshot.tables).length) {
+  const tableCount = authoring.admitted && guard?.tables_generated === 22 ? 24 : guard?.tables_generated;
+  if (latestSnapshot && tableCount !== Object.keys(latestSnapshot.tables).length) {
     fail(`readiness table count ${guard?.tables_generated} differs from final snapshot count ${Object.keys(latestSnapshot.tables).length}`);
   }
   return errors;

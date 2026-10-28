@@ -2,7 +2,7 @@
 {
   "doc_id": "TEACH-CON-C41",
   "class": "contract",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
@@ -11,10 +11,10 @@
   "effective_on": "2026-10-26",
   "approval": {
     "state": "approved",
-    "approved_version": "1.4.0",
+    "approved_version": "1.5.0",
     "approved_on": "2026-10-26",
-    "record": "domains/demo-kitchen/owner-approval.json",
-    "basis": "Bounded owner-approved kitchen scope; implementation versions/digest recorded separately from owner wording."
+    "record": "domains/demo-authoring/owner-approval.json",
+    "basis": "Owner-approved bounded manager-authoring increment and narrow private storage/access scope; actual execution remains conditional on review/tests."
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -32,7 +32,8 @@
     "TEACH-CON-C41@1.0.3",
     "TEACH-CON-C41@1.1.0",
     "TEACH-CON-C41@1.2.0",
-    "TEACH-CON-C41@1.3.0"
+    "TEACH-CON-C41@1.3.0",
+    "TEACH-CON-C41@1.4.0"
   ],
   "superseded_by": null,
   "depends_on": [
@@ -69,6 +70,15 @@
     "source_registration_only": true,
     "physical_schema_admission": false,
     "runtime_proof": "NOT_ESTABLISHED_BY_REGISTRATION"
+  },
+  "demo_authoring_registration": {
+    "package": "TEACH-DEMO-AUTHORING-2026-10-26@0.1.0",
+    "impact_issue": null,
+    "approval_record": "domains/demo-authoring/owner-approval.json",
+    "source_package": "domains/demo-authoring/proposal-0.1.0",
+    "source_registration_only": true,
+    "physical_schema_admission": false,
+    "runtime_proof": "NOT_ESTABLISHED_BY_REGISTRATION"
   }
 }
 -->
@@ -80,7 +90,7 @@
 | Contract ID        | C41                                                                                                                                                             |
 | Group              | C40 Application Boundaries                                                                                                                                      |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.4.0 |
+| Version | 1.5.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
 | Approved by | Patrick Craven (scope owner), 2026-10-26; SYS-21 #99; see `domains/demo-kitchen/owner-approval.json`; implementation versions recorded by preparer |
@@ -224,3 +234,10 @@ The existing authorized `ReadAssignedContentVersion` GET may additionally return
 | Version | Date | Change | By |
 | --- | --- | --- | --- |
 | 1.4.0 | 2026-10-26 | Bounded fictional stations, people, recipe/tool references and sample holdings; no new entities, permissions or learning semantics. | Patrick Craven (scope owner); ChatGPT (recorder) |
+
+
+## Bounded private manager-authoring successor — 2026-10-26
+
+The existing fifteen-route catalog remains exact. Add only the five scoped authoring routes in authoring-operations.json with strict request/query/response shapes, cookie-only current manager authorization, same-origin unsafe methods, no-store responses and existing error envelope. ReadAuthoringOperation requires explicit expected operation and exact scoped key; unknown or foreign targets disclose no other visit data. Request bodies remain bounded; field errors expose only approved path/rule codes. This source registration is not mounting or deployment authority.
+
+This amendment takes precedence only for the exact source package `domains/demo-authoring/proposal-0.1.0`; all unrelated requirements, historical decisions, recovery gates and permission boundaries remain unchanged. It does not itself execute migrations, grant credentials, or establish runtime conformance.

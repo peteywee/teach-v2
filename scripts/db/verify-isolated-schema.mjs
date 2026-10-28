@@ -56,6 +56,9 @@ async function deny(pool, sql) {
 export async function verifyIsolatedSchemaProof({ exerciseRuntime } = {}) {
   const connectionString = assertIsolatedDatabaseTarget(process.env.DATABASE_URL);
   const { manifest } = verifyIsolatedLineage();
+  assert.equal(manifest.migrations.length, 9, 'current authoring proof requires nine migrations');
+  assert.equal(manifest.tables.length, 24, 'current authoring proof requires twenty-four application tables');
+  assert.equal(manifest.functions.length, 43, 'current authoring proof requires the original39 and four new functions');
   const suffix = `${process.pid}_${randomBytes(4).toString('hex')}`;
   const roles = Object.fromEntries(['creator', 'runtime', 'browser', 'legacy'].map((kind) => [kind, `teach_iso_${kind}_${suffix}`]));
   const names = ['a', 'b'].map((part) => `teach_v2_isolated_${part}_${suffix}`);
@@ -149,15 +152,25 @@ export async function verifyIsolatedSchemaProof({ exerciseRuntime } = {}) {
         assert.deepEqual((await creator.query('SELECT * FROM teach_v2_demo.unrelated')).rows, [{ id: 9 }]);
         await creator.query('DROP SCHEMA teach_v2_demo CASCADE');
       }
-      assert.deepEqual(await applyIsolatedSchemaMigrations(creator), { schema, applied: 8, total: 8 });
+      assert.deepEqual(await applyIsolatedSchemaMigrations(creator), { schema, applied: 9, total: 9 });
       assert.deepEqual(await legacySnapshot(owner), before, 'legacy inventory, ACL, RLS, defaults, sequences, journals or rows changed');
       const first = await isolatedSnapshot(owner);
-      assert.deepEqual(await applyIsolatedSchemaMigrations(creator), { schema, applied: 0, total: 8 });
+      assert.deepEqual(await applyIsolatedSchemaMigrations(creator), { schema, applied: 0, total: 9 });
       assert.deepEqual(await isolatedSnapshot(owner), first, 'second application was not a no-op');
-      assert.equal(first.relations.filter((row) => row.relkind === 'r').length, 23);
-      assert.equal(first.functions.length, 39);
+      assert.equal(first.relations.filter((row) => row.relkind === 'r').length, 25);
+      assert.deepEqual(first.functions.map(row => row.proname).sort(), manifest.functions, 'exact pinned current function inventory');
       assert.ok(first.relations.filter((row) => row.relkind === 'r').every((row) => row.relrowsecurity));
       assert.ok(first.functions.every((row) => !row.prosecdef), 'SECURITY DEFINER is not admitted');
+      for (const role of [roles.browser, 'anon', 'authenticated']) {
+        for (const table of ['content_authoring_drafts', 'content_authoring_receipts']) {
+          const acl = (await owner.query(`SELECT
+            pg_catalog.has_table_privilege($1,$2,'SELECT') AS select,
+            pg_catalog.has_table_privilege($1,$2,'INSERT') AS insert,
+            pg_catalog.has_table_privilege($1,$2,'UPDATE') AS update,
+            pg_catalog.has_table_privilege($1,$2,'DELETE') AS delete`, [role, `${schema}.${table}`])).rows[0];
+          assert.deepEqual(acl, { select: false, insert: false, update: false, delete: false }, 'no browser or API access to either authoring table');
+        }
+      }
       const fks = await owner.query(`SELECT childns.nspname AS child,parentns.nspname AS parent FROM pg_catalog.pg_constraint fk JOIN pg_catalog.pg_class child ON child.oid=fk.conrelid JOIN pg_catalog.pg_namespace childns ON childns.oid=child.relnamespace JOIN pg_catalog.pg_class parent ON parent.oid=fk.confrelid JOIN pg_catalog.pg_namespace parentns ON parentns.oid=parent.relnamespace WHERE fk.contype='f' AND childns.nspname='teach_v2_demo'`);
       assert.ok(fks.rows.length > 20 && fks.rows.every((row) => row.child === schema && row.parent === schema), 'cross-schema foreign key');
       const triggerFunctions = await owner.query(`SELECT fnns.nspname FROM pg_catalog.pg_trigger t JOIN pg_catalog.pg_class c ON c.oid=t.tgrelid JOIN pg_catalog.pg_namespace ns ON ns.oid=c.relnamespace JOIN pg_catalog.pg_proc p ON p.oid=t.tgfoid JOIN pg_catalog.pg_namespace fnns ON fnns.oid=p.pronamespace WHERE ns.nspname='teach_v2_demo' AND NOT t.tgisinternal`);
@@ -169,11 +182,23 @@ export async function verifyIsolatedSchemaProof({ exerciseRuntime } = {}) {
       await creator.query(`GRANT USAGE ON SCHEMA teach_v2_demo TO ${q(roles.runtime)};
         GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA teach_v2_demo TO ${q(roles.runtime)};`);
       for (const table of manifest.tables) {
-        await creator.query(`GRANT SELECT, INSERT, UPDATE ON teach_v2_demo.${q(table)} TO ${q(roles.runtime)};
+        const privileges = table === 'content_authoring_receipts' ? 'SELECT, INSERT' : 'SELECT, INSERT, UPDATE';
+        await creator.query(`GRANT ${privileges} ON teach_v2_demo.${q(table)} TO ${q(roles.runtime)};
           CREATE POLICY isolated_runtime_test ON teach_v2_demo.${q(table)} TO ${q(roles.runtime)} USING (true) WITH CHECK (true);`);
       }
       const runtimeConnection = databaseUrl(name, roles.runtime);
       const runtime = new pg.Pool({ connectionString: runtimeConnection, max: 2, options: '-c search_path=legacy_shadow,public,pg_catalog' }); pools.push(runtime);
+      for (const table of ['content_authoring_drafts', 'content_authoring_receipts']) {
+        const privileges = (await runtime.query(`SELECT
+          pg_catalog.has_table_privilege(current_user,$1,'SELECT') AS select,
+          pg_catalog.has_table_privilege(current_user,$1,'INSERT') AS insert,
+          pg_catalog.has_table_privilege(current_user,$1,'UPDATE') AS update,
+          pg_catalog.has_table_privilege(current_user,$1,'DELETE') AS delete`, [`${schema}.${table}`])).rows[0];
+        assert.deepEqual(privileges, { select: true, insert: true, update: table === 'content_authoring_drafts', delete: false }, 'exact private authoring runtime privileges');
+        await runtime.query(`SELECT pg_catalog.count(*) FROM ${q(schema)}.${q(table)}`);
+        await deny(runtime, `DELETE FROM ${q(schema)}.${q(table)} WHERE false`); probes++;
+      }
+      await deny(runtime, 'UPDATE teach_v2_demo.content_authoring_receipts SET key=key WHERE false'); probes++;
       const browser = new pg.Pool({ connectionString: databaseUrl(name, roles.browser), max: 1 }); pools.push(browser);
       for (const role of ['anon', 'authenticated']) {
         const apiRole = new pg.Pool({ connectionString: databaseUrl(name), max: 1, options: `-c role=${role}` }); pools.push(apiRole);
@@ -214,7 +239,7 @@ export async function verifyIsolatedSchemaProof({ exerciseRuntime } = {}) {
       assert.deepEqual(await isolatedSnapshot(owner), protectedState, 'journal drift rejection mutated schema');
     }
     assert.equal(fingerprints[0], fingerprints[1], 'independent clean replays differ');
-    const result = { postgresMajor: 17, migrations: 8, applicationTables: 22, journalTables: 1, functions: 39, denialAndDefaultProbes: probes, hostileBuiltinProbes: shadowProbes, namedApiRolesTested: 2, legacyUnchanged: true, cleanReplayIdentical: true, runtimeExercised: Boolean(exerciseRuntime), schemaFingerprint: fingerprints[0] };
+    const result = { postgresMajor: 17, migrations: 9, applicationTables: 24, journalTables: 1, functions: manifest.functions.length, denialAndDefaultProbes: probes, hostileBuiltinProbes: shadowProbes, namedApiRolesTested: 2, legacyUnchanged: true, cleanReplayIdentical: true, runtimeExercised: Boolean(exerciseRuntime), schemaFingerprint: fingerprints[0] };
     console.log(`ISOLATED SCHEMA PROOF PASS: ${JSON.stringify(result)}`);
     return result;
   } finally {

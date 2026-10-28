@@ -78,7 +78,11 @@ export async function verifyIsolatedModelEquivalence() {
   await applyIsolatedSchemaMigrations(migrated);
   const expected=await modelCatalog(model),actual=await modelCatalog(migrated);
   compareCatalogs(expected,actual);
+  assert.equal(expected.tables.length,24,'full current authoring model required');
+  for(const table of ['content_authoring_drafts','content_authoring_receipts'])assert.ok(expected.tables.some(row=>row.relname===table),'both authoring models must be generated');
   const mutations = [
+   ['authoring draft field','ALTER TABLE teach_v2_demo.content_authoring_drafts DROP COLUMN catalog_digest CASCADE'],
+   ['authoring receipt identity','ALTER TABLE teach_v2_demo.content_authoring_receipts DROP CONSTRAINT authoring_receipt_pk'],
    ['extra table','CREATE TABLE teach_v2_demo.unexpected_table (id text)'],
    ['table durability','ALTER TABLE teach_v2_demo.transaction_control_reconciliation_records SET UNLOGGED'],
    ['column type','ALTER TABLE teach_v2_demo.identity_identities ALTER COLUMN id TYPE varchar(200)'],

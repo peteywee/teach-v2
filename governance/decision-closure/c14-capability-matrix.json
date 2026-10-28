@@ -2,12 +2,12 @@
   "x-document": {
     "doc_id": "TEACH-PROP-DCS-02-DATA",
     "class": "decision-table",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "status": "active",
     "owner": "Patrick Craven, Top Shelf Service LLC",
     "created_on": "2026-10-05",
-    "updated_on": "2026-10-17",
-    "approval_record": "domains/demo-runtime/owner-approval.json"
+    "updated_on": "2026-10-26",
+    "approval_record": "domains/demo-authoring/owner-approval.json"
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -94,7 +94,12 @@
         "learning.assignment.create",
         "learning.state.read_team",
         "organization.membership.deactivate",
-        "organization.team.read"
+        "organization.team.read",
+        "content.draft.read",
+        "content.draft.write",
+        "content.draft.preview",
+        "content.draft.publish",
+        "transaction.authoring.read"
       ]
     },
     "org_admin": {
@@ -1780,6 +1785,224 @@
         "runtime_conformance": "UNKNOWN",
         "missing_obligations": "Implementation and physical admission not yet evidenced"
       }
+    },
+    {
+      "id": "ReadAuthoringWorkspace",
+      "kind": "query",
+      "capability": "content.draft.read",
+      "scope": "LOCATION",
+      "bundles": [
+        "manager"
+      ],
+      "actor_classes": [
+        "HumanActor"
+      ],
+      "target_resolution": "Exact live DEMO_ONLY run + manager identity and its immutable organization/location; foreign targets are non-disclosing. No real/customer authoring.",
+      "preconditions": [
+        "Database-current live run/session and fixed manager membership",
+        "Current authoring-specific allowlist; ordinary manager bundle alone is insufficient",
+        "No learner access; draft/receipt resolved by run and manager, never client owner claims"
+      ],
+      "idempotency_proposed": "N/A (safe method)",
+      "audit_on_success": "None by default; bounded authorization denials unchanged",
+      "transaction_owner": "N/A",
+      "transaction_participants": [],
+      "route_exposure": "ROUTED",
+      "grant_state": "REGISTERED",
+      "blocking_note": "Only this private synthetic demo scope is registered; production action and runtime proof remain separately gated.",
+      "contract_refs": [
+        "C14",
+        "C22",
+        "C23",
+        "C31",
+        "C41"
+      ],
+      "owning_domain": "Content",
+      "application_interface": "Content owner-query-boundary ReadAuthoringWorkspace",
+      "orchestration": null,
+      "policy_interfaces": [
+        "AuthorizationDecisionInterface"
+      ],
+      "ledger": null,
+      "definition_source": "domains/demo-authoring/proposal-0.1.0/authoring-operations.json"
+    },
+    {
+      "id": "SaveContentDraft",
+      "kind": "command",
+      "capability": "content.draft.write",
+      "scope": "LOCATION",
+      "bundles": [
+        "manager"
+      ],
+      "actor_classes": [
+        "HumanActor"
+      ],
+      "target_resolution": "Exact live DEMO_ONLY run + manager identity and its immutable organization/location; foreign targets are non-disclosing. No real/customer authoring.",
+      "preconditions": [
+        "Database-current live run/session and fixed manager membership",
+        "Current authoring-specific allowlist; ordinary manager bundle alone is insufficient",
+        "No learner access; draft/receipt resolved by run and manager, never client owner claims"
+      ],
+      "idempotency_proposed": "CLIENT_SUPPLIED cross-operation key with exact payload and current-authority readback",
+      "audit_on_success": "SaveContentDraft \u2192 ContentDraft typed target with revision/digest, required atomically only for actual draft creation or revision change; unchanged save creates no new creation audit.",
+      "transaction_owner": "Content",
+      "transaction_participants": [
+        "AuditLifecycle",
+        "TransactionControl"
+      ],
+      "route_exposure": "ROUTED",
+      "grant_state": "REGISTERED",
+      "blocking_note": "Only this private synthetic demo scope is registered; production action and runtime proof remain separately gated.",
+      "contract_refs": [
+        "C14",
+        "C22",
+        "C23",
+        "C31",
+        "C41"
+      ],
+      "owning_domain": "Content",
+      "application_interface": "Content application-command-boundary",
+      "orchestration": null,
+      "policy_interfaces": [
+        "AuthorizationDecisionInterface",
+        "AuditAppendInterface",
+        "AuthoringReceiptInterface"
+      ],
+      "ledger": {
+        "state": "BLOCKED",
+        "runtime_conformance": "UNKNOWN",
+        "missing_obligations": 4
+      },
+      "definition_source": "domains/demo-authoring/proposal-0.1.0/authoring-operations.json"
+    },
+    {
+      "id": "PreviewContentDraft",
+      "kind": "query",
+      "capability": "content.draft.preview",
+      "scope": "LOCATION",
+      "bundles": [
+        "manager"
+      ],
+      "actor_classes": [
+        "HumanActor"
+      ],
+      "target_resolution": "Exact live DEMO_ONLY run + manager identity and its immutable organization/location; foreign targets are non-disclosing. No real/customer authoring.",
+      "preconditions": [
+        "Database-current live run/session and fixed manager membership",
+        "Current authoring-specific allowlist; ordinary manager bundle alone is insufficient",
+        "No learner access; draft/receipt resolved by run and manager, never client owner claims"
+      ],
+      "idempotency_proposed": "N/A (safe method)",
+      "audit_on_success": "None by default; bounded authorization denials unchanged",
+      "transaction_owner": "N/A",
+      "transaction_participants": [],
+      "route_exposure": "ROUTED",
+      "grant_state": "REGISTERED",
+      "blocking_note": "Only this private synthetic demo scope is registered; production action and runtime proof remain separately gated.",
+      "contract_refs": [
+        "C14",
+        "C22",
+        "C23",
+        "C31",
+        "C41"
+      ],
+      "owning_domain": "Content",
+      "application_interface": "Content owner-query-boundary PreviewContentDraft",
+      "orchestration": null,
+      "policy_interfaces": [
+        "AuthorizationDecisionInterface"
+      ],
+      "ledger": null,
+      "definition_source": "domains/demo-authoring/proposal-0.1.0/authoring-operations.json"
+    },
+    {
+      "id": "PublishContentDraft",
+      "kind": "command",
+      "capability": "content.draft.publish",
+      "scope": "LOCATION",
+      "bundles": [
+        "manager"
+      ],
+      "actor_classes": [
+        "HumanActor"
+      ],
+      "target_resolution": "Exact live DEMO_ONLY run + manager identity and its immutable organization/location; foreign targets are non-disclosing. No real/customer authoring.",
+      "preconditions": [
+        "Database-current live run/session and fixed manager membership",
+        "Current authoring-specific allowlist; ordinary manager bundle alone is insufficient",
+        "No learner access; draft/receipt resolved by run and manager, never client owner claims"
+      ],
+      "idempotency_proposed": "CLIENT_SUPPLIED cross-operation key with exact payload and current-authority readback",
+      "audit_on_success": "PublishContentDraft \u2192 factual PublishContentPack action on ContentPack; not old automation command invocation; no new audit for no-op",
+      "transaction_owner": "Content",
+      "transaction_participants": [
+        "AuditLifecycle",
+        "TransactionControl"
+      ],
+      "route_exposure": "ROUTED",
+      "grant_state": "REGISTERED",
+      "blocking_note": "Only this private synthetic demo scope is registered; production action and runtime proof remain separately gated.",
+      "contract_refs": [
+        "C14",
+        "C22",
+        "C23",
+        "C31",
+        "C41"
+      ],
+      "owning_domain": "Content",
+      "application_interface": "Content application-command-boundary",
+      "orchestration": null,
+      "policy_interfaces": [
+        "AuthorizationDecisionInterface",
+        "AuditAppendInterface",
+        "AuthoringReceiptInterface"
+      ],
+      "ledger": {
+        "state": "BLOCKED",
+        "runtime_conformance": "UNKNOWN",
+        "missing_obligations": 4
+      },
+      "definition_source": "domains/demo-authoring/proposal-0.1.0/authoring-operations.json"
+    },
+    {
+      "id": "ReadAuthoringOperation",
+      "kind": "query",
+      "capability": "transaction.authoring.read",
+      "scope": "LOCATION",
+      "bundles": [
+        "manager"
+      ],
+      "actor_classes": [
+        "HumanActor"
+      ],
+      "target_resolution": "Exact live DEMO_ONLY run + manager identity and its immutable organization/location; foreign targets are non-disclosing. No real/customer authoring.",
+      "preconditions": [
+        "Database-current live run/session and fixed manager membership",
+        "Current authoring-specific allowlist; ordinary manager bundle alone is insufficient",
+        "No learner access; draft/receipt resolved by run and manager, never client owner claims"
+      ],
+      "idempotency_proposed": "N/A (safe method)",
+      "audit_on_success": "None by default; bounded authorization denials unchanged",
+      "transaction_owner": "N/A",
+      "transaction_participants": [],
+      "route_exposure": "ROUTED",
+      "grant_state": "REGISTERED",
+      "blocking_note": "Only this private synthetic demo scope is registered; production action and runtime proof remain separately gated.",
+      "contract_refs": [
+        "C14",
+        "C22",
+        "C23",
+        "C31",
+        "C41"
+      ],
+      "owning_domain": "TransactionControl",
+      "application_interface": "TransactionControl owner-query-boundary ReadAuthoringOperation",
+      "orchestration": null,
+      "policy_interfaces": [
+        "AuthorizationDecisionInterface"
+      ],
+      "ledger": null,
+      "definition_source": "domains/demo-authoring/proposal-0.1.0/authoring-operations.json"
     }
   ],
   "demo_runtime_registration": {
@@ -1812,7 +2035,12 @@
     "MANAGER": [
       "ListTeam",
       "ReadTeamMemberLearnerState",
-      "AssignContent"
+      "AssignContent",
+      "ReadAuthoringWorkspace",
+      "SaveContentDraft",
+      "PreviewContentDraft",
+      "PublishContentDraft",
+      "ReadAuthoringOperation"
     ],
     "default": "DENY even if an ordinary bundle contains the capability"
   },
@@ -1838,5 +2066,12 @@
     "authority": "contracts/c01-canonical-semantics-contract.md#exact-demo-capability-identifier-compatibility",
     "required_membership": "kernel/capabilities.json approved exact vocabulary",
     "shape": "baseline pattern OR exact capability_identifier_exceptions; no other alternative"
+  },
+  "demo_authoring_registration": {
+    "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+    "package_version": "0.1.0",
+    "approval_record": "domains/demo-authoring/owner-approval.json",
+    "impact_issue": null,
+    "registered_on": "2026-10-26"
   }
 }

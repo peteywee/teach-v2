@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { installAuthoringPredecessor } from './authoring-predecessor-fixture.mjs';
 // Negative-path tests for the teach-v2 validators.
 //
 // TESTING STANDARD (owner-directed 2026-10-04): every validator must have both
@@ -113,6 +114,10 @@ function scratch() {
   try {
     if (useArchive) execFileSync("tar", ["-xf", join(archiveDir, "source.tar"), "--no-same-owner", "--no-overwrite-dir", "-C", dir], { timeout: 5000 });
     else cpSync(ROOT, dir, { recursive: true, filter: includeFixture });
+    // Authenticate the complete newest source/SQL before running the unchanged
+    // historical 220 declarations against their exact released-kitchen inputs.
+    // Current authoring mutation/authority oracles run in a separate mandatory stage.
+    installAuthoringPredecessor(dir);
     return dir;
   } catch (error) {
     rmSync(dir, { recursive: true, force: true });

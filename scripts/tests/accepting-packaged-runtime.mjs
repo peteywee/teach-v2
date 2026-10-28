@@ -1,10 +1,10 @@
-import {MemoryDemoTransaction} from '../../tests/demo/memory-transaction.ts';
+import {MemoryAuthoringTransaction} from '../../tests/demo-authoring/harness.ts';
 import {exerciseAcceptingRuntime} from './accepting-runtime-flow.mjs';
-await exerciseAcceptingRuntime(process.argv[2],new MemoryDemoTransaction());
+await exerciseAcceptingRuntime(process.argv[2],new MemoryAuthoringTransaction());
 // Expiry boundary remains the existing database-clock rule, not a new scheduler.
 const {assembleHostedRuntime}=await import((await import('node:url')).pathToFileURL(process.argv[2]+'/src/bootstrap/demo-successor/runtime.js').href);
 const assert=(await import('node:assert/strict')).default;
-const db=new MemoryDemoTransaction(),origin='https://demo.example.test';
+const db=new MemoryAuthoringTransaction(),origin='https://demo.example.test';
 const {handle}=assembleHostedRuntime({origin,options:{}},db);
 const start=await handle(new Request(origin+'/api/v1/demo/start',{method:'POST',headers:{Host:'demo.example.test',Origin:origin,'Content-Type':'application/json'},body:'{}'}));assert.equal(start.status,201);
 const cookie=start.headers.get('set-cookie').split(';')[0];

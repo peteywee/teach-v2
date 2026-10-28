@@ -28,7 +28,7 @@ export function scanContractQuestions(root, readContract = path => readFileSync(
  }
  return {unresolved,resolved,sources};
 }
-export function deriveOwnerDecisionInventory(root,baselineCommit,readPhysicalSource=path=>readFileSync(join(root,path),'utf8'),readContract=path=>readFileSync(join(root,path),'utf8')) {
+export function deriveOwnerDecisionInventory(root,baselineCommit,readPhysicalSource=path=>readFileSync(join(root,path),'utf8'),readContract=path=>readFileSync(join(root,path),'utf8'),readSemanticSource=path=>readFileSync(join(root,path),'utf8')) {
  if(!/^[a-f0-9]{40}$/.test(baselineCommit))throw new Error('consulted V2 baseline SHA required');
  const questions=scanContractQuestions(root,readContract),sources={...questions.sources},physical=[];
  for(const [slice,lane] of [['P06','assignment'],['P07','certification'],['P08','progress-event']]){
@@ -37,7 +37,7 @@ export function deriveOwnerDecisionInventory(root,baselineCommit,readPhysicalSou
  }
  const semantic=[];
  for(const name of readdirSync(join(root,'kernel')).filter(x=>x.endsWith('.json')).sort()){
-  const path=`kernel/${name}`,text=readFileSync(join(root,path),'utf8'),record=JSON.parse(text);if(!Array.isArray(record.entries))continue;sources[path]=digest(text);
+  const path=`kernel/${name}`,text=readSemanticSource(path),record=JSON.parse(text);if(!Array.isArray(record.entries))continue;sources[path]=digest(text);
   for(const entry of record.entries.filter(x=>x.status==='candidate'))semantic.push({registry:path,id:entry.id,owner:entry.owning_domain??null,status:'candidate'});
  }
  return {version:'0.1.0',scope:'all unresolved active-contract question rows, future physical-shape questions, and candidate promotion inventory; no owner approval',consulted_v2_baseline:baselineCommit,

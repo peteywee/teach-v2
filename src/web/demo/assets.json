@@ -33,5 +33,30 @@
     "path": "/assets/wire-contract.mjs",
     "file": "wire-contract.mjs",
     "contentType": "text/javascript; charset=utf-8"
+  },
+  {
+    "path": "/assets/authoring-api.mjs",
+    "file": "authoring-api.mjs",
+    "contentType": "text/javascript; charset=utf-8"
+  },
+  {
+    "path": "/assets/authoring-wire.mjs",
+    "file": "authoring-wire.mjs",
+    "contentType": "text/javascript; charset=utf-8"
+  },
+  {
+    "path": "/assets/authoring-model.mjs",
+    "file": "authoring-model.mjs",
+    "contentType": "text/javascript; charset=utf-8"
+  },
+  {
+    "path": "/assets/authoring-views.mjs",
+    "file": "authoring-views.mjs",
+    "contentType": "text/javascript; charset=utf-8"
+  },
+  {
+    "path": "/assets/authoring-controller.mjs",
+    "file": "authoring-controller.mjs",
+    "contentType": "text/javascript; charset=utf-8"
   }
 ]

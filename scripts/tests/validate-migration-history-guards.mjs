@@ -9,6 +9,7 @@ import { inspectMigrationHistory } from '../packaging/migration-history-guards.m
 import { inspectLearningImplementation } from '../persistence/learning-implementation-evidence.mjs';
 import { exactCurrentDenial } from '../verification/demo-validator-predecessor.mjs';
 import { withKitchenPredecessor } from './kitchen-predecessor-fixture.mjs';
+import { installAuthoringPredecessor } from './authoring-predecessor-fixture.mjs';
 
 const ROOT = resolve(new URL('.', import.meta.url).pathname, '../..');
 const json = (dir, path) => JSON.parse(readFileSync(join(dir, path), 'utf8'));
@@ -65,6 +66,7 @@ function check(name, mutate, pattern = null, structuralOnly = false) {
   const dir = mkdtempSync(join(tmpdir(), 'migration-guard-'));
   try {
     cpSync(ROOT, dir, { recursive: true, filter: (src) => !/(?:^|\/)\.git(?:\/|$)|(?:^|\/)node_modules(?:\/|$)/.test(src) });
+    installAuthoringPredecessor(dir);
     const originalAssertions = () => {
     mutate(dir);
     if (pairedSealDenials.has(name)) {

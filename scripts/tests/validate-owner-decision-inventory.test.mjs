@@ -12,3 +12,20 @@ test('new unresolved question is included even when text contains unresolved',()
 test('duplicate question fails closed',()=>fixture(dir=>{mutate(dir,s=>s.replace('## 7.', '| OQ-SYS-1 | Duplicate | Yes | SYS-4 |\n\n## 7.'));assert.throws(()=>scanContractQuestions(dir),/duplicate question/);}));
 test('unknown table schema fails closed',()=>fixture(dir=>{mutate(dir,s=>s.replace('Blocks implementation','Unreviewed blocking'));assert.throws(()=>scanContractQuestions(dir),/unknown question table schema/);}));
 test('unknown blocking state fails closed',()=>fixture(dir=>{mutate(dir,s=>s.replace(/(\| OQ-SYS-1 \|[^\n]*?\| )No(?: \(resolved\))?( +\|)/,'$1Maybe$2'));assert.throws(()=>scanContractQuestions(dir),/unknown implementation-blocking state/);}));
+
+// Exercise the actual admission-owning CLI, not a caller-supplied proof object.
+import { spawnSync } from 'node:child_process';
+import { authoringSourceFixture } from './authoring-source-fixture.mjs';
+test('historical owner inventory authenticates current authoring bytes before finite projection', () => {
+ const dir=authoringSourceFixture(root,'owner-authoring-projection-');
+ const run=()=>spawnSync(process.execPath,['scripts/verification/validate-legacy-foundation-recovery.mjs'],{cwd:dir,encoding:'utf8',timeout:5000});
+ try {
+  let result=run();assert.equal(result.status,0,result.stdout+result.stderr);
+  for(const path of ['kernel/entities.json','contracts/c31-content-teaching-engine-contract.md']) {
+   const full=join(dir,path),bytes=readFileSync(full,'utf8');
+   try {writeFileSync(full,bytes+'\n');result=run();assert.notEqual(result.status,0);assert.equal(result.signal,null);}
+   finally{writeFileSync(full,bytes);}
+  }
+  result=run();assert.equal(result.status,0,result.stdout+result.stderr);
+ } finally {rmSync(dir,{recursive:true,force:true});}
+});

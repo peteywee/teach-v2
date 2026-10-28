@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-PROP-DCS-07",
   "class": "specification",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-05",
-  "updated_on": "2026-10-19",
+  "updated_on": "2026-10-28",
   "baseline": {
     "repo": "peteywee/teach-v2",
     "ref": "main",
@@ -42,16 +42,17 @@
   ],
   "approval": {
     "state": "approved",
-    "approved_version": "3.0.0",
-    "approved_on": "2026-10-19",
-    "record": "docs/proposals/demo-recovery-exception/owner-adoption.json",
-    "basis": "Owner approved adoption of the reviewed first additive synthetic demo recovery exception and corresponding PR; actual recovery and live actions remain separately gated."
+    "approved_version": "4.0.0",
+    "approved_on": "2026-10-28",
+    "record": "docs/proposals/demo-authoring-recovery-exception/owner-adoption.json",
+    "basis": "Owner approved preparing and adopting one authoring migration exception conditional on fresh encrypted backup and successful PostgreSQL restore/preservation proof; no future waiver or paid service."
   },
   "supersedes": [
     "TEACH-PROP-DCS-07@0.3.0",
     "TEACH-PROP-DCS-07@1.0.0",
     "TEACH-PROP-DCS-07@1.1.0",
-    "TEACH-PROP-DCS-07@2.0.0"
+    "TEACH-PROP-DCS-07@2.0.0",
+    "TEACH-PROP-DCS-07@3.0.0"
   ],
   "approval_history": [
     {
@@ -72,7 +73,7 @@
     "deployment_authority": false,
     "spending_authority": false
   },
-  "effective_on": "2026-10-19",
+  "effective_on": "2026-10-28",
   "demo_recovery_exception_registration": {
     "registration": "docs/proposals/demo-recovery-exception/adoption-registration.json",
     "owner_decision": "docs/proposals/demo-recovery-exception/owner-adoption.json",
@@ -82,6 +83,13 @@
     "runtime_activation": false,
     "deployment_authority": false,
     "spending_authority": false
+  },
+  "superseded_by": null,
+  "authoring_recovery_exception_registration": {
+    "id": "TEACH-DEMO-AUTHORING-RECOVERY-2026-10-28",
+    "record": "docs/proposals/demo-authoring-recovery-exception/adoption-registration.json",
+    "scope": "ONE_EXACT_AUTHORING_MIGRATION_POLICY_ONLY",
+    "actual_recovery_evidence": "UNKNOWN"
   }
 }
 -->
@@ -179,7 +187,7 @@ Evidence is bound to the exact candidate, Supabase project, database and schema,
 | HTTP probes | Publishable/anon and authenticated requests, explicit demo schema/profile requests, table endpoints and applicable RPC paths are denied with attributable API authorization/schema errors. Network failure, missing credential, generic 404 or unexplained non-200 alone is not proof. |
 | Legacy inventory/settings/journal before and after | Legacy schema, rows, grants, defaults, triggers, functions, exposed schemas and journal remain unchanged; only separately inventoried demo objects differ. |
 
-Missing, unreadable, stale or contradictory project-specific evidence blocks promotion. Provider defaults, announced changes, project age and successful local tests never substitute for target readback. MIG-9/MIG-10 still require the fresh post-freeze named restore point and current isolated restore proof, with only C21 §4.1 permitting its exact application recovery set for the first additive synthetic installation; §8 still requires manual exact-candidate owner approval. The design and unresolved live gates are in `governance/demo-schema-isolation/design.md`.
+Missing, unreadable, stale or contradictory project-specific evidence blocks promotion. Provider defaults, announced changes, project age and successful local tests never substitute for target readback. MIG-9/MIG-10 still require the fresh post-freeze named restore point and current isolated restore proof, with only C21 §4.1 (first installation) or §4.2 (exact authoring migration) permitting its individually bound application recovery set; §8 still requires manual exact-candidate owner approval. The design and unresolved live gates are in `governance/demo-schema-isolation/design.md`.
 
 ## 6. OQ-AUD-2 and OQ-AUD-3 — audit history and denial records
 
@@ -224,9 +232,9 @@ Dependency: step 7 needs a smoke organization, which needs tenant bootstrap — 
 Owner-supplied: manual, owner-approved, exact candidate. Procedure:
 
 1. Candidate frozen; MIG-6 (empty-DB replay) and MIG-7 (apply to a copy of current production schema) PROVEN on the candidate SHA.
-2. Fresh named restore point captured after the candidate is frozen (MIG-9); restore proof ≤ 30 days old (MIG-10). Only C21 §4.1 permits the exact candidate-bound encrypted application recovery set and actual PG17 restore/preservation rehearsal instead. All eight normative procedure steps in docs/proposals/demo-recovery-exception/proposal.md MUST pass; missing/unknown coverage blocks. This is not platform disaster recovery or an ongoing production policy.
-3. Owner records approval naming candidate SHA, migration IDs/hashes and restore point (or exact C21 §4.1 recovery set solely inside that exception). Preparation approval is not capture, credential, live apply or deployment authority.
-4. Operator runs `pnpm db:migrate` against production with the release credential; output stored as evidence. For the sole C21 §4.1 exception, use the separately reviewed isolated-schema additive lineage/apply procedure instead, never the public-schema legacy runner. Recheck target, absent namespace/prior apply and no unapproved role collision; any provisioned creator/runtime identities and effective privileges must match separately approved provisioning and unchanged preservation inventory immediately before manual apply. No CI production credential or automatic apply is permitted.
+2. Fresh named restore point captured after the candidate is frozen (MIG-9); restore proof ≤ 30 days old (MIG-10). Only C21 §4.1 or §4.2 permits its exact candidate-bound encrypted application recovery set and actual PG17 restore/preservation rehearsal instead. For §4.1, all eight normative procedure steps in docs/proposals/demo-recovery-exception/proposal.md MUST pass; for §4.2, every requirement in C21 §4.2 and docs/proposals/demo-authoring-recovery-exception/adoption.md MUST pass; missing/unknown coverage blocks. This is not platform disaster recovery or an ongoing production policy.
+3. Owner records approval naming candidate SHA, migration IDs/hashes and restore point (or exact C21 §4.1/§4.2 recovery set solely inside its respective exception). Preparation approval is not capture, credential, live apply or deployment authority.
+4. Operator runs `pnpm db:migrate` against production with the release credential; output stored as evidence. For the individually bounded C21 §4.1 or §4.2 exception, use the separately reviewed isolated-schema additive lineage/apply procedure instead, never the public-schema legacy runner. Recheck exact target and prior apply; §4.1 requires absent namespace while §4.2 requires the exact existing eight-migration prefix and unchanged approved creator/runtime boundaries; any provisioned creator/runtime identities and effective privileges must match separately approved provisioning and unchanged preservation inventory immediately before manual apply. No CI production credential or automatic apply is permitted.
 5. Post-apply readback: migration journal head equals candidate; MIG-14 drift check = 0.
 6. CI holds no production database credential; a workflow that can reach production fails review.
 
@@ -287,3 +295,8 @@ Exact owner approval: `domains/demo-runtime/owner-approval.json`; immutable gove
 ## 15. Proposed bounded recovery revision
 
 Version 3.0.0 is adopted as policy only; actual recovery evidence remains UNKNOWN. Only C21 §4.1 changes the recovery alternative for the exact first additive synthetic installation. See docs/proposals/demo-recovery-exception/proposal.md; no other policy, evidence or live authority is changed.
+
+
+## 16. One authoring migration recovery successor — 2026-10-28
+
+Version4.0.0 adds only C21 §4.2 for isolated0008 SHA256 `6c6e568354e95cb5012e369dca6a3f0c9a3c2d72ac49d05127d1b77f3ba941ab` in t34ch `acqafjkdkdmtpnsxiesw` / `teach_v2_demo`. Actual recovery qualification is UNKNOWN/BLOCKED. A fresh post-freeze dependency-closed encrypted snapshot, verified owner-only retention, supported separately approved key access, retained-only actual PostgreSQL17 restore and exact candidate upgrade/preservation proof are mandatory. Missing coverage blocks; synthetic rehearsal and the consumed first-install exception cannot substitute. No recurring recovery waiver, paid service, export, credential or production authority is granted by policy registration.

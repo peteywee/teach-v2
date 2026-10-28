@@ -1,3 +1,5 @@
+import { authoringSourceFixture } from './authoring-source-fixture.mjs';
+import { installAuthoringPredecessor } from './authoring-predecessor-fixture.mjs';
 import { withKitchenPredecessor } from './kitchen-predecessor-fixture.mjs';
 import assert from 'node:assert/strict';
 import { after, test } from 'node:test';
@@ -15,9 +17,9 @@ import {
 } from '../persistence/demo-recipes-physical-successor.mjs';
 
 const root = resolve(new URL('../..', import.meta.url).pathname);
-const fixture = mkdtempSync(join(tmpdir(), 'teach-recipe-physical-'));
-for (const path of ['docs', '.github', 'domains', 'contracts', 'kernel', 'persistence', 'drizzle','drizzle-isolated', 'governance', 'verification', 'scripts', 'src', 'tests']) cpSync(join(root, path), join(fixture, path), { recursive: true });
+const fixture = authoringSourceFixture(root, 'teach-recipe-physical-');
 for (const path of DEMO_RECIPE_REVIEWED_SOURCE_PATHS) { mkdirSync(join(fixture, path, '..'), { recursive: true }); cpSync(join(root, path), join(fixture, path)); }
+installAuthoringPredecessor(fixture);
 after(() => rmSync(fixture, { recursive: true, force: true }));
 const raw = path => readFileSync(join(fixture, path), 'utf8');
 const json = path => JSON.parse(raw(path));

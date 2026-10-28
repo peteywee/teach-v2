@@ -149,13 +149,28 @@ jobs:
       - name: Audit demo-recipe-postgres
         id: audit_demo_recipe_postgres
         run: node scripts/verification/run-self-audit.mjs --stage demo-recipe-postgres
+      - name: Audit demo-authoring-admission
+        id: audit_demo_authoring_admission
+        run: node scripts/verification/run-self-audit.mjs --stage demo-authoring-admission
+      - name: Audit demo-authoring-source-tests
+        id: audit_demo_authoring_source_tests
+        run: node scripts/verification/run-self-audit.mjs --stage demo-authoring-source-tests
+      - name: Audit demo-authoring-generation
+        id: audit_demo_authoring_generation
+        run: node scripts/verification/run-self-audit.mjs --stage demo-authoring-generation
       - name: Start owned loopback PostgreSQL for kitchen proof
         id: kitchen_postgres_start
         run: timeout 25s node scripts/verification/kitchen-loopback-postgres.mjs start
       - name: Audit demo-kitchen-postgres
         id: audit_demo_kitchen_postgres
         run: node scripts/verification/run-self-audit.mjs --stage demo-kitchen-postgres
-      - name: Remove kitchen fixture and restore service target
+      - name: Audit demo-authoring-postgres
+        id: audit_demo_authoring_postgres
+        run: node scripts/verification/run-self-audit.mjs --stage demo-authoring-postgres
+      - name: Audit demo-authoring-isolated-history
+        id: audit_demo_authoring_isolated_history
+        run: node scripts/verification/run-self-audit.mjs --stage demo-authoring-isolated-history
+      - name: Remove kitchen and authoring fixture and restore service target
         id: kitchen_postgres_stop
         if: always()
         run: timeout 25s node scripts/verification/kitchen-loopback-postgres.mjs stop

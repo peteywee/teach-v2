@@ -1,3 +1,4 @@
+import { installAuthoringPredecessor } from './authoring-predecessor-fixture.mjs';
 import { RECOVERY_BASE, RECOVERY_ARCHIVES } from '../kernel/demo-recovery-registration.mjs';
 import assert from 'node:assert/strict';
 import { after, test } from 'node:test';
@@ -11,6 +12,7 @@ import { withKitchenPredecessor } from './kitchen-predecessor-fixture.mjs';
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const fixture = mkdtempSync(join(tmpdir(), 'teach-recipe-registration-'));
 for (const name of ['docs', 'scripts', '.github', 'verification', 'kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle', 'drizzle-isolated', 'src', 'tests']) cpSync(join(root, name), join(fixture, name), { recursive: true });
+installAuthoringPredecessor(fixture);
 after(() => rmSync(fixture, { recursive: true, force: true }));
 const raw = path => readFileSync(join(fixture, path), 'utf8');
 const json = path => JSON.parse(raw(path));

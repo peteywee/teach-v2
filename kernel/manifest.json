@@ -1,11 +1,11 @@
 {
   "kernel_id": "TEACH-K00",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "status": "active",
   "canonical_format": "json",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-17",
+  "updated_on": "2026-10-26",
   "governed_by": [
     "TEACH-CON-C00",
     "TEACH-CON-C01"
@@ -973,5 +973,12 @@
     "runtime_activation_authorized": false,
     "physical_admission_performed": false,
     "record": "domains/demo-runtime/registration.json"
+  },
+  "demo_authoring_registration": {
+    "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+    "package_version": "0.1.0",
+    "approval_record": "domains/demo-authoring/owner-approval.json",
+    "impact_issue": null,
+    "registered_on": "2026-10-26"
   }
 }

@@ -1,3 +1,5 @@
+import { inspectSourceInScope } from '../verification/source-inspection-scope.mjs';
+import { inspectAuthoringPhysicalSuccessor, AUTHORING_STORAGE_PATHS } from './demo-authoring-physical-successor.mjs';
 import { inspectKitchenPhysicalSuccessor } from './demo-kitchen-physical-successor.mjs';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -43,16 +45,20 @@ const physicalHistoricalPaths = new Set([
 
 // Structural evidence only. Neither this function nor the historical projection
 // turns authoring admission, recorded claims, or source inspection into runtime PASS.
-export function inspectDemoStorageEvidence(root) {
+export function inspectDemoStorageEvidence(root) { return inspectSourceInScope('storage', root); }
+// Internal finite dispatcher entry. Direct invocation establishes no shared scope.
+export function inspectDemoStorageEvidenceUncached(root) {
   const registration = inspectDemoRuntimeRegistration(root);
   const recipePhysicalSuccessor = inspectDemoRecipePhysicalSuccessor(root);
-  const errors = [...registration.errors, ...recipePhysicalSuccessor.errors];
+  const authoringPhysicalSuccessor = inspectAuthoringPhysicalSuccessor(root);
+  const errors = [...registration.errors, ...recipePhysicalSuccessor.errors, ...authoringPhysicalSuccessor.errors];
+  const currentPhysicalFiles = new Set([...allowedPhysicalFiles, ...(authoringPhysicalSuccessor.admitted ? AUTHORING_STORAGE_PATHS : [])]);
   const fail = message => errors.push(`demo owner storage: ${message}`);
-  const text = path => { try { return readFileSync(join(root, path), 'utf8'); } catch (error) { fail(`${path}: ${error.message}`); return ''; } };
+  const text = path => { try { return path.startsWith('src/') && Object.hasOwn(authoringPhysicalSuccessor.predecessorFiles, path) ? authoringPhysicalSuccessor.predecessorFiles[path] : readFileSync(join(root, path), 'utf8'); } catch (error) { fail(`${path}: ${error.message}`); return ''; } };
   const load = path => { try { return JSON.parse(text(path)); } catch (error) { fail(`${path}: ${error.message}`); return null; } };
   const readiness = load('persistence/physical-slices/readiness.json');
   const extended = Boolean(readiness?.demo_physical_successor || existsSync(join(root, `${lane}/physical-successor.json`)) || existsSync(join(root, 'src/bootstrap/demo/demo-persistence-schema.ts')));
-  if (!extended) return { errors, extended, registration, recipePhysicalSuccessor };
+  if (!extended) return { errors, extended, registration, recipePhysicalSuccessor, authoringPhysicalSuccessor };
   if (!existsSync(join(root, `${lane}/physical-successor.json`))) fail('independently reviewed exact physical successor required');
   if (registration.physicalSuccessor?.present !== true || registration.physicalSuccessor.errors?.length || !isDeepStrictEqual([...(registration.physicalSuccessor?.revisedPaths ?? [])].sort(), [...physicalHistoricalPaths].sort())) fail('exact independently verified nine-path physical successor required');
   const admission = inspectDemoPhysicalPrerequisites(root, registration);
@@ -71,7 +77,7 @@ export function inspectDemoStorageEvidence(root) {
   equal(Object.keys(latest?.tables ?? {}).sort(), expectedTables, 'exact prior eight plus fourteen owner tables required');
   if (expectedTables.length !== 22) fail('exact 22-table current schema required');
   const kitchenPhysicalSuccessor = inspectKitchenPhysicalSuccessor(root); errors.push(...kitchenPhysicalSuccessor.errors);
-  const migrationCount = kitchenPhysicalSuccessor.admitted && recipePhysicalSuccessor.admitted ? 8 : recipePhysicalSuccessor.admitted ? 7 : 6;
+  const migrationCount = authoringPhysicalSuccessor.admitted ? 9 : kitchenPhysicalSuccessor.admitted && recipePhysicalSuccessor.admitted ? 8 : recipePhysicalSuccessor.admitted ? 7 : 6;
   if (journal?.entries?.length !== migrationCount || journal?.entries?.[5]?.idx !== 5 || journal?.entries?.[5]?.tag !== '0005_demo_runtime_owner_storage') fail('exact historical history or independently reviewed recipe/kitchen guard successor required');
   errors.push(...inspectMigrationHistory(root));
   const migration = text('drizzle/0005_demo_runtime_owner_storage.sql');
@@ -91,10 +97,10 @@ export function inspectDemoStorageEvidence(root) {
     const files = walk('src/modules').filter(path => /\.(?:ts|js|mjs|mts)$/.test(path) && !path.endsWith('.test.ts'));
     for (const path of files) {
       const body = text(path);
-      if (path.includes('/infrastructure/persistence/') && !allowedPhysicalFiles.has(path)) fail(`unadmitted physical adapter or source: ${path}`);
-      if (!allowedPhysicalFiles.has(path) && /\bpgTable\s*\(|\bclass\s+Postgres\w*/.test(body)) fail(`unadmitted physical implementation: ${path}`);
+      if (path.includes('/infrastructure/persistence/') && !currentPhysicalFiles.has(path)) fail(`unadmitted physical adapter or source: ${path}`);
+      if (!currentPhysicalFiles.has(path) && /\bpgTable\s*\(|\bclass\s+Postgres\w*/.test(body)) fail(`unadmitted physical implementation: ${path}`);
     }
-    for (const path of allowedPhysicalFiles) if (!files.includes(path)) fail(`missing admitted physical source: ${path}`);
+    for (const path of currentPhysicalFiles) if (!files.includes(path)) fail(`missing admitted physical source: ${path}`);
     const tableOwners = new Map((mapping?.tables ?? []).map(table => [table.table, ownerModules[table.owner]]));
     for (const name of Object.keys(prior?.tables ?? {})) {
       const table = name.slice('public.'.length);
@@ -150,7 +156,7 @@ export function inspectDemoStorageEvidence(root) {
   const p07 = load('persistence/physical-slices/certification/admission.json');
   if (p07?.decision !== 'BLOCK' || p07?.implementation_authorized !== false) fail('P07 must remain BLOCK');
   } catch (error) { fail(`malformed current storage evidence: ${error.message}`); }
-  return { errors, extended, registration, recipePhysicalSuccessor };
+  return { errors, extended, registration, recipePhysicalSuccessor, authoringPhysicalSuccessor };
 }
 
 export function createPersistenceEvidenceContext(root) {

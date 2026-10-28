@@ -1,3 +1,4 @@
+import { authoringStages } from './authoring-stage-catalog.mjs';
 import { STORAGE_OWNER_PATTERN, STORAGE_INTEGRATION_PATTERN } from './demo-storage-partitions.mjs';
 import {REGISTRATION_ENTRY_PATTERN,REGISTRATION_REMAINDER_PATTERN} from './validator-partitions.mjs';
 // Development verification commands only. This is not a product rules engine,
@@ -37,7 +38,9 @@ export const stageCatalog = Object.freeze([
   ['demo-generation', 'node', ['scripts/db/verify-demo-generation.mjs']],
   ['demo-postgres', 'node', ['--import', 'tsx', 'scripts/db/run-demo-integration.ts']],
   ['demo-recipe-postgres', 'node', ['--import', 'tsx', 'scripts/db/run-demo-recipe-integration.ts']],
+  ...authoringStages.slice(0, 3),
   ['demo-kitchen-postgres', 'node', ['--import', 'tsx', 'scripts/db/run-demo-kitchen-integration.ts']],
+  ...authoringStages.slice(3),
   ['typecheck', 'pnpm', ['typecheck']],
   ['foundation', 'pnpm', ['exec', 'node', '--import', 'tsx', '--test']],
   ['drizzle-history', 'pnpm', ['exec', 'drizzle-kit', 'check']],

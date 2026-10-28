@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "owner_domain": "Content",
+  "actor": "HumanActor",
+  "required_persona": "MANAGER",
+  "scope": "authenticated demo run + organization + location + manager identity",
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/authoring/workspace",
+      "operation": "ReadAuthoringWorkspace",
+      "success_status": 200,
+      "capability": "content.draft.read",
+      "kind": "query",
+      "owner_module": "Content",
+      "audit_action": null,
+      "audit_target": null,
+      "receipt_operation": null
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/authoring/draft",
+      "operation": "SaveContentDraft",
+      "success_status": 200,
+      "capability": "content.draft.write",
+      "kind": "command",
+      "owner_module": "Content",
+      "audit_action": "SaveContentDraft",
+      "audit_target": "ContentDraft",
+      "receipt_operation": "SaveContentDraft"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/authoring/draft/preview",
+      "operation": "PreviewContentDraft",
+      "success_status": 200,
+      "capability": "content.draft.preview",
+      "kind": "query",
+      "owner_module": "Content",
+      "audit_action": null,
+      "audit_target": null,
+      "receipt_operation": null
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/authoring/draft/publish",
+      "operation": "PublishContentDraft",
+      "success_status": 200,
+      "capability": "content.draft.publish",
+      "kind": "command",
+      "owner_module": "Content",
+      "audit_action": "PublishContentPack",
+      "audit_target": "ContentPack",
+      "receipt_operation": "PublishContentDraft"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/authoring/operations/{key}",
+      "operation": "ReadAuthoringOperation",
+      "success_status": 200,
+      "capability": "transaction.authoring.read",
+      "kind": "query",
+      "owner_module": "TransactionControl",
+      "audit_action": null,
+      "audit_target": null,
+      "receipt_operation": null
+    }
+  ],
+  "tables": [
+    {
+      "name": "content_authoring_drafts",
+      "owner": "Content",
+      "runtime_privileges": [
+        "SELECT",
+        "INSERT",
+        "UPDATE"
+      ],
+      "delete": false
+    },
+    {
+      "name": "content_authoring_receipts",
+      "owner": "TransactionControl",
+      "runtime_privileges": [
+        "SELECT",
+        "INSERT"
+      ],
+      "delete": false
+    }
+  ],
+  "query_rules": {
+    "PreviewContentDraft": {
+      "revision": "integer 1..100, required"
+    },
+    "ReadAuthoringOperation": {
+      "operation": [
+        "SaveContentDraft",
+        "PublishContentDraft"
+      ]
+    }
+  },
+  "limits": {
+    "saves": 100,
+    "publications": 10,
+    "receiptKeys": 256,
+    "bodyBytes": 65536,
+    "catalogBytes": 49152,
+    "responseBytes": 262144
+  },
+  "legacy_operations_unchanged": true,
+  "automation_impersonation": false,
+  "publication_assigns_automatically": false
+}

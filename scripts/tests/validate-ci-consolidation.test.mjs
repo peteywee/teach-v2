@@ -1,3 +1,6 @@
+import { inspectAuthoringEngineering } from '../verification/demo-authoring-engineering.mjs';
+import { authoringStages } from '../verification/authoring-stage-catalog.mjs';
+import { createAuthoringPredecessorCopy } from './authoring-proof-copy.mjs';
 import {VALIDATOR_PARTITION_COUNT,validatorPartitionOrdinals,validatorPartitionForOrdinal,assertValidatorInventory,WHOLE_REPOSITORY_CONTROLS,REBALANCED_VALIDATOR_CASES,REGISTRATION_TEST_NAMES,REGISTRATION_ENTRY_PATTERN,REGISTRATION_REMAINDER_PATTERN} from '../verification/validator-partitions.mjs';
 import assert from 'node:assert/strict';
 import { after, test } from 'node:test';
@@ -419,6 +422,7 @@ const STORAGE_STAGES = [
 ];
 const currentAdditions = [...additions.map(([id,command,args])=>[id,command,id==='demo-source-tests'?args.filter(arg=>arg!=='scripts/tests/demo-storage-evidence.mjs').flatMap(arg=>arg==='tests/demo/recipe-content.test.ts'?[arg,...KITCHEN_SOURCE_TESTS]:[arg]):args]),...KITCHEN_STAGES,...STORAGE_STAGES];
 const CURRENT_VALIDATORS = [...BASELINE_VALIDATORS,'scripts/kernel/validate-capability-admission.mjs','scripts/kernel/validate-demo-runtime-registration.mjs','scripts/persistence/validate-demo-physical-admission.mjs','scripts/kernel/validate-demo-recipes-registration.mjs','scripts/persistence/validate-demo-recipes-physical-admission.mjs','scripts/kernel/validate-demo-kitchen-registration.mjs'];
+const LIVE_VALIDATORS = [...CURRENT_VALIDATORS,'scripts/kernel/validate-demo-authoring-registration.mjs'];
 const AUDIT_RUNNER_TEST = 'scripts/tests/validate-whole-audit-runner.test.mjs';
 test('all 24 baseline obligations retain their identities, argv, discovery and bounds', () => {
   const predecessor=JSON.parse(kitchenPredecessor('verification/whole-repository/self-audit-plan.json'));
@@ -434,9 +438,13 @@ test('all 24 baseline obligations retain their identities, argv, discovery and b
   }
   assert.equal(predecessor.stages.length, 48);
   assert.equal(new Set(predecessor.stages.map(x => x.id)).size, 48);
-  assert.equal(expectedPlan.stages.length, 52);
-  assert.equal(new Set(expectedPlan.stages.map(x => x.id)).size, 52);
-  assert.deepEqual(expectedPlan.stages.map(x=>x.id).sort(),[...predecessor.stages.map(x=>x.id),...KITCHEN_STAGES.map(([id])=>id),...STORAGE_STAGES.map(([id])=>id)].sort());
+  const authoring=inspectAuthoringEngineering(ROOT);assert.equal(authoring.present,true);assert.deepEqual(authoring.errors,[]);
+  const previousPlan=JSON.parse(authoring.predecessorFiles['verification/whole-repository/self-audit-plan.json']);
+  assert.equal(previousPlan.stages.length, 52);
+  assert.equal(new Set(previousPlan.stages.map(x => x.id)).size, 52);
+  assert.deepEqual(previousPlan.stages.map(x=>x.id).sort(),[...predecessor.stages.map(x=>x.id),...KITCHEN_STAGES.map(([id])=>id),...STORAGE_STAGES.map(([id])=>id)].sort());
+  assert.equal(expectedPlan.stages.length,57);
+  assert.deepEqual(expectedPlan.stages.filter(row=>!authoringStages.some(([id])=>row.id===id)),previousPlan.stages);
   assert.deepEqual(JSON.parse(read('verification/whole-repository/self-audit-plan.json')), expectedPlan);
   assert.equal(expectedPlan.shell_execution, false);
   assert.equal(expectedPlan.max_operation_ms, 25000);
@@ -596,7 +604,7 @@ test('all 53 baseline validators remain in the live umbrella discovery domain', 
   assert.equal(BASELINE_VALIDATORS.length, 53);
   for (const path of BASELINE_VALIDATORS) assert.ok(live.includes(path), path);
   assert.equal(CURRENT_VALIDATORS.length,59);
-  assert.deepEqual(live.sort(), CURRENT_VALIDATORS.slice().sort());
+  assert.deepEqual(live.sort(), LIVE_VALIDATORS.slice().sort());
 });
 test('all 13 foundation files and seven PostgreSQL suite bodies retain actual assertions', () => {
   const foundation = Object.keys(UNCHANGED_PROOF_FILES).filter(path => path.startsWith('src/modules/'));
@@ -624,7 +632,7 @@ function auditEvidence() {
   return { source, context, tests, planHash, reports };
 }
 const evaluate = f => evaluateAuditReports(expectedPlan, f.reports, f.source, f.planHash, f.tests, f.context);
-test('complete 52-stage source-bound evidence reconciles', () => assert.deepEqual(evaluate(auditEvidence()), []));
+test('complete 57-stage source-bound evidence reconciles', () => assert.deepEqual(evaluate(auditEvidence()), []));
 for (const [id] of currentAdditions) {
   for (const state of ['missing', 'BLOCKED', 'UNKNOWN', 'SKIPPED']) test(`${id} ${state} cannot disappear into a green aggregate`, () => {
     const f = auditEvidence();
@@ -663,7 +671,8 @@ function gitFixture({ realValidator = false } = {}) {
   write('.gitignore', 'verification/generated/\n');
   write('verification/whole-repository/self-audit-plan.json', JSON.stringify(expectedPlan, null, 2) + '\n');
   write('src/modules/example/domain/a.test.ts', '// fixture inventory\n');
-  if (realValidator) for (const path of ['scripts/kernel/demo-kitchen-registration.mjs','scripts/verification/demo-kitchen-engineering.mjs','scripts/kernel/demo-recovery-registration.mjs','scripts/kernel/demo-schema-isolation-registration.mjs','scripts/kernel/demo-recipes-registration.mjs','scripts/kernel/demo-runtime-registration.mjs','scripts/kernel/semantic-dependency-closure.mjs','scripts/kernel/demo-physical-successor.mjs','scripts/persistence/demo-admission-evidence.mjs','scripts/persistence/admission-criteria.mjs']) write(path, read(path));
+  // Exact imported source closure; fixture documents remain the only governed input.
+  if (realValidator) for (const path of ['scripts/architecture/command-coverage-evidence.mjs', 'scripts/architecture/repository-integration-evidence.mjs', 'scripts/db/compile-isolated-schema.mjs', 'scripts/kernel/authoring-source-reader.mjs', 'scripts/kernel/demo-authoring-recovery-registration.mjs', 'scripts/kernel/demo-authoring-registration.mjs', 'scripts/kernel/demo-kitchen-registration.mjs', 'scripts/kernel/demo-physical-successor.mjs', 'scripts/kernel/demo-recipes-registration.mjs', 'scripts/kernel/demo-recovery-registration.mjs', 'scripts/kernel/demo-runtime-registration.mjs', 'scripts/kernel/demo-schema-isolation-registration.mjs', 'scripts/kernel/semantic-dependency-closure.mjs', 'scripts/packaging/migration-history-guards.mjs', 'scripts/persistence/admission-criteria.mjs', 'scripts/persistence/assignment-admission-evidence.mjs', 'scripts/persistence/demo-admission-evidence.mjs', 'scripts/persistence/demo-authoring-physical-successor.mjs', 'scripts/persistence/demo-kitchen-physical-successor.mjs', 'scripts/persistence/demo-recipes-physical-successor.mjs', 'scripts/persistence/demo-storage-evidence.mjs', 'scripts/persistence/future-admission-evidence.mjs', 'scripts/verification/authoring-stage-catalog.mjs', 'scripts/verification/consolidated-ci-evidence.mjs', 'scripts/verification/demo-authoring-engineering.mjs', 'scripts/verification/demo-kitchen-engineering.mjs', 'scripts/verification/demo-schema-isolation-engineering.mjs', 'scripts/verification/demo-storage-partitions.mjs', 'scripts/verification/self-audit-catalog.mjs', 'scripts/verification/self-audit-workflow.mjs', 'scripts/verification/source-inspection-scope.mjs', 'scripts/verification/validate-workflow-lifecycle.mjs', 'scripts/verification/validator-partitions.mjs', 'scripts/verification/workflow-lifecycle-inventory.mjs', 'scripts/verification/workflow-lifecycle.mjs']) write(path, read(path));
   write('scripts/docs/validate-document-metadata.mjs', realValidator ? read('scripts/docs/validate-document-metadata.mjs') : `import {readFileSync,writeFileSync,existsSync} from 'node:fs';\nconst p='verification/generated/control.json';const c=existsSync(p)?JSON.parse(readFileSync(p)):{};writeFileSync('verification/generated/argv.json',JSON.stringify({argv:process.argv.slice(2),legacyBase:process.env.DOC_GOV_BASE_REF??null}));if(c.corrupt_event)writeFileSync(c.corrupt_event,'{invalid');process.exit(c.exit??0);\n`);
   const metadata = { doc_id: 'FIXTURE-001', class: 'governance-policy', version: '1.0.0', status: 'draft', owner: 'VerificationEvidence', created_on: '2026-10-01', updated_on: '2026-10-10' };
   const document = (meta = metadata, body = 'original') => '<!--tos-doc\n' + JSON.stringify(meta) + '\n-->\n' + body + '\n';
@@ -1076,11 +1085,11 @@ test('authenticated predecessor authority umbrella retains five-second physical 
   // Keep the real original sequential assertion as a historical source proof.
   // The current bounded three-child runner has its own mandatory executable suite.
   const source=kitchenPredecessor('scripts/architecture/validate-whole-repository.mjs').replace(/^#!.*\n/,'').replace(/^import .*;\n/gm,'');
-  const calls=[], output=[];
-  assert.throws(()=>runInNewContext(source, {
+  const calls=[], output=[], predecessorCopy=createAuthoringPredecessorCopy(ROOT);
+  try { assert.throws(()=>runInNewContext(source, {
     readdirSync, join, resolve, inspectRepositoryIntegration:()=>[],
     spawnSync:(command,args,options)=>{calls.push({command,args,options});return args[0]==='scripts/persistence/validate-demo-physical-admission.mjs'?{status:1,stderr:'physical-negative-control'}:{status:0};},
-    process:{cwd:()=>ROOT,execPath:process.execPath,exit:code=>{throw new Error(`expected umbrella exit ${code}`);}},
+    process:{cwd:()=>predecessorCopy.root,execPath:process.execPath,exit:code=>{throw new Error(`expected umbrella exit ${code}`);}},
     console:{error:message=>output.push(message),log:message=>output.push(message)},
   },{timeout:2000}),/expected umbrella exit 1/);
   assert.equal(calls.length,59);
@@ -1088,6 +1097,7 @@ test('authenticated predecessor authority umbrella retains five-second physical 
   const physical=calls.find(call=>call.args[0]==='scripts/persistence/validate-demo-physical-admission.mjs');
   assert.equal(physical.command,process.execPath); assert.equal(physical.options.timeout,5000);
   assert.match(output.join('\n'),/physical-negative-control/);
+  } finally { predecessorCopy.remove(); }
 });
 test('current three-child authority runner regression suite is required in the exact bounded catalog',()=>{
   const prior=JSON.parse(kitchenPredecessor('verification/whole-repository/self-audit-plan.json')).stages.find(x=>x.id==='audit-regressions');
@@ -1099,9 +1109,9 @@ test('current three-child authority runner regression suite is required in the e
     stage.args=stage.args.filter(path=>path!==AUDIT_RUNNER_TEST);writeFileSync(file,JSON.stringify(plan));
   },inspectConsolidatedVerification);
 });
-test('current authority runner executes all 59 exact slots and retains ordered physical failure evidence',async()=>{
+test('current authority runner executes all 60 exact slots and retains ordered physical failure evidence',async()=>{
   const paths=discoverAuthorityValidators(ROOT),calls=[],physical='scripts/persistence/validate-demo-physical-admission.mjs';
-  assert.deepEqual(paths,CURRENT_VALIDATORS.slice().sort());assert.equal(paths.length,59);
+  assert.deepEqual(paths,LIVE_VALIDATORS.slice().sort());assert.equal(paths.length,60);assert.equal(CURRENT_VALIDATORS.length,59);
   let active=0,maxActive=0;
   const spawnImpl=(command,args,options)=>{
     calls.push({command,args,options});active++;maxActive=Math.max(maxActive,active);
@@ -1113,7 +1123,7 @@ test('current authority runner executes all 59 exact slots and retains ordered p
     return child;
   };
   const results=await runAuthorityValidators(ROOT,paths,{spawnImpl});
-  assert.equal(calls.length,59);assert.equal(maxActive,3);assert.equal(active,0);
+  assert.equal(calls.length,60);assert.equal(maxActive,3);assert.equal(active,0);
   assert.deepEqual(calls.map(call=>call.args[0]),paths);assert.deepEqual(results.map(result=>result.path),paths);
   for(const call of calls){
     assert.equal(call.command,process.execPath);assert.equal(call.args.length,1);assert.equal(call.options.cwd,ROOT);
@@ -1127,7 +1137,13 @@ for(const id of ['demo-source-tests','demo-generation','demo-postgres','demo-rec
  mutateFixtureFile('verification/whole-repository/self-audit-plan.json',(file,original)=>{const plan=JSON.parse(original);plan.stages=plan.stages.filter(stage=>stage.id!==id);writeFileSync(file,JSON.stringify(plan));},inspectConsolidatedVerification);
 });
 for(const path of ['scripts/db/run-demo-integration.ts','scripts/db/run-demo-recipe-integration.ts','scripts/db/run-p05-prefix-integration.ts'])test(`live CI rejects weakened disposable integration wrapper ${path}`,()=>{
- mutateFixtureFile(path,file=>writeFileSync(file,'// omitted suite or prefix isolation\n'),inspectConsolidatedVerification);
+ assert.deepEqual(inspectConsolidatedVerification(structuralRoot), []);
+ mutateFixtureFile(path,file=>writeFileSync(file,'// omitted suite or prefix isolation\n'),target=>{
+  const errors=inspectConsolidatedVerification(target);
+  if(path==='scripts/db/run-demo-integration.ts')assert.ok(errors.some(error=>error.includes(path)), 'current runner tamper cannot be hidden by its authenticated predecessor');
+  return errors;
+ });
+ assert.deepEqual(inspectConsolidatedVerification(structuralRoot), []);
 });
 
 test('historical generator setup successor preserves original proof bytes and every assertion',()=>{
@@ -1254,7 +1270,10 @@ test('recipe CI cannot omit or substitute the separate disposable PostgreSQL sui
 });
 
 test('recipe scheduling split preserves all 43 historical PostgreSQL declarations and both operation bounds', () => {
-  const original=read('scripts/db/run-demo-integration.ts');
+  const authoring = inspectAuthoringEngineering(ROOT);
+  assert.equal(authoring.present, true); assert.deepEqual(authoring.errors, []);
+  const original = authoring.predecessorFiles['scripts/db/run-demo-integration.ts'];
+  assert.equal(typeof original, 'string', 'authenticated exact historical runner required');
   const recipe=read('scripts/db/run-demo-recipe-integration.ts');
   assert.equal(hash(original),'575b41278b354e0cfeb32a51f4b56f7719169772d19f4cdea5b83f2303222a62');
   assert.equal(hash(recipe),'0ae8978b1762054b7bf0f8a94a2754492e29220e6e4297bf2fa6a85c8464b9f9');

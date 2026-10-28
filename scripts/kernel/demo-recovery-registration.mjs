@@ -1,3 +1,5 @@
+import {inspectAuthoringEngineering} from '../verification/demo-authoring-engineering.mjs';
+import {inspectAuthoringRecoveryRegistration} from './demo-authoring-recovery-registration.mjs';
 import { createHash } from 'node:crypto';
 import { existsSync, lstatSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -119,15 +121,20 @@ export function inspectDemoRecoveryRegistration(root) {
     keys(registration.source_predecessor_sha256, RECOVERY_SOURCE_REVISIONS, 'source predecessor seals');
     keys(registration.source_current_sha256, [...RECOVERY_SOURCE_REVISIONS, ...RECOVERY_SOURCE_ADDITIONS], 'current source seals');
     for (const path of RECOVERY_AUTHORITY_PATHS) equal(hash(source.files[path] ?? ''), registration.predecessor_file_hashes[path], `preserved authority differs: ${path}`);
+    const policy = inspectAuthoringRecoveryRegistration(root);
+    errors.push(...policy.errors);
+    if (errors.length) return { ...empty, present: true, errors };
     const kitchen = inspectKitchenRegistration(root);
     const kitchenEngineering = inspectKitchenEngineering(root);
-    errors.push(...kitchen.errors, ...kitchenEngineering.errors);
-    const authority = path => Object.hasOwn(kitchen.predecessorFiles, path) ? kitchen.predecessorFiles[path] : raw(path);
-    const sourceBytes = path => Object.hasOwn(kitchenEngineering.predecessorFiles, path) ? kitchenEngineering.predecessorFiles[path] : raw(path);
+    const authoringEngineering = inspectAuthoringEngineering(root);
+    errors.push(...kitchen.errors, ...kitchenEngineering.errors, ...authoringEngineering.errors);
+    if (errors.length) return { ...empty, present: true, errors };
+    const authority = path => Object.hasOwn(kitchen.predecessorFiles, path) ? kitchen.predecessorFiles[path] : Object.hasOwn(policy.predecessorFiles,path) ? policy.predecessorFiles[path] : raw(path);
+    const sourceBytes = path => Object.hasOwn(kitchenEngineering.predecessorFiles, path) ? kitchenEngineering.predecessorFiles[path] : Object.hasOwn(authoringEngineering.predecessorFiles,path) ? authoringEngineering.predecessorFiles[path] : raw(path);
     for (const path of [...RECOVERY_AUTHORITY_PATHS, ...RECOVERY_ARCHIVES]) equal(hash(authority(path)), registration.authority_file_hashes[path], `current authority differs: ${path}`);
     for (const path of RECOVERY_SOURCE_REVISIONS) equal(hash(compatibility.files[path] ?? ''), registration.source_predecessor_sha256[path], `preserved source differs: ${path}`);
     for (const path of [...RECOVERY_SOURCE_REVISIONS, ...RECOVERY_SOURCE_ADDITIONS]) equal(hash(normalizedRecoverySource(path, sourceBytes(path))), registration.source_current_sha256[path], `current source differs: ${path}`);
-    return { ...empty, errors, present: true, registration, revisedPaths: errors.length ? [] : [...RECOVERY_AUTHORITY_PATHS], addedPaths: errors.length ? [] : [...RECOVERY_ARCHIVES], predecessorFiles: errors.length ? {} : source.files, predecessorSources: errors.length ? {} : compatibility.files };
+    return { ...empty, errors, present: true, registration, revisedPaths: errors.length ? [] : [...RECOVERY_AUTHORITY_PATHS], addedPaths: errors.length ? [] : [...RECOVERY_ARCHIVES, ...policy.addedPaths], predecessorFiles: errors.length ? {} : source.files, predecessorSources: errors.length ? {} : compatibility.files };
   } catch (error) {
     fail(`missing or malformed adoption evidence: ${error.message}`);
     return { ...empty, present: existsSync(join(root, RECOVERY_REGISTRATION)), errors };

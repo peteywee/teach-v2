@@ -1,0 +1,21 @@
+{
+  "impact_issue": "https://github.com/peteywee/teach-v2/issues/101",
+  "scope": "ONE_EXACT_AUTHORING_MIGRATION_POLICY_ONLY",
+  "authority_paths": [
+    "contracts/c21-database-migration-contract.md",
+    "governance/decision-closure/07-evidence-release-operations-spec.md"
+  ],
+  "preserved_versions": [
+    "TEACH-CON-C21@3.0.0",
+    "TEACH-PROP-DCS-07@3.0.0"
+  ],
+  "unchanged": [
+    "consumed first-install exception",
+    "native default for other migrations",
+    "daily requirement for non-reconstructable data",
+    "private schema and runtime rights",
+    "all migration SQL",
+    "no paid service"
+  ],
+  "actual_recovery": "UNKNOWN"
+}

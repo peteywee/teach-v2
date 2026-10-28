@@ -1,3 +1,5 @@
+import { inspectSourceInScope } from '../verification/source-inspection-scope.mjs';
+import { inspectAuthoringRegistration } from './demo-authoring-registration.mjs';
 import { createHash } from 'node:crypto';
 import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -55,14 +57,18 @@ const metadata = text => JSON.parse(text.match(/^<!--tos-doc\n([\s\S]*?)\n-->\n/
  * current authority and preserved predecessor bytes before exposing a finite
  * historical view. It deliberately never calls old registration, engineering,
  * physical or activation inspectors: those consume this leaf, not vice versa. */
-export function inspectKitchenRegistration(root) {
+export function inspectKitchenRegistration(root) { return inspectSourceInScope('kitchenRegistration', root); }
+// Internal finite dispatcher entry. Direct invocation establishes no shared scope.
+export function inspectKitchenRegistrationUncached(root) {
   const empty = { present: false, errors: [], revisedPaths: [], addedPaths: [], predecessorFiles: {} };
   const registrationPath = `${KITCHEN_BASE}/registration.json`;
-  const errors = [], fail = message => errors.push(`demo kitchen registration: ${message}`);
+  const authoring = inspectAuthoringRegistration(root);
+  const errors = [...authoring.errors], fail = message => errors.push(`demo kitchen registration: ${message}`);
   const equal = (a,b,message) => { if (!isDeepStrictEqual(a,b)) fail(message); };
   // Fresh snapshot per synchronous invocation; no cross-call/stat cache.
   const bytes = new Map(), directories = new Set();
   const raw = path => {
+    if (Object.hasOwn(authoring.predecessorFiles, path)) return authoring.predecessorFiles[path];
     if (bytes.has(path)) return bytes.get(path);
     const parts=path.split('/');
     for(let n=1;n<=parts.length;n++) {
@@ -76,6 +82,7 @@ export function inspectKitchenRegistration(root) {
   };
   const json = path => JSON.parse(raw(path));
   try {
+    if (errors.length) return { ...empty, present: true, errors };
     if(!existsSync(join(root,registrationPath))) {
       if(existsSync(join(root,KITCHEN_BASE)) || existsSync(join(root,KITCHEN_SCHEMA_PROJECTION)) || ARCHIVES.some(p=>existsSync(join(root,p))) || KITCHEN_REVISED_PATHS.some(p=>existsSync(join(root,p))&&raw(p).includes('demo_kitchen_registration'))) fail('orphan kitchen sources without registration');
       return {...empty,errors};

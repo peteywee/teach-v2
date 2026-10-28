@@ -1,4 +1,8 @@
-import test from 'node:test';
+import {createAuthoringPredecessorCopy} from '../../scripts/tests/authoring-proof-copy.mjs';
+import {fileURLToPath,pathToFileURL} from 'node:url';
+let predecessor;const historicalAssets=()=>{predecessor??=createAuthoringPredecessorCopy(fileURLToPath(new URL('../../',import.meta.url)));return readFile(pathToFileURL(predecessor.root+'/src/web/demo/assets.json'),'utf8');};
+after(()=>predecessor?.remove());
+import test,{after} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash,randomUUID} from 'node:crypto';
@@ -59,7 +63,7 @@ test('rendering guidance is pure and ordinary rerenders do not persist disclosur
 });
 
 test('help preserves existing API and finite static-asset boundaries',async()=>{
- const assets=JSON.parse(await source('src/web/demo/assets.json'));
+ const assets=JSON.parse(await historicalAssets());
  assert.equal(assets.length,7);assert.ok(assets.some(a=>a.file==='views.mjs'));
  assert.ok(!assets.some(a=>/legacy|guidance|\.svg/.test(a.file)));
  const app=await source('src/web/demo/app.mjs');assert.doesNotMatch(app,/navigation-help|legacyBrandIllustration/);

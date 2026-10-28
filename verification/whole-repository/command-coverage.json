@@ -629,6 +629,40 @@
         "Owner command implementation, transaction-bound authority/audit and negative-path integration evidence",
         "API mounting and end-to-end demo verification where routed"
       ]
+    },
+    {
+      "command": "SaveContentDraft",
+      "owner": "Content",
+      "authority_requirements": [],
+      "semantic_registration": "domains/demo-authoring/registration.json",
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "Independent exact-candidate semantic and source review",
+        "Exact current physical admission and PostgreSQL negative-path proof",
+        "Complete scoped runtime publication/recovery tests",
+        "Exact-head CI and live manager-to-learner acceptance"
+      ]
+    },
+    {
+      "command": "PublishContentDraft",
+      "owner": "Content",
+      "authority_requirements": [],
+      "semantic_registration": "domains/demo-authoring/registration.json",
+      "state": "BLOCKED",
+      "runtime_conformance": "UNKNOWN",
+      "runtime_activation": "BLOCKED",
+      "artifacts": [],
+      "tests": [],
+      "missing_obligations": [
+        "Independent exact-candidate semantic and source review",
+        "Exact current physical admission and PostgreSQL negative-path proof",
+        "Complete scoped runtime publication/recovery tests",
+        "Exact-head CI and live manager-to-learner acceptance"
+      ]
     }
   ],
   "semantic_registration": "domains/demo-runtime/registration.json"

@@ -1,3 +1,5 @@
+import {PostgresDemoAuthoring} from '../../modules/content/infrastructure/persistence/postgres-demo-authoring.js';
+import {PostgresDemoAuthoringReceipts} from '../../modules/transaction-control/infrastructure/persistence/postgres-demo-authoring-receipts.js';
 import {sql} from 'drizzle-orm';
 import {drizzle} from 'drizzle-orm/node-postgres';
 import type pg from 'pg';
@@ -23,7 +25,7 @@ export class PostgresDemoTransaction implements DemoTransactionRunner {
     const dates=result.fields.filter(field=>field.dataTypeID===1184||field.dataTypeID===1114).map(field=>field.name);
     return result.rows.map(row=>{const decoded={...row};for(const name of dates){const value=decoded[name];if(value!==null&&value!==undefined){const date=new Date(String(value));if(!Number.isFinite(date.getTime()))throw Error('Invalid PostgreSQL timestamp');decoded[name]=date;}}return decoded as R;});
    }};
-   return work({organization:new PostgresDemoOrganization(query),identity:new PostgresDemoIdentity(query,tx),content:new PostgresDemoContent(query),learning:new PostgresDemoLearning(query),audit:new PostgresDemoAudit(query),receipts:new PostgresDemoReceipts(query)});
+   return work({authoring:new PostgresDemoAuthoring(query),authoringReceipts:new PostgresDemoAuthoringReceipts(query),organization:new PostgresDemoOrganization(query),identity:new PostgresDemoIdentity(query,tx),content:new PostgresDemoContent(query),learning:new PostgresDemoLearning(query),audit:new PostgresDemoAudit(query),receipts:new PostgresDemoReceipts(query)});
   },{isolationLevel:'read committed'});
  }
 }

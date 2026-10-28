@@ -1,3 +1,4 @@
+import { authoringSourceFixture } from './authoring-source-fixture.mjs';
 import assert from 'node:assert/strict';
 import { after, test } from 'node:test';
 import { cpSync, mkdtempSync, readFileSync, writeFileSync, rmSync, renameSync, symlinkSync } from 'node:fs';
@@ -5,8 +6,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { inspectKitchenRegistration, KITCHEN_BASE, KITCHEN_PROPOSAL, KITCHEN_REVISED_PATHS, KITCHEN_SCHEMA_PROJECTION } from '../kernel/demo-kitchen-registration.mjs';
 const root=resolve(new URL('../..',import.meta.url).pathname);
-const fixture=mkdtempSync(join(tmpdir(),'teach-kitchen-source-'));
-for(const path of ['domains','contracts','kernel','governance'])cpSync(join(root,path),join(fixture,path),{recursive:true});
+const fixture=authoringSourceFixture(root, 'teach-kitchen-source-');
 after(()=>rmSync(fixture,{recursive:true,force:true}));
 const raw=p=>readFileSync(join(fixture,p),'utf8');
 const deny=()=>{const r=inspectKitchenRegistration(fixture);assert.ok(r.errors.length);assert.deepEqual(r.revisedPaths,[]);assert.deepEqual(r.addedPaths,[]);assert.deepEqual(r.predecessorFiles,{});return r;};

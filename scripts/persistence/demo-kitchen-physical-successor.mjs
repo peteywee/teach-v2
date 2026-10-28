@@ -1,3 +1,5 @@
+import { inspectSourceInScope } from '../verification/source-inspection-scope.mjs';
+import { inspectAuthoringPhysicalSuccessor } from './demo-authoring-physical-successor.mjs';
 import { verifyIsolatedLineage } from '../db/compile-isolated-schema.mjs';
 import { createHash } from 'node:crypto';
 import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
@@ -32,9 +34,14 @@ function inspectionReader(root) {
 }
 /** Finite authoring admission only. Independent review binds all code and SQL;
  * this inspector does not execute a migration or claim production readiness. */
-export function inspectKitchenPhysicalSuccessor(root) {
-  const read = inspectionReader(root);
+export function inspectKitchenPhysicalSuccessor(root) { return inspectSourceInScope('kitchenPhysical', root); }
+// Internal finite dispatcher entry. Direct invocation establishes no shared scope.
+export function inspectKitchenPhysicalSuccessorUncached(root) {
+  const authoring = inspectAuthoringPhysicalSuccessor(root);
+  const raw = inspectionReader(root);
+  const read = path => Object.hasOwn(authoring.predecessorFiles, path) ? authoring.predecessorFiles[path] : raw(path);
   const denied={present:false,admitted:false,errors:[],migrationCount:null,revisedPaths:[],addedPaths:[],predecessorFiles:{}};
+  if (authoring.errors.length) return { ...denied, present: true, errors: authoring.errors };
   if(!existsSync(join(root,KITCHEN_PHYSICAL_BASE))) {
     const orphan = [KITCHEN_PUBLIC_MIGRATION,KITCHEN_ISOLATED_MIGRATION,'drizzle/meta/0007_snapshot.json','verification/demo-kitchen/engineering-manifest.json'].some(path=>existsSync(join(root,path)));
     return orphan ? {...denied,present:true,errors:['demo kitchen physical successor: orphan migration or engineering evidence without physical lane']} : denied;
@@ -65,9 +72,9 @@ export function inspectKitchenPhysicalSuccessor(root) {
     equal({...journal,entries:journal.entries?.slice(0,7)},prior,'old journal prefix immutable');equal(journal.entries?.length,8,'one append only');
     equal(journal.entries?.[7],{idx:7,version:'7',when:1792979340000,tag:'0007_demo_kitchen_content_guard',breakpoints:true},'exact current journal suffix required');
     equal(json('drizzle-isolated/meta/_journal.json'),journal,'public and isolated journals share exact identities');
-    equal(readdirSync(join(root,'drizzle')).filter(n=>n.endsWith('.sql')).sort(),[...names.map(n=>n+'.sql'),'0007_demo_kitchen_content_guard.sql'].sort(),'no additional public migrations');
-    equal(readdirSync(join(root,'drizzle-isolated')).filter(n=>n.endsWith('.sql')).sort(),[...names.map(n=>n+'.sql'),'0007_demo_kitchen_content_guard.sql'].sort(),'no additional isolated migrations');
-    equal(readdirSync(join(root,'drizzle/meta')).filter(n=>n.endsWith('_snapshot.json')).sort(),Array.from({length:8},(_,i)=>`${String(i).padStart(4,'0')}_snapshot.json`),'exact eight snapshots');
+    equal(readdirSync(join(root,'drizzle')).filter(n=>n.endsWith('.sql') && !(authoring.admitted && n==='0008_demo_manager_authoring.sql')).sort(),[...names.map(n=>n+'.sql'),'0007_demo_kitchen_content_guard.sql'].sort(),'no additional public migrations');
+    equal(readdirSync(join(root,'drizzle-isolated')).filter(n=>n.endsWith('.sql') && !(authoring.admitted && n==='0008_demo_manager_authoring.sql')).sort(),[...names.map(n=>n+'.sql'),'0007_demo_kitchen_content_guard.sql'].sort(),'no additional isolated migrations');
+    equal(readdirSync(join(root,'drizzle/meta')).filter(n=>n.endsWith('_snapshot.json') && !(authoring.admitted && n==='0008_snapshot.json')).sort(),Array.from({length:8},(_,i)=>`${String(i).padStart(4,'0')}_snapshot.json`),'exact eight snapshots');
     const priorSnapshot=json('drizzle/meta/0006_snapshot.json'),snapshot=json('drizzle/meta/0007_snapshot.json');
     equal(snapshot,{...priorSnapshot,id:snapshot.id,prevId:priorSnapshot.id},'snapshot changes only identity link');
     if(!/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(snapshot.id)||snapshot.id==='00000000-0000-0000-0000-000000000000'||names.some((_,i)=>json(`drizzle/meta/${String(i).padStart(4,'0')}_snapshot.json`).id===snapshot.id))fail('unique nonzero snapshot ID required');
@@ -79,7 +86,9 @@ export function inspectKitchenPhysicalSuccessor(root) {
     }
     const body = text => text.slice(text.indexOf('CREATE OR REPLACE FUNCTION'));
     equal(body(read('domains/demo-kitchen/proposal-0.1.0/0007_demo_kitchen_content_guard.sql')),body(read(KITCHEN_ISOLATED_MIGRATION)),'proposal and isolated guard function bytes must agree exactly');
-    verifyIsolatedLineage(root); // Pure deterministic compiler proof; no database or old admission calls.
+    // The newest physical leaf already verifies the complete current compiler
+    // lineage. Only its authenticated predecessor view may retain this old proof.
+    if (!authoring.admitted) verifyIsolatedLineage(root);
     const manifest=json('drizzle-isolated/manifest.json');equal(manifest.migrations?.length,8,'isolated manifest needs eighth migration');
     equal(manifest.migrations?.[7],{name:'0007_demo_kitchen_content_guard.sql',historicalSha256:hash(read(KITCHEN_PUBLIC_MIGRATION)),isolatedSha256:hash(read(KITCHEN_ISOLATED_MIGRATION)),when:1792979340000},'exact isolated migration binding');
     const admitted=errors.length===0;
