@@ -141,10 +141,13 @@ const aggregateTimeouts = new Map([
   ['scripts/tests/validate-capability-admission.mjs', 25000],
   ['scripts/architecture/validate-whole-repository.mjs', 25000],
 ]);
-function runValidator(dir, script) {
+function runValidator(dir, script, controlName) {
   const [file, ...args] = script.split(" ");
   try {
-    const out = execFileSync("node", [join(dir, file), ...args], {
+    const historicalControl=controlName==='whole audit: every standalone gate passes'?'positive':controlName==='whole audit: an otherwise untriggered historical validator fails'?'negative':null;
+    if(historicalControl&&(file!=='scripts/architecture/validate-whole-repository.mjs'||args.length))throw Error('exact historical whole-audit command required');
+    const commandArgs=historicalControl?[join(ROOT,'scripts/tests/authoring-predecessor-fixture.mjs'),'--historical-whole-audit',dir,historicalControl]:[join(dir,file),...args];
+    const out = execFileSync("node", commandArgs, {
       cwd: dir,
       encoding: "utf8",
       stdio: ["ignore", "pipe", "pipe"],
@@ -174,7 +177,7 @@ function test(name, script, mutate, expect) {
     const transition=predecessorCases.find(row=>row.name===name);
     if(transition&&(transition.script!==script||transition.original_pattern!==(expect.pattern?.source??null)||transition.original_outcome!==(expect.pass?'PASS':'DENIAL')||transition.original_mutation_sha256!==createHash('sha256').update(mutate.toString()).digest('hex')))throw Error('exact original predecessor case declaration required');
     if(transition?.current_seal_probe_path){const path=join(dir,transition.current_seal_probe_path);writeFileSync(path,readFileSync(path,'utf8')+'\n');}
-    const r = runValidator(dir, transition?.current_probe_script??script);
+    const r = runValidator(dir, transition?.current_probe_script??script, name);
     const kitchenTransition = kitchenValidatorTransition(name, transition);
     const currentDiagnostic = kitchenTransition?.current_diagnostic ?? transition?.current_diagnostic;
     let ok = transition?exactCurrentDenial(r,currentDiagnostic,dir):validatorResultMatches(r, expect);

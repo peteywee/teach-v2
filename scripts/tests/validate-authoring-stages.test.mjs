@@ -13,9 +13,9 @@ const root = resolve(new URL('../..', import.meta.url).pathname);
 test('five authoring commands and exact bounded scheduling refinement retain all fifty-two logical obligations', () => {
   const source = inspectAuthoringEngineering(root); assert.equal(source.present, true); assert.deepEqual(source.errors, []);
   const prior = JSON.parse(source.predecessorFiles['verification/whole-repository/self-audit-plan.json']);
-  assert.equal(prior.stages.length, 52); assert.equal(expectedPlan.stages.length, 73);
+  assert.equal(prior.stages.length, 52); assert.equal(expectedPlan.stages.length, 76);
   assert.deepEqual(expectedPlan.stages.filter(stage => !authoringStages.some(([id]) => id === stage.id)&&!SCHEDULING_EXTRA_IDS.includes(stage.id)), prior.stages.map(refineScheduledStage));
-  assert.equal(new Set(expectedPlan.stages.map(stage => stage.id)).size, 73);
+  assert.equal(new Set(expectedPlan.stages.map(stage => stage.id)).size, 76);
   for (const [id, command, args] of authoringStages) {
     assert.deepEqual(expectedPlan.stages.find(stage => stage.id === id), { id, command, args, timeout_ms: 25000 });
     for (const path of args.filter(value => /^(?:scripts|tests)\//.test(value))) assert.ok(existsSync(join(root, path)), path);

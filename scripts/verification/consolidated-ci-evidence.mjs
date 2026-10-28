@@ -6,7 +6,7 @@ import { STORAGE_OWNER_PATTERN, STORAGE_INTEGRATION_PATTERN, STORAGE_INTEGRATION
 import { inspectKitchenRegistration } from '../kernel/demo-kitchen-registration.mjs';
 import { inspectDemoRecoveryRegistration } from '../kernel/demo-recovery-registration.mjs';
 import { inspectRecipeRegistration } from '../kernel/demo-recipes-registration.mjs';
-import {REGISTRATION_ENTRY_PATTERN,REGISTRATION_REMAINDER_PATTERN} from './validator-partitions.mjs';
+import {REGISTRATION_ENTRY_PATTERN,REGISTRATION_REMAINDER_PATTERN,REGISTRATION_FIRST_PATTERN,REGISTRATION_SECOND_PATTERN} from './validator-partitions.mjs';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join } from 'node:path';
@@ -35,7 +35,7 @@ export function inspectConsolidatedVerificationUncached(root) {
     if (checkouts.length !== 1 || !/^          fetch-depth: 0$/m.test(checkouts[0]) || [...checkouts[0].matchAll(/^          fetch-depth:/gm)].length !== 1) fail('full-history credential-free document checkout required');
     if (inspectWorkflowText(path,workflow).length !== 1) fail('one explicit producer job required');
     if (!workflow.includes("node-version: '20.20.2'") || !workflow.includes('pnpm@12.8.1') || !workflow.includes('run: pnpm install --frozen-lockfile\n') || !workflow.includes('image: postgres:17.11-alpine') || !workflow.includes("TEACH_ISOLATED_DB: '1'") || !workflow.includes('timeout-minutes: 15')) fail('pinned runtime and isolated PostgreSQL required');
-    for(const [id,pattern] of [['demo-registration-entry-regressions',REGISTRATION_ENTRY_PATTERN],['demo-registration-regressions',REGISTRATION_REMAINDER_PATTERN]]){
+    for(const [id,pattern] of [['demo-registration-entry-regressions',REGISTRATION_ENTRY_PATTERN],['demo-registration-regressions',REGISTRATION_FIRST_PATTERN],['demo-registration-regressions-second',REGISTRATION_SECOND_PATTERN]]){
       const demoRegression=plan?.stages?.find(stage=>stage.id===id);
       if(demoRegression?.command!=='node'||JSON.stringify(demoRegression?.args)!==JSON.stringify(['--test','--test-name-pattern='+pattern,'scripts/tests/validate-demo-runtime-registration.mjs'])||demoRegression?.timeout_ms!==25000)fail('exact bounded demo registration mutation suite must run in CI');
     }
@@ -44,8 +44,11 @@ export function inspectConsolidatedVerificationUncached(root) {
     try {
       if(createHash('sha256').update(preservedRegistrationTestBytes(root)).digest('hex')!=='0aec40789483d97aafbeaa69846037de42b7f2f8a71c34979cd74aac8ce5a639')fail('original seventeen registration test declarations must remain exact');
     } catch(error) { fail(error.message); }
-    const physicalRegression=plan?.stages?.find(stage=>stage.id==='audit-regressions');
-    if(physicalRegression?.command!=='node'||JSON.stringify(physicalRegression?.args)!==JSON.stringify(['--test','scripts/tests/validate-development-self-audit.test.mjs','scripts/tests/validate-ci-consolidation.test.mjs','scripts/tests/validate-demo-physical-successor.mjs','scripts/tests/validate-replay-database-cleanup.test.mjs','scripts/tests/validate-whole-audit-runner.test.mjs'])||physicalRegression?.timeout_ms!==25000||!existsSync(join(root,'scripts/tests/validate-demo-physical-successor.mjs')))fail('exact bounded physical successor mutation suite must run in CI');
+    for(const id of ['audit-regressions','audit-regressions-second','audit-regressions-third']) {
+      const regression=plan?.stages?.find(stage=>stage.id===id);
+      if(JSON.stringify(regression)!==JSON.stringify(expectedPlan.stages.find(stage=>stage.id===id)))fail('exact bounded audit regression partition must run in CI');
+    }
+    if(!existsSync(join(root,'scripts/tests/validate-demo-physical-successor.mjs')))fail('exact bounded physical successor mutation suite must run in CI');
     for (const [id, pattern] of [['demo-storage-owner-regressions', STORAGE_OWNER_PATTERN], ['demo-storage-integration-regressions', STORAGE_INTEGRATION_FIRST_PATTERN], ['demo-storage-integration-second', STORAGE_INTEGRATION_SECOND_PATTERN]]) {
       const stage = plan?.stages?.find(stage => stage.id === id);
       if (stage?.command !== 'node' || JSON.stringify(stage?.args) !== JSON.stringify(['--test', '--test-name-pattern='+pattern, 'scripts/tests/demo-storage-evidence.mjs']) || stage?.timeout_ms !== 25000) fail('exact bounded exhaustive storage partitions required');
@@ -124,6 +127,7 @@ export function inspectConsolidationCoverageUncached(root) {
     if(hash(text)!=='671dbd10c44a762970e4174668a7a7aa57464c2e4cf242bb0c7344cb64a6e9ac')fail('reviewed baseline command mapping identity required');
     const coverage=JSON.parse(text),plan=JSON.parse(readFileSync(join(root,'verification/whole-repository/self-audit-plan.json'),'utf8'));
     const stages=new Map(plan.stages.map(stage=>[stage.id,stage]));
+    if(!['demo-registration-entry-regressions','demo-registration-regressions','demo-registration-regressions-second'].every(id=>JSON.stringify(stages.get(id))===JSON.stringify(expectedPlan.stages.find(row=>row.id===id))))fail('original registration obligation requires all exact bounded regression groups');
     const scripts=JSON.parse(readFileSync(join(root,'package.json'),'utf8')).scripts;
     // One finite engineering successor preserves the old P05 assertions by
     // running them against their exact immutable prefix, not the extended head.
@@ -160,6 +164,7 @@ export function inspectConsolidationCoverageUncached(root) {
     for(const producer of coverage.producer_command_mapping)for(const step of producer.steps)for(const item of step.coverage) {
       if(item.stages?.some(id=>!stages.has(id)))fail(`${producer.workflow}: mapped bounded stage missing`);
       if(item.kind==='bounded_stage') {
+        if(item.stages[0]==='audit-regressions'&&!['audit-regressions','audit-regressions-second','audit-regressions-third'].every(id=>JSON.stringify(stages.get(id))===JSON.stringify(expectedPlan.stages.find(row=>row.id===id))))fail('original audit obligation requires all exact bounded regression groups');
         const stage=stages.get(item.stages[0]);
         const expanded=item.command.startsWith('node scripts/verification/run-self-audit.mjs --stage ')?['node','scripts/verification/run-self-audit.mjs','--stage',stage?.id].join(' '):[stage?.command,...(stage?.args||[])].join(' ');
         // The target/snapshot stage intentionally groups two explicit node-test inputs.

@@ -59,6 +59,9 @@ jobs:
       - name: Audit demo-registration-regressions
         id: audit_demo_registration_regressions
         run: node scripts/verification/run-self-audit.mjs --stage demo-registration-regressions
+      - name: Audit demo-registration-regressions-second
+        id: audit_demo_registration_regressions_second
+        run: node scripts/verification/run-self-audit.mjs --stage demo-registration-regressions-second
       - name: Audit document-governance
         id: audit_document_governance
         run: node scripts/verification/run-self-audit.mjs --stage document-governance
@@ -167,6 +170,12 @@ jobs:
       - name: Audit audit-regressions
         id: audit_audit_regressions
         run: node scripts/verification/run-self-audit.mjs --stage audit-regressions
+      - name: Audit audit-regressions-second
+        id: audit_audit_regressions_second
+        run: node scripts/verification/run-self-audit.mjs --stage audit-regressions-second
+      - name: Audit audit-regressions-third
+        id: audit_audit_regressions_third
+        run: node scripts/verification/run-self-audit.mjs --stage audit-regressions-third
       - name: Audit recovery-regressions
         id: audit_recovery_regressions
         run: node scripts/verification/run-self-audit.mjs --stage recovery-regressions

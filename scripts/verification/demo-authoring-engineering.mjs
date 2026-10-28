@@ -10,7 +10,7 @@ export const AUTHORING_ENGINEERING_MANIFEST = `${AUTHORING_ENGINEERING_BASE}/eng
 export const AUTHORING_ENGINEERING_REVIEW = `${AUTHORING_ENGINEERING_BASE}/engineering-independent-review.json`;
 // Only the separate independent reviewer may supply this seal. Normalizing this
 // single literal breaks the review/self-hash cycle and changes nothing else.
-export const AUTHORING_ENGINEERING_REVIEW_SHA256 = '6091150a71cf7ea9b18c8e26956218584b818de23dc9db9ae2557227adf0e135';
+export const AUTHORING_ENGINEERING_REVIEW_SHA256 = 'a07ea7db5bb122aa76598080273b7e99b1d2a24531228490f5b70d3ed889db76';
 const SCOPE = 'BOUNDED_MANAGER_AUTHORING_SOURCE_AND_STORAGE_SUCCESSOR';
 const FLAGS = ['runtime_activation_authorized', 'shared_or_production_execution_authorized', 'credential_creation_authorized', 'security_grants_authorized', 'deployment_authorized'];
 export function normalizedAuthoringEngineeringSource(path, bytes) {

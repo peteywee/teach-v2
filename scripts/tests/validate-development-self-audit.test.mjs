@@ -1,15 +1,17 @@
+import { authoringSourceFixture } from './authoring-source-fixture.mjs';
+import { deriveOwnerDecisionInventory } from '../verification/owner-decision-inventory.mjs';
 import { expectedScheduledEvidence } from '../verification/development-self-audit.mjs';
 import {VALIDATOR_PARTITION_COUNT,validatorPartitionOrdinals,validatorPartitionForOrdinal,assertValidatorInventory,WHOLE_REPOSITORY_CONTROLS} from '../verification/validator-partitions.mjs';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { mkdtempSync,mkdirSync,writeFileSync,readFileSync,rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join,resolve } from 'node:path';
 import { execFileSync,spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { localDocumentGovernanceContext } from '../verification/document-governance-context.mjs';
 import { expectedPlan,inspectAuditPlan } from '../verification/self-audit-catalog.mjs';
-import { sourceIdentity,runBounded,runAuditStage,evaluateAuditReports,discoverFoundationTests } from '../verification/development-self-audit.mjs';
+import { currentFacts,sourceIdentity,runBounded,runAuditStage,evaluateAuditReports,discoverFoundationTests } from '../verification/development-self-audit.mjs';
 const hash=value=>createHash('sha256').update(value).digest('hex');
 function fixture(body='console.log("fixture check");'){
  const root=mkdtempSync(join(tmpdir(),'teach-self-audit-'));
@@ -136,4 +138,32 @@ for(const exitCode of [0,4])test(`self-audit CLI drains large stdout/stderr pipe
   assert.equal(control.stdout,'','immediate exit must discard deferred stdout');
   assert.equal(control.stderr,'','immediate exit must discard deferred stderr');
  } finally {f.cleanup();}
+});
+
+
+test('current authoring facts preserve live inventory while authenticating the historical decision packet',()=>{
+ const sourceRoot=resolve(new URL('../..',import.meta.url).pathname);
+ const read=(root,path)=>readFileSync(join(root,path),'utf8');
+ const recorded=JSON.parse(read(sourceRoot,'verification/legacy-recovery/owner-decisions.json'));
+ const live=deriveOwnerDecisionInventory(sourceRoot,recorded.consulted_v2_baseline);
+ const facts=currentFacts(sourceRoot);
+ for(const [name,value]of Object.entries(live.totals))assert.equal(facts.owner_decisions[name],value);
+ assert.notEqual(facts.owner_decisions.physical_shape_questions,recorded.totals.physical_shape_questions);
+ const liveEntities=JSON.parse(read(sourceRoot,'kernel/entities.json')).entries;
+ assert.equal(facts.registries.entities.approved,liveEntities.filter(row=>row.status==='approved').length);
+ assert.equal(facts.runtime_activation,'BLOCKED');
+ const copy=authoringSourceFixture(sourceRoot,'teach-current-owner-facts-');
+ try{
+  const before=currentFacts(copy);assert.deepEqual(before,facts);
+  for(const path of ['kernel/entities.json','contracts/c31-content-teaching-engine-contract.md']){
+   const full=join(copy,path),bytes=readFileSync(full,'utf8');
+   try{writeFileSync(full,bytes+'\n');assert.throws(()=>currentFacts(copy),error=>error.message.includes(path));}
+   finally{writeFileSync(full,bytes);}
+   assert.deepEqual(currentFacts(copy),before);
+  }
+  const packet=join(copy,'verification/legacy-recovery/owner-decisions.json'),bytes=readFileSync(packet,'utf8');
+  try{const value=JSON.parse(bytes);value.totals.physical_shape_questions++;writeFileSync(packet,JSON.stringify(value));assert.throws(()=>currentFacts(copy),/owner decision inventory drift/);}
+  finally{writeFileSync(packet,bytes);}
+  assert.deepEqual(currentFacts(copy),before);
+ }finally{rmSync(copy,{recursive:true,force:true});}
 });

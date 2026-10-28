@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "reviewer": "independent-review-authoring-security",
-  "reviewed_at_utc": "2026-10-28T12:53:45.058955+00:00",
+  "reviewed_at_utc": "2026-10-28T13:53:08.267170+00:00",
   "scope": "BOUNDED_MANAGER_AUTHORING_SOURCE_AND_STORAGE_SUCCESSOR",
-  "manifest_sha256": "c960980d8b02387707bab5b9276a361043dbc9c95ec3404a24a54ef2da92ad72",
+  "manifest_sha256": "fa6aa008512cd1214f016fc7c093a44fa5a76512da75b4d617635cb99c9ca0c0",
   "outcome": "PASS",
   "source_edits_by_reviewer": false,
   "unresolved_scope_blockers": [],
@@ -14,7 +14,7 @@
   "security_grants_authorized": false,
   "deployment_authorized": false,
   "reviewed_properties": [
-    "Exact 182-file current inventory, 97 predecessor files byte-matching released-tree-equivalent baseline 4a9b964, and 81 immutable historical files verified independently.",
+    "Exact 183-file current inventory, 98 predecessor files byte-matching released-tree-equivalent baseline 4a9b964, and 81 immutable historical files verified independently.",
     "Raw registration passes with exact issue 101 and finite append-only semantic, contract and manager capability scope; old automation policy and learner policy remain unchanged.",
     "Shared run lock and active-session refresh serialize per-visit commands; server manager membership and tenant/location scope precede authoring reads and writes.",
     "Only catalog fields are composed over immutable seed training. Publication appends an exact new version without replacing assignments or old history; assignment remains a separate existing boundary.",
@@ -51,7 +51,15 @@
     "Aggregate finalization requires both same-source bounded receipts for each split obligation, exact commands, inventories, names, ordinals and digests; missing, duplicated, renamed, wrong-index/total, timeout and altered-command evidence is denied. Five newly changed source paths are bound with genuine historical predecessor bytes rather than hidden to preserve an obsolete delivery path count.",
     "Final scheduling refinement uses 73 mandatory stages: migration guards now three exact modulo-three six-case partitions instead of two nine-case stages, while original eighteen declaration bodies and no-argument two-worker full control remain unchanged. Exact required receipts, workflow/catalog inventory, invalid selectors and omission/miswiring regressions include all three partitions.",
     "Schema engineering authenticates the raw authoring engineering leaf before any projection and returns empty outputs immediately on failure. Its existing recovery then kitchen precedence is preserved, followed only by exact authenticated authoring predecessor files. Original historical schema assertions and review hashes are unchanged; added same-process current audit-source tamper/restoration assertions require path-specific denial and empty outputs.",
-    "Historical no-argument authority producer is covered only when both exact current authority stage descriptors exist; original migration producer requires all three exact current descriptors. No path-only or count-only coverage shortcut is accepted."
+    "Historical no-argument authority producer is covered only when both exact current authority stage descriptors exist; original migration producer requires all three exact current descriptors. No path-only or count-only coverage shortcut is accepted.",
+    "Finite scheduling lookup tables cache only deterministic ordinal arithmetic, not source or proof verdicts. Exact predecessor mapping and input validation remain; internal tables are frozen and returned ordinal arrays are copied with mutation-isolation regression.",
+    "Two exact original whole-audit controls use an explicit scheduling adapter, authenticating canonical regular scripts tree, all 205 historical script hashes, original runner hash and exact 59-validator roster before invoking genuine historical exported runner. Integration executes alone then remaining 58 at original maximum-three concurrency and five-second child bounds. Original result/error aggregation and summary predicates remain; all 220 declaration bodies are byte-identical. Positive mode rejects negative suffix; negative mode permits only the exact original mutation. No historical source is rewritten and all 81 immutable artifacts remain unchanged.",
+    "Historical execution closure comprises 93 byte-bound modules with only builtin or authenticated scripts imports. Scripts-root symlink bypass found during review was corrected with lstat checks and explicit regression; descendant and root symlinks, extra/mutated modules, wrong modes, missing/duplicate results and nonordinary failures remain denied.",
+    "Current facts continue deriving raw live owner inventory and registries. Only historical packet comparison receives exact raw-registration-authenticated authoring semantic/contract predecessor bytes after existing precedence; authentication errors throw. Added current-root and kernel/C31/packet tamper-restoration tests retain exact packet equality.",
+    "Final audit scheduling successor has 74 mandatory stages: exact original five audit test files split into CI-consolidation alone and the other four in original relative order. Both aggregate and standalone historical command coverage require both exact descriptors; same-source finalization requires both ordinary successful receipts. Exact disjoint file union, omitted/miswired/duplicate stages and changed-timeout denials retain all assertions. Historical whole-audit ordering remains unchanged from reviewed exclusive integration adapter; no additional scheduling adaptation.",
+    "Final mandatory stage count is 76. CI consolidation has a fixed ordered 453-name census bound to explicit hash; exact predecessor 451 executed names differ only by two new generated stage-omission cases and explicit aggregate-title successor. Transparent native test wrapper registers and asserts complete census even under filtering; positive escaped selectors partition 227/226 without modifying test assertions.",
+    "Registration retains exact original seventeen declaration bytes and no-argument full execution; prior entry-plus-sixteen coverage remains independently checked through authenticated predecessor. Current exact entry singleton, fifteen remainder and one heavy-case singleton form exhaustive disjoint union. Actual successful non-SKIP TAP names and selected digests are required per source-bound receipt for all CI/registration partitions; skipped, renamed, duplicate, omitted, swapped or stale evidence is denied. Standalone and aggregate logical coverage require every exact group.",
+    "Existing schema rehashed-source test separately checks current envelope mutation denial/restoration, then executes its unchanged historical mutation, rehash and exact independent-review error assertion inside authenticated predecessor restoration. No historical assertion, regex or review seal is weakened; new changed test path is explicitly bound."
   ],
   "independent_checks": [
     {
@@ -119,6 +127,48 @@
       "storage_cases": 30,
       "mandatory_stages": 73,
       "runtime": "Node 24.22.1; static and pure diagnostic only"
+    },
+    {
+      "check": "Historical scheduling adapter exact source inventory and executable closure review",
+      "result": "PASS",
+      "manifest_sha256": "b28f73a340ae97b0b049bb71fc4b99127e87747b78a29d0751c00465fba5efac",
+      "current_files": 182,
+      "predecessor_files": 97,
+      "immutable_files": 81,
+      "historical_modules_rehashed": 93,
+      "all_220_declaration_section_bytes_unchanged": true,
+      "runtime_proof": "NOT_ESTABLISHED_BY_REVIEW"
+    },
+    {
+      "check": "Final audit-group source rehash and exact original five-file disjoint union",
+      "result": "PASS",
+      "manifest_sha256": "b5fb5269beca701fb7c35a8ea5e91a570677324f4be4b2ba596063ce3235e8e4",
+      "current_files": 182,
+      "predecessor_files": 97,
+      "immutable_files": 81,
+      "mandatory_stages": 74,
+      "command_bound_ms": 25000,
+      "runtime": "Node 24.22.1; pure diagnostic"
+    },
+    {
+      "check": "Final76 manifest rehash and clean1bb executed451 census comparison to exact453 successor",
+      "result": "PASS",
+      "manifest_sha256": "fa6aa008512cd1214f016fc7c093a44fa5a76512da75b4d617635cb99c9ca0c0",
+      "current_files": 183,
+      "predecessor_files": 98,
+      "immutable_files": 81,
+      "ci_partition_counts": [
+        227,
+        226
+      ],
+      "registration_partition_counts": [
+        1,
+        15,
+        1
+      ],
+      "mandatory_stages": 76,
+      "command_bound_ms": 25000,
+      "runtime": "Node 24.22.1; static and pure diagnostic only"
     }
   ],
   "limitations": [
@@ -127,6 +177,9 @@
     "New table runtime policies and function execution permissions require exact reviewed activation and readback; source admission is not execution authorization.",
     "Latest fixture, historical runner, policy and mechanical adapter corrections are source-reviewed; complete pinned whole-candidate execution after final seal remains required. Actual recovery evidence remains UNKNOWN until separately established.",
     "Current 72-stage scheduling successor full native-default local sweep, hosted CI and measured 900-second job headroom are not established by this source review; no runtime, recovery or production authority is inferred.",
-    "The earlier 72-stage manifest failed composed historical schema/coverage gates; this review binds the corrected 73-stage source only. Actual composed gate success, full native-default sweep and hosted performance remain pending."
+    "The earlier 72-stage manifest failed composed historical schema/coverage gates; this review binds the corrected 73-stage source only. Actual composed gate success, full native-default sweep and hosted performance remain pending.",
+    "Historical scheduling adapter and currentFacts correction require actual positive/negative whole-audit, current-root facts and full composed audit regression execution; source review does not establish hosted timing or release readiness.",
+    "The 74-stage grouping and historical whole-audit controls still require exact-source local/hosted execution; limited measured historical hosted margin is not resolved or asserted by this static review.",
+    "Final76 grouping and schema fixture correction require exact-source focused/full runtime and hosted CI execution; this independent source review is not a runtime, recovery, deployment or timing proof."
   ]
 }

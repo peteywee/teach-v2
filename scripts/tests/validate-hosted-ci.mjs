@@ -58,7 +58,7 @@ test('same producer retains legacy stage inventory and includes every new bounde
  assert.equal(legacy.length,48);assert.equal(new Set(legacy).size,48);
  assert.equal(current.length,52);assert.equal(new Set(current).size,52);
  assert.deepEqual(live,expectedPlan.stages.map(stage=>stage.id));
- assert.equal(live.length,73);assert.equal(new Set(live).size,73);
+ assert.equal(live.length,76);assert.equal(new Set(live).size,76);
  assert.deepEqual(live.filter(id=>!authoringStages.some(([added])=>id===added)&&!SCHEDULING_EXTRA_IDS.includes(id)),current);
  assert.deepEqual(live.filter(id=>authoringStages.some(([added])=>id===added)),authoringStages.map(([id])=>id));
  const added=['demo-kitchen-registration','demo-kitchen-postgres','demo-storage-owner-regressions','demo-storage-integration-regressions'];

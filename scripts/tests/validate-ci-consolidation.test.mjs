@@ -1,15 +1,19 @@
+import { CI_TEST_NAMES, CI_TEST_NAMES_SHA256, assertCIInventory, ciPartitionNames, CI_FIRST_PATTERN, CI_SECOND_PATTERN, registrationPartitionNames, REGISTRATION_FIRST_PATTERN, REGISTRATION_SECOND_PATTERN } from '../verification/validator-partitions.mjs';
+import { installAuthoringPredecessor, inspectHistoricalAuditFixture, reconcileHistoricalAuditResults, historicalAuditErrors } from './authoring-predecessor-fixture.mjs';
 import { predecessorValidatorPartitionForOrdinal, AUTHORITY_VALIDATORS, MIGRATION_GUARD_NAMES, parseBoundedPartition, boundedPartitionEvidence } from '../verification/validator-partitions.mjs';
 import { STORAGE_INTEGRATION_FIRST_PATTERN, STORAGE_INTEGRATION_SECOND_PATTERN, storagePartitionNames } from '../verification/demo-storage-partitions.mjs';
 import { refineScheduledStage, SCHEDULING_EXTRA_IDS } from '../verification/self-audit-catalog.mjs';
-import { expectedScheduledEvidence } from '../verification/development-self-audit.mjs';
+import { expectedScheduledEvidence, readScheduledEvidence } from '../verification/development-self-audit.mjs';
 import { inspectAuthoringEngineering } from '../verification/demo-authoring-engineering.mjs';
 import { authoringStages } from '../verification/authoring-stage-catalog.mjs';
 import { createAuthoringPredecessorCopy } from './authoring-proof-copy.mjs';
 import {VALIDATOR_PARTITION_COUNT,validatorPartitionOrdinals,validatorPartitionForOrdinal,assertValidatorInventory,WHOLE_REPOSITORY_CONTROLS,REBALANCED_VALIDATOR_CASES,REGISTRATION_TEST_NAMES,REGISTRATION_ENTRY_PATTERN,REGISTRATION_REMAINDER_PATTERN} from '../verification/validator-partitions.mjs';
 import assert from 'node:assert/strict';
-import { after, test } from 'node:test';
+import { after, test as nodeTest } from 'node:test';
+const registeredCINames=[];
+function test(name,...args){registeredCINames.push(name);return nodeTest(name,...args);}
 import { createHash } from 'node:crypto';
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, renameSync, symlinkSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
@@ -447,7 +451,7 @@ test('all 24 baseline logical obligations retain identities, discovery and bound
   assert.equal(previousPlan.stages.length, 52);
   assert.equal(new Set(previousPlan.stages.map(x => x.id)).size, 52);
   assert.deepEqual(previousPlan.stages.map(x=>x.id).sort(),[...predecessor.stages.map(x=>x.id),...KITCHEN_STAGES.map(([id])=>id),...STORAGE_STAGES.map(([id])=>id)].sort());
-  assert.equal(expectedPlan.stages.length,73);
+  assert.equal(expectedPlan.stages.length,76);
   assert.deepEqual(expectedPlan.stages.filter(row=>!authoringStages.some(([id])=>row.id===id)&&!SCHEDULING_EXTRA_IDS.includes(row.id)),previousPlan.stages.map(refineScheduledStage));
   assert.deepEqual(JSON.parse(read('verification/whole-repository/self-audit-plan.json')), expectedPlan);
   assert.equal(expectedPlan.shell_execution, false);
@@ -637,13 +641,24 @@ function auditEvidence() {
   return { source, context, tests, planHash, reports };
 }
 const evaluate = f => evaluateAuditReports(expectedPlan, f.reports, f.source, f.planHash, f.tests, f.context);
-test('complete 73-stage source-bound evidence reconciles', () => {
+test('complete 76-stage source-bound evidence reconciles', () => {
  assert.deepEqual(evaluate(auditEvidence()), []);
- for(const id of ['authority','authority-second','migration-guards','migration-guards-second','migration-guards-third','demo-storage-integration-regressions','demo-storage-integration-second']){
-  for(const mutate of [r=>delete r.scheduled_partition,r=>r.scheduled_partition.names.pop(),r=>r.scheduled_partition.names.push(r.scheduled_partition.names[0]),r=>r.scheduled_partition.names[0]='renamed-case',r=>r.scheduled_partition.index=99,r=>r.scheduled_partition.total=99,r=>r.timed_out=true,r=>r.command.push('--partition=1/3')]){
+ for(const id of ['audit-regressions-second','audit-regressions-third','demo-registration-entry-regressions','demo-registration-regressions','demo-registration-regressions-second']){
+  const expected=expectedScheduledEvidence(id),tap=expected.names.map((name,index)=>`ok ${index+1} - ${name}`).join('\n')+'\n';
+  assert.deepEqual(readScheduledEvidence(id,tap),expected);
+  for(const altered of [tap.replace('ok 1 -','not ok 1 -'),tap.replace(expected.names[0],expected.names[0]+' # SKIP'),tap+'ok 999 - '+expected.names[0]+'\n',tap.replace(expected.names[0],'renamed-case')]){
+   const parsed=readScheduledEvidence(id,altered);assert.notDeepEqual(parsed,expected);
+   const evidence=auditEvidence();evidence.reports.find(row=>row.stage===id).scheduled_partition=parsed;assert.ok(evaluate(evidence).length,'TAP failure/skip/duplicate/renamed case cannot satisfy exact partition');
+  }
+ }
+
+ for(const id of ['authority','authority-second','migration-guards','migration-guards-second','migration-guards-third','demo-storage-integration-regressions','demo-storage-integration-second','audit-regressions-second','audit-regressions-third','demo-registration-entry-regressions','demo-registration-regressions','demo-registration-regressions-second']){
+  for(const mutate of [r=>delete r.scheduled_partition,r=>r.scheduled_partition.names.pop(),r=>r.scheduled_partition.names.push(r.scheduled_partition.names[0]),r=>r.scheduled_partition.names[0]='renamed-case',r=>r.scheduled_partition.index=99,r=>r.scheduled_partition.total=99,r=>r.scheduled_partition.digest='0'.repeat(64),r=>r.scheduled_partition.selected_digest='0'.repeat(64),r=>r.timed_out=true,r=>r.command.push('--partition=1/3')]){
    const f=auditEvidence();mutate(f.reports.find(row=>row.stage===id));assert.ok(evaluate(f).length,id);
   }
  }
+ const swapped=auditEvidence();swapped.reports.find(row=>row.stage==='audit-regressions-third').scheduled_partition=structuredClone(swapped.reports.find(row=>row.stage==='audit-regressions-second').scheduled_partition);assert.ok(evaluate(swapped).length,'first CI receipt cannot replace second partition');
+ const replayed=auditEvidence();replayed.reports.find(row=>row.stage==='demo-registration-regressions-second').source.stamp='stale-source';assert.ok(evaluate(replayed).length,'registration partition cannot replay a different source');
  for(const kind of ['authority','migration']){
   const names=kind==='authority'?AUTHORITY_VALIDATORS:MIGRATION_GUARD_NAMES;
   const halves=Array.from({length:kind==='authority'?2:3},(_,i)=>boundedPartitionEvidence(kind,i+1));
@@ -1132,7 +1147,32 @@ test('authenticated predecessor authority umbrella retains five-second physical 
 test('current three-child authority runner regression suite is required in the exact bounded catalog',()=>{
   const prior=JSON.parse(kitchenPredecessor('verification/whole-repository/self-audit-plan.json')).stages.find(x=>x.id==='audit-regressions');
   const current=expectedPlan.stages.find(x=>x.id==='audit-regressions');
-  assert.deepEqual(current,{...prior,args:[...prior.args,AUDIT_RUNNER_TEST]});
+  const second=expectedPlan.stages.find(x=>x.id==='audit-regressions-second');
+  assert.deepEqual(current,refineScheduledStage({...prior,args:[...prior.args,AUDIT_RUNNER_TEST]}));
+  assert.deepEqual(second,{...prior,id:'audit-regressions-second',args:['--test','--test-name-pattern='+CI_FIRST_PATTERN,prior.args[2]]});
+  const third=expectedPlan.stages.find(x=>x.id==='audit-regressions-third');
+  assert.deepEqual(third,{...prior,id:'audit-regressions-third',args:['--test','--test-name-pattern='+CI_SECOND_PATTERN,prior.args[2]]});
+  assert.deepEqual([ciPartitionNames(1).length,ciPartitionNames(2).length],[227,226]);
+  assert.deepEqual([...ciPartitionNames(1),...ciPartitionNames(2)].sort(),[...CI_TEST_NAMES].sort());
+  assertCIInventory([...CI_TEST_NAMES]);
+  for(const mutate of [rows=>rows.pop(),rows=>rows.push(rows[0]),rows=>rows[0]='renamed',rows=>[rows[0],rows[1]]=[rows[1],rows[0]]]){const rows=[...CI_TEST_NAMES];mutate(rows);assert.throws(()=>assertCIInventory(rows));}
+  const files=[...current.args.slice(1),...second.args.slice(2)];
+  assert.deepEqual(files.slice().sort(),[...prior.args.slice(1),AUDIT_RUNNER_TEST].sort());assert.equal(new Set(files).size,5);
+  assert.deepEqual(current.args.slice(1),[prior.args[1],...prior.args.slice(3),AUDIT_RUNNER_TEST]);
+  for(const id of ['audit-regressions','audit-regressions-second','audit-regressions-third'])for(const change of ['omit','miswire','timeout','duplicate'])mutateFixtureFile('verification/whole-repository/self-audit-plan.json',(file,original)=>{
+    const plan=JSON.parse(original),row=plan.stages.find(x=>x.id===id);
+    if(change==='omit')plan.stages=plan.stages.filter(x=>x.id!==id);
+    if(change==='miswire')row.args=['--test','scripts/tests/unreviewed.mjs'];
+    if(change==='timeout')row.timeout_ms=25001;
+    if(change==='duplicate')plan.stages.push(structuredClone(row));
+    writeFileSync(file,JSON.stringify(plan));
+  },inspectConsolidatedVerification);
+  for(const id of ['audit-regressions','audit-regressions-second','audit-regressions-third'])for(const change of ['omit','miswire'])mutateFixtureFile('verification/whole-repository/self-audit-plan.json',(file,original)=>{
+    const plan=JSON.parse(original),row=plan.stages.find(x=>x.id===id);
+    if(change==='omit')plan.stages=plan.stages.filter(x=>x.id!==id);else row.args=['--test','scripts/tests/unreviewed.mjs'];
+    writeFileSync(file,JSON.stringify(plan));
+    assert.ok(inspectConsolidationCoverage(structuralRoot).some(error=>error.includes('original audit obligation requires all exact bounded regression groups')));
+  },inspectConsolidationCoverage);
   assert.ok(existsSync(join(ROOT,AUDIT_RUNNER_TEST)));
   mutateFixtureFile('verification/whole-repository/self-audit-plan.json',(file,original)=>{
     const plan=JSON.parse(original),stage=plan.stages.find(x=>x.id==='audit-regressions');
@@ -1201,6 +1241,7 @@ test('twenty-six bounded partitions refine the authenticated fourteen and retain
  assert.deepEqual(partitions.flat().sort((a,b)=>a-b),all);
  assert.equal(new Set(partitions.flat()).size,220);
  assert.deepEqual(partitions[12],[152]);assert.deepEqual(partitions[13],[153]);
+ const isolated=validatorPartitionOrdinals(1);isolated.splice(0,isolated.length,999);assert.deepEqual(validatorPartitionOrdinals(1),partitions[0],'returned arrays cannot mutate finite scheduling tables');
  const moved=new Map([[108,3],[120,4],[144,4],[176,12],[180,4],[201,5]]);
  for(let i=0;i<12;i++){const old=all.filter(n=>(moved.get(n)??n%12+1)===i+1&&n!==152&&n!==153);assert.deepEqual(partitions[i],old.filter((_,j)=>j%2===0));assert.deepEqual(partitions[i+14],old.filter((_,j)=>j%2===1));}
  for(const ordinal of all.filter(n=>!moved.has(n)))assert.equal(predecessorValidatorPartitionForOrdinal(ordinal),ordinal===152?13:ordinal===153?14:ordinal%12+1,'all other 214 assignments remain unchanged');
@@ -1229,8 +1270,16 @@ test('dedicated controls cannot be renamed, moved, omitted or duplicated behind 
 test('registration split executes exactly one plus sixteen unchanged test declarations',()=>{
  const source=preservedRegistrationTestBytes(ROOT);
  assert.equal(hash(source),'0aec40789483d97aafbeaa69846037de42b7f2f8a71c34979cd74aac8ce5a639');
+ const currentNames=[1,2,3].map(registrationPartitionNames);assert.deepEqual(currentNames.map(rows=>rows.length),[1,15,1]);assert.equal(new Set(currentNames.flat()).size,17);assert.deepEqual(currentNames.flat().sort(),[...REGISTRATION_TEST_NAMES].sort());
+ for(const id of ['demo-registration-entry-regressions','demo-registration-regressions','demo-registration-regressions-second'])for(const change of ['omit','miswire'])mutateFixtureFile('verification/whole-repository/self-audit-plan.json',(file,original)=>{
+  const plan=JSON.parse(original),row=plan.stages.find(stage=>stage.id===id);if(change==='omit')plan.stages=plan.stages.filter(stage=>stage.id!==id);else row.args=['--test','--test-name-pattern=^wrong$','scripts/tests/validate-demo-runtime-registration.mjs'];writeFileSync(file,JSON.stringify(plan));
+  assert.ok(inspectConsolidatedVerification(structuralRoot).some(error=>error.includes('exact bounded demo registration mutation suite')));
+  assert.ok(inspectConsolidationCoverage(structuralRoot).some(error=>error.includes('original registration obligation requires all exact bounded regression groups')));
+ },inspectConsolidatedVerification);
+
  const names=[...source.matchAll(/^test\('([^']+)'/gm)].map(match=>match[1]);assert.equal(names.length,17);assert.deepEqual(names,REGISTRATION_TEST_NAMES);
- const stages=expectedPlan.stages.filter(stage=>['demo-registration-entry-regressions','demo-registration-regressions'].includes(stage.id));
+ const predecessor=inspectAuthoringEngineering(ROOT);assert.deepEqual(predecessor.errors,[]);
+ const stages=JSON.parse(predecessor.predecessorFiles['verification/whole-repository/self-audit-plan.json']).stages.filter(stage=>['demo-registration-entry-regressions','demo-registration-regressions'].includes(stage.id));
  const selected=stages.map(stage=>names.filter(name=>new RegExp(stage.args[1].slice('--test-name-pattern='.length)).test(name)));
  assert.deepEqual(selected.map(rows=>rows.length),[1,16]);
  assert.deepEqual([...selected.flat()].sort(),[...names].sort());assert.equal(new Set(selected.flat()).size,17);
@@ -1282,9 +1331,15 @@ test('pinned Node test runner executes exact registration partitions without par
   const run=pattern=>{const out=execFileSync(process.execPath,['--test','--test-reporter=tap','--test-name-pattern='+pattern,file],{env:childEnvironment,encoding:'utf8',timeout:5000});return [...out.matchAll(/^# EXECUTED:(.+)$/gm)].map(match=>JSON.parse(match[1]));};
   assert.deepEqual(run(REGISTRATION_ENTRY_PATTERN),[REGISTRATION_TEST_NAMES[1]]);
   assert.deepEqual(run(REGISTRATION_REMAINDER_PATTERN),REGISTRATION_TEST_NAMES.filter((_,index)=>index!==1));
+  assert.deepEqual(run(REGISTRATION_FIRST_PATTERN),registrationPartitionNames(2));
+  assert.deepEqual(run(REGISTRATION_SECOND_PATTERN),registrationPartitionNames(3));
+  assert.deepEqual([1,2,3].flatMap(registrationPartitionNames).sort(),[...REGISTRATION_TEST_NAMES].sort());
   // The former tempting negative-lookahead selector matches the parent suite.
   // This executable control is why pure RegExp.test(name) is not sufficient.
   assert.equal(run('^(?!all 131 exact registered entries reject partial approval and deletion$)').length,17);
+  writeFileSync(file,"import {test} from 'node:test';\n"+CI_TEST_NAMES.map(name=>`test(${JSON.stringify(name)},()=>console.log('EXECUTED:'+${JSON.stringify(JSON.stringify(name))}));`).join('\n')+'\n');
+  assert.deepEqual(run(CI_FIRST_PATTERN),ciPartitionNames(1));assert.deepEqual(run(CI_SECOND_PATTERN),ciPartitionNames(2));
+
  }finally{rmSync(dir,{recursive:true,force:true});}
 });
 
@@ -1337,3 +1392,35 @@ test('recipe scheduling split preserves all 43 historical PostgreSQL declaration
 for(const id of ['demo-postgres','demo-recipe-postgres'])test(`split PostgreSQL stage ${id} cannot raise its operation ceiling`,()=>{
   mutateFixtureFile('verification/whole-repository/self-audit-plan.json',(file,original)=>{const plan=JSON.parse(original);plan.stages.find(stage=>stage.id===id).timeout_ms=30000;writeFileSync(file,JSON.stringify(plan));},inspectConsolidatedVerification);
 });
+
+
+test('historical whole-audit scheduling authenticates original modules and requires every genuine result',()=>{
+ const dir=mkdtempSync(join(tmpdir(),'historical-audit-scheduling-'));
+ try {
+  cpSync(ROOT,dir,{recursive:true,filter:path=>!/(^|\/)\.git(?:\/|$)|(^|\/)node_modules(?:\/|$)|verification\/generated/.test(path)});
+  installAuthoringPredecessor(dir);
+  inspectHistoricalAuditFixture(dir,'positive');
+  const scriptsDir=join(dir,'scripts'),movedScripts=join(dir,'saved-scripts');renameSync(scriptsDir,movedScripts);symlinkSync(movedScripts,scriptsDir);assert.throws(()=>inspectHistoricalAuditFixture(dir,'positive'),/historical scripts must be a real directory/);rmSync(scriptsDir);renameSync(movedScripts,scriptsDir);
+  const negative=join(dir,'scripts/persistence/validate-persistence-semantic-closure-registration.mjs'),original=readFileSync(negative,'utf8');
+  assert.throws(()=>inspectHistoricalAuditFixture(dir,'negative'),/exact original negative/);
+  writeFileSync(negative,original+'\nprocess.exit(1);\n');inspectHistoricalAuditFixture(dir,'negative');
+  assert.throws(()=>inspectHistoricalAuditFixture(dir,'positive'),/exact complete historical/);
+  writeFileSync(negative,original+'\nprocess.exit(1);\n\n');assert.throws(()=>inspectHistoricalAuditFixture(dir,'negative'));writeFileSync(negative,original);
+  const runner=join(dir,'scripts/architecture/validate-whole-repository.mjs'),runnerBytes=readFileSync(runner);
+  writeFileSync(runner,Buffer.concat([runnerBytes,Buffer.from('\n')]));assert.throws(()=>inspectHistoricalAuditFixture(dir,'positive'),/exact complete historical/);writeFileSync(runner,runnerBytes);
+  const extra=join(dir,'scripts/architecture/unreviewed.mjs');writeFileSync(extra,'');assert.throws(()=>inspectHistoricalAuditFixture(dir,'positive'),/exact historical script inventory/);rmSync(extra);
+  symlinkSync(runner,extra);assert.throws(()=>inspectHistoricalAuditFixture(dir,'positive'),/symlink/);rmSync(extra);
+  assert.throws(()=>inspectHistoricalAuditFixture(dir,'unknown'),/exact historical control/);
+  const scripts=discoverAuthorityValidators(dir),results=scripts.map(path=>({path,status:0,signal:null,error:null,stdout:'',stderr:''}));
+  assert.deepEqual(reconcileHistoricalAuditResults(scripts,[...results].reverse()),results);
+  assert.deepEqual(historicalAuditErrors(scripts,results),[]);
+  for(const mutate of [rows=>rows.pop(),rows=>rows[0]=rows[1],rows=>rows[0].path='unreviewed']){const rows=structuredClone(results);mutate(rows);assert.throws(()=>reconcileHistoricalAuditResults(scripts,rows));}
+  for(const patch of [{status:1,stderr:'original negative control'},{status:null,error:'validator timed out after 5000ms'},{status:null,signal:'SIGKILL'},{status:null,error:'validator launch failed: fixture'}]){
+   const rows=structuredClone(results);Object.assign(rows[0],patch);assert.equal(historicalAuditErrors(scripts,rows).length,1);
+  }
+  assert.throws(()=>reconcileHistoricalAuditResults(scripts.slice(1),results));
+ }finally{rmSync(dir,{recursive:true,force:true});}
+});
+
+// All declarations are registered even under a positive Node name selector.
+assertCIInventory(registeredCINames);
