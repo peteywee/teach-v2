@@ -69,3 +69,50 @@ test('outer audit timeout terminates the inherited validator process group',{ski
   assert.ok(terminated,'terminated child must not still be running after bounded signal observation');
  }finally{rmSync(root,{recursive:true,force:true});}
 });
+
+
+test('integration barrier preserves launch and result order while draining preceding children',async()=>{
+ const integration='scripts/architecture/validate-repository-integration.mjs';
+ const paths=['before-slow','before-fast',integration,'after-a','after-b','after-c'];
+ const started=[],closed=[];let active=0,max=0,integrationActive=false;
+ const spawnImpl=(command,args,options)=>{
+  const path=args[0];assert.equal(command,process.execPath);assert.equal(options.shell,false);assert.equal(options.detached,false);
+  if(path===integration){assert.equal(active,0);assert.deepEqual(closed.slice().sort(),paths.slice(0,2).sort());integrationActive=true;}
+  else assert.equal(integrationActive,false,'no child may overlap the integration slot');
+  if(path.startsWith('after'))assert.ok(closed.includes(integration),'integration must finish before following launch');
+  started.push(path);active++;max=Math.max(max,active);
+  const child=new EventEmitter();child.stdout=new PassThrough();child.stderr=new PassThrough();child.kill=()=>{};
+  setTimeout(()=>{active--;if(path===integration)integrationActive=false;closed.push(path);child.emit('close',0,null);},path==='before-slow'?25:5);
+  return child;
+ };
+ const results=await runAuthorityValidators('/tmp',paths,{spawnImpl});
+ assert.deepEqual(started,paths);assert.deepEqual(results.map(row=>row.path),paths);assert.equal(max,3);assert.ok(results.every(row=>row.status===0&&!row.error&&!row.signal));
+});
+
+test('integration denial, timeout, signal and launch error retain every following validator',async()=>{
+ const integration='scripts/architecture/validate-repository-integration.mjs';
+ for(const mode of ['denial','timeout','signal','launch']){
+  const paths=['before',integration,'after-a','after-b'],started=[];let active=0,integrationActive=false;
+  const spawnImpl=(command,args,options)=>{
+   const path=args[0];started.push(path);assert.equal(options.detached,false);
+   if(path===integration){assert.equal(active,0);if(mode==='launch')throw Error('integration launch fixture');integrationActive=true;}
+   else assert.equal(integrationActive,false);
+   active++;
+   const child=new EventEmitter();child.stdout=new PassThrough();child.stderr=new PassThrough();let closed=false;
+   const close=(status,signal)=>{if(closed)return;closed=true;active--;if(path===integration)integrationActive=false;child.emit('close',status,signal);};
+   child.kill=()=>{if(!closed)setImmediate(()=>close(null,'SIGKILL'));};
+   if(path!==integration)setImmediate(()=>close(0,null));
+   else if(mode==='denial')setImmediate(()=>{child.stderr.end('integration-denied');close(4,null);});
+   else if(mode==='signal')setImmediate(()=>close(null,'SIGTERM'));
+   return child;
+  };
+  const results=await runAuthorityValidators('/tmp',paths,{timeoutMs:100,spawnImpl});
+  assert.deepEqual(started,paths);assert.deepEqual(results.map(row=>row.path),paths);
+  assert.ok(results.filter(row=>row.path!==integration).every(row=>row.status===0&&!row.error&&!row.signal));
+  const result=results[1];
+  if(mode==='denial'){assert.equal(result.status,4);assert.equal(result.stderr,'integration-denied');}
+  if(mode==='timeout'){assert.match(result.error,/timed out after 100ms/);assert.equal(result.signal,'SIGKILL');}
+  if(mode==='signal')assert.equal(result.signal,'SIGTERM');
+  if(mode==='launch')assert.match(result.error,/validator launch failed: integration launch fixture/);
+ }
+});

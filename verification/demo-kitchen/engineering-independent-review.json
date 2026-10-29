@@ -1,8 +1,8 @@
 {
   "review_id": "TEACH-DEMO-KITCHEN-ENGINEERING-REVIEW-2026-10-26",
-  "manifest_sha256": "4d59e7dd747db167b148c06f52f53939c4c5fe29fb54e0cc92f1956585e44aae",
-  "reviewer": "/root/reconcile_teach_hosting_direction",
-  "reviewed_at_utc": "2026-10-26T11:04:15Z",
+  "manifest_sha256": "2fe904f2053e8f7df50d60e23cedd4251d3cd52a2d0435004428f44cc37ac4cb",
+  "reviewer": "/root/release_teach_manager_authoring/review_authoring_security",
+  "reviewed_at_utc": "2026-10-29T00:08:16.006677Z",
   "outcome": "PASS",
   "source_edits_by_reviewer": false,
   "scope": "BOUNDED_KITCHEN_SOURCE_AND_GUARD_SUCCESSOR",
@@ -13,20 +13,20 @@
   "security_grants_authorized": false,
   "deployment_authorized": false,
   "unresolved_scope_blockers": [],
-  "review_basis": "Independent read-only finite timing refinement: all 52 baseline predecessors and 77 current normalized source hashes verified. Exactly six named validator ordinals move within the same fourteen partitions; the other 214 assignments, all 220 original declarations, immutable transition pins and 52-stage Node20 plan remain unchanged. The authority runner changes only its fixed worker count from two to three with corresponding concurrency controls; every one of 59 slots, deterministic result order, failure drain, process-group cleanup, five-second child ceiling and 25-second outer ceiling remain intact. The former schema command becomes two explicitly named mandatory receipts covering the same seven direct files and existing recovery import closure, with exact 8 plus 41 successful case inventories and no skipped, duplicate, unknown, nested or malformed TAP results. Both steps are required by exact workflow and lifecycle inventory; obsolete schema receipt names are rejected. Schema test bodies outside the two extended hosted-CI controls, all nine other hosted commands, target guards, migration SQL and production permissions are unchanged. Diagnostic timings inform scheduling but do not establish final exact-source or production success.",
+  "review_basis": "Independent read-only review of owner-authorized PR103 bounded scheduling repair on exact head287e73473ee514296bb40dc745e3d7b0f3848763. Only the authority runner and its regression file change within the existing77-current-path kitchen source successor. The exact repository integration slot is a scheduling barrier: preceding bounded children drain, the genuine unchanged integration command runs alone, then at-most-three concurrency resumes. All59 discovered validators, sorted launch and result order, actual child commands, assertions, five-second child ceiling,25-second outer ceiling,1MiB output bound, failure drain and inherited process-group cleanup remain unchanged. No product, database, migration, deployment or runtime authority is granted. Historical52 predecessor bytes and all prior test bodies remain exact. Source review does not establish hosted timing or release success.",
   "independent_local_checks": [
-    "All 52 baseline predecessor bytes independently matched git show 884d829e and all 77 current normalized source hashes matched the manifest",
-    "Exact six ordinal moves independently checked; all other 214 assignments unchanged and fourteen-partition union contains every original ordinal exactly once",
-    "Original 220 declarations, 115-case transition manifest, Node20 stage plan/catalog, lifecycle admission, database target guards and both 0007 SQL bodies independently matched prior source",
-    "Whole-runner delta inspected as one additional fixed worker with matching tests; remaining runOne, limits, process-group behavior and ordered failure collection unchanged",
-    "Saved unsplit 49-case diagnostic output independently matched the exact 8/41 catalog union; both saved split TAP logs parsed successfully; four malformed/duplicate/bailout probes independently rejected",
-    "Nine other hosted commands and original seven direct schema files matched prior source; workflow template and derived lifecycle inventory matched committed candidates exactly; git diff --check passed"
+    "All77 normalized current source hashes independently rehashed; only runner and runner-test bindings changed relative to287e734",
+    "All52 preserved predecessor bytes independently compared with git baseline884d829e5b53dcf9291677f52e7f100882f528e6; manifest metadata, path sets and predecessor hashes unchanged",
+    "Reviewed full runner delta: runOne, discovery, CLI aggregate/storage predicates and all limits unchanged; fixed exact-path barrier retains input launch/result order including repeated slots",
+    "All seven existing regression bodies unchanged; two additional cases verify prefix drain/exclusive integration/suffix resumption and denial/timeout/signal/launch-error continuation",
+    "Independently executed runner suite on Node24.22.1:9 passed,0 failed,0 skipped in1776.52ms; worker pinned Node20.20.2 focused log separately reports9/9",
+    "git diff --check passed; authoring a788 source and recovery evidence not modified by reviewer"
   ],
   "remaining_release_checks": [
-    "Clean exact-source all fourteen partition timings, both mandatory schema receipts, aggregate regressions and independent sealed/tamper sweep",
-    "Required exact-head CI on pinned Node20 and Node24 including actual Docker host-network kitchen PostgreSQL proof and complete hosted lane",
-    "Authorized production migration and exact-revision deployment verification",
-    "Fresh live kitchen and unchanged training/reset/logout acceptance"
+    "Apply genuine review anchor, confirm normalized manifest unchanged and exact source admission",
+    "Clean exact-head full59-validator audit and CI consolidation regression within existing25-second bounds",
+    "Required remote exact-head CI including historical mutation controls and hosted runtime checks; no timing success inferred from local focused tests",
+    "Verify Vercel selected runtime and absence of future-major engines warning for exact deployed source; no transfer of authoring a788 recovery or deployment proofs"
   ],
-  "supersedes_review_sha256": "a61d7e896c88a3333d91cb27cd2beca29a422cd8da74fe162fc511bf786168cf"
+  "supersedes_review_sha256": "d220388a6a61b6de1be850f78c186bc5e0e683a0a40472aed690e57fe9c939c5"
 }
