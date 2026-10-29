@@ -18,12 +18,14 @@ export function discoverAuthorityValidators(root) {
 }
 
 /** Three bounded, no-argument read-only validator children at a time. Every slot
- * runs once; results retain inventory order. There is no shared proof cache or
+ * runs once; results retain inventory order. The integration slot is a barrier:
+ * preceding children drain before it runs alone, then bounded concurrency resumes.
+ * There is no shared proof cache or
  * skipped validator. Children inherit the umbrella's process group so the outer
  * 25s self-audit SIGKILL also terminates them, rather than orphaning detached work. */
 export async function runAuthorityValidators(root,scripts,{timeoutMs=5000,spawnImpl=spawn}={}) {
  if(!Number.isInteger(timeoutMs)||timeoutMs<1||timeoutMs>5000)throw new RangeError('validator timeout must be 1..5000ms');
- const results=new Array(scripts.length);let next=0;
+ const results=new Array(scripts.length);
  const runOne=path=>new Promise(resolveResult=>{
   let child,timer,settled=false,outputBytes=0,stdout='',stderr='',failure=null;
   const stop=()=>{
@@ -47,8 +49,19 @@ export async function runAuthorityValidators(root,scripts,{timeoutMs=5000,spawnI
   child.once('close',(status,signal)=>finish(status,signal));
   timer=setTimeout(()=>{failure='validator timed out after '+timeoutMs+'ms';stop();},timeoutMs);
  });
- const worker=async()=>{for(;;){const index=next++;if(index>=scripts.length)return;results[index]=await runOne(scripts[index]);}};
- await Promise.all([worker(),worker(),worker()]);return results;
+ const runConcurrent=async(start,end)=>{
+  let next=start;
+  const worker=async()=>{for(;;){const index=next++;if(index>=end)return;results[index]=await runOne(scripts[index]);}};
+  await Promise.all([worker(),worker(),worker()]);
+ };
+ const integration='scripts/architecture/validate-repository-integration.mjs';
+ let start=0;
+ for(let index=0;index<scripts.length;index++)if(scripts[index]===integration){
+  await runConcurrent(start,index);
+  results[index]=await runOne(scripts[index]);
+  start=index+1;
+ }
+ await runConcurrent(start,scripts.length);return results;
 }
 
 async function main() {
