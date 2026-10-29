@@ -1422,6 +1422,204 @@
         "issue": "#82",
         "registered_on": "2026-10-17"
       }
+    },
+    {
+      "id": "content.draft.read",
+      "kind": "capability",
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "definition": "Canonical action constant for ReadAuthoringWorkspace; only exact live demo manager authorization, never a learner grant.",
+      "requires": [
+        {
+          "family": "values",
+          "id": "Capability"
+        },
+        {
+          "family": "identifiers",
+          "id": "CapabilityId"
+        },
+        {
+          "family": "entities",
+          "id": "ContentDraft"
+        }
+      ],
+      "identifier": "CapabilityId",
+      "registration_authority": "C01",
+      "policy_authority": "C14",
+      "internal_no_grant": false,
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/39",
+        "operation_id": "ReadAuthoringWorkspace",
+        "operation_kind": "query"
+      },
+      "demo_authoring_registration": {
+        "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-authoring/owner-approval.json",
+        "impact_issue": null,
+        "registered_on": "2026-10-26"
+      }
+    },
+    {
+      "id": "content.draft.write",
+      "kind": "capability",
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "definition": "Canonical action constant for SaveContentDraft; only exact live demo manager authorization, never a learner grant.",
+      "requires": [
+        {
+          "family": "values",
+          "id": "Capability"
+        },
+        {
+          "family": "identifiers",
+          "id": "CapabilityId"
+        },
+        {
+          "family": "entities",
+          "id": "ContentDraft"
+        },
+        {
+          "family": "commands",
+          "id": "SaveContentDraft"
+        }
+      ],
+      "identifier": "CapabilityId",
+      "registration_authority": "C01",
+      "policy_authority": "C14",
+      "internal_no_grant": false,
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/40",
+        "operation_id": "SaveContentDraft",
+        "operation_kind": "command"
+      },
+      "demo_authoring_registration": {
+        "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-authoring/owner-approval.json",
+        "impact_issue": null,
+        "registered_on": "2026-10-26"
+      }
+    },
+    {
+      "id": "content.draft.preview",
+      "kind": "capability",
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "definition": "Canonical action constant for PreviewContentDraft; only exact live demo manager authorization, never a learner grant.",
+      "requires": [
+        {
+          "family": "values",
+          "id": "Capability"
+        },
+        {
+          "family": "identifiers",
+          "id": "CapabilityId"
+        },
+        {
+          "family": "entities",
+          "id": "ContentDraft"
+        }
+      ],
+      "identifier": "CapabilityId",
+      "registration_authority": "C01",
+      "policy_authority": "C14",
+      "internal_no_grant": false,
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/41",
+        "operation_id": "PreviewContentDraft",
+        "operation_kind": "query"
+      },
+      "demo_authoring_registration": {
+        "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-authoring/owner-approval.json",
+        "impact_issue": null,
+        "registered_on": "2026-10-26"
+      }
+    },
+    {
+      "id": "content.draft.publish",
+      "kind": "capability",
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "definition": "Canonical action constant for PublishContentDraft; only exact live demo manager authorization, never a learner grant.",
+      "requires": [
+        {
+          "family": "values",
+          "id": "Capability"
+        },
+        {
+          "family": "identifiers",
+          "id": "CapabilityId"
+        },
+        {
+          "family": "entities",
+          "id": "ContentDraft"
+        },
+        {
+          "family": "commands",
+          "id": "PublishContentDraft"
+        }
+      ],
+      "identifier": "CapabilityId",
+      "registration_authority": "C01",
+      "policy_authority": "C14",
+      "internal_no_grant": false,
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/42",
+        "operation_id": "PublishContentDraft",
+        "operation_kind": "command"
+      },
+      "demo_authoring_registration": {
+        "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-authoring/owner-approval.json",
+        "impact_issue": null,
+        "registered_on": "2026-10-26"
+      }
+    },
+    {
+      "id": "transaction.authoring.read",
+      "kind": "capability",
+      "status": "approved",
+      "owning_domain": "Authorization",
+      "definition": "Canonical action constant for ReadAuthoringOperation; only exact live demo manager authorization, never a learner grant.",
+      "requires": [
+        {
+          "family": "values",
+          "id": "Capability"
+        },
+        {
+          "family": "identifiers",
+          "id": "CapabilityId"
+        },
+        {
+          "family": "entities",
+          "id": "AuthoringReceipt"
+        }
+      ],
+      "identifier": "CapabilityId",
+      "registration_authority": "C01",
+      "policy_authority": "C14",
+      "internal_no_grant": false,
+      "authorization_policy_ref": {
+        "path": "governance/decision-closure/c14-capability-matrix.json",
+        "json_pointer": "/operations/43",
+        "operation_id": "ReadAuthoringOperation",
+        "operation_kind": "query"
+      },
+      "demo_authoring_registration": {
+        "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-authoring/owner-approval.json",
+        "impact_issue": null,
+        "registered_on": "2026-10-26"
+      }
     }
   ],
   "note": "Capability identifiers are registered here; C14 owns authorization meaning, assignment, scope, evaluation, and denial.",

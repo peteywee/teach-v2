@@ -2,12 +2,12 @@
   "x-document": {
     "doc_id": "TEACH-PROP-DCS-05-DATA",
     "class": "specification",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "status": "active",
     "owner": "Patrick Craven, Top Shelf Service LLC",
     "created_on": "2026-10-05",
-    "updated_on": "2026-10-17",
-    "approval_record": "domains/demo-runtime/owner-approval.json"
+    "updated_on": "2026-10-26",
+    "approval_record": "domains/demo-authoring/owner-approval.json"
   },
   "baseline_route_scan": {
     "source": "verification/owner-decisions/2026-10-04/route-scan.json",
@@ -1112,6 +1112,267 @@
         "properties": {},
         "required": []
       }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/authoring/workspace",
+      "operation": "ReadAuthoringWorkspace",
+      "capability": "content.draft.read",
+      "success_status": 200,
+      "scope": "LOCATION",
+      "request_body_schema": null,
+      "response_schema": "domains/demo-authoring/proposal-0.1.0/authoring-wire.schema.json#/$defs/Workspace",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "cookie_only_session": true,
+      "target_binding": "Exact live demo run + current manager identity; client scope only a checked selector",
+      "approval_record": "domains/demo-authoring/owner-approval.json",
+      "definition_source": "domains/demo-authoring/proposal-0.1.0/authoring-operations.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": null,
+      "authentication": "SESSION_COOKIE",
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "locationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": [
+          "organizationId",
+          "locationId"
+        ]
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/authoring/draft",
+      "operation": "SaveContentDraft",
+      "capability": "content.draft.write",
+      "success_status": 200,
+      "scope": "LOCATION",
+      "request_body_schema": {
+        "$ref": "domains/demo-authoring/proposal-0.1.0/authoring-wire.schema.json#/$defs/SaveInput"
+      },
+      "response_schema": "domains/demo-authoring/proposal-0.1.0/authoring-wire.schema.json#/$defs/SaveResult",
+      "origin_check": true,
+      "idempotency_key_header": "Idempotency-Key",
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "cookie_only_session": true,
+      "target_binding": "Exact live demo run + current manager identity; client scope only a checked selector",
+      "approval_record": "domains/demo-authoring/owner-approval.json",
+      "definition_source": "domains/demo-authoring/proposal-0.1.0/authoring-operations.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": "application/json",
+      "authentication": "SESSION_COOKIE",
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "locationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": [
+          "organizationId",
+          "locationId"
+        ]
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/authoring/draft/preview",
+      "operation": "PreviewContentDraft",
+      "capability": "content.draft.preview",
+      "success_status": 200,
+      "scope": "LOCATION",
+      "request_body_schema": null,
+      "response_schema": "domains/demo-authoring/proposal-0.1.0/authoring-wire.schema.json#/$defs/Preview",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "cookie_only_session": true,
+      "target_binding": "Exact live demo run + current manager identity; client scope only a checked selector",
+      "approval_record": "domains/demo-authoring/owner-approval.json",
+      "definition_source": "domains/demo-authoring/proposal-0.1.0/authoring-operations.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": null,
+      "authentication": "SESSION_COOKIE",
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "locationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": [
+          "organizationId",
+          "locationId"
+        ]
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "revision": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          }
+        },
+        "required": [
+          "revision"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/authoring/draft/publish",
+      "operation": "PublishContentDraft",
+      "capability": "content.draft.publish",
+      "success_status": 200,
+      "scope": "LOCATION",
+      "request_body_schema": {
+        "$ref": "domains/demo-authoring/proposal-0.1.0/authoring-wire.schema.json#/$defs/PublishInput"
+      },
+      "response_schema": "domains/demo-authoring/proposal-0.1.0/authoring-wire.schema.json#/$defs/PublishResult",
+      "origin_check": true,
+      "idempotency_key_header": "Idempotency-Key",
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "cookie_only_session": true,
+      "target_binding": "Exact live demo run + current manager identity; client scope only a checked selector",
+      "approval_record": "domains/demo-authoring/owner-approval.json",
+      "definition_source": "domains/demo-authoring/proposal-0.1.0/authoring-operations.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": "application/json",
+      "authentication": "SESSION_COOKIE",
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "locationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": [
+          "organizationId",
+          "locationId"
+        ]
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/organizations/{organizationId}/locations/{locationId}/authoring/operations/{key}",
+      "operation": "ReadAuthoringOperation",
+      "capability": "transaction.authoring.read",
+      "success_status": 200,
+      "scope": "LOCATION",
+      "request_body_schema": null,
+      "response_schema": "domains/demo-authoring/proposal-0.1.0/authoring-wire.schema.json#/$defs/OperationResult",
+      "origin_check": false,
+      "idempotency_key_header": null,
+      "mounted": false,
+      "implemented": false,
+      "state": "REGISTERED_NOT_IMPLEMENTED",
+      "cookie_only_session": true,
+      "target_binding": "Exact live demo run + current manager identity; client scope only a checked selector",
+      "approval_record": "domains/demo-authoring/owner-approval.json",
+      "definition_source": "domains/demo-authoring/proposal-0.1.0/authoring-operations.json",
+      "error_schema": "governance/decision-closure/api-error-envelope.schema.json",
+      "cache_control": "no-store",
+      "unsafe_content_type": null,
+      "authentication": "SESSION_COOKIE",
+      "path_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organizationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "locationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "key": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{16,128}$"
+          }
+        },
+        "required": [
+          "organizationId",
+          "locationId",
+          "key"
+        ]
+      },
+      "query_parameters_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "operation": {
+            "enum": [
+              "SaveContentDraft",
+              "PublishContentDraft"
+            ]
+          }
+        },
+        "required": [
+          "operation"
+        ]
+      }
     }
   ],
   "unrouted_operations": [
@@ -1198,5 +1459,12 @@
     "application_sessions_including_history": 100,
     "close_available_at_cap": true
   },
-  "no_mount_authority": true
+  "no_mount_authority": true,
+  "demo_authoring_registration": {
+    "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+    "package_version": "0.1.0",
+    "approval_record": "domains/demo-authoring/owner-approval.json",
+    "impact_issue": null,
+    "registered_on": "2026-10-26"
+  }
 }

@@ -10,7 +10,10 @@ import {DemoError} from '../../src/modules/authorization/application/demo-error.
 export const origin='https://demo.example.test';
 export function binding():HostedBindingProposal{return {kind:'HOSTED_DEMO_BINDING_PROPOSAL',version:1,execution:'DISABLED',provider:'VERCEL_SUPABASE',source:{commit:'a'.repeat(40),tree:'b'.repeat(40),buildDigest:'c'.repeat(64),manifestDigest:'d'.repeat(64)},authority:{packageDigest:'a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a',registrationDigest:'b94cf7c7c9bab35ad2454470295ae2b04b8814bd0ac55c282cdd3dd6df67218d',admissionDigest:'e'.repeat(64),mappingDigest:'f'.repeat(64),migrationDigest:'0'.repeat(64)},runtime:{node:'20.20.2',packageManager:'pnpm@12.8.1'},vercel:{teamId:'synthetic_team',projectId:'synthetic_project',environment:'preview',deploymentId:'synthetic_deployment',origin},supabase:{projectRef:'a'.repeat(20),endpoint:{host:'aws-0-us-east-1.pooler.supabase.com',port:6543,database:'postgres',mode:'transaction'}},secretRevisions:{runtime:'opaque_revision_1',scheduler:'opaque_revision_2'},migrationHead:'0005_demo_runtime_owner_storage'};}
 export function assets():Map<string,HostedStaticAsset>{
- const definitions=JSON.parse(readFileSync(new URL('../../src/web/demo/assets.json',import.meta.url),'utf8')) as Array<{path:string;file:string;contentType:string}>;
+ const legacyBytes=readFileSync(new URL('./legacy-assets.json',import.meta.url),'utf8');
+ // Exact released 30b4c62d tree inventory, retained only for the original seven-asset factory proof.
+ if(createHash('sha256').update(legacyBytes).digest('hex')!=='e17024f7dfc5c7978af159e6370f58379068c42686b4aa63d39f654e6238a1c4')throw Error('Historical asset inventory changed');
+ const definitions=JSON.parse(legacyBytes) as Array<{path:string;file:string;contentType:string}>;
  return new Map(definitions.map(row=>{const bytes=readFileSync(new URL('../../src/web/demo/'+row.file,import.meta.url));return [row.path,{bytes,contentType:row.contentType,sha256:createHash('sha256').update(bytes).digest('hex')}];}));
 }
 export async function testOnlyCompose(options:{proposed:unknown;verify:()=>Promise<unknown>;poolFactory:()=>Promise<unknown>;applicationFactory:(pool:unknown)=>DemoApplicationPort;poolPolicy?:unknown}){

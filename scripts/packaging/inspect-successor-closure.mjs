@@ -3,9 +3,14 @@ import {dirname,resolve,relative} from 'node:path';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {HOSTED_WEB_ASSETS} from './build-demo-hosted.mjs';
+import {inspectAuthoringPhysicalSuccessor} from '../persistence/demo-authoring-physical-successor.mjs';
+const AUTHORING_OPERATIONS='domains/demo-authoring/proposal-0.1.0/authoring-operations.json';
+const AUTHORING_ASSETS=['authoring-api.mjs','authoring-wire.mjs','authoring-model.mjs','authoring-views.mjs','authoring-controller.mjs'].map(file=>({path:'/assets/'+file,file,contentType:'text/javascript; charset=utf-8'}));
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 /** Source closure proof only. Not a deployable build, approval, or activation manifest. */
 export function inspectSuccessorClosure(root){
+ const authoring=inspectAuthoringPhysicalSuccessor(root);
+ if(authoring.errors.length||authoring.present&&!authoring.admitted)throw Error('Authoring closure requires exact source and physical admission');
  const files={},packages=new Set(),pending=[
  'src/bootstrap/demo-successor/accepting-entrypoint.ts','src/bootstrap/demo-successor/runtime.ts','src/bootstrap/demo-successor/runtime-config.ts','src/bootstrap/demo-successor/entrypoint.ts','src/bootstrap/demo-successor/composition.ts','src/bootstrap/demo-successor/transaction.ts',
  'src/bootstrap/demo-successor/pool.ts','src/bootstrap/demo-successor/binding.ts',
@@ -24,11 +29,17 @@ export function inspectSuccessorClosure(root){
  }
  }
  const assets=JSON.parse(readFileSync(resolve(root,'src/web/demo/assets.json')));
- if(JSON.stringify(assets)!==JSON.stringify(HOSTED_WEB_ASSETS)||assets.length!==7)throw Error('Asset closure drift');
+ const expectedAssets=authoring.admitted?[...HOSTED_WEB_ASSETS,...AUTHORING_ASSETS]:HOSTED_WEB_ASSETS;
+ if(JSON.stringify(assets)!==JSON.stringify(expectedAssets)||assets.length!==(authoring.admitted?12:7))throw Error('Asset closure drift');
  for(const asset of assets){const path='src/web/demo/'+asset.file;files[path]=hash(readFileSync(resolve(root,path)));}
  for(const path of ['governance/automation-principals.json','domains/demo-runtime/proposal-0.1.0/baseline-error-envelope.schema.json','src/web/demo/assets.json','tsconfig.json','tsconfig.successor.json','scripts/packaging/build-successor-accepting.mjs','scripts/packaging/build-successor-local.mjs','scripts/packaging/inspect-successor-closure.mjs','scripts/packaging/build-demo-hosted.mjs','pnpm-lock.yaml','package.json','domains/demo-runtime/proposal-0.1.0/transport-and-queries.json'])files[path]=hash(readFileSync(resolve(root,path)));
  const routes=JSON.parse(readFileSync(resolve(root,'domains/demo-runtime/proposal-0.1.0/transport-and-queries.json'))).routes;
  if(routes.length!==15||new Set(routes.map(r=>r.operation)).size!==15)throw Error('Route closure drift');
+ if(authoring.admitted){
+  const bytes=readFileSync(resolve(root,AUTHORING_OPERATIONS)),extra=JSON.parse(bytes).routes;
+  if(extra.length!==5||new Set([...routes,...extra].map(r=>r.operation)).size!==20)throw Error('Authoring route closure drift');
+  routes.push(...extra);files[AUTHORING_OPERATIONS]=hash(bytes);
+ }
  const sorted=Object.fromEntries(Object.entries(files).sort(([a],[b])=>a.localeCompare(b)));
  const pkg=JSON.parse(readFileSync(resolve(root,'package.json')));
  return {kind:'SUCCESSOR_SOURCE_CLOSURE',execution:'DISABLED',deployable:false,nodePatch:process.versions.node,

@@ -1,3 +1,6 @@
+import { inspectAuthoringEngineering } from '../verification/demo-authoring-engineering.mjs';
+import { inspectSourceInScope } from '../verification/source-inspection-scope.mjs';
+import { inspectAuthoringPhysicalSuccessor } from './demo-authoring-physical-successor.mjs';
 import { inspectKitchenPhysicalSuccessor } from './demo-kitchen-physical-successor.mjs';
 import { createHash } from 'node:crypto';
 import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
@@ -44,7 +47,8 @@ export const DEMO_RECIPE_REVIEWED_SOURCE_PATHS = Object.freeze([
 const BASELINE_SHA256 = '47f6d13618713d72de0a321d5edb1e0ad1a1551236f76d176073f5d023ed49d9';
 const PRIOR_JOURNAL_SHA256 = '412b21579a8deb58d06aaa6890e8bd34ce398ad9801b70d2196ea8332af83ddf';
 const hash = value => createHash('sha256').update(value).digest('hex');
-const binding = Object.freeze({
+// Resolve imported seals at invocation, after the finite inspector module graph initializes.
+const binding = () => Object.freeze({
   package: 'TEACH-DEMO-RECIPES-2026-10-18@0.1.1',
   package_sha256sums_digest: RECIPE_PACKAGE_SHA256,
   recipe_registration_sha256: RECIPE_REGISTRATION_SHA256,
@@ -71,10 +75,12 @@ const regularRead = (root, path) => {
 /** Exact finite source binding. Only the review anchor literal is normalized;
  * no other source bytes may change after independent review. */
 export function demoRecipeReviewedSourceHashes(root) {
+  const authoring = inspectAuthoringEngineering(root);
+  if (authoring.errors.length) throw Error('exact independently reviewed gate, activation and test source hashes differ: ' + authoring.errors.join('; '));
   const engineering = inspectSchemaIsolationEngineering(root);
   if (engineering.errors.length) throw Error('exact independently reviewed gate, activation and test source hashes differ: ' + engineering.errors.join('; '));
   return Object.fromEntries(DEMO_RECIPE_REVIEWED_SOURCE_PATHS.map(path => {
-    let source = Object.hasOwn(engineering.predecessorFiles, path) ? engineering.predecessorFiles[path] : regularRead(root, path);
+    let source = Object.hasOwn(engineering.predecessorFiles, path) ? engineering.predecessorFiles[path] : Object.hasOwn(authoring.predecessorFiles, path) ? authoring.predecessorFiles[path] : regularRead(root, path);
     if (path === 'scripts/persistence/demo-recipes-physical-successor.mjs') {
       const anchor = /^export const DEMO_RECIPE_PHYSICAL_REVIEW_SHA256 = (?:null|'[a-f0-9]{64}');$/m;
       if (!anchor.test(source)) throw Error('exact review-anchor declaration required');
@@ -95,7 +101,7 @@ export function buildDemoRecipePhysicalSuccessor(root) {
   const journal = JSON.parse(raw(DEMO_RECIPE_JOURNAL));
   return {
     successor_id: 'TEACH-DEMO-RECIPE-PHYSICAL-SUCCESSOR-2026-10-18',
-    version: '1.0.0', ...binding, ...structuredClone(limits),
+    version: '1.0.0', ...binding(), ...structuredClone(limits),
     original_physical_successor_unchanged: true,
     prior_migration_count: 6, current_migration_count: 7, current_table_count: 22,
     immutable_baseline_sha256: BASELINE_SHA256,
@@ -113,7 +119,9 @@ export function buildDemoRecipePhysicalSuccessor(root) {
  * structural authoring compatibility, never executed migration/runtime proof.
  * Every authority output is empty on any error; caller-supplied booleans are not
  * accepted as registration or review evidence. */
-export function inspectDemoRecipePhysicalSuccessor(root) {
+export function inspectDemoRecipePhysicalSuccessor(root) { return inspectSourceInScope('recipePhysical', root); }
+// Internal finite dispatcher entry. Direct invocation establishes no shared scope.
+export function inspectDemoRecipePhysicalSuccessorUncached(root) {
   const denied = { admitted: false, migrationCount: null, addedPaths: [], revisedPaths: [] };
   const envelopeExists = existsSync(join(root, DEMO_RECIPE_PHYSICAL_ENVELOPE));
   const laneExists = existsSync(join(root, DEMO_RECIPE_PHYSICAL_LANE));
@@ -126,7 +134,8 @@ export function inspectDemoRecipePhysicalSuccessor(root) {
   const errors = [], fail = message => errors.push(`demo recipe physical successor: ${message}`);
   const equal = (actual, expected, message) => { if (!isDeepStrictEqual(actual, expected)) fail(message); };
   const kitchen = inspectKitchenPhysicalSuccessor(root);
-  errors.push(...kitchen.errors);
+  const authoring = inspectAuthoringPhysicalSuccessor(root);
+  errors.push(...kitchen.errors, ...authoring.errors);
   const raw = path => Object.hasOwn(kitchen.predecessorFiles, path) ? kitchen.predecessorFiles[path] : regularRead(root, path);
   const json = path => JSON.parse(raw(path));
   if (!envelopeExists) {
@@ -199,8 +208,8 @@ export function inspectDemoRecipePhysicalSuccessor(root) {
     const entry = journal.entries?.[6];
     equal(entry, { idx: 6, version: '7', when: entry?.when, tag: '0006_demo_recipe_content_guard', breakpoints: true }, 'exact function-only migration journal suffix required');
     if (!Number.isSafeInteger(entry?.when) || entry.when <= prior.entries[5].when) fail('strictly increasing migration timestamp required');
-    equal(readdirSync(join(root, 'drizzle')).filter(name => name.endsWith('.sql') && !(kitchen.admitted && name === '0007_demo_kitchen_content_guard.sql')).sort(), [...prior.entries.map(row => `${row.tag}.sql`), '0006_demo_recipe_content_guard.sql'].sort(), 'only six original migrations and exact recipe guard migration admitted');
-    equal(readdirSync(join(root, 'drizzle/meta')).filter(name => name.endsWith('_snapshot.json') && !(kitchen.admitted && name === '0007_snapshot.json')).sort(), Array.from({ length: 7 }, (_, index) => `${String(index).padStart(4, '0')}_snapshot.json`), 'exact seven-snapshot inventory required');
+    equal(readdirSync(join(root, 'drizzle')).filter(name => name.endsWith('.sql') && !(kitchen.admitted && name === '0007_demo_kitchen_content_guard.sql') && !(authoring.admitted && name === '0008_demo_manager_authoring.sql')).sort(), [...prior.entries.map(row => `${row.tag}.sql`), '0006_demo_recipe_content_guard.sql'].sort(), 'only six original migrations and exact recipe guard migration admitted');
+    equal(readdirSync(join(root, 'drizzle/meta')).filter(name => name.endsWith('_snapshot.json') && !(kitchen.admitted && name === '0007_snapshot.json') && !(authoring.admitted && name === '0008_snapshot.json')).sort(), Array.from({ length: 7 }, (_, index) => `${String(index).padStart(4, '0')}_snapshot.json`), 'exact seven-snapshot inventory required');
     const oldSnapshot = json('drizzle/meta/0005_snapshot.json'), snapshot = json(DEMO_RECIPE_SNAPSHOT);
     equal(snapshot, { ...oldSnapshot, id: snapshot.id, prevId: oldSnapshot.id }, 'function-only migration snapshot may change only id and prevId');
     if (typeof snapshot.id !== 'string' || !/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(snapshot.id) || snapshot.id === '00000000-0000-0000-0000-000000000000' || Object.keys(baseline.files).filter(path => /^drizzle\/meta\/\d+_snapshot\.json$/.test(path)).some(path => json(path).id === snapshot.id)) fail('unique nonzero successor snapshot identity required');

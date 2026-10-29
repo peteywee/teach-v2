@@ -1,3 +1,4 @@
+import { installAuthoringPredecessor } from './authoring-predecessor-fixture.mjs';
 import { withKitchenPredecessor } from './kitchen-predecessor-fixture.mjs';
 import { RECOVERY_BASE, inspectDemoRecoveryRegistration } from '../kernel/demo-recovery-registration.mjs';
 import assert from 'node:assert/strict';
@@ -11,7 +12,7 @@ import { inspectSchemaIsolationRegistration } from '../kernel/demo-schema-isolat
 import { inspectSchemaIsolationEngineering } from '../verification/demo-schema-isolation-engineering.mjs';
 import { inspectRecipeRegistration } from '../kernel/demo-recipes-registration.mjs';
 import { DEMO_RECIPE_PHYSICAL_EVIDENCE, DEMO_RECIPE_PHYSICAL_ENVELOPE, DEMO_RECIPE_PHYSICAL_REVIEW, DEMO_RECIPE_MIGRATION, DEMO_RECIPE_SNAPSHOT } from '../persistence/demo-recipes-physical-successor.mjs';
-import { inspectRepositoryIntegration } from '../architecture/repository-integration-evidence.mjs';
+import { pathToFileURL } from 'node:url';
 import { currentFacts } from '../verification/development-self-audit.mjs';
 import { deriveOwnerDecisionInventory } from '../verification/owner-decision-inventory.mjs';
 import { inspectDemoStorageEvidence, createPersistenceEvidenceContext, DEMO_OWNER_ADAPTERS } from '../persistence/demo-storage-evidence.mjs';
@@ -23,6 +24,10 @@ import { inspectFutureAdmission } from '../persistence/future-admission-evidence
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const fixture = mkdtempSync(join(tmpdir(), 'teach-demo-storage-'));
 for (const path of ['docs', 'kernel','domains','architecture','contracts','application-interfaces','governance','persistence','drizzle','drizzle-isolated','src','drizzle.config.ts','drizzle.p05.config.ts','pnpm-lock.yaml','package.json','scripts','.github','verification','tests']) cpSync(join(root,path),join(fixture,path),{recursive:true});
+installAuthoringPredecessor(fixture);
+// Pair authenticated predecessor bytes with their own inspector/renderer module graph.
+// Current modules must never interpret this intentionally historical fixture.
+const { inspectRepositoryIntegration } = await import(pathToFileURL(join(fixture, 'scripts/architecture/repository-integration-evidence.mjs')).href);
 after(() => rmSync(fixture,{recursive:true,force:true}));
 const raw = path => readFileSync(join(fixture,path),'utf8');
 const json = path => JSON.parse(raw(path));

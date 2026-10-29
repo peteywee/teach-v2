@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -20,6 +20,18 @@ export const HISTORICAL_PINS = Object.freeze({
 });
 const JOURNAL_PIN = '82d436f093d623ac3b90785073f7226e7ed2994283754a39084bfdea2aec33e0';
 const KITCHEN_JOURNAL_PIN = 'c7fe91cffd5a9ed952ef2183f671c67068632f865e2cd22f206d2ca8724e2a40';
+// A separate append-only pin: the original eight entries and their compiled
+// bytes remain unchanged. This compiler is pure and never imports admission.
+export const AUTHORING_MIGRATION = '0008_demo_manager_authoring.sql';
+export const AUTHORING_MIGRATION_PIN = '8cc38af9d9c005a79b183dbee11cb0b210933fd871d7b23ca93d44475455226d';
+export const AUTHORING_JOURNAL_PIN = 'b0142fb94c2fc806b0e61b1d3692f09dbfc932f7445f227d512a89aa3e608f79';
+export const AUTHORING_TABLES = Object.freeze(['content_authoring_drafts', 'content_authoring_receipts']);
+export const AUTHORING_FUNCTION_SIGNATURES = Object.freeze({
+  content_authoring_validate_catalog: 'text,text',
+  demo_authoring_owner_active: 'text,text,text,text,timestamptz',
+  content_guard_authoring_draft: '',
+  transaction_guard_authoring_receipt: '',
+});
 const BREAKPOINT = '\n--> statement-breakpoint\n';
 const RETAINED_TABLES = ['organization_organizations', 'organization_locations', 'organization_membership_grants', 'organization_reporting_relationships', 'identity_demo_personas', 'content_packs', 'content_pack_versions', 'learning_assignments', 'learning_progress_events', 'audit_events', 'lifecycle_events', 'transaction_command_receipts'];
 const CATALOG_FUNCTIONS = new Set(['now', 'length', 'btrim', 'octet_length', 'isfinite', 'encode', 'sha256', 'convert_to', 'family', 'masklen', 'pg_advisory_xact_lock', 'clock_timestamp', 'count', 'lower', 'jsonb_typeof', 'jsonb_array_length', 'jsonb_build_object', 'hashtextextended', 'date_bin', 'pg_current_xact_id', 'string_agg', 'to_jsonb', 'jsonb_each', 'jsonb_array_elements', 'array_append', 'chr']);
@@ -71,7 +83,7 @@ export function tokenizeSql(sql) {
   return tokens;
 }
 
-export function qualifySql(sql, objectNames) {
+export function qualifySql(sql, objectNames, catalogFunctions = CATALOG_FUNCTIONS) {
   const tokens = tokenizeSql(sql);
   const meaningful = (index, direction) => {
     for (let i = index + direction; i >= 0 && i < tokens.length; i += direction) {
@@ -80,7 +92,7 @@ export function qualifySql(sql, objectNames) {
     return -1;
   };
   return tokens.map((token, index) => {
-    if (token.kind === 'body') return token.tag + qualifySql(token.body, objectNames) + token.tag;
+    if (token.kind === 'body') return token.tag + qualifySql(token.body, objectNames, catalogFunctions) + token.tag;
     if (token.kind !== 'identifier') return token.text;
     const previous = meaningful(index, -1), next = meaningful(index, 1);
     if (token.value === 'public' && tokens[next]?.text === '.') {
@@ -96,7 +108,7 @@ export function qualifySql(sql, objectNames) {
       }
       return qualified(token.value);
     }
-    if (CATALOG_FUNCTIONS.has(token.value) && tokens[next]?.text === '(' && tokens[previous]?.text !== '.') return `pg_catalog.${token.value}`;
+    if (catalogFunctions.has(token.value) && tokens[next]?.text === '(' && tokens[previous]?.text !== '.') return `pg_catalog.${token.value}`;
     if (token.value === 'C' && tokens[previous]?.value === 'collate') return 'pg_catalog."C"';
     return token.text;
   }).join('');
@@ -132,15 +144,46 @@ END $isolated_acl$;`);
   return parts.join(BREAKPOINT) + '\n';
 }
 
+// Only the appended objects receive new ACL statements. In particular, no
+// earlier table, function, grant or policy is rewritten by this suffix.
+function authoringSecurityStatements() {
+  const parts = AUTHORING_TABLES.flatMap(table => [
+    `ALTER TABLE ${qualified(table)} ENABLE ROW LEVEL SECURITY;`,
+    `REVOKE ALL ON TABLE ${qualified(table)} FROM PUBLIC;`,
+  ]);
+  // CREATE OR REPLACE preserves existing function ACLs; revoke only the four
+  // newly-created invoker functions, with fixed reviewed signatures.
+  const functions = Object.entries(AUTHORING_FUNCTION_SIGNATURES).map(([name, args]) => `${qualified(name)}(${args})`);
+  parts.push(...functions.map(fn => `REVOKE ALL ON FUNCTION ${fn} FROM PUBLIC;`));
+  for (const role of ['anon', 'authenticated']) {
+    parts.push(`DO $authoring_acl$ BEGIN
+ IF EXISTS (SELECT 1 FROM pg_catalog.pg_roles WHERE rolname='${role}') THEN
+  ${[...AUTHORING_TABLES.map(table => `REVOKE ALL ON TABLE ${qualified(table)} FROM ${q(role)};`), ...functions.map(fn => `REVOKE ALL ON FUNCTION ${fn} FROM ${q(role)};`)].join('\n  ')}
+ END IF;
+END $authoring_acl$;`);
+  }
+  return '\n' + parts.join(BREAKPOINT) + '\n';
+}
+
 export function buildIsolatedLineage(root = REPOSITORY_ROOT) {
-  assert.deepEqual(readdirSync(resolve(root, 'drizzle')).filter((name) => name.endsWith('.sql')).sort(), Object.keys(HISTORICAL_PINS).sort(), 'unreviewed historical SQL suffix');
-  const sources = Object.entries(HISTORICAL_PINS).map(([name, hash]) => {
+  const authoring = existsSync(resolve(root, 'drizzle', AUTHORING_MIGRATION));
+  if (['domains/demo-authoring', 'persistence/physical-slices/demo-authoring', 'drizzle/meta/0008_snapshot.json', 'drizzle-isolated/0008_demo_manager_authoring.sql'].some(path => existsSync(resolve(root, path)))) {
+    assert.ok(authoring, 'authoring evidence cannot fall back to a historical lineage without its exact ninth migration');
+  }
+  const pins = authoring ? { ...HISTORICAL_PINS, [AUTHORING_MIGRATION]: AUTHORING_MIGRATION_PIN } : HISTORICAL_PINS;
+  assert.deepEqual(readdirSync(resolve(root, 'drizzle')).filter((name) => name.endsWith('.sql')).sort(), Object.keys(pins).sort(), 'unreviewed historical SQL suffix');
+  const sources = Object.entries(pins).map(([name, hash]) => {
     const sql = readFileSync(resolve(root, 'drizzle', name), 'utf8');
     assert.equal(sha256(sql), hash, `historical migration drift: ${name}`);
     return { name, hash, sql };
   });
   const journalBytes = readFileSync(resolve(root, 'drizzle/meta/_journal.json'), 'utf8');
-  assert.equal(sha256(journalBytes), KITCHEN_JOURNAL_PIN, 'historical journal drift');
+  assert.equal(sha256(journalBytes), authoring ? AUTHORING_JOURNAL_PIN : KITCHEN_JOURNAL_PIN, 'historical journal drift');
+  if (authoring) {
+    const priorAuthoringBytes = readFileSync(resolve(root, 'persistence/physical-slices/demo-authoring/prior-journal.json'), 'utf8');
+    assert.equal(sha256(priorAuthoringBytes), KITCHEN_JOURNAL_PIN, 'preserved eight-migration journal drift');
+    assert.deepEqual({ ...JSON.parse(journalBytes), entries: JSON.parse(journalBytes).entries.slice(0, 8) }, JSON.parse(priorAuthoringBytes), 'authoring journal prefix drift');
+  }
   const priorBytes = readFileSync(resolve(root, 'persistence/physical-slices/demo-kitchen/prior-journal.json'), 'utf8');
   assert.equal(sha256(priorBytes), JOURNAL_PIN, 'preserved seven-migration journal drift');
   assert.deepEqual({ ...JSON.parse(journalBytes), entries: JSON.parse(journalBytes).entries.slice(0, 7) }, JSON.parse(priorBytes), 'historical journal prefix drift');
@@ -148,7 +191,13 @@ export function buildIsolatedLineage(root = REPOSITORY_ROOT) {
   const combined = sources.map(({ sql }) => sql).join('\n');
   const tables = [...new Set([...combined.matchAll(/CREATE TABLE "?([a-z_]+)"?/g)].map((match) => match[1]))].sort();
   const functions = [...new Set([...combined.matchAll(/CREATE (?:OR REPLACE )?FUNCTION "?([a-z_]+)"?/g)].map((match) => match[1]))].sort();
-  assert.equal(tables.length, 22); assert.equal(functions.length, 39);
+  const priorCombined = sources.slice(0, 8).map(({ sql }) => sql).join('\n');
+  const priorTables = [...new Set([...priorCombined.matchAll(/CREATE TABLE "?([a-z_]+)"?/g)].map(match => match[1]))].sort();
+  const priorFunctions = [...new Set([...priorCombined.matchAll(/CREATE (?:OR REPLACE )?FUNCTION "?([a-z_]+)"?/g)].map(match => match[1]))].sort();
+  assert.equal(priorTables.length, 22); assert.equal(priorFunctions.length, 39);
+  assert.deepEqual(tables, authoring ? [...priorTables, ...AUTHORING_TABLES].sort() : priorTables, 'exact application table inventory required');
+  assert.deepEqual(functions, authoring ? [...priorFunctions, ...Object.keys(AUTHORING_FUNCTION_SIGNATURES)].sort() : priorFunctions, 'exact function inventory required');
+  const priorObjectNames = new Set([...priorTables, ...priorFunctions]);
   const objectNames = new Set([...tables, ...functions]);
   const files = new Map();
   for (const source of sources) {
@@ -163,7 +212,10 @@ export function buildIsolatedLineage(root = REPOSITORY_ROOT) {
       assert.ok(securityOffset > 0, 'reviewed public security sweep missing');
       sql = sql.slice(0, securityOffset);
     }
-    sql = qualifySql(sql, objectNames);
+    // New identifiers must not alter the qualification of historical sources.
+    sql = source.name === AUTHORING_MIGRATION
+      ? qualifySql(sql, objectNames, new Set([...CATALOG_FUNCTIONS, 'array_agg']))
+      : qualifySql(sql, priorObjectNames);
     const assertStatic = (text) => {
       const tokens = tokenizeSql(text).filter((token) => !['comment', 'space'].includes(token.kind));
       for (const [index, token] of tokens.entries()) {
@@ -173,11 +225,12 @@ export function buildIsolatedLineage(root = REPOSITORY_ROOT) {
     };
     assertStatic(sql);
     const prefix = `-- ISOLATED LINEAGE v1; generated by scripts/db/compile-isolated-schema.mjs.\n-- Historical source: drizzle/${source.name}; sha256:${source.hash}\n-- Do not edit generated SQL. Historical public migrations are never executed here.\n`;
-    if (source.name.startsWith('0005_')) sql += securityStatements(tables);
+    if (source.name.startsWith('0005_')) sql += securityStatements(priorTables);
+    if (source.name === AUTHORING_MIGRATION) sql += authoringSecurityStatements();
     files.set(source.name, prefix + sql);
   }
   files.set('meta/_journal.json', JSON.stringify(journal, null, 2) + '\n');
-  const manifest = { version: 1, schema: ISOLATED_SCHEMA, journal: `${ISOLATED_SCHEMA}.__drizzle_migrations`, historicalJournalSha256: KITCHEN_JOURNAL_PIN, tables, functions, migrations: sources.map(({ name, hash }, idx) => ({ name, historicalSha256: hash, isolatedSha256: sha256(files.get(name)), when: journal.entries[idx].when })) };
+  const manifest = { version: 1, schema: ISOLATED_SCHEMA, journal: `${ISOLATED_SCHEMA}.__drizzle_migrations`, historicalJournalSha256: authoring ? AUTHORING_JOURNAL_PIN : KITCHEN_JOURNAL_PIN, tables, functions, migrations: sources.map(({ name, hash }, idx) => ({ name, historicalSha256: hash, isolatedSha256: sha256(files.get(name)), when: journal.entries[idx].when })) };
   files.set('manifest.json', JSON.stringify(manifest, null, 2) + '\n');
   return { files, manifest };
 }
@@ -185,7 +238,7 @@ export function buildIsolatedLineage(root = REPOSITORY_ROOT) {
 export function verifyIsolatedLineage(root = REPOSITORY_ROOT) {
   const lineage = buildIsolatedLineage(root);
   for (const [name, bytes] of lineage.files) assert.equal(readFileSync(resolve(root, 'drizzle-isolated', name), 'utf8'), bytes, `isolated lineage drift: ${name}`);
-  assert.deepEqual(readdirSync(resolve(root, 'drizzle-isolated')).filter((name) => name.endsWith('.sql')).sort(), Object.keys(HISTORICAL_PINS).sort(), 'unregistered isolated SQL');
+  assert.deepEqual(readdirSync(resolve(root, 'drizzle-isolated')).filter((name) => name.endsWith('.sql')).sort(), lineage.manifest.migrations.map(migration => migration.name).sort(), 'unregistered isolated SQL');
   return lineage;
 }
 

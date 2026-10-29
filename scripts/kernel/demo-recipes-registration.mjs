@@ -1,3 +1,5 @@
+import { inspectSourceInScope } from '../verification/source-inspection-scope.mjs';
+import { inspectAuthoringRegistration } from './demo-authoring-registration.mjs';
 import { createHash } from 'node:crypto';
 import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -38,15 +40,20 @@ const metadata = text => JSON.parse(text.match(/^<!--tos-doc\n([\s\S]*?)\n-->\n/
 /** Synchronous, read-only and non-recursive. This gate proves exact registration
  * integrity, not independent review, physical admission, or local activation.
  * No caller may substitute predecessor bytes unless this returns no errors. */
-export function inspectRecipeRegistration(root) {
+export function inspectRecipeRegistration(root) { return inspectSourceInScope('recipeRegistration', root); }
+// Internal finite dispatcher entry. Direct invocation establishes no shared scope.
+export function inspectRecipeRegistrationUncached(root) {
   const registrationPath = `${RECIPE_BASE}/registration.json`;
   const empty = { present: false, revisedPaths: [], addedPaths: [], predecessorFiles: {} };
   if (!existsSync(join(root, registrationPath))) return {
     ...empty, errors: existsSync(join(root, RECIPE_BASE)) ? ['demo recipe registration: orphan recipe sources without registration'] : [],
   };
-  const errors = [], fail = message => errors.push(`demo recipe registration: ${message}`);
+  const authoring = inspectAuthoringRegistration(root);
+  const errors = [...authoring.errors], fail = message => errors.push(`demo recipe registration: ${message}`);
+  if (errors.length) return { ...empty, present: true, errors };
   const equal = (actual, expected, message) => { if (!isDeepStrictEqual(actual, expected)) fail(message); };
   const raw = path => {
+    if (Object.hasOwn(authoring.predecessorFiles, path)) return authoring.predecessorFiles[path];
     const parts = path.split('/');
     for (let index = 1; index <= parts.length; index++) {
       const stat = lstatSync(join(root, ...parts.slice(0, index)));

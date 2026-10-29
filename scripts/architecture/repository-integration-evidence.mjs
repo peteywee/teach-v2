@@ -1,3 +1,5 @@
+import { inspectSourceInScope } from '../verification/source-inspection-scope.mjs';
+import { inspectAuthoringPhysicalSuccessor } from '../persistence/demo-authoring-physical-successor.mjs';
 import { inspectKitchenPhysicalSuccessor } from '../persistence/demo-kitchen-physical-successor.mjs';
 import { createPersistenceEvidenceContext } from '../persistence/demo-storage-evidence.mjs';
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
@@ -7,7 +9,24 @@ import { inspectFutureAdmission } from '../persistence/future-admission-evidence
 import { inspectCommandCoverage } from './command-coverage-evidence.mjs';
 import { inspectAssignmentAdmission } from '../persistence/assignment-admission-evidence.mjs';
 
-export function inspectRepositoryIntegration(root) {
+// The only delegated database entry is the reviewed authoring proof. All other
+// entry points retain the original direct-Pool guard requirement.
+export function hasGuardedDatabaseEntry(path, source, readDelegate) {
+  const imported = /\bimport\s*\{\s*assertIsolatedDatabaseTarget\s*\}\s*from\s*['"][^'"]*isolated-database-target\.mjs['"]/.test(source);
+  const guard = source.search(/\bassertIsolatedDatabaseTarget\s*\(\s*process\.env\.DATABASE_URL\s*\)/);
+  const pool = source.search(/new\s+(?:pg\.)?Pool\s*\(/);
+  if (!imported || guard < 0) return false;
+  if (pool >= 0) return guard < pool;
+  if (path !== 'tests/integration/demo/authoring-runtime.test.ts') return false;
+  if (!/import\s*\{\s*verifyIsolatedSchemaProof\s*\}\s*from\s*['"]\.\.\/\.\.\/\.\.\/scripts\/db\/verify-isolated-schema\.mjs['"]/.test(source)) return false;
+  const calls = [...source.matchAll(/\bverifyIsolatedSchemaProof\s*\(/g)];
+  if (calls.length !== 1 || guard > calls[0].index) return false;
+  return hasGuardedDatabaseEntry('scripts/db/verify-isolated-schema.mjs', readDelegate());
+}
+
+export function inspectRepositoryIntegration(root) { return inspectSourceInScope('repositoryIntegration', root); }
+// Internal finite dispatcher entry. Direct invocation establishes no shared scope.
+export function inspectRepositoryIntegrationUncached(root) {
   let persistence;
   try { persistence=createPersistenceEvidenceContext(root); }
   catch(error) {
@@ -15,7 +34,8 @@ export function inspectRepositoryIntegration(root) {
     return [`repository integration: unverified persistence evidence: ${error.message}`, ...inspectConsolidatedVerification(root)];
   }
   const kitchen=inspectKitchenPhysicalSuccessor(root);
-  const errors=[...persistence.errors,...kitchen.errors];
+  const authoring=inspectAuthoringPhysicalSuccessor(root);
+  const errors=[...persistence.errors,...kitchen.errors,...authoring.errors];
   // A marker or claimed ADMIT is insufficient: only independently reviewed
   // current storage may use these exact two tables at these exact locations.
   const admittedDemo=persistence.extended && persistence.errors.length===0;
@@ -26,7 +46,8 @@ export function inspectRepositoryIntegration(root) {
      // The recipe successor adds no tables; its reviewed snapshot repeats
      // the unchanged predecessor only after the full physical gate passes.
      ...(persistence.recipePhysicalSuccessor?.admitted ? ['drizzle/meta/0006_snapshot.json'] : []),
-     ...(kitchen.admitted ? ['drizzle/meta/0007_snapshot.json'] : [])].includes(path);
+     ...(kitchen.admitted ? ['drizzle/meta/0007_snapshot.json'] : []),
+     ...(authoring.admitted ? ['drizzle/meta/0008_snapshot.json'] : [])].includes(path);
   const fail=(message)=>errors.push(`repository integration: ${message}`);
   const load=(path)=>{try{return JSON.parse(readFileSync(join(root,path),'utf8'));}catch(error){fail(`${path}: ${error.message}`);return null;}};
   const text=(path)=>{try{return readFileSync(join(root,path),'utf8');}catch(error){fail(`${path}: ${error.message}`);return '';}};
@@ -103,9 +124,7 @@ export function inspectRepositoryIntegration(root) {
   const databasePaths=['scripts/db/migrate.ts',...walk('scripts/db').filter(x=>/^scripts\/db\/verify-.*-replay\.ts$/.test(x)),...walk('tests/integration').filter(x=>x.endsWith('.test.ts'))];
   for(const path of databasePaths) {
     const source=text(path);
-    const guard=source.search(/\bassertIsolatedDatabaseTarget\s*\(\s*process\.env\.DATABASE_URL\s*\)/);
-    const pool=source.search(/new\s+(?:pg\.)?Pool\s*\(/);
-    if(!/\bimport\s*\{\s*assertIsolatedDatabaseTarget\s*\}\s*from\s*['"][^'"]*isolated-database-target\.mjs['"]/.test(source) || guard<0 || pool<0 || guard>pool) fail(`${path}: isolated target guard must run before any Pool`);
+    if(!hasGuardedDatabaseEntry(path, source, () => text('scripts/db/verify-isolated-schema.mjs'))) fail(`${path}: isolated target guard must run before any Pool`);
   }
   errors.push(...inspectConsolidatedVerification(root));
   errors.push(...inspectAssignmentAdmission(root), ...inspectFutureAdmission(root,'P07'), ...inspectFutureAdmission(root,'P08'), ...inspectCommandCoverage(root));

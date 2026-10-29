@@ -1,3 +1,5 @@
+import { inspectSourceInScope } from '../verification/source-inspection-scope.mjs';
+import { inspectAuthoringRegistration } from './demo-authoring-registration.mjs';
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -231,10 +233,14 @@ function inspectActiveAuthorityInventory(root, expectedFiles) {
   return errors;
 }
 
-export function inspectDemoRuntimeRegistration(root) {
+export function inspectDemoRuntimeRegistration(root) { return inspectSourceInScope('runtimeRegistration', root); }
+// Internal finite dispatcher entry. Direct invocation establishes no shared scope.
+export function inspectDemoRuntimeRegistrationUncached(root) {
   if (!hasDemoRegistration(root)) return { errors: inspectSchemaIsolationRegistration(root).errors, registered: false };
-  const errors = [];
-  const raw = path => readFileSync(join(root, path), 'utf8');
+  const authoring = inspectAuthoringRegistration(root);
+  const errors = [...authoring.errors];
+  if (errors.length) return { errors, registered: true };
+  const raw = path => Object.hasOwn(authoring.predecessorFiles, path) ? authoring.predecessorFiles[path] : readFileSync(join(root, path), 'utf8');
   const json = path => JSON.parse(raw(path));
   const equal = (actual, expected, label) => { if (!isDeepStrictEqual(actual, expected)) errors.push(`demo registration: ${label}`); };
   try {
@@ -312,7 +318,7 @@ export function inspectDemoRuntimeRegistration(root) {
     const expectedFiles = new Set([
       ...Object.keys(source.files), ...Object.keys(registration.authority_file_hashes ?? {}),
       ...Object.keys(EVIDENCE_HASHES), ...[...seen, 'SHA256SUMS'].map(name => `${DEMO_PROPOSAL}/${name}`),
-      ...recipeSuccessor.addedPaths, ...schemaIsolationSuccessor.addedPaths, ...kitchenSuccessor.addedPaths,
+      ...recipeSuccessor.addedPaths, ...schemaIsolationSuccessor.addedPaths, ...kitchenSuccessor.addedPaths, ...authoring.addedPaths,
     ]);
     errors.push(...inspectActiveAuthorityInventory(root, expectedFiles));
     const overlay = buildDemoKernelOverlay(source, proposal);
@@ -379,7 +385,7 @@ export function inspectDemoRuntimeRegistration(root) {
         equal(normalize(current), normalize(source.files[path]), `unchanged preceding source drift: ${path}`);
       } else equal(hash(current), digest, `unchanged preceding source drift: ${path}`);
     }
-    return { errors, registered: true, registeredEntries: 131, closure, source, proposal, physicalSuccessor, recipeSuccessor, schemaIsolationSuccessor, kitchenSuccessor };
+    return { errors, registered: true, registeredEntries: 131, closure, source, proposal, physicalSuccessor, recipeSuccessor, schemaIsolationSuccessor, kitchenSuccessor, authoringSuccessor: authoring };
   } catch (error) {
     errors.push(`demo registration: missing or malformed evidence: ${error.message}`);
     return { errors, registered: true };

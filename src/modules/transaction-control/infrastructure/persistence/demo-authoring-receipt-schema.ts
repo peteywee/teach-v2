@@ -1,0 +1,9 @@
+import {pgTable} from '../../../../platform/database-target.js';
+import {sql} from 'drizzle-orm';
+import {text,timestamp,jsonb,primaryKey,foreignKey,check,type AnyPgColumn} from 'drizzle-orm/pg-core';
+type Ref=AnyPgColumn<{data:string}>;
+export function defineDemoAuthoringReceipts(refs:{runId:Ref;organizationId:Ref;locationId:Ref;locationOrganizationId:Ref;identityId:Ref}){
+ return pgTable('content_authoring_receipts',{demoRunId:text('demo_run_id').notNull(),organizationId:text('organization_id').notNull(),locationId:text('location_id').notNull(),managerIdentityId:text('manager_identity_id').notNull(),key:text('key').notNull(),operation:text('operation').notNull(),payloadDigest:text('payload_digest').notNull(),result:jsonb('result').notNull(),createdAt:timestamp('created_at',{withTimezone:true,mode:'date'}).notNull(),expiresAt:timestamp('expires_at',{withTimezone:true,mode:'date'}).notNull()},t=>[
+ primaryKey({name:'authoring_receipt_pk',columns:[t.demoRunId,t.managerIdentityId,t.key]}),foreignKey({name:'authoring_receipt_run_fk',columns:[t.demoRunId],foreignColumns:[refs.runId]}),foreignKey({name:'authoring_receipt_org_fk',columns:[t.organizationId],foreignColumns:[refs.organizationId]}),foreignKey({name:'authoring_receipt_location_fk',columns:[t.locationId,t.organizationId],foreignColumns:[refs.locationId,refs.locationOrganizationId]}),foreignKey({name:'authoring_receipt_manager_fk',columns:[t.managerIdentityId],foreignColumns:[refs.identityId]}),check('authoring_receipt_shape_check',sql`${t.operation} IN ('SaveContentDraft','PublishContentDraft') AND ${t.key} ~ '^[A-Za-z0-9_-]{16,128}$' AND ${t.payloadDigest} ~ '^[0-9a-f]{64}$' AND octet_length(${t.result}::text)<=4096 AND isfinite(${t.createdAt}) AND isfinite(${t.expiresAt}) AND ${t.expiresAt}>${t.createdAt}`)
+ ]);
+}

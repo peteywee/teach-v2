@@ -1,0 +1,16 @@
+{
+  "decision_id": "TEACH-DEMO-AUTHORING-RECOVERY-2026-10-28",
+  "record_form": "MINIMAL_OWNER_DECISION_SUMMARY",
+  "recorded_on": "2026-10-28",
+  "decision": "Prepare and adopt one authoring migration exception conditional on fresh encrypted backup and successful PostgreSQL restore/preservation proof; no future waiver and no paid Supabase.",
+  "policy_adoption_authorized": true,
+  "project_id": "acqafjkdkdmtpnsxiesw",
+  "schema": "teach_v2_demo",
+  "migration_sha256": "6c6e568354e95cb5012e369dca6a3f0c9a3c2d72ac49d05127d1b77f3ba941ab",
+  "actual_recovery_evidence": "UNKNOWN",
+  "data_export_authorized_by_this_record": false,
+  "key_access_authorized_by_this_record": false,
+  "production_execution_authorized_by_this_record": false,
+  "spending_authorized": false,
+  "future_migration_exception": false
+}

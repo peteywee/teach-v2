@@ -1,0 +1,1109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:teach:demo-authoring:wire:1",
+  "title": "Finite private demo manager authoring wire contract",
+  "status": "registered",
+  "$defs": {
+    "TeachingBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$(?![\\s\\S])"
+        },
+        "kind": {
+          "const": "SINGLE_CHOICE"
+        },
+        "instruction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+          "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+          "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+        },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+            "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+          }
+        },
+        "expectedOptionIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "feedback": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+            "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+          }
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "instruction",
+        "prompt",
+        "options",
+        "expectedOptionIndex",
+        "feedback"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "options": {
+                "minItems": 2,
+                "maxItems": 2
+              }
+            },
+            "required": [
+              "options"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedOptionIndex": {
+                "maximum": 1
+              },
+              "feedback": {
+                "minItems": 2,
+                "maxItems": 2
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "options": {
+                "minItems": 3,
+                "maxItems": 3
+              }
+            },
+            "required": [
+              "options"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedOptionIndex": {
+                "maximum": 2
+              },
+              "feedback": {
+                "minItems": 3,
+                "maxItems": 3
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "options": {
+                "minItems": 4,
+                "maxItems": 4
+              }
+            },
+            "required": [
+              "options"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedOptionIndex": {
+                "maximum": 3
+              },
+              "feedback": {
+                "minItems": 4,
+                "maxItems": 4
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "options": {
+                "minItems": 5,
+                "maxItems": 5
+              }
+            },
+            "required": [
+              "options"
+            ]
+          },
+          "then": {
+            "properties": {
+              "expectedOptionIndex": {
+                "maximum": 4
+              },
+              "feedback": {
+                "minItems": 5,
+                "maxItems": 5
+              }
+            }
+          }
+        }
+      ]
+    },
+    "KitchenStation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$(?![\\s\\S])"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+          "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+        },
+        "responsiblePersonId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$(?![\\s\\S])"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "responsiblePersonId"
+      ]
+    },
+    "DemoPerson": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$(?![\\s\\S])"
+        },
+        "displayLabel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+          "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+        },
+        "roleLabel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+          "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+        }
+      },
+      "required": [
+        "id",
+        "displayLabel",
+        "roleLabel"
+      ]
+    },
+    "EquipmentItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$(?![\\s\\S])"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+          "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+        },
+        "kind": {
+          "enum": [
+            "TOOL",
+            "EQUIPMENT"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "kind"
+      ]
+    },
+    "EquipmentRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "equipmentId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$(?![\\s\\S])"
+        },
+        "quantity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "equipmentId",
+        "quantity"
+      ]
+    },
+    "InventoryHolding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "equipmentId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$(?![\\s\\S])"
+        },
+        "stationId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,128}$(?![\\s\\S])"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "quantity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "equipmentId",
+        "stationId",
+        "quantity"
+      ]
+    },
+    "StationRecipe": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$(?![\\s\\S])"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+          "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+        },
+        "servings": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "ingredients": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 30,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+            "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+          }
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+            "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+          }
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "^(?![\\s\\S]*(?:[\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]|<[^>]*>|\\b(?:[A-Za-z][A-Za-z0-9+.-]*:\\/\\/|[hH][tT][tT][pP][sS]?:|[fF][tT][pP]:|[fF][iI][lL][eE]:|[dD][aA][tT][aA]:|[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]:|[vV][bB][sS][cC][rR][iI][pP][tT]:|[mM][aA][iI][lL][tT][oO]:|[tT][eE][lL]:|[wW][wW][wW]\\.)|(?:^|[\\s(\"'])\\/\\/\\S+|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:^|[^\\uD800-\\uDBFF])[\\uDC00-\\uDFFF]))[\\s\\S]*$(?![\\s\\S])",
+          "description": "Plain text measured in Unicode scalar values, with no normalization; excludes HTML, URL/media/script references, prohibited controls, and lone surrogates."
+        },
+        "stationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$(?![\\s\\S])"
+        },
+        "requirements": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "$ref": "#/$defs/EquipmentRequirement"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "servings",
+        "ingredients",
+        "steps",
+        "reference",
+        "stationId",
+        "requirements"
+      ],
+      "description": "Fictional read-only recipe. Responsible person derives from its station; requirements are not reservations or availability."
+    },
+    "ContentVersion": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 38,
+          "description": "Strict SemVer2.0 including prerelease/build; validated by exact canonical parser."
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "version",
+        "digest"
+      ]
+    },
+    "PublicBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$"
+        },
+        "kind": {
+          "const": "SINGLE_CHOICE"
+        },
+        "instruction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "instruction",
+        "prompt",
+        "options"
+      ]
+    },
+    "PublicContent": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contentPackId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$"
+        },
+        "organizationId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$"
+        },
+        "contentVersion": {
+          "$ref": "#/$defs/ContentVersion"
+        },
+        "schemaVersion": {
+          "const": "1.2.0"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "blocks": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/$defs/PublicBlock"
+          }
+        },
+        "synthetic": {
+          "const": true
+        },
+        "recipes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 24,
+          "items": {
+            "$ref": "#/$defs/StationRecipe"
+          }
+        },
+        "stations": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "$ref": "#/$defs/KitchenStation"
+          }
+        },
+        "people": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 24,
+          "items": {
+            "$ref": "#/$defs/DemoPerson"
+          }
+        },
+        "equipment": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 40,
+          "items": {
+            "$ref": "#/$defs/EquipmentItem"
+          }
+        },
+        "inventory": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 80,
+          "items": {
+            "$ref": "#/$defs/InventoryHolding"
+          }
+        }
+      },
+      "required": [
+        "contentPackId",
+        "organizationId",
+        "contentVersion",
+        "schemaVersion",
+        "title",
+        "blocks",
+        "synthetic",
+        "recipes",
+        "stations",
+        "people",
+        "equipment",
+        "inventory"
+      ]
+    },
+    "Catalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "stations": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "$ref": "#/$defs/KitchenStation"
+          }
+        },
+        "equipment": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 40,
+          "items": {
+            "$ref": "#/$defs/EquipmentItem"
+          }
+        },
+        "inventory": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 80,
+          "items": {
+            "$ref": "#/$defs/InventoryHolding"
+          }
+        },
+        "recipes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 24,
+          "items": {
+            "$ref": "#/$defs/StationRecipe"
+          }
+        }
+      },
+      "required": [
+        "stations",
+        "equipment",
+        "inventory",
+        "recipes"
+      ]
+    },
+    "ContentRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contentPackId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^1\\.2\\.(?:[0-9]|10)$"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "contentPackId",
+        "version",
+        "digest"
+      ]
+    },
+    "Draft": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "catalogDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "catalog": {
+          "$ref": "#/$defs/Catalog"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "baseContentRef": {
+          "$ref": "#/$defs/ContentRef"
+        },
+        "lastPublished": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "revision": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                },
+                "contentRef": {
+                  "$ref": "#/$defs/ContentRef"
+                }
+              },
+              "required": [
+                "revision",
+                "contentRef"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "revision",
+        "catalogDigest",
+        "catalog",
+        "createdAt",
+        "updatedAt",
+        "baseContentRef",
+        "lastPublished"
+      ]
+    },
+    "Workspace": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$"
+        },
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "organizationId": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,128}$"
+            },
+            "locationId": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,128}$"
+            }
+          },
+          "required": [
+            "organizationId",
+            "locationId"
+          ]
+        },
+        "managerIdentityId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "allowedOperations": {
+          "const": [
+            "ReadAuthoringWorkspace",
+            "SaveContentDraft",
+            "PreviewContentDraft",
+            "PublishContentDraft",
+            "ReadAuthoringOperation"
+          ]
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "contentPackId": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{1,128}$"
+            },
+            "baseContentRef": {
+              "$ref": "#/$defs/ContentRef"
+            },
+            "people": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 24,
+              "items": {
+                "$ref": "#/$defs/DemoPerson"
+              }
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "catalog": {
+              "$ref": "#/$defs/Catalog"
+            }
+          },
+          "required": [
+            "contentPackId",
+            "baseContentRef",
+            "people",
+            "title",
+            "catalog"
+          ]
+        },
+        "draft": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "latestPublished": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "contentRef": {
+              "$ref": "#/$defs/ContentRef"
+            },
+            "catalog": {
+              "$ref": "#/$defs/Catalog"
+            }
+          },
+          "required": [
+            "contentRef",
+            "catalog"
+          ]
+        },
+        "publishedVersions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 11,
+          "items": {
+            "$ref": "#/$defs/ContentRef"
+          }
+        },
+        "limits": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "stations": {
+              "const": 12
+            },
+            "equipment": {
+              "const": 40
+            },
+            "inventory": {
+              "const": 80
+            },
+            "recipes": {
+              "const": 24
+            },
+            "catalogBytes": {
+              "const": 49152
+            },
+            "saves": {
+              "const": 100
+            },
+            "publications": {
+              "const": 10
+            },
+            "receiptKeys": {
+              "const": 256
+            },
+            "remainingSaves": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "remainingPublications": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "remainingAssignments": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            }
+          },
+          "required": [
+            "stations",
+            "equipment",
+            "inventory",
+            "recipes",
+            "catalogBytes",
+            "saves",
+            "publications",
+            "receiptKeys",
+            "remainingSaves",
+            "remainingPublications",
+            "remainingAssignments"
+          ]
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "runId",
+        "scope",
+        "managerIdentityId",
+        "expiresAt",
+        "allowedOperations",
+        "source",
+        "draft",
+        "latestPublished",
+        "publishedVersions",
+        "limits"
+      ]
+    },
+    "SaveResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "operation": {
+          "const": "SaveContentDraft"
+        },
+        "draftId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "catalogDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "operation",
+        "draftId",
+        "revision",
+        "catalogDigest",
+        "updatedAt"
+      ]
+    },
+    "PublishResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "operation": {
+          "const": "PublishContentDraft"
+        },
+        "draftId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "contentRef": {
+          "$ref": "#/$defs/ContentRef"
+        },
+        "unchanged": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "operation",
+        "draftId",
+        "revision",
+        "contentRef",
+        "unchanged"
+      ]
+    },
+    "Preview": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "draft": {
+          "const": true
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "catalogDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "content": {
+          "$ref": "#/$defs/PublicContent"
+        }
+      },
+      "required": [
+        "draft",
+        "revision",
+        "catalogDigest",
+        "content"
+      ]
+    },
+    "OperationResult": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "found": {
+              "const": false
+            },
+            "operation": {
+              "enum": [
+                "SaveContentDraft",
+                "PublishContentDraft"
+              ]
+            },
+            "key": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{16,128}$"
+            }
+          },
+          "required": [
+            "found",
+            "operation",
+            "key"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "found": {
+              "const": true
+            },
+            "operation": {
+              "enum": [
+                "SaveContentDraft",
+                "PublishContentDraft"
+              ]
+            },
+            "key": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{16,128}$"
+            },
+            "result": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/SaveResult"
+                },
+                {
+                  "$ref": "#/$defs/PublishResult"
+                }
+              ]
+            }
+          },
+          "required": [
+            "found",
+            "operation",
+            "key",
+            "result"
+          ]
+        }
+      ]
+    },
+    "SaveInput": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "expectedRevision": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "mode": {
+              "const": "replace"
+            },
+            "catalog": {
+              "$ref": "#/$defs/Catalog"
+            }
+          },
+          "required": [
+            "expectedRevision",
+            "mode",
+            "catalog"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "expectedRevision": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "mode": {
+              "const": "restorePublished"
+            },
+            "publishedContentRef": {
+              "$ref": "#/$defs/ContentRef"
+            }
+          },
+          "required": [
+            "expectedRevision",
+            "mode",
+            "publishedContentRef"
+          ]
+        }
+      ]
+    },
+    "PublishInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "expectedRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "draftDigest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "expectedRevision",
+        "draftDigest"
+      ]
+    }
+  },
+  "responses": {
+    "ReadAuthoringWorkspace": {
+      "$ref": "#/$defs/Workspace"
+    },
+    "SaveContentDraft": {
+      "$ref": "#/$defs/SaveResult"
+    },
+    "PreviewContentDraft": {
+      "$ref": "#/$defs/Preview"
+    },
+    "PublishContentDraft": {
+      "$ref": "#/$defs/PublishResult"
+    },
+    "ReadAuthoringOperation": {
+      "$ref": "#/$defs/OperationResult"
+    }
+  },
+  "requests": {
+    "SaveContentDraft": {
+      "$ref": "#/$defs/SaveInput"
+    },
+    "PublishContentDraft": {
+      "$ref": "#/$defs/PublishInput"
+    }
+  },
+  "x-required-semantic-validation": [
+    "Ownership is authenticated run/org/location/manager, never supplied authority.",
+    "Existing people and training/title are immutable server-supplied source.",
+    "Canonical catalog <=49152 UTF8 bytes; total HTTP body <=65536 bytes; response <=262144 bytes.",
+    "References, uniqueness, useful trimmed names and exact version/digest are validated server-side.",
+    "Preview uses an explicit 0.0.0-draft.N version inside the draft wrapper, never a published ContentRef.",
+    "Readback operation matches result.operation, key binds exact operation and payload."
+  ]
+}

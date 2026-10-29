@@ -1,10 +1,13 @@
+import {createAuthoringPredecessorCopy} from './authoring-proof-copy.mjs';
 import assert from 'node:assert/strict';
-import {test} from 'node:test';
+import {test,before,after} from 'node:test';
 import {cpSync,mkdirSync,mkdtempSync,readFileSync,rmSync,writeFileSync} from 'node:fs';
 import {join,resolve} from 'node:path';
 import {tmpdir} from 'node:os';
 import {buildDemoRouteInventory,inspectDemoRouteSource,inspectDemoRouteInventory,DEMO_ROUTE_INVENTORY} from '../verification/demo-route-inventory.mjs';
-const root=resolve(new URL('../..',import.meta.url).pathname);
+let root,predecessor;
+before(()=>{predecessor=createAuthoringPredecessorCopy(resolve(new URL('../..',import.meta.url).pathname));root=predecessor.root;});
+after(()=>predecessor?.remove());
 function fixture(work){const dir=mkdtempSync(join(tmpdir(),'teach-demo-routes-'));try{for(const path of ['src','domains/demo-runtime'])cpSync(join(root,path),join(dir,path),{recursive:true});mkdirSync(join(dir,'verification/demo-runtime'),{recursive:true});write(dir);work(dir);}finally{rmSync(dir,{recursive:true,force:true});}}
 function write(dir){writeFileSync(join(dir,DEMO_ROUTE_INVENTORY),JSON.stringify(buildDemoRouteInventory(dir),null,2)+'\n');}
 function edit(dir,path,change){const file=join(dir,path);const before=readFileSync(file,'utf8');const after=change(before);assert.notEqual(before,after);writeFileSync(file,after);}

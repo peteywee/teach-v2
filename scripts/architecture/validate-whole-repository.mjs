@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { AUTHORITY_VALIDATORS, parseBoundedPartition, boundedPartitionEvidence } from '../verification/validator-partitions.mjs';
 import { readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -52,14 +53,19 @@ export async function runAuthorityValidators(root,scripts,{timeoutMs=5000,spawnI
 }
 
 async function main() {
- const root=resolve(process.cwd()),scripts=discoverAuthorityValidators(root),errors=[];
+ const root=resolve(process.cwd()),allScripts=discoverAuthorityValidators(root),errors=[];
+ const partition=parseBoundedPartition(process.argv.slice(2));
+ if(partition!==null&&JSON.stringify(allScripts)!==JSON.stringify(AUTHORITY_VALIDATORS))throw Error('exact sixty authority validator inventory required');
+ const evidence=partition===null?null:boundedPartitionEvidence('authority',partition);
+ const scripts=evidence?evidence.names:allScripts;
  // Require the standalone integration slot; never substitute a summary for it.
- if(!scripts.includes('scripts/architecture/validate-repository-integration.mjs'))errors.push('required repository integration validator missing');
+ if(!allScripts.includes('scripts/architecture/validate-repository-integration.mjs'))errors.push('required repository integration validator missing');
  const results=await runAuthorityValidators(root,scripts);
  for(const result of results)if(result.status!==0||result.error||result.signal)errors.push(`${result.path}: ${result.error||((result.stdout||'')+(result.stderr||'')).trim()||'validator terminated '+result.signal}`);
  if(errors.length){console.error(`WHOLE-REPOSITORY AUDIT FAILED (${errors.length})\n${errors.join('\n')}`);return 1;}
- console.log(`WHOLE-REPOSITORY AUDIT PASS: ${scripts.length} standalone authority/admission validators`);
- console.log('PROVEN: module/layer dependency checks, Application-owned repository ports, isolated execution entry guards, future queue/admission reconciliation');
+ if(evidence)console.log('Bounded partition: '+JSON.stringify(evidence));
+ console.log(`${evidence?'AUTHORITY PARTITION '+partition+'/2':'WHOLE-REPOSITORY AUDIT'} PASS: ${scripts.length} standalone authority/admission validators`);
+ console.log(evidence?'PARTIAL: exact selected validators only; complete authority requires both source-bound partition receipts':'PROVEN: module/layer dependency checks, Application-owned repository ports, isolated execution entry guards, future queue/admission reconciliation');
  const storage=inspectDemoStorageEvidence(root);
  console.log(storage.extended&&storage.errors.length===0
   ? 'ADMIT: exact demo P05 extension/P06 Assignment/P08 ProgressEvent authoring only; UNDER_TEST: current storage proof; BLOCK: P07 Certification; UNKNOWN: all-command runtime authorization/audit/orchestration conformance; BLOCKED: shared/production execution'

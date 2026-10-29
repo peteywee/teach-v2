@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { ENGINEERING_MANIFEST, ENGINEERING_REVIEW, ENGINEERING_BASE, ENGINEERING_REVISED_PATHS, ENGINEERING_ADDED_PATHS, SCHEMA_ENGINEERING_REVIEW_SHA256, inspectSchemaIsolationEngineering } from '../verification/demo-schema-isolation-engineering.mjs';
 import { inspectDemoRecipePhysicalSuccessor } from '../persistence/demo-recipes-physical-successor.mjs';
+import { withAuthoringPredecessor } from './authoring-predecessor-fixture.mjs';
 
 const root = resolve(new URL('../..', import.meta.url).pathname);
 const fixture = mkdtempSync(join(tmpdir(), 'teach-schema-engineering-'));
@@ -58,13 +59,19 @@ test('altered predecessors, injected paths, rebound hashes and review authority 
 });
 
 test('a rehashed current source and manifest cannot replace the independently sealed review', requireReview, () => {
-  const path = ENGINEERING_REVISED_PATHS[0], source = raw(path), manifestText = raw(ENGINEERING_MANIFEST);
-  try {
-    writeFileSync(join(fixture, path), source + '\n');
-    const manifest = JSON.parse(manifestText); manifest.current_sha256[path] = hash(source + '\n');
-    writeFileSync(join(fixture, ENGINEERING_MANIFEST), JSON.stringify(manifest, null, 2) + '\n');
-    assert.match(denied().errors.join('\n'), /review must bind exact engineering manifest/);
-  } finally { writeFileSync(join(fixture, path), source); writeFileSync(join(fixture, ENGINEERING_MANIFEST), manifestText); }
+  assert.deepEqual(inspectSchemaIsolationEngineering(fixture).errors, []);
+  change(ENGINEERING_REVISED_PATHS[0], text => text + '\n');
+  assert.deepEqual(inspectSchemaIsolationEngineering(fixture).errors, []);
+  withAuthoringPredecessor(fixture, () => {
+    const path = ENGINEERING_REVISED_PATHS[0], source = raw(path), manifestText = raw(ENGINEERING_MANIFEST);
+    try {
+      writeFileSync(join(fixture, path), source + '\n');
+      const manifest = JSON.parse(manifestText); manifest.current_sha256[path] = hash(source + '\n');
+      writeFileSync(join(fixture, ENGINEERING_MANIFEST), JSON.stringify(manifest, null, 2) + '\n');
+      assert.match(denied().errors.join('\n'), /review must bind exact engineering manifest/);
+    } finally { writeFileSync(join(fixture, path), source); writeFileSync(join(fixture, ENGINEERING_MANIFEST), manifestText); }
+  });
+  assert.deepEqual(inspectSchemaIsolationEngineering(fixture).errors, []);
 });
 
 test('missing review, orphan manifest, extra engineering evidence and symlinks never expose predecessors', () => {

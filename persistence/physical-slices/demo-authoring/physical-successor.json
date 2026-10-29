@@ -1,0 +1,94 @@
+{
+  "successor_id": "TEACH-DEMO-AUTHORING-PHYSICAL-SUCCESSOR-2026-10-26",
+  "baseline_commit": "30b4c62dca6dbfe5cb709b5b6d1b34257bf5d567",
+  "baseline_tree": "ef3b12410f3efdf70724ac2532cfc3fe8f437d7e",
+  "prior_migration_count": 8,
+  "current_migration_count": 9,
+  "new_tables": [
+    "content_authoring_drafts",
+    "content_authoring_receipts"
+  ],
+  "application_tables": 24,
+  "functions": [
+    "audit_guard_demo_event",
+    "audit_guard_demo_lifecycle",
+    "content_authoring_validate_catalog",
+    "content_guard_authoring_draft",
+    "content_guard_demo_version",
+    "demo_assignment_shape",
+    "demo_audit_denial_subject",
+    "demo_audit_target_matches",
+    "demo_authoring_owner_active",
+    "demo_canonical_json",
+    "demo_content_version_shape",
+    "demo_evaluation_shape",
+    "demo_identity_scope_matches",
+    "demo_json_id",
+    "demo_json_keys",
+    "demo_json_string",
+    "demo_json_timestamp",
+    "demo_json_timestamp_equals",
+    "demo_lifecycle_shape",
+    "demo_plain_text",
+    "demo_progress_shape",
+    "demo_reject_history_change",
+    "demo_session_shape",
+    "demo_valid_network_prefix",
+    "demo_valid_semver",
+    "identity_guard_application_session_update",
+    "identity_guard_demo_credential",
+    "identity_guard_demo_persona",
+    "identity_guard_demo_session",
+    "identity_guard_identity_update",
+    "identity_guard_invitation_insert",
+    "identity_guard_invitation_update",
+    "identity_guard_single_use_token_update",
+    "learning_guard_demo_assignment",
+    "learning_guard_progress",
+    "learning_guard_session_write",
+    "organization_guard_demo_run",
+    "organization_guard_grant",
+    "organization_guard_membership",
+    "organization_guard_report",
+    "transaction_control_guard_reconciliation_record_update",
+    "transaction_guard_authoring_receipt",
+    "transaction_guard_demo_receipt"
+  ],
+  "new_roles": 0,
+  "deleted_or_rewritten_historical_rows": 0,
+  "content_schema_versions": [
+    "1.0.0",
+    "1.1.0",
+    "1.2.0"
+  ],
+  "journal_entry": {
+    "idx": 8,
+    "version": "7",
+    "when": 1793039444823,
+    "tag": "0008_demo_manager_authoring",
+    "breakpoints": true
+  },
+  "migration_sha256": {
+    "drizzle/0008_demo_manager_authoring.sql": "8cc38af9d9c005a79b183dbee11cb0b210933fd871d7b23ca93d44475455226d",
+    "drizzle-isolated/0008_demo_manager_authoring.sql": "6c6e568354e95cb5012e369dca6a3f0c9a3c2d72ac49d05127d1b77f3ba941ab"
+  },
+  "runtime_activation_authorized": false,
+  "shared_or_production_execution_authorized": false,
+  "deployment_authorized": false,
+  "credential_creation_authorized": false,
+  "production_application": "SEPARATE_REVIEWED_ACTION_REQUIRED",
+  "private_access": {
+    "content_authoring_drafts": [
+      "SELECT",
+      "INSERT",
+      "UPDATE"
+    ],
+    "content_authoring_receipts": [
+      "SELECT",
+      "INSERT"
+    ]
+  },
+  "public_or_browser_access": false,
+  "delete_authority": false,
+  "evidence_state": "SOURCE_PREPARED_NOT_RUNTIME_PROOF"
+}

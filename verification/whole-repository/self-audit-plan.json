@@ -11,7 +11,17 @@
       "id": "authority",
       "command": "node",
       "args": [
-        "scripts/architecture/validate-whole-repository.mjs"
+        "scripts/architecture/validate-whole-repository.mjs",
+        "--partition=1/2"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "authority-second",
+      "command": "node",
+      "args": [
+        "scripts/architecture/validate-whole-repository.mjs",
+        "--partition=2/2"
       ],
       "timeout_ms": 25000
     },
@@ -30,7 +40,17 @@
       "command": "node",
       "args": [
         "--test",
-        "--test-name-pattern=^(?:exact demo successor proves 131 entries, 236 approved, 583 references and no holds|every family rejects extra entries and unrelated status promotions|typed references cannot substitute a candidate homonym or wrong family|Membership promotion removes only old hold and cannot promote candidate business events|baseline bytes, exact owner evidence and proposal files are immutable|registration inventory, activation scope and authority hash allowlist cannot be forged|manifest ancestry and exact one-owner assignments remain closed|current immutable historical evidence is checked live, never hidden by baseline reads|every registered changed authority file remains byte-bound to reviewed registration|envelope collisions never rename ContentPack or replace LifecycleSnapshot definition|actual kernel, admission and historical discovery CLIs reject changed live authority|only three exact approved four-segment names extend baseline grammar|frozen proposal directory rejects unexpected files and nested directories|historical physical criterion order remains non-authoritative without allowing changed evidence|active authority roots reject unregistered files, subdirectories and symlinks|validator harness never accepts expected stderr followed by timeout, signal or launch failure)$",
+        "--test-name-pattern=^(?:exact demo successor proves 131 entries, 236 approved, 583 references and no holds|every family rejects extra entries and unrelated status promotions|typed references cannot substitute a candidate homonym or wrong family|Membership promotion removes only old hold and cannot promote candidate business events|baseline bytes, exact owner evidence and proposal files are immutable|registration inventory, activation scope and authority hash allowlist cannot be forged|manifest ancestry and exact one-owner assignments remain closed|current immutable historical evidence is checked live, never hidden by baseline reads|envelope collisions never rename ContentPack or replace LifecycleSnapshot definition|actual kernel, admission and historical discovery CLIs reject changed live authority|only three exact approved four-segment names extend baseline grammar|frozen proposal directory rejects unexpected files and nested directories|historical physical criterion order remains non-authoritative without allowing changed evidence|active authority roots reject unregistered files, subdirectories and symlinks|validator harness never accepts expected stderr followed by timeout, signal or launch failure)$",
+        "scripts/tests/validate-demo-runtime-registration.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-registration-regressions-second",
+      "command": "node",
+      "args": [
+        "--test",
+        "--test-name-pattern=^(?:every registered changed authority file remains byte-bound to reviewed registration)$",
         "scripts/tests/validate-demo-runtime-registration.mjs"
       ],
       "timeout_ms": 25000
@@ -83,7 +103,26 @@
       "id": "migration-guards",
       "command": "node",
       "args": [
-        "scripts/tests/validate-migration-history-guards.mjs"
+        "scripts/tests/validate-migration-history-guards.mjs",
+        "--partition=1/3"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "migration-guards-second",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-migration-history-guards.mjs",
+        "--partition=2/3"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "migration-guards-third",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-migration-history-guards.mjs",
+        "--partition=3/3"
       ],
       "timeout_ms": 25000
     },
@@ -100,7 +139,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=1/14"
+        "--shard=1/26"
       ],
       "timeout_ms": 25000
     },
@@ -109,7 +148,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=2/14"
+        "--shard=2/26"
       ],
       "timeout_ms": 25000
     },
@@ -118,7 +157,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=3/14"
+        "--shard=3/26"
       ],
       "timeout_ms": 25000
     },
@@ -127,7 +166,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=4/14"
+        "--shard=4/26"
       ],
       "timeout_ms": 25000
     },
@@ -136,7 +175,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=5/14"
+        "--shard=5/26"
       ],
       "timeout_ms": 25000
     },
@@ -145,7 +184,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=6/14"
+        "--shard=6/26"
       ],
       "timeout_ms": 25000
     },
@@ -154,7 +193,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=7/14"
+        "--shard=7/26"
       ],
       "timeout_ms": 25000
     },
@@ -163,7 +202,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=8/14"
+        "--shard=8/26"
       ],
       "timeout_ms": 25000
     },
@@ -172,7 +211,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=9/14"
+        "--shard=9/26"
       ],
       "timeout_ms": 25000
     },
@@ -181,7 +220,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=10/14"
+        "--shard=10/26"
       ],
       "timeout_ms": 25000
     },
@@ -190,7 +229,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=11/14"
+        "--shard=11/26"
       ],
       "timeout_ms": 25000
     },
@@ -199,7 +238,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=12/14"
+        "--shard=12/26"
       ],
       "timeout_ms": 25000
     },
@@ -208,7 +247,7 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=13/14"
+        "--shard=13/26"
       ],
       "timeout_ms": 25000
     },
@@ -217,7 +256,115 @@
       "command": "node",
       "args": [
         "scripts/tests/validate-validators.mjs",
-        "--shard=14/14"
+        "--shard=14/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-15",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=15/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-16",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=16/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-17",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=17/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-18",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=18/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-19",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=19/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-20",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=20/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-21",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=21/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-22",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=22/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-23",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=23/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-24",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=24/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-25",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=25/26"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "validator-shard-26",
+      "command": "node",
+      "args": [
+        "scripts/tests/validate-validators.mjs",
+        "--shard=26/26"
       ],
       "timeout_ms": 25000
     },
@@ -227,10 +374,29 @@
       "args": [
         "--test",
         "scripts/tests/validate-development-self-audit.test.mjs",
-        "scripts/tests/validate-ci-consolidation.test.mjs",
         "scripts/tests/validate-demo-physical-successor.mjs",
         "scripts/tests/validate-replay-database-cleanup.test.mjs",
         "scripts/tests/validate-whole-audit-runner.test.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "audit-regressions-second",
+      "command": "node",
+      "args": [
+        "--test",
+        "--test-name-pattern=^(?:all 24 baseline logical obligations retain identities, discovery and bounds through exact scheduling refinement|unique obligation validator-shard-14 has its own bounded executable stage|unique obligation validator-shard-7 has its own bounded executable stage|unique obligation validator-shard-9 has its own bounded executable stage|unique obligation validator-shard-11 has its own bounded executable stage|unique obligation validator-shard-4 has its own bounded executable stage|unique obligation validator-shard-6 has its own bounded executable stage|unique obligation demo-generation has its own bounded executable stage|unique obligation demo-recipe-postgres has its own bounded executable stage|unique obligation document-governance has its own bounded executable stage|unique obligation drizzle-history has its own bounded executable stage|unique obligation replay-p02 has its own bounded executable stage|unique obligation replay-p04 has its own bounded executable stage|unique obligation demo-kitchen-postgres has its own bounded executable stage|unique obligation demo-storage-integration-regressions has its own bounded executable stage|complete 220-case catalog includes exactly the four approved checker and admission additions|all 13 foundation files and seven PostgreSQL suite bodies retain actual assertions|validator-shard-13 missing cannot disappear into a green aggregate|validator-shard-13 UNKNOWN cannot disappear into a green aggregate|validator-shard-14 missing cannot disappear into a green aggregate|validator-shard-14 UNKNOWN cannot disappear into a green aggregate|demo-registration-entry-regressions missing cannot disappear into a green aggregate|demo-registration-entry-regressions UNKNOWN cannot disappear into a green aggregate|validator-shard-7 missing cannot disappear into a green aggregate|validator-shard-7 UNKNOWN cannot disappear into a green aggregate|validator-shard-8 missing cannot disappear into a green aggregate|validator-shard-8 UNKNOWN cannot disappear into a green aggregate|validator-shard-9 missing cannot disappear into a green aggregate|validator-shard-9 UNKNOWN cannot disappear into a green aggregate|validator-shard-10 missing cannot disappear into a green aggregate|validator-shard-10 UNKNOWN cannot disappear into a green aggregate|validator-shard-11 missing cannot disappear into a green aggregate|validator-shard-11 UNKNOWN cannot disappear into a green aggregate|validator-shard-12 missing cannot disappear into a green aggregate|validator-shard-12 UNKNOWN cannot disappear into a green aggregate|validator-shard-4 missing cannot disappear into a green aggregate|validator-shard-4 UNKNOWN cannot disappear into a green aggregate|validator-shard-5 missing cannot disappear into a green aggregate|validator-shard-5 UNKNOWN cannot disappear into a green aggregate|validator-shard-6 missing cannot disappear into a green aggregate|validator-shard-6 UNKNOWN cannot disappear into a green aggregate|demo-source-tests missing cannot disappear into a green aggregate|demo-source-tests UNKNOWN cannot disappear into a green aggregate|demo-generation missing cannot disappear into a green aggregate|demo-generation UNKNOWN cannot disappear into a green aggregate|demo-postgres missing cannot disappear into a green aggregate|demo-postgres UNKNOWN cannot disappear into a green aggregate|demo-recipe-postgres missing cannot disappear into a green aggregate|demo-recipe-postgres UNKNOWN cannot disappear into a green aggregate|demo-registration-regressions missing cannot disappear into a green aggregate|demo-registration-regressions UNKNOWN cannot disappear into a green aggregate|document-governance missing cannot disappear into a green aggregate|document-governance UNKNOWN cannot disappear into a green aggregate|production-contract-decisions missing cannot disappear into a green aggregate|production-contract-decisions UNKNOWN cannot disappear into a green aggregate|drizzle-history missing cannot disappear into a green aggregate|drizzle-history UNKNOWN cannot disappear into a green aggregate|replay-p01 missing cannot disappear into a green aggregate|replay-p01 UNKNOWN cannot disappear into a green aggregate|replay-p02 missing cannot disappear into a green aggregate|replay-p02 UNKNOWN cannot disappear into a green aggregate|replay-p03 missing cannot disappear into a green aggregate|replay-p03 UNKNOWN cannot disappear into a green aggregate|replay-p04 missing cannot disappear into a green aggregate|replay-p04 UNKNOWN cannot disappear into a green aggregate|demo-kitchen-registration missing cannot disappear into a green aggregate|demo-kitchen-registration UNKNOWN cannot disappear into a green aggregate|demo-kitchen-postgres missing cannot disappear into a green aggregate|demo-kitchen-postgres UNKNOWN cannot disappear into a green aggregate|demo-storage-owner-regressions missing cannot disappear into a green aggregate|demo-storage-owner-regressions UNKNOWN cannot disappear into a green aggregate|demo-storage-integration-regressions missing cannot disappear into a green aggregate|demo-storage-integration-regressions UNKNOWN cannot disappear into a green aggregate|reconciliation rejects retained context error contradicts success|reconciliation rejects absent captured document context|reconciliation rejects document base argv tampering|reconciliation rejects extra shell payload|reconciliation rejects different tree|reconciliation rejects different plan|reconciliation rejects failed unique replay|reconciliation rejects truncated foundation inventory|reconciliation rejects different validator inventory|plan cannot erase authority-second|plan cannot erase demo-registration-regressions|plan cannot erase document-governance|plan cannot erase pins|plan cannot erase production-denials|plan cannot erase migration-guards-second|plan cannot erase apply-regressions|plan cannot erase validator-shard-2|plan cannot erase validator-shard-4|plan cannot erase validator-shard-6|plan cannot erase validator-shard-8|plan cannot erase validator-shard-10|plan cannot erase validator-shard-12|plan cannot erase validator-shard-14|plan cannot erase validator-shard-16|plan cannot erase validator-shard-18|plan cannot erase validator-shard-20|plan cannot erase validator-shard-22|plan cannot erase validator-shard-24|plan cannot erase validator-shard-26|plan cannot erase audit-regressions-second|plan cannot erase recovery-regressions|plan cannot erase demo-source-tests|plan cannot erase demo-storage-integration-regressions|plan cannot erase demo-kitchen-registration|plan cannot erase demo-postgres|plan cannot erase demo-authoring-admission|plan cannot erase demo-authoring-generation|plan cannot erase demo-authoring-postgres|plan cannot erase typecheck|plan cannot erase drizzle-history|plan cannot erase replay-p01|plan cannot erase replay-p03|plan cannot erase replay|plan cannot erase postgres-p01|plan cannot erase postgres-identity-commands|plan cannot erase postgres-p03|plan cannot erase postgres-p05|actual push event binds source, raw payload, run and comparison base|document resolver fails closed for missing PR base|document resolver fails closed for missing push before|document resolver fails closed for wrong push source|document resolver fails closed for missing event path|document resolver fails closed for local override in CI|document resolver fails closed for wrong action source|document resolver fails closed for non-numeric attempt|document resolver fails closed for unavailable base object|document resolver fails closed for abbreviated base|initial push uses an explicit ZERO_BASE fallback, not a hidden comparison|context validator rejects omitted context field|context validator rejects wrong source binding|context validator rejects zero-base PR downgrade|context validator rejects missing run provenance|legacy document-base environment cannot silently change a no-base dispatch command|post-execution event corruption retains failure evidence instead of dropping the attempt|real document comparison rejects changed stable document ID|real document comparison rejects backward update date|live two-workflow inventory matches regenerated files, with exactly one independent observer|structural validator rejects unique stage document context override even after inventory regeneration|structural validator rejects no-op shell on finalizer even after inventory regeneration|structural validator rejects job default no-op shell even after inventory regeneration|structural validator rejects workflow default directory override even after inventory regeneration|structural validator rejects PR main-only branch narrowing even after inventory regeneration|structural validator rejects PR ignored-path filter even after inventory regeneration|structural validator rejects missing main push even after inventory regeneration|structural validator rejects extra schedule event even after inventory regeneration|structural validator rejects shallow document history even after inventory regeneration|structural validator rejects duplicate history override even after inventory regeneration|structural validator rejects skipped unique document stage even after inventory regeneration|structural validator rejects masked unique replay exit even after inventory regeneration|structural validator rejects wrong stage order even after inventory regeneration|structural validator rejects reusable workflow trigger even after inventory regeneration|structural validator rejects actions permission expansion even after inventory regeneration|structural validator rejects OIDC permission expansion even after inventory regeneration|structural validator rejects alternate repository checkout even after inventory regeneration|structural validator rejects success-only audit finalization even after inventory regeneration|structural validator rejects silent missing audit bundle even after inventory regeneration|structural validator rejects success-only lifecycle artifact even after inventory regeneration|structural validator rejects unbounded job even after inventory regeneration|independent observer rejects untrusted producer source checkout after inventory regeneration|independent observer rejects producer list removal after inventory regeneration|independent observer rejects self-observation recursion after inventory regeneration|independent observer rejects write actions permission after inventory regeneration|independent observer rejects unbounded readback after inventory regeneration|independent observer rejects success-only failure evidence after inventory regeneration|real consolidated workflow cannot self-close without an independent valid receipt|consolidated receipt rejects wrong tree_sha|consolidated receipt rejects wrong workflow_source_sha|consolidated receipt rejects wrong run_id|consolidated receipt rejects wrong job_id|consolidated receipt rejects wrong artifact_sha256|consolidated receipt rejects wrong artifact_report_sha256|consolidated receipt rejects wrong upload_outcome|consolidated receipt rejects wrong run_conclusion|consolidated receipt rejects wrong event|even rehashed consolidated checkpoint rejects failed unique check rehashed to success|even rehashed consolidated checkpoint rejects changed stage order|a failure attempt remains retained and requires a separate diagnosed recovery attempt|a skipped attempt remains retained and requires a separate diagnosed recovery attempt|document report cannot reuse a receipt with different source_sha|document report cannot reuse a receipt with different event_sha256|document report cannot reuse a receipt with different run_id|coverage manifest preserves all 44 original producer identities and 131 literal command steps|coverage validator rejects wrong baseline commit|coverage validator rejects omitted old wrapper|coverage validator rejects omitted old command|coverage validator rejects unknown stage destination|coverage validator rejects unsupported destination kind|coverage validator rejects omitted baseline validator|coverage validator rejects changed replay digest|coverage validator rejects omitted added stage|live coverage rejects a no-op test:p02:integration package alias despite preserved old proof files|live coverage rejects a no-op test:session:commands:integration package alias despite preserved old proof files|live coverage rejects a no-op test:p04:integration package alias despite preserved old proof files|live coverage rejects a no-op db:verify-replay package alias despite preserved old proof files|live coverage rejects a no-op db:verify-p03-replay package alias despite preserved old proof files|live coverage rejects a no-op db:verify-p05-replay package alias despite preserved old proof files|live coverage rejects removed or altered assertion body scripts/db/verify-migration-replay\\.ts|live coverage rejects removed or altered assertion body src/modules/identity/domain/credential\\.test\\.ts|live coverage requires the newly admitted capability validator, not just the historical 53|live coverage requires the exact demo registration validator and bounded mutation stage|validator worker merger rejects missing report|validator worker merger rejects both catalogs omit a case|validator worker merger rejects omitted result|validator worker merger rejects wrong worker partition|validator worker merger rejects nonboolean pass|worker result cannot pass before ordinary exit and retains failing case outcomes|validator worker collector rejects nonzero exit|validator worker collector rejects duplicate report|authenticated predecessor authority umbrella retains five-second physical failure propagation|current authority runner executes all 60 exact slots and retains ordered physical failure evidence|live CI requires exact bounded demo-generation proof|live CI requires exact bounded demo-recipe-postgres proof|live CI rejects weakened disposable integration wrapper scripts/db/run-demo-recipe-integration\\.ts|historical generator setup successor preserves original proof bytes and every assertion|live coverage rejects restoring forced backend termination|dedicated controls cannot be renamed, moved, omitted or duplicated behind the catalog digest|actual twenty-six-partition harness selection executes each declared ordinal in its exact one stage|pinned Node test runner executes exact storage partitions without parent-suite leakage|recipe CI extension keeps both exact successor gates in the complete refined authority coverage|recipe CI cannot omit existing-stage regression tests/demo-web/recipe-api\\.test\\.mjs|recipe CI cannot omit existing-stage regression scripts/tests/validate-demo-recipes-registration\\.mjs|recipe CI cannot omit or substitute the separate disposable PostgreSQL suite|split PostgreSQL stage demo-postgres cannot raise its operation ceiling|historical whole-audit scheduling authenticates original modules and requires every genuine result)$",
+        "scripts/tests/validate-ci-consolidation.test.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "audit-regressions-third",
+      "command": "node",
+      "args": [
+        "--test",
+        "--test-name-pattern=^(?:unique obligation validator-shard-13 has its own bounded executable stage|unique obligation demo-registration-entry-regressions has its own bounded executable stage|unique obligation validator-shard-8 has its own bounded executable stage|unique obligation validator-shard-10 has its own bounded executable stage|unique obligation validator-shard-12 has its own bounded executable stage|unique obligation validator-shard-5 has its own bounded executable stage|unique obligation demo-source-tests has its own bounded executable stage|unique obligation demo-postgres has its own bounded executable stage|unique obligation demo-registration-regressions has its own bounded executable stage|unique obligation production-contract-decisions has its own bounded executable stage|unique obligation replay-p01 has its own bounded executable stage|unique obligation replay-p03 has its own bounded executable stage|unique obligation demo-kitchen-registration has its own bounded executable stage|unique obligation demo-storage-owner-regressions has its own bounded executable stage|all baseline case guarantees retain exact finite successor diagnostics|all 53 baseline validators remain in the live umbrella discovery domain|complete 76-stage source-bound evidence reconciles|validator-shard-13 BLOCKED cannot disappear into a green aggregate|validator-shard-13 SKIPPED cannot disappear into a green aggregate|validator-shard-14 BLOCKED cannot disappear into a green aggregate|validator-shard-14 SKIPPED cannot disappear into a green aggregate|demo-registration-entry-regressions BLOCKED cannot disappear into a green aggregate|demo-registration-entry-regressions SKIPPED cannot disappear into a green aggregate|validator-shard-7 BLOCKED cannot disappear into a green aggregate|validator-shard-7 SKIPPED cannot disappear into a green aggregate|validator-shard-8 BLOCKED cannot disappear into a green aggregate|validator-shard-8 SKIPPED cannot disappear into a green aggregate|validator-shard-9 BLOCKED cannot disappear into a green aggregate|validator-shard-9 SKIPPED cannot disappear into a green aggregate|validator-shard-10 BLOCKED cannot disappear into a green aggregate|validator-shard-10 SKIPPED cannot disappear into a green aggregate|validator-shard-11 BLOCKED cannot disappear into a green aggregate|validator-shard-11 SKIPPED cannot disappear into a green aggregate|validator-shard-12 BLOCKED cannot disappear into a green aggregate|validator-shard-12 SKIPPED cannot disappear into a green aggregate|validator-shard-4 BLOCKED cannot disappear into a green aggregate|validator-shard-4 SKIPPED cannot disappear into a green aggregate|validator-shard-5 BLOCKED cannot disappear into a green aggregate|validator-shard-5 SKIPPED cannot disappear into a green aggregate|validator-shard-6 BLOCKED cannot disappear into a green aggregate|validator-shard-6 SKIPPED cannot disappear into a green aggregate|demo-source-tests BLOCKED cannot disappear into a green aggregate|demo-source-tests SKIPPED cannot disappear into a green aggregate|demo-generation BLOCKED cannot disappear into a green aggregate|demo-generation SKIPPED cannot disappear into a green aggregate|demo-postgres BLOCKED cannot disappear into a green aggregate|demo-postgres SKIPPED cannot disappear into a green aggregate|demo-recipe-postgres BLOCKED cannot disappear into a green aggregate|demo-recipe-postgres SKIPPED cannot disappear into a green aggregate|demo-registration-regressions BLOCKED cannot disappear into a green aggregate|demo-registration-regressions SKIPPED cannot disappear into a green aggregate|document-governance BLOCKED cannot disappear into a green aggregate|document-governance SKIPPED cannot disappear into a green aggregate|production-contract-decisions BLOCKED cannot disappear into a green aggregate|production-contract-decisions SKIPPED cannot disappear into a green aggregate|drizzle-history BLOCKED cannot disappear into a green aggregate|drizzle-history SKIPPED cannot disappear into a green aggregate|replay-p01 BLOCKED cannot disappear into a green aggregate|replay-p01 SKIPPED cannot disappear into a green aggregate|replay-p02 BLOCKED cannot disappear into a green aggregate|replay-p02 SKIPPED cannot disappear into a green aggregate|replay-p03 BLOCKED cannot disappear into a green aggregate|replay-p03 SKIPPED cannot disappear into a green aggregate|replay-p04 BLOCKED cannot disappear into a green aggregate|replay-p04 SKIPPED cannot disappear into a green aggregate|demo-kitchen-registration BLOCKED cannot disappear into a green aggregate|demo-kitchen-registration SKIPPED cannot disappear into a green aggregate|demo-kitchen-postgres BLOCKED cannot disappear into a green aggregate|demo-kitchen-postgres SKIPPED cannot disappear into a green aggregate|demo-storage-owner-regressions BLOCKED cannot disappear into a green aggregate|demo-storage-owner-regressions SKIPPED cannot disappear into a green aggregate|demo-storage-integration-regressions BLOCKED cannot disappear into a green aggregate|demo-storage-integration-regressions SKIPPED cannot disappear into a green aggregate|reconciliation rejects absent expected document context|reconciliation rejects different document base at reconciliation|reconciliation rejects omitted document comparison argv|reconciliation rejects different source SHA|reconciliation rejects different source stamp|reconciliation rejects duplicate stage|reconciliation rejects timed out unique replay|reconciliation rejects missing validator case|plan cannot erase authority|plan cannot erase demo-registration-entry-regressions|plan cannot erase demo-registration-regressions-second|plan cannot erase production-contract-decisions|plan cannot erase target-snapshots|plan cannot erase migration-guards|plan cannot erase migration-guards-third|plan cannot erase validator-shard-1|plan cannot erase validator-shard-3|plan cannot erase validator-shard-5|plan cannot erase validator-shard-7|plan cannot erase validator-shard-9|plan cannot erase validator-shard-11|plan cannot erase validator-shard-13|plan cannot erase validator-shard-15|plan cannot erase validator-shard-17|plan cannot erase validator-shard-19|plan cannot erase validator-shard-21|plan cannot erase validator-shard-23|plan cannot erase validator-shard-25|plan cannot erase audit-regressions|plan cannot erase audit-regressions-third|plan cannot erase lifecycle-regressions|plan cannot erase demo-storage-owner-regressions|plan cannot erase demo-storage-integration-second|plan cannot erase demo-generation|plan cannot erase demo-recipe-postgres|plan cannot erase demo-authoring-source-tests|plan cannot erase demo-kitchen-postgres|plan cannot erase demo-authoring-isolated-history|plan cannot erase foundation|plan cannot erase generation|plan cannot erase replay-p02|plan cannot erase replay-p04|plan cannot erase migrate-isolated|plan cannot erase postgres-p02|plan cannot erase postgres-session-commands|plan cannot erase postgres-p04|actual pull_request event binds source, raw payload, run and comparison base|actual workflow_dispatch event binds source, raw payload, run and comparison base|document resolver fails closed for zero PR base|document resolver fails closed for wrong PR source|document resolver fails closed for wrong repository|document resolver fails closed for unreadable event path|document resolver fails closed for wrong expected source|document resolver fails closed for missing run ID|document resolver fails closed for unsupported privileged event|document resolver fails closed for shell-looking base|document resolver fails closed for uppercase base|no-event local context explicitly binds HEAD and optional exact base|context validator rejects unexpected context authority|context validator rejects no-base PR downgrade|context validator rejects invalid event digest|real bounded document child retains exact argv and source-bound event evidence|real failed document child retains a blocked checkpoint|real document comparison rejects changed body without a version increase|real document comparison rejects changed creation date|real document comparison accepts an increased version with stable identity and dates|structural validator rejects unique stage runtime environment override even after inventory regeneration|structural validator rejects no-op shell on unique replay even after inventory regeneration|structural validator rejects workflow default no-op shell even after inventory regeneration|structural validator rejects unique stage directory override even after inventory regeneration|structural validator rejects job default directory override even after inventory regeneration|structural validator rejects PR path filter even after inventory regeneration|structural validator rejects missing manual dispatch even after inventory regeneration|structural validator rejects privileged PR-target event even after inventory regeneration|structural validator rejects duplicate trigger block even after inventory regeneration|structural validator rejects absent full-history declaration even after inventory regeneration|structural validator rejects skipped required job even after inventory regeneration|structural validator rejects silently tolerated replay failure even after inventory regeneration|structural validator rejects omitted unique release check even after inventory regeneration|structural validator rejects matrix without supported model even after inventory regeneration|structural validator rejects top-level write permissions even after inventory regeneration|structural validator rejects job-level permission override even after inventory regeneration|structural validator rejects persisted checkout credentials even after inventory regeneration|structural validator rejects mutable source checkout even after inventory regeneration|structural validator rejects success-only audit artifact even after inventory regeneration|structural validator rejects success-only lifecycle checkpoint even after inventory regeneration|structural validator rejects silent missing lifecycle artifact even after inventory regeneration|structural validator rejects substring-spoofed job deadline even after inventory regeneration|independent observer rejects mutable observer checkout after inventory regeneration|independent observer rejects duplicate producer list after inventory regeneration|independent observer rejects success-only producer observation after inventory regeneration|independent observer rejects persisted credential after inventory regeneration|independent observer rejects unquoted readback identifier after inventory regeneration|independent observer rejects ignored missing terminal evidence after inventory regeneration|consolidated receipt rejects wrong source_sha|consolidated receipt rejects wrong workflow_sha256|consolidated receipt rejects wrong workflow_source_verified|consolidated receipt rejects wrong attempt|consolidated receipt rejects wrong artifact_id|consolidated receipt rejects wrong archive_sha256|consolidated receipt rejects wrong artifact_expired|consolidated receipt rejects wrong job_conclusion|consolidated receipt rejects wrong artifact_name|even rehashed consolidated checkpoint rejects omitted unique stage outcome|even rehashed consolidated checkpoint rejects wrong captured job|even rehashed consolidated checkpoint rejects omitted stage from both inventories|a cancelled attempt remains retained and requires a separate diagnosed recovery attempt|document report cannot reuse a receipt with different event_name|document report cannot reuse a receipt with different base_policy|document report cannot reuse a receipt with different repository|document report cannot reuse a receipt with different run_attempt|every old command has a real executable stage, validator, setup or complete test-inventory destination|coverage validator rejects wrong baseline tree|coverage validator rejects duplicate wrapper hiding another|coverage validator rejects rewritten old command|coverage validator rejects incorrect known stage destination|coverage validator rejects missing proof destination|coverage validator rejects omitted preserved proof file|coverage validator rejects omitted retained stage|live coverage rejects a no-op test:integration package alias despite preserved old proof files|live coverage rejects a no-op test:identity:commands:integration package alias despite preserved old proof files|live coverage rejects a no-op test:p03:integration package alias despite preserved old proof files|live coverage rejects a no-op test:p05:integration package alias despite preserved old proof files|live coverage rejects a no-op db:verify-p02-replay package alias despite preserved old proof files|live coverage rejects a no-op db:verify-p04-replay package alias despite preserved old proof files|live coverage rejects a no-op db:verify-p05-generation package alias despite preserved old proof files|live coverage rejects removed or altered assertion body tests/integration/identity/session-command-transaction\\.test\\.ts|live coverage rejects a deleted historical validator even if manifest counts stay unchanged|live coverage rejects an unreviewed extra standalone validator|two isolated worker partitions preserve exact catalog and ordered shard outcomes|validator worker merger rejects extra report|validator worker merger rejects catalog mismatch|validator worker merger rejects duplicated result|validator worker merger rejects changed case name|validator worker merger rejects missing diagnostic|validator worker collector rejects no report|validator worker collector rejects worker error after report|live coverage requires physical validator slot 56 and its bounded mutation invocation|current three-child authority runner regression suite is required in the exact bounded catalog|live CI requires exact bounded demo-source-tests proof|live CI requires exact bounded demo-postgres proof|live CI rejects weakened disposable integration wrapper scripts/db/run-demo-integration\\.ts|live CI rejects weakened disposable integration wrapper scripts/db/run-p05-prefix-integration\\.ts|live coverage rejects a weakened or deleted bounded replay cleanup helper|twenty-six bounded partitions refine the authenticated fourteen and retain every original ordinal exactly once|registration split executes exactly one plus sixteen unchanged test declarations|storage partitions retain every original declaration exactly once and reject inventory drift|pinned Node test runner executes exact registration partitions without parent-suite leakage|recipe CI cannot omit existing-stage regression tests/demo/recipe-content\\.test\\.ts|recipe CI cannot omit existing-stage regression tests/demo-web/recipes\\.test\\.mjs|recipe CI cannot omit existing-stage regression scripts/tests/validate-demo-recipes-physical-successor\\.mjs|recipe scheduling split preserves all 43 historical PostgreSQL declarations and both operation bounds|split PostgreSQL stage demo-recipe-postgres cannot raise its operation ceiling)$",
+        "scripts/tests/validate-ci-consolidation.test.mjs"
       ],
       "timeout_ms": 25000
     },
@@ -300,7 +466,17 @@
       "command": "node",
       "args": [
         "--test",
-        "--test-name-pattern=^(?:repository integration accepts exact reviewed current storage and historical queue|repository integration cannot admit owner tables from a forged successor|repository integration rejects Certification even inside the admitted migration|repository integration rejects admitted table names at an unadmitted source location|repository integration rejects admitted table names in a later migration|repository integration rejects admitted table names in a later snapshot|repository integration does not project a tampered live queue|repository integration requires the real isolated guard despite compact imports|repository integration rejects a guard after the first Pool)$",
+        "--test-name-pattern=^(?:repository integration accepts exact reviewed current storage and historical queue|repository integration rejects Certification even inside the admitted migration|repository integration rejects admitted table names in a later migration|repository integration does not project a tampered live queue|repository integration rejects a guard after the first Pool)$",
+        "scripts/tests/demo-storage-evidence.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-storage-integration-second",
+      "command": "node",
+      "args": [
+        "--test",
+        "--test-name-pattern=^(?:repository integration cannot admit owner tables from a forged successor|repository integration rejects admitted table names at an unadmitted source location|repository integration rejects admitted table names in a later snapshot|repository integration requires the real isolated guard despite compact imports)$",
         "scripts/tests/demo-storage-evidence.mjs"
       ],
       "timeout_ms": 25000
@@ -342,12 +518,68 @@
       "timeout_ms": 25000
     },
     {
+      "id": "demo-authoring-admission",
+      "command": "node",
+      "args": [
+        "--test",
+        "scripts/tests/validate-demo-authoring-admission.mjs",
+        "scripts/tests/validate-authoring-isolated-lineage.test.mjs",
+        "scripts/tests/validate-authoring-stages.test.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-authoring-source-tests",
+      "command": "node",
+      "args": [
+        "--import",
+        "tsx",
+        "--test",
+        "tests/demo-authoring/application.test.ts",
+        "tests/demo-authoring/journey.test.ts",
+        "tests/demo-authoring/transport.test.ts",
+        "tests/demo-web/authoring-model.test.mjs",
+        "tests/demo-web/authoring-api.test.mjs",
+        "tests/demo-web/authoring-controller.test.mjs",
+        "tests/demo-web/authoring-views.test.mjs",
+        "tests/demo-web/authoring-events.test.mjs",
+        "scripts/tests/validate-authoring-recovery-policy.test.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-authoring-generation",
+      "command": "node",
+      "args": [
+        "scripts/db/verify-authoring-generation.mjs"
+      ],
+      "timeout_ms": 25000
+    },
+    {
       "id": "demo-kitchen-postgres",
       "command": "node",
       "args": [
         "--import",
         "tsx",
         "scripts/db/run-demo-kitchen-integration.ts"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-authoring-postgres",
+      "command": "node",
+      "args": [
+        "--import",
+        "tsx",
+        "scripts/db/run-demo-authoring-integration.ts"
+      ],
+      "timeout_ms": 25000
+    },
+    {
+      "id": "demo-authoring-isolated-history",
+      "command": "node",
+      "args": [
+        "scripts/db/verify-authoring-isolated-history.mjs"
       ],
       "timeout_ms": 25000
     },

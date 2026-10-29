@@ -1,3 +1,4 @@
+import { authoringSourceFixture } from './authoring-source-fixture.mjs';
 import assert from 'node:assert/strict';
 import { after, test } from 'node:test';
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
@@ -5,8 +6,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { inspectKitchenEngineering, KITCHEN_ENGINEERING_MANIFEST, KITCHEN_ENGINEERING_REVIEW, KITCHEN_SOURCE_REVISIONS, KITCHEN_REVIEWED_ADDITIONS, KITCHEN_IMPLEMENTATION_PATHS } from '../verification/demo-kitchen-engineering.mjs';
 import { inspectKitchenPhysicalSuccessor } from '../persistence/demo-kitchen-physical-successor.mjs';
-const root=resolve(new URL('../..',import.meta.url).pathname), fixture=mkdtempSync(join(tmpdir(),'teach-kitchen-engineering-'));
-for(const path of ['.github','docs','domains','contracts','kernel','persistence','drizzle','drizzle-isolated','governance','verification','scripts','src','tests'])cpSync(join(root,path),join(fixture,path),{recursive:true});
+const root=resolve(new URL('../..',import.meta.url).pathname), fixture=authoringSourceFixture(root, 'teach-kitchen-engineering-');
 after(()=>rmSync(fixture,{recursive:true,force:true}));
 function denied(){
   const engineering=inspectKitchenEngineering(fixture),physical=inspectKitchenPhysicalSuccessor(fixture);

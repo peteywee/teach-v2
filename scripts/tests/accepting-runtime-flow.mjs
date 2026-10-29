@@ -1,3 +1,4 @@
+import {exercisePackagedAuthoring} from './packaged-authoring-flow.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {join} from 'node:path';
@@ -6,7 +7,7 @@ export async function exerciseAcceptingRuntime(root,transactions){
 const {assembleHostedRuntime}=await import(pathToFileURL(join(root,'src/bootstrap/demo-successor/runtime.js')).href);
 const origin='https://demo.example.test';
 let failNext=false;
-const {handle:handler}=assembleHostedRuntime({origin,options:{}},{run:work=>transactions.run(async tx=>{const value=await work(tx);if(failNext){failNext=false;throw Error('synthetic failed commit boundary');}return value;})});
+const {handle:handler}=assembleHostedRuntime({origin,options:{}},{authoring:transactions.authoring,run:work=>transactions.run(async tx=>{const value=await work(tx);if(failNext){failNext=false;throw Error('synthetic failed commit boundary');}return value;})});
 const assets=new Map(JSON.parse(readFileSync(join(root,'src/web/demo/assets.json'))).map(row=>[row.path,{bytes:readFileSync(join(root,'src/web/demo',row.file))}]));
 for(const [path,asset]of assets){const r=await handler(new Request(origin+path,{headers:{Host:'demo.example.test'}}));assert.equal(r.status,200);assert.deepEqual(Buffer.from(await r.arrayBuffer()),asset.bytes);}
 let cookie='',sequence=0;const operations=new Set();
@@ -25,10 +26,11 @@ await call('CompleteLearningSession',base+`/learning-sessions/${session.id}/comp
 await call('SwitchDemoPersona','/api/v1/demo/persona','POST',{...scope,persona:'MANAGER'});
 const team=await call('ListTeam',base+'/team');await call('ReadTeamMemberLearnerState',base+`/team/${team.items[0].identityId}/learner-state`);
 await call('AssignContent',base+'/assignments','POST',{identityId:a.identityId,contentPackId:a.contentPackId,contentVersion:a.contentVersion},'packaged_assign_1234');
+await exercisePackagedAuthoring(call,base,scope,a,content);
 await call('CloseDemoRun','/api/v1/demo/close','POST',scope);
 await call('BeginDemoRun','/api/v1/demo/start','POST',{});await call('RevokeApplicationSession','/api/v1/session','DELETE');
 assert.equal((await handler(new Request(origin+'/api/v1/session',{headers:{Host:'demo.example.test',Cookie:cookie}}))).status,401);
 assert.equal((await handler(new Request(origin+'/api/v1/demo/start',{method:'POST',headers:{Host:'demo.example.test',Origin:'https://evil.example.test','Content-Type':'application/json'},body:'{}'}))).status,403);
-assert.equal(operations.size,15);assert.equal(assets.size,7);
-console.log('PASS: accepting assembly 15 operations, 7 assets');
+assert.equal(operations.size,20);assert.equal(assets.size,12);
+console.log('PASS: accepting assembly 20 operations, 12 assets');
 }

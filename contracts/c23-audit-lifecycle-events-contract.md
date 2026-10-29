@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C23",
   "class": "contract",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-17",
-  "effective_on": "2026-10-17",
+  "updated_on": "2026-10-26",
+  "effective_on": "2026-10-26",
   "approval": {
     "state": "approved",
-    "approved_version": "1.3.0",
-    "approved_on": "2026-10-17",
-    "record": "domains/demo-runtime/owner-approval.json",
-    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; SHA256SUMS sha256:a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a"
+    "approved_version": "1.4.0",
+    "approved_on": "2026-10-26",
+    "record": "domains/demo-authoring/owner-approval.json",
+    "basis": "Owner-approved bounded manager-authoring increment and narrow private storage/access scope; actual execution remains conditional on review/tests."
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -31,7 +31,8 @@
   "supersedes": [
     "TEACH-CON-C23@1.0.3",
     "TEACH-CON-C23@1.1.0",
-    "TEACH-CON-C23@1.2.0"
+    "TEACH-CON-C23@1.2.0",
+    "TEACH-CON-C23@1.3.0"
   ],
   "superseded_by": null,
   "depends_on": [
@@ -47,6 +48,15 @@
     "physical_schema_admission": false,
     "runtime_activation": false,
     "deployment_authority": false
+  },
+  "demo_authoring_registration": {
+    "package": "TEACH-DEMO-AUTHORING-2026-10-26@0.1.0",
+    "impact_issue": null,
+    "approval_record": "domains/demo-authoring/owner-approval.json",
+    "source_package": "domains/demo-authoring/proposal-0.1.0",
+    "source_registration_only": true,
+    "physical_schema_admission": false,
+    "runtime_proof": "NOT_ESTABLISHED_BY_REGISTRATION"
   }
 }
 -->
@@ -58,7 +68,7 @@
 | Contract ID        | C23                                                                                                                                                             |
 | Group              | C20 Data Correctness                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.3.0 |
+| Version | 1.4.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
 | Approved by | Patrick Craven (owner), 2026-10-17; TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; see `domains/demo-runtime/owner-approval.json` |
@@ -174,3 +184,10 @@ Begin and Switch are explicitly NON-RETRYABLE secret issuance. Close is state-gu
 Register finite typed audit actor/target/result and lifecycle snapshot definitions. Required audit/lifecycle history is append-only and transaction-bound; failure rolls back effects. Initial synthetic provisioning has separately typed principal attribution. Identity, Membership, Assignment and DemoRun replay must exactly reproduce their lifecycle fields. Preserve approved denial dedup/rate/overflow rules and do not promote business-event candidates.
 
 Exact definitions and field constraints are incorporated from `domains/demo-runtime/proposal-0.1.0/demo-boundary.md`, `domains/demo-runtime/proposal-0.1.0/authority-and-audit.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.json`, and `domains/demo-runtime/proposal-0.1.0/transport-and-queries.json` with its referenced schemas. No definition beyond that approved package is introduced.
+
+
+## Bounded private manager-authoring successor — 2026-10-26
+
+On actual draft creation or revision change, SaveContentDraft atomically records a ContentDraft typed target with exact ContentDraftId, draft revision and catalog digest, without submitted content values. An unchanged save does not create a new creation audit. PublishContentDraft executes the new Content-owned append-version path and may record the factual PublishContentPack audit action against ContentPack; this does not invoke or grant the old automation-only command. No creation audit is emitted for a no-op publication. Existing audit branches, redaction, denial bounds and lifecycle replay entities remain unchanged; ContentDraft is not silently added to lifecycle replay.
+
+This amendment takes precedence only for the exact source package `domains/demo-authoring/proposal-0.1.0`; all unrelated requirements, historical decisions, recovery gates and permission boundaries remain unchanged. It does not itself execute migrations, grant credentials, or establish runtime conformance.

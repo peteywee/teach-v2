@@ -1,8 +1,9 @@
-import { STORAGE_OWNER_PATTERN, STORAGE_INTEGRATION_PATTERN } from './demo-storage-partitions.mjs';
-import {REGISTRATION_ENTRY_PATTERN,REGISTRATION_REMAINDER_PATTERN} from './validator-partitions.mjs';
+import { authoringStages } from './authoring-stage-catalog.mjs';
+import { STORAGE_OWNER_PATTERN, STORAGE_INTEGRATION_PATTERN, STORAGE_INTEGRATION_FIRST_PATTERN, STORAGE_INTEGRATION_SECOND_PATTERN } from './demo-storage-partitions.mjs';
+import {REGISTRATION_ENTRY_PATTERN,REGISTRATION_REMAINDER_PATTERN,REGISTRATION_FIRST_PATTERN,REGISTRATION_SECOND_PATTERN,CI_FIRST_PATTERN,CI_SECOND_PATTERN} from './validator-partitions.mjs';
 // Development verification commands only. This is not a product rules engine,
 // command authorization registry, or permission to execute shared migrations.
-export const stageCatalog = Object.freeze([
+const predecessorStageCatalog = Object.freeze([
   ['authority', 'node', ['scripts/architecture/validate-whole-repository.mjs']],
   ['demo-registration-entry-regressions', 'node', ['--test', '--test-name-pattern='+REGISTRATION_ENTRY_PATTERN, 'scripts/tests/validate-demo-runtime-registration.mjs']],
   ['demo-registration-regressions', 'node', ['--test', '--test-name-pattern='+REGISTRATION_REMAINDER_PATTERN, 'scripts/tests/validate-demo-runtime-registration.mjs']],
@@ -37,7 +38,9 @@ export const stageCatalog = Object.freeze([
   ['demo-generation', 'node', ['scripts/db/verify-demo-generation.mjs']],
   ['demo-postgres', 'node', ['--import', 'tsx', 'scripts/db/run-demo-integration.ts']],
   ['demo-recipe-postgres', 'node', ['--import', 'tsx', 'scripts/db/run-demo-recipe-integration.ts']],
+  ...authoringStages.slice(0, 3),
   ['demo-kitchen-postgres', 'node', ['--import', 'tsx', 'scripts/db/run-demo-kitchen-integration.ts']],
+  ...authoringStages.slice(3),
   ['typecheck', 'pnpm', ['typecheck']],
   ['foundation', 'pnpm', ['exec', 'node', '--import', 'tsx', '--test']],
   ['drizzle-history', 'pnpm', ['exec', 'drizzle-kit', 'check']],
@@ -56,6 +59,28 @@ export const stageCatalog = Object.freeze([
   ['postgres-p04', 'pnpm', ['test:p04:integration']],
   ['postgres-p05', 'pnpm', ['test:p05:integration']],
 ]);
+// Authenticated refinement of the previous logical obligations, not deletion.
+export const SCHEDULING_EXTRA_IDS=Object.freeze(['audit-regressions-second','audit-regressions-third','demo-registration-regressions-second','authority-second','migration-guards-second','migration-guards-third',...Array.from({length:12},(_,i)=>'validator-shard-'+(i+15)),'demo-storage-integration-second']);
+export function refineScheduledStage(stage){
+ const result=structuredClone(stage);
+ if(result.id?.startsWith('validator-shard-'))result.args=result.args.map(arg=>arg.replace(/\/14$/, '/26'));
+ if(result.id==='demo-registration-regressions')result.args=result.args.map(arg=>arg==='--test-name-pattern='+REGISTRATION_REMAINDER_PATTERN?'--test-name-pattern='+REGISTRATION_FIRST_PATTERN:arg);
+ if(result.id==='audit-regressions')result.args=result.args.filter((_,index)=>index!==2);
+ if(result.id==='authority')result.args=[...result.args,'--partition=1/2'];
+ if(result.id==='migration-guards')result.args=[...result.args,'--partition=1/3'];
+ if(result.id==='demo-storage-integration-regressions')result.args=result.args.map(arg=>arg==='--test-name-pattern='+STORAGE_INTEGRATION_PATTERN?'--test-name-pattern='+STORAGE_INTEGRATION_FIRST_PATTERN:arg);
+ return result;
+}
+export const stageCatalog=Object.freeze(predecessorStageCatalog.flatMap(([id,command,args])=>{
+ const current=refineScheduledStage({id,command,args}),rows=[[id,command,current.args]];
+ if(id==='audit-regressions')rows.push([id+'-second',command,['--test','--test-name-pattern='+CI_FIRST_PATTERN,args[2]]],[id+'-third',command,['--test','--test-name-pattern='+CI_SECOND_PATTERN,args[2]]]);
+ if(id==='demo-registration-regressions')rows.push([id+'-second',command,args.map(arg=>arg==='--test-name-pattern='+REGISTRATION_REMAINDER_PATTERN?'--test-name-pattern='+REGISTRATION_SECOND_PATTERN:arg)]);
+ if(id==='authority')rows.push([id+'-second',command,[...args,'--partition=2/2']]);
+ if(id==='migration-guards')rows.push([id+'-second',command,[...args,'--partition=2/3']],[id+'-third',command,[...args,'--partition=3/3']]);
+ if(id==='validator-shard-14')for(let i=15;i<=26;i++)rows.push(['validator-shard-'+i,'node',['scripts/tests/validate-validators.mjs','--shard='+i+'/26']]);
+ if(id==='demo-storage-integration-regressions')rows.push(['demo-storage-integration-second',command,args.map(arg=>arg==='--test-name-pattern='+STORAGE_INTEGRATION_PATTERN?'--test-name-pattern='+STORAGE_INTEGRATION_SECOND_PATTERN:arg)]);
+ return rows;
+}));
 export const expectedPlan = {
   version: '0.2.0', scope: 'development checks only; runtime and production authority remain separate',
   max_operation_ms: 25000, shell_execution: false,

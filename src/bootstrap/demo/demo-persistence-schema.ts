@@ -16,3 +16,7 @@ export const {packs,versions}=defineDemoContentTables(organizations.id);
 export const {assignments,sessions,progress}=defineDemoLearningTables({identityId:identities.id,organizationId:organizations.id,locationId:locations.id,locationOrganizationId:locations.organizationId,membershipIdentityId:memberships.identityId,membershipOrganizationId:memberships.organizationId,membershipLocationId:memberships.locationId,packId:packs.id,packOrganizationId:packs.organizationId,versionPackId:versions.contentPackId,version:versions.version,digest:versions.digest});
 export const {audit,lifecycle}=defineDemoAuditTables(organizations.id,locations.id,locations.organizationId);
 export const receipts=defineDemoReceiptTable(organizations.id,locations.id,locations.organizationId);
+import {defineDemoAuthoringDrafts} from '../../modules/content/infrastructure/persistence/demo-authoring-schema.js';
+import {defineDemoAuthoringReceipts} from '../../modules/transaction-control/infrastructure/persistence/demo-authoring-receipt-schema.js';
+export const authoringDrafts=defineDemoAuthoringDrafts({runId:runs.id,organizationId:organizations.id,locationId:locations.id,locationOrganizationId:locations.organizationId,identityId:identities.id,packId:packs.id,packOrganizationId:packs.organizationId,versionPackId:versions.contentPackId,version:versions.version,digest:versions.digest});
+export const authoringReceipts=defineDemoAuthoringReceipts({runId:runs.id,organizationId:organizations.id,locationId:locations.id,locationOrganizationId:locations.organizationId,identityId:identities.id});

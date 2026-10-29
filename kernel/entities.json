@@ -1104,6 +1104,131 @@
         "registered_on": "2026-10-17"
       },
       "identifier": "DemoExecutionPrincipalId"
+    },
+    {
+      "id": "ContentDraft",
+      "kind": "entity",
+      "status": "approved",
+      "owning_domain": "Content",
+      "definition": "One private mutable working kitchen catalog per demo run, owned by its current manager identity; never learner content or an immutable publication.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "ContentDraftId"
+        },
+        {
+          "family": "identifiers",
+          "id": "DemoRunId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "ContentPackId"
+        },
+        {
+          "family": "values",
+          "id": "ContentVersion"
+        }
+      ],
+      "identifier": "ContentDraftId",
+      "fields": {
+        "id": "ContentDraftId",
+        "demoRunId": "DemoRunId, immutable, unique",
+        "managerIdentityId": "IdentityId, immutable",
+        "scope": "immutable OrganizationId + LocationId derived from run",
+        "baseContent": "exact immutable ContentPackId + ContentVersion + digest",
+        "revision": "integer 1..100; compare-and-swap, not ContentVersion",
+        "catalog": "bounded mutable schema-1.2 kitchen child values only",
+        "catalogDigest": "SHA-256 digest of canonical catalog",
+        "lastPublished": "nullable exact draft revision and immutable published content reference"
+      },
+      "constraints": [
+        "Only SaveContentDraft and PublishContentDraft may mutate this representation after current manager/run authorization.",
+        "No draft delete, learner read, real staff identity or live stock claim.",
+        "Published content, questions, scoring, existing assignments and historical attempts remain unchanged.",
+        "Revision and digest are draft evidence, not SemVer content identity."
+      ],
+      "demo_authoring_registration": {
+        "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-authoring/owner-approval.json",
+        "impact_issue": null,
+        "registered_on": "2026-10-26"
+      }
+    },
+    {
+      "id": "AuthoringReceipt",
+      "kind": "entity",
+      "status": "approved",
+      "owning_domain": "TransactionControl",
+      "definition": "Append-only current-authority-scoped recovery receipt for SaveContentDraft or PublishContentDraft; separate from the existing three-learning-command CommandReceipt.",
+      "requires": [
+        {
+          "family": "identifiers",
+          "id": "AuthoringReceiptId"
+        },
+        {
+          "family": "identifiers",
+          "id": "DemoRunId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdentityId"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdempotencyKey"
+        },
+        {
+          "family": "identifiers",
+          "id": "OrganizationId"
+        },
+        {
+          "family": "identifiers",
+          "id": "LocationId"
+        },
+        {
+          "family": "commands",
+          "id": "SaveContentDraft"
+        },
+        {
+          "family": "commands",
+          "id": "PublishContentDraft"
+        }
+      ],
+      "identifier": "AuthoringReceiptId",
+      "fields": {
+        "id": "AuthoringReceiptId composite; no separate physical opaque-ID column",
+        "operation": "SaveContentDraft | PublishContentDraft, bound payload but not identity",
+        "payloadDigest": "canonical request SHA-256",
+        "result": "bounded confirmed result only, not full catalog or credentials",
+        "scope": "organization/location derived from immutable run",
+        "expiresAt": "run-scoped replay deadline; current authority required before lookup"
+      },
+      "constraints": [
+        "Identity is (DemoRunId, managerIdentityId:IdentityId, IdempotencyKey). Operation is not part of the uniqueness key.",
+        "Cross-operation or changed-payload key reuse conflicts; identical replay is free and never publishes twice.",
+        "Old successful save receipts remain valid when the mutable draft advances.",
+        "At most 256 distinct receipt keys per visit; no UPDATE or DELETE."
+      ],
+      "demo_authoring_registration": {
+        "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-authoring/owner-approval.json",
+        "impact_issue": null,
+        "registered_on": "2026-10-26"
+      }
     }
   ]
 }

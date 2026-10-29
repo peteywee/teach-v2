@@ -1,5 +1,6 @@
 import { ApiError } from './api.mjs';
-const empty=()=>({phase:'loading',screen:'home',session:null,membership:null,assignments:[],states:[],team:[],teamStates:{},content:null,library:[],catalogs:[],recipeKey:null,stationKey:null,equipmentKey:null,assignmentId:null,memberId:null,feedbackId:null,selected:null,error:null,notice:'',busy:false});
+import {createAuthoringActions} from './authoring-controller.mjs';
+const empty=()=>({phase:'loading',screen:'home',session:null,membership:null,assignments:[],states:[],team:[],teamStates:{},content:null,authoring:null,library:[],catalogs:[],recipeKey:null,stationKey:null,equipmentKey:null,assignmentId:null,memberId:null,feedbackId:null,selected:null,error:null,notice:'',busy:false});
 const libraryScreens=['kitchen','stations','station','recipes','recipe','equipment'];
 const sameRef=(a,b)=>a?.version===b?.version&&a?.digest===b?.digest;
 const protocol=()=>{throw new ApiError('protocol');};
@@ -27,14 +28,14 @@ export function createDemoController({api,onChange=()=>{},online=()=>globalThis.
   state.phase=error.status===401?'unauthenticated':error.status===403?'forbidden':error.kind==='offline'||!online()?'offline':'error';
   state.error={kind:error.kind||'network',status:error.status||0,code:error.code||'',requestId:error.requestId||null,retryAfterSeconds:error.retryAfterSeconds||null};
  }
- async function run(work,{mutation=false,discard=false}={}){
+ async function run(work,{mutation=false,discard=false,preserve=false,onError=null}={}){
   if(writePending)return false;
   active?.abort();active=new AbortController();const t=++epoch;
   if(mutation)writePending=true;
   if(discard){clear();state.phase='loading';}
-  state.busy=mutation;state.phase='loading';state.error=null;state.notice='';emit();
+  state.busy=mutation||preserve;state.phase=preserve?'ready':'loading';state.error=null;state.notice='';emit();
   try{if(!online())throw new ApiError('offline');await work(t);if(valid(t)){state.phase='ready';state.error=null;}}
-  catch(error){if(valid(t))fail(error);}
+  catch(error){if(valid(t)&&!onError?.(error))fail(error);}
   finally{if(mutation){writePending=false;for(const resolve of idleWaiters.splice(0))resolve();}if(valid(t)){state.busy=false;emit();}}
   return true;
  }
@@ -56,7 +57,7 @@ export function createDemoController({api,onChange=()=>{},online=()=>globalThis.
   const current=await call(t,'ReadCurrentSession');
   if(state.session&&(state.session.identityId!==current.identityId||state.session.demo.runId!==current.demo.runId||state.session.demo.scope.organizationId!==current.demo.scope.organizationId||state.session.demo.scope.locationId!==current.demo.scope.locationId))keys.clear();
   // A different tab may rotate the shared HttpOnly cookie. Never carry old persona/scope data forward.
-  state.assignments=[];state.states=[];state.team=[];state.teamStates={};state.content=null;state.library=[];state.catalogs=[];state.recipeKey=null;state.stationKey=null;state.equipmentKey=null;
+  state.authoring=null;state.assignments=[];state.states=[];state.team=[];state.teamStates={};state.content=null;state.library=[];state.catalogs=[];state.recipeKey=null;state.stationKey=null;state.equipmentKey=null;
   if(expected&&(current.identityId!==expected.identityId||current.demo.runId!==expected.demo.runId||current.demo.persona!==expected.demo.persona))protocol();
   state.session=current;requireOps('ListOwnMemberships');const memberships=await call(t,'ListOwnMemberships');
   const member=memberships.items.find(m=>m.organizationId===current.demo.scope.organizationId&&m.locationId===current.demo.scope.locationId);
@@ -111,6 +112,7 @@ export function createDemoController({api,onChange=()=>{},online=()=>globalThis.
  async function begin(t){const issued=await call(t,'BeginDemoRun',{body:{}});await hydrate(t,{expected:issued});state.notice='Your isolated demo is ready. All training responses are saved by the service.';}
  return {
   snapshot,allowed,
+  ...createAuthoringActions({get:()=>state,emit,run,call,scope,requireOps,hydrate,team,validateCatalog,makeKey}),
   boot:async()=>{if(writePending)await new Promise(resolve=>idleWaiters.push(resolve));return run(async t=>{try{await hydrate(t);}catch(e){if(e.status===401){clear();state.screen='home';return;}throw e;}});},
   enter:()=>run(begin,{mutation:true,discard:true}),
   recover:()=>run(async t=>{await hydrate(t);state.notice='Session and saved records reloaded from the service.';}),
@@ -154,7 +156,7 @@ export function createDemoController({api,onChange=()=>{},online=()=>globalThis.
    try{await begin(t);}catch(error){state.notice='Previous demo ended. A new demo could not be started.';throw error;}
   },{mutation:true,discard:true});},
   retryClose:()=>{if(!closingScope||writePending)return false;return run(async t=>{state.notice='Ending this demo has not yet been confirmed.';await call(t,'CloseDemoRun',{body:closingScope});closingScope=null;clear();state.notice='Demo ended. Access was revoked.';},{mutation:true,discard:true});},
-  offline:()=>{if(writePending)return;active?.abort();epoch++;state.phase='offline';state.notice='';state.error={kind:'offline',status:0,code:'',requestId:null};emit();},
+  offline:()=>{if(writePending)return;active?.abort();epoch++;if(state.screen==='authoring'&&state.authoring){state.phase='ready';state.busy=false;state.authoring.status=state.authoring.pending||state.authoring.assignmentPending?'uncertain':'failed';state.authoring.error=state.authoring.pending||state.authoring.assignmentPending?'You are offline. The earlier operation may already have been saved. Reconnect and check its saved state; no automatic retry is queued.':'You are offline. Unsaved form changes are kept in this page, but no save has been sent or queued.';emit();return;}state.phase='offline';state.notice='';state.error={kind:'offline',status:0,code:'',requestId:null};emit();},
   conceal:()=>{active?.abort();epoch++;clear();state.phase='loading';emit();},
  };
 }

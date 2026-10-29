@@ -1,3 +1,4 @@
+import { inspectAuthoringEngineering } from './demo-authoring-engineering.mjs';
 import { inspectKitchenEngineering } from './demo-kitchen-engineering.mjs';
 import { inspectDemoRecoveryRegistration } from '../kernel/demo-recovery-registration.mjs';
 import { createHash } from 'node:crypto';
@@ -97,11 +98,14 @@ export function inspectSchemaIsolationEngineering(root) {
     return { ...empty, errors };
   }
   try {
+    const authoring = inspectAuthoringEngineering(root);
+    errors.push(...authoring.errors);
+    if(errors.length)return { ...empty, present: true, errors };
     const kitchen = inspectKitchenEngineering(root);
     errors.push(...kitchen.errors);
     const recovery = inspectDemoRecoveryRegistration(root);
     errors.push(...recovery.errors);
-    const projected = path => Object.hasOwn(recovery.predecessorSources, path) ? recovery.predecessorSources[path] : Object.hasOwn(kitchen.predecessorFiles, path) ? kitchen.predecessorFiles[path] : raw(path);
+    const projected = path => Object.hasOwn(recovery.predecessorSources, path) ? recovery.predecessorSources[path] : Object.hasOwn(kitchen.predecessorFiles, path) ? kitchen.predecessorFiles[path] : Object.hasOwn(authoring.predecessorFiles,path) ? authoring.predecessorFiles[path] : raw(path);
     const decision = inspectSchemaIsolationRegistration(root);
     errors.push(...decision.errors);
     if (!decision.present) fail('exact approved bounded schema decision required');

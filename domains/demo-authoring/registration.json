@@ -1,0 +1,263 @@
+{
+  "registration_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+  "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+  "version": "0.1.0",
+  "state": "REGISTERED_BOUNDED_AUTHORING_SOURCE_ONLY",
+  "baseline_commit": "30b4c62dca6dbfe5cb709b5b6d1b34257bf5d567",
+  "baseline_tree": "ef3b12410f3efdf70724ac2532cfc3fe8f437d7e",
+  "impact_issue": "https://github.com/peteywee/teach-v2/issues/101",
+  "package_sha256sums_digest": "168a26453ac4b05f0e08ecd0fe548fb38da586cf561ac391d16fdaf1f3da857b",
+  "source_baseline_sha256": "a047c82fc232fb371710a06460892751b29ce5af5e91516b50f2e17f12274e9e",
+  "approval_sha256": "1fa0fb982efe1d2cce284d6c56cd69264082c582fd3205e16656237bf622f405",
+  "approval_record": "domains/demo-authoring/owner-approval.json",
+  "revised_paths": [
+    "kernel/entities.json",
+    "kernel/identifiers.json",
+    "kernel/values.json",
+    "kernel/states.json",
+    "kernel/state-machines.json",
+    "kernel/relationships.json",
+    "kernel/invariants.json",
+    "kernel/decision-tables.json",
+    "kernel/commands.json",
+    "kernel/capabilities.json",
+    "kernel/events.json",
+    "kernel/manifest.json",
+    "domains/ownership-map.json",
+    "governance/decision-closure/c14-capability-matrix.json",
+    "application-interfaces/authority.json",
+    "governance/decision-closure/api-boundary-manifest.json",
+    "verification/whole-repository/command-coverage.json",
+    "contracts/c01-canonical-semantics-contract.md",
+    "contracts/c14-authorization-capabilities-contract.md",
+    "contracts/c22-transaction-idempotency-reconciliation-contract.md",
+    "contracts/c23-audit-lifecycle-events-contract.md",
+    "contracts/c31-content-teaching-engine-contract.md",
+    "contracts/c41-api-boundary-contract.md",
+    "contracts/c42-web-client-boundary-contract.md",
+    "contracts/README.md",
+    "contracts/APPROVAL-RECORD.md"
+  ],
+  "added_authority_paths": [
+    "contracts/superseded/c01-canonical-semantics-contract-1.9.0.md",
+    "contracts/superseded/c14-authorization-capabilities-contract-1.4.0.md",
+    "contracts/superseded/c22-transaction-idempotency-reconciliation-contract-1.4.0.md",
+    "contracts/superseded/c23-audit-lifecycle-events-contract-1.3.0.md",
+    "contracts/superseded/c31-content-teaching-engine-contract-1.5.0.md",
+    "contracts/superseded/c41-api-boundary-contract-1.4.0.md",
+    "contracts/superseded/c42-web-client-boundary-contract-1.4.0.md"
+  ],
+  "predecessor_file_hashes": {
+    "kernel/entities.json": "cd90fbe900ed6501260851fb5544af80f5d8b2ada3febe1af05860ce65566769",
+    "kernel/identifiers.json": "654361edea6f0454bc7c2146d5211f67e5b06c08816fe8d6c58ffa2d805d7207",
+    "kernel/values.json": "53dc59c4c674c051546bba8e5f20f2a02c19c6fe6463f9dff6a2eb446c163d83",
+    "kernel/states.json": "bb8a87b90b0be4c4a09d4c3587b2962913634622f0502b52a0b738b21041d993",
+    "kernel/state-machines.json": "52877a884bbf4c103e353c65bedd8a285b45e323b0027ac82a5224beb262524d",
+    "kernel/relationships.json": "cd95c8f50f7624c58806b0e5c010524223a652ff36135290ae43fad4804f9f51",
+    "kernel/invariants.json": "f63907ea4519b4a1c976ce0f7488bb09f3e560400def2b698cab192e5db81cc1",
+    "kernel/decision-tables.json": "cdc815560b1c0de74bdaaae7090a7a2ae43c44772bb426cd41596713cd6bb05d",
+    "kernel/commands.json": "cbba495cbcf3c5df63e7337114d31e175d25dd488bc2e0007167ffab6a39fc4d",
+    "kernel/capabilities.json": "d9feeeb4e2136573af3a637a0071367939ffd417d9409a357732c450dbc81fe0",
+    "kernel/events.json": "98eacc6f7c6ec73e42dc39e98c25b9124218572f0ec86f9b44aa6d87ae2e11a8",
+    "kernel/manifest.json": "6aea39a3618cc9d54c22507715353a9afc0180dbed5163c7cfef6697a2b7aca8",
+    "domains/ownership-map.json": "64fc29336a0d9b3eedc3fe13e6c2aca9aa1e1fcbe70c8e5743fac4ade2a68220",
+    "governance/decision-closure/c14-capability-matrix.json": "e837cab122d46f4b26f5be927428d22300ec79a80d090a3c70cb7856cd35d665",
+    "application-interfaces/authority.json": "62bbebf13ed55cbc13eddcc6921054b9a52052f2e56b881a528ede485e71aa64",
+    "governance/decision-closure/api-boundary-manifest.json": "d671edaa5f31c0ed3d1ef019b4f48a8e974ae9b181ba0096a4ffa0fb6af87346",
+    "verification/whole-repository/command-coverage.json": "c2505a72f306d8574d95d6f3afa404698e525eb2aa51cc268b7b73cf7859d05f",
+    "contracts/c01-canonical-semantics-contract.md": "0244af89de80ff3e37182ef92e376e5c50dc602461d34361138bcbda91ed2a0d",
+    "contracts/c14-authorization-capabilities-contract.md": "044a6d1fb6e2df6f82cc6b833588a9f8a72d81e63873c032fda33af8029be17f",
+    "contracts/c22-transaction-idempotency-reconciliation-contract.md": "fa13f148923f7679d661b113caf1dd52998f12e01d80bb94143b3c714467de36",
+    "contracts/c23-audit-lifecycle-events-contract.md": "79bf1ff741d737b4c704a5b7f91086f6278c5c286df965f8e2fb48ec3da9ffa1",
+    "contracts/c31-content-teaching-engine-contract.md": "4b6e32f84f3ca8dd2951b9c29e95b61c923f37d5dc37ffe299b0a23fdef451ae",
+    "contracts/c41-api-boundary-contract.md": "a12a6c7bd4cc9b1bb6fb38a4095e29f4a1e031d2638a609ca6793316f02a1008",
+    "contracts/c42-web-client-boundary-contract.md": "7a261dabdb540a18d2350ab19f92dc43d785de57dac39566569f8afc40bf64ec",
+    "contracts/README.md": "150c6dbd38382448cce860b9a3e511ec7bb653ff098b8dd6f7a76b7ef4e49b1c",
+    "contracts/APPROVAL-RECORD.md": "85465f3d9b0e38b2dadfdce3a66eb0187257a50ad4efac1b56002f8cd56e314e"
+  },
+  "authority_file_hashes": {
+    "kernel/entities.json": "bdf21b770673c5be649c0eecbc7948f7cdd907157193b6a1f229009bbf37291a",
+    "kernel/identifiers.json": "f8ab601ec060101253eadaafe1fba7e3f9fe298abcd16fc2b4264f0954861ec8",
+    "kernel/values.json": "53dc59c4c674c051546bba8e5f20f2a02c19c6fe6463f9dff6a2eb446c163d83",
+    "kernel/states.json": "bb8a87b90b0be4c4a09d4c3587b2962913634622f0502b52a0b738b21041d993",
+    "kernel/state-machines.json": "52877a884bbf4c103e353c65bedd8a285b45e323b0027ac82a5224beb262524d",
+    "kernel/relationships.json": "5a39ce36c5b83900169eb3fd01a70f3ff22a33faf510fd65554efdc950dd7c84",
+    "kernel/invariants.json": "f63907ea4519b4a1c976ce0f7488bb09f3e560400def2b698cab192e5db81cc1",
+    "kernel/decision-tables.json": "cdc815560b1c0de74bdaaae7090a7a2ae43c44772bb426cd41596713cd6bb05d",
+    "kernel/commands.json": "2cb0f847db83edcaf39aa348fe145d80ff8f83da2234ee2effe62fab4fdadb07",
+    "kernel/capabilities.json": "794ab39a7781f09fed586401d70bccb137d5b118552d1103568ed78a9c719422",
+    "kernel/events.json": "98eacc6f7c6ec73e42dc39e98c25b9124218572f0ec86f9b44aa6d87ae2e11a8",
+    "kernel/manifest.json": "c374a5ef62ec6b079f882f2d03ee8ce83d9fd8c1972512cad21e952bf63fd647",
+    "domains/ownership-map.json": "389c86ce1cd9b158411ebb212c031b0c010da33f71779c498ba5dd99cc7dbd0f",
+    "governance/decision-closure/c14-capability-matrix.json": "662ca204a0c4e56c7c3a2187ccebd41b5162db79b2a3263986e46ce9fc0e1d7f",
+    "application-interfaces/authority.json": "6ca04b4cd77357064d638a89a69a51a97f4e4a1e7747cb8b1711e358ef52e562",
+    "governance/decision-closure/api-boundary-manifest.json": "7038b1a63248f967e6233c74acdc8fa104f61003b86293d642b817503e0361a8",
+    "verification/whole-repository/command-coverage.json": "ff21de8998b73aed52159a2d7f188ea8139a5b4afdfddc6e227ebd9be7752d6c",
+    "contracts/c01-canonical-semantics-contract.md": "dcb4cc1e9eb40c2e4b2b7c93e8de87beb69e00ef8ee4d2ed73fc7f365f1a12b3",
+    "contracts/c14-authorization-capabilities-contract.md": "6c5c17449f4bcb92507a5f25c03083f21938b82b95a96dbaad854926671238a2",
+    "contracts/c22-transaction-idempotency-reconciliation-contract.md": "6874ff4159055d8d9244d2052f48a0b9521376c516bfa3c7a9213cd0aa9ddb9f",
+    "contracts/c23-audit-lifecycle-events-contract.md": "e18ccd830b9e14d44966ea610560b0aa9f71a97c73e675c880310b6bafab1e29",
+    "contracts/c31-content-teaching-engine-contract.md": "8b49f2018db7d15531108cf4d6ec537f22e73d4ee7f929daee1067f00194b551",
+    "contracts/c41-api-boundary-contract.md": "33e036caa024f91bd7bccc7ef19c85389c688b2e2c37704a02675dbc9cb39c1c",
+    "contracts/c42-web-client-boundary-contract.md": "1a6f075d4aa33d6bdb106755d6b84163c03622575dbf0ab905f81c5e31a396cf",
+    "contracts/README.md": "e842ddb3672656f90e6610148a68fbf5f4bda0194fe416848730ca21dafd0992",
+    "contracts/APPROVAL-RECORD.md": "459233e74e45423b2388391fcbe18c2107e0858bcd921c25cd9410f7c2f34eec",
+    "contracts/superseded/c01-canonical-semantics-contract-1.9.0.md": "80a90f29d7c5c070e561d96d6372d7a44840e95aadee2b23f5caefd3d0b41dcf",
+    "contracts/superseded/c14-authorization-capabilities-contract-1.4.0.md": "2c5aa2e20a2a4a1fce939b3c13ee0fbc7a643a6529da3760ae4a1ee3ee083c69",
+    "contracts/superseded/c22-transaction-idempotency-reconciliation-contract-1.4.0.md": "6d0a4590b46aa44399d599e8c32d0535d9be8df7ed918ae4ead5e0037624d1a2",
+    "contracts/superseded/c23-audit-lifecycle-events-contract-1.3.0.md": "6832d84b05c06dbd6c3622f1ad22b3e1079e7fb34bfa702c1c27239afa9f30a1",
+    "contracts/superseded/c31-content-teaching-engine-contract-1.5.0.md": "da03e577a850e4b8fc605139973bff64f13ef51119b66ff31fbf3d92c9ffdb00",
+    "contracts/superseded/c41-api-boundary-contract-1.4.0.md": "35eb4eb08630017ae6f5a5e151aec2bc7324b6168ed2f9b063e17dcaf1fbe1f3",
+    "contracts/superseded/c42-web-client-boundary-contract-1.4.0.md": "3f95200ecbcace213f250cc8388bd521b6d65d4156186fa68e7f529c32c70748"
+  },
+  "contracts": [
+    {
+      "contract": "C01",
+      "path": "contracts/c01-canonical-semantics-contract.md",
+      "from": "1.9.0",
+      "to": "1.10.0",
+      "superseded_copy": "contracts/superseded/c01-canonical-semantics-contract-1.9.0.md"
+    },
+    {
+      "contract": "C14",
+      "path": "contracts/c14-authorization-capabilities-contract.md",
+      "from": "1.4.0",
+      "to": "1.5.0",
+      "superseded_copy": "contracts/superseded/c14-authorization-capabilities-contract-1.4.0.md"
+    },
+    {
+      "contract": "C22",
+      "path": "contracts/c22-transaction-idempotency-reconciliation-contract.md",
+      "from": "1.4.0",
+      "to": "1.5.0",
+      "superseded_copy": "contracts/superseded/c22-transaction-idempotency-reconciliation-contract-1.4.0.md"
+    },
+    {
+      "contract": "C23",
+      "path": "contracts/c23-audit-lifecycle-events-contract.md",
+      "from": "1.3.0",
+      "to": "1.4.0",
+      "superseded_copy": "contracts/superseded/c23-audit-lifecycle-events-contract-1.3.0.md"
+    },
+    {
+      "contract": "C31",
+      "path": "contracts/c31-content-teaching-engine-contract.md",
+      "from": "1.5.0",
+      "to": "1.6.0",
+      "superseded_copy": "contracts/superseded/c31-content-teaching-engine-contract-1.5.0.md"
+    },
+    {
+      "contract": "C41",
+      "path": "contracts/c41-api-boundary-contract.md",
+      "from": "1.4.0",
+      "to": "1.5.0",
+      "superseded_copy": "contracts/superseded/c41-api-boundary-contract-1.4.0.md"
+    },
+    {
+      "contract": "C42",
+      "path": "contracts/c42-web-client-boundary-contract.md",
+      "from": "1.4.0",
+      "to": "1.5.0",
+      "superseded_copy": "contracts/superseded/c42-web-client-boundary-contract-1.4.0.md"
+    }
+  ],
+  "registered_entries": [
+    {
+      "family": "entities",
+      "id": "ContentDraft"
+    },
+    {
+      "family": "identifiers",
+      "id": "ContentDraftId"
+    },
+    {
+      "family": "entities",
+      "id": "AuthoringReceipt"
+    },
+    {
+      "family": "identifiers",
+      "id": "AuthoringReceiptId"
+    },
+    {
+      "family": "commands",
+      "id": "SaveContentDraft"
+    },
+    {
+      "family": "commands",
+      "id": "PublishContentDraft"
+    },
+    {
+      "family": "capabilities",
+      "id": "content.draft.read"
+    },
+    {
+      "family": "capabilities",
+      "id": "content.draft.write"
+    },
+    {
+      "family": "capabilities",
+      "id": "content.draft.preview"
+    },
+    {
+      "family": "capabilities",
+      "id": "content.draft.publish"
+    },
+    {
+      "family": "capabilities",
+      "id": "transaction.authoring.read"
+    },
+    {
+      "family": "relationships",
+      "id": "ContentDraftBelongsToRun"
+    },
+    {
+      "family": "relationships",
+      "id": "ContentDraftOwnedByManager"
+    },
+    {
+      "family": "relationships",
+      "id": "ContentDraftReferencesContentPack"
+    },
+    {
+      "family": "relationships",
+      "id": "AuthoringReceiptBelongsToRun"
+    },
+    {
+      "family": "relationships",
+      "id": "AuthoringReceiptBelongsToManager"
+    },
+    {
+      "family": "relationships",
+      "id": "AuthoringReceiptUsesKey"
+    }
+  ],
+  "semantic_closure": {
+    "approvedEntries": 253,
+    "checkedReferences": 658
+  },
+  "operations": [
+    "ReadAuthoringWorkspace",
+    "SaveContentDraft",
+    "PreviewContentDraft",
+    "PublishContentDraft",
+    "ReadAuthoringOperation"
+  ],
+  "new_tables": [
+    "content_authoring_drafts",
+    "content_authoring_receipts"
+  ],
+  "prior_route_count": 15,
+  "current_route_count": 20,
+  "content_schema_versions": [
+    "1.0.0",
+    "1.1.0",
+    "1.2.0"
+  ],
+  "historical_migrations_immutable": true,
+  "runtime_activation_authorized": false,
+  "physical_admission_performed": false,
+  "shared_or_production_execution_authorized": false,
+  "execution_authorized_by_registration": false,
+  "independent_verification": "NOT_ESTABLISHED_BY_REGISTRATION",
+  "implementation_conformance": "NOT_ESTABLISHED_BY_REGISTRATION"
+}

@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C22",
   "class": "contract",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-17",
-  "effective_on": "2026-10-17",
+  "updated_on": "2026-10-26",
+  "effective_on": "2026-10-26",
   "approval": {
     "state": "approved",
-    "approved_version": "1.4.0",
-    "approved_on": "2026-10-17",
-    "record": "domains/demo-runtime/owner-approval.json",
-    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; SHA256SUMS sha256:a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a"
+    "approved_version": "1.5.0",
+    "approved_on": "2026-10-26",
+    "record": "domains/demo-authoring/owner-approval.json",
+    "basis": "Owner-approved bounded manager-authoring increment and narrow private storage/access scope; actual execution remains conditional on review/tests."
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -31,7 +31,8 @@
   "supersedes": [
     "TEACH-CON-C22@1.1.0",
     "TEACH-CON-C22@1.2.0",
-    "TEACH-CON-C22@1.3.0"
+    "TEACH-CON-C22@1.3.0",
+    "TEACH-CON-C22@1.4.0"
   ],
   "superseded_by": null,
   "depends_on": [
@@ -47,6 +48,15 @@
     "physical_schema_admission": false,
     "runtime_activation": false,
     "deployment_authority": false
+  },
+  "demo_authoring_registration": {
+    "package": "TEACH-DEMO-AUTHORING-2026-10-26@0.1.0",
+    "impact_issue": null,
+    "approval_record": "domains/demo-authoring/owner-approval.json",
+    "source_package": "domains/demo-authoring/proposal-0.1.0",
+    "source_registration_only": true,
+    "physical_schema_admission": false,
+    "runtime_proof": "NOT_ESTABLISHED_BY_REGISTRATION"
   }
 }
 -->
@@ -58,7 +68,7 @@
 | Contract ID        | C22                                                                                                                                                             |
 | Group              | C20 Data Correctness                                                                                                                                            |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.4.0 |
+| Version | 1.5.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
 | Approved by | Patrick Craven (owner), 2026-10-17; TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; see `domains/demo-runtime/owner-approval.json` |
@@ -189,3 +199,10 @@ Begin and Switch are explicitly NON-RETRYABLE secret issuance. Close is state-gu
 Register finite typed audit actor/target/result and lifecycle snapshot definitions. Required audit/lifecycle history is append-only and transaction-bound; failure rolls back effects. Initial synthetic provisioning has separately typed principal attribution. Identity, Membership, Assignment and DemoRun replay must exactly reproduce their lifecycle fields. Preserve approved denial dedup/rate/overflow rules and do not promote business-event candidates.
 
 Exact definitions and field constraints are incorporated from `domains/demo-runtime/proposal-0.1.0/demo-boundary.md`, `domains/demo-runtime/proposal-0.1.0/authority-and-audit.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.md`, `domains/demo-runtime/proposal-0.1.0/learning-definition.json`, and `domains/demo-runtime/proposal-0.1.0/transport-and-queries.json` with its referenced schemas. No definition beyond that approved package is introduced.
+
+
+## Bounded private manager-authoring successor — 2026-10-26
+
+SaveContentDraft and PublishContentDraft use separate append-only AuthoringReceipt records bound to run + manager + key, exact operation and canonical request digest. Operation is not part of key identity. Current authority is revalidated before replay/readback; altered payload or cross-operation reuse conflicts. A saved response remains valid after draft revision advances. Compare-and-swap prevents stale overwrite; lost responses require canonical readback, not assumed success. At most 100 saves, 10 new publications and 256 distinct receipt keys per visit; identical replay is free. Publication compares the saved catalog against the current latest published catalog in the same pack. If they match, no new version is created. Restoring an older catalog that differs from the latest publication creates a new immutable version; old published versions and attempts are never rewritten.
+
+This amendment takes precedence only for the exact source package `domains/demo-authoring/proposal-0.1.0`; all unrelated requirements, historical decisions, recovery gates and permission boundaries remain unchanged. It does not itself execute migrations, grant credentials, or establish runtime conformance.

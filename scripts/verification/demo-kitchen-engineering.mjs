@@ -1,3 +1,5 @@
+import { inspectSourceInScope } from './source-inspection-scope.mjs';
+import { inspectAuthoringEngineering } from './demo-authoring-engineering.mjs';
 import { createHash } from 'node:crypto';
 import { existsSync, lstatSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -116,12 +118,17 @@ export function normalizedKitchenEngineeringSource(path, bytes) {
 /** Nonrecursive finite source proof. No historical bytes are exposed until the
  * complete current source, preserved baseline, decision and independent review
  * pass. This establishes no live execution or data-modification authority. */
-export function inspectKitchenEngineering(root) {
-  const read = inspectionReader(root);
+export function inspectKitchenEngineering(root) { return inspectSourceInScope('kitchenEngineering', root); }
+// Internal finite dispatcher entry. Direct invocation establishes no shared scope.
+export function inspectKitchenEngineeringUncached(root) {
+  const authoring = inspectAuthoringEngineering(root);
+  const raw = inspectionReader(root);
+  const read = path => Object.hasOwn(authoring.predecessorFiles, path) ? authoring.predecessorFiles[path] : raw(path);
   const empty = { present: false, revisedPaths: [], addedPaths: [], predecessorFiles: {} };
-  const errors = [], fail = message => errors.push(`demo kitchen engineering: ${message}`);
+  const errors = [...authoring.errors], fail = message => errors.push(`demo kitchen engineering: ${message}`);
   const equal = (a, b, message) => { if (!isDeepStrictEqual(a, b)) fail(message); };
   try {
+    if (errors.length) return { ...empty, present: true, errors };
     if (!existsSync(join(root, KITCHEN_ENGINEERING_MANIFEST))) {
       if ([KITCHEN_ENGINEERING_REVIEW, 'domains/demo-kitchen/registration.json', 'persistence/physical-slices/demo-kitchen', 'drizzle/0007_demo_kitchen_content_guard.sql'].some(path => existsSync(join(root, path)))) fail('orphan kitchen source, migration or independent review without engineering manifest');
       return { ...empty, errors };

@@ -1,0 +1,45 @@
+{
+  "approval_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+  "state": "APPROVED_BOUNDED_SCOPE",
+  "record_form": "MINIMAL_OWNER_DECISION_SUMMARY",
+  "approved_on": "2026-10-26",
+  "owner": "Patrick Craven, Top Shelf Service LLC",
+  "scope": "Finite manager-only private demo authoring, immutable publication and explicit assignment; two private tables and minimum existing-runtime access.",
+  "tables": [
+    {
+      "name": "content_authoring_drafts",
+      "owner": "Content",
+      "runtime_privileges": [
+        "SELECT",
+        "INSERT",
+        "UPDATE"
+      ],
+      "delete": false
+    },
+    {
+      "name": "content_authoring_receipts",
+      "owner": "TransactionControl",
+      "runtime_privileges": [
+        "SELECT",
+        "INSERT"
+      ],
+      "delete": false
+    }
+  ],
+  "limits": {
+    "saves": 100,
+    "publications": 10,
+    "receiptKeys": 256,
+    "bodyBytes": 65536,
+    "catalogBytes": 49152,
+    "responseBytes": 262144
+  },
+  "no_new_roles": true,
+  "no_public_access": true,
+  "no_delete": true,
+  "training_questions_and_scoring_unchanged": true,
+  "release_approval_conditional_on_tests_and_checks": true,
+  "independent_verification": "NOT_ESTABLISHED_BY_APPROVAL",
+  "package_sha256sums_digest": "168a26453ac4b05f0e08ecd0fe548fb38da586cf561ac391d16fdaf1f3da857b",
+  "impact_issue": "https://github.com/peteywee/teach-v2/issues/101"
+}

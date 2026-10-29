@@ -2,19 +2,19 @@
 {
   "doc_id": "TEACH-CON-C01",
   "class": "contract",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-17",
-  "effective_on": "2026-10-17",
+  "updated_on": "2026-10-26",
+  "effective_on": "2026-10-26",
   "approval": {
     "state": "approved",
-    "approved_version": "1.9.0",
-    "approved_on": "2026-10-17",
-    "record": "domains/demo-runtime/owner-approval.json",
-    "basis": "TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; SHA256SUMS sha256:a1df23b03a0f0660a072cff00eb40d3d2fb60bc8c521f12b56977f559601196a"
+    "approved_version": "1.10.0",
+    "approved_on": "2026-10-26",
+    "record": "domains/demo-authoring/owner-approval.json",
+    "basis": "Owner-approved bounded manager-authoring increment and narrow private storage/access scope; actual execution remains conditional on review/tests."
   },
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -30,7 +30,8 @@
   },
   "supersedes": [
     "TEACH-CON-C01@1.7.0",
-    "TEACH-CON-C01@1.8.0"
+    "TEACH-CON-C01@1.8.0",
+    "TEACH-CON-C01@1.9.0"
   ],
   "superseded_by": null,
   "depends_on": [
@@ -46,6 +47,15 @@
     "physical_schema_admission": false,
     "runtime_activation": false,
     "deployment_authority": false
+  },
+  "demo_authoring_registration": {
+    "package": "TEACH-DEMO-AUTHORING-2026-10-26@0.1.0",
+    "impact_issue": null,
+    "approval_record": "domains/demo-authoring/owner-approval.json",
+    "source_package": "domains/demo-authoring/proposal-0.1.0",
+    "source_registration_only": true,
+    "physical_schema_admission": false,
+    "runtime_proof": "NOT_ESTABLISHED_BY_REGISTRATION"
   }
 }
 -->
@@ -57,7 +67,7 @@
 | Contract ID        | C01                                                                                                                                                             |
 | Group              | C01 Canonical Semantics (Semantic Kernel, K00)                                                                                                                  |
 | Governed by        | C00 System Authority                                                                                                                                            |
-| Version | 1.9.0 |
+| Version | 1.10.0 |
 | Status             | `active`                                                                                                                                                        |
 | Owner              | Patrick Craven, Top Shelf Service LLC                                                                                                                           |
 | Approved by | Patrick Craven (owner), 2026-10-17; TEACH-DEMO-RUNTIME-2026-10-17@0.1.0; SYS-21 #82; see `domains/demo-runtime/owner-approval.json` |
@@ -244,3 +254,10 @@ Exact definitions and field constraints are incorporated from `domains/demo-runt
 ### Exact demo capability identifier compatibility
 
 For the five capability names explicitly registered by `TEACH-DEMO-RUNTIME-2026-10-17@0.1.0`, C01 naming authority applies the following effective rule: a name MUST be a member of the exact approved `kernel/capabilities.json` vocabulary AND MUST either satisfy the unchanged ordinary `CapabilityId.validation.pattern` or equal exactly one of `identity.demo.persona.create`, `identity.demo.persona.switch`, `identity.demo.sessions.revoke`. These three literal alternatives take precedence over the ordinary three-segment pattern for these names only. The existing CapabilityId entry and pattern remain unchanged as predecessor authority; this registered C01 addendum supplies the finite effective compatibility rule. No other fourth-segment name, unknown capability or wildcard is admitted. Vocabulary membership does not grant a capability.
+
+
+## Bounded private manager-authoring successor — 2026-10-26
+
+Registers only ContentDraft, ContentDraftId, AuthoringReceipt, AuthoringReceiptId, the two authoring commands, five capabilities and six explicit ownership/reference relationships in the sealed authoring package. AuthoringReceiptId is an immutable composite (DemoRunId, managerIdentityId:IdentityId, IdempotencyKey), represented by its three-column primary key, not a new opaque-ID column. Queries remain owner-query interfaces, not commands. Existing entries, automation principals and CommandReceipt meaning remain unchanged.
+
+This amendment takes precedence only for the exact source package `domains/demo-authoring/proposal-0.1.0`; all unrelated requirements, historical decisions, recovery gates and permission boundaries remain unchanged. It does not itself execute migrations, grant credentials, or establish runtime conformance.

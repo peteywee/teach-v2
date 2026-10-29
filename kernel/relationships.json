@@ -1601,6 +1601,228 @@
         "issue": "#82",
         "registered_on": "2026-10-17"
       }
+    },
+    {
+      "id": "ContentDraftBelongsToRun",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Content",
+      "definition": "Immutable authoring ownership/reference link; does not confer independent read or mutation authority.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentDraft"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        }
+      ],
+      "from": "ContentDraft",
+      "to": "DemoRun",
+      "authority_contracts": [
+        "C01",
+        "C14",
+        "C31"
+      ],
+      "does_not_grant": [
+        "cross-run access",
+        "learner authoring",
+        "new identity or staff account"
+      ],
+      "cardinality": "many-to-one",
+      "demo_authoring_registration": {
+        "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-authoring/owner-approval.json",
+        "impact_issue": null,
+        "registered_on": "2026-10-26"
+      }
+    },
+    {
+      "id": "ContentDraftOwnedByManager",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Content",
+      "definition": "Immutable authoring ownership/reference link; does not confer independent read or mutation authority.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentDraft"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        }
+      ],
+      "from": "ContentDraft",
+      "to": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C14",
+        "C31"
+      ],
+      "does_not_grant": [
+        "cross-run access",
+        "learner authoring",
+        "new identity or staff account"
+      ],
+      "cardinality": "many-to-one",
+      "demo_authoring_registration": {
+        "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-authoring/owner-approval.json",
+        "impact_issue": null,
+        "registered_on": "2026-10-26"
+      }
+    },
+    {
+      "id": "ContentDraftReferencesContentPack",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "Content",
+      "definition": "Immutable authoring ownership/reference link; does not confer independent read or mutation authority.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "ContentDraft"
+        },
+        {
+          "family": "entities",
+          "id": "ContentPack"
+        }
+      ],
+      "from": "ContentDraft",
+      "to": "ContentPack",
+      "authority_contracts": [
+        "C01",
+        "C14",
+        "C31"
+      ],
+      "does_not_grant": [
+        "cross-run access",
+        "learner authoring",
+        "new identity or staff account"
+      ],
+      "cardinality": "many-to-one",
+      "demo_authoring_registration": {
+        "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-authoring/owner-approval.json",
+        "impact_issue": null,
+        "registered_on": "2026-10-26"
+      }
+    },
+    {
+      "id": "AuthoringReceiptBelongsToRun",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "TransactionControl",
+      "definition": "Immutable authoring ownership/reference link; does not confer independent read or mutation authority.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "AuthoringReceipt"
+        },
+        {
+          "family": "entities",
+          "id": "DemoRun"
+        }
+      ],
+      "from": "AuthoringReceipt",
+      "to": "DemoRun",
+      "authority_contracts": [
+        "C01",
+        "C14",
+        "C22"
+      ],
+      "does_not_grant": [
+        "cross-run access",
+        "learner authoring",
+        "new identity or staff account"
+      ],
+      "cardinality": "many-to-one",
+      "demo_authoring_registration": {
+        "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-authoring/owner-approval.json",
+        "impact_issue": null,
+        "registered_on": "2026-10-26"
+      }
+    },
+    {
+      "id": "AuthoringReceiptBelongsToManager",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "TransactionControl",
+      "definition": "Immutable authoring ownership/reference link; does not confer independent read or mutation authority.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "AuthoringReceipt"
+        },
+        {
+          "family": "entities",
+          "id": "Identity"
+        }
+      ],
+      "from": "AuthoringReceipt",
+      "to": "Identity",
+      "authority_contracts": [
+        "C01",
+        "C14",
+        "C22"
+      ],
+      "does_not_grant": [
+        "cross-run access",
+        "learner authoring",
+        "new identity or staff account"
+      ],
+      "cardinality": "many-to-one",
+      "demo_authoring_registration": {
+        "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-authoring/owner-approval.json",
+        "impact_issue": null,
+        "registered_on": "2026-10-26"
+      }
+    },
+    {
+      "id": "AuthoringReceiptUsesKey",
+      "kind": "relationship",
+      "status": "approved",
+      "owning_domain": "TransactionControl",
+      "definition": "Immutable authoring ownership/reference link; does not confer independent read or mutation authority.",
+      "requires": [
+        {
+          "family": "entities",
+          "id": "AuthoringReceipt"
+        },
+        {
+          "family": "identifiers",
+          "id": "IdempotencyKey"
+        }
+      ],
+      "from": "AuthoringReceipt",
+      "to": "IdempotencyKey",
+      "authority_contracts": [
+        "C01",
+        "C14",
+        "C22"
+      ],
+      "does_not_grant": [
+        "cross-run access",
+        "learner authoring",
+        "new identity or staff account"
+      ],
+      "cardinality": "many-to-one",
+      "demo_authoring_registration": {
+        "package_id": "TEACH-DEMO-AUTHORING-2026-10-26",
+        "package_version": "0.1.0",
+        "approval_record": "domains/demo-authoring/owner-approval.json",
+        "impact_issue": null,
+        "registered_on": "2026-10-26"
+      }
     }
   ],
   "version": "0.16.0",

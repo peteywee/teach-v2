@@ -1,10 +1,19 @@
 import assert from 'node:assert/strict';
-import test from 'node:test';
+import test, { after } from 'node:test';
 import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { buildIsolatedLineage, HISTORICAL_PINS, qualifySql, REPOSITORY_ROOT, tokenizeSql, verifyIsolatedLineage } from '../db/compile-isolated-schema.mjs';
+import { buildIsolatedLineage as buildCurrentLineage, HISTORICAL_PINS, qualifySql, REPOSITORY_ROOT as CURRENT_ROOT, tokenizeSql, verifyIsolatedLineage as verifyCurrentLineage } from '../db/compile-isolated-schema.mjs';
 import { applyIsolatedSchemaMigrations } from '../db/migrate-isolated-schema.mjs';
+import { createAuthoringPredecessorCopy } from './authoring-proof-copy.mjs';
+
+// Preserve all five original cases and their exact eight/22/39 assertions.
+// Current successor coverage lives in a distinct mandatory authoring suite.
+const predecessor = createAuthoringPredecessorCopy(CURRENT_ROOT);
+after(predecessor.remove);
+const REPOSITORY_ROOT = predecessor.root;
+const buildIsolatedLineage = (root = REPOSITORY_ROOT) => buildCurrentLineage(root);
+const verifyIsolatedLineage = (root = REPOSITORY_ROOT) => verifyCurrentLineage(root);
 
 test('committed isolated lineage is deterministic and historical migrations are pinned', () => {
   const first = verifyIsolatedLineage(), second = buildIsolatedLineage();

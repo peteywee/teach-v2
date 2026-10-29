@@ -1,17 +1,30 @@
+import {authoringSourceFixture} from './authoring-source-fixture.mjs';
+import { installAuthoringPredecessor } from './authoring-predecessor-fixture.mjs';
 import { spawnSync } from 'node:child_process';
 import { inspectConsolidatedVerification, preservedRegistrationTestBytes } from '../verification/consolidated-ci-evidence.mjs';
 import { createHash } from 'node:crypto';
 import assert from 'node:assert/strict';
 import { after, test } from 'node:test';
-import { cpSync, mkdtempSync, readFileSync, writeFileSync, renameSync, symlinkSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { readFileSync, writeFileSync, renameSync, symlinkSync, rmSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { RECOVERY_BASE as BASE, RECOVERY_REGISTRATION, RECOVERY_REVIEW, RECOVERY_REVIEW_SHA256, RECOVERY_AUTHORITY_PATHS, RECOVERY_ARCHIVES, RECOVERY_SOURCE_REVISIONS, RECOVERY_SOURCE_ADDITIONS, inspectDemoRecoveryRegistration } from '../kernel/demo-recovery-registration.mjs';
 import { inspectSchemaIsolationRegistration } from '../kernel/demo-schema-isolation-registration.mjs';
 import { inspectSchemaIsolationEngineering } from '../verification/demo-schema-isolation-engineering.mjs';
 const root = resolve(new URL('../..', import.meta.url).pathname);
-const fixture = mkdtempSync(join(tmpdir(), 'teach-recovery-registration-'));
-for (const name of ['docs', 'scripts', '.github', 'kernel', 'domains', 'contracts', 'application-interfaces', 'governance', 'persistence', 'drizzle', 'drizzle-isolated', 'verification', 'src', 'tests']) cpSync(join(root, name), join(fixture, name), { recursive: true });
+const fixture = authoringSourceFixture(root,'teach-recovery-registration-');
+// Capture the authenticated CURRENT chain before the historical fixture unwind.
+// Two authoring-only source successors must authenticate before old recovery
+// checks may consume their exact preserved bytes. Never accept current errors.
+const currentChain = inspectDemoRecoveryRegistration(fixture);
+const currentTamperResults = [];
+for (const path of ['scripts/verification/validate-legacy-foundation-recovery.mjs','scripts/release/validate-production-migration-evidence.mjs']) {
+  const before = readFileSync(join(fixture,path),'utf8');
+  try {
+    writeFileSync(join(fixture,path),before+'\n');
+    currentTamperResults.push({path,result:inspectDemoRecoveryRegistration(fixture)});
+  } finally { writeFileSync(join(fixture,path),before); }
+}
+installAuthoringPredecessor(fixture);
 after(() => rmSync(fixture, { recursive: true, force: true }));
 const raw = path => readFileSync(join(fixture, path), 'utf8');
 const denied = () => {
@@ -25,7 +38,13 @@ const denied = () => {
 };
 const change = (path, mutate) => { const before = raw(path); try { writeFileSync(join(fixture, path), mutate(before)); denied(); } finally { writeFileSync(join(fixture, path), before); } };
 const reviewReady = { skip: !RECOVERY_REVIEW_SHA256 ? 'Real independent review is pending; no synthetic PASS is issued.' : false };
+
+
 test('unsealed adoption fails closed; sealed adoption exposes only finite predecessor bytes', () => {
+ assert.deepEqual(currentChain.errors,[]);
+ for(const path of ['contracts/superseded/c21-database-migration-contract-3.0.0.md','governance/decision-closure/superseded/07-evidence-release-operations-spec-3.0.0.md'])assert.ok(currentChain.addedPaths.includes(path),path);
+ for(const {path,result} of currentTamperResults){assert.ok(result.errors.some(error=>error.includes(path)),path);assert.deepEqual(result.predecessorFiles,{});assert.deepEqual(result.predecessorSources,{});assert.deepEqual(result.revisedPaths,[]);assert.deepEqual(result.addedPaths,[]);}
+
   if (!RECOVERY_REVIEW_SHA256) { denied(); return; }
   const result = inspectDemoRecoveryRegistration(fixture);
   assert.deepEqual(result.errors, []);

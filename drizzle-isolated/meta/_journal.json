@@ -57,6 +57,13 @@
       "when": 1792979340000,
       "tag": "0007_demo_kitchen_content_guard",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793039444823,
+      "tag": "0008_demo_manager_authoring",
+      "breakpoints": true
     }
   ]
 }

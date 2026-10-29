@@ -1,3 +1,5 @@
+import { inspectAuthoringPhysicalSuccessor } from '../persistence/demo-authoring-physical-successor.mjs';
+import { createAuthoringPredecessorCopy } from '../tests/authoring-proof-copy.mjs';
 import { inspectKitchenPhysicalSuccessor } from '../persistence/demo-kitchen-physical-successor.mjs';
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
@@ -5,7 +7,14 @@ import {cpSync,mkdtempSync,readFileSync,rmSync,writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join,relative,resolve} from 'node:path';
 import { inspectDemoRecipePhysicalSuccessor, DEMO_RECIPE_MIGRATION, DEMO_RECIPE_SNAPSHOT } from '../persistence/demo-recipes-physical-successor.mjs';
-const root=resolve(process.cwd()),dir=mkdtempSync(join(tmpdir(),'demo-generated-'));
+const root=resolve(process.cwd());
+const authoring=inspectAuthoringPhysicalSuccessor(root);assert.deepEqual(authoring.errors,[],'authoring predecessor generation requires verified physical successor');
+if(authoring.present){
+ const copy=createAuthoringPredecessorCopy(root);
+ try{execFileSync(process.execPath,[join(copy.root,'scripts/db/verify-demo-generation.mjs')],{cwd:copy.root,encoding:'utf8',timeout:25000,stdio:'inherit'});}
+ finally{copy.remove();}
+}else{
+const dir=mkdtempSync(join(tmpdir(),'demo-generated-'));
 try{
  const recipe=inspectDemoRecipePhysicalSuccessor(root);assert.deepEqual(recipe.errors,[],'recipe predecessor generation requires verified physical successor');
  const kitchen=inspectKitchenPhysicalSuccessor(root);assert.deepEqual(kitchen.errors,[],'kitchen predecessor generation requires verified physical successor');
@@ -21,3 +30,5 @@ try{
  const generated=JSON.parse(readFileSync(join(dir,'meta/0005_snapshot.json'),'utf8')),snapshot=JSON.parse(readFileSync(join(root,'drizzle/meta/0005_snapshot.json'),'utf8'));delete generated.id;delete snapshot.id;assert.deepEqual(generated,snapshot);assert.equal(Object.keys(snapshot.tables).length,22);
  console.log('DEMO PINNED DRIZZLE GENERATION PASS: 14 new tables, 22 total; prior five immutable');
 }finally{rmSync(dir,{recursive:true,force:true});}
+
+}

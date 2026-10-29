@@ -2,9 +2,11 @@
   "version": 1,
   "schema": "teach_v2_demo",
   "journal": "teach_v2_demo.__drizzle_migrations",
-  "historicalJournalSha256": "c7fe91cffd5a9ed952ef2183f671c67068632f865e2cd22f206d2ca8724e2a40",
+  "historicalJournalSha256": "b0142fb94c2fc806b0e61b1d3692f09dbfc932f7445f227d512a89aa3e608f79",
   "tables": [
     "audit_events",
+    "content_authoring_drafts",
+    "content_authoring_receipts",
     "content_pack_versions",
     "content_packs",
     "identity_application_sessions",
@@ -30,10 +32,13 @@
   "functions": [
     "audit_guard_demo_event",
     "audit_guard_demo_lifecycle",
+    "content_authoring_validate_catalog",
+    "content_guard_authoring_draft",
     "content_guard_demo_version",
     "demo_assignment_shape",
     "demo_audit_denial_subject",
     "demo_audit_target_matches",
+    "demo_authoring_owner_active",
     "demo_canonical_json",
     "demo_content_version_shape",
     "demo_evaluation_shape",
@@ -66,6 +71,7 @@
     "organization_guard_membership",
     "organization_guard_report",
     "transaction_control_guard_reconciliation_record_update",
+    "transaction_guard_authoring_receipt",
     "transaction_guard_demo_receipt"
   ],
   "migrations": [
@@ -116,6 +122,12 @@
       "historicalSha256": "9fb45f65daebf30479de6cc08d62ee0884a210ca74b9ad377a7bb34c33645655",
       "isolatedSha256": "83cee79983ae59a537ae1329e09c0aa0e00bcaea72b2468132b1f9d446dbdb58",
       "when": 1792979340000
+    },
+    {
+      "name": "0008_demo_manager_authoring.sql",
+      "historicalSha256": "8cc38af9d9c005a79b183dbee11cb0b210933fd871d7b23ca93d44475455226d",
+      "isolatedSha256": "6c6e568354e95cb5012e369dca6a3f0c9a3c2d72ac49d05127d1b77f3ba941ab",
+      "when": 1793039444823
     }
   ]
 }

@@ -8,6 +8,7 @@ import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:f
 import { tmpdir } from 'node:os';
 import { join, relative, resolve, sep } from 'node:path';
 import { Worker, isMainThread, parentPort, workerData } from 'node:worker_threads';
+import { installAuthoringPredecessor } from './authoring-predecessor-fixture.mjs';
 
 const ROOT = resolve(new URL('.', import.meta.url).pathname, '../..');
 const results = [];
@@ -22,6 +23,7 @@ function scratch() {
     // installed dependency tree ten times exhausts the bounded CI stage.
     filter: (src) => !relative(ROOT, src).split(sep).some(part => part === '.git' || part === 'node_modules'),
   });
+  installAuthoringPredecessor(dir);
   return dir;
 }
 

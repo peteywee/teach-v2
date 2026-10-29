@@ -2,12 +2,12 @@
 {
   "doc_id": "TEACH-CON-APPROVALS",
   "class": "approval-record",
-  "version": "0.23.0",
+  "version": "0.25.0",
   "claims_truth_state": "declared",
   "status": "active",
   "owner": "Patrick Craven, Top Shelf Service LLC",
   "created_on": "2026-10-03",
-  "updated_on": "2026-10-26",
+  "updated_on": "2026-10-28",
   "effective_on": "2026-10-03",
   "baseline": {
     "repo": "peteywee/teach-v2",
@@ -46,6 +46,15 @@
     "approval_record": "domains/demo-kitchen/owner-approval.json",
     "source_package": "domains/demo-kitchen/proposal-0.1.0",
     "sha256sums_sha256": "ba01dfc871d53a98a621ee301ec8435061c8d01f0ac509c1029539d03337406d",
+    "source_registration_only": true,
+    "physical_schema_admission": false,
+    "runtime_proof": "NOT_ESTABLISHED_BY_REGISTRATION"
+  },
+  "demo_authoring_registration": {
+    "package": "TEACH-DEMO-AUTHORING-2026-10-26@0.1.0",
+    "impact_issue": null,
+    "approval_record": "domains/demo-authoring/owner-approval.json",
+    "source_package": "domains/demo-authoring/proposal-0.1.0",
     "source_registration_only": true,
     "physical_schema_admission": false,
     "runtime_proof": "NOT_ESTABLISHED_BY_REGISTRATION"
@@ -556,3 +565,21 @@ Recorded 2026-10-26. Minimal owner decision: `domains/demo-kitchen/owner-approva
 | C42 | 1.3.0 | 1.4.0 | Read-only Stations and Equipment navigation; requirements distinct from holdings |
 
 Implementation versions and source digests are preparer bindings of the approved scope, not a claim that the owner saw or independently reviewed those exact bytes. See `domains/demo-kitchen/registration.json`.
+
+
+## Bounded manager-authoring decision — 2026-10-26
+
+Owner approved the finite manager-authoring workflow, two private per-visit storage representations, and narrowly scoped existing-runtime access, conditional on review and passing tests. No new role, public access, DELETE permission, training change or general customer content policy. Exact source package: `domains/demo-authoring/proposal-0.1.0`; minimum decision record: `domains/demo-authoring/owner-approval.json`. Impact issue and independent source review remain separate pending release evidence.
+
+- C01: 1.9.0 → 1.10.0; preserved archive `contracts/superseded/c01-canonical-semantics-contract-1.9.0.md`.
+- C14: 1.4.0 → 1.5.0; preserved archive `contracts/superseded/c14-authorization-capabilities-contract-1.4.0.md`.
+- C22: 1.4.0 → 1.5.0; preserved archive `contracts/superseded/c22-transaction-idempotency-reconciliation-contract-1.4.0.md`.
+- C23: 1.3.0 → 1.4.0; preserved archive `contracts/superseded/c23-audit-lifecycle-events-contract-1.3.0.md`.
+- C31: 1.5.0 → 1.6.0; preserved archive `contracts/superseded/c31-content-teaching-engine-contract-1.5.0.md`.
+- C41: 1.4.0 → 1.5.0; preserved archive `contracts/superseded/c41-api-boundary-contract-1.4.0.md`.
+- C42: 1.4.0 → 1.5.0; preserved archive `contracts/superseded/c42-web-client-boundary-contract-1.4.0.md`.
+
+
+## One authoring migration recovery exception — 2026-10-28 (#101)
+
+C21 and evidence/release operations3.0.0→4.0.0 add only the separately owner-approved exact0008 encrypted recovery alternative in C21 §4.2. Prior3.0 bodies/approvals are preserved; consumed §4.1 remains historical. Owner record: `docs/proposals/demo-authoring-recovery-exception/owner-adoption.json`. Current actual recovery proof remains UNKNOWN/BLOCKED; missing coverage, absent post-freeze snapshot, unsupported key custody or failed retained-onlyPG17 restore/preservation blocks activation. No broader$0 policy, future waiver, paid service or execution authority is adopted.

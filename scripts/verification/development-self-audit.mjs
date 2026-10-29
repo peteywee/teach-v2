@@ -1,3 +1,6 @@
+import { ciPartitionNames, CI_TEST_NAMES_SHA256, registrationPartitionNames } from './validator-partitions.mjs';
+import { boundedPartitionEvidence } from './validator-partitions.mjs';
+import { storagePartitionNames } from './demo-storage-partitions.mjs';
 import {VALIDATOR_PARTITION_COUNT,validatorPartitionOrdinals} from './validator-partitions.mjs';
 import { spawnSync, execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -7,6 +10,7 @@ import { deriveOwnerDecisionInventory } from './owner-decision-inventory.mjs';
 import { createHistoricalSourceReader } from '../kernel/demo-runtime-registration.mjs';
 import { inspectSchemaIsolationRegistration } from '../kernel/demo-schema-isolation-registration.mjs';
 import { inspectRecipeRegistration } from '../kernel/demo-recipes-registration.mjs';
+import { inspectAuthoringRegistration } from '../kernel/demo-authoring-registration.mjs';
 import { resolveDocumentGovernanceContext, inspectDocumentGovernanceContext, documentGovernanceArgs } from './document-governance-context.mjs';
 import { inspectAuditPlan } from './self-audit-catalog.mjs';
 
@@ -44,9 +48,14 @@ export function currentFacts(root) {
   if(recipe.errors.length)throw new Error('current recipe successor must verify before historical question projection: '+recipe.errors.join('; '));
   const schema=inspectSchemaIsolationRegistration(root);
   if(schema.errors.length)throw new Error('current schema successor must verify before historical question projection: '+schema.errors.join('; '));
-  const readContract=path=>recipe.present&&Object.hasOwn(recipe.predecessorFiles,path)?recipe.predecessorFiles[path]:schema.present&&Object.hasOwn(schema.predecessorFiles,path)?schema.predecessorFiles[path]:readFileSync(join(root,path),'utf8');
+  const authoring=inspectAuthoringRegistration(root);
+  if(authoring.errors.length)throw new Error('current authoring successor must verify before historical question projection: '+authoring.errors.join('; '));
+  // Only the historical packet is projected. Live owner facts and registries
+  // above remain derived from the actual current source, never predecessors.
+  const readSemantic=path=>authoring.present&&Object.hasOwn(authoring.predecessorFiles,path)?authoring.predecessorFiles[path]:readFileSync(join(root,path),'utf8');
+  const readContract=path=>recipe.present&&Object.hasOwn(recipe.predecessorFiles,path)?recipe.predecessorFiles[path]:schema.present&&Object.hasOwn(schema.predecessorFiles,path)?schema.predecessorFiles[path]:readSemantic(path);
   const readInventory=path=>['persistence/physical-slices/assignment/admission-evidence-plan.json','persistence/physical-slices/progress-event/admission-evidence-plan.json'].includes(path)?historical(path):readFileSync(join(root,path),'utf8');
-  const packetInventory=deriveOwnerDecisionInventory(root,ownerInventory.consulted_v2_baseline,readInventory,readContract);
+  const packetInventory=deriveOwnerDecisionInventory(root,ownerInventory.consulted_v2_baseline,readInventory,readContract,readSemantic);
   if(JSON.stringify(ownerInventory)!==JSON.stringify(packetInventory))throw new Error('owner decision inventory drift');
   return { kernel_version:load('kernel/manifest.json').version,ownership_version:load('domains/ownership-map.json').version,
     policy_baselines:{architecture:load('architecture/authority.json').baseline_commit,application:load('application-interfaces/authority.json').baseline_commit,persistence:load('persistence/authority.json').baseline_commit},
@@ -66,6 +75,24 @@ export function runBounded(command,args,{root,timeoutMs=25000,env=process.env}={
   return {started_at:started.toISOString(),finished_at:new Date().toISOString(),duration_ms:Date.now()-started.getTime(),exit_code:result.status,
     timed_out:result.error?.code==='ETIMEDOUT',execution_error:result.error?.code||cleanupError||null,stdout:result.stdout||'',stderr:result.stderr||''};
 }
+export function expectedScheduledEvidence(id){
+ if(id==='audit-regressions-second'||id==='audit-regressions-third')return {kind:'ci',index:id==='audit-regressions-second'?1:2,total:2,inventory:453,digest:CI_TEST_NAMES_SHA256,names:ciPartitionNames(id==='audit-regressions-second'?1:2),selected_digest:digest(JSON.stringify(ciPartitionNames(id==='audit-regressions-second'?1:2)))};
+ if(['demo-registration-entry-regressions','demo-registration-regressions','demo-registration-regressions-second'].includes(id)){const index=id==='demo-registration-entry-regressions'?1:id==='demo-registration-regressions'?2:3;return {kind:'registration',index,total:3,inventory:17,names:registrationPartitionNames(index),selected_digest:digest(JSON.stringify(registrationPartitionNames(index)))};}
+ if(id==='authority'||id==='authority-second')return boundedPartitionEvidence('authority',id==='authority'?1:2);
+ if(['migration-guards','migration-guards-second','migration-guards-third'].includes(id))return boundedPartitionEvidence('migration',id==='migration-guards'?1:id==='migration-guards-second'?2:3);
+ if(id==='demo-storage-integration-regressions'||id==='demo-storage-integration-second')return {kind:'storage',index:id==='demo-storage-integration-regressions'?1:2,total:2,names:storagePartitionNames(id==='demo-storage-integration-regressions'?1:2)};
+ return null;
+}
+export function readScheduledEvidence(id,stdout){
+ const expected=expectedScheduledEvidence(id);if(!expected)return null;
+ if(['storage','ci','registration'].includes(expected.kind)){
+  const names=[...stdout.matchAll(/^ok [0-9]+ - (.+)$/gm)].map(match=>match[1]).filter(name=>!name.includes(' # SKIP'));
+  return {...expected,names,...(expected.kind==='storage'?{}:{selected_digest:digest(JSON.stringify(names))})};
+ }
+ const lines=stdout.split('\n').filter(line=>line.startsWith('Bounded partition: '));
+ if(lines.length!==1)return null;
+ try{return JSON.parse(lines[0].slice('Bounded partition: '.length));}catch{return null;}
+}
 export function runAuditStage(root,id,{expectedSha=process.env.AUDIT_EXPECTED_SHA,env=process.env}={}) {
   const planPath=join(root,'verification/whole-repository/self-audit-plan.json'),planText=readFileSync(planPath,'utf8'),plan=JSON.parse(planText);
   const errors=inspectAuditPlan(plan);if(errors.length)throw new Error(errors.join('; '));
@@ -83,6 +110,7 @@ export function runAuditStage(root,id,{expectedSha=process.env.AUDIT_EXPECTED_SH
     source:before,source_unchanged:same,...(inputContext?{input_context:inputContext,input_context_error:contextError}:{}),plan_sha256:digest(planText),command:[stage.command,...args],runtime:{node:process.version,platform:process.platform},
     started_at:result.started_at,finished_at:result.finished_at,duration_ms:result.duration_ms,exit_code:result.exit_code,timed_out:result.timed_out,execution_error:result.execution_error,
     stdout_sha256:digest(result.stdout),stderr_sha256:digest(result.stderr),
+    ...(expectedScheduledEvidence(id)?{scheduled_partition:readScheduledEvidence(id,result.stdout)}:{}),
     ...(validatorMatch?{validator_shard:{inventory:Number(validatorMatch[1]),index:Number(validatorMatch[2]),total:Number(validatorMatch[3]),selected:Number(validatorMatch[4]),digest:validatorMatch[5]}}:{}),
     full_runtime_conformance:'UNKNOWN',runtime_activation:'BLOCKED',shared_or_production_execution_authorized:false};
   const output=join(root,'verification/generated/self-audit');mkdirSync(output,{recursive:true});writeFileSync(join(output,`${id}.json`),JSON.stringify(report,null,2)+'\n');
@@ -101,6 +129,7 @@ export function evaluateAuditReports(plan,reports,source,planHash,foundationTest
       if(r.input_context_error!==null||inspectDocumentGovernanceContext(documentContext,source.source_sha).length||JSON.stringify(r.input_context)!==JSON.stringify(documentContext))errors.push(`${stage.id}: exact event/base context required`);
       else if(JSON.stringify(r.command)!==JSON.stringify([stage.command,...documentGovernanceArgs(documentContext)]))errors.push(`${stage.id}: executed command differs from event/base plan`);
     } else if(!Array.isArray(r.command)||r.command[0]!==stage.command||JSON.stringify(r.command.slice(1,1+stage.args.length))!==JSON.stringify(stage.args)||!stage.discover_tests&&r.command.length!==stage.args.length+1)errors.push(`${stage.id}: executed command differs from plan`);
+    if(expectedScheduledEvidence(stage.id)&&JSON.stringify(r.scheduled_partition)!==JSON.stringify(expectedScheduledEvidence(stage.id)))errors.push(`${stage.id}: exact executed scheduling partition required`);
     if(stage.discover_tests && (!Array.isArray(foundationTests)||!foundationTests.length||JSON.stringify(r.command)!==JSON.stringify([stage.command,...stage.args,...foundationTests])))errors.push(`${stage.id}: complete live foundation inventory required`);
     const started=Date.parse(r.started_at),finished=Date.parse(r.finished_at);
     if(!Number.isFinite(started)||!Number.isFinite(finished)||finished<started||!Number.isFinite(r.duration_ms)||r.duration_ms<0||r.duration_ms>stage.timeout_ms+2000||Math.abs(finished-started-r.duration_ms)>1000||!/^[a-f0-9]{64}$/.test(r.stdout_sha256||'')||!/^[a-f0-9]{64}$/.test(r.stderr_sha256||''))errors.push(`${stage.id}: invalid time/output provenance`);
