@@ -230,3 +230,59 @@ test('paired database login tests refuse target/source/TLS drift before opening 
  }
  assert.equal((await compareDatabaseLogins(configuration,{Client:RefusedClient,sourceCommit:'unknown'})).status,'BLOCKED');assert.equal(connections,0);
 });
+
+import {Readable} from 'node:stream';
+import {toHostedRequest} from '../../src/bootstrap/demo-hosted/node-adapter.js';
+{
+const {observePreviewRequest,addVercelPreviewRequestDiagnostics}=await import(new URL('../../scripts/packaging/build-vercel-release.mjs',import.meta.url).href);
+const origin='https://teach-v2-git-feat-demo-manager-authoring-peteyweetss.vercel.app',host=new URL(origin).host;
+function request(extra:string[]=[],url='/',method='GET'){return Object.assign(Readable.from([]),{method,url,rawHeaders:['Host',host,...extra]});}
+test('observer uses genuine adapter, outputs only fixed booleans, and preserves malicious input',()=>{
+ for(const [extra,url] of [[[], '/'],[['Host','PRIVATE_SENTINEL'],'/'],[['Cookie','PRIVATE_SENTINEL','cookie','PRIVATE_SENTINEL'],'/'],[['Transfer-Encoding','chunked'],'/'],[['Content-Length','9'],'/'],[['X-Forwarded-Host','PRIVATE_SENTINEL'],'/'],[[], 'https://PRIVATE_SENTINEL/']] as [string[],string][]){
+  const input=request(extra,url),before=JSON.stringify({url:input.url,rawHeaders:input.rawHeaders});let accepted=false;
+  try{toHostedRequest(input as any,origin);accepted=true;}catch{}
+  const result=observePreviewRequest(input,origin,toHostedRequest);
+  assert.equal(result.adapterAccepted,accepted);assert.equal(JSON.stringify({url:input.url,rawHeaders:input.rawHeaders}),before);
+  assert.equal(result.kind,'TEACH_PREVIEW_REQUEST_SHAPE');for(const [key,value] of Object.entries(result))if(key!=='kind')assert.equal(typeof value,'boolean');
+  assert.ok(!JSON.stringify(result).includes('PRIVATE_SENTINEL'));
+ }
+});
+test('generated exact Preview wrapper is bounded, response-identical, non-consuming and fail-safe',async()=>{
+ const root=mkdtempSync(join(tmpdir(),'teach-preview-observer-'));
+ const old=console.info;const logs:string[]=[];
+ try{
+  mkdirSync(join(root,'src/bootstrap/demo-successor'),{recursive:true});mkdirSync(join(root,'src/bootstrap/demo-hosted'),{recursive:true});
+  writeFileSync(join(root,'package.json'),'{"type":"module"}');
+  writeFileSync(join(root,'.vc-config.json'),JSON.stringify({runtime:'nodejs24.x',handler:'vercel-public-navigation.mjs'}));
+  writeFileSync(join(root,'vercel-public-navigation.mjs'),`import {toHostedRequest} from ${JSON.stringify(new URL('../../src/bootstrap/demo-hosted/node-adapter.ts',import.meta.url).href)};export default function handler(req,res){res.calls++;res.input=req;if(res.error)throw res.error;if(res.measure){let status=200;try{toHostedRequest(req,${JSON.stringify(origin)});}catch{status=400;}res.response={status,headers:{'cache-control':'no-store'},body:status===200?'PUBLIC':'INVALID_REQUEST'};}return res.response;}`);
+  writeFileSync(join(root,'src/bootstrap/demo-successor/runtime-config.js'),`let failure=false;export function fail(){failure=true;}export function captureRuntimeConfiguration(){if(failure)throw Error('PRIVATE_SENTINEL_CONFIG');return {origin:${JSON.stringify(origin)}}}`);
+  writeFileSync(join(root,'src/bootstrap/demo-hosted/node-adapter.js'),`export {toHostedRequest} from ${JSON.stringify(new URL('../../src/bootstrap/demo-hosted/node-adapter.ts',import.meta.url).href)};`);
+  for(const env of [{},{VERCEL:'1',VERCEL_ENV:'production'},{VERCEL:'1',VERCEL_ENV:'preview',VERCEL_GIT_COMMIT_REF:'other'}])assert.equal(addVercelPreviewRequestDiagnostics(root,env),false);
+  assert.equal(addVercelPreviewRequestDiagnostics(root,{VERCEL:'1',VERCEL_ENV:'preview',VERCEL_GIT_COMMIT_REF:'feat/demo-manager-authoring'}),true);
+  const {default:handler}=await import(pathToFileURL(join(root,'vercel-preview-request-diagnostics.mjs')).href);
+  const original=await import(pathToFileURL(join(root,'vercel-public-navigation.mjs')).href);
+  const matrix=await import(pathToFileURL(join(root,'vercel-preview-request-diagnostics.mjs')).href+'?matrix');console.info=()=>{};
+  for(const [extra,url] of [[[], '/'],[['Host','PRIVATE_SENTINEL'],'/'],[['Cookie','PRIVATE_SENTINEL','cookie','PRIVATE_SENTINEL'],'/'],[['Transfer-Encoding','chunked'],'/'],[['Content-Length','9'],'/'],[['X-Forwarded-Host','PRIVATE_SENTINEL'],'/'],[[], 'https://PRIVATE_SENTINEL/'],[[], '/a/../']] as [string[],string][]){
+   const input=request(extra,url);let reads=0;input.read=()=>{reads++;throw Error('BODY_READ');};
+   const baseline={calls:0,input:null,measure:true},observed={calls:0,input:null,measure:true};
+   const expected=original.default(input,baseline),actual=matrix.default(input,observed);
+   assert.deepEqual(actual,expected);assert.equal(observed.calls,1);assert.equal(observed.input,input);assert.equal(reads,0);
+  }
+  let attempts=0;console.info=(value:string)=>{attempts++;if(attempts===1)throw Error('PRIVATE_SENTINEL');logs.push(value);};
+  for(let i=0;i<12;i++){
+   const input=request(['Cookie','PRIVATE_SENTINEL','Authorization','PRIVATE_SENTINEL_AUTH']);let reads=0;input.read=()=>{reads++;throw Error('BODY_READ');};
+   const out={calls:0,input:null,response:Promise.resolve('UNCHANGED')};assert.equal(handler(input,out),out.response);assert.equal(out.calls,1);assert.equal(out.input,input);assert.equal(reads,0);
+  }
+  assert.equal(attempts,8);assert.equal(logs.length,7);assert.ok(!logs.join('').includes('PRIVATE_SENTINEL'));
+  const originalError=new Error('PRIVATE_SENTINEL_ORIGINAL');const errorOut={calls:0,input:null,error:originalError};assert.throws(()=>handler(request(),errorOut),error=>error===originalError);assert.equal(errorOut.calls,1);
+  const rejection=Promise.reject(originalError);rejection.catch(()=>{});const rejectedOut={calls:0,input:null,response:rejection};assert.equal(handler(request(),rejectedOut),rejection);assert.equal(rejectedOut.calls,1);
+  const post=request([], '/', 'POST'),out={calls:0,input:null,response:42};assert.equal(handler(post,out),42);assert.equal(attempts,8);
+  const accessor=request();Object.defineProperty(accessor,'method',{get(){throw Error('PRIVATE_SENTINEL_GETTER')}});const accessorOut={calls:0,input:null,response:81};const accessorFresh=await import(pathToFileURL(join(root,'vercel-preview-request-diagnostics.mjs')).href+'?accessor');assert.equal(accessorFresh.default(accessor,accessorOut),81);assert.equal(accessorOut.calls,1);
+  const configModule=await import(pathToFileURL(join(root,'src/bootstrap/demo-successor/runtime-config.js')).href);configModule.fail();
+  const fresh=await import(pathToFileURL(join(root,'vercel-preview-request-diagnostics.mjs')).href+'?fresh');
+  const safeOut={calls:0,input:null,response:91};assert.equal(fresh.default(request(),safeOut),91);assert.equal(safeOut.calls,1);assert.equal(attempts,8);
+  assert.equal(JSON.parse(readFileSync(join(root,'.vc-config.json'),'utf8')).handler,'vercel-preview-request-diagnostics.mjs');
+ }finally{console.info=old;rmSync(root,{recursive:true,force:true});}
+});
+
+}

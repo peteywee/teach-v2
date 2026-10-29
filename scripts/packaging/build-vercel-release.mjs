@@ -215,6 +215,50 @@ export default async function productionRoot(incoming,outgoing){
   return true;
 }
 
+/** Temporary exact-branch Preview observer. Never changes admission or emits values. */
+export function observePreviewRequest(incoming, origin, adapt) {
+  const headers = new Headers();
+  let hasRepeatedHeaderName = false;
+  const seen = new Set();
+  for (let i = 0; i < incoming.rawHeaders.length; i += 2) {
+    const name = incoming.rawHeaders[i].toLowerCase();
+    if (seen.has(name)) hasRepeatedHeaderName = true;
+    seen.add(name);
+    headers.append(name, incoming.rawHeaders[i + 1]);
+  }
+  let adapterAccepted = false;
+  try { adapt(incoming, origin); adapterAccepted = true; } catch { /* Never emit errors. */ }
+  return {kind: 'TEACH_PREVIEW_REQUEST_SHAPE', adapterAccepted,
+    hostMatchesConfiguredOrigin: headers.get('host') === new URL(origin).host,
+    configuredOriginIsExpectedBranch: origin === 'https://teach-v2-git-feat-demo-manager-authoring-peteyweetss.vercel.app',
+    targetIsRoot: incoming.url === '/', hasRepeatedHeaderName,
+    hasTransferEncoding: headers.has('transfer-encoding'),
+    contentLengthAbsentOrZero: !headers.has('content-length') || headers.get('content-length') === '0'};
+}
+export function addVercelPreviewRequestDiagnostics(bundle, env = process.env) {
+  if (env.VERCEL !== '1' || env.VERCEL_ENV !== 'preview' || env.VERCEL_GIT_COMMIT_REF !== 'feat/demo-manager-authoring') return false;
+  const path = join(bundle, '.vc-config.json');
+  const config = JSON.parse(readFileSync(path, 'utf8'));
+  if (config.handler !== 'vercel-public-navigation.mjs' || config.runtime !== 'nodejs24.x') throw Error('Expected Preview navigation handler required');
+  writeFileSync(join(bundle, 'vercel-preview-request-diagnostics.mjs'), `import handler from './vercel-public-navigation.mjs';
+import {captureRuntimeConfiguration} from './src/bootstrap/demo-successor/runtime-config.js';
+import {toHostedRequest} from './src/bootstrap/demo-hosted/node-adapter.js';
+${observePreviewRequest.toString()}
+let remaining=8;
+export default function previewDiagnostics(incoming,outgoing){
+  try{
+    if(remaining>0&&incoming.method==='GET'){
+      remaining--;
+      console.info(JSON.stringify(observePreviewRequest(incoming,captureRuntimeConfiguration(process.env).origin,toHostedRequest)));
+    }
+  }catch{/* Observation/logging cannot change the original response. */}
+  return handler(incoming,outgoing);
+}
+`, {flag: 'wx'});
+  writeFileSync(path, JSON.stringify({...config, handler: 'vercel-preview-request-diagnostics.mjs'}));
+  return true;
+}
+
 /** Restore only equivalent JSON formatting; changed configuration stays blocked. */
 export function restoreVercelConfigFormatting(root) {
   const path = join(root, 'vercel.json');
@@ -258,6 +302,7 @@ export function buildVercelRelease(root = process.cwd()) {
     addVercelDatabaseDiagnostics(join(output, 'functions', 'demo.func'));
     addVercelPublicNavigation(join(output, 'functions', 'demo.func'));
     addVercelProductionRootRedirect(join(output, 'functions', 'demo.func'));
+    addVercelPreviewRequestDiagnostics(join(output, 'functions', 'demo.func'));
     const files = bundleInventory(output);
     writeFileSync(join(output, 'vercel-release-manifest.json'), JSON.stringify({
       kind: 'TEACH_VERCEL_RELEASE_MANIFEST', sourceCommit: manifest.sourceCommit,
