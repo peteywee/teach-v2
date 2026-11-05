@@ -1,0 +1,23 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "ui": "stream",
+  "envMode": "strict",
+  "remoteCache": {
+    "enabled": false
+  },
+  "globalEnv": [
+    "TEACH_TURBO_RUNTIME",
+    "NODE_OPTIONS",
+    "TZ",
+    "LANG",
+    "LC_ALL"
+  ],
+  "tasks": {
+    "typecheck": {
+      "outputs": []
+    },
+    "test:foundation": {
+      "outputs": []
+    }
+  }
+}

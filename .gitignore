@@ -12,3 +12,4 @@ dist/
 
 verification/generated/
 .vercel
+.turbo/
